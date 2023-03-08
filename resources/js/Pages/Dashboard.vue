@@ -4,7 +4,9 @@
             <div class="col-12">
                 <div class="card">
                     <h5>Empty Page</h5>
-                    <p>Use this page to start from scratch and place your custom content.</p>
+                    <p>
+                        {{ word }}
+                    </p>
                 </div>
             </div>
         </div>
@@ -12,12 +14,16 @@
 </template>
 
 <script>
-import {defineComponent} from 'vue'
-import AppLayout from '@/Layouts/AppLayout.vue'
+import AppLayout from "@/Layouts/AppLayout.vue";
 
-export default defineComponent({
+export default {
     components: {
         AppLayout,
     },
-})
+    data() {
+        return {
+            word: "SUPPPP",
+        };
+    },
+};
 </script>
