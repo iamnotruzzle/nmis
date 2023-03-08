@@ -30,7 +30,7 @@ export default {
         };
     },
     mounted() {
-        console.log(this.users);
+        // console.log(this.users);
         this.userList = [...this.users.data];
     },
 };

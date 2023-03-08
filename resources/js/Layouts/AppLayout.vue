@@ -44,12 +44,14 @@ export default {
                             icon: "pi pi-fw pi-home",
                             to: "dashboard",
                             prefix: "dashboard",
+                            comp: "Dashboard",
                         },
                         {
                             label: "Users",
                             icon: "pi pi-fw pi-home",
                             to: "users",
                             prefix: "users",
+                            comp: "Users/Index",
                         },
                         {
                             label: "Sign out",

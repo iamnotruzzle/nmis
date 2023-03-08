@@ -22,6 +22,7 @@
                     ></appsubmenu>
                 </template>
                 <template v-else>
+                    <!-- { 'router-link-exact-active': activeIndex === i }, -->
                     <Link
                         v-if="item.to"
                         :href="item.to"
@@ -29,7 +30,10 @@
                             item.class,
                             'p-ripple',
                             { 'p-disabled': item.disabled },
-                            { 'router-link-exact-active': activeIndex === i },
+                            {
+                                'router-link-exact-active':
+                                    $page.component === item.comp,
+                            },
                         ]"
                         :style="item.style"
                         @click="onMenuItemClick($event, item, i)"
@@ -139,6 +143,8 @@ export default {
                 originalEvent: event,
                 item: item,
             });
+
+            console.log(this.activeIndex);
         },
         visible(item) {
             return typeof item.visible === "function"
