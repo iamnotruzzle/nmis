@@ -23,15 +23,16 @@
             <i class="pi pi-ellipsis-v"></i>
         </button>
 
+        <!-- Mobile screen -->
         <ul
             v-if="topbarMenuActive"
             class="layout-topbar-menu lg:flex origin-top"
         >
             <li>
-                <button class="p-link layout-topbar-button">
+                <Button class="p-button-link p-link layout-topbar-button">
                     <i class="pi pi-calendar"></i>
                     <span>Events</span>
-                </button>
+                </Button>
             </li>
             <li>
                 <Button
@@ -46,16 +47,25 @@
                 <Button class="p-button-link p-link layout-topbar-button">
                     <i class="pi pi-user"></i>
                     <span>Profile</span>
+                </Button>
+            </li>
+            <li>
+                <Button
+                    class="p-button-link p-link layout-topbar-button"
+                    @click="logout"
+                >
+                    <i class="pi pi-fw pi-sign-out"></i>
+                    <span>Logout</span>
                 </Button>
             </li>
         </ul>
-
+        <!-- Desktop screen -->
         <ul v-else class="layout-topbar-menu hidden lg:flex origin-top">
             <li>
-                <button class="p-link layout-topbar-button">
+                <Button class="p-button-link p-link layout-topbar-button">
                     <i class="pi pi-calendar"></i>
                     <span>Events</span>
-                </button>
+                </Button>
             </li>
             <li>
                 <Button
@@ -70,6 +80,15 @@
                 <Button class="p-button-link p-link layout-topbar-button">
                     <i class="pi pi-user"></i>
                     <span>Profile</span>
+                </Button>
+            </li>
+            <li>
+                <Button
+                    class="p-button-link p-link layout-topbar-button"
+                    @click="logout"
+                >
+                    <i class="pi pi-fw pi-sign-out"></i>
+                    <span>Logout</span>
                 </Button>
             </li>
         </ul>
@@ -138,6 +157,9 @@ export default {
                 topbarEl.isSameNode(event.target) ||
                 topbarEl.contains(event.target)
             );
+        },
+        logout() {
+            this.$inertia.post(this.route("logout"));
         },
     },
 };
