@@ -39,12 +39,6 @@ export default {
                 {
                     label: "Menu",
                     items: [
-                        // {
-                        //     label: "Dashboard",
-                        //     icon: "pi pi-fw pi-home",
-                        //     to: this.route("dashboard"),
-                        //     prefix: "dashboard",
-                        // },
                         {
                             label: "Dashboard",
                             icon: "pi pi-fw pi-home",

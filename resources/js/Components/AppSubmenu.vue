@@ -7,8 +7,7 @@
                 :class="[
                     {
                         'layout-menuitem-category': root,
-                        'active-menuitem':
-                            activeIndex === i && !item.to && !item.disabled,
+                        'active-menuitem': activeIndex === i && !item.disabled,
                     },
                 ]"
                 role="none"
@@ -30,6 +29,7 @@
                             item.class,
                             'p-ripple',
                             { 'p-disabled': item.disabled },
+                            { 'router-link-exact-active': activeIndex === i },
                         ]"
                         :style="item.style"
                         @click="onMenuItemClick($event, item, i)"
@@ -106,10 +106,18 @@ export default {
     },
     data() {
         return {
-            activeIndex: null,
+            activeIndex: this.setInitialIndex(),
         };
     },
     methods: {
+        setInitialIndex() {
+            const currentUrl = window.location.href;
+            const currentItem = this.items?.findIndex(
+                (element) => element.to === currentUrl
+            );
+
+            return currentItem > 0 ? currentItem : 0;
+        },
         onMenuItemClick(event, item, index) {
             if (item.disabled) {
                 event.preventDefault();
@@ -125,7 +133,7 @@ export default {
                 item.command({ originalEvent: event, item: item });
             }
 
-            this.activeIndex = index === this.activeIndex ? null : index;
+            this.activeIndex = index;
 
             this.$emit("menuitem-click", {
                 originalEvent: event,
