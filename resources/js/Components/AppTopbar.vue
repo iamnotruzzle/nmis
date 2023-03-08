@@ -91,14 +91,17 @@ export default {
             outsideClickListener: null,
         };
     },
+    mounted() {
+        this.bindOutsideClickListener();
+    },
+    beforeUnmount() {
+        this.unbindOutsideClickListener();
+    },
     methods: {
         onMenuToggle(event) {
             this.$emit("menu-toggle", event);
         },
-        // onTopbarMenuToggle(event) {
-        //     this.$emit("topbar-menu-toggle", event);
-        // },
-        onTopBarMenuToggle(event) {
+        onTopBarMenuToggle() {
             this.topbarMenuActive = !this.topbarMenuActive;
         },
         goToSettings() {
@@ -107,8 +110,8 @@ export default {
         bindOutsideClickListener() {
             if (!this.outsideClickListener) {
                 this.outsideClickListener = (event) => {
-                    if (isOutsideClicked(event)) {
-                        topbarMenuActive.value = false;
+                    if (this.isOutsideClicked(event)) {
+                        this.topbarMenuActive = false;
                     }
                 };
                 document.addEventListener("click", this.outsideClickListener);
@@ -116,7 +119,10 @@ export default {
         },
         unbindOutsideClickListener() {
             if (this.outsideClickListener) {
-                document.removeEventListener("click", outsideClickListener);
+                document.removeEventListener(
+                    "click",
+                    this.outsideClickListener
+                );
                 this.outsideClickListener = null;
             }
         },
