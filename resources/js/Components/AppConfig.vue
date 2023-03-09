@@ -15,7 +15,7 @@
         ></Button>
 
         <div class="layout-config-content">
-            <h6 class="mt-0">Component Scale</h6>
+            <!-- <h6 class="mt-0">Component Scale</h6>
             <div class="config-scale">
                 <Button
                     icon="pi pi-minus"
@@ -89,7 +89,7 @@
                     />
                     <label for="overlay">Overlay</label>
                 </div>
-            </div>
+            </div> -->
 
             <h6>Color Scheme</h6>
             <div class="p-formgroup-inline">
@@ -153,7 +153,14 @@
 </template>
 
 <script>
+import RadioButton from "primevue/radiobutton";
+import Button from "primevue/button";
+
 export default {
+    components: {
+        RadioButton: RadioButton,
+        Button: Button,
+    },
     props: {
         layoutMode: {
             type: String,
@@ -255,6 +262,7 @@ export default {
         },
         changeTheme() {
             let theme = this.themeScheme + "-" + this.themeColor;
+            console.log(this.$appState.theme);
             let themeElement = document.getElementById("theme-link");
             themeElement.setAttribute(
                 "href",

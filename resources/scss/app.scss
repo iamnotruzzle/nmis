@@ -2,12 +2,14 @@
     z-index: 1000;
     top: 7rem;
 }
-
-@import '~primevue/resources/primevue.min.css';
-@import '~primevue/resources/themes/saga-blue/theme.css';
-@import '~primeflex/primeflex.min.css';
-@import '~primeicons/primeicons.css';
-@import './layout';
+// theme selectors
+// https://github.com/primefaces/primevue-sass-theme/tree/main/themes
+@import "~primevue/resources/primevue.min.css";
+// @import "~primevue/resources/themes/saga-blue/theme.css"; // default theme
+@import "~primevue/resources/themes/vela-purple/theme.css";
+@import "~primeflex/primeflex.min.css";
+@import "~primeicons/primeicons.css";
+@import "./layout";
 
 *::-webkit-scrollbar {
     width: 0.75em;
@@ -15,7 +17,6 @@
 
 *::-webkit-scrollbar-track {
     box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-
 }
 
 *::-webkit-scrollbar-thumb {
@@ -25,8 +26,7 @@
 
 .layout-sidebar::-webkit-scrollbar,
 .layout-sidebar::-webkit-scrollbar-track,
-.layout-sidebar::-webkit-scrollbar-thumb
-{
+.layout-sidebar::-webkit-scrollbar-thumb {
     border-top-right-radius: 12px;
     border-bottom-right-radius: 12px;
 }

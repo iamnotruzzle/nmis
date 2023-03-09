@@ -3,6 +3,7 @@
         <AppTopBar @menu-toggle="onMenuToggle" />
         <div class="layout-sidebar" @click="onSidebarClick">
             <AppMenu :model="menu" @menuitem-click="onMenuItemClick" />
+            <!-- <AppConfig /> -->
         </div>
 
         <div class="layout-main-container">
@@ -17,7 +18,6 @@
                 v-if="mobileMenuActive"
             ></div>
         </transition>
-        <Toast />
     </div>
 </template>
 
@@ -25,7 +25,7 @@
 import AppTopBar from "../Components/AppTopbar.vue";
 import AppMenu from "../Components/AppMenu.vue";
 import AppFooter from "../Components/AppFooter.vue";
-import Toast from "primevue/toast";
+import AppConfig from "../Components/AppConfig.vue";
 
 export default {
     data() {
@@ -185,7 +185,7 @@ export default {
         AppTopBar: AppTopBar,
         AppMenu: AppMenu,
         AppFooter: AppFooter,
-        Toast,
+        AppConfig: AppConfig,
     },
 };
 </script>
