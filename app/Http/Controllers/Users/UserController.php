@@ -19,9 +19,13 @@ class UserController extends Controller
     //     // $this->middleware(['permission:create-users']);
     // }
 
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::paginate(15);
+        $users = User::when($request->search, function ($query, $value) {
+            $query->where('name', 'LIKE', '%' . $value . '%');
+            // ->orWhere('email', 'LIKE', '%' . $value . '%');
+        })
+            ->paginate(20);
 
         return Inertia::render('Users/Index', ['users' => $users]);
     }
