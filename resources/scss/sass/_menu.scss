@@ -56,16 +56,17 @@
                 margin-left: auto;
             }
 
-            &:focus {
-                @include focused-inset();
+            &.router-link-exact-active {
+                font-weight: 700;
+                color: var(--primary-color);
             }
 
             &:hover {
                 background-color: var(--surface-hover);
             }
 
-            &.router-link-exact-active {
-                font-weight: 700;
+            &:focus {
+                @include focused-inset();
             }
         }
 
