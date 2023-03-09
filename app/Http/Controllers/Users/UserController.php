@@ -25,7 +25,8 @@ class UserController extends Controller
             $query->where('name', 'LIKE', '%' . $value . '%');
             // ->orWhere('email', 'LIKE', '%' . $value . '%');
         })
-            ->paginate(20);
+            ->orderBy('name', 'asc')
+            ->paginate(50);
 
         return Inertia::render('Users/Index', ['users' => $users]);
     }

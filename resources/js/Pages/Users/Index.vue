@@ -1,7 +1,6 @@
 <template>
   <app-layout>
     <div class="card">
-      <!-- v-model:filters="filters" -->
       <DataTable
         class="p-datatable-sm"
         v-model:filters="filters"
@@ -15,14 +14,13 @@
         dataKey="id"
         filterDisplay="row"
         :loading="loading"
-        :globalFilterFields="['name', 'email']"
       >
         <template #header>
           <div class="flex justify-content-end">
             <span class="p-input-icon-left">
               <i class="pi pi-search" />
               <InputText
-                v-model="filters['global'].value"
+                v-model="search"
                 placeholder="Keyword Search"
               />
             </span>
@@ -95,7 +93,6 @@
 
 <script>
 import { FilterMatchMode } from 'primevue/api';
-// import { CustomerService } from '@/service/CustomerService';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import InputText from 'primevue/inputtext';
 import Column from 'primevue/column';
@@ -116,9 +113,10 @@ export default {
       search: '',
       options: {},
       params: {},
+      totalRecords: 0,
       usersList: null,
       filters: {
-        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        // global: { value: null, matchMode: FilterMatchMode.CONTAINS },
         name: { value: null, matchMode: FilterMatchMode.CONTAINS },
         email: { value: null, matchMode: FilterMatchMode.CONTAINS },
         created_at: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -128,11 +126,6 @@ export default {
     };
   },
   mounted() {
-    // this.users.getUsersMedium().then((data) => {
-    //   this.usersList = this.getUsers(data);
-    //   this.loading = false;
-    // });
-    // console.log(this.users.data);
     this.usersList = this.users.data;
     this.loading = false;
   },
@@ -141,19 +134,15 @@ export default {
       this.$inertia.get('users', this.params, {
         preserveState: true,
         preserveScroll: true,
+        onFinish: (visit) => {
+          this.usersList = this.users.data;
+        },
       });
     },
   },
   watch: {
-    options: function (val) {
-      this.params.page = val.page;
-      this.params.page_size = val.itemsPerPage;
-      this.updateData();
-    },
-    'filters.global': function (val, oldVal) {
-      console.log(val);
+    search: function (val, oldVal) {
       this.params.search = val;
-      this.params.page = 1;
       this.updateData();
     },
   },
