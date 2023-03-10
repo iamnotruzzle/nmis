@@ -1,6 +1,11 @@
 <template>
   <app-layout>
     <div class="card">
+      <!--
+            data table sort order
+            asc = 1
+            desc =-1
+        -->
       <DataTable
         class="p-datatable-sm"
         v-model:filters="filters"
@@ -93,14 +98,18 @@
           <template #body="slotProps">
             <Button
               icon="pi pi-pencil"
-              class="p-button-rounded p-button-success mr-2"
+              class="mr-1"
+              rounded
+              text
+              severity="warning"
               @click="editItem(slotProps.data)"
             />
 
             <Button
               icon="pi pi-trash"
-              class="p-button-rounded p-button-warning mt-2"
-              severity="success"
+              rounded
+              text
+              severity="danger"
               @click="confirmDeleteItem(slotProps.data)"
             />
           </template>
@@ -134,7 +143,7 @@
         <div class="field">
           <label for="description">Email</label>
           <InputText
-            type="email1"
+            type="email"
             id="email"
             v-model.trim="form.email"
             required="true"
@@ -152,21 +161,23 @@
           <Button
             label="Cancel"
             icon="pi pi-times"
-            class="p-button-text text-yellow-500"
+            severity="danger"
+            text
             @click="cancel"
           />
           <Button
             v-if="isUpdate == true"
             label="Update"
             icon="pi pi-check"
-            class="p-button-text"
+            severity="warning"
+            text
             @click="submit"
           />
           <Button
             v-else
             label="Save"
             icon="pi pi-check"
-            class="p-button-text"
+            text
             @click="submit"
           />
         </template>
@@ -198,7 +209,8 @@
           <Button
             label="Yes"
             icon="pi pi-check"
-            class="p-button-text"
+            severity="danger"
+            text
             @click="deleteItem"
           />
         </template>
