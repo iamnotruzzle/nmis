@@ -21,14 +21,22 @@
         :loading="loading"
       >
         <template #header>
-          <div class="flex justify-content-end">
-            <span class="p-input-icon-left">
-              <i class="pi pi-search" />
-              <InputText
-                v-model="search"
-                placeholder="Keyword Search"
+          <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+            <span class="text-xl text-900 font-bold">Users</span>
+            <div>
+              <span class="p-input-icon-left mr-2">
+                <i class="pi pi-search" />
+                <InputText
+                  v-model="search"
+                  placeholder="Keyword Search"
+                />
+              </span>
+              <Button
+                label="Add user"
+                icon="pi pi-user-plus"
+                iconPos="right"
               />
-            </span>
+            </div>
           </div>
         </template>
         <template #empty> No user found. </template>
