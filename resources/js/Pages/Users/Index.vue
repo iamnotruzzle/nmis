@@ -35,6 +35,7 @@
                 label="Add user"
                 icon="pi pi-user-plus"
                 iconPos="right"
+                @click="openCreateItemDialog"
               />
             </div>
           </div>
@@ -131,6 +132,7 @@
         header="User Detail"
         :modal="true"
         class="p-fluid"
+        dismissableMask="true"
       >
         <div class="field">
           <label for="name">Name</label>
@@ -197,6 +199,7 @@
         :style="{ width: '450px' }"
         header="Confirm"
         :modal="true"
+        dismissableMask="true"
       >
         <div class="flex align-items-center justify-content-center">
           <i
@@ -286,12 +289,10 @@ export default {
         },
       });
     },
-    cancel() {
-      this.itemId = null;
-      this.isUpdate = false;
-      this.createItemDialog = false;
+    openCreateItemDialog() {
       this.form.reset();
-      this.form.clearErrors();
+      this.itemId = null;
+      this.createItemDialog = true;
     },
     editItem(item) {
       this.isUpdate = true;
@@ -338,6 +339,13 @@ export default {
           //   this.deletedMsg();
         },
       });
+    },
+    cancel() {
+      this.itemId = null;
+      this.isUpdate = false;
+      this.createItemDialog = false;
+      this.form.reset();
+      this.form.clearErrors();
     },
   },
   watch: {
