@@ -86,7 +86,123 @@
             />
           </template>
         </Column>
+        <Column
+          header="Action"
+          style="min-width: 12rem"
+        >
+          <template #body="slotProps">
+            <Button
+              icon="pi pi-pencil"
+              class="p-button-rounded p-button-success mr-2"
+              @click="editItem(slotProps.data)"
+            />
+
+            <Button
+              icon="pi pi-trash"
+              class="p-button-rounded p-button-warning mt-2"
+              severity="success"
+              @click="confirmDeleteItem(slotProps.data)"
+            />
+          </template>
+        </Column>
       </DataTable>
+
+      <!-- create & edit dialog -->
+      <Dialog
+        v-model:visible="createItemDialog"
+        :style="{ width: '450px' }"
+        header="User Detail"
+        :modal="true"
+        class="p-fluid"
+      >
+        <div class="field">
+          <label for="name">Name</label>
+          <InputText
+            id="name"
+            v-model.trim="form.name"
+            required="true"
+            autofocus
+            :class="{ 'p-invalid': form.name == '' }"
+          />
+          <small
+            class="text-error"
+            v-if="form.name == ''"
+          >
+            Name is required.
+          </small>
+        </div>
+        <div class="field">
+          <label for="description">Email</label>
+          <InputText
+            type="email1"
+            id="email"
+            v-model.trim="form.email"
+            required="true"
+            autofocus
+            :class="{ 'p-invalid': form.email == '' }"
+          />
+          <small
+            class="text-error"
+            v-if="form.email == ''"
+          >
+            Email is required.
+          </small>
+        </div>
+        <template #footer>
+          <Button
+            label="Cancel"
+            icon="pi pi-times"
+            class="p-button-text text-yellow-500"
+            @click="cancel"
+          />
+          <Button
+            v-if="isUpdate == true"
+            label="Update"
+            icon="pi pi-check"
+            class="p-button-text"
+            @click="submit"
+          />
+          <Button
+            v-else
+            label="Save"
+            icon="pi pi-check"
+            class="p-button-text"
+            @click="submit"
+          />
+        </template>
+      </Dialog>
+
+      <!-- Delete confirmation dialog -->
+      <Dialog
+        v-model:visible="deleteItemDialog"
+        :style="{ width: '450px' }"
+        header="Confirm"
+        :modal="true"
+      >
+        <div class="flex align-items-center justify-content-center">
+          <i
+            class="pi pi-exclamation-triangle mr-3"
+            style="font-size: 2rem"
+          />
+          <span v-if="form"
+            >Are you sure you want to delete <b>{{ form.name }}</b> ?</span
+          >
+        </div>
+        <template #footer>
+          <Button
+            label="No"
+            icon="pi pi-times"
+            class="p-button-text"
+            @click="deleteItemDialog = false"
+          />
+          <Button
+            label="Yes"
+            icon="pi pi-check"
+            class="p-button-text"
+            @click="deleteItem"
+          />
+        </template>
+      </Dialog>
     </div>
   </app-layout>
 </template>
@@ -97,6 +213,8 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import InputText from 'primevue/inputtext';
 import Column from 'primevue/column';
 import DataTable from 'primevue/datatable';
+import Button from 'primevue/button';
+import Dialog from 'primevue/dialog';
 
 export default {
   components: {
@@ -104,12 +222,18 @@ export default {
     InputText,
     Column,
     DataTable,
+    Button,
+    Dialog,
   },
   props: {
     users: Object,
   },
   data() {
     return {
+      itemId: null,
+      isUpdate: false,
+      createItemDialog: false,
+      deleteItemDialog: false,
       search: '',
       options: {},
       params: {},
@@ -121,8 +245,11 @@ export default {
         email: { value: null, matchMode: FilterMatchMode.CONTAINS },
         created_at: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
-
       loading: true,
+      form: this.$inertia.form({
+        name: null,
+        email: null,
+      }),
     };
   },
   mounted() {
@@ -136,6 +263,59 @@ export default {
         preserveScroll: true,
         onFinish: (visit) => {
           this.usersList = this.users.data;
+        },
+      });
+    },
+    cancel() {
+      this.itemId = null;
+      this.isUpdate = false;
+      this.createItemDialog = false;
+      this.form.reset();
+      this.form.clearErrors();
+    },
+    editItem(item) {
+      this.isUpdate = true;
+      this.createItemDialog = true;
+      this.itemId = item.id;
+      this.form.name = item.name;
+      this.form.email = item.email;
+    },
+    submit() {
+      if (this.isUpdate) {
+        this.form.put(route('users.update', this.itemId), {
+          preserveScroll: true,
+          onSuccess: () => {
+            this.itemId = null;
+            this.createItemDialog = false;
+            this.cancel();
+            // this.createdMsg();
+          },
+        });
+      } else {
+        this.form.post(route('users.store'), {
+          preserveScroll: true,
+          onSuccess: () => {
+            this.itemId = null;
+            this.createItemDialog = false;
+            this.cancel();
+            // this.createdMsg();
+          },
+        });
+      }
+    },
+    confirmDeleteItem(item) {
+      this.itemId = item.id;
+      this.form.name = item.name;
+      this.form.email = item.email;
+      this.deleteItemDialog = true;
+    },
+    deleteItem() {
+      this.form.delete(route('users.destroy', this.itemId), {
+        preserveScroll: true,
+        onSuccess: () => {
+          this.deleteItemDialog = false;
+          this.itemId = null;
+          //   this.deletedMsg();
         },
       });
     },
