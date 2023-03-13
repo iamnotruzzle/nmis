@@ -6,12 +6,7 @@
       style="min-width: 80%"
     >
       <div class="col-12 mt-5 xl:mt-0 text-center">
-        <img
-          :src="'images/logo-' + logoColor + '.svg'"
-          alt="Sakai logo"
-          class="mb-5"
-          style="width: 81px; height: 60px"
-        />
+        <h1>TEMPLATE</h1>
       </div>
       <div
         class="col-12 xl:col-6"
@@ -27,9 +22,9 @@
         >
           <div class="text-center mb-5">
             <img
-              src="images/avatar.png"
+              src="images/hosp_logo.png"
               alt="Image"
-              height="50"
+              height="100"
               class="mb-3"
             />
             <div class="text-900 text-3xl font-medium mb-3">Welcome</div>
