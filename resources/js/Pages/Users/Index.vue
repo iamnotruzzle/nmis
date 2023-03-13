@@ -106,8 +106,9 @@
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            <span v-if="data.suffix == 'na'"></span>
-            <span v-else>{{ data.suffix }}</span>
+            {{ data.suffix }}
+            <!-- <span v-if="data.suffix == 'na'"></span>
+            <span v-else>{{ data.suffix }}</span> -->
           </template>
           <template #filter="{ filterModel, filterCallback }">
             <InputText
@@ -203,9 +204,9 @@
           />
           <small
             class="text-error"
-            v-if="form.firstName == ''"
+            v-if="form.errors.firstName"
           >
-            First name is required.
+            {{ form.errors.firstName }}
           </small>
         </div>
         <div class="field">
@@ -215,6 +216,12 @@
             v-model.trim="form.middleName"
             autofocus
           />
+          <small
+            class="text-error"
+            v-if="form.errors.middleName"
+          >
+            {{ form.errors.middleName }}
+          </small>
         </div>
         <div class="field">
           <label for="lastName">Last name</label>
@@ -227,9 +234,9 @@
           />
           <small
             class="text-error"
-            v-if="form.lastName == ''"
+            v-if="form.errors.lastName"
           >
-            Last name is required.
+            {{ form.errors.lastName }}
           </small>
         </div>
         <div class="field">
@@ -239,6 +246,12 @@
             v-model.trim="form.suffix"
             autofocus
           />
+          <small
+            class="text-error"
+            v-if="form.errors.suffix"
+          >
+            {{ form.errors.suffix }}
+          </small>
         </div>
         <div class="field">
           <label for="description">Email</label>
@@ -252,9 +265,9 @@
           />
           <small
             class="text-error"
-            v-if="form.email == ''"
+            v-if="form.errors.email"
           >
-            Email is required.
+            {{ form.errors.email }}
           </small>
         </div>
         <div class="field">
@@ -268,9 +281,9 @@
           />
           <small
             class="text-error"
-            v-if="form.username == ''"
+            v-if="form.errors.username"
           >
-            Username is required.
+            {{ form.errors.username }}
           </small>
         </div>
         <div class="field">
@@ -286,9 +299,9 @@
           />
           <small
             class="text-error"
-            v-if="form.password == ''"
+            v-if="form.errors.password"
           >
-            Password is required.
+            {{ form.errors.password }}
           </small>
         </div>
         <div class="field">
