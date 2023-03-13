@@ -13,7 +13,7 @@
         paginator
         :rows="20"
         :rowsPerPageOptions="[5, 10, 20, 50]"
-        sortField="name"
+        sortField="lastName"
         :sortOrder="1"
         removableSort
         dataKey="id"
@@ -43,13 +43,13 @@
         <template #empty> No user found. </template>
         <template #loading> Loading user data. Please wait. </template>
         <Column
-          field="name"
-          header="Name"
+          field="lastName"
+          header="Last name"
           sortable
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.name }}
+            {{ data.lastName }}
           </template>
           <template #filter="{ filterModel, filterCallback }">
             <InputText
@@ -57,7 +57,65 @@
               type="text"
               @input="filterCallback()"
               class="p-column-filter"
-              placeholder="Search by name"
+              placeholder="Search by last name"
+            />
+          </template>
+        </Column>
+        <Column
+          field="firstName"
+          header="First name"
+          sortable
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.firstName }}
+          </template>
+          <template #filter="{ filterModel, filterCallback }">
+            <InputText
+              v-model="filterModel.value"
+              type="text"
+              @input="filterCallback()"
+              class="p-column-filter"
+              placeholder="Search by first name"
+            />
+          </template>
+        </Column>
+        <Column
+          field="middleName"
+          header="Middle name"
+          sortable
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.middleName }}
+          </template>
+          <template #filter="{ filterModel, filterCallback }">
+            <InputText
+              v-model="filterModel.value"
+              type="text"
+              @input="filterCallback()"
+              class="p-column-filter"
+              placeholder="Search by middle name"
+            />
+          </template>
+        </Column>
+        <Column
+          field="suffix"
+          header="Suffix"
+          sortable
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            <span v-if="data.suffix == 'na'"></span>
+            <span v-else>{{ data.suffix }}</span>
+          </template>
+          <template #filter="{ filterModel, filterCallback }">
+            <InputText
+              v-model="filterModel.value"
+              type="text"
+              @input="filterCallback()"
+              class="p-column-filter"
+              placeholder="Search by suffix"
             />
           </template>
         </Column>
@@ -135,19 +193,67 @@
         dismissableMask="true"
       >
         <div class="field">
-          <label for="name">Name</label>
+          <label for="firstName">First name</label>
           <InputText
-            id="name"
-            v-model.trim="form.name"
+            id="firstName"
+            v-model.trim="form.firstName"
             required="true"
             autofocus
-            :class="{ 'p-invalid': form.name == '' }"
+            :class="{ 'p-invalid': form.firstName == '' }"
           />
           <small
             class="text-error"
-            v-if="form.name == ''"
+            v-if="form.firstName == ''"
           >
-            Name is required.
+            First name is required.
+          </small>
+        </div>
+        <div class="field">
+          <label for="middleName">Middle name</label>
+          <InputText
+            id="middleName"
+            v-model.trim="form.middleName"
+            required="true"
+            autofocus
+            :class="{ 'p-invalid': form.middleName == '' }"
+          />
+          <small
+            class="text-error"
+            v-if="form.middleName == ''"
+          >
+            Middle name is required.
+          </small>
+        </div>
+        <div class="field">
+          <label for="lastName">Last name</label>
+          <InputText
+            id="lastName"
+            v-model.trim="form.lastName"
+            required="true"
+            autofocus
+            :class="{ 'p-invalid': form.lastName == '' }"
+          />
+          <small
+            class="text-error"
+            v-if="form.lastName == ''"
+          >
+            Last name is required.
+          </small>
+        </div>
+        <div class="field">
+          <label for="suffix">Suffix</label>
+          <InputText
+            id="suffix"
+            v-model.trim="form.suffix"
+            required="true"
+            autofocus
+            :class="{ 'p-invalid': form.suffix == '' }"
+          />
+          <small
+            class="text-error"
+            v-if="form.suffix == ''"
+          >
+            Suffix name is required.
           </small>
         </div>
         <div class="field">
@@ -165,6 +271,40 @@
             v-if="form.email == ''"
           >
             Email is required.
+          </small>
+        </div>
+        <div class="field">
+          <label for="username">Username</label>
+          <InputText
+            id="username"
+            v-model.trim="form.username"
+            required="true"
+            autofocus
+            :class="{ 'p-invalid': form.username == '' }"
+          />
+          <small
+            class="text-error"
+            v-if="form.username == ''"
+          >
+            Username is required.
+          </small>
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <Password
+            id="password"
+            type="password"
+            toggleMask
+            v-model.trim="form.password"
+            required="true"
+            autofocus
+            :class="{ 'p-invalid': form.password == '' }"
+          />
+          <small
+            class="text-error"
+            v-if="form.password == ''"
+          >
+            Password is required.
           </small>
         </div>
         <template #footer>
@@ -207,7 +347,8 @@
             style="font-size: 2rem"
           />
           <span v-if="form"
-            >Are you sure you want to delete <b>{{ form.name }}</b> ?</span
+            >Are you sure you want to delete
+            <b>{{ form.firstName }} {{ form.middleName }} {{ form.lastName }} </b> ?</span
           >
         </div>
         <template #footer>
@@ -234,6 +375,7 @@
 import { FilterMatchMode } from 'primevue/api';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import InputText from 'primevue/inputtext';
+import Password from 'primevue/password';
 import Column from 'primevue/column';
 import DataTable from 'primevue/datatable';
 import Button from 'primevue/button';
@@ -244,6 +386,7 @@ export default {
     AppLayout,
     InputText,
     Column,
+    Password,
     DataTable,
     Button,
     Dialog,
@@ -264,14 +407,23 @@ export default {
       usersList: null,
       filters: {
         // global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        name: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        firstName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        middleName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        lastName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        suffix: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        username: { value: null, matchMode: FilterMatchMode.CONTAINS },
         email: { value: null, matchMode: FilterMatchMode.CONTAINS },
         created_at: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       loading: true,
       form: this.$inertia.form({
-        name: null,
+        firstName: null,
+        middleName: null,
+        lastName: null,
+        suffix: null,
+        username: null,
         email: null,
+        password: null,
       }),
     };
   },
@@ -298,8 +450,13 @@ export default {
       this.isUpdate = true;
       this.createItemDialog = true;
       this.itemId = item.id;
-      this.form.name = item.name;
+      this.form.firstName = item.firstName;
+      this.form.middleName = item.middleName;
+      this.form.lastName = item.lastName;
+      this.form.suffix = item.suffix;
+      this.form.username = item.username;
       this.form.email = item.email;
+      this.form.password = item.password;
     },
     submit() {
       if (this.isUpdate) {
@@ -326,8 +483,13 @@ export default {
     },
     confirmDeleteItem(item) {
       this.itemId = item.id;
-      this.form.name = item.name;
+      this.form.firstName = item.firstName;
+      this.form.middleName = item.middleName;
+      this.form.lastName = item.lastName;
+      this.form.suffix = item.suffix;
+      this.form.username = item.username;
       this.form.email = item.email;
+      this.form.password = item.password;
       this.deleteItemDialog = true;
     },
     deleteItem() {

@@ -22,10 +22,12 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $users = User::when($request->search, function ($query, $value) {
-            $query->where('name', 'LIKE', '%' . $value . '%');
+            $query->where('firstName', 'LIKE', '%' . $value . '%')
+                ->where('middleName', 'LIKE', '%' . $value . '%')
+                ->where('lastName', 'LIKE', '%' . $value . '%');
             // ->orWhere('email', 'LIKE', '%' . $value . '%');
         })
-            ->orderBy('name', 'asc')
+            ->orderBy('lastName', 'asc')
             ->paginate(50);
 
         return Inertia::render('Users/Index', ['users' => $users]);
