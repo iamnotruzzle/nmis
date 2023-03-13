@@ -66,8 +66,9 @@
             <label
               for="password"
               class="block text-900 font-medium text-xl mb-2"
-              >Password</label
             >
+              Password
+            </label>
             <Password
               id="password"
               v-model="form.password"
@@ -75,6 +76,7 @@
               class="w-full mb-3"
               inputClass="w-full"
               inputStyle="padding:1rem"
+              :feedback="false"
               @keyup.enter="submit"
             ></Password>
 
