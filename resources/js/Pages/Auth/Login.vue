@@ -73,14 +73,14 @@
               id="password"
               v-model="form.password"
               :toggleMask="true"
-              class="w-full mb-3"
+              class="w-full mb-5"
               inputClass="w-full"
               inputStyle="padding:1rem"
               :feedback="false"
               @keyup.enter="submit"
             ></Password>
 
-            <div class="flex align-items-center justify-content-between mb-5">
+            <!-- <div class="flex align-items-center justify-content-between mb-5">
               <div class="flex align-items-center">
                 <Checkbox
                   id="rememberme"
@@ -90,7 +90,7 @@
                 ></Checkbox>
                 <label for="rememberme">Remember me</label>
               </div>
-              <!-- <a
+              <a
                 :href="route('register')"
                 class="font-medium no-underline ml-2 text-right cursor-pointer"
                 style="color: var(--primary-color)"
@@ -100,8 +100,8 @@
                 class="font-medium no-underline ml-2 text-right cursor-pointer"
                 style="color: var(--primary-color)"
                 >Forgot password?</a
-              > -->
-            </div>
+              >
+            </div> -->
             <Button
               type="submit"
               @click="submit"
@@ -143,21 +143,21 @@ export default {
       form: this.$inertia.form({
         login: '',
         password: '',
-        remember: false,
+        // remember: false,
       }),
     };
   },
   methods: {
     submit() {
       this.form
-        .transform((data) => ({
-          ...data,
-          remember: this.form.remember ? 'on' : '',
-        }))
+        // .transform((data) => ({
+        //   ...data,
+        //   remember: this.form.remember ? 'on' : '',
+        // }))
         .post(this.route('login'), {
           onFinish: () => this.form.reset('password'),
         });
-      console.log(this.form);
+      //   console.log(this.form);
     },
   },
 };
