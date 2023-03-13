@@ -190,6 +190,7 @@
         header="User Detail"
         :modal="true"
         class="p-fluid"
+        dismissableMask
       >
         <div class="field">
           <label for="firstName">First name</label>
@@ -212,16 +213,8 @@
           <InputText
             id="middleName"
             v-model.trim="form.middleName"
-            required="true"
             autofocus
-            :class="{ 'p-invalid': form.middleName == '' }"
           />
-          <small
-            class="text-error"
-            v-if="form.middleName == ''"
-          >
-            Middle name is required.
-          </small>
         </div>
         <div class="field">
           <label for="lastName">Last name</label>
@@ -244,16 +237,8 @@
           <InputText
             id="suffix"
             v-model.trim="form.suffix"
-            required="true"
             autofocus
-            :class="{ 'p-invalid': form.suffix == '' }"
           />
-          <small
-            class="text-error"
-            v-if="form.suffix == ''"
-          >
-            Suffix name is required.
-          </small>
         </div>
         <div class="field">
           <label for="description">Email</label>
@@ -305,6 +290,17 @@
           >
             Password is required.
           </small>
+        </div>
+        <div class="field">
+          <label for="image">Upload image</label>
+          <FileUpload
+            id="image"
+            mode="basic"
+            @input="onUpload"
+            accept="image/*"
+            :maxFileSize="1000000"
+          >
+          </FileUpload>
         </div>
         <template #footer>
           <Button
@@ -378,6 +374,7 @@ import Column from 'primevue/column';
 import DataTable from 'primevue/datatable';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
+import FileUpload from 'primevue/fileupload';
 
 export default {
   components: {
@@ -388,6 +385,7 @@ export default {
     DataTable,
     Button,
     Dialog,
+    FileUpload,
   },
   props: {
     users: Object,
@@ -415,6 +413,7 @@ export default {
       },
       loading: true,
       form: this.$inertia.form({
+        image: null,
         firstName: null,
         middleName: null,
         lastName: null,
@@ -506,6 +505,9 @@ export default {
       this.createItemDialog = false;
       this.form.reset();
       this.form.clearErrors();
+    },
+    onUpload(event) {
+      this.form.image = event.target.files[0];
     },
   },
   watch: {
