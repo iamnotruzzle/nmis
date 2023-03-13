@@ -190,7 +190,6 @@
         header="User Detail"
         :modal="true"
         class="p-fluid"
-        dismissableMask="true"
       >
         <div class="field">
           <label for="firstName">First name</label>
@@ -296,7 +295,7 @@
             type="password"
             toggleMask
             v-model.trim="form.password"
-            required="true"
+            :required="true"
             autofocus
             :class="{ 'p-invalid': form.password == '' }"
           />
@@ -339,7 +338,6 @@
         :style="{ width: '450px' }"
         header="Confirm"
         :modal="true"
-        dismissableMask="true"
       >
         <div class="flex align-items-center justify-content-center">
           <i
