@@ -350,7 +350,6 @@
 
 <script>
 import { defineComponent } from 'vue';
-// import { Head, Link } from '@inertiajs/inertia-vue3';
 import { Head, Link } from '@inertiajs/vue3';
 
 export default defineComponent({

@@ -389,6 +389,7 @@
 
 <script>
 import { FilterMatchMode } from 'primevue/api';
+import { router } from '@inertiajs/vue3';
 import { Head } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import InputText from 'primevue/inputtext';
@@ -499,8 +500,8 @@ export default {
     },
     submit() {
       if (this.isUpdate) {
-        Inertia.post(
-          route('users.update', this.itemId),
+        router.post(
+          `users/${this.itemId}`,
           {
             _method: 'put',
             preserveScroll: true,
@@ -508,8 +509,8 @@ export default {
             middleName: this.form.middleName,
             lastName: this.form.lastName,
             suffix: this.form.suffix,
-            role: this.form.role,
-            permissions: this.form.permissions,
+            // role: this.form.role,
+            // permissions: this.form.permissions,
             email: this.form.email,
             username: this.form.username,
             password: this.form.password,
@@ -520,9 +521,6 @@ export default {
               this.itemId = null;
               this.createItemDialog = false;
               this.cancel();
-              this.form.reset();
-              this.form.clearErrors();
-              this.storePropsToLocal();
               this.updatedMsg();
             },
           }
@@ -534,9 +532,6 @@ export default {
             this.itemId = null;
             this.createItemDialog = false;
             this.cancel();
-            this.form.reset();
-            this.form.clearErrors();
-            this.storePropsToLocal();
             this.createdMsg();
           },
         });
@@ -572,6 +567,7 @@ export default {
       this.createItemDialog = false;
       this.form.reset();
       this.form.clearErrors();
+      this.storePropsToLocal();
     },
     createdMsg() {
       this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Account created', life: 3000 });

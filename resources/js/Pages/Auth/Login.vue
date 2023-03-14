@@ -111,7 +111,6 @@
 </template>
 
 <script>
-// import { Head } from '@inertiajs/inertia-vue3';
 import { Head } from '@inertiajs/vue3';
 import Checkbox from 'primevue/checkbox';
 import Button from 'primevue/button';
