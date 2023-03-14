@@ -1,5 +1,7 @@
 <template>
   <app-layout>
+    <Head title="Template - Users" />
+
     <div class="card">
       <Toast />
       <!--
@@ -387,8 +389,7 @@
 
 <script>
 import { FilterMatchMode } from 'primevue/api';
-// import { Inertia } from '@inertiajs/inertia';
-import { router } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
@@ -402,6 +403,7 @@ import Toast from 'primevue/toast';
 export default {
   components: {
     AppLayout,
+    Head,
     InputText,
     Column,
     Password,
@@ -558,6 +560,8 @@ export default {
           this.deleteItemDialog = false;
           this.itemId = null;
           this.storePropsToLocal();
+          this.form.clearErrors();
+          this.form.reset();
           this.deletedMsg();
         },
       });
