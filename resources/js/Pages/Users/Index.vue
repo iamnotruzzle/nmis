@@ -387,7 +387,8 @@
 
 <script>
 import { FilterMatchMode } from 'primevue/api';
-import { Inertia } from '@inertiajs/inertia';
+// import { Inertia } from '@inertiajs/inertia';
+import { router } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';

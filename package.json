@@ -10,9 +10,6 @@
     "production": "mix --production"
   },
   "devDependencies": {
-    "@inertiajs/inertia": "^0.10.0",
-    "@inertiajs/inertia-vue3": "^0.5.1",
-    "@inertiajs/progress": "^0.2.6",
     "@tailwindcss/forms": "^0.2.1",
     "@tailwindcss/typography": "^0.3.0",
     "@vue/compiler-sfc": "^3.0.5",
@@ -21,9 +18,9 @@
     "lodash": "^4.17.19",
     "postcss": "^8.1.14",
     "postcss-import": "^12.0.1",
-    "primeflex": "~3.0.0",
-    "primeicons": "~4.1.0",
-    "primevue": "3.24.0",
+    "primeflex": "3.0.0",
+    "primeicons": "4.1.0",
+    "primevue": "3.25.0",
     "resolve-url-loader": "^4.0.0",
     "sass": "^1.42.1",
     "sass-loader": "^12.1.0",
@@ -33,6 +30,7 @@
     "vue-loader": "^16.1.2"
   },
   "dependencies": {
+    "@inertiajs/vue3": "^1.0.2",
     "prettier": "^2.8.4"
   }
 }

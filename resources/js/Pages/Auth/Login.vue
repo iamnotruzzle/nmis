@@ -70,7 +70,6 @@
               :toggleMask="true"
               class="w-full mb-5"
               inputClass="w-full"
-              inputStyle="padding:1rem"
               :feedback="false"
               @keyup.enter="submit"
             ></Password>
@@ -112,7 +111,8 @@
 </template>
 
 <script>
-import { Head } from '@inertiajs/inertia-vue3';
+// import { Head } from '@inertiajs/inertia-vue3';
+import { Head } from '@inertiajs/vue3';
 import Checkbox from 'primevue/checkbox';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
