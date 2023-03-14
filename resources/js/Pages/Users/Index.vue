@@ -1,6 +1,7 @@
 <template>
   <app-layout>
     <div class="card">
+      <Toast />
       <!--
             data table sort order
             asc = 1
@@ -391,6 +392,7 @@ import DataTable from 'primevue/datatable';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import FileUpload from 'primevue/fileupload';
+import Toast from 'primevue/toast';
 
 export default {
   components: {
@@ -402,6 +404,7 @@ export default {
     Button,
     Dialog,
     FileUpload,
+    Toast,
   },
   props: {
     users: Object,
@@ -460,6 +463,10 @@ export default {
         },
       });
     },
+    // assign image name to form.image
+    onUpload(event) {
+      this.form.image = event.target.files[0];
+    },
     openCreateItemDialog() {
       this.isUpdate = false;
       this.form.clearErrors();
@@ -509,7 +516,7 @@ export default {
               this.form.reset();
               this.form.clearErrors();
               this.storePropsToLocal();
-              // this.createdMsg();
+              this.updatedMsg();
             },
           }
         );
@@ -523,7 +530,7 @@ export default {
             this.form.reset();
             this.form.clearErrors();
             this.storePropsToLocal();
-            // this.createdMsg();
+            this.createdMsg();
           },
         });
       }
@@ -546,7 +553,7 @@ export default {
           this.deleteItemDialog = false;
           this.itemId = null;
           this.storePropsToLocal();
-          //   this.deletedMsg();
+          this.deletedMsg();
         },
       });
     },
@@ -557,8 +564,14 @@ export default {
       this.form.reset();
       this.form.clearErrors();
     },
-    onUpload(event) {
-      this.form.image = event.target.files[0];
+    createdMsg() {
+      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Account created', life: 3000 });
+    },
+    updatedMsg() {
+      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Account updated', life: 3000 });
+    },
+    deletedMsg() {
+      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Account deleted', life: 3000 });
     },
   },
   watch: {
