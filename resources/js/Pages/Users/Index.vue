@@ -45,6 +45,22 @@
         </template>
         <template #empty> No user found. </template>
         <template #loading> Loading user data. Please wait. </template>
+        <Column header="Avatar">
+          <template #body="{ data }">
+            <Avatar
+              v-if="data.image != null"
+              :image="`/storage/${data.image}`"
+              shape="circle"
+              size="large"
+            />
+            <Avatar
+              v-else
+              image="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+              shape="circle"
+              size="large"
+            />
+          </template>
+        </Column>
         <Column
           field="lastName"
           header="Last name"
@@ -315,7 +331,7 @@
             mode="basic"
             @input="onUpload"
             accept="image/*"
-            :maxFileSize="1000000"
+            :maxFileSize="7000000"
           >
           </FileUpload>
         </div>
@@ -400,6 +416,7 @@ import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import FileUpload from 'primevue/fileupload';
 import Toast from 'primevue/toast';
+import Avatar from 'primevue/avatar';
 
 export default {
   components: {
@@ -413,6 +430,7 @@ export default {
     Dialog,
     FileUpload,
     Toast,
+    Avatar,
   },
   props: {
     users: Object,
