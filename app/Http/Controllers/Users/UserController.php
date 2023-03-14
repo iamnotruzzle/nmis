@@ -50,7 +50,7 @@ class UserController extends Controller
             'suffix' => 'string|nullable',
             // 'role' => 'required|string',
             // 'permissions' => 'required',
-            'email' => 'required|email|unique:users,email|max:40',
+            'email' => 'required|email:rfc,dns|unique:users,email|max:40',
             'username' => 'required|string|unique:users,username|max:14',
             'password' => 'required|min:8',
         ]);
@@ -101,7 +101,8 @@ class UserController extends Controller
                 // 'permissions' => 'required',
                 'email' => [
                     'required',
-                    'email',
+                    // 'email',
+                    'email:rfc,dns',
                     Rule::unique('users')->ignore($user->id)
                 ],
                 'username' => [
@@ -139,7 +140,8 @@ class UserController extends Controller
                 // 'permissions' => 'required',
                 'email' => [
                     'required',
-                    'email',
+                    // 'email',
+                    'email:rfc,dns',
                     Rule::unique('users')->ignore($user->id)
                 ],
                 'username' => [

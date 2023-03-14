@@ -331,6 +331,8 @@
             icon="pi pi-check"
             severity="warning"
             text
+            type="submit"
+            :disabled="form.processing"
             @click="submit"
           />
           <Button
@@ -338,6 +340,8 @@
             label="Save"
             icon="pi pi-check"
             text
+            type="submit"
+            :disabled="form.processing"
             @click="submit"
           />
         </template>
