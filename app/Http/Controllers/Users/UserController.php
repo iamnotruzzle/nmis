@@ -61,13 +61,6 @@ class UserController extends Controller
             $image = null;
         }
 
-        // $suffix = 'na';
-        // if ($request->suffix == '' || $request->suffix == null) {
-        //     $suffix = 'na';
-        // } else {
-        //     $suffix = $request->suffix;
-        // }
-
         $user = User::create([
             'firstName' => $request->firstName,
             'middleName' => $request->middleName,
@@ -93,6 +86,8 @@ class UserController extends Controller
 
     public function update(User $user, Request $request)
     {
+        // dd($request);
+
         $image = $user->image;
 
         if ($request->password != null || $request->password != '') {
@@ -140,7 +135,7 @@ class UserController extends Controller
                 'middleName' => 'string|nullable',
                 'lastName' => 'required|string',
                 'suffix' => 'string|nullable',
-                'role' => 'required|string',
+                // 'role' => 'required|string',
                 // 'permissions' => 'required',
                 'email' => [
                     'required',
@@ -172,17 +167,28 @@ class UserController extends Controller
         }
 
         // update user role
-        $user->syncRoles($request->role);
+        // $user->syncRoles($request->role);
 
         // update user permissions
-        $user->syncPermissions([$request->permissions]);
+        // $user->syncPermissions([$request->permissions]);
 
         // return redirect()->back();
         return Redirect::route('users.index');
     }
 
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        Storage::delete('public/' . $user->image);
+
+        $user->delete();
+
+        // remove user role
+        // $user->roles()->detach();
+
+        // remove user role
+        // $user->permissions()->detach();
+
+        // return redirect()->back();
+        return Redirect::route('users.index');
     }
 }

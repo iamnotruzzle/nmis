@@ -191,6 +191,7 @@
         header="User Detail"
         :modal="true"
         class="p-fluid"
+        @hide="clickOutsideDialog"
         dismissableMask
       >
         <div class="field">
@@ -347,6 +348,7 @@
         :style="{ width: '450px' }"
         header="Confirm"
         :modal="true"
+        dismissableMask
       >
         <div class="flex align-items-center justify-content-center">
           <i
@@ -380,6 +382,7 @@
 
 <script>
 import { FilterMatchMode } from 'primevue/api';
+import { Inertia } from '@inertiajs/inertia';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
@@ -438,23 +441,35 @@ export default {
     };
   },
   mounted() {
-    this.usersList = this.users.data;
+    this.storePropsToLocal();
     this.loading = false;
   },
   methods: {
+    // use this function so that every time you make
+    // server request such as POST, the data in the table
+    // is updated
+    storePropsToLocal() {
+      this.usersList = this.users.data;
+    },
     updateData() {
       this.$inertia.get('users', this.params, {
         preserveState: true,
         preserveScroll: true,
         onFinish: (visit) => {
-          this.usersList = this.users.data;
+          this.storePropsToLocal();
         },
       });
     },
     openCreateItemDialog() {
+      this.isUpdate = false;
+      this.form.clearErrors();
       this.form.reset();
       this.itemId = null;
       this.createItemDialog = true;
+    },
+    // emit close dialog
+    clickOutsideDialog() {
+      this.$emit('hide', (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
     },
     editItem(item) {
       this.isUpdate = true;
@@ -470,15 +485,34 @@ export default {
     },
     submit() {
       if (this.isUpdate) {
-        this.form.put(route('users.update', this.itemId), {
-          preserveScroll: true,
-          onSuccess: () => {
-            this.itemId = null;
-            this.createItemDialog = false;
-            this.cancel();
-            // this.createdMsg();
+        Inertia.post(
+          route('users.update', this.itemId),
+          {
+            _method: 'put',
+            preserveScroll: true,
+            firstName: this.form.firstName,
+            middleName: this.form.middleName,
+            lastName: this.form.lastName,
+            suffix: this.form.suffix,
+            role: this.form.role,
+            permissions: this.form.permissions,
+            email: this.form.email,
+            username: this.form.username,
+            password: this.form.password,
+            image: this.form.image,
           },
-        });
+          {
+            onSuccess: () => {
+              this.itemId = null;
+              this.createItemDialog = false;
+              this.cancel();
+              this.form.reset();
+              this.form.clearErrors();
+              this.storePropsToLocal();
+              // this.createdMsg();
+            },
+          }
+        );
       } else {
         this.form.post(route('users.store'), {
           preserveScroll: true,
@@ -486,6 +520,9 @@ export default {
             this.itemId = null;
             this.createItemDialog = false;
             this.cancel();
+            this.form.reset();
+            this.form.clearErrors();
+            this.storePropsToLocal();
             // this.createdMsg();
           },
         });
@@ -508,6 +545,7 @@ export default {
         onSuccess: () => {
           this.deleteItemDialog = false;
           this.itemId = null;
+          this.storePropsToLocal();
           //   this.deletedMsg();
         },
       });
