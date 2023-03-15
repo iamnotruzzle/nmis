@@ -160,7 +160,6 @@
         <Column
           header="CREATED AT"
           filterField="created_at"
-          dataType="date"
           style="min-width: 10rem"
           :showFilterMenu="false"
         >
@@ -172,7 +171,6 @@
               v-model="from"
               dateFormat="mm-dd-yy"
               placeholder="FROM"
-              mask="99-99-9999"
               showIcon
               showButtonBar
               :hideOnDateTimeSelect="true"
@@ -182,7 +180,6 @@
               v-model="to"
               dateFormat="mm-dd-yy"
               placeholder="TO"
-              mask="99-99-9999"
               showIcon
               showButtonBar
               :hideOnDateTimeSelect="true"
@@ -611,6 +608,20 @@ export default {
     deletedMsg() {
       this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Account deleted', life: 3000 });
     },
+    getLocalDateString(utcStr) {
+      const date = new Date(utcStr);
+      return (
+        date.getFullYear() +
+        '-' +
+        String(date.getMonth() + 1).padStart(2, '0') +
+        '-' +
+        String(date.getDate()).padStart(2, '0') +
+        ' ' +
+        String(date.getHours()).padStart(2, '0') +
+        ':' +
+        String(date.getMinutes()).padStart(2, '0')
+      );
+    },
   },
   watch: {
     search: function (val, oldVal) {
@@ -618,11 +629,13 @@ export default {
       this.updateData();
     },
     from: function (val) {
-      this.params.from = val;
+      let from = this.getLocalDateString(val);
+      this.params.from = from;
       this.updateData();
     },
     to: function (val) {
-      this.params.to = val;
+      let to = this.getLocalDateString(val);
+      this.params.to = to;
       this.updateData();
     },
   },
