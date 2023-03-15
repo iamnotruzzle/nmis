@@ -167,7 +167,6 @@
             {{ data.created_at }}
           </template>
           <template #filter="{}">
-            <!-- @clear-click="clearFromFilter" -->
             <Calendar
               v-model="from"
               dateFormat="mm-dd-yy"
@@ -177,7 +176,6 @@
               :hideOnDateTimeSelect="true"
             />
             <div class="mt-2"></div>
-            <!-- @clear-click="clearToFilter" -->
             <Calendar
               v-model="to"
               dateFormat="mm-dd-yy"
@@ -624,13 +622,6 @@ export default {
         ':' +
         String(date.getMinutes()).padStart(2, '0')
       );
-    },
-    clearFromFilter() {
-      this.$emit('clear-click', (this.params.from = null), (this.from = null));
-      this.updateData();
-    },
-    clearToFilter() {
-      this.$emit('clear-click', (this.params.to = null), (this.to = null));
     },
   },
   watch: {

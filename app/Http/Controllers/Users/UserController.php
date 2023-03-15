@@ -26,9 +26,8 @@ class UserController extends Controller
     {
         $users = User::when($request->search, function ($query, $value) {
             $query->where('firstName', 'LIKE', '%' . $value . '%')
-                ->where('middleName', 'LIKE', '%' . $value . '%')
-                ->where('lastName', 'LIKE', '%' . $value . '%');
-            // ->orWhere('email', 'LIKE', '%' . $value . '%');
+                ->orWhere('middleName', 'LIKE', '%' . $value . '%')
+                ->orWhere('lastName', 'LIKE', '%' . $value . '%');
         })
             ->when(
                 $request->from,
