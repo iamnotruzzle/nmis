@@ -167,6 +167,7 @@
             {{ data.created_at }}
           </template>
           <template #filter="{}">
+            <!-- @clear-click="clearFromFilter" -->
             <Calendar
               v-model="from"
               dateFormat="mm-dd-yy"
@@ -176,6 +177,7 @@
               :hideOnDateTimeSelect="true"
             />
             <div class="mt-2"></div>
+            <!-- @clear-click="clearToFilter" -->
             <Calendar
               v-model="to"
               dateFormat="mm-dd-yy"
@@ -426,6 +428,7 @@ import FileUpload from 'primevue/fileupload';
 import Toast from 'primevue/toast';
 import Avatar from 'primevue/avatar';
 import Calendar from 'primevue/calendar';
+import { thisExpression } from '@babel/types';
 
 export default {
   components: {
@@ -622,6 +625,13 @@ export default {
         String(date.getMinutes()).padStart(2, '0')
       );
     },
+    clearFromFilter() {
+      this.$emit('clear-click', (this.params.from = null), (this.from = null));
+      this.updateData();
+    },
+    clearToFilter() {
+      this.$emit('clear-click', (this.params.to = null), (this.to = null));
+    },
   },
   watch: {
     search: function (val, oldVal) {
@@ -629,13 +639,23 @@ export default {
       this.updateData();
     },
     from: function (val) {
-      let from = this.getLocalDateString(val);
-      this.params.from = from;
+      if (val != null) {
+        let from = this.getLocalDateString(val);
+        this.params.from = from;
+      } else {
+        this.params.from = null;
+        this.from = null;
+      }
       this.updateData();
     },
     to: function (val) {
-      let to = this.getLocalDateString(val);
-      this.params.to = to;
+      if (val != null) {
+        let to = this.getLocalDateString(val);
+        this.params.to = to;
+      } else {
+        this.params.to = null;
+        this.to = null;
+      }
       this.updateData();
     },
   },
