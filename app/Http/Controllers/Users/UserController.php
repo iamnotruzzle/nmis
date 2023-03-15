@@ -14,21 +14,22 @@ class UserController extends Controller
 {
 
     // restrict controller based on the users role
-    // public function __construct()
-    // {
-    //     // this will disable routes for users that is not super-admin or admin
-    //     $this->middleware(['role:super-admin|admin']);
-    //     // $this->middleware(['role_or_permission:super-admin|admin|edit-users']);
-    //     // $this->middleware(['permission:create-users']);
-    // }
+    public function __construct()
+    {
+        // this will disable routes for users that is not super-admin or admin
+        $this->middleware(['role:super-admin|admin']);
+        // $this->middleware(['role_or_permission:super-admin|admin|edit-users']);
+        // $this->middleware(['permission:create-users']);
+    }
 
     public function index(Request $request)
     {
-        $users = User::when($request->search, function ($query, $value) {
-            $query->where('firstName', 'LIKE', '%' . $value . '%')
-                ->orWhere('middleName', 'LIKE', '%' . $value . '%')
-                ->orWhere('lastName', 'LIKE', '%' . $value . '%');
-        })
+        $users = User::with(['roles', 'permissions'])
+            ->when($request->search, function ($query, $value) {
+                $query->where('firstName', 'LIKE', '%' . $value . '%')
+                    ->orWhere('middleName', 'LIKE', '%' . $value . '%')
+                    ->orWhere('lastName', 'LIKE', '%' . $value . '%');
+            })
             ->when(
                 $request->from,
                 function ($query, $value) {
