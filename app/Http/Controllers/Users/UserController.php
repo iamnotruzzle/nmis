@@ -30,6 +30,18 @@ class UserController extends Controller
                 ->where('lastName', 'LIKE', '%' . $value . '%');
             // ->orWhere('email', 'LIKE', '%' . $value . '%');
         })
+            ->when(
+                $request->from,
+                function ($query, $value) {
+                    $query->whereDate('created_at', '>=', $value);
+                }
+            )
+            ->when(
+                $request->to,
+                function ($query, $value) {
+                    $query->whereDate('created_at', '<=', $value);
+                }
+            )
             ->orderBy('lastName', 'asc')
             ->paginate(50);
 

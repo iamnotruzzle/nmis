@@ -21,6 +21,7 @@
         removableSort
         dataKey="id"
         filterDisplay="row"
+        showGridlines
         :loading="loading"
       >
         <template #header>
@@ -126,8 +127,6 @@
         >
           <template #body="{ data }">
             {{ data.suffix }}
-            <!-- <span v-if="data.suffix == 'na'"></span>
-            <span v-else>{{ data.suffix }}</span> -->
           </template>
           <template #filter="{ filterModel, filterCallback }">
             <InputText
@@ -158,23 +157,35 @@
             />
           </template>
         </Column>
-        <!-- TODO fixed the correct date that shows in the table column and database -->
         <Column
-          field="created_at"
-          header="Created at"
-          sortable
-          style="min-width: 12rem"
+          header="CREATED AT"
+          filterField="created_at"
+          dataType="date"
+          style="min-width: 10rem"
+          :showFilterMenu="false"
         >
           <template #body="{ data }">
             {{ data.created_at }}
           </template>
-          <template #filter="{ filterModel, filterCallback }">
-            <InputText
-              v-model="filterModel.value"
-              type="text"
-              @input="filterCallback()"
-              class="p-column-filter"
-              placeholder="Search by created at"
+          <template #filter="{}">
+            <Calendar
+              v-model="from"
+              dateFormat="mm-dd-yy"
+              placeholder="FROM"
+              mask="99-99-9999"
+              showIcon
+              showButtonBar
+              :hideOnDateTimeSelect="true"
+            />
+            <div class="mt-2"></div>
+            <Calendar
+              v-model="to"
+              dateFormat="mm-dd-yy"
+              placeholder="TO"
+              mask="99-99-9999"
+              showIcon
+              showButtonBar
+              :hideOnDateTimeSelect="true"
             />
           </template>
         </Column>
@@ -417,6 +428,7 @@ import Dialog from 'primevue/dialog';
 import FileUpload from 'primevue/fileupload';
 import Toast from 'primevue/toast';
 import Avatar from 'primevue/avatar';
+import Calendar from 'primevue/calendar';
 
 export default {
   components: {
@@ -431,6 +443,7 @@ export default {
     FileUpload,
     Toast,
     Avatar,
+    Calendar,
   },
   props: {
     users: Object,
@@ -444,6 +457,8 @@ export default {
       search: '',
       options: {},
       params: {},
+      from: null,
+      to: null,
       totalRecords: 0,
       usersList: null,
       filters: {
@@ -454,7 +469,6 @@ export default {
         suffix: { value: null, matchMode: FilterMatchMode.CONTAINS },
         username: { value: null, matchMode: FilterMatchMode.CONTAINS },
         email: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        created_at: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       loading: true,
       form: this.$inertia.form({
@@ -471,10 +485,11 @@ export default {
   },
   mounted() {
     this.storePropsToLocal();
+
     this.loading = false;
   },
   methods: {
-    // use this function so that every time you make
+    // use storePropsToLocal() function so that every time you make
     // server request such as POST, the data in the table
     // is updated
     storePropsToLocal() {
@@ -600,6 +615,14 @@ export default {
   watch: {
     search: function (val, oldVal) {
       this.params.search = val;
+      this.updateData();
+    },
+    from: function (val) {
+      this.params.from = val;
+      this.updateData();
+    },
+    to: function (val) {
+      this.params.to = val;
       this.updateData();
     },
   },
