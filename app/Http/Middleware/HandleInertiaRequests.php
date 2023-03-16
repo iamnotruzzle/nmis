@@ -41,15 +41,15 @@ class HandleInertiaRequests extends Middleware
             'auth.user' => fn () => $request->user()
                 ? $request->user()->only('id', 'firstName', 'middleName', 'lastName', 'username', 'email', 'image')
                 : null,
-            // 'auth.user.permissions' => function () use ($request) {
-            //     return ($request->user() ? $request->user()->getAllPermissions()->pluck('name') : null);
-            // },
-            // 'auth.user.roles' => function () use ($request) {
-            //     return ($request->user() ? $request->user()->roles()->pluck('name') : null);
-            // },
-            // 'flash' => [
-            //     'message' => fn () => $request->session()->get('message')
-            // ],
+            'auth.user.permissions' => function () use ($request) {
+                return ($request->user() ? $request->user()->getAllPermissions()->pluck('name') : null);
+            },
+            'auth.user.roles' => function () use ($request) {
+                return ($request->user() ? $request->user()->roles()->pluck('name') : null);
+            },
+            'flash' => [
+                'message' => fn () => $request->session()->get('message')
+            ],
         ]);
     }
 }

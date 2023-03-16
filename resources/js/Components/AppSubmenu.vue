@@ -110,8 +110,10 @@ export default {
   data() {
     return {
       activeIndex: this.setInitialIndex(),
+      itemList: null,
     };
   },
+  mounted() {},
   methods: {
     setInitialIndex() {
       const currentUrl = window.location.href;
@@ -143,6 +145,11 @@ export default {
     },
     visible(item) {
       return typeof item.visible === 'function' ? item.visible() : item.visible !== false;
+    },
+  },
+  computed: {
+    user() {
+      return this.$page.props.auth.user;
     },
   },
 };
