@@ -17,7 +17,8 @@ class UserController extends Controller
     public function __construct()
     {
         // this will disable routes for users that is not super-admin or admin
-        $this->middleware(['role:super-admin|admin']);
+        $this->middleware(['role:super-admin']);
+        // $this->middleware(['role:super-admin|admin']);
         // $this->middleware(['role_or_permission:super-admin|admin|edit-users']);
         // $this->middleware(['permission:create-users']);
     }

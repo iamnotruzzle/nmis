@@ -89,7 +89,7 @@ export default {
   },
   methods: {
     removeRoutesIfNonAdmin() {
-      if (this.user.roles[0] == 'user') {
+      if (this.user.roles[0] == 'admin' || this.user.roles[0] == 'user') {
         this.menu[0].items.splice(1, 1); //remove user route
       }
     },
