@@ -139,6 +139,24 @@
           </template>
         </Column>
         <Column
+          field="role"
+          header="Role"
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.roles[0].name }}
+          </template>
+          <!-- <template #filter="{ filterModel, filterCallback }">
+            <InputText
+              v-model="filterModel.value"
+              type="text"
+              @input="filterCallback()"
+              class="p-column-filter"
+              placeholder="Search by role"
+            />
+          </template> -->
+        </Column>
+        <Column
           field="email"
           header="Email"
           sortable
@@ -299,6 +317,30 @@
           </small>
         </div>
         <div class="field">
+          <label for="role">Role</label>
+          <!-- <InputText
+            id="role"
+            v-model.trim="form.username"
+            required="true"
+            autofocus
+            :class="{ 'p-invalid': form.username == '' }"
+          /> -->
+          <Dropdown
+            v-model="form.role"
+            :options="roles"
+            optionLabel="name"
+            optionValue="value"
+            placeholder="Role"
+            class="w-full md:w-14rem"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.role"
+          >
+            {{ form.errors.role }}
+          </small>
+        </div>
+        <div class="field">
           <label for="username">Username</label>
           <InputText
             id="username"
@@ -426,7 +468,7 @@ import FileUpload from 'primevue/fileupload';
 import Toast from 'primevue/toast';
 import Avatar from 'primevue/avatar';
 import Calendar from 'primevue/calendar';
-import { thisExpression } from '@babel/types';
+import Dropdown from 'primevue/dropdown';
 
 export default {
   components: {
@@ -442,6 +484,7 @@ export default {
     Toast,
     Avatar,
     Calendar,
+    Dropdown,
   },
   props: {
     users: Object,
@@ -465,16 +508,32 @@ export default {
         middleName: { value: null, matchMode: FilterMatchMode.CONTAINS },
         lastName: { value: null, matchMode: FilterMatchMode.CONTAINS },
         suffix: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        // role: { value: null, matchMode: FilterMatchMode.CONTAINS },
         username: { value: null, matchMode: FilterMatchMode.CONTAINS },
         email: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       loading: true,
+      roles: [
+        {
+          name: 'super-admin',
+          value: 'super-admin',
+        },
+        {
+          name: 'admin',
+          value: 'admin',
+        },
+        {
+          name: 'user',
+          value: 'user',
+        },
+      ],
       form: this.$inertia.form({
         image: null,
         firstName: null,
         middleName: null,
         lastName: null,
         suffix: null,
+        role: null,
         username: null,
         email: null,
         password: null,
@@ -518,6 +577,8 @@ export default {
       this.$emit('hide', (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
     },
     editItem(item) {
+      //   console.log(item.roles[0].name);
+
       this.isUpdate = true;
       this.createItemDialog = true;
       this.itemId = item.id;
@@ -525,6 +586,7 @@ export default {
       this.form.middleName = item.middleName;
       this.form.lastName = item.lastName;
       this.form.suffix = item.suffix;
+      this.form.role = item.roles[0].name;
       this.form.username = item.username;
       this.form.email = item.email;
       this.form.password = item.password;
@@ -540,7 +602,7 @@ export default {
             middleName: this.form.middleName,
             lastName: this.form.lastName,
             suffix: this.form.suffix,
-            // role: this.form.role,
+            role: this.form.role,
             // permissions: this.form.permissions,
             email: this.form.email,
             username: this.form.username,
@@ -574,6 +636,7 @@ export default {
       this.form.middleName = item.middleName;
       this.form.lastName = item.lastName;
       this.form.suffix = item.suffix;
+      this.form.role = item.role;
       this.form.username = item.username;
       this.form.email = item.email;
       this.form.password = item.password;

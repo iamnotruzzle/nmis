@@ -60,7 +60,7 @@ class UserController extends Controller
             'middleName' => 'string|nullable',
             'lastName' => 'required|string',
             'suffix' => 'string|nullable',
-            // 'role' => 'required|string',
+            'role' => 'required|string',
             // 'permissions' => 'required',
             'email' => 'required|email:rfc,dns|unique:users,email|max:40',
             'username' => 'required|string|unique:users,username|max:14',
@@ -87,7 +87,7 @@ class UserController extends Controller
         // dd($user);
 
         // assign role
-        // $user->assignRole($request->role);
+        $user->assignRole($request->role);
 
         // assign permissions
         // $user->givePermissionTo($request->permissions);
@@ -109,7 +109,7 @@ class UserController extends Controller
                 'middleName' => 'string|nullable',
                 'lastName' => 'required|string',
                 'suffix' => 'string|nullable',
-                // 'role' => 'required|string',
+                'role' => 'required|string',
                 // 'permissions' => 'required',
                 'email' => [
                     'required',
@@ -148,7 +148,7 @@ class UserController extends Controller
                 'middleName' => 'string|nullable',
                 'lastName' => 'required|string',
                 'suffix' => 'string|nullable',
-                // 'role' => 'required|string',
+                'role' => 'required|string',
                 // 'permissions' => 'required',
                 'email' => [
                     'required',
@@ -181,7 +181,7 @@ class UserController extends Controller
         }
 
         // update user role
-        // $user->syncRoles($request->role);
+        $user->syncRoles($request->role);
 
         // update user permissions
         // $user->syncPermissions([$request->permissions]);
