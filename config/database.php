@@ -104,7 +104,7 @@ return [
     |
     */
 
-    'migrations' => 'migrations',
+    'migrations' => 'csrw_migrations',
 
     /*
     |--------------------------------------------------------------------------

@@ -22,11 +22,9 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var string[]
-     */
+
+    protected $table = 'csrw_users';
+
     protected $fillable = [
         'firstName',
         'middleName',
