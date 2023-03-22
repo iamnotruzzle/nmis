@@ -34,7 +34,10 @@
       class="layout-topbar-menu lg:flex origin-top"
     >
       <li>
-        <Button class="p-button-link p-link layout-topbar-button">
+        <Button
+          class="p-button-link p-link layout-topbar-button"
+          @click="goToDashboard"
+        >
           <i class="pi pi-calendar"></i>
           <span>Events</span>
         </Button>
@@ -42,14 +45,17 @@
       <li>
         <Button
           class="p-button-link p-link layout-topbar-button"
-          @click="goToSettings"
+          @click="goToDashboard"
         >
           <i class="pi pi-cog"></i>
           <span>Settings</span>
         </Button>
       </li>
       <li>
-        <Button class="p-button-link p-link layout-topbar-button">
+        <Button
+          class="p-button-link p-link layout-topbar-button"
+          @click="goToDashboard"
+        >
           <i class="pi pi-user"></i>
           <span>Profile</span>
         </Button>
@@ -70,7 +76,10 @@
       class="layout-topbar-menu hidden lg:flex origin-top"
     >
       <li>
-        <Button class="p-button-link p-link layout-topbar-button">
+        <Button
+          class="p-button-link p-link layout-topbar-button"
+          @click="goToDashboard"
+        >
           <i class="pi pi-calendar"></i>
           <span>Events</span>
         </Button>
@@ -78,14 +87,17 @@
       <li>
         <Button
           class="p-button-link p-link layout-topbar-button"
-          @click="goToSettings"
+          @click="goToDashboard"
         >
           <i class="pi pi-cog"></i>
           <span>Settings</span>
         </Button>
       </li>
       <li>
-        <Button class="p-button-link p-link layout-topbar-button">
+        <Button
+          class="p-button-link p-link layout-topbar-button"
+          @click="goToDashboard"
+        >
           <i class="pi pi-user"></i>
           <span>Profile</span>
         </Button>
@@ -131,8 +143,8 @@ export default {
     onTopBarMenuToggle() {
       this.topbarMenuActive = !this.topbarMenuActive;
     },
-    goToSettings() {
-      this.$inertia.get(this.route('profile.show'));
+    goToDashboard() {
+      this.$inertia.get(this.route('dashboard'));
     },
     bindOutsideClickListener() {
       if (!this.outsideClickListener) {
