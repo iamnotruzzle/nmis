@@ -47,4 +47,10 @@ class Item extends Model
     {
         return $this->hasOne(Category::class, 'cl1comb', 'cl1comb');
     }
+
+    // medical supplies unit
+    public function unit()
+    {
+        return $this->hasOne(UnitOfMeasurement::class, 'uomcode', 'uomcode');
+    }
 }
