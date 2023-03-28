@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Location;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -44,15 +45,15 @@ class HandleInertiaRequests extends Middleware
             'auth.user.userDetail' => function () use ($request) {
                 return ($request->user() ? $request->user()->userDetail : null);
             },
+            'locations' => function () {
+                return Location::where('wardstat', 'A')->orderBy('wardname', 'ASC')->get();
+            },
             'auth.user.permissions' => function () use ($request) {
                 return ($request->user() ? $request->user()->getAllPermissions()->pluck('name') : null);
             },
             'auth.user.roles' => function () use ($request) {
                 return ($request->user() ? $request->user()->roles()->pluck('name') : null);
             },
-            'flash' => [
-                'message' => fn () => $request->session()->get('message')
-            ],
         ]);
     }
 }

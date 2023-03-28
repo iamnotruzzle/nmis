@@ -45,6 +45,20 @@
           </transition-group>
           <div class="w-full md:w-10 mx-auto">
             <label
+              for="location"
+              class="block text-900 text-xl font-medium mb-2"
+            >
+              Location
+            </label>
+            <Dropdown
+              v-model="form.wardcode"
+              :options="locationsList"
+              optionLabel="wardname"
+              optionValue="wardcode"
+              class="w-full mb-3"
+            />
+
+            <label
               for="employeeid"
               class="block text-900 text-xl font-medium mb-2"
             >
@@ -75,28 +89,6 @@
               @keyup.enter="submit"
             ></Password>
 
-            <!-- <div class="flex align-items-center justify-content-between mb-5">
-              <div class="flex align-items-center">
-                <Checkbox
-                  id="rememberme"
-                  v-model="checked"
-                  :binary="true"
-                  class="mr-2"
-                ></Checkbox>
-                <label for="rememberme">Remember me</label>
-              </div>
-              <a
-                :href="route('register')"
-                class="font-medium no-underline ml-2 text-right cursor-pointer"
-                style="color: var(--primary-color)"
-                >Register</a
-              >
-              <a
-                class="font-medium no-underline ml-2 text-right cursor-pointer"
-                style="color: var(--primary-color)"
-                >Forgot password?</a
-              >
-            </div> -->
             <Button
               type="submit"
               @click="submit"
@@ -118,6 +110,8 @@ import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
 import Message from 'primevue/message';
+import Dropdown from 'primevue/dropdown';
+import { usePage } from '@inertiajs/vue3';
 
 export default {
   components: {
@@ -127,22 +121,41 @@ export default {
     Password,
     Message,
     Head,
+    Dropdown,
   },
   computed: {
     logoColor() {
       return 'dark';
     },
   },
+  props: {
+    locations: Array,
+  },
   data() {
     return {
+      locationsList: [],
       form: this.$inertia.form({
+        wardcode: null,
         login: '',
         password: '',
         // remember: false,
       }),
     };
   },
+  mounted() {
+    // console.log(usePage().props.auth.user);
+    this.initializeLocation();
+    // console.log(this.locationsList);
+  },
   methods: {
+    initializeLocation() {
+      this.locations.forEach((e) => {
+        this.locationsList.push({
+          wardcode: e.wardcode,
+          wardname: e.wardname,
+        });
+      });
+    },
     submit() {
       this.form
         // .transform((data) => ({
