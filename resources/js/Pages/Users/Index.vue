@@ -167,7 +167,7 @@
           <template #body="{ data }">
             {{ data.employeeid }}
           </template>
-          <template #filter="{ filterModel, filterCallback }">
+          <!-- <template #filter="{ filterModel, filterCallback }">
             <InputText
               v-model="filterModel.value"
               type="text"
@@ -175,7 +175,7 @@
               class="p-column-filter"
               placeholder="Search by employeeid"
             />
-          </template>
+          </template> -->
         </Column>
         <Column
           header="CREATED AT"
@@ -560,6 +560,7 @@ export default {
       this.users.data.forEach((e) => {
         if (e.user_detail != null || e.user_detail == '') {
           this.usersList.push({
+            id: e.id,
             image: e.image,
             employeeid: e.employeeid,
             role: e.roles[0].name,
@@ -571,6 +572,7 @@ export default {
           });
         } else {
           this.usersList.push({
+            id: e.id,
             image: e.image,
             employeeid: e.employeeid,
             role: e.roles[0].name,
@@ -625,7 +627,7 @@ export default {
       this.$emit('hide', (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
     },
     editItem(item) {
-      //   console.log(item.roles[0].name);
+      //   console.log(item);
 
       this.isUpdate = true;
       this.createItemDialog = true;
@@ -634,7 +636,8 @@ export default {
       //   this.form.middleName = item.middleName;
       //   this.form.lastName = item.lastName;
       //   this.form.suffix = item.suffix;
-      this.form.role = item.roles[0].name;
+      //   this.form.role = item.roles[0].name;
+      this.form.role = item.role;
       this.form.employeeid = item.employeeid;
       //   this.form.email = item.email;
       this.form.password = item.password;
@@ -662,6 +665,7 @@ export default {
               this.itemId = null;
               this.createItemDialog = false;
               this.cancel();
+              this.updateData();
               this.updatedMsg();
             },
           }
@@ -673,6 +677,7 @@ export default {
             this.itemId = null;
             this.createItemDialog = false;
             this.cancel();
+            this.updateData();
             this.createdMsg();
           },
         });
@@ -699,6 +704,7 @@ export default {
           this.storeUserToContainer();
           this.form.clearErrors();
           this.form.reset();
+          this.updateData();
           this.deletedMsg();
         },
       });
