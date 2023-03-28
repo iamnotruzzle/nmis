@@ -48,6 +48,25 @@
         </template>
         <template #empty> No user found. </template>
         <template #loading> Loading user data. Please wait. </template>
+        <Column
+          field="employeeid"
+          header="Employee ID"
+          sortable
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.employeeid }}
+          </template>
+          <!-- <template #filter="{ filterModel, filterCallback }">
+            <InputText
+              v-model="filterModel.value"
+              type="text"
+              @input="filterCallback()"
+              class="p-column-filter"
+              placeholder="Search by employeeid"
+            />
+          </template> -->
+        </Column>
         <Column header="Avatar">
           <template #body="{ data }">
             <Avatar
@@ -157,25 +176,6 @@
               placeholder="Search by role"
             />
           </template>
-        </Column>
-        <Column
-          field="employeeid"
-          header="Employee ID"
-          sortable
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ data.employeeid }}
-          </template>
-          <!-- <template #filter="{ filterModel, filterCallback }">
-            <InputText
-              v-model="filterModel.value"
-              type="text"
-              @input="filterCallback()"
-              class="p-column-filter"
-              placeholder="Search by employeeid"
-            />
-          </template> -->
         </Column>
         <Column
           header="CREATED AT"
