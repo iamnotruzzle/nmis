@@ -15,12 +15,7 @@ class CreateCsrwUsersTable extends Migration
     {
         Schema::create('csrw_users', function (Blueprint $table) {
             $table->id();
-            $table->string('firstName');
-            $table->string('middleName')->nullable();
-            $table->string('lastName');
-            $table->string('suffix')->nullable();
-            $table->string('username')->unique();
-            $table->string('email')->unique();
+            $table->string('employeeid')->unique();
             $table->text('image')->nullable();
             $table->string('password');
             $table->rememberToken();

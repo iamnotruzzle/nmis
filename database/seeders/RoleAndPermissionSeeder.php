@@ -33,36 +33,36 @@ class RoleAndPermissionSeeder extends Seeder
 
         // create default user
         $superAdminUser = User::factory()->create([
-            'firstName' => 'super',
-            'middleName' => null,
-            'lastName' => 'admin',
-            'suffix' => null,
-            'username' => 'sa',
-            'email' => 'sa@sa.com',
+            // 'firstName' => 'super',
+            // 'middleName' => null,
+            // 'lastName' => 'admin',
+            // 'suffix' => null,
+            'employeeid' => 'sa',
+            // 'email' => 'sa@sa.com',
             'image' => null,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
         ]);
 
         $adminUser = User::factory()->create([
-            'firstName' => 'admin',
-            'middleName' => null,
-            'lastName' => 'admin',
-            'suffix' => null,
-            'username' => 'admin',
-            'email' => 'admin@admin.com',
+            // 'firstName' => 'admin',
+            // 'middleName' => null,
+            // 'lastName' => 'admin',
+            // 'suffix' => null,
+            'employeeid' => 'admin',
+            // 'email' => 'admin@admin.com',
             'image' => null,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
         ]);
 
         $user = User::factory()->create([
-            'firstName' => 'user',
-            'middleName' => null,
-            'lastName' => 'user',
-            'suffix' => null,
-            'username' => 'user',
-            'email' => 'user@user.com',
+            // 'firstName' => 'user',
+            // 'middleName' => null,
+            // 'lastName' => 'user',
+            // 'suffix' => null,
+            'employeeid' => 'user',
+            // 'email' => 'user@user.com',
             'image' => null,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),

@@ -62,7 +62,7 @@
             />
           </template>
         </Column>
-        <Column
+        <!-- <Column
           field="lastName"
           header="Last name"
           sortable
@@ -80,8 +80,8 @@
               placeholder="Search by last name"
             />
           </template>
-        </Column>
-        <Column
+        </Column> -->
+        <!-- <Column
           field="firstName"
           header="First name"
           sortable
@@ -99,8 +99,8 @@
               placeholder="Search by first name"
             />
           </template>
-        </Column>
-        <Column
+        </Column> -->
+        <!-- <Column
           field="middleName"
           header="Middle name"
           sortable
@@ -118,8 +118,8 @@
               placeholder="Search by middle name"
             />
           </template>
-        </Column>
-        <Column
+        </Column> -->
+        <!-- <Column
           field="suffix"
           header="Suffix"
           sortable
@@ -137,7 +137,7 @@
               placeholder="Search by suffix"
             />
           </template>
-        </Column>
+        </Column> -->
         <Column
           field="role"
           header="Role"
@@ -156,7 +156,7 @@
             />
           </template> -->
         </Column>
-        <Column
+        <!-- <Column
           field="email"
           header="Email"
           sortable
@@ -174,7 +174,7 @@
               placeholder="Search by email"
             />
           </template>
-        </Column>
+        </Column> -->
         <Column
           header="CREATED AT"
           filterField="created_at"
@@ -182,7 +182,7 @@
           :showFilterMenu="false"
         >
           <template #body="{ data }">
-            {{ data.created_at }}
+            {{ tzone(data.created_at) }}
           </template>
           <template #filter="{}">
             <Calendar
@@ -239,7 +239,7 @@
         @hide="clickOutsideDialog"
         dismissableMask
       >
-        <div class="field">
+        <!-- <div class="field">
           <label for="firstName">First name</label>
           <InputText
             id="firstName"
@@ -254,8 +254,8 @@
           >
             {{ form.errors.firstName }}
           </small>
-        </div>
-        <div class="field">
+        </div> -->
+        <!-- <div class="field">
           <label for="middleName">Middle name</label>
           <InputText
             id="middleName"
@@ -268,8 +268,8 @@
           >
             {{ form.errors.middleName }}
           </small>
-        </div>
-        <div class="field">
+        </div> -->
+        <!-- <div class="field">
           <label for="lastName">Last name</label>
           <InputText
             id="lastName"
@@ -284,8 +284,8 @@
           >
             {{ form.errors.lastName }}
           </small>
-        </div>
-        <div class="field">
+        </div> -->
+        <!-- <div class="field">
           <label for="suffix">Suffix</label>
           <InputText
             id="suffix"
@@ -298,8 +298,8 @@
           >
             {{ form.errors.suffix }}
           </small>
-        </div>
-        <div class="field">
+        </div> -->
+        <!-- <div class="field">
           <label for="description">Email</label>
           <InputText
             type="email"
@@ -315,15 +315,15 @@
           >
             {{ form.errors.email }}
           </small>
-        </div>
+        </div> -->
         <div class="field">
           <label for="role">Role</label>
           <!-- <InputText
             id="role"
-            v-model.trim="form.username"
+            v-model.trim="form.employeeid"
             required="true"
             autofocus
-            :class="{ 'p-invalid': form.username == '' }"
+            :class="{ 'p-invalid': form.employeeid == '' }"
           /> -->
           <Dropdown
             v-model="form.role"
@@ -341,19 +341,23 @@
           </small>
         </div>
         <div class="field">
-          <label for="username">Username</label>
-          <InputText
-            id="username"
-            v-model.trim="form.username"
+          <label for="employeeid">Employee ID</label>
+          <AutoComplete
+            id="employeeid"
+            v-model="form.employeeid"
             required="true"
             autofocus
-            :class="{ 'p-invalid': form.username == '' }"
+            optionLabel="employeeid"
+            :suggestions="employeeIdList"
+            @complete="searchEmployeeID"
+            @item-select="selectedEmployeeID"
+            :class="{ 'p-invalid': form.employeeid == '' }"
           />
           <small
             class="text-error"
-            v-if="form.errors.username"
+            v-if="form.errors.employeeid"
           >
-            {{ form.errors.username }}
+            {{ form.errors.employeeid }}
           </small>
         </div>
         <div class="field">
@@ -469,6 +473,8 @@ import Toast from 'primevue/toast';
 import Avatar from 'primevue/avatar';
 import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
+import AutoComplete from 'primevue/autocomplete';
+import moment from 'moment';
 
 export default {
   components: {
@@ -485,9 +491,11 @@ export default {
     Avatar,
     Calendar,
     Dropdown,
+    AutoComplete,
   },
   props: {
     users: Object,
+    employeeids: Object,
   },
   data() {
     return {
@@ -502,14 +510,15 @@ export default {
       to: null,
       totalRecords: 0,
       usersList: null,
+      employeeIdList: [],
       filters: {
         // global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        firstName: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        middleName: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        lastName: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        suffix: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        // role: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        username: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        // firstName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        // middleName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        // lastName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        // suffix: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        role: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        employeeid: { value: null, matchMode: FilterMatchMode.CONTAINS },
         email: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       loading: true,
@@ -529,35 +538,53 @@ export default {
       ],
       form: this.$inertia.form({
         image: null,
-        firstName: null,
-        middleName: null,
-        lastName: null,
-        suffix: null,
+        // firstName: null,
+        // middleName: null,
+        // lastName: null,
+        // suffix: null,
         role: null,
-        username: null,
-        email: null,
+        employeeid: null,
+        // email: null,
         password: null,
       }),
     };
   },
   mounted() {
-    this.storePropsToLocal();
+    this.storeUserToContainer();
 
     this.loading = false;
   },
   methods: {
-    // use storePropsToLocal() function so that every time you make
+    // use storeUserToContainer() function so that every time you make
     // server request such as POST, the data in the table
     // is updated
-    storePropsToLocal() {
+    storeUserToContainer() {
       this.usersList = this.users.data;
+    },
+    searchEmployeeID(event) {
+      setTimeout(() => {
+        if (!event.query.trim().length) {
+          this.employeeIdList = [...this.employeeids.employeeid];
+        } else {
+          this.employeeIdList = this.employeeids.filter((e) => {
+            // contains whatever the value
+            return e.employeeid.includes(event.query);
+          });
+        }
+      }, 200);
+    },
+    selectedEmployeeID(e) {
+      this.form.employeeid = e.value.employeeid;
+    },
+    tzone(date) {
+      return moment.tz(date, 'Asia/Manila').format('L');
     },
     updateData() {
       this.$inertia.get('users', this.params, {
         preserveState: true,
         preserveScroll: true,
         onFinish: (visit) => {
-          this.storePropsToLocal();
+          this.storeUserToContainer();
         },
       });
     },
@@ -582,13 +609,13 @@ export default {
       this.isUpdate = true;
       this.createItemDialog = true;
       this.itemId = item.id;
-      this.form.firstName = item.firstName;
-      this.form.middleName = item.middleName;
-      this.form.lastName = item.lastName;
-      this.form.suffix = item.suffix;
+      //   this.form.firstName = item.firstName;
+      //   this.form.middleName = item.middleName;
+      //   this.form.lastName = item.lastName;
+      //   this.form.suffix = item.suffix;
       this.form.role = item.roles[0].name;
-      this.form.username = item.username;
-      this.form.email = item.email;
+      this.form.employeeid = item.employeeid;
+      //   this.form.email = item.email;
       this.form.password = item.password;
     },
     submit() {
@@ -598,14 +625,14 @@ export default {
           {
             _method: 'put',
             preserveScroll: true,
-            firstName: this.form.firstName,
-            middleName: this.form.middleName,
-            lastName: this.form.lastName,
-            suffix: this.form.suffix,
+            // firstName: this.form.firstName,
+            // middleName: this.form.middleName,
+            // lastName: this.form.lastName,
+            // suffix: this.form.suffix,
             role: this.form.role,
             // permissions: this.form.permissions,
-            email: this.form.email,
-            username: this.form.username,
+            // email: this.form.email,
+            employeeid: this.form.employeeid,
             password: this.form.password,
             image: this.form.image,
           },
@@ -632,13 +659,13 @@ export default {
     },
     confirmDeleteItem(item) {
       this.itemId = item.id;
-      this.form.firstName = item.firstName;
-      this.form.middleName = item.middleName;
-      this.form.lastName = item.lastName;
-      this.form.suffix = item.suffix;
+      //   this.form.firstName = item.firstName;
+      //   this.form.middleName = item.middleName;
+      //   this.form.lastName = item.lastName;
+      //   this.form.suffix = item.suffix;
       this.form.role = item.role;
-      this.form.username = item.username;
-      this.form.email = item.email;
+      this.form.employeeid = item.employeeid;
+      //   this.form.email = item.email;
       this.form.password = item.password;
       this.deleteItemDialog = true;
     },
@@ -648,7 +675,7 @@ export default {
         onSuccess: () => {
           this.deleteItemDialog = false;
           this.itemId = null;
-          this.storePropsToLocal();
+          this.storeUserToContainer();
           this.form.clearErrors();
           this.form.reset();
           this.deletedMsg();
@@ -661,7 +688,7 @@ export default {
       this.createItemDialog = false;
       this.form.reset();
       this.form.clearErrors();
-      this.storePropsToLocal();
+      this.storeUserToContainer();
     },
     createdMsg() {
       this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Account created', life: 3000 });

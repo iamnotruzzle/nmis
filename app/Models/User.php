@@ -26,12 +26,12 @@ class User extends Authenticatable
     protected $table = 'csrw_users';
 
     protected $fillable = [
-        'firstName',
-        'middleName',
-        'lastName',
-        'suffix',
-        'email',
-        'username',
+        // 'firstName',
+        // 'middleName',
+        // 'lastName',
+        // 'suffix',
+        // 'email',
+        'employeeid',
         'password',
         'image'
     ];
@@ -55,15 +55,11 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'created_at' => 'date:m-d-Y',
+        // 'created_at' => 'date:m-d-Y',
     ];
 
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = [
-        'profile_photo_url',
-    ];
+    public function userDetail()
+    {
+        return $this->hasOne(UserDetail::class, 'employeeid', 'employeeid');
+    }
 }

@@ -45,14 +45,15 @@
           </transition-group>
           <div class="w-full md:w-10 mx-auto">
             <label
-              for="username"
+              for="employeeid"
               class="block text-900 text-xl font-medium mb-2"
             >
-              Username
+              Employee ID
             </label>
             <InputText
-              id="username"
+              id="employeeid"
               v-model="form.login"
+              name="login"
               type="text"
               class="w-full mb-3"
               style="padding: 1rem"

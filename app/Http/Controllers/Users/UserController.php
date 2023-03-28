@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\UserDetail;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -25,12 +26,14 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        $users = User::with(['roles', 'permissions'])
-            ->when($request->search, function ($query, $value) {
-                $query->where('firstName', 'LIKE', '%' . $value . '%')
-                    ->orWhere('middleName', 'LIKE', '%' . $value . '%')
-                    ->orWhere('lastName', 'LIKE', '%' . $value . '%');
-            })
+        $employeeids = UserDetail::where('empstat', 'A')->get('employeeid');
+
+        $users = User::with(['roles', 'permissions', 'userDetail'])
+            // ->when($request->search, function ($query, $value) {
+            //     $query->where('firstName', 'LIKE', '%' . $value . '%')
+            //         ->orWhere('middleName', 'LIKE', '%' . $value . '%')
+            //         ->orWhere('lastName', 'LIKE', '%' . $value . '%');
+            // })
             ->when(
                 $request->from,
                 function ($query, $value) {
@@ -43,10 +46,13 @@ class UserController extends Controller
                     $query->whereDate('created_at', '<=', $value);
                 }
             )
-            ->orderBy('lastName', 'asc')
+            // ->orderBy('lastName', 'asc')
             ->paginate(50);
 
-        return Inertia::render('Users/Index', ['users' => $users]);
+        return Inertia::render('Users/Index', [
+            'users' => $users,
+            'employeeids' => $employeeids
+        ]);
     }
 
     public function store(Request $request)
@@ -57,14 +63,9 @@ class UserController extends Controller
 
         $request->validate([
             'image' => 'nullable|image|mimes:jpeg,jpg,png,gif,svg|max:5048',
-            'firstName' => 'required|string',
-            'middleName' => 'string|nullable',
-            'lastName' => 'required|string',
-            'suffix' => 'string|nullable',
-            'role' => 'required|string',
+            'role' => 'required',
             // 'permissions' => 'required',
-            'email' => 'required|email:rfc|unique:users,email|max:40',
-            'username' => 'required|string|unique:users,username|max:14',
+            'employeeid' => 'required|string|unique:csrw_users,employeeid|max:14',
             'password' => 'required|min:8',
         ]);
 
@@ -75,12 +76,7 @@ class UserController extends Controller
         }
 
         $user = User::create([
-            'firstName' => $request->firstName,
-            'middleName' => $request->middleName,
-            'lastName' => $request->lastName,
-            'suffix' => $request->suffix,
-            'email' => $request->email,
-            'username' => $request->username,
+            'employeeid' => $request->employeeid,
             'password' => bcrypt($request->password),
             'image' => $image,
         ]);
@@ -106,23 +102,13 @@ class UserController extends Controller
         if ($request->password != null || $request->password != '') {
             $request->validate([
                 'image' => 'nullable|image|mimes:jpeg,jpg,png,gif,svg|max:5048',
-                'firstName' => 'required|string',
-                'middleName' => 'string|nullable',
-                'lastName' => 'required|string',
-                'suffix' => 'string|nullable',
-                'role' => 'required|string',
+                'role' => 'required',
                 // 'permissions' => 'required',
-                'email' => [
-                    'required',
-                    // 'email',
-                    'email:rfc',
-                    Rule::unique('users')->ignore($user->id)
-                ],
-                'username' => [
+                'employeeid' => [
                     'required',
                     'string',
                     'max:14',
-                    Rule::unique('users')->ignore($user->id)
+                    Rule::unique('csrw_users')->ignore($user->id)
                 ],
                 'password' => 'required|min:8'
             ]);
@@ -133,31 +119,16 @@ class UserController extends Controller
             }
 
             $user->update([
-                'firstName' => $request->firstName,
-                'middleName' => $request->middleName,
-                'lastName' => $request->lastName,
-                'suffix' => $request->suffix,
-                'email' => $request->email,
-                'username' => $request->username,
+                'employeeid' => $request->employeeid,
                 'password' => bcrypt($request->password),
                 'image' => $image
             ]);
         } else {
             $request->validate([
                 'image' => 'nullable|image|mimes:jpeg,jpg,png,gif,svg|max:5048',
-                'firstName' => 'required|string',
-                'middleName' => 'string|nullable',
-                'lastName' => 'required|string',
-                'suffix' => 'string|nullable',
-                'role' => 'required|string',
+                'role' => 'required',
                 // 'permissions' => 'required',
-                'email' => [
-                    'required',
-                    // 'email',
-                    'email:rfc',
-                    Rule::unique('users')->ignore($user->id)
-                ],
-                'username' => [
+                'employeeid' => [
                     'required',
                     'string',
                     'max:14',
@@ -171,12 +142,7 @@ class UserController extends Controller
             }
 
             $user->update([
-                'firstName' => $request->firstName,
-                'middleName' => $request->middleName,
-                'lastName' => $request->lastName,
-                'suffix' => $request->suffix,
-                'email' => $request->email,
-                'username' => $request->username,
+                'employeeid' => $request->employeeid,
                 'image' => $image
             ]);
         }
