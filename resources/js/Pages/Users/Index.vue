@@ -9,6 +9,8 @@
             asc = 1
             desc =-1
         -->
+      <!-- :globalFilterFields="['lastname', 'firstname', 'middlename', 'role', 'employeeid']" -->
+      <!-- :rows="20" -->
       <DataTable
         class="p-datatable-sm"
         v-model:filters="filters"
@@ -16,8 +18,8 @@
         paginator
         :rows="20"
         :rowsPerPageOptions="[5, 10, 20, 50]"
-        sortField="lastName"
-        :sortOrder="1"
+        sortField="lastname"
+        :sortOrder="-1"
         removableSort
         dataKey="id"
         filterDisplay="row"
@@ -32,7 +34,7 @@
                 <i class="pi pi-search" />
                 <InputText
                   v-model="search"
-                  placeholder="Keyword Search"
+                  placeholder="Search Employee ID"
                 />
               </span>
               <Button
@@ -62,14 +64,14 @@
             />
           </template>
         </Column>
-        <!-- <Column
-          field="lastName"
+        <Column
+          field="lastname"
           header="Last name"
           sortable
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.lastName }}
+            {{ data.lastname }}
           </template>
           <template #filter="{ filterModel, filterCallback }">
             <InputText
@@ -80,15 +82,15 @@
               placeholder="Search by last name"
             />
           </template>
-        </Column> -->
-        <!-- <Column
-          field="firstName"
+        </Column>
+        <Column
+          field="firstname"
           header="First name"
           sortable
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.firstName }}
+            {{ data.firstname }}
           </template>
           <template #filter="{ filterModel, filterCallback }">
             <InputText
@@ -99,15 +101,15 @@
               placeholder="Search by first name"
             />
           </template>
-        </Column> -->
-        <!-- <Column
-          field="middleName"
+        </Column>
+        <Column
+          field="middlename"
           header="Middle name"
           sortable
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.middleName }}
+            {{ data.middlename }}
           </template>
           <template #filter="{ filterModel, filterCallback }">
             <InputText
@@ -118,15 +120,15 @@
               placeholder="Search by middle name"
             />
           </template>
-        </Column> -->
-        <!-- <Column
-          field="suffix"
+        </Column>
+        <Column
+          field="empsuffix"
           header="Suffix"
           sortable
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.suffix }}
+            {{ data.empsuffix }}
           </template>
           <template #filter="{ filterModel, filterCallback }">
             <InputText
@@ -137,33 +139,14 @@
               placeholder="Search by suffix"
             />
           </template>
-        </Column> -->
+        </Column>
         <Column
           field="role"
           header="Role"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.roles[0].name }}
-          </template>
-          <!-- <template #filter="{ filterModel, filterCallback }">
-            <InputText
-              v-model="filterModel.value"
-              type="text"
-              @input="filterCallback()"
-              class="p-column-filter"
-              placeholder="Search by role"
-            />
-          </template> -->
-        </Column>
-        <!-- <Column
-          field="email"
-          header="Email"
-          sortable
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ data.email }}
+            {{ data.role }}
           </template>
           <template #filter="{ filterModel, filterCallback }">
             <InputText
@@ -171,10 +154,29 @@
               type="text"
               @input="filterCallback()"
               class="p-column-filter"
-              placeholder="Search by email"
+              placeholder="Search by role"
             />
           </template>
-        </Column> -->
+        </Column>
+        <Column
+          field="employeeid"
+          header="Employee ID"
+          sortable
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.employeeid }}
+          </template>
+          <template #filter="{ filterModel, filterCallback }">
+            <InputText
+              v-model="filterModel.value"
+              type="text"
+              @input="filterCallback()"
+              class="p-column-filter"
+              placeholder="Search by employeeid"
+            />
+          </template>
+        </Column>
         <Column
           header="CREATED AT"
           filterField="created_at"
@@ -318,13 +320,6 @@
         </div> -->
         <div class="field">
           <label for="role">Role</label>
-          <!-- <InputText
-            id="role"
-            v-model.trim="form.employeeid"
-            required="true"
-            autofocus
-            :class="{ 'p-invalid': form.employeeid == '' }"
-          /> -->
           <Dropdown
             v-model="form.role"
             :options="roles"
@@ -349,7 +344,7 @@
             autofocus
             optionLabel="employeeid"
             :suggestions="employeeIdList"
-            @complete="searchEmployeeID"
+            @complete="autoCompleteEmployeeID"
             @item-select="selectedEmployeeID"
             :class="{ 'p-invalid': form.employeeid == '' }"
           />
@@ -509,14 +504,14 @@ export default {
       from: null,
       to: null,
       totalRecords: 0,
-      usersList: null,
+      usersList: [],
       employeeIdList: [],
       filters: {
-        // global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        // firstName: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        // middleName: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        // lastName: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        // suffix: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        firstname: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        middlename: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        lastname: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        empsuffix: { value: null, matchMode: FilterMatchMode.CONTAINS },
         role: { value: null, matchMode: FilterMatchMode.CONTAINS },
         employeeid: { value: null, matchMode: FilterMatchMode.CONTAINS },
         email: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -553,15 +548,38 @@ export default {
     this.storeUserToContainer();
 
     this.loading = false;
+    // console.log(this.users.data);
   },
   methods: {
     // use storeUserToContainer() function so that every time you make
     // server request such as POST, the data in the table
     // is updated
     storeUserToContainer() {
-      this.usersList = this.users.data;
+      //   this.usersList = this.users.data;
+
+      this.users.data.forEach((e) => {
+        if (e.user_detail != null || e.user_detail == '') {
+          this.usersList.push({
+            image: e.image,
+            employeeid: e.employeeid,
+            role: e.roles[0].name,
+            lastname: e.user_detail.lastname,
+            firstname: e.user_detail.firstname,
+            middlename: e.user_detail.middlename,
+            empsuffix: e.user_detail.empsuffix,
+            created_at: e.created_at,
+          });
+        } else {
+          this.usersList.push({
+            image: e.image,
+            employeeid: e.employeeid,
+            role: e.roles[0].name,
+            created_at: e.created_at,
+          });
+        }
+      });
     },
-    searchEmployeeID(event) {
+    autoCompleteEmployeeID(event) {
       setTimeout(() => {
         if (!event.query.trim().length) {
           this.employeeIdList = [...this.employeeids.employeeid];
@@ -580,10 +598,13 @@ export default {
       return moment.tz(date, 'Asia/Manila').format('L');
     },
     updateData() {
+      this.usersList = [];
+
       this.$inertia.get('users', this.params, {
         preserveState: true,
         preserveScroll: true,
         onFinish: (visit) => {
+          this.usersList = [];
           this.storeUserToContainer();
         },
       });

@@ -29,11 +29,9 @@ class UserController extends Controller
         $employeeids = UserDetail::where('empstat', 'A')->get('employeeid');
 
         $users = User::with(['roles', 'permissions', 'userDetail'])
-            // ->when($request->search, function ($query, $value) {
-            //     $query->where('firstName', 'LIKE', '%' . $value . '%')
-            //         ->orWhere('middleName', 'LIKE', '%' . $value . '%')
-            //         ->orWhere('lastName', 'LIKE', '%' . $value . '%');
-            // })
+            ->when($request->search, function ($query, $value) {
+                $query->where('employeeid', 'LIKE', '%' . $value . '%');
+            })
             ->when(
                 $request->from,
                 function ($query, $value) {
@@ -132,7 +130,7 @@ class UserController extends Controller
                     'required',
                     'string',
                     'max:14',
-                    Rule::unique('users')->ignore($user->id)
+                    Rule::unique('csrw_users')->ignore($user->id)
                 ],
             ]);
 
