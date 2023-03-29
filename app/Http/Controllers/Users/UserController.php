@@ -44,8 +44,8 @@ class UserController extends Controller
                     $query->whereDate('created_at', '<=', $value);
                 }
             )
-            // ->orderBy('lastName', 'asc')
-            ->paginate(50);
+            ->orderBy('employeeid', 'asc')
+            ->paginate(80);
 
         return Inertia::render('Users/Index', [
             'users' => $users,
@@ -55,8 +55,6 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request);
-
         $image = '';
 
         $request->validate([

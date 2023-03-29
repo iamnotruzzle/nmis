@@ -9,10 +9,12 @@
             asc = 1
             desc =-1
         -->
+      <!-- :globalFilterFields="['lastname', 'firstname', 'middlename', 'role', 'employeeid']" -->
+      <!-- :rows="20" -->
       <DataTable
         class="p-datatable-sm"
         v-model:filters="filters"
-        :value="usersList"
+        :value="categoriesList"
         paginator
         :rows="20"
         :rowsPerPageOptions="[5, 10, 20, 50]"
@@ -26,34 +28,34 @@
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold">Users</span>
+            <span class="text-xl text-900 font-bold">Category</span>
             <div>
               <span class="p-input-icon-left mr-2">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="search"
-                  placeholder="Search Employee ID"
+                  placeholder="Search category"
                 />
               </span>
               <Button
-                label="Add user"
-                icon="pi pi-user-plus"
+                label="Add category"
+                icon="pi pi-plus"
                 iconPos="right"
                 @click="openCreateItemDialog"
               />
             </div>
           </div>
         </template>
-        <template #empty> No user found. </template>
-        <template #loading> Loading user data. Please wait. </template>
+        <template #empty> No category found. </template>
+        <template #loading> Loading category data. Please wait. </template>
         <Column
-          field="employeeid"
-          header="Employee ID"
+          field="ptcode"
+          header="PTCODE"
           sortable
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.employeeid }}
+            {{ data.ptcode }}
           </template>
           <template #filter="{ filterModel, filterCallback }">
             <InputText
@@ -61,34 +63,18 @@
               type="text"
               @input="filterCallback()"
               class="p-column-filter"
-              placeholder="Search by employeeid"
-            />
-          </template>
-        </Column>
-        <Column header="Avatar">
-          <template #body="{ data }">
-            <Avatar
-              v-if="data.image != null"
-              :image="`/storage/${data.image}`"
-              shape="circle"
-              size="large"
-            />
-            <Avatar
-              v-else
-              image="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
-              shape="circle"
-              size="large"
+              placeholder="Search by ptcode"
             />
           </template>
         </Column>
         <Column
-          field="lastname"
-          header="Last name"
+          field="cl1code"
+          header="CL1CODE"
           sortable
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.lastname }}
+            {{ data.cl1code }}
           </template>
           <template #filter="{ filterModel, filterCallback }">
             <InputText
@@ -96,18 +82,18 @@
               type="text"
               @input="filterCallback()"
               class="p-column-filter"
-              placeholder="Search by last name"
+              placeholder="Search by cl1code"
             />
           </template>
         </Column>
         <Column
-          field="firstname"
-          header="First name"
+          field="cl1code"
+          header="CL1COMB"
           sortable
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.firstname }}
+            {{ data.cl1comb }}
           </template>
           <template #filter="{ filterModel, filterCallback }">
             <InputText
@@ -115,18 +101,18 @@
               type="text"
               @input="filterCallback()"
               class="p-column-filter"
-              placeholder="Search by first name"
+              placeholder="Search by cl1comb"
             />
           </template>
         </Column>
         <Column
-          field="middlename"
-          header="Middle name"
+          field="cl1desc"
+          header="CL1DESC"
           sortable
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.middlename }}
+            {{ data.cl1desc }}
           </template>
           <template #filter="{ filterModel, filterCallback }">
             <InputText
@@ -134,18 +120,18 @@
               type="text"
               @input="filterCallback()"
               class="p-column-filter"
-              placeholder="Search by middle name"
+              placeholder="Search by cl1desc"
             />
           </template>
         </Column>
         <Column
-          field="empsuffix"
-          header="Suffix"
+          field="cl1lock"
+          header="CL1LOCK"
           sortable
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.empsuffix }}
+            {{ data.cl1lock }}
           </template>
           <template #filter="{ filterModel, filterCallback }">
             <InputText
@@ -153,62 +139,45 @@
               type="text"
               @input="filterCallback()"
               class="p-column-filter"
-              placeholder="Search by suffix"
+              placeholder="Search by cl1lock"
             />
           </template>
         </Column>
         <Column
-          field="role"
-          header="Role"
+          field="cl1stat"
+          header="CL1STAT"
+          sortable
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.role }}
+            {{ data.cl1stat }}
           </template>
           <template #filter="{ filterModel, filterCallback }">
-            <Dropdown
+            <InputText
               v-model="filterModel.value"
-              @change="filterCallback()"
-              :options="roles"
-              optionLabel="name"
-              optionValue="value"
-              placeholder="Filter role"
+              type="text"
+              @input="filterCallback()"
               class="p-column-filter"
-              style="min-width: 12rem"
-              :showClear="true"
-            >
-              <template #option="slotProps">
-                <Tag :value="slotProps.option.value" />
-              </template>
-            </Dropdown>
+              placeholder="Search by cl1stat"
+            />
           </template>
         </Column>
         <Column
-          header="CREATED AT"
-          filterField="created_at"
-          style="min-width: 10rem"
-          :showFilterMenu="false"
+          field="cl1upsw"
+          header="CL1UPSW"
+          sortable
+          style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ tzone(data.created_at) }}
+            {{ data.cl1upsw }}
           </template>
-          <template #filter="{}">
-            <Calendar
-              v-model="from"
-              dateFormat="mm-dd-yy"
-              placeholder="FROM"
-              showIcon
-              showButtonBar
-              :hideOnDateTimeSelect="true"
-            />
-            <div class="mt-2"></div>
-            <Calendar
-              v-model="to"
-              dateFormat="mm-dd-yy"
-              placeholder="TO"
-              showIcon
-              showButtonBar
-              :hideOnDateTimeSelect="true"
+          <template #filter="{ filterModel, filterCallback }">
+            <InputText
+              v-model="filterModel.value"
+              type="text"
+              @input="filterCallback()"
+              class="p-column-filter"
+              placeholder="Search by cl1upsw"
             />
           </template>
         </Column>
@@ -241,77 +210,123 @@
       <Dialog
         v-model:visible="createItemDialog"
         :style="{ width: '450px' }"
-        header="User Detail"
+        header="Category Detail"
         :modal="true"
         class="p-fluid"
         @hide="clickOutsideDialog"
         dismissableMask
       >
         <div class="field">
-          <label for="role">Role</label>
+          <label for="ptcode">Ptcode</label>
+          <InputText
+            id="ptcode"
+            v-model.trim="form.ptcode"
+            required="true"
+            autofocus
+            :class="{ 'p-invalid': form.ptcode == '' }"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.ptcode"
+          >
+            {{ form.errors.ptcode }}
+          </small>
+        </div>
+        <div class="field">
+          <label for="cl1code">Cl1code</label>
+          <InputText
+            id="cl1code"
+            v-model.trim="form.cl1code"
+            required="true"
+            autofocus
+            :class="{ 'p-invalid': form.cl1code == '' }"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.cl1code"
+          >
+            {{ form.errors.cl1code }}
+          </small>
+        </div>
+        <div class="field">
+          <label for="cl1comb">Cl1comb</label>
+          <InputText
+            id="cl1comb"
+            v-model.trim="form.cl1comb"
+            required="true"
+            autofocus
+            :class="{ 'p-invalid': form.cl1comb == '' }"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.cl1comb"
+          >
+            {{ form.errors.cl1comb }}
+          </small>
+        </div>
+        <div class="field">
+          <label for="cl1desc">Cl1desc</label>
+          <InputText
+            id="cl1desc"
+            v-model.trim="form.cl1desc"
+            required="true"
+            autofocus
+            :class="{ 'p-invalid': form.cl1desc == '' }"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.cl1desc"
+          >
+            {{ form.errors.cl1desc }}
+          </small>
+        </div>
+        <div class="field">
+          <label for="cl1lock">Cl1lock</label>
+          <InputText
+            id="cl1lock"
+            v-model.trim="form.cl1lock"
+            required="true"
+            autofocus
+            :class="{ 'p-invalid': form.cl1lock == '' }"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.cl1lock"
+          >
+            {{ form.errors.cl1lock }}
+          </small>
+        </div>
+        <div class="field">
+          <label for="cl1stat">Cl1stat</label>
           <Dropdown
-            v-model="form.role"
-            :options="roles"
+            v-model="form.cl1stat"
+            :options="cl1stats"
             optionLabel="name"
             optionValue="value"
-            placeholder="Role"
             class="w-full md:w-14rem"
           />
           <small
             class="text-error"
-            v-if="form.errors.role"
+            v-if="form.errors.cl1stat"
           >
-            {{ form.errors.role }}
+            {{ form.errors.cl1stat }}
           </small>
         </div>
         <div class="field">
-          <label for="employeeid">Employee ID</label>
-          <AutoComplete
-            id="employeeid"
-            v-model="form.employeeid"
+          <label for="cl1upsw">Cl1upsw</label>
+          <InputText
+            id="cl1upsw"
+            v-model.trim="form.cl1upsw"
             required="true"
             autofocus
-            optionLabel="employeeid"
-            :suggestions="employeeIdList"
-            @complete="autoCompleteEmployeeID"
-            @item-select="selectedEmployeeID"
-            :class="{ 'p-invalid': form.employeeid == '' }"
+            :class="{ 'p-invalid': form.cl1upsw == '' }"
           />
           <small
             class="text-error"
-            v-if="form.errors.employeeid"
+            v-if="form.errors.cl1upsw"
           >
-            {{ form.errors.employeeid }}
+            {{ form.errors.cl1upsw }}
           </small>
-        </div>
-        <div class="field">
-          <label for="password">Password</label>
-          <Password
-            id="password"
-            type="password"
-            toggleMask
-            v-model.trim="form.password"
-            :required="true"
-            autofocus
-            :class="{ 'p-invalid': form.password == '' }"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.password"
-          >
-            {{ form.errors.password }}
-          </small>
-        </div>
-        <div class="field">
-          <label for="image">Upload image</label>
-          <FileUpload
-            id="image"
-            mode="basic"
-            @input="onUpload"
-            accept="image/*"
-            :maxFileSize="7000000"
-          >
-          </FileUpload>
         </div>
         <template #footer>
           <Button
@@ -357,8 +372,7 @@
             style="font-size: 2rem"
           />
           <span v-if="form"
-            >Are you sure you want to delete
-            <b>{{ form.firstName }} {{ form.middleName }} {{ form.lastName }} </b> ?</span
+            >Are you sure you want to delete <b>{{ form.cl1desc }}</b> ?</span
           >
         </div>
         <template #footer>
@@ -398,7 +412,6 @@ import Avatar from 'primevue/avatar';
 import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
 import AutoComplete from 'primevue/autocomplete';
-import Tag from 'primevue/tag';
 import moment from 'moment';
 
 export default {
@@ -417,11 +430,9 @@ export default {
     Calendar,
     Dropdown,
     AutoComplete,
-    Tag,
   },
   props: {
-    users: Object,
-    employeeids: Object,
+    categories: Object,
   },
   data() {
     return {
@@ -432,111 +443,77 @@ export default {
       search: '',
       options: {},
       params: {},
-      from: null,
-      to: null,
       totalRecords: 0,
-      usersList: [],
-      employeeIdList: [],
+      categoriesList: [],
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        firstname: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        middlename: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        lastname: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        empsuffix: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        role: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        employeeid: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        email: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        ptcode: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        cl1code: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        cl1comb: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        cl1desc: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        cl1lock: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        cl1stat: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        cl1upsw: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
-      loading: true,
-      roles: [
+      cl1stats: [
         {
-          name: 'super-admin',
-          value: 'super-admin',
+          name: 'ACTIVE',
+          value: 'A',
         },
         {
-          name: 'admin',
-          value: 'admin',
-        },
-        {
-          name: 'user',
-          value: 'user',
+          name: 'INACTIVE',
+          value: 'I',
         },
       ],
+      loading: true,
       form: this.$inertia.form({
-        image: null,
-        role: null,
-        employeeid: null,
-        password: null,
+        cl1comb: null,
+        ptcode: null,
+        cl1code: null,
+        cl1desc: null,
+        cl1lock: null,
+        cl1stat: null,
+        cl1upsw: null,
       }),
     };
   },
   mounted() {
-    this.storeUserInContainer();
+    this.storeCategoryInContainer();
 
     this.loading = false;
+    // console.log(this.categories);
   },
   methods: {
-    // use storeUserInContainer() function so that every time you make
+    // use storeCategoryInContainer() function so that every time you make
     // server request such as POST, the data in the table
     // is updated
-    storeUserInContainer() {
-      this.users.data.forEach((e) => {
-        if (e.user_detail != null || e.user_detail == '') {
-          this.usersList.push({
-            id: e.id,
-            image: e.image,
-            employeeid: e.employeeid,
-            role: e.roles[0].name,
-            lastname: e.user_detail.lastname,
-            firstname: e.user_detail.firstname,
-            middlename: e.user_detail.middlename,
-            empsuffix: e.user_detail.empsuffix,
-            created_at: e.created_at,
-          });
-        } else {
-          this.usersList.push({
-            id: e.id,
-            image: e.image,
-            employeeid: e.employeeid,
-            role: e.roles[0].name,
-            created_at: e.created_at,
-          });
-        }
+    storeCategoryInContainer() {
+      //   this.categoriesList = this.users.data;
+
+      this.categories.data.forEach((e) => {
+        this.categoriesList.push({
+          cl1code: e.cl1code,
+          cl1comb: e.cl1comb,
+          cl1desc: e.cl1desc,
+          cl1dtmd: e.cl1dtmd,
+          cl1lock: e.cl1lock,
+          cl1stat: e.cl1stat,
+          cl1upsw: e.cl1upsw,
+          ptcode: e.ptcode,
+        });
       });
     },
-    autoCompleteEmployeeID(event) {
-      setTimeout(() => {
-        if (!event.query.trim().length) {
-          this.employeeIdList = [...this.employeeids.employeeid];
-        } else {
-          this.employeeIdList = this.employeeids.filter((e) => {
-            // contains whatever the value
-            return e.employeeid.includes(event.query);
-          });
-        }
-      }, 200);
-    },
-    selectedEmployeeID(e) {
-      this.form.employeeid = e.value.employeeid;
-    },
-    tzone(date) {
-      return moment.tz(date, 'Asia/Manila').format('L');
-    },
     updateData() {
-      this.usersList = [];
+      this.categoriesList = [];
 
-      this.$inertia.get('users', this.params, {
+      this.$inertia.get('categories', this.params, {
         preserveState: true,
         preserveScroll: true,
         onFinish: (visit) => {
-          this.usersList = [];
-          this.storeUserInContainer();
+          this.categoriesList = [];
+          this.storeCategoryInContainer();
         },
       });
-    },
-    // assign image name to form.image
-    onUpload(event) {
-      this.form.image = event.target.files[0];
     },
     openCreateItemDialog() {
       this.isUpdate = false;
@@ -554,22 +531,23 @@ export default {
 
       this.isUpdate = true;
       this.createItemDialog = true;
-      this.itemId = item.id;
-      this.form.role = item.role;
-      this.form.employeeid = item.employeeid;
-      this.form.password = item.password;
+      this.itemId = item.cl1comb;
+      this.form.cl1comb = item.cl1comb;
+      this.form.ptcode = item.ptcode;
+      this.form.cl1code = item.cl1code;
+      this.form.cl1desc = item.cl1desc;
+      this.form.cl1lock = item.cl1lock;
+      this.form.cl1stat = item.cl1stat;
+      this.form.cl1upsw = item.cl1upsw;
     },
     submit() {
       if (this.isUpdate) {
         router.post(
-          `users/${this.itemId}`,
+          `categories/${this.itemId}`,
           {
             _method: 'put',
             preserveScroll: true,
-            role: this.form.role,
-            employeeid: this.form.employeeid,
-            password: this.form.password,
-            image: this.form.image,
+            cl1comb: this.form.cl1comb,
           },
           {
             onSuccess: () => {
@@ -582,7 +560,7 @@ export default {
           }
         );
       } else {
-        this.form.post(route('users.store'), {
+        this.form.post(route('categories.store'), {
           preserveScroll: true,
           onSuccess: () => {
             this.itemId = null;
@@ -595,19 +573,17 @@ export default {
       }
     },
     confirmDeleteItem(item) {
-      this.itemId = item.id;
-      this.form.role = item.role;
-      this.form.employeeid = item.employeeid;
-      this.form.password = item.password;
+      this.itemId = item.cl1comb;
+      this.form.cl1desc = item.cl1desc;
       this.deleteItemDialog = true;
     },
     deleteItem() {
-      this.form.delete(route('users.destroy', this.itemId), {
+      this.form.delete(route('categories.destroy', this.itemId), {
         preserveScroll: true,
         onSuccess: () => {
           this.deleteItemDialog = false;
           this.itemId = null;
-          this.storeUserInContainer();
+          this.storeCategoryInContainer();
           this.form.clearErrors();
           this.form.reset();
           this.updateData();
@@ -621,56 +597,21 @@ export default {
       this.createItemDialog = false;
       this.form.reset();
       this.form.clearErrors();
-      this.usersList = [];
-      this.storeUserInContainer();
+      this.storeCategoryInContainer();
     },
     createdMsg() {
-      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Account created', life: 3000 });
+      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Category created', life: 3000 });
     },
     updatedMsg() {
-      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Account updated', life: 3000 });
+      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Category updated', life: 3000 });
     },
     deletedMsg() {
-      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Account deleted', life: 3000 });
-    },
-    getLocalDateString(utcStr) {
-      const date = new Date(utcStr);
-      return (
-        date.getFullYear() +
-        '-' +
-        String(date.getMonth() + 1).padStart(2, '0') +
-        '-' +
-        String(date.getDate()).padStart(2, '0') +
-        ' ' +
-        String(date.getHours()).padStart(2, '0') +
-        ':' +
-        String(date.getMinutes()).padStart(2, '0')
-      );
+      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Category deleted', life: 3000 });
     },
   },
   watch: {
     search: function (val, oldVal) {
       this.params.search = val;
-      this.updateData();
-    },
-    from: function (val) {
-      if (val != null) {
-        let from = this.getLocalDateString(val);
-        this.params.from = from;
-      } else {
-        this.params.from = null;
-        this.from = null;
-      }
-      this.updateData();
-    },
-    to: function (val) {
-      if (val != null) {
-        let to = this.getLocalDateString(val);
-        this.params.to = to;
-      } else {
-        this.params.to = null;
-        this.to = null;
-      }
       this.updateData();
     },
   },

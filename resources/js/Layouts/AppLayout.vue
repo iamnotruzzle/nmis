@@ -63,6 +63,13 @@ export default {
               comp: 'Users/Index',
             },
             {
+              label: 'Category',
+              icon: 'pi pi-fw pi-home',
+              to: 'categories',
+              prefix: 'categories',
+              comp: 'Csr/Inventory/Categories/Index',
+            },
+            {
               label: 'Sign out',
               icon: 'pi pi-fw pi-sign-out',
               command: () => {
