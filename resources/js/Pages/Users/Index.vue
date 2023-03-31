@@ -181,34 +181,17 @@
         dismissableMask
       >
         <div class="field">
-          <label for="role">Role</label>
-          <Dropdown
-            v-model="form.role"
-            :options="roles"
-            optionLabel="name"
-            optionValue="value"
-            placeholder="Role"
-            class="w-full md:w-14rem"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.role"
-          >
-            {{ form.errors.role }}
-          </small>
-        </div>
-        <div class="field">
           <label for="employeeid">Employee ID</label>
           <AutoComplete
             id="employeeid"
             v-model="form.employeeid"
             required="true"
-            autofocus
             optionLabel="employeeid"
             :suggestions="employeeIdList"
             @complete="autoCompleteEmployeeID"
             @item-select="selectedEmployeeID"
             :class="{ 'p-invalid': form.employeeid == '' }"
+            @keyup.enter="submit"
           />
           <small
             class="text-error"
@@ -225,14 +208,31 @@
             toggleMask
             v-model.trim="form.password"
             :required="true"
-            autofocus
             :class="{ 'p-invalid': form.password == '' }"
+            @keyup.enter="submit"
           />
           <small
             class="text-error"
             v-if="form.errors.password"
           >
             {{ form.errors.password }}
+          </small>
+        </div>
+        <div class="field">
+          <label for="role">Role</label>
+          <Dropdown
+            v-model="form.role"
+            :options="roles"
+            optionLabel="name"
+            optionValue="value"
+            placeholder="Role"
+            class="w-full md:w-14rem"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.role"
+          >
+            {{ form.errors.role }}
           </small>
         </div>
         <div class="field">
