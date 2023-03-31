@@ -4,24 +4,19 @@
 
     <div class="card">
       <Toast />
-      <!--
-            data table sort order
-            asc = 1
-            desc =-1
-        -->
-      <!-- :globalFilterFields="['lastname', 'firstname', 'middlename', 'role', 'employeeid']" -->
-      <!-- :rows="20" -->
+
+      <!-- v-model:filters="filters" -->
       <DataTable
         class="p-datatable-sm"
         v-model:filters="filters"
         :value="categoriesList"
+        lazy
         paginator
-        :rows="20"
-        :rowsPerPageOptions="[5, 10, 20, 50]"
-        sortField="lastname"
-        :sortOrder="-1"
-        removableSort
-        dataKey="id"
+        :rows="rows"
+        ref="dt"
+        :totalRecords="totalRecords"
+        @page="onPage($event)"
+        dataKey="cl1comb"
         filterDisplay="row"
         showGridlines
         :loading="loading"
@@ -51,134 +46,64 @@
         <Column
           field="ptcode"
           header="PTCODE"
-          sortable
           style="min-width: 12rem"
         >
           <template #body="{ data }">
             {{ data.ptcode }}
           </template>
-          <template #filter="{ filterModel, filterCallback }">
-            <InputText
-              v-model="filterModel.value"
-              type="text"
-              @input="filterCallback()"
-              class="p-column-filter"
-              placeholder="Search by ptcode"
-            />
-          </template>
         </Column>
         <Column
           field="cl1code"
           header="CL1CODE"
-          sortable
           style="min-width: 12rem"
         >
           <template #body="{ data }">
             {{ data.cl1code }}
           </template>
-          <template #filter="{ filterModel, filterCallback }">
-            <InputText
-              v-model="filterModel.value"
-              type="text"
-              @input="filterCallback()"
-              class="p-column-filter"
-              placeholder="Search by cl1code"
-            />
-          </template>
         </Column>
         <Column
           field="cl1code"
           header="CL1COMB"
-          sortable
           style="min-width: 12rem"
         >
           <template #body="{ data }">
             {{ data.cl1comb }}
           </template>
-          <template #filter="{ filterModel, filterCallback }">
-            <InputText
-              v-model="filterModel.value"
-              type="text"
-              @input="filterCallback()"
-              class="p-column-filter"
-              placeholder="Search by cl1comb"
-            />
-          </template>
         </Column>
         <Column
           field="cl1desc"
           header="CL1DESC"
-          sortable
           style="min-width: 12rem"
         >
           <template #body="{ data }">
             {{ data.cl1desc }}
           </template>
-          <template #filter="{ filterModel, filterCallback }">
-            <InputText
-              v-model="filterModel.value"
-              type="text"
-              @input="filterCallback()"
-              class="p-column-filter"
-              placeholder="Search by cl1desc"
-            />
-          </template>
         </Column>
         <Column
           field="cl1lock"
           header="CL1LOCK"
-          sortable
           style="min-width: 12rem"
         >
           <template #body="{ data }">
             {{ data.cl1lock }}
           </template>
-          <template #filter="{ filterModel, filterCallback }">
-            <InputText
-              v-model="filterModel.value"
-              type="text"
-              @input="filterCallback()"
-              class="p-column-filter"
-              placeholder="Search by cl1lock"
-            />
-          </template>
         </Column>
         <Column
           field="cl1stat"
           header="CL1STAT"
-          sortable
           style="min-width: 12rem"
         >
           <template #body="{ data }">
             {{ data.cl1stat }}
           </template>
-          <template #filter="{ filterModel, filterCallback }">
-            <InputText
-              v-model="filterModel.value"
-              type="text"
-              @input="filterCallback()"
-              class="p-column-filter"
-              placeholder="Search by cl1stat"
-            />
-          </template>
         </Column>
         <Column
           field="cl1upsw"
           header="CL1UPSW"
-          sortable
           style="min-width: 12rem"
         >
           <template #body="{ data }">
             {{ data.cl1upsw }}
-          </template>
-          <template #filter="{ filterModel, filterCallback }">
-            <InputText
-              v-model="filterModel.value"
-              type="text"
-              @input="filterCallback()"
-              class="p-column-filter"
-              placeholder="Search by cl1upsw"
-            />
           </template>
         </Column>
         <Column
@@ -397,7 +322,6 @@
 
 <script>
 import { FilterMatchMode } from 'primevue/api';
-import { router } from '@inertiajs/vue3';
 import { Head } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import InputText from 'primevue/inputtext';
@@ -436,6 +360,11 @@ export default {
   },
   data() {
     return {
+      // paginator
+      loading: false,
+      totalRecords: null,
+      rows: null,
+      // end paginator
       itemId: null,
       isUpdate: false,
       createItemDialog: false,
@@ -443,17 +372,9 @@ export default {
       search: '',
       options: {},
       params: {},
-      totalRecords: 0,
       categoriesList: [],
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        ptcode: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        cl1code: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        cl1comb: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        cl1desc: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        cl1lock: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        cl1stat: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        cl1upsw: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       cl1stats: [
         {
@@ -465,7 +386,6 @@ export default {
           value: 'I',
         },
       ],
-      loading: true,
       form: this.$inertia.form({
         cl1comb: null,
         ptcode: null,
@@ -477,19 +397,20 @@ export default {
       }),
     };
   },
+  // created will be initialize before mounted
+  created() {
+    this.totalRecords = this.categories.total;
+    this.params.page = this.categories.current_page;
+    this.rows = this.categories.per_page;
+  },
   mounted() {
     this.storeCategoryInContainer();
-
-    this.loading = false;
-    // console.log(this.categories);
   },
   methods: {
     // use storeCategoryInContainer() function so that every time you make
     // server request such as POST, the data in the table
     // is updated
     storeCategoryInContainer() {
-      //   this.categoriesList = this.users.data;
-
       this.categories.data.forEach((e) => {
         this.categoriesList.push({
           cl1code: e.cl1code,
@@ -503,15 +424,22 @@ export default {
         });
       });
     },
+    onPage(event) {
+      this.params.page = event.page + 1;
+      this.updateData();
+    },
     updateData() {
       this.categoriesList = [];
+      this.loading = true;
 
       this.$inertia.get('categories', this.params, {
         preserveState: true,
         preserveScroll: true,
         onFinish: (visit) => {
+          this.totalRecords = this.categories.total;
           this.categoriesList = [];
           this.storeCategoryInContainer();
+          this.loading = false;
         },
       });
     },
@@ -527,8 +455,6 @@ export default {
       this.$emit('hide', (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
     },
     editItem(item) {
-      //   console.log(item);
-
       this.isUpdate = true;
       this.createItemDialog = true;
       this.itemId = item.cl1comb;
@@ -542,23 +468,17 @@ export default {
     },
     submit() {
       if (this.isUpdate) {
-        router.post(
-          `categories/${this.itemId}`,
-          {
-            _method: 'put',
-            preserveScroll: true,
-            cl1comb: this.form.cl1comb,
+        this.form.put(route('categories.update'), {
+          preserveScroll: true,
+          onSuccess: () => {
+            this.itemId = null;
+            this.createItemDialog = false;
+            this.cancel();
+            // this.updateData(); // orig
+            this.updateData();
+            this.updatedMsg();
           },
-          {
-            onSuccess: () => {
-              this.itemId = null;
-              this.createItemDialog = false;
-              this.cancel();
-              this.updateData();
-              this.updatedMsg();
-            },
-          }
-        );
+        });
       } else {
         this.form.post(route('categories.store'), {
           preserveScroll: true,
@@ -566,6 +486,7 @@ export default {
             this.itemId = null;
             this.createItemDialog = false;
             this.cancel();
+            // this.updateData(); // orig
             this.updateData();
             this.createdMsg();
           },
@@ -597,6 +518,7 @@ export default {
       this.createItemDialog = false;
       this.form.reset();
       this.form.clearErrors();
+      this.categoriesList = [];
       this.storeCategoryInContainer();
     },
     createdMsg() {
