@@ -13,12 +13,12 @@
         class="p-datatable-sm"
         v-model:filters="filters"
         :value="usersList"
+        lazy
         paginator
-        :rows="20"
-        :rowsPerPageOptions="[5, 10, 20, 50]"
-        sortField="lastname"
-        :sortOrder="-1"
-        removableSort
+        :rows="rows"
+        ref="dt"
+        :totalRecords="totalRecords"
+        @page="onPage($event)"
         dataKey="id"
         filterDisplay="row"
         showGridlines
@@ -49,20 +49,10 @@
         <Column
           field="employeeid"
           header="Employee ID"
-          sortable
           style="min-width: 12rem"
         >
           <template #body="{ data }">
             {{ data.employeeid }}
-          </template>
-          <template #filter="{ filterModel, filterCallback }">
-            <InputText
-              v-model="filterModel.value"
-              type="text"
-              @input="filterCallback()"
-              class="p-column-filter"
-              placeholder="Search by employeeid"
-            />
           </template>
         </Column>
         <Column header="Avatar">
@@ -84,77 +74,37 @@
         <Column
           field="lastname"
           header="Last name"
-          sortable
           style="min-width: 12rem"
         >
           <template #body="{ data }">
             {{ data.lastname }}
           </template>
-          <template #filter="{ filterModel, filterCallback }">
-            <InputText
-              v-model="filterModel.value"
-              type="text"
-              @input="filterCallback()"
-              class="p-column-filter"
-              placeholder="Search by last name"
-            />
-          </template>
         </Column>
         <Column
           field="firstname"
           header="First name"
-          sortable
           style="min-width: 12rem"
         >
           <template #body="{ data }">
             {{ data.firstname }}
           </template>
-          <template #filter="{ filterModel, filterCallback }">
-            <InputText
-              v-model="filterModel.value"
-              type="text"
-              @input="filterCallback()"
-              class="p-column-filter"
-              placeholder="Search by first name"
-            />
-          </template>
         </Column>
         <Column
           field="middlename"
           header="Middle name"
-          sortable
           style="min-width: 12rem"
         >
           <template #body="{ data }">
             {{ data.middlename }}
           </template>
-          <template #filter="{ filterModel, filterCallback }">
-            <InputText
-              v-model="filterModel.value"
-              type="text"
-              @input="filterCallback()"
-              class="p-column-filter"
-              placeholder="Search by middle name"
-            />
-          </template>
         </Column>
         <Column
           field="empsuffix"
           header="Suffix"
-          sortable
           style="min-width: 12rem"
         >
           <template #body="{ data }">
             {{ data.empsuffix }}
-          </template>
-          <template #filter="{ filterModel, filterCallback }">
-            <InputText
-              v-model="filterModel.value"
-              type="text"
-              @input="filterCallback()"
-              class="p-column-filter"
-              placeholder="Search by suffix"
-            />
           </template>
         </Column>
         <Column
@@ -164,23 +114,6 @@
         >
           <template #body="{ data }">
             {{ data.role }}
-          </template>
-          <template #filter="{ filterModel, filterCallback }">
-            <Dropdown
-              v-model="filterModel.value"
-              @change="filterCallback()"
-              :options="roles"
-              optionLabel="name"
-              optionValue="value"
-              placeholder="Filter role"
-              class="p-column-filter"
-              style="min-width: 12rem"
-              :showClear="true"
-            >
-              <template #option="slotProps">
-                <Tag :value="slotProps.option.value" />
-              </template>
-            </Dropdown>
           </template>
         </Column>
         <Column
@@ -425,6 +358,11 @@ export default {
   },
   data() {
     return {
+      // paginator
+      loading: false,
+      totalRecords: null,
+      rows: null,
+      // end paginator
       itemId: null,
       isUpdate: false,
       createItemDialog: false,
@@ -434,20 +372,17 @@ export default {
       params: {},
       from: null,
       to: null,
-      totalRecords: 0,
       usersList: [],
       employeeIdList: [],
       filters: {
-        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
         firstname: { value: null, matchMode: FilterMatchMode.CONTAINS },
         middlename: { value: null, matchMode: FilterMatchMode.CONTAINS },
         lastname: { value: null, matchMode: FilterMatchMode.CONTAINS },
         empsuffix: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        role: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        role: { value: null, matchMode: FilterMatchMode.EQUALS },
         employeeid: { value: null, matchMode: FilterMatchMode.CONTAINS },
         email: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
-      loading: true,
       roles: [
         {
           name: 'super-admin',
@@ -469,6 +404,12 @@ export default {
         password: null,
       }),
     };
+  },
+  // created will be initialize before mounted
+  created() {
+    this.totalRecords = this.users.total;
+    this.params.page = this.users.current_page;
+    this.rows = this.users.per_page;
   },
   mounted() {
     this.storeUserInContainer();
@@ -522,15 +463,22 @@ export default {
     tzone(date) {
       return moment.tz(date, 'Asia/Manila').format('L');
     },
+    onPage(event) {
+      this.params.page = event.page + 1;
+      this.updateData();
+    },
     updateData() {
       this.usersList = [];
+      this.loading = true;
 
       this.$inertia.get('users', this.params, {
         preserveState: true,
         preserveScroll: true,
         onFinish: (visit) => {
+          this.totalRecords = this.users.total;
           this.usersList = [];
           this.storeUserInContainer();
+          this.loading = false;
         },
       });
     },
@@ -605,13 +553,14 @@ export default {
       this.form.delete(route('users.destroy', this.itemId), {
         preserveScroll: true,
         onSuccess: () => {
+          this.usersList = [];
           this.deleteItemDialog = false;
           this.itemId = null;
-          this.storeUserInContainer();
           this.form.clearErrors();
           this.form.reset();
           this.updateData();
           this.deletedMsg();
+          this.storeUserInContainer();
         },
       });
     },

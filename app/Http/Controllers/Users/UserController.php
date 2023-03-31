@@ -45,7 +45,10 @@ class UserController extends Controller
                 }
             )
             ->orderBy('employeeid', 'asc')
-            ->paginate(20);
+            // ->paginate(20);
+            ->paginate(15);
+
+        // dd($users)
 
         return Inertia::render('Users/Index', [
             'users' => $users,
