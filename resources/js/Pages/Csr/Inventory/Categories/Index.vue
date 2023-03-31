@@ -1,6 +1,6 @@
 <template>
   <app-layout>
-    <Head title="Template - Users" />
+    <Head title="Template - Categories" />
 
     <div class="card">
       <Toast />
@@ -165,6 +165,7 @@
             required="true"
             autofocus
             :class="{ 'p-invalid': form.cl1code == '' }"
+            @keyup.enter="submit"
           />
           <small
             class="text-error"
@@ -181,6 +182,7 @@
             required="true"
             autofocus
             :class="{ 'p-invalid': form.cl1comb == '' }"
+            @keyup.enter="submit"
           />
           <small
             class="text-error"
@@ -197,6 +199,7 @@
             required="true"
             autofocus
             :class="{ 'p-invalid': form.cl1desc == '' }"
+            @keyup.enter="submit"
           />
           <small
             class="text-error"
@@ -213,6 +216,7 @@
             required="true"
             autofocus
             :class="{ 'p-invalid': form.cl1lock == '' }"
+            @keyup.enter="submit"
           />
           <small
             class="text-error"
@@ -245,6 +249,7 @@
             required="true"
             autofocus
             :class="{ 'p-invalid': form.cl1upsw == '' }"
+            @keyup.enter="submit"
           />
           <small
             class="text-error"
@@ -405,6 +410,8 @@ export default {
   },
   mounted() {
     this.storeCategoryInContainer();
+
+    this.loading = false;
   },
   methods: {
     // use storeCategoryInContainer() function so that every time you make
@@ -474,7 +481,6 @@ export default {
             this.itemId = null;
             this.createItemDialog = false;
             this.cancel();
-            // this.updateData(); // orig
             this.updateData();
             this.updatedMsg();
           },
@@ -486,7 +492,6 @@ export default {
             this.itemId = null;
             this.createItemDialog = false;
             this.cancel();
-            // this.updateData(); // orig
             this.updateData();
             this.createdMsg();
           },
@@ -502,13 +507,14 @@ export default {
       this.form.delete(route('categories.destroy', this.itemId), {
         preserveScroll: true,
         onSuccess: () => {
+          this.categoriesList = [];
           this.deleteItemDialog = false;
           this.itemId = null;
-          this.storeCategoryInContainer();
           this.form.clearErrors();
           this.form.reset();
           this.updateData();
           this.deletedMsg();
+          this.storeCategoryInContainer();
         },
       });
     },
