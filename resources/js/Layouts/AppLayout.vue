@@ -56,11 +56,18 @@ export default {
               comp: 'Dashboard',
             },
             {
-              label: 'Category',
+              label: 'Categories',
               icon: 'pi pi-fw pi-home',
               to: 'categories',
               prefix: 'categories',
               comp: 'Csr/Inventory/Categories/Index',
+            },
+            {
+              label: 'Items',
+              icon: 'pi pi-fw pi-home',
+              to: 'items',
+              prefix: 'items',
+              comp: 'Csr/Inventory/Items/Index',
             },
             {
               label: 'Users',

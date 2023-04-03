@@ -14,6 +14,7 @@ class Item extends Model
     public $incrementing = false;
     // declare primary as string
     protected $keyType = 'string';
+    public $timestamps = false;
 
     protected $fillable = [
         'cl2comb',

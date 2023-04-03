@@ -1,6 +1,6 @@
 <template>
   <app-layout>
-    <Head title="Template - Categories" />
+    <Head title="Template - Items" />
 
     <div class="card">
       <Toast />
@@ -23,7 +23,7 @@
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold">Categories</span>
+            <span class="text-xl text-900 font-bold">Items</span>
             <div>
               <span class="p-input-icon-left mr-2">
                 <i class="pi pi-search" />
@@ -331,6 +331,7 @@ export default {
   props: {
     categories: Object,
     procTypes: Array,
+    cl1combs: Array,
   },
   data() {
     return {
@@ -347,7 +348,7 @@ export default {
       options: {},
       params: {},
       categoriesList: [],
-      procTypesList: [],
+      cl1combsList: [],
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
@@ -377,17 +378,18 @@ export default {
     this.rows = this.categories.per_page;
   },
   mounted() {
-    this.storeProcTypesInContainer();
+    console.log(this.cl1combs);
+
+    this.storeCl1combsInContainer();
     this.storeCategoryInContainer();
 
     this.loading = false;
   },
   methods: {
-    storeProcTypesInContainer() {
-      this.procTypes.forEach((e) => {
-        this.procTypesList.push({
-          ptcode: e.ptcode,
-          ptdesc: e.ptdesc,
+    storeCl1combsInContainer() {
+      this.cl1combs.forEach((e) => {
+        this.cl1combsList.push({
+          cl1comb: e.cl1comb,
         });
       });
     },
@@ -415,7 +417,7 @@ export default {
       this.categoriesList = [];
       this.loading = true;
 
-      this.$inertia.get('categories', this.params, {
+      this.$inertia.get('items', this.params, {
         preserveState: true,
         preserveScroll: true,
         onFinish: (visit) => {
