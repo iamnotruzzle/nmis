@@ -143,11 +143,13 @@
       >
         <div class="field">
           <label for="ptcode">Ptcode</label>
-          <InputText
-            id="ptcode"
+          <Dropdown
             v-model.trim="form.ptcode"
             required="true"
-            autofocus
+            :options="procTypesList"
+            optionLabel="ptdesc"
+            optionValue="ptcode"
+            class="w-full mb-3"
             :class="{ 'p-invalid': form.ptcode == '' }"
           />
           <small
@@ -172,23 +174,6 @@
             v-if="form.errors.cl1code"
           >
             {{ form.errors.cl1code }}
-          </small>
-        </div>
-        <div class="field">
-          <label for="cl1comb">Cl1comb</label>
-          <InputText
-            id="cl1comb"
-            v-model.trim="form.cl1comb"
-            required="true"
-            autofocus
-            :class="{ 'p-invalid': form.cl1comb == '' }"
-            @keyup.enter="submit"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.cl1comb"
-          >
-            {{ form.errors.cl1comb }}
           </small>
         </div>
         <div class="field">
@@ -345,6 +330,7 @@ export default {
   },
   props: {
     categories: Object,
+    procTypes: Array,
   },
   data() {
     return {
@@ -361,6 +347,7 @@ export default {
       options: {},
       params: {},
       categoriesList: [],
+      procTypesList: [],
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
@@ -375,7 +362,6 @@ export default {
         },
       ],
       form: this.$inertia.form({
-        cl1comb: null,
         ptcode: null,
         cl1code: null,
         cl1desc: null,
@@ -391,11 +377,20 @@ export default {
     this.rows = this.categories.per_page;
   },
   mounted() {
+    this.storeProcTypesInContainer();
     this.storeCategoryInContainer();
 
     this.loading = false;
   },
   methods: {
+    storeProcTypesInContainer() {
+      this.procTypes.forEach((e) => {
+        this.procTypesList.push({
+          ptcode: e.ptcode,
+          ptdesc: e.ptdesc,
+        });
+      });
+    },
     // use storeCategoryInContainer() function so that every time you make
     // server request such as POST, the data in the table
     // is updated
@@ -405,7 +400,6 @@ export default {
           cl1code: e.cl1code,
           cl1comb: e.cl1comb,
           cl1desc: e.cl1desc,
-          cl1dtmd: e.cl1dtmd,
           cl1lock: e.cl1lock,
           cl1stat: e.cl1stat,
           cl1upsw: e.cl1upsw,
@@ -441,13 +435,12 @@ export default {
     },
     // emit close dialog
     clickOutsideDialog() {
-      this.$emit('hide', (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
+      this.$emit('hide', (this.itemId = null), (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
     },
     editItem(item) {
       this.isUpdate = true;
       this.createItemDialog = true;
       this.itemId = item.cl1comb;
-      this.form.cl1comb = item.cl1comb;
       this.form.ptcode = item.ptcode;
       this.form.cl1code = item.cl1code;
       this.form.cl1desc = item.cl1desc;
@@ -456,7 +449,7 @@ export default {
     },
     submit() {
       if (this.isUpdate) {
-        this.form.put(route('categories.update'), {
+        this.form.put(route('categories.update', this.itemId), {
           preserveScroll: true,
           onSuccess: () => {
             this.itemId = null;

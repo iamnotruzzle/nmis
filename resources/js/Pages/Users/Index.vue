@@ -495,7 +495,7 @@ export default {
     },
     // emit close dialog
     clickOutsideDialog() {
-      this.$emit('hide', (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
+      this.$emit('hide', (this.itemId = null), (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
     },
     editItem(item) {
       //   console.log(item);

@@ -9,7 +9,7 @@ class ProcTypeForHclass extends Model
 {
     use HasFactory;
 
-    protected $table = 'hproctyp';
+    protected $table = 'hproctyp'; // list of proc type for hclass tables
     protected $primaryKey = 'ptcode';
     public $incrementing = false;
     // declare primary as string
