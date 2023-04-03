@@ -209,23 +209,6 @@
           </small>
         </div>
         <div class="field">
-          <label for="cl1lock">Cl1lock</label>
-          <InputText
-            id="cl1lock"
-            v-model.trim="form.cl1lock"
-            required="true"
-            autofocus
-            :class="{ 'p-invalid': form.cl1lock == '' }"
-            @keyup.enter="submit"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.cl1lock"
-          >
-            {{ form.errors.cl1lock }}
-          </small>
-        </div>
-        <div class="field">
           <label for="cl1stat">Cl1stat</label>
           <Dropdown
             v-model="form.cl1stat"
@@ -396,7 +379,6 @@ export default {
         ptcode: null,
         cl1code: null,
         cl1desc: null,
-        cl1lock: null,
         cl1stat: null,
         cl1upsw: null,
       }),
@@ -469,7 +451,6 @@ export default {
       this.form.ptcode = item.ptcode;
       this.form.cl1code = item.cl1code;
       this.form.cl1desc = item.cl1desc;
-      this.form.cl1lock = item.cl1lock;
       this.form.cl1stat = item.cl1stat;
       this.form.cl1upsw = item.cl1upsw;
     },
