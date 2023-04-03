@@ -56,18 +56,18 @@ export default {
               comp: 'Dashboard',
             },
             {
-              label: 'Users',
-              icon: 'pi pi-fw pi-home',
-              to: 'users',
-              prefix: 'users',
-              comp: 'Users/Index',
-            },
-            {
               label: 'Category',
               icon: 'pi pi-fw pi-home',
               to: 'categories',
               prefix: 'categories',
               comp: 'Csr/Inventory/Categories/Index',
+            },
+            {
+              label: 'Users',
+              icon: 'pi pi-fw pi-home',
+              to: 'users',
+              prefix: 'users',
+              comp: 'Users/Index',
             },
             {
               label: 'Sign out',
