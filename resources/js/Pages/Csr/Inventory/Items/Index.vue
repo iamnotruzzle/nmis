@@ -9,6 +9,7 @@
         class="p-datatable-sm"
         v-model:filters="filters"
         :value="itemsList"
+        selectionMode="single"
         lazy
         paginator
         :rows="rows"

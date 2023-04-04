@@ -10,6 +10,7 @@
         class="p-datatable-sm"
         v-model:filters="filters"
         :value="categoriesList"
+        selectionMode="single"
         lazy
         paginator
         :rows="rows"

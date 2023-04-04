@@ -13,6 +13,7 @@
         class="p-datatable-sm"
         v-model:filters="filters"
         :value="usersList"
+        selectionMode="single"
         lazy
         paginator
         :rows="rows"
