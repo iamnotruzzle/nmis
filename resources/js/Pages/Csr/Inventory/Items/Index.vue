@@ -5,18 +5,17 @@
     <div class="card">
       <Toast />
 
-      <!-- v-model:filters="filters" -->
       <DataTable
         class="p-datatable-sm"
         v-model:filters="filters"
-        :value="categoriesList"
+        :value="itemsList"
         lazy
         paginator
         :rows="rows"
         ref="dt"
         :totalRecords="totalRecords"
         @page="onPage($event)"
-        dataKey="cl1comb"
+        dataKey="cl2comb"
         filterDisplay="row"
         showGridlines
         :loading="loading"
@@ -29,11 +28,11 @@
                 <i class="pi pi-search" />
                 <InputText
                   v-model="search"
-                  placeholder="Search category"
+                  placeholder="Search item"
                 />
               </span>
               <Button
-                label="Add category"
+                label="Add item"
                 icon="pi pi-plus"
                 iconPos="right"
                 @click="openCreateItemDialog"
@@ -41,28 +40,19 @@
             </div>
           </div>
         </template>
-        <template #empty> No category found. </template>
-        <template #loading> Loading category data. Please wait. </template>
+        <template #empty> No item found. </template>
+        <template #loading> Loading item data. Please wait. </template>
         <Column
-          field="ptcode"
-          header="PTCODE"
+          field="cl2comb"
+          header="CL2COMB"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.ptcode }}
+            {{ data.cl2comb }}
           </template>
         </Column>
         <Column
-          field="cl1code"
-          header="CL1CODE"
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ data.cl1code }}
-          </template>
-        </Column>
-        <Column
-          field="cl1code"
+          field="cl1comb"
           header="CL1COMB"
           style="min-width: 12rem"
         >
@@ -71,39 +61,57 @@
           </template>
         </Column>
         <Column
-          field="cl1desc"
-          header="CL1DESC"
+          field="cl2code"
+          header="CL2CODE"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.cl1desc }}
+            {{ data.cl2code }}
           </template>
         </Column>
         <Column
-          field="cl1lock"
-          header="CL1LOCK"
+          field="cl2desc"
+          header="CL2DESC"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.cl1lock }}
+            {{ data.cl2desc }}
           </template>
         </Column>
         <Column
-          field="cl1stat"
-          header="CL1STAT"
+          field="unit"
+          header="UNIT"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.cl1stat }}
+            {{ data.uomcode }}
           </template>
         </Column>
         <Column
-          field="cl1upsw"
-          header="CL1UPSW"
+          field="cl2stat"
+          header="STATUS"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.cl1upsw }}
+            {{ data.cl2stat }}
+          </template>
+        </Column>
+        <Column
+          field="cl2lock"
+          header="CL2LOCK"
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.cl2lock }}
+          </template>
+        </Column>
+        <Column
+          field="cl2upsw"
+          header="CL2UPSW"
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.cl2upsw }}
           </template>
         </Column>
         <Column
@@ -135,95 +143,115 @@
       <Dialog
         v-model:visible="createItemDialog"
         :style="{ width: '450px' }"
-        header="Category Detail"
+        header="Item Detail"
         :modal="true"
         class="p-fluid"
         @hide="clickOutsideDialog"
         dismissableMask
       >
         <div class="field">
-          <label for="ptcode">Ptcode</label>
+          <label for="cl1comb">Cl1comb</label>
           <Dropdown
-            v-model.trim="form.ptcode"
+            v-model.trim="form.cl1comb"
             required="true"
-            :options="procTypesList"
-            optionLabel="ptdesc"
-            optionValue="ptcode"
+            :options="cl1combsList"
+            optionLabel="cl1desc"
+            optionValue="cl1comb"
             class="w-full mb-3"
-            :class="{ 'p-invalid': form.ptcode == '' }"
+            :class="{ 'p-invalid': form.cl1comb == '' }"
           />
           <small
             class="text-error"
-            v-if="form.errors.ptcode"
+            v-if="form.errors.cl1comb"
           >
-            {{ form.errors.ptcode }}
+            {{ form.errors.cl1comb }}
           </small>
         </div>
         <div class="field">
-          <label for="cl1code">Cl1code</label>
+          <label for="cl2code">Cl2code</label>
           <InputText
+            id="cl2code"
+            v-model.trim="form.cl2code"
+            required="true"
+            autofocus
+            :class="{ 'p-invalid': form.cl2code == '' }"
+            @keyup.enter="submit"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.cl2code"
+          >
+            {{ form.errors.cl2code }}
+          </small>
+        </div>
+        <div class="field">
+          <label for="cl2desc">Cl2desc</label>
+          <Textarea
             id="cl1code"
-            v-model.trim="form.cl1code"
+            v-model.trim="form.cl2desc"
             required="true"
+            rows="5"
             autofocus
-            :class="{ 'p-invalid': form.cl1code == '' }"
+            :class="{ 'p-invalid': form.cl2desc == '' }"
             @keyup.enter="submit"
           />
           <small
             class="text-error"
-            v-if="form.errors.cl1code"
+            v-if="form.errors.cl2desc"
           >
-            {{ form.errors.cl1code }}
+            {{ form.errors.cl2desc }}
           </small>
         </div>
         <div class="field">
-          <label for="cl1desc">Cl1desc</label>
-          <InputText
-            id="cl1desc"
-            v-model.trim="form.cl1desc"
-            required="true"
-            autofocus
-            :class="{ 'p-invalid': form.cl1desc == '' }"
-            @keyup.enter="submit"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.cl1desc"
-          >
-            {{ form.errors.cl1desc }}
-          </small>
-        </div>
-        <div class="field">
-          <label for="cl1stat">Cl1stat</label>
+          <label for="unit">UNIT</label>
           <Dropdown
-            v-model="form.cl1stat"
-            :options="cl1stats"
+            required="true"
+            v-model="form.unit"
+            :options="unitsList"
+            dataKey="unit"
+            optionLabel="uomdesc"
+            optionValue="uomdesc"
+            class="w-full mb-3"
+            :class="{ 'p-invalid': form.unit == '' }"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.unit"
+          >
+            {{ form.errors.unit }}
+          </small>
+        </div>
+        <div class="field">
+          <label for="cl2upsw">Cl2upsw</label>
+          <InputText
+            id="cl2upsw"
+            v-model.trim="form.cl2upsw"
+            required="true"
+            autofocus
+            :class="{ 'p-invalid': form.cl2upsw == '' }"
+            @keyup.enter="submit"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.cl2upsw"
+          >
+            {{ form.errors.cl2upsw }}
+          </small>
+        </div>
+        <div class="field">
+          <label for="cl2stat">Cl2stat</label>
+          <Dropdown
+            v-model="form.cl2stat"
+            :options="cl2stats"
             optionLabel="name"
             optionValue="value"
             class="w-full md:w-14rem"
           />
           <small
             class="text-error"
-            v-if="form.errors.cl1stat"
+            v-if="form.errors.cl2stat"
           >
-            {{ form.errors.cl1stat }}
-          </small>
-        </div>
-        <div class="field">
-          <label for="cl1upsw">Cl1upsw</label>
-          <InputText
-            id="cl1upsw"
-            v-model.trim="form.cl1upsw"
-            required="true"
-            autofocus
-            :class="{ 'p-invalid': form.cl1upsw == '' }"
-            @keyup.enter="submit"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.cl1upsw"
-          >
-            {{ form.errors.cl1upsw }}
+            {{ form.errors.cl2stat }}
           </small>
         </div>
         <template #footer>
@@ -270,7 +298,7 @@
             style="font-size: 2rem"
           />
           <span v-if="form"
-            >Are you sure you want to delete <b>{{ form.cl1desc }}</b> ?</span
+            >Are you sure you want to delete <b>{{ form.cl2desc }}</b> ?</span
           >
         </div>
         <template #footer>
@@ -309,7 +337,7 @@ import Avatar from 'primevue/avatar';
 import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
 import AutoComplete from 'primevue/autocomplete';
-import moment from 'moment';
+import Textarea from 'primevue/textarea';
 
 export default {
   components: {
@@ -327,11 +355,12 @@ export default {
     Calendar,
     Dropdown,
     AutoComplete,
+    Textarea,
   },
   props: {
-    categories: Object,
-    procTypes: Array,
     cl1combs: Array,
+    units: Array,
+    items: Object,
   },
   data() {
     return {
@@ -347,12 +376,13 @@ export default {
       search: '',
       options: {},
       params: {},
-      categoriesList: [],
+      itemsList: [],
       cl1combsList: [],
+      unitsList: [],
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
-      cl1stats: [
+      cl2stats: [
         {
           name: 'ACTIVE',
           value: 'A',
@@ -363,25 +393,26 @@ export default {
         },
       ],
       form: this.$inertia.form({
-        ptcode: null,
-        cl1code: null,
-        cl1desc: null,
-        cl1stat: null,
-        cl1upsw: null,
+        cl2comb: null,
+        cl1comb: null,
+        cl2code: null,
+        cl2desc: null,
+        unit: null,
+        cl2stat: null,
+        cl2upsw: null,
       }),
     };
   },
   // created will be initialize before mounted
   created() {
-    this.totalRecords = this.categories.total;
-    this.params.page = this.categories.current_page;
-    this.rows = this.categories.per_page;
+    this.totalRecords = this.items.total;
+    this.params.page = this.items.current_page;
+    this.rows = this.items.per_page;
   },
   mounted() {
-    console.log(this.cl1combs);
-
     this.storeCl1combsInContainer();
-    this.storeCategoryInContainer();
+    this.storeItemInContainer();
+    this.storeUnitsInContainer();
 
     this.loading = false;
   },
@@ -390,22 +421,33 @@ export default {
       this.cl1combs.forEach((e) => {
         this.cl1combsList.push({
           cl1comb: e.cl1comb,
+          cl1desc: e.cl1desc,
         });
       });
     },
-    // use storeCategoryInContainer() function so that every time you make
+    storeUnitsInContainer() {
+      this.units.forEach((e) => {
+        this.unitsList.push({
+          uomcode: e.uomcode,
+          uomdesc: e.uomdesc,
+        });
+      });
+    },
+    // use storeItemInContainer() function so that every time you make
     // server request such as POST, the data in the table
     // is updated
-    storeCategoryInContainer() {
-      this.categories.data.forEach((e) => {
-        this.categoriesList.push({
-          cl1code: e.cl1code,
+    storeItemInContainer() {
+      this.items.data.forEach((e) => {
+        this.itemsList.push({
+          cl2comb: e.cl2comb,
           cl1comb: e.cl1comb,
-          cl1desc: e.cl1desc,
-          cl1lock: e.cl1lock,
-          cl1stat: e.cl1stat,
-          cl1upsw: e.cl1upsw,
-          ptcode: e.ptcode,
+          cl2code: e.cl2code,
+          cl2desc: e.cl2desc,
+          uomcode: e.unit === null ? '' : e.unit.uomdesc,
+          cl2stat: e.cl2stat,
+          cl2lock: e.cl2lock,
+          cl2upsw: e.cl2upsw,
+          pharmaceutical: e.pharmaceutical,
         });
       });
     },
@@ -414,16 +456,16 @@ export default {
       this.updateData();
     },
     updateData() {
-      this.categoriesList = [];
+      this.itemsList = [];
       this.loading = true;
 
       this.$inertia.get('items', this.params, {
         preserveState: true,
         preserveScroll: true,
         onFinish: (visit) => {
-          this.totalRecords = this.categories.total;
-          this.categoriesList = [];
-          this.storeCategoryInContainer();
+          this.totalRecords = this.items.total;
+          this.itemsList = [];
+          this.storeItemInContainer();
           this.loading = false;
         },
       });
@@ -442,16 +484,18 @@ export default {
     editItem(item) {
       this.isUpdate = true;
       this.createItemDialog = true;
-      this.itemId = item.cl1comb;
-      this.form.ptcode = item.ptcode;
-      this.form.cl1code = item.cl1code;
-      this.form.cl1desc = item.cl1desc;
-      this.form.cl1stat = item.cl1stat;
-      this.form.cl1upsw = item.cl1upsw;
+      this.itemId = item.cl2comb;
+      this.form.cl2comb = item.cl2comb;
+      this.form.cl1comb = item.cl1comb;
+      this.form.cl2code = item.cl2code;
+      this.form.cl2desc = item.cl2desc;
+      this.form.unit = item.uomcode;
+      this.form.cl2stat = item.cl2stat;
+      this.form.cl2upsw = item.cl2upsw;
     },
     submit() {
       if (this.isUpdate) {
-        this.form.put(route('categories.update', this.itemId), {
+        this.form.put(route('items.update', this.itemId), {
           preserveScroll: true,
           onSuccess: () => {
             this.itemId = null;
@@ -462,7 +506,7 @@ export default {
           },
         });
       } else {
-        this.form.post(route('categories.store'), {
+        this.form.post(route('items.store'), {
           preserveScroll: true,
           onSuccess: () => {
             this.itemId = null;
@@ -475,22 +519,22 @@ export default {
       }
     },
     confirmDeleteItem(item) {
-      this.itemId = item.cl1comb;
-      this.form.cl1desc = item.cl1desc;
+      this.itemId = item.cl2comb;
+      this.form.cl2desc = item.cl2desc;
       this.deleteItemDialog = true;
     },
     deleteItem() {
-      this.form.delete(route('categories.destroy', this.itemId), {
+      this.form.delete(route('items.destroy', this.itemId), {
         preserveScroll: true,
         onSuccess: () => {
-          this.categoriesList = [];
+          this.itemsList = [];
           this.deleteItemDialog = false;
           this.itemId = null;
           this.form.clearErrors();
           this.form.reset();
           this.updateData();
           this.deletedMsg();
-          this.storeCategoryInContainer();
+          this.storeItemInContainer();
         },
       });
     },
@@ -500,17 +544,17 @@ export default {
       this.createItemDialog = false;
       this.form.reset();
       this.form.clearErrors();
-      this.categoriesList = [];
-      this.storeCategoryInContainer();
+      this.itemsList = [];
+      this.storeItemInContainer();
     },
     createdMsg() {
-      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Category created', life: 3000 });
+      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Item created', life: 3000 });
     },
     updatedMsg() {
-      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Category updated', life: 3000 });
+      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Item updated', life: 3000 });
     },
     deletedMsg() {
-      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Category deleted', life: 3000 });
+      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Item deleted', life: 3000 });
     },
   },
   watch: {

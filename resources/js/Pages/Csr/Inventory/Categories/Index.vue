@@ -194,22 +194,6 @@
           </small>
         </div>
         <div class="field">
-          <label for="cl1stat">Cl1stat</label>
-          <Dropdown
-            v-model="form.cl1stat"
-            :options="cl1stats"
-            optionLabel="name"
-            optionValue="value"
-            class="w-full md:w-14rem"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.cl1stat"
-          >
-            {{ form.errors.cl1stat }}
-          </small>
-        </div>
-        <div class="field">
           <label for="cl1upsw">Cl1upsw</label>
           <InputText
             id="cl1upsw"
@@ -224,6 +208,22 @@
             v-if="form.errors.cl1upsw"
           >
             {{ form.errors.cl1upsw }}
+          </small>
+        </div>
+        <div class="field">
+          <label for="cl1stat">Cl1stat</label>
+          <Dropdown
+            v-model="form.cl1stat"
+            :options="cl1stats"
+            optionLabel="name"
+            optionValue="value"
+            class="w-full md:w-14rem"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.cl1stat"
+          >
+            {{ form.errors.cl1stat }}
           </small>
         </div>
         <template #footer>
