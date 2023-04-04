@@ -7,7 +7,9 @@
 
       <DataTable
         class="p-datatable-sm"
+        dataKey="cl2comb"
         v-model:filters="filters"
+        v-model:expandedRows="expandedRows"
         :value="itemsList"
         selectionMode="single"
         lazy
@@ -16,7 +18,6 @@
         ref="dt"
         :totalRecords="totalRecords"
         @page="onPage($event)"
-        dataKey="cl2comb"
         filterDisplay="row"
         showGridlines
         :loading="loading"
@@ -43,6 +44,10 @@
         </template>
         <template #empty> No item found. </template>
         <template #loading> Loading item data. Please wait. </template>
+        <Column
+          expander
+          style="width: 5rem"
+        />
         <Column
           field="cl2comb"
           header="CL2COMB"
@@ -138,6 +143,44 @@
             />
           </template>
         </Column>
+        <template #expansion="slotProps">
+          <div class="p-3">
+            <!-- {{ slotProps.data }} -->
+            <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+              <h5>
+                Prices for <span class="text-cyan-500 hover:text-cyan-700">{{ slotProps.data.cl2desc }}</span>
+              </h5>
+              <Button
+                label="Add price"
+                icon="pi pi-dollar"
+                iconPos="right"
+                @click="openCreateItemDialog"
+              />
+            </div>
+            <DataTable
+              :dataKey="slotProps.cl2comb"
+              :value="slotProps.data.prices"
+            >
+              <!-- <Column
+                field="cl2comb"
+                header="CL2COMB"
+              >
+                <template #body="{ data }">
+                  {{ data.cl2comb }}
+                </template>
+              </Column> -->
+              <!-- <Column
+                field="amount"
+                header="Amount"
+                sortable
+              >
+                <template #body="slotProps">
+                  {{ formatCurrency(slotProps.data.amount) }}
+                </template>
+              </Column> -->
+            </DataTable>
+          </div>
+        </template>
       </DataTable>
 
       <!-- create & edit dialog -->
@@ -318,6 +361,63 @@
           />
         </template>
       </Dialog>
+
+      <!-- create & edit price dialog -->
+      <Dialog
+        v-model:visible="createItemPriceDialog"
+        :style="{ width: '450px' }"
+        header="Price Detail"
+        :modal="true"
+        class="p-fluid"
+        @hide="clickOutsidePriceDialog"
+        dismissableMask
+      >
+        <div class="field">
+          <label for="cl2code">Cl2code</label>
+          <InputText
+            id="cl2code"
+            v-model.trim="formPrice.cl2code"
+            required="true"
+            autofocus
+            :class="{ 'p-invalid': formPrice.cl2code == '' }"
+            @keyup.enter="submit"
+          />
+          <small
+            class="text-error"
+            v-if="formPrice.errors.cl2code"
+          >
+            {{ formPrice.errors.cl2code }}
+          </small>
+        </div>
+        <template #footer>
+          <Button
+            label="Cancel"
+            icon="pi pi-times"
+            severity="danger"
+            text
+            @click="cancelPrice"
+          />
+          <Button
+            v-if="isPriceUpdate == true"
+            label="Update"
+            icon="pi pi-check"
+            severity="warning"
+            text
+            type="submit"
+            :disabled="formPrice.processing"
+            @click="submit"
+          />
+          <Button
+            v-else
+            label="Save"
+            icon="pi pi-check"
+            text
+            type="submit"
+            :disabled="form.processing"
+            @click="submit"
+          />
+        </template>
+      </Dialog>
     </div>
   </app-layout>
 </template>
@@ -365,6 +465,9 @@ export default {
   },
   data() {
     return {
+      // data table expand
+      expandedRows: [],
+      // end data table expand
       // paginator
       loading: false,
       totalRecords: null,
@@ -374,6 +477,12 @@ export default {
       isUpdate: false,
       createItemDialog: false,
       deleteItemDialog: false,
+      // price
+      itemPriceId: null,
+      isPriceUpdate: false,
+      createItemPriceDialog: false,
+      deleteItemPriceDialog: false,
+      // end price
       search: '',
       options: {},
       params: {},
@@ -402,6 +511,15 @@ export default {
         cl2stat: null,
         cl2upsw: null,
       }),
+      formPrice: this.$inertia.form({
+        cl2comb: null,
+        cl1comb: null,
+        cl2code: null,
+        cl2desc: null,
+        unit: null,
+        cl2stat: null,
+        cl2upsw: null,
+      }),
     };
   },
   // created will be initialize before mounted
@@ -414,6 +532,8 @@ export default {
     this.storeCl1combsInContainer();
     this.storeItemInContainer();
     this.storeUnitsInContainer();
+
+    console.log(this.items);
 
     this.loading = false;
   },
@@ -449,6 +569,7 @@ export default {
           cl2lock: e.cl2lock,
           cl2upsw: e.cl2upsw,
           pharmaceutical: e.pharmaceutical,
+          prices: e.prices.length === 0 ? [] : e.prices,
         });
       });
     },
@@ -557,6 +678,41 @@ export default {
     deletedMsg() {
       this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Item deleted', life: 3000 });
     },
+    // ********** prices
+    openCreateItemDialog() {
+      this.isPriceUpdate = false;
+      this.formPrice.clearErrors();
+      this.formPrice.reset();
+      this.itemPriceId = null;
+      this.createItemPriceDialog = true;
+    },
+    // emit price close dialog
+    clickOutsidePriceDialog() {
+      this.$emit(
+        'hide',
+        (this.itemPriceId = null),
+        (this.isPriceUpdate = false),
+        this.formPrice.clearErrors(),
+        this.formPrice.reset()
+      );
+    },
+    cancelPrice() {
+      this.itemPriceId = null;
+      this.isPriceUpdate = false;
+      this.createItemPriceDialog = false;
+      this.formPrice.reset();
+      this.formPrice.clearErrors();
+    },
+    createdPriceMsg() {
+      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Price created', life: 3000 });
+    },
+    updatedPriceMsg() {
+      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Price updated', life: 3000 });
+    },
+    deletedPriceMsg() {
+      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Price deleted', life: 3000 });
+    },
+    // ********** end prices
   },
   watch: {
     search: function (val, oldVal) {

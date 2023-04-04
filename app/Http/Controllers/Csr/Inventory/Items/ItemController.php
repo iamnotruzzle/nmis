@@ -25,7 +25,7 @@ class ItemController extends Controller
             ->orderBy('uomdesc', 'ASC')
             ->get(['uomcode', 'uomdesc']);
 
-        $items = Item::with('unit')
+        $items = Item::with(['unit', 'prices'])
             ->when($request->search, function ($query, $value) {
                 $query->where('cl2comb', 'LIKE', '%' . $value . '%')
                     ->orWhere('cl2desc', 'LIKE', '%' . $value . '%');
