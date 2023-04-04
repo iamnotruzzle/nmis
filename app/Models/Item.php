@@ -54,4 +54,9 @@ class Item extends Model
     {
         return $this->hasOne(UnitOfMeasurement::class, 'uomcode', 'uomcode');
     }
+
+    public function prices()
+    {
+        return $this->hasMany(ItemPrices::class, 'cl2comb', 'cl2comb')->orderBy('created_at', 'DESC');
+    }
 }
