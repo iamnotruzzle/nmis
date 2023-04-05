@@ -16,7 +16,6 @@ class CreateCsrwItemPricesTable extends Migration
         Schema::create('csrw_item_prices', function (Blueprint $table) {
             $table->id();
             $table->string('cl2comb');
-            $table->string('uomcode');
             $table->decimal('selling_price', $precision = 8, $scale = 2);
             $table->string('entry_by');
             $table->timestamps();

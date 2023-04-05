@@ -10,17 +10,17 @@ class ItemPrices extends Model
     use HasFactory;
 
     protected $table = 'csrw_item_prices';
-    protected $primaryKey = 'cl2comb';
-    public $incrementing = false;
-    // declare primary as string
-    protected $keyType = 'string';
 
     protected $fillable = [
         'id',
         'cl2comb',
-        'uomcode',
         'selling_price',
         'entry_by',
         'created_at'
     ];
+
+    public function userDetail()
+    {
+        return $this->hasOne(UserDetail::class, 'employeeid', 'entry_by');
+    }
 }

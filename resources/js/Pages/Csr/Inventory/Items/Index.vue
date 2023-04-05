@@ -19,7 +19,6 @@
         :totalRecords="totalRecords"
         @page="onPage($event)"
         filterDisplay="row"
-        showGridlines
         :loading="loading"
       >
         <template #header>
@@ -152,32 +151,68 @@
               </h5>
               <Button
                 label="Add price"
-                icon="pi pi-dollar"
+                icon="pi pi-plus"
                 iconPos="right"
-                @click="openCreateItemDialog"
+                @click="openCreateItemDialog(slotProps.data)"
               />
             </div>
             <DataTable
               :dataKey="slotProps.cl2comb"
               :value="slotProps.data.prices"
+              paginator
+              :rows="5"
             >
-              <!-- <Column
-                field="cl2comb"
-                header="CL2COMB"
+              <Column
+                field="Selling price"
+                header="Selling price"
               >
                 <template #body="{ data }">
-                  {{ data.cl2comb }}
+                  {{ data.selling_price }}
                 </template>
-              </Column> -->
-              <!-- <Column
-                field="amount"
-                header="Amount"
-                sortable
+              </Column>
+              <Column
+                field="Entry by"
+                header="Entry by"
+              >
+                <template #body="{ data }">
+                  <span v-if="data.user_detail === null"></span>
+                  <span v-else>
+                    {{ data.user_detail.firstname }} {{ data.user_detail.middlename }} {{ data.user_detail.lastname }}
+                    {{ data.user_detail.empsuffix }}
+                  </span>
+                </template>
+              </Column>
+              <Column
+                field="created_at"
+                header="Created at"
+              >
+                <template #body="{ data }">
+                  {{ tzone(data.created_at) }}
+                </template>
+              </Column>
+              <Column
+                header="Action"
+                style="min-width: 12rem"
               >
                 <template #body="slotProps">
-                  {{ formatCurrency(slotProps.data.amount) }}
+                  <Button
+                    icon="pi pi-pencil"
+                    class="mr-1"
+                    rounded
+                    text
+                    severity="warning"
+                    @click="editPrice(slotProps.data)"
+                  />
+
+                  <Button
+                    icon="pi pi-trash"
+                    rounded
+                    text
+                    severity="danger"
+                    @click="confirmDeletePrice(slotProps.data)"
+                  />
                 </template>
-              </Column> -->
+              </Column>
             </DataTable>
           </div>
         </template>
@@ -262,7 +297,6 @@
             class="text-error"
             v-if="form.errors.unit"
           >
-            {{ form.errors.unit }}
           </small>
         </div>
         <div class="field">
@@ -373,20 +407,20 @@
         dismissableMask
       >
         <div class="field">
-          <label for="cl2code">Cl2code</label>
+          <label for="selling_price">Selling price</label>
           <InputText
-            id="cl2code"
-            v-model.trim="formPrice.cl2code"
+            id="selling_price"
+            v-model.trim="formPrice.selling_price"
             required="true"
             autofocus
-            :class="{ 'p-invalid': formPrice.cl2code == '' }"
-            @keyup.enter="submit"
+            :class="{ 'p-invalid': formPrice.selling_price == '' }"
+            @keyup.enter="submitPrice"
           />
           <small
             class="text-error"
-            v-if="formPrice.errors.cl2code"
+            v-if="formPrice.errors.selling_price"
           >
-            {{ formPrice.errors.cl2code }}
+            {{ formPrice.errors.selling_price }}
           </small>
         </div>
         <template #footer>
@@ -405,7 +439,7 @@
             text
             type="submit"
             :disabled="formPrice.processing"
-            @click="submit"
+            @click="submitPrice"
           />
           <Button
             v-else
@@ -413,8 +447,42 @@
             icon="pi pi-check"
             text
             type="submit"
-            :disabled="form.processing"
-            @click="submit"
+            :disabled="formPrice.processing"
+            @click="submitPrice"
+          />
+        </template>
+      </Dialog>
+
+      <!-- Delete item price confirmation dialog -->
+      <Dialog
+        v-model:visible="deleteItemPriceDialog"
+        :style="{ width: '450px' }"
+        header="Confirm"
+        :modal="true"
+        dismissableMask
+      >
+        <div class="flex align-items-center justify-content-center">
+          <i
+            class="pi pi-exclamation-triangle mr-3"
+            style="font-size: 2rem"
+          />
+          <span v-if="form">
+            Are you sure you want to delete <b>₱ {{ formPrice.selling_price }}</b> price ?
+          </span>
+        </div>
+        <template #footer>
+          <Button
+            label="No"
+            icon="pi pi-times"
+            class="p-button-text"
+            @click="deleteItemPriceDialog = false"
+          />
+          <Button
+            label="Yes"
+            icon="pi pi-check"
+            severity="danger"
+            text
+            @click="deletePrice"
           />
         </template>
       </Dialog>
@@ -439,6 +507,8 @@ import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
 import AutoComplete from 'primevue/autocomplete';
 import Textarea from 'primevue/textarea';
+import InputNumber from 'primevue/inputnumber';
+import moment from 'moment';
 
 export default {
   components: {
@@ -457,6 +527,7 @@ export default {
     Dropdown,
     AutoComplete,
     Textarea,
+    InputNumber,
   },
   props: {
     cl1combs: Array,
@@ -512,13 +583,10 @@ export default {
         cl2upsw: null,
       }),
       formPrice: this.$inertia.form({
+        id: null,
         cl2comb: null,
-        cl1comb: null,
-        cl2code: null,
-        cl2desc: null,
-        unit: null,
-        cl2stat: null,
-        cl2upsw: null,
+        selling_price: null,
+        entry_by: this.$page.props.auth.user.userDetail.employeeid,
       }),
     };
   },
@@ -533,11 +601,19 @@ export default {
     this.storeItemInContainer();
     this.storeUnitsInContainer();
 
-    console.log(this.items);
+    // console.log(this.items);
 
     this.loading = false;
   },
+  computed: {
+    user() {
+      return this.$page.props.auth.user;
+    },
+  },
   methods: {
+    tzone(date) {
+      return moment.tz(date, 'Asia/Manila').format('LLL');
+    },
     storeCl1combsInContainer() {
       this.cl1combs.forEach((e) => {
         this.cl1combsList.push({
@@ -679,11 +755,11 @@ export default {
       this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Item deleted', life: 3000 });
     },
     // ********** prices
-    openCreateItemDialog() {
+    openCreateItemDialog(item) {
+      this.formPrice.id = item.id;
+      this.formPrice.cl2comb = item.cl2comb;
       this.isPriceUpdate = false;
-      this.formPrice.clearErrors();
-      this.formPrice.reset();
-      this.itemPriceId = null;
+      this.itemPriceId = item.id;
       this.createItemPriceDialog = true;
     },
     // emit price close dialog
@@ -695,6 +771,58 @@ export default {
         this.formPrice.clearErrors(),
         this.formPrice.reset()
       );
+    },
+    editPrice(item) {
+      this.isPriceUpdate = true;
+      this.createItemPriceDialog = true;
+      this.itemPriceId = item.id;
+      this.formPrice.id = item.id;
+      this.formPrice.cl2comb = item.cl2comb;
+      this.formPrice.selling_price = item.selling_price;
+    },
+    submitPrice() {
+      if (this.isPriceUpdate) {
+        this.formPrice.put(route('itemprices.update', this.itemPriceId), {
+          preserveScroll: true,
+          onSuccess: () => {
+            this.itemPriceId = null;
+            this.createItemPriceDialog = false;
+            this.cancelPrice();
+            this.updateData();
+            this.updatedPriceMsg();
+          },
+        });
+      } else {
+        this.formPrice.post(route('itemprices.store'), {
+          preserveScroll: true,
+          onSuccess: () => {
+            this.itemPriceId = null;
+            this.createItemDialog = false;
+            this.cancelPrice();
+            this.updateData();
+            this.createdPriceMsg();
+          },
+        });
+      }
+    },
+    confirmDeletePrice(item) {
+      this.itemPriceId = item.id;
+      this.formPrice.selling_price = item.selling_price;
+      this.deleteItemPriceDialog = true;
+    },
+    deletePrice() {
+      this.form.delete(route('itemprices.destroy', this.itemPriceId), {
+        preserveScroll: true,
+        onSuccess: () => {
+          this.deleteItemPriceDialog = false;
+          this.itemPriceId = null;
+          this.formPrice.clearErrors();
+          this.formPrice.reset();
+          this.updateData();
+          this.deletedPriceMsg();
+          //   this.storeItemInContainer();
+        },
+      });
     },
     cancelPrice() {
       this.itemPriceId = null;

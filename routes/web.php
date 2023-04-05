@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Csr\Inventory\Categories\CategoryController;
+use App\Http\Controllers\Csr\Inventory\ItemPrice\ItemPriceController;
 use App\Http\Controllers\Csr\Inventory\Items\ItemController;
 use App\Http\Controllers\Users\UserController;
 use Illuminate\Foundation\Application;
@@ -28,3 +29,4 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 Route::resource('categories', CategoryController::class)->middleware(['auth:sanctum', 'verified'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('items', ItemController::class)->middleware(['auth:sanctum', 'verified'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('users', UserController::class)->middleware(['auth:sanctum', 'verified'])->only(['index', 'store', 'update', 'destroy']);
+Route::resource('itemprices', ItemPriceController::class)->middleware(['auth:sanctum', 'verified'])->only(['index', 'store', 'update', 'destroy']);
