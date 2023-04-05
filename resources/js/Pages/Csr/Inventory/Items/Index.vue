@@ -153,7 +153,7 @@
                 label="Add price"
                 icon="pi pi-plus"
                 iconPos="right"
-                @click="openCreateItemDialog(slotProps.data)"
+                @click="openCreateItemPriceDialog(slotProps.data)"
               />
             </div>
             <DataTable
@@ -755,7 +755,7 @@ export default {
       this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Item deleted', life: 3000 });
     },
     // ********** prices
-    openCreateItemDialog(item) {
+    openCreateItemPriceDialog(item) {
       this.formPrice.id = item.id;
       this.formPrice.cl2comb = item.cl2comb;
       this.isPriceUpdate = false;
