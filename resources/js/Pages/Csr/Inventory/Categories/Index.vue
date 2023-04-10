@@ -340,7 +340,7 @@ export default {
       totalRecords: null,
       rows: null,
       // end paginator
-      itemId: null,
+      cl1comb: null,
       isUpdate: false,
       createCategoryDialog: false,
       deleteCategoryDialog: false,
@@ -431,17 +431,17 @@ export default {
       this.isUpdate = false;
       this.form.clearErrors();
       this.form.reset();
-      this.itemId = null;
+      this.cl1comb = null;
       this.createCategoryDialog = true;
     },
     // emit close dialog
     clickOutsideDialog() {
-      this.$emit('hide', (this.itemId = null), (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
+      this.$emit('hide', (this.cl1comb = null), (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
     },
     editCategory(item) {
       this.isUpdate = true;
       this.createCategoryDialog = true;
-      this.itemId = item.cl1comb;
+      this.cl1comb = item.cl1comb;
       this.form.ptcode = item.ptcode;
       this.form.cl1code = item.cl1code;
       this.form.cl1desc = item.cl1desc;
@@ -450,10 +450,10 @@ export default {
     },
     submit() {
       if (this.isUpdate) {
-        this.form.put(route('categories.update', this.itemId), {
+        this.form.put(route('categories.update', this.cl1comb), {
           preserveScroll: true,
           onSuccess: () => {
-            this.itemId = null;
+            this.cl1comb = null;
             this.createCategoryDialog = false;
             this.cancel();
             this.updateData();
@@ -464,7 +464,7 @@ export default {
         this.form.post(route('categories.store'), {
           preserveScroll: true,
           onSuccess: () => {
-            this.itemId = null;
+            this.cl1comb = null;
             this.createCategoryDialog = false;
             this.cancel();
             this.updateData();
@@ -474,17 +474,17 @@ export default {
       }
     },
     confirmDeleteItem(item) {
-      this.itemId = item.cl1comb;
+      this.cl1comb = item.cl1comb;
       this.form.cl1desc = item.cl1desc;
       this.deleteCategoryDialog = true;
     },
     deleteCategory() {
-      this.form.delete(route('categories.destroy', this.itemId), {
+      this.form.delete(route('categories.destroy', this.cl1comb), {
         preserveScroll: true,
         onSuccess: () => {
           this.categoriesList = [];
           this.deleteCategoryDialog = false;
-          this.itemId = null;
+          this.cl1comb = null;
           this.form.clearErrors();
           this.form.reset();
           this.updateData();
@@ -494,7 +494,7 @@ export default {
       });
     },
     cancel() {
-      this.itemId = null;
+      this.cl1comb = null;
       this.isUpdate = false;
       this.createCategoryDialog = false;
       this.form.reset();

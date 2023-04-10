@@ -549,7 +549,7 @@ export default {
       createItemDialog: false,
       deleteItemDialog: false,
       // price
-      itemPriceId: null,
+      priceId: null,
       isPriceUpdate: false,
       createItemPriceDialog: false,
       deleteItemPriceDialog: false,
@@ -759,14 +759,14 @@ export default {
       this.formPrice.id = item.id;
       this.formPrice.cl2comb = item.cl2comb;
       this.isPriceUpdate = false;
-      this.itemPriceId = item.id;
+      this.priceId = item.id;
       this.createItemPriceDialog = true;
     },
     // emit price close dialog
     clickOutsidePriceDialog() {
       this.$emit(
         'hide',
-        (this.itemPriceId = null),
+        (this.priceId = null),
         (this.isPriceUpdate = false),
         this.formPrice.clearErrors(),
         this.formPrice.reset()
@@ -775,17 +775,17 @@ export default {
     editPrice(item) {
       this.isPriceUpdate = true;
       this.createItemPriceDialog = true;
-      this.itemPriceId = item.id;
+      this.priceId = item.id;
       this.formPrice.id = item.id;
       this.formPrice.cl2comb = item.cl2comb;
       this.formPrice.selling_price = item.selling_price;
     },
     submitPrice() {
       if (this.isPriceUpdate) {
-        this.formPrice.put(route('itemprices.update', this.itemPriceId), {
+        this.formPrice.put(route('itemprices.update', this.priceId), {
           preserveScroll: true,
           onSuccess: () => {
-            this.itemPriceId = null;
+            this.priceId = null;
             this.createItemPriceDialog = false;
             this.cancelPrice();
             this.updateData();
@@ -796,7 +796,7 @@ export default {
         this.formPrice.post(route('itemprices.store'), {
           preserveScroll: true,
           onSuccess: () => {
-            this.itemPriceId = null;
+            this.priceId = null;
             this.createItemDialog = false;
             this.cancelPrice();
             this.updateData();
@@ -806,16 +806,16 @@ export default {
       }
     },
     confirmDeletePrice(item) {
-      this.itemPriceId = item.id;
+      this.priceId = item.id;
       this.formPrice.selling_price = item.selling_price;
       this.deleteItemPriceDialog = true;
     },
     deletePrice() {
-      this.form.delete(route('itemprices.destroy', this.itemPriceId), {
+      this.form.delete(route('itemprices.destroy', this.priceId), {
         preserveScroll: true,
         onSuccess: () => {
           this.deleteItemPriceDialog = false;
-          this.itemPriceId = null;
+          this.priceId = null;
           this.formPrice.clearErrors();
           this.formPrice.reset();
           this.updateData();
@@ -825,7 +825,7 @@ export default {
       });
     },
     cancelPrice() {
-      this.itemPriceId = null;
+      this.priceId = null;
       this.isPriceUpdate = false;
       this.createItemPriceDialog = false;
       this.formPrice.reset();
