@@ -70,6 +70,13 @@ export default {
               comp: 'Csr/Inventory/Items/Index',
             },
             {
+              label: 'CSR-Stocks',
+              icon: 'pi pi-fw pi-home',
+              to: 'csr-stocks',
+              prefix: 'csr-stocks',
+              comp: 'Csr/Inventory/Stocks/Index',
+            },
+            {
               label: 'Users',
               icon: 'pi pi-fw pi-home',
               to: 'users',

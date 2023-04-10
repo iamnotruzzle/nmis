@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Csr\Inventory\Stocks;
 
 use App\Http\Controllers\Controller;
 use App\Models\CsrStocks;
+use App\Models\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
@@ -21,17 +22,15 @@ class CsrStocksController extends Controller
         //     ->orderBy('uomdesc', 'ASC')
         //     ->get(['uomcode', 'uomdesc']);
 
-        // $items = Item::with(['unit', 'prices.userDetail'])
-        //     ->when($request->search, function ($query, $value) {
-        //         $query->where('cl2comb', 'LIKE', '%' . $value . '%')
-        //             ->orWhere('cl2desc', 'LIKE', '%' . $value . '%');
-        //     })
-        //     ->where('cl2stat', 'A')
-        //     ->orderBy('cl2desc', 'ASC')
-        //     ->paginate(15);
+        $items = Item::where('cl2stat', 'A')
+            ->orderBy('cl2desc', 'ASC')
+            ->get(['cl2comb', 'cl2desc']);
+
+        $stocks = CsrStocks::paginate(15);
 
         return Inertia::render('Csr/Inventory/Stocks/Index', [
-            // 'cl1combs' => $cl1combs,
+            'items' => $items,
+            'stocks' => $stocks,
             // 'items' => $items,
             // 'units' => $units,
         ]);
@@ -139,7 +138,7 @@ class CsrStocksController extends Controller
 
     public function destroy(CsrStocks $csrstock)
     {
-        // $item->delete();
+        $csrstock->delete();
 
         return Redirect::route('csrstocks.index');
     }

@@ -8,6 +8,7 @@ use App\Models\ProcTypeForHclass;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class CategoryController extends Controller
@@ -65,7 +66,11 @@ class CategoryController extends Controller
     {
         $request->validate([
             'ptcode' => 'required|max:5',
-            'cl1code' => 'required|unique:hclass1,cl1code|max:5',
+            'cl1code' => [
+                'required',
+                'max:5',
+                Rule::unique('hclass1')->ignore($request->cl1code, 'cl1code') // 'cl1code' is the column
+            ],
             'cl1desc' => 'required|max:20',
             'cl1stat' => 'required|max:1',
             'cl1upsw' => 'required|max:1',

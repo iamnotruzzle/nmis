@@ -118,7 +118,7 @@
               rounded
               text
               severity="warning"
-              @click="editItem(slotProps.data)"
+              @click="editCategory(slotProps.data)"
             />
 
             <Button
@@ -134,7 +134,7 @@
 
       <!-- create & edit dialog -->
       <Dialog
-        v-model:visible="createItemDialog"
+        v-model:visible="createCategoryDialog"
         :style="{ width: '450px' }"
         header="Category Detail"
         :modal="true"
@@ -259,7 +259,7 @@
 
       <!-- Delete confirmation dialog -->
       <Dialog
-        v-model:visible="deleteItemDialog"
+        v-model:visible="deleteCategoryDialog"
         :style="{ width: '450px' }"
         header="Confirm"
         :modal="true"
@@ -279,14 +279,14 @@
             label="No"
             icon="pi pi-times"
             class="p-button-text"
-            @click="deleteItemDialog = false"
+            @click="deleteCategoryDialog = false"
           />
           <Button
             label="Yes"
             icon="pi pi-check"
             severity="danger"
             text
-            @click="deleteItem"
+            @click="deleteCategory"
           />
         </template>
       </Dialog>
@@ -342,8 +342,8 @@ export default {
       // end paginator
       itemId: null,
       isUpdate: false,
-      createItemDialog: false,
-      deleteItemDialog: false,
+      createCategoryDialog: false,
+      deleteCategoryDialog: false,
       search: '',
       options: {},
       params: {},
@@ -432,15 +432,15 @@ export default {
       this.form.clearErrors();
       this.form.reset();
       this.itemId = null;
-      this.createItemDialog = true;
+      this.createCategoryDialog = true;
     },
     // emit close dialog
     clickOutsideDialog() {
       this.$emit('hide', (this.itemId = null), (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
     },
-    editItem(item) {
+    editCategory(item) {
       this.isUpdate = true;
-      this.createItemDialog = true;
+      this.createCategoryDialog = true;
       this.itemId = item.cl1comb;
       this.form.ptcode = item.ptcode;
       this.form.cl1code = item.cl1code;
@@ -454,7 +454,7 @@ export default {
           preserveScroll: true,
           onSuccess: () => {
             this.itemId = null;
-            this.createItemDialog = false;
+            this.createCategoryDialog = false;
             this.cancel();
             this.updateData();
             this.updatedMsg();
@@ -465,7 +465,7 @@ export default {
           preserveScroll: true,
           onSuccess: () => {
             this.itemId = null;
-            this.createItemDialog = false;
+            this.createCategoryDialog = false;
             this.cancel();
             this.updateData();
             this.createdMsg();
@@ -476,14 +476,14 @@ export default {
     confirmDeleteItem(item) {
       this.itemId = item.cl1comb;
       this.form.cl1desc = item.cl1desc;
-      this.deleteItemDialog = true;
+      this.deleteCategoryDialog = true;
     },
-    deleteItem() {
+    deleteCategory() {
       this.form.delete(route('categories.destroy', this.itemId), {
         preserveScroll: true,
         onSuccess: () => {
           this.categoriesList = [];
-          this.deleteItemDialog = false;
+          this.deleteCategoryDialog = false;
           this.itemId = null;
           this.form.clearErrors();
           this.form.reset();
@@ -496,7 +496,7 @@ export default {
     cancel() {
       this.itemId = null;
       this.isUpdate = false;
-      this.createItemDialog = false;
+      this.createCategoryDialog = false;
       this.form.reset();
       this.form.clearErrors();
       this.categoriesList = [];
