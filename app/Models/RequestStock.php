@@ -18,7 +18,7 @@ class RequestStock extends Model
         'approved_qty',
         'status',
         'requested_by',
-        'requested_at',
+        'requested_at', // ward location
         'approved_by',
     ];
 }

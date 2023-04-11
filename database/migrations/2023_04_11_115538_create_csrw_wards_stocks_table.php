@@ -17,6 +17,13 @@ class CreateCsrwWardsStocksTable extends Migration
             $table->id();
             $table->bigInteger('request_stock_id');
             $table->bigInteger('stock_id');
+            $table->string('location');
+            $table->string('cl2comb');
+            $table->integer('quantity');
+            $table->dateTime('manufactured_date');
+            $table->dateTime('delivered_date');
+            $table->dateTime('expiration_date');
+            $table->dateTime('received_date');
             $table->timestamps();
         });
     }
