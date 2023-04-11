@@ -77,6 +77,13 @@ export default {
               comp: 'Csr/Inventory/Stocks/Index',
             },
             {
+              label: 'W-Stocks',
+              icon: 'pi pi-fw pi-home',
+              to: 'requeststocks',
+              prefix: 'requeststocks',
+              comp: 'Wards/Stocks/Index',
+            },
+            {
               label: 'Users',
               icon: 'pi pi-fw pi-home',
               to: 'users',

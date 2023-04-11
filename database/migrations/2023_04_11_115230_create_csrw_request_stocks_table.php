@@ -17,11 +17,11 @@ class CreateCsrwRequestStocksTable extends Migration
             $table->id();
             $table->string('cl2comb');
             $table->integer('requested_qty');
-            $table->integer('approved_qty');
+            $table->integer('approved_qty')->nullable();
             $table->string('status');
             $table->string('requested_by');
             $table->string('requested_at');
-            $table->string('approved_by');
+            $table->string('approved_by')->nullable();
             $table->timestamps();
         });
     }

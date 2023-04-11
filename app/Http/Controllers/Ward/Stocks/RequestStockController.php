@@ -1,0 +1,98 @@
+<?php
+
+namespace App\Http\Controllers\Ward\Stocks;
+
+use App\Http\Controllers\Controller;
+use App\Models\Item;
+use App\Models\RequestStock;
+use App\Models\WardStocks;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
+use Inertia\Inertia;
+
+class RequestStockController extends Controller
+{
+    public function index(Request $request)
+    {
+        $searchString = $request->search;
+
+        // get auth wardcode
+        $authWardcode = DB::table('csrw_users')
+            ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
+            ->select('csrw_login_history.wardcode')
+            ->orderBy('csrw_login_history.created_at', 'desc')
+            ->first();
+
+        $items = Item::where('cl2stat', 'A')
+            ->orderBy('cl2desc', 'ASC')
+            ->get(['cl2comb', 'cl2desc']);
+
+        $stocks = WardStocks::with('itemDetail')
+            // ->whereHas('itemDetail', function ($q) use ($searchString) {
+            //     $q->where('cl2desc', 'LIKE', '%' . $searchString . '%')
+            //         ->orWhere('batch_no', 'LIKE', '%' . $searchString . '%');
+            // })
+            ->orderBy('expiration_date', 'desc')
+            ->paginate(15);
+
+        $requestStocks = RequestStock::with([
+            'itemDetail',
+            'requested_by_details',
+            'requested_at_details',
+            'approved_by_details'
+        ])
+            ->whereHas('itemDetail', function ($q) use ($searchString) {
+                $q->where('cl2desc', 'LIKE', '%' . $searchString . '%');
+            })
+            ->paginate(15);
+
+        return Inertia::render('Wards/Stocks/Index', [
+            'authWardcode' => $authWardcode,
+            'items' => $items,
+            'stocks' => $stocks,
+            'requestStocks' => $requestStocks,
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+
+        $request->validate([
+            'cl2comb' => 'required',
+            'requested_qty' => 'required|numeric',
+        ]);
+
+        $requeststock = RequestStock::create([
+            'cl2comb' => $request->cl2comb,
+            'requested_qty' => $request->requested_qty,
+            'status' => 'REQUESTED',
+            'requested_by' => $request->requested_by,
+            'requested_at' => $request->requested_at,
+        ]);
+
+        return Redirect::route('requeststocks.index');
+    }
+
+    public function update(RequestStock $requeststock, Request $request)
+    {
+        $request->validate([
+            'cl2comb' => 'required',
+            'requested_qty' => 'required|numeric',
+        ]);
+
+        $requeststock->update([
+            'cl2comb' => $request->cl2comb,
+            'requested_qty' => $request->requested_qty,
+        ]);
+
+        return Redirect::route('requeststocks.index');
+    }
+
+    public function destroy(RequestStock $requeststock)
+    {
+        $requeststock->delete();
+
+        return Redirect::route('requeststocks.index');
+    }
+}
