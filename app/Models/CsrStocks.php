@@ -9,7 +9,7 @@ class CsrStocks extends Model
 {
     use HasFactory;
 
-    protected $table = 'csrw_stocks';
+    protected $table = 'csrw_csr_stocks';
     // protected $primaryKey = 'cl1comb';
     // public $incrementing = false;
     // declare primary as string
@@ -22,7 +22,12 @@ class CsrStocks extends Model
         'cl2comb',
         'quantity',
         'manufactured_date',
-        'delivery_date',
+        'delivered_date',
         'expiration_date',
     ];
+
+    public function itemDetail()
+    {
+        return $this->hasOne(Item::class, 'cl2comb', 'cl2comb');
+    }
 }

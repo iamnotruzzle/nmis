@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Csr\Inventory\Stocks;
 use App\Http\Controllers\Controller;
 use App\Models\CsrStocks;
 use App\Models\Item;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
@@ -13,125 +14,64 @@ class CsrStocksController extends Controller
 {
     public function index(Request $request)
     {
-        // $cl1combs = Category::where('cl1stat', 'A')
-        //     ->orderBy('cl1comb', 'ASC')
-        //     ->get(['cl1comb', 'cl1desc']);
-
-        // // TODO ask if uomstat condition is needed
-        // $units = UnitOfMeasurement::where('uomstat', 'A')
-        //     ->orderBy('uomdesc', 'ASC')
-        //     ->get(['uomcode', 'uomdesc']);
+        $searchString = $request->search;
 
         $items = Item::where('cl2stat', 'A')
             ->orderBy('cl2desc', 'ASC')
             ->get(['cl2comb', 'cl2desc']);
 
-        $stocks = CsrStocks::paginate(15);
+        $stocks = CsrStocks::with('itemDetail')
+            ->whereHas('itemDetail', function ($q) use ($searchString) {
+                $q->where('cl2desc', 'LIKE', '%' . $searchString . '%')
+                    ->orWhere('batch_no', 'LIKE', '%' . $searchString . '%');
+            })
+            ->paginate(15);
 
         return Inertia::render('Csr/Inventory/Stocks/Index', [
             'items' => $items,
             'stocks' => $stocks,
-            // 'items' => $items,
-            // 'units' => $units,
         ]);
     }
 
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'cl1comb' => 'required|max:20',
-        //     'cl2code' => 'required|unique:hclass2,cl2code|max:10',
-        //     'cl2desc' => 'max:200',
-        //     'unit' => 'required',
-        //     'cl2stat' => 'required|max:1',
-        //     'cl2upsw' => 'required|max:1',
-        // ]);
 
-        // // get uomcode of the unit selected
-        // $unit = UnitOfMeasurement::where('uomstat', 'A')
-        //     ->where('uomdesc', $request->unit)
-        //     ->get(['uomcode']);
+        $request->validate([
+            'batch_no' => 'required',
+            'cl2comb' => 'required',
+            'quantity' => 'required|numeric',
+            'expiration_date' => 'required',
+        ]);
 
-        // $items = Item::create([
-        //     'cl2comb' => $request->cl1comb . '' . $request->cl2code,
-        //     'cl1comb' => $request->cl1comb,
-        //     'cl2code' => $request->cl2code,
-        //     'stkno' => '',
-        //     'cl2desc' => $request->cl2desc,
-        //     'cl2retprc' => 0.00,
-        //     'uomcode' => $unit[0]->uomcode,
-        //     'cl2dteas' => Carbon::now(),
-        //     'cl2stat' => $request->cl2stat,
-        //     'cl2lock' => 'N',
-        //     'cl2upsw' => $request->cl2upsw,
-        //     'cl2dtmd' => NULL,
-        //     'curcode' => NULL,
-        //     'cl2purp' => NULL,
-        //     'curcode1' => NULL,
-        //     'uomcode1' => NULL,
-        //     'cl2ctr' => NULL,
-        //     'brandname' => NULL,
-        //     'stockbal' => 0.00,
-        //     'pharmaceutical' => NULL,
-        //     'pharmaceutical' => NULL,
-        //     'baldteasof' => Carbon::now(),
-        //     'begbal' => 0.00,
-        //     'lot_no' => '',
-        //     'barcode' => NULL,
-        //     'rpoint' => NULL,
-        // ]);
+        $stocks = CsrStocks::create([
+            'batch_no' => $request->batch_no,
+            'cl2comb' => $request->cl2comb,
+            'quantity' => $request->quantity,
+            'manufactured_date' => Carbon::parse($request->manufactured_date)->setTimezone('Asia/Manila'),
+            'delivered_date' => Carbon::parse($request->delivered_date)->setTimezone('Asia/Manila'),
+            'expiration_date' => Carbon::parse($request->expiration_date)->setTimezone('Asia/Manila'),
+        ]);
 
         return Redirect::route('csrstocks.index');
     }
 
     public function update(CsrStocks $csrstock, Request $request)
     {
-        // $request->validate([
-        //     'cl1comb' => 'required|max:20',
-        //     'cl2code' => [
-        //         'required',
-        //         'max:10',
-        //         Rule::unique('hclass2')->ignore($request->cl2comb, 'cl2comb') // 'cl2comb' is the column
-        //     ],
-        //     'cl2desc' => 'max:200',
-        //     'unit' => 'required',
-        //     'cl2stat' => 'required|max:1',
-        //     'cl2upsw' => 'required|max:1',
-        // ]);
+        $request->validate([
+            'batch_no' => 'required',
+            'cl2comb' => 'required',
+            'quantity' => 'required|numeric',
+            'expiration_date' => 'required',
+        ]);
 
-        // // get uomcode of the unit selected
-        // $unit = UnitOfMeasurement::where('uomstat', 'A')
-        //     ->where('uomdesc', $request->unit)
-        //     ->get(['uomcode']);
-
-        // $item->update([
-        //     'cl2comb' => $request->cl1comb . '' . $request->cl2code,
-        //     'cl1comb' => $request->cl1comb,
-        //     'cl2code' => $request->cl2code,
-        //     'stkno' => '',
-        //     'cl2desc' => $request->cl2desc,
-        //     'cl2retprc' => 0.00,
-        //     'uomcode' => $unit[0]->uomcode,
-        //     // 'cl2dteas' => Carbon::now(),
-        //     'cl2stat' => $request->cl2stat,
-        //     'cl2lock' => 'N',
-        //     'cl2upsw' => $request->cl2upsw,
-        //     'cl2dtmd' => NULL,
-        //     'curcode' => NULL,
-        //     'cl2purp' => NULL,
-        //     'curcode1' => NULL,
-        //     'uomcode1' => NULL,
-        //     'cl2ctr' => NULL,
-        //     'brandname' => NULL,
-        //     'stockbal' => 0.00,
-        //     'pharmaceutical' => NULL,
-        //     'pharmaceutical' => NULL,
-        //     // 'baldteasof' => Carbon::now(),
-        //     'begbal' => 0.00,
-        //     'lot_no' => '',
-        //     'barcode' => NULL,
-        //     'rpoint' => NULL,
-        // ]);
+        $csrstock->update([
+            'batch_no' => $request->batch_no,
+            'cl2comb' => $request->cl2comb,
+            'quantity' => $request->quantity,
+            'manufactured_date' => Carbon::parse($request->manufactured_date)->setTimezone('Asia/Manila'),
+            'delivered_date' => Carbon::parse($request->delivered_date)->setTimezone('Asia/Manila'),
+            'expiration_date' => Carbon::parse($request->expiration_date)->setTimezone('Asia/Manila'),
+        ]);
 
         return Redirect::route('csrstocks.index');
     }

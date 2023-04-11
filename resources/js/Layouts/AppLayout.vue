@@ -72,8 +72,8 @@ export default {
             {
               label: 'CSR-Stocks',
               icon: 'pi pi-fw pi-home',
-              to: 'csr-stocks',
-              prefix: 'csr-stocks',
+              to: 'csrstocks',
+              prefix: 'csrstocks',
               comp: 'Csr/Inventory/Stocks/Index',
             },
             {

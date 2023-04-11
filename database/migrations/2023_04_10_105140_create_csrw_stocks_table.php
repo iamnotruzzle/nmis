@@ -13,14 +13,14 @@ class CreateCsrwStocksTable extends Migration
      */
     public function up()
     {
-        Schema::create('csrw_stocks', function (Blueprint $table) {
+        Schema::create('csrw_csr_stocks', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('batch_no');
             $table->string('cl2comb');
             $table->integer('quantity');
-            $table->date('manufactured_date')->nullable();
-            $table->date('delivered_date')->nullable();
-            $table->date('expiration_date');
+            $table->dateTime('manufactured_date')->nullable();
+            $table->dateTime('delivered_date')->nullable();
+            $table->dateTime('expiration_date');
             $table->timestamps();
         });
     }
