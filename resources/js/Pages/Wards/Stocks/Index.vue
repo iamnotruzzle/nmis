@@ -441,7 +441,7 @@ export default {
         preserveState: true,
         preserveScroll: true,
         onFinish: (visit) => {
-          this.totalRecords = this.stocks.total;
+          this.totalRecords = this.requestStocks.total;
           this.requestStocksList = [];
           this.storeRequestStocksInContainer();
           this.loading = false;
