@@ -105,9 +105,29 @@
           field="created_at"
           header="CREATED AT"
           style="min-width: 12rem"
+          :showFilterMenu="false"
         >
           <template #body="{ data }">
             {{ tzone(data.created_at) }}
+          </template>
+          <template #filter="{}">
+            <Calendar
+              v-model="from"
+              dateFormat="mm-dd-yy"
+              placeholder="FROM"
+              showIcon
+              showButtonBar
+              :hideOnDateTimeSelect="true"
+            />
+            <div class="mt-2"></div>
+            <Calendar
+              v-model="to"
+              dateFormat="mm-dd-yy"
+              placeholder="TO"
+              showIcon
+              showButtonBar
+              :hideOnDateTimeSelect="true"
+            />
           </template>
         </Column>
 
@@ -307,14 +327,8 @@ export default {
       options: {},
       params: {},
       // manufactured date
-      from_md: null,
-      to_md: null,
-      // delivered date
-      from_dd: null,
-      to_dd: null,
-      // expiration date
-      from_ed: null,
-      to_ed: null,
+      from: null,
+      to: null,
       itemsList: [],
       requestStocksList: [],
       filters: {
@@ -527,63 +541,23 @@ export default {
       this.params.search = val;
       this.updateData();
     },
-    from_md: function (val) {
+    from: function (val) {
       if (val != null) {
-        let from_md = val;
-        this.params.from_md = from_md;
+        let from = val;
+        this.params.from = from;
       } else {
-        this.params.from_md = null;
-        this.from_md = null;
+        this.params.from = null;
+        this.from = null;
       }
       this.updateData();
     },
-    to_md: function (val) {
+    to: function (val) {
       if (val != null) {
-        let to_md = val;
-        this.params.to_md = to_md;
+        let to = val;
+        this.params.to = to;
       } else {
-        this.params.to_md = null;
-        this.to_md = null;
-      }
-      this.updateData();
-    },
-    from_dd: function (val) {
-      if (val != null) {
-        let from_dd = val;
-        this.params.from_dd = from_dd;
-      } else {
-        this.params.from_dd = null;
-        this.from_dd = null;
-      }
-      this.updateData();
-    },
-    to_dd: function (val) {
-      if (val != null) {
-        let to_dd = val;
-        this.params.to_dd = to_dd;
-      } else {
-        this.params.to_dd = null;
-        this.to_dd = null;
-      }
-      this.updateData();
-    },
-    from_ed: function (val) {
-      if (val != null) {
-        let from_ed = val;
-        this.params.from_ed = from_ed;
-      } else {
-        this.params.from_ed = null;
-        this.from_ed = null;
-      }
-      this.updateData();
-    },
-    to_ed: function (val) {
-      if (val != null) {
-        let to_ed = val;
-        this.params.to_ed = to_ed;
-      } else {
-        this.params.to_ed = null;
-        this.to_ed = null;
+        this.params.to = null;
+        this.to = null;
       }
       this.updateData();
     },

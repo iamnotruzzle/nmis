@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Item;
 use App\Models\RequestStock;
 use App\Models\WardStocks;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -45,6 +46,18 @@ class RequestStockController extends Controller
             ->whereHas('itemDetail', function ($q) use ($searchString) {
                 $q->where('cl2desc', 'LIKE', '%' . $searchString . '%');
             })
+            ->when(
+                $request->from,
+                function ($query, $value) {
+                    $query->whereDate('created_at', '>=', Carbon::parse($value)->setTimezone('Asia/Manila'));
+                }
+            )
+            ->when(
+                $request->to,
+                function ($query, $value) {
+                    $query->whereDate('created_at', '<=', Carbon::parse($value)->setTimezone('Asia/Manila'));
+                }
+            )
             ->paginate(15);
 
         return Inertia::render('Wards/Stocks/Index', [
