@@ -47,9 +47,9 @@ class CsrStocksController extends Controller
             'batch_no' => $request->batch_no,
             'cl2comb' => $request->cl2comb,
             'quantity' => $request->quantity,
-            'manufactured_date' => Carbon::parse($request->manufactured_date)->setTimezone('Asia/Manila'),
-            'delivered_date' => Carbon::parse($request->delivered_date)->setTimezone('Asia/Manila'),
-            'expiration_date' => Carbon::parse($request->expiration_date)->setTimezone('Asia/Manila'),
+            'manufactured_date' => $request->manufactured_date == null ? null : Carbon::parse($request->manufactured_date)->setTimezone('Asia/Manila'),
+            'delivered_date' => $request->delivered_date == null ? null : Carbon::parse($request->delivered_date)->setTimezone('Asia/Manila'),
+            'expiration_date' => $request->expiration_date == null ? null : Carbon::parse($request->expiration_date)->setTimezone('Asia/Manila'),
         ]);
 
         return Redirect::route('csrstocks.index');
@@ -68,9 +68,9 @@ class CsrStocksController extends Controller
             'batch_no' => $request->batch_no,
             'cl2comb' => $request->cl2comb,
             'quantity' => $request->quantity,
-            'manufactured_date' => Carbon::parse($request->manufactured_date)->setTimezone('Asia/Manila'),
-            'delivered_date' => Carbon::parse($request->delivered_date)->setTimezone('Asia/Manila'),
-            'expiration_date' => Carbon::parse($request->expiration_date)->setTimezone('Asia/Manila'),
+            'manufactured_date' => $request->manufactured_date == null ? null : Carbon::parse($request->manufactured_date)->setTimezone('Asia/Manila'),
+            'delivered_date' => $request->delivered_date == null ? null : Carbon::parse($request->delivered_date)->setTimezone('Asia/Manila'),
+            'expiration_date' => $request->expiration_date == null ? null : Carbon::parse($request->expiration_date)->setTimezone('Asia/Manila'),
         ]);
 
         return Redirect::route('csrstocks.index');
