@@ -16,6 +16,7 @@ class CsrStocksController extends Controller
     {
         $searchString = $request->search;
 
+
         $items = Item::where('cl2stat', 'A')
             ->orderBy('cl2desc', 'ASC')
             ->get(['cl2comb', 'cl2desc']);
@@ -25,6 +26,42 @@ class CsrStocksController extends Controller
                 $q->where('cl2desc', 'LIKE', '%' . $searchString . '%')
                     ->orWhere('batch_no', 'LIKE', '%' . $searchString . '%');
             })
+            ->when(
+                $request->from_md,
+                function ($query, $value) {
+                    $query->whereDate('manufactured_date', '>=', Carbon::parse($value)->setTimezone('Asia/Manila'));
+                }
+            )
+            ->when(
+                $request->to_md,
+                function ($query, $value) {
+                    $query->whereDate('manufactured_date', '<=', Carbon::parse($value)->setTimezone('Asia/Manila'));
+                }
+            )
+            ->when(
+                $request->from_dd,
+                function ($query, $value) {
+                    $query->whereDate('delivered_date', '>=', Carbon::parse($value)->setTimezone('Asia/Manila'));
+                }
+            )
+            ->when(
+                $request->to_dd,
+                function ($query, $value) {
+                    $query->whereDate('delivered_date', '<=', Carbon::parse($value)->setTimezone('Asia/Manila'));
+                }
+            )
+            ->when(
+                $request->from_ed,
+                function ($query, $value) {
+                    $query->whereDate('expiration_date', '>=', Carbon::parse($value)->setTimezone('Asia/Manila'));
+                }
+            )
+            ->when(
+                $request->to_ed,
+                function ($query, $value) {
+                    $query->whereDate('expiration_date', '<=', Carbon::parse($value)->setTimezone('Asia/Manila'));
+                }
+            )
             ->paginate(15);
 
         return Inertia::render('Csr/Inventory/Stocks/Index', [

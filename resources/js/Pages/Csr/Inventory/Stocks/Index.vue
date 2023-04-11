@@ -75,27 +75,87 @@
           field="manufactured_date"
           header="MANUFACTURED DATE"
           style="min-width: 12rem"
+          :showFilterMenu="false"
         >
           <template #body="{ data }">
             {{ tzone(data.manufactured_date) }}
+          </template>
+          <template #filter="{}">
+            <Calendar
+              v-model="from_md"
+              dateFormat="mm-dd-yy"
+              placeholder="FROM"
+              showIcon
+              showButtonBar
+              :hideOnDateTimeSelect="true"
+            />
+            <div class="mt-2"></div>
+            <Calendar
+              v-model="to_md"
+              dateFormat="mm-dd-yy"
+              placeholder="TO"
+              showIcon
+              showButtonBar
+              :hideOnDateTimeSelect="true"
+            />
           </template>
         </Column>
         <Column
           field="delivered_date"
           header="DELIVERY DATE"
           style="min-width: 12rem"
+          :showFilterMenu="false"
         >
           <template #body="{ data }">
             {{ tzone(data.delivered_date) }}
+          </template>
+          <template #filter="{}">
+            <Calendar
+              v-model="from_dd"
+              dateFormat="mm-dd-yy"
+              placeholder="FROM"
+              showIcon
+              showButtonBar
+              :hideOnDateTimeSelect="true"
+            />
+            <div class="mt-2"></div>
+            <Calendar
+              v-model="to_dd"
+              dateFormat="mm-dd-yy"
+              placeholder="TO"
+              showIcon
+              showButtonBar
+              :hideOnDateTimeSelect="true"
+            />
           </template>
         </Column>
         <Column
           field="expiration_date"
           header="EXPIRATION DATE"
           style="min-width: 12rem"
+          :showFilterMenu="false"
         >
           <template #body="{ data }">
             {{ tzone(data.expiration_date) }}
+          </template>
+          <template #filter="{}">
+            <Calendar
+              v-model="from_ed"
+              dateFormat="mm-dd-yy"
+              placeholder="FROM"
+              showIcon
+              showButtonBar
+              :hideOnDateTimeSelect="true"
+            />
+            <div class="mt-2"></div>
+            <Calendar
+              v-model="to_ed"
+              dateFormat="mm-dd-yy"
+              placeholder="TO"
+              showIcon
+              showButtonBar
+              :hideOnDateTimeSelect="true"
+            />
           </template>
         </Column>
         <Column
@@ -361,6 +421,15 @@ export default {
       search: '',
       options: {},
       params: {},
+      // manufactured date
+      from_md: null,
+      to_md: null,
+      // delivered date
+      from_dd: null,
+      to_dd: null,
+      // expiration date
+      from_ed: null,
+      to_ed: null,
       itemsList: [],
       stocksList: [],
       filters: {
@@ -542,6 +611,66 @@ export default {
   watch: {
     search: function (val, oldVal) {
       this.params.search = val;
+      this.updateData();
+    },
+    from_md: function (val) {
+      if (val != null) {
+        let from_md = val;
+        this.params.from_md = from_md;
+      } else {
+        this.params.from_md = null;
+        this.from_md = null;
+      }
+      this.updateData();
+    },
+    to_md: function (val) {
+      if (val != null) {
+        let to_md = val;
+        this.params.to_md = to_md;
+      } else {
+        this.params.to_md = null;
+        this.to_md = null;
+      }
+      this.updateData();
+    },
+    from_dd: function (val) {
+      if (val != null) {
+        let from_dd = val;
+        this.params.from_dd = from_dd;
+      } else {
+        this.params.from_dd = null;
+        this.from_dd = null;
+      }
+      this.updateData();
+    },
+    to_dd: function (val) {
+      if (val != null) {
+        let to_dd = val;
+        this.params.to_dd = to_dd;
+      } else {
+        this.params.to_dd = null;
+        this.to_dd = null;
+      }
+      this.updateData();
+    },
+    from_ed: function (val) {
+      if (val != null) {
+        let from_ed = val;
+        this.params.from_ed = from_ed;
+      } else {
+        this.params.from_ed = null;
+        this.from_ed = null;
+      }
+      this.updateData();
+    },
+    to_ed: function (val) {
+      if (val != null) {
+        let to_ed = val;
+        this.params.to_ed = to_ed;
+      } else {
+        this.params.to_ed = null;
+        this.to_ed = null;
+      }
       this.updateData();
     },
   },
