@@ -229,7 +229,7 @@
         dismissableMask
       >
         <div class="field">
-          <label for="cl1comb">Cl1comb</label>
+          <label for="cl1comb">Category</label>
           <Dropdown
             v-model.trim="form.cl1comb"
             required="true"
