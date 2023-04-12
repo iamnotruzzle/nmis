@@ -70,18 +70,17 @@ class IssueItemController extends Controller
 
     public function store(Request $request)
     {
-
+        // TODO create a validation to check if the approved_qty is enough to the
+        // total quantity of the item's stock
         $request->validate([
-            'cl2comb' => 'required',
-            'requested_qty' => 'required|numeric',
+            'approved_qty' => 'required|numeric',
         ]);
 
         $requeststock = RequestStock::create([
             'cl2comb' => $request->cl2comb,
-            'requested_qty' => $request->requested_qty,
-            'status' => 'REQUESTED',
-            'requested_by' => $request->requested_by,
-            'requested_at' => $request->requested_at,
+            'approved_qty' => $request->approved_qty,
+            'status' => 'APPROVED',
+            'approved_by' => $request->requested_by,
         ]);
 
         return Redirect::route('requeststocks.index');

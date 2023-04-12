@@ -8,8 +8,12 @@
       <!-- v-model:filters="filters" -->
       <DataTable
         class="p-datatable-sm"
-        v-model:filters="filters"
+        v-model:expandedRowGroups="expandedRowGroups"
         :value="requestStocksList"
+        v-model:filters="filters"
+        expandableRowGroups
+        rowGroupMode="subheader"
+        groupRowsBy="requested_at"
         selectionMode="single"
         lazy
         paginator
@@ -17,7 +21,6 @@
         ref="dt"
         :totalRecords="totalRecords"
         @page="onPage($event)"
-        dataKey="cl1comb"
         filterDisplay="row"
         showGridlines
         :loading="loading"
@@ -31,19 +34,17 @@
                 <InputText
                   v-model="search"
                   placeholder="Search item"
+                  class="w-30rem"
                 />
               </span>
-              <Button
-                label="Request Stock"
-                icon="pi pi-plus"
-                iconPos="right"
-                @click="openRequestStockDialog"
-              />
             </div>
           </div>
         </template>
         <template #empty> No request stock found. </template>
         <template #loading> Loading request stock data. Please wait. </template>
+        <template #groupheader="slotProps">
+          <span class="vertical-align-middle ml-2 font-bold line-height-3">{{ slotProps.data.requested_at }}</span>
+        </template>
         <Column
           field="item"
           header="ITEM"
@@ -60,6 +61,15 @@
         >
           <template #body="{ data }">
             {{ data.requested_qty }}
+          </template>
+        </Column>
+        <Column
+          field="approved_qty"
+          header="APPROVED QTY"
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.approved_qty }}
           </template>
         </Column>
         <Column
@@ -84,15 +94,6 @@
           </template>
         </Column>
         <Column
-          field="requested_at"
-          header="REQUESTED AT"
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ data.requested_at }}
-          </template>
-        </Column>
-        <Column
           field="approved_by"
           header="APPROVED BY"
           style="min-width: 12rem"
@@ -110,7 +111,7 @@
           <template #body="{ data }">
             {{ tzone(data.created_at) }}
           </template>
-          <template #filter="{}">
+          <!-- <template #filter="{}">
             <Calendar
               v-model="from"
               dateFormat="mm-dd-yy"
@@ -128,7 +129,7 @@
               showButtonBar
               :hideOnDateTimeSelect="true"
             />
-          </template>
+          </template> -->
         </Column>
 
         <Column
@@ -137,12 +138,20 @@
         >
           <template #body="slotProps">
             <Button
+              icon="pi pi-plus"
+              rounded
+              text
+              severity="info"
+              @click="openIssueItemDialog(slotProps.data)"
+            />
+
+            <Button
               icon="pi pi-pencil"
               class="mr-1"
               rounded
               text
               severity="warning"
-              @click="editRequestStock(slotProps.data)"
+              @click="editIssueItem(slotProps.data)"
             />
 
             <Button
@@ -158,7 +167,7 @@
 
       <!-- create & edit dialog -->
       <Dialog
-        v-model:visible="requestStockDialog"
+        v-model:visible="issueItemDialog"
         :style="{ width: '450px' }"
         header="Stock Detail"
         :modal="true"
@@ -176,7 +185,7 @@
             optionLabel="cl2desc"
             optionValue="cl2comb"
             class="w-full mb-3"
-            :class="{ 'p-invalid': form.cl2comb == '' }"
+            disabled
           />
           <small
             class="text-error"
@@ -185,20 +194,29 @@
           </small>
         </div>
         <div class="field">
-          <label for="requested_qty">Request quantity</label>
+          <label for="requested_qty">Requested quantity</label>
           <InputText
             id="requested_qty"
             v-model.trim="form.requested_qty"
             required="true"
+            disabled
+          />
+        </div>
+        <div class="field">
+          <label for="approved_qty">Approve quantity</label>
+          <InputText
+            id="approved_qty"
+            v-model.trim="form.approved_qty"
+            required="true"
             autofocus
-            :class="{ 'p-invalid': form.requested_qty == '' }"
+            :class="{ 'p-invalid': form.approved_qty == '' }"
             @keyup.enter="submit"
           />
           <small
             class="text-error"
-            v-if="form.errors.requested_qty"
+            v-if="form.errors.approved_qty"
           >
-            {{ form.errors.requested_qty }}
+            {{ form.errors.approved_qty }}
           </small>
         </div>
 
@@ -314,6 +332,7 @@ export default {
   },
   data() {
     return {
+      expandedRowGroups: null,
       // paginator
       loading: false,
       totalRecords: null,
@@ -321,7 +340,7 @@ export default {
       // end paginator
       requestStockId: null,
       isUpdate: false,
-      requestStockDialog: false,
+      issueItemDialog: false,
       deleteRequestStockDialog: false,
       search: '',
       options: {},
@@ -348,9 +367,9 @@ export default {
         cl2comb: null,
         cl2desc: null,
         requested_qty: null,
+        approved_qty: null,
         status: null,
-        requested_by: this.$page.props.auth.user.userDetail.employeeid,
-        requested_at: this.authWardcode.wardcode,
+        approved_by: this.$page.props.auth.user.userDetail.employeeid,
       }),
     };
   },
@@ -398,7 +417,7 @@ export default {
         });
       });
     },
-    // use storeStocksInContainer() function so that every time you make
+    // use storeRequestStocksInContainer() function so that every time you make
     // server request such as POST, the data in the table
     // is updated
     storeRequestStocksInContainer() {
@@ -428,6 +447,7 @@ export default {
           created_at: e.created_at,
         });
       });
+      //   console.log(this.requestStocksList);
     },
     onPage(event) {
       this.params.page = event.page + 1;
@@ -448,12 +468,13 @@ export default {
         },
       });
     },
-    openRequestStockDialog() {
-      this.isUpdate = false;
+    openIssueItemDialog(item) {
       this.form.clearErrors();
       this.form.reset();
-      this.requestStockId = null;
-      this.requestStockDialog = true;
+      this.requestStockId = item.id;
+      this.form.cl2comb = item.cl2comb;
+      this.form.requested_qty = item.requested_qty;
+      this.issueItemDialog = true;
     },
     // emit close dialog
     clickOutsideDialog() {
@@ -465,9 +486,9 @@ export default {
         this.form.reset()
       );
     },
-    editRequestStock(item) {
+    editIssueItem(item) {
       this.isUpdate = true;
-      this.requestStockDialog = true;
+      this.issueItemDialog = true;
       this.requestStockId = item.id;
       this.form.cl2comb = item.cl2comb;
       this.form.requested_qty = item.requested_qty;
@@ -478,7 +499,7 @@ export default {
           preserveScroll: true,
           onSuccess: () => {
             this.requestStockId = null;
-            this.requestStockDialog = false;
+            this.issueItemDialog = false;
             this.cancel();
             this.updateData();
             this.updatedMsg();
@@ -489,7 +510,7 @@ export default {
           preserveScroll: true,
           onSuccess: () => {
             this.requestStockId = null;
-            this.requestStockDialog = false;
+            this.issueItemDialog = false;
             this.cancel();
             this.updateData();
             this.createdMsg();
@@ -520,7 +541,7 @@ export default {
     cancel() {
       this.requestStockId = null;
       this.isUpdate = false;
-      this.requestStockDialog = false;
+      this.issueItemDialog = false;
       this.form.reset();
       this.form.clearErrors();
       this.requestStocksList = [];
