@@ -13,14 +13,24 @@ class WardStocks extends Model
 
     protected $fillable = [
         'id',
-        'request_stock_id',
-        'stock_id',
+        'request_stock_id', // from csrw_request_stocks
+        'stock_id', // from csr_stocks
         'location',
         'cl2comb',
         'quantity',
-        'manufactured_date',
-        'delivered_date',
-        'expiration_date',
+        'manufactured_date',  // from csr_stocks
+        'delivered_date',  // from csr_stocks
+        'expiration_date',  // from csr_stocks
         'received_date',
     ];
+
+    public function requestStockDetail()
+    {
+        return $this->hasOne(RequestStock::class, 'id', 'request_stock_id');
+    }
+
+    public function stockDetail()
+    {
+        return $this->hasOne(CsrStocks::class, 'id', 'stock_id');
+    }
 }
