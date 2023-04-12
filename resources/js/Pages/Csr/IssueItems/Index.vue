@@ -14,7 +14,6 @@
         expandableRowGroups
         rowGroupMode="subheader"
         groupRowsBy="requested_at"
-        selectionMode="single"
         lazy
         paginator
         :rows="rows"
@@ -33,7 +32,7 @@
                 <i class="pi pi-search" />
                 <InputText
                   v-model="search"
-                  placeholder="Search item"
+                  placeholder="Search ward"
                   class="w-30rem"
                 />
               </span>
@@ -43,7 +42,8 @@
         <template #empty> No request stock found. </template>
         <template #loading> Loading request stock data. Please wait. </template>
         <template #groupheader="slotProps">
-          <span class="vertical-align-middle ml-2 font-bold line-height-3">{{ slotProps.data.requested_at }}</span>
+          <span class="vertical-align-middle ml-2 font-bold line-height-3 mr-2">{{ slotProps.data.requested_at }}</span>
+          <i class="pi pi-home"></i>
         </template>
         <Column
           field="item"
@@ -111,7 +111,7 @@
           <template #body="{ data }">
             {{ tzone(data.created_at) }}
           </template>
-          <!-- <template #filter="{}">
+          <template #filter="{}">
             <Calendar
               v-model="from"
               dateFormat="mm-dd-yy"
@@ -129,7 +129,7 @@
               showButtonBar
               :hideOnDateTimeSelect="true"
             />
-          </template> -->
+          </template>
         </Column>
 
         <Column
@@ -187,11 +187,6 @@
             class="w-full mb-3"
             disabled
           />
-          <small
-            class="text-error"
-            v-if="form.errors.cl2comb"
-          >
-          </small>
         </div>
         <div class="field">
           <label for="requested_qty">Requested quantity</label>
@@ -364,6 +359,7 @@ export default {
         },
       ],
       form: this.$inertia.form({
+        id: null,
         cl2comb: null,
         cl2desc: null,
         requested_qty: null,
@@ -427,6 +423,7 @@ export default {
           cl2comb: e.cl2comb,
           cl2desc: e.item_detail.cl2desc,
           requested_qty: e.requested_qty,
+          approved_qty: e.approved_qty,
           status: e.status,
           requested_by: e.requested_by_details.firstname.concat(
             ' ',
@@ -471,7 +468,8 @@ export default {
     openIssueItemDialog(item) {
       this.form.clearErrors();
       this.form.reset();
-      this.requestStockId = item.id;
+      //   this.requestStockId = item.id;
+      this.form.id = item.id;
       this.form.cl2comb = item.cl2comb;
       this.form.requested_qty = item.requested_qty;
       this.issueItemDialog = true;
@@ -548,13 +546,13 @@ export default {
       this.storeRequestStocksInContainer();
     },
     createdMsg() {
-      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Requested stock', life: 3000 });
+      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Approve requested stock', life: 3000 });
     },
     updatedMsg() {
-      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Requested stock updated', life: 3000 });
+      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Approve requested stock updated', life: 3000 });
     },
     deletedMsg() {
-      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Request stock deleted', life: 3000 });
+      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Approve requested stock deleted', life: 3000 });
     },
   },
   watch: {

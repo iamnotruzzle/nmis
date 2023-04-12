@@ -43,8 +43,8 @@ class IssueItemController extends Controller
             'requested_at_details',
             'approved_by_details'
         ])
-            ->whereHas('itemDetail', function ($q) use ($searchString) {
-                $q->where('cl2desc', 'LIKE', '%' . $searchString . '%');
+            ->whereHas('requested_at_details', function ($q) use ($searchString) {
+                $q->where('wardname', 'LIKE', '%' . $searchString . '%');
             })
             ->when(
                 $request->from,
@@ -72,15 +72,19 @@ class IssueItemController extends Controller
     {
         // TODO create a validation to check if the approved_qty is enough to the
         // total quantity of the item's stock
+
+        $requestStockId = $request->id;
+
         $request->validate([
             'approved_qty' => 'required|numeric',
         ]);
 
-        $requeststock = RequestStock::create([
-            'cl2comb' => $request->cl2comb,
+        $requeststock = RequestStock::where('id', $requestStockId)->first();
+
+        $requeststock->update([
             'approved_qty' => $request->approved_qty,
             'status' => 'APPROVED',
-            'approved_by' => $request->requested_by,
+            'approved_by' => $request->approved_by,
         ]);
 
         return Redirect::route('requeststocks.index');
