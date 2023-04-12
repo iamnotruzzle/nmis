@@ -4,6 +4,7 @@ use App\Http\Controllers\Csr\Inventory\Categories\CategoryController;
 use App\Http\Controllers\Csr\Inventory\ItemPrice\ItemPriceController;
 use App\Http\Controllers\Csr\Inventory\Items\ItemController;
 use App\Http\Controllers\Csr\Inventory\Stocks\CsrStocksController;
+use App\Http\Controllers\Csr\IssueItem\IssueItemController;
 use App\Http\Controllers\Users\UserController;
 use App\Http\Controllers\Ward\Stocks\RequestStockController;
 use Illuminate\Foundation\Application;
@@ -34,3 +35,4 @@ Route::resource('users', UserController::class)->middleware(['auth:sanctum', 've
 Route::resource('itemprices', ItemPriceController::class)->middleware(['auth:sanctum', 'verified'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('csrstocks', CsrStocksController::class)->middleware(['auth:sanctum', 'verified'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('requeststocks', RequestStockController::class)->middleware(['auth:sanctum', 'verified'])->only(['index', 'store', 'update', 'destroy']);
+Route::resource('issueitems', IssueItemController::class)->middleware(['auth:sanctum', 'verified'])->only(['index', 'store', 'update', 'destroy']);

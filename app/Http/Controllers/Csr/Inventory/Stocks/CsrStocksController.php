@@ -62,7 +62,7 @@ class CsrStocksController extends Controller
                     $query->whereDate('expiration_date', '<=', Carbon::parse($value)->setTimezone('Asia/Manila'));
                 }
             )
-            ->orderBy('expiration_date', 'desc')
+            ->orderBy('expiration_date', 'asc')
             ->paginate(15);
 
         return Inertia::render('Csr/Inventory/Stocks/Index', [
