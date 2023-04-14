@@ -18,8 +18,8 @@ class CreateCsrwRequestStocksTable extends Migration
             $table->string('location');
             $table->string('status');
             $table->string('requested_by');
-            $table->string('approved_by');
-            $table->dateTime('received_date');
+            $table->string('approved_by')->nullable();
+            $table->dateTime('received_date')->nullable();
             $table->timestamps();
         });
     }
