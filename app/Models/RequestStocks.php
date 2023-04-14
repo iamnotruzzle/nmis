@@ -24,4 +24,14 @@ class RequestStocks extends Model
     {
         return $this->hasOne(Location::class, 'location', 'wardcode');
     }
+
+    public function requested_by_details()
+    {
+        return $this->hasOne(UserDetail::class, 'requested_by', 'employeeid');
+    }
+
+    public function approved_by_details()
+    {
+        return $this->hasOne(UserDetail::class, 'approved_by', 'employeeid');
+    }
 }
