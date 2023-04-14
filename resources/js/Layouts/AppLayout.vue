@@ -77,13 +77,6 @@ export default {
               comp: 'Csr/Inventory/Stocks/Index',
             },
             {
-              label: 'CSR-Issue Items',
-              icon: 'pi pi-fw pi-home',
-              to: 'issueitems',
-              prefix: 'issueitems',
-              comp: 'Csr/IssueItems/Index',
-            },
-            {
               label: 'W-Stocks',
               icon: 'pi pi-fw pi-home',
               to: 'requeststocks',
