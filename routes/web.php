@@ -5,6 +5,7 @@ use App\Http\Controllers\Csr\Inventory\ItemPrice\ItemPriceController;
 use App\Http\Controllers\Csr\Inventory\Items\ItemController;
 use App\Http\Controllers\Csr\Inventory\Stocks\CsrStocksController;
 use App\Http\Controllers\Users\UserController;
+use App\Http\Controllers\Wards\RequestStocks\RequestStocksController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -32,3 +33,4 @@ Route::resource('items', ItemController::class)->middleware(['auth:sanctum', 've
 Route::resource('users', UserController::class)->middleware(['auth:sanctum', 'verified'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('itemprices', ItemPriceController::class)->middleware(['auth:sanctum', 'verified'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('csrstocks', CsrStocksController::class)->middleware(['auth:sanctum', 'verified'])->only(['index', 'store', 'update', 'destroy']);
+Route::resource('requeststocks', RequestStocksController::class)->middleware(['auth:sanctum', 'verified'])->only(['index', 'store', 'update', 'destroy']);
