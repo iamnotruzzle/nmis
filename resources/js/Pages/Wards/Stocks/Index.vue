@@ -342,7 +342,6 @@ export default {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       form: this.$inertia.form({
-        id: null,
         location: null,
         requested_by: null,
         requestStockListDetails: [],
