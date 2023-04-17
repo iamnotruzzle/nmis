@@ -22,21 +22,21 @@ class RequestStocks extends Model
 
     public function requested_at_details()
     {
-        return $this->hasOne(Location::class, 'location', 'wardcode');
+        return $this->hasOne(Location::class, 'wardcode', 'location');
     }
 
     public function requested_by_details()
     {
-        return $this->hasOne(UserDetail::class, 'requested_by', 'employeeid');
+        return $this->hasOne(UserDetail::class, 'employeeid', 'requested_by');
     }
 
     public function approved_by_details()
     {
-        return $this->hasOne(UserDetail::class, 'approved_by', 'employeeid');
+        return $this->hasOne(UserDetail::class, 'employeeid', 'approved_by');
     }
 
     public function request_stocks_details()
     {
-        return $this->hasMany(RequestStocksDetails::class, 'id', 'request_stocks_id');
+        return $this->hasMany(RequestStocksDetails::class, 'request_stocks_id', 'id');
     }
 }

@@ -23,4 +23,9 @@ class RequestStocksDetails extends Model
     {
         return $this->hasOne(RequestStocks::class, 'request_stocks_id', 'id');
     }
+
+    public function item_details()
+    {
+        return $this->hasOne(Item::class, 'cl2comb', 'cl2comb');
+    }
 }

@@ -11,6 +11,7 @@
         -->
       <DataTable
         class="p-datatable-sm"
+        v-model:expandedRows="expandedRows"
         v-model:filters="filters"
         :value="requestStockList"
         selectionMode="single"
@@ -45,17 +46,12 @@
             </div>
           </div>
         </template>
+        <Column
+          expander
+          style="width: 5rem"
+        />
         <template #empty> No requested stock found. </template>
         <template #loading> Loading requested stock data. Please wait. </template>
-        <Column
-          field="id"
-          header="ID"
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ data.id }}
-          </template>
-        </Column>
         <Column
           header="CREATED AT"
           filterField="created_at"
@@ -86,6 +82,15 @@
           </template>
         </Column>
         <Column
+          field="requested_by"
+          header="REQUESTED BY"
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.requested_by }}
+          </template>
+        </Column>
+        <Column
           header="Action"
           style="min-width: 12rem"
         >
@@ -108,6 +113,29 @@
             />
           </template>
         </Column>
+        <template #expansion="slotProps">
+          <div class="p-3">
+            <h5 class="text-cyan-500 hover:text-cyan-700">Requested Items</h5>
+            <DataTable
+              paginator
+              :rows="7"
+              :value="slotProps.data.request_stocks_details"
+            >
+              <Column
+                field="item"
+                header="Item"
+              >
+                <template #body="{ data }">
+                  {{ data.item_details.cl2desc }}
+                </template>
+              </Column>
+              <Column
+                field="requested_qty"
+                header="Requested qty"
+              ></Column>
+            </DataTable>
+          </div>
+        </template>
       </DataTable>
 
       <!-- @hide="clickOutsideDialog" -->
@@ -310,6 +338,7 @@ export default {
   },
   data() {
     return {
+      expandedRows: null,
       // paginator
       loading: false,
       totalRecords: null,
@@ -355,6 +384,7 @@ export default {
     this.rows = this.requestedStocks.per_page;
   },
   mounted() {
+    // console.log(this.requestedStocks);
     this.storeItemsInController();
     this.storeRequestedStocksInContainer();
 
@@ -381,11 +411,36 @@ export default {
       this.requestedStocks.data.forEach((e) => {
         this.requestStockList.push({
           id: e.id,
+          status: e.status,
+          requested_by:
+            e.requested_by_details.firstname +
+            ' ' +
+            e.requested_by_details.middlname +
+            ' ' +
+            e.requested_by_details.lastname,
+          created_at: moment.tz(e.created_at, 'Asia/Manila').format('LL'),
+          request_stocks_details: e.request_stocks_details,
         });
       });
+      //   console.log(this.requestStockList);
     },
     tzone(date) {
-      return moment.tz(date, 'Asia/Manila').format('L');
+      return moment.tz(date, 'Asia/Manila').format('LL');
+    },
+    getSeverity(item) {
+      switch (item.status) {
+        case 'REQUESTED':
+          return 'primary';
+
+        case 'FILLED':
+          return 'info';
+
+        case 'DELIVERED':
+          return 'success';
+
+        default:
+          return null;
+      }
     },
     onPage(event) {
       this.params.page = event.page + 1;
@@ -399,7 +454,7 @@ export default {
         preserveState: true,
         preserveScroll: true,
         onFinish: (visit) => {
-          this.totalRecords = this.users.total;
+          this.totalRecords = this.requestedStocks.total;
           this.requestStockList = [];
           this.storeRequestedStocksInContainer();
           this.loading = false;
