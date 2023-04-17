@@ -1,6 +1,6 @@
 <template>
   <app-layout>
-    <Head title="Template - Stocks" />
+    <Head title="Template - Issue Items" />
 
     <div class="card">
       <Toast />
@@ -448,7 +448,7 @@ export default {
       this.usersList = [];
       this.loading = true;
 
-      this.$inertia.get('requeststocks', this.params, {
+      this.$inertia.get('issueitems', this.params, {
         preserveState: true,
         preserveScroll: true,
         onFinish: (visit) => {
@@ -540,7 +540,7 @@ export default {
       this.form.requestStockListDetails = this.requestStockListDetails;
 
       if (this.isUpdate) {
-        this.form.put(route('requeststocks.update', this.requestStockId), {
+        this.form.put(route('issueitems.update', this.requestStockId), {
           preserveScroll: true,
           onSuccess: () => {
             this.requestStockId = null;
@@ -551,7 +551,7 @@ export default {
           },
         });
       } else {
-        this.form.post(route('requeststocks.store'), {
+        this.form.post(route('issueitems.store'), {
           preserveScroll: true,
           onSuccess: () => {
             this.requestStockId = null;
@@ -568,7 +568,7 @@ export default {
       this.deleteItemDialog = true;
     },
     deleteItem() {
-      this.form.delete(route('requeststocks.destroy', this.requestStockId), {
+      this.form.delete(route('issueitems.destroy', this.requestStockId), {
         preserveScroll: true,
         onSuccess: () => {
           this.requestStockList = [];
