@@ -155,6 +155,7 @@
           <DataTable
             :value="requestStockListDetails"
             tableStyle="min-width: 50rem"
+            class="p-datatable-sm"
           >
             <Column
               field="cl2desc"
@@ -166,14 +167,10 @@
               header="REQUESTED QTY"
               sortable
             ></Column>
-            <Column
-              header=""
-              style="min-width: 12rem"
-            >
+            <Column header="">
               <template #body="slotProps">
                 <Button
                   icon="pi pi-times"
-                  class="mr-1"
                   rounded
                   text
                   severity="danger"
