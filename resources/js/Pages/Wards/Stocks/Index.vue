@@ -268,10 +268,7 @@
             class="pi pi-exclamation-triangle mr-3"
             style="font-size: 2rem"
           />
-          <span v-if="form"
-            >Are you sure you want to delete
-            <b>{{ form.firstName }} {{ form.middleName }} {{ form.lastName }} </b> ?</span
-          >
+          <span v-if="form">Are you sure you want to delete this request?</span>
         </div>
         <template #footer>
           <Button
@@ -371,6 +368,7 @@ export default {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       form: this.$inertia.form({
+        request_stocks_id: null,
         location: null,
         requested_by: null,
         requestStockListDetails: [],
@@ -520,11 +518,20 @@ export default {
       );
     },
     editRequestedStock(item) {
-      //   console.log(item);
+      this.form.request_stocks_id = item.id;
 
       this.isUpdate = true;
       this.createRequestStocksDialog = true;
       this.requestStockId = item.id;
+
+      item.request_stocks_details.forEach((e) => {
+        this.requestStockListDetails.push({
+          request_stocks_details_id: e.id,
+          cl2comb: e.cl2comb,
+          cl2desc: e.item_details.cl2desc,
+          requested_qty: e.requested_qty,
+        });
+      });
     },
     submit() {
       // setup location, requested by and requestStockListDetails before submitting
@@ -551,7 +558,6 @@ export default {
             this.createRequestStocksDialog = false;
             this.cancel();
             this.updateData();
-            this.createdMsg();
           },
         });
       }
@@ -561,7 +567,7 @@ export default {
       this.deleteItemDialog = true;
     },
     deleteItem() {
-      this.form.delete(route('users.destroy', this.requestStockId), {
+      this.form.delete(route('requeststocks.destroy', this.requestStockId), {
         preserveScroll: true,
         onSuccess: () => {
           this.requestStockList = [];
@@ -571,7 +577,6 @@ export default {
           this.form.reset();
           this.updateData();
           this.deletedMsg();
-          this.storeUserInContainer();
         },
       });
     },
@@ -581,17 +586,16 @@ export default {
       this.createRequestStocksDialog = false;
       this.form.reset();
       this.form.clearErrors();
-      this.usersList = [];
       this.storeRequestedStocksInContainer();
     },
     createdMsg() {
-      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Account created', life: 3000 });
+      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Stock request created', life: 3000 });
     },
     updatedMsg() {
-      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Account updated', life: 3000 });
+      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Stock request updated', life: 3000 });
     },
     deletedMsg() {
-      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Account deleted', life: 3000 });
+      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Stock request deleted', life: 3000 });
     },
     getLocalDateString(utcStr) {
       const date = new Date(utcStr);

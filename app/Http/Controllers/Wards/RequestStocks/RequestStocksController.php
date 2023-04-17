@@ -60,34 +60,42 @@ class RequestStocksController extends Controller
             ]);
         }
 
-        return Redirect::route('csrstocks.index');
+        return Redirect::route('requeststocks.index');
     }
 
     public function update(RequestStocks $requeststock, Request $request)
     {
-        // $request->validate([
-        //     'batch_no' => 'required',
-        //     'cl2comb' => 'required',
-        //     'quantity' => 'required|numeric',
-        //     'expiration_date' => 'required',
-        // ]);
+        $requestStocksID = $request->request_stocks_id;
 
-        // $csrstock->update([
-        //     'batch_no' => $request->batch_no,
-        //     'cl2comb' => $request->cl2comb,
-        //     'quantity' => $request->quantity,
-        //     'manufactured_date' => $request->manufactured_date == null ? null : Carbon::parse($request->manufactured_date)->setTimezone('Asia/Manila'),
-        //     'delivered_date' => $request->delivered_date == null ? null : Carbon::parse($request->delivered_date)->setTimezone('Asia/Manila'),
-        //     'expiration_date' => $request->expiration_date == null ? null : Carbon::parse($request->expiration_date)->setTimezone('Asia/Manila'),
-        // ]);
+        // if the total count of the container is 0,
+        // delete both RequestStocks and RequestStocksDetails
+        if (count($request->requestStockListDetails) == 0) {
+            RequestStocks::where('id', $requestStocksID)->delete();
+            RequestStocksDetails::where('request_stocks_id', $requestStocksID)->delete();
+        } else {
+            RequestStocksDetails::where('request_stocks_id', $requestStocksID)->delete();
+            foreach ($request->requestStockListDetails as $item) {
+                RequestStocksDetails::create([
+                    'request_stocks_id' => $requestStocksID,
+                    'cl2comb' => $item['cl2comb'],
+                    'requested_qty' => $item['requested_qty'],
+                ]);
+            }
+        }
 
-        return Redirect::route('csrstocks.index');
+        return Redirect::route('requeststocks.index');
     }
 
-    public function destroy(RequestStocks $requeststock)
+    public function destroy(RequestStocks $requeststock, Request $request)
     {
-        // $csrstock->delete();
+        $requestStocksID = $requeststock->id;
 
-        return Redirect::route('csrstocks.index');
+        // delete request stock
+        $requeststock->delete();
+
+        // delete request stock details
+        RequestStocksDetails::where('request_stocks_id', $requestStocksID)->delete();
+
+        return Redirect::route('requeststocks.index');
     }
 }
