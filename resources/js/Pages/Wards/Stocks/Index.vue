@@ -125,7 +125,6 @@
             required="true"
             v-model="item"
             :options="itemsList"
-            dataKey="unit"
             optionLabel="cl2desc"
             class="w-full mb-3"
           />
@@ -167,6 +166,21 @@
               header="REQUESTED QTY"
               sortable
             ></Column>
+            <Column
+              header=""
+              style="min-width: 12rem"
+            >
+              <template #body="slotProps">
+                <Button
+                  icon="pi pi-times"
+                  class="mr-1"
+                  rounded
+                  text
+                  severity="danger"
+                  @click="removeFromRequestContainer(slotProps.data)"
+                />
+              </template>
+            </Column>
           </DataTable>
         </div>
 
@@ -301,6 +315,7 @@ export default {
       requestStockList: [],
       // stock list details
       requestStockListDetails: [],
+      id: 0,
       item: null,
       cl2desc: null,
       requested_qty: null,
@@ -392,6 +407,7 @@ export default {
         (this.requestStockId = null),
         (this.isUpdate = false),
         (this.requestStockListDetails = []),
+        (this.id = 0),
         (this.item = null),
         (this.cl2desc = null),
         (this.requested_qty = null),
@@ -420,9 +436,9 @@ export default {
           } else {
             this.itemNotSelected = false;
             this.itemNotSelectedMsg = null;
-
+            this.id++;
             this.requestStockListDetails.push({
-              // id: this.nextRequestId++,
+              id: this.id,
               cl2comb: this.item['cl2comb'],
               cl2desc: this.item['cl2desc'],
               requested_qty: this.requested_qty,
@@ -430,7 +446,13 @@ export default {
           }
         }
       }
-      console.log(this.requestStockListDetails);
+      //   console.log(this.requestStockListDetails);
+    },
+    removeFromRequestContainer(item) {
+      this.requestStockListDetails.splice(
+        this.requestStockListDetails.findIndex((e) => e.id === item.id),
+        1
+      );
     },
     editRequestedStock(item) {
       //   console.log(item);
