@@ -136,6 +136,7 @@
             v-model.trim="requested_qty"
             required="true"
             autofocus
+            type="number"
             :class="{ 'p-invalid': requested_qty == '' || item == null }"
             @keyup.enter="fillRequestContainer"
           />
