@@ -312,7 +312,6 @@ export default {
       requestStockList: [],
       // stock list details
       requestStockListDetails: [],
-      id: 0,
       item: null,
       cl2desc: null,
       requested_qty: null,
@@ -325,8 +324,9 @@ export default {
       },
       form: this.$inertia.form({
         id: null,
-        location: this.wardcode,
+        location: null,
         requested_by: null,
+        requestStockListDetails: [],
       }),
     };
   },
@@ -337,8 +337,6 @@ export default {
     this.rows = this.requestedStocks.per_page;
   },
   mounted() {
-    this.form.requested_by = this.user.userDetail.employeeid;
-
     this.storeItemsInController();
     this.storeRequestedStocksInContainer();
 
@@ -404,7 +402,6 @@ export default {
         (this.requestStockId = null),
         (this.isUpdate = false),
         (this.requestStockListDetails = []),
-        (this.id = 0),
         (this.item = null),
         (this.cl2desc = null),
         (this.requested_qty = null),
@@ -433,9 +430,7 @@ export default {
           } else {
             this.itemNotSelected = false;
             this.itemNotSelectedMsg = null;
-            this.id++;
             this.requestStockListDetails.push({
-              id: this.id,
               cl2comb: this.item['cl2comb'],
               cl2desc: this.item['cl2desc'],
               requested_qty: this.requested_qty,
@@ -447,7 +442,7 @@ export default {
     },
     removeFromRequestContainer(item) {
       this.requestStockListDetails.splice(
-        this.requestStockListDetails.findIndex((e) => e.id === item.id),
+        this.requestStockListDetails.findIndex((e) => e.cl2comb === item.cl2comb),
         1
       );
     },
@@ -459,6 +454,11 @@ export default {
       this.requestStockId = item.id;
     },
     submit() {
+      // setup location, requested by and requestStockListDetails before submitting
+      this.form.location = this.authWardcode.wardcode;
+      this.form.requested_by = this.user.userDetail.employeeid;
+      this.form.requestStockListDetails = this.requestStockListDetails;
+
       if (this.isUpdate) {
         this.form.put(route('requeststocks.update', this.requestStockId), {
           preserveScroll: true,
