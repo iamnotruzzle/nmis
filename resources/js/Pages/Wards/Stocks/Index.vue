@@ -153,12 +153,25 @@
             style="font-size: 1.5rem"
           />
           <DataTable
+            v-model:filters="requestStockListDetailsFilter"
+            :globalFilterFields="['cl2desc']"
             :value="requestStockListDetails"
             tableStyle="min-width: 50rem"
             class="p-datatable-sm"
             paginator
             :rows="7"
           >
+            <template #header>
+              <div class="flex justify-content-end">
+                <span class="p-input-icon-left">
+                  <i class="pi pi-search" />
+                  <InputText
+                    v-model="requestStockListDetailsFilter['global'].value"
+                    placeholder="Search Item"
+                  />
+                </span>
+              </div>
+            </template>
             <Column
               field="cl2desc"
               header="REQUESTED ITEM"
@@ -313,6 +326,9 @@ export default {
       itemsList: [],
       requestStockList: [],
       // stock list details
+      requestStockListDetailsFilter: {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      },
       requestStockListDetails: [],
       item: null,
       cl2desc: null,
