@@ -148,16 +148,15 @@
           </small>
         </div>
         <div class="field mt-8">
-          <label>Requested stock list</label>
+          <label class="mr-2">Requested stock list</label>
+          <i
+            class="pi pi-shopping-cart text-blue-500"
+            style="font-size: 1.5rem"
+          />
           <DataTable
             :value="requestStockListDetails"
             tableStyle="min-width: 50rem"
           >
-            <Column
-              field="cl2comb"
-              header="CL2COMB"
-              sortable
-            ></Column>
             <Column
               field="cl2desc"
               header="REQUESTED ITEM"
