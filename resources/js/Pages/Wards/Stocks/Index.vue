@@ -34,7 +34,7 @@
                 <i class="pi pi-search" />
                 <InputText
                   v-model="search"
-                  placeholder="Search Employee ID"
+                  placeholder="Search requestor or item"
                 />
               </span>
               <Button
@@ -558,6 +558,7 @@ export default {
             this.createRequestStocksDialog = false;
             this.cancel();
             this.updateData();
+            this.createdMsg();
           },
         });
       }

@@ -15,7 +15,7 @@ class RequestStocksController extends Controller
 {
     public function index(Request $request)
     {
-        // $searchString = $request->search;
+        $searchString = $request->search;
 
         // get auth wardcode
         $authWardcode = DB::table('csrw_users')
@@ -29,7 +29,27 @@ class RequestStocksController extends Controller
             ->get(['cl2comb', 'cl2desc']);
 
         $requestedStocks = RequestStocks::with(['requested_at_details', 'requested_by_details', 'approved_by_details', 'request_stocks_details.item_details'])
-            ->orderBy('created_at', 'asc')
+            ->whereHas('requested_by_details', function ($q) use ($searchString) {
+                $q->where('firstname', 'LIKE', '%' . $searchString . '%')
+                    ->orWhere('middlename', 'LIKE', '%' . $searchString . '%')
+                    ->orWhere('lastname', 'LIKE', '%' . $searchString . '%');
+            })
+            ->orWhereHas('request_stocks_details.item_details', function ($q) use ($searchString) {
+                $q->where('cl2desc', 'LIKE', '%' . $searchString . '%');
+            })
+            ->when(
+                $request->from,
+                function ($query, $value) {
+                    $query->whereDate('created_at', '>=', $value);
+                }
+            )
+            ->when(
+                $request->to,
+                function ($query, $value) {
+                    $query->whereDate('created_at', '<=', $value);
+                }
+            )
+            ->orderBy('created_at', 'desc')
             ->paginate(15);
 
         // dd($items);
