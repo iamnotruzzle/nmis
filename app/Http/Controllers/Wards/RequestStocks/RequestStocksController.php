@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Wards\RequestStocks;
 
 use App\Http\Controllers\Controller;
+use App\Models\Item;
 use App\Models\RequestStocks;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
@@ -14,63 +16,34 @@ class RequestStocksController extends Controller
     {
         // $searchString = $request->search;
 
+        // get auth wardcode
+        $authWardcode = DB::table('csrw_users')
+            ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
+            ->select('csrw_login_history.wardcode')
+            ->orderBy('csrw_login_history.created_at', 'desc')
+            ->first();
 
-        // $items = Item::where('cl2stat', 'A')
-        //     ->orderBy('cl2desc', 'ASC')
-        //     ->get(['cl2comb', 'cl2desc']);
+        $items = Item::where('cl2stat', 'A')
+            ->orderBy('cl2desc', 'ASC')
+            ->get(['cl2comb', 'cl2desc']);
 
-        // $stocks = CsrStocks::with('itemDetail')
-        //     ->whereHas('itemDetail', function ($q) use ($searchString) {
-        //         $q->where('cl2desc', 'LIKE', '%' . $searchString . '%')
-        //             ->orWhere('batch_no', 'LIKE', '%' . $searchString . '%');
-        //     })
-        //     ->when(
-        //         $request->from_md,
-        //         function ($query, $value) {
-        //             $query->whereDate('manufactured_date', '>=', Carbon::parse($value)->setTimezone('Asia/Manila'));
-        //         }
-        //     )
-        //     ->when(
-        //         $request->to_md,
-        //         function ($query, $value) {
-        //             $query->whereDate('manufactured_date', '<=', Carbon::parse($value)->setTimezone('Asia/Manila'));
-        //         }
-        //     )
-        //     ->when(
-        //         $request->from_dd,
-        //         function ($query, $value) {
-        //             $query->whereDate('delivered_date', '>=', Carbon::parse($value)->setTimezone('Asia/Manila'));
-        //         }
-        //     )
-        //     ->when(
-        //         $request->to_dd,
-        //         function ($query, $value) {
-        //             $query->whereDate('delivered_date', '<=', Carbon::parse($value)->setTimezone('Asia/Manila'));
-        //         }
-        //     )
-        //     ->when(
-        //         $request->from_ed,
-        //         function ($query, $value) {
-        //             $query->whereDate('expiration_date', '>=', Carbon::parse($value)->setTimezone('Asia/Manila'));
-        //         }
-        //     )
-        //     ->when(
-        //         $request->to_ed,
-        //         function ($query, $value) {
-        //             $query->whereDate('expiration_date', '<=', Carbon::parse($value)->setTimezone('Asia/Manila'));
-        //         }
-        //     )
-        //     ->orderBy('expiration_date', 'asc')
-        //     ->paginate(15);
+        $requestedStocks = RequestStocks::with(['requested_at_details', 'requested_by_details', 'approved_by_details'])
+            ->orderBy('expiration_date', 'asc')
+            ->paginate(15);
 
-        return Inertia::render('Csr/Inventory/Stocks/Index', [
-            // 'items' => $items,
-            // 'stocks' => $stocks,
+        // dd($items);
+
+        return Inertia::render('Wards/Stocks/Index', [
+            'items' => $items,
+            'requestedStocks' => $requestedStocks,
+            'authWardcode' => $authWardcode,
         ]);
     }
 
     public function store(Request $request)
     {
+
+        dd($request);
 
         // $request->validate([
         //     'batch_no' => 'required',
@@ -79,7 +52,7 @@ class RequestStocksController extends Controller
         //     'expiration_date' => 'required',
         // ]);
 
-        // $stocks = CsrStocks::create([
+        // $requestedStocks = CsrStocks::create([
         //     'batch_no' => $request->batch_no,
         //     'cl2comb' => $request->cl2comb,
         //     'quantity' => $request->quantity,
@@ -87,6 +60,10 @@ class RequestStocksController extends Controller
         //     'delivered_date' => $request->delivered_date == null ? null : Carbon::parse($request->delivered_date)->setTimezone('Asia/Manila'),
         //     'expiration_date' => $request->expiration_date == null ? null : Carbon::parse($request->expiration_date)->setTimezone('Asia/Manila'),
         // ]);
+
+        // 'manufactured_date' => $request->manufactured_date == null ? null : Carbon::parse($request->manufactured_date)->setTimezone('Asia/Manila'),
+        // 'delivered_date' => $request->delivered_date == null ? null : Carbon::parse($request->delivered_date)->setTimezone('Asia/Manila'),
+        // 'expiration_date' => $request->expiration_date == null ? null : Carbon::parse($request->expiration_date)->setTimezone('Asia/Manila'),
 
         return Redirect::route('csrstocks.index');
     }

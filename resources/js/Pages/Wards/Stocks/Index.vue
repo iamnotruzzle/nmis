@@ -1,15 +1,18 @@
 <template>
   <app-layout>
-    <Head title="Template - Stocks" />
+    <Head title="Template - Users" />
 
     <div class="card">
       <Toast />
-
-      <!-- v-model:filters="filters" -->
+      <!--
+            data table sort order
+            asc = 1
+            desc =-1
+        -->
       <DataTable
         class="p-datatable-sm"
         v-model:filters="filters"
-        :value="stocksList"
+        :value="requestStockList"
         selectionMode="single"
         lazy
         paginator
@@ -17,72 +20,54 @@
         ref="dt"
         :totalRecords="totalRecords"
         @page="onPage($event)"
-        dataKey="cl1comb"
+        dataKey="id"
         filterDisplay="row"
         showGridlines
         :loading="loading"
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold">Stocks</span>
+            <span class="text-xl text-900 font-bold">Requested Stocks</span>
             <div>
               <span class="p-input-icon-left mr-2">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="search"
-                  placeholder="Search item"
+                  placeholder="Search Employee ID"
                 />
               </span>
               <Button
-                label="Add stocks"
+                label="Request stocks"
                 icon="pi pi-plus"
                 iconPos="right"
-                @click="openCreateItemDialog"
+                @click="openCreateRequestStocksDialog"
               />
             </div>
           </div>
         </template>
-        <template #empty> No stock found. </template>
-        <template #loading> Loading stock data. Please wait. </template>
+        <template #empty> No requested stock found. </template>
+        <template #loading> Loading requested stock data. Please wait. </template>
         <Column
-          field="batch_no"
-          header="BATCH NO."
+          field="id"
+          header="ID"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.batch_no }}
+            {{ data.id }}
           </template>
         </Column>
         <Column
-          field="item"
-          header="ITEM"
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ data.cl2desc }}
-          </template>
-        </Column>
-        <Column
-          field="quantity"
-          header="QUANTITY"
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ data.quantity }}
-          </template>
-        </Column>
-        <Column
-          field="manufactured_date"
-          header="MANUFACTURED DATE"
-          style="min-width: 12rem"
+          header="CREATED AT"
+          filterField="created_at"
+          style="min-width: 10rem"
           :showFilterMenu="false"
         >
           <template #body="{ data }">
-            {{ tzone(data.manufactured_date) }}
+            {{ tzone(data.created_at) }}
           </template>
           <template #filter="{}">
             <Calendar
-              v-model="from_md"
+              v-model="from"
               dateFormat="mm-dd-yy"
               placeholder="FROM"
               showIcon
@@ -91,65 +76,7 @@
             />
             <div class="mt-2"></div>
             <Calendar
-              v-model="to_md"
-              dateFormat="mm-dd-yy"
-              placeholder="TO"
-              showIcon
-              showButtonBar
-              :hideOnDateTimeSelect="true"
-            />
-          </template>
-        </Column>
-        <Column
-          field="delivered_date"
-          header="DELIVERY DATE"
-          style="min-width: 12rem"
-          :showFilterMenu="false"
-        >
-          <template #body="{ data }">
-            {{ tzone(data.delivered_date) }}
-          </template>
-          <template #filter="{}">
-            <Calendar
-              v-model="from_dd"
-              dateFormat="mm-dd-yy"
-              placeholder="FROM"
-              showIcon
-              showButtonBar
-              :hideOnDateTimeSelect="true"
-            />
-            <div class="mt-2"></div>
-            <Calendar
-              v-model="to_dd"
-              dateFormat="mm-dd-yy"
-              placeholder="TO"
-              showIcon
-              showButtonBar
-              :hideOnDateTimeSelect="true"
-            />
-          </template>
-        </Column>
-        <Column
-          field="expiration_date"
-          header="EXPIRATION DATE"
-          style="min-width: 12rem"
-          :showFilterMenu="false"
-        >
-          <template #body="{ data }">
-            {{ tzone(data.expiration_date) }}
-          </template>
-          <template #filter="{}">
-            <Calendar
-              v-model="from_ed"
-              dateFormat="mm-dd-yy"
-              placeholder="FROM"
-              showIcon
-              showButtonBar
-              :hideOnDateTimeSelect="true"
-            />
-            <div class="mt-2"></div>
-            <Calendar
-              v-model="to_ed"
+              v-model="to"
               dateFormat="mm-dd-yy"
               placeholder="TO"
               showIcon
@@ -169,7 +96,7 @@
               rounded
               text
               severity="warning"
-              @click="editItem(slotProps.data)"
+              @click="editRequestedStock(slotProps.data)"
             />
 
             <Button
@@ -185,119 +112,63 @@
 
       <!-- create & edit dialog -->
       <Dialog
-        v-model:visible="createStockDialog"
-        :style="{ width: '450px' }"
-        header="Stock Detail"
+        v-model:visible="createRequestStocksDialog"
+        header="Request stock"
         :modal="true"
         class="p-fluid"
         @hide="clickOutsideDialog"
         dismissableMask
       >
         <div class="field">
-          <label for="batch_no">Batch no.</label>
-          <InputText
-            id="batch_no"
-            v-model.trim="form.batch_no"
-            required="true"
-            autofocus
-            :class="{ 'p-invalid': form.batch_no == '' }"
-            @keyup.enter="submit"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.batch_no"
-          >
-            {{ form.errors.batch_no }}
-          </small>
-        </div>
-        <div class="field">
-          <label for="Item">Item</label>
+          <label>Item</label>
           <Dropdown
             required="true"
-            v-model="form.cl2comb"
+            v-model="item"
             :options="itemsList"
             dataKey="unit"
             optionLabel="cl2desc"
-            optionValue="cl2comb"
             class="w-full mb-3"
-            :class="{ 'p-invalid': form.cl2comb == '' }"
           />
-          <small
-            class="text-error"
-            v-if="form.errors.cl2comb"
-          >
-          </small>
         </div>
         <div class="field">
-          <label for="quantity">Quantity</label>
+          <label for="Item">Quantity</label>
           <InputText
             id="quantity"
-            v-model.trim="form.quantity"
+            v-model.trim="requested_qty"
             required="true"
             autofocus
-            :class="{ 'p-invalid': form.quantity == '' }"
-            @keyup.enter="submit"
+            :class="{ 'p-invalid': requested_qty == '' || item == null }"
+            @keyup.enter="fillRequestContainer"
           />
           <small
             class="text-error"
-            v-if="form.errors.quantity"
+            v-if="itemNotSelected == true"
           >
-            {{ form.errors.quantity }}
+            {{ itemNotSelectedMsg }}
           </small>
         </div>
-        <div class="field">
-          <label for="manufactured_date">Manufactured date</label>
-          <Calendar
-            v-model="form.manufactured_date"
-            dateFormat="mm-dd-yy"
-            showIcon
-            showButtonBar
-            showTime
-            hourFormat="12"
-            :hideOnDateTimeSelect="true"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.manufactured_date"
+        <div class="field mt-8">
+          <label>Requested stock list</label>
+          <DataTable
+            :value="requestStockListDetails"
+            tableStyle="min-width: 50rem"
           >
-            {{ form.errors.manufactured_date }}
-          </small>
-        </div>
-        <div class="field">
-          <label for="delivered_date">Delivered date</label>
-          <Calendar
-            v-model="form.delivered_date"
-            dateFormat="mm-dd-yy"
-            showIcon
-            showButtonBar
-            showTime
-            hourFormat="12"
-            :hideOnDateTimeSelect="true"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.delivered_date"
-          >
-            {{ form.errors.delivered_date }}
-          </small>
-        </div>
-        <div class="field">
-          <label for="expiration_date">Expiration date</label>
-          <Calendar
-            v-model="form.expiration_date"
-            dateFormat="mm-dd-yy"
-            showIcon
-            showButtonBar
-            showTime
-            hourFormat="12"
-            :hideOnDateTimeSelect="true"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.expiration_date"
-          >
-            {{ form.errors.expiration_date }}
-          </small>
+            <Column
+              field="cl2comb"
+              header="CL2COMB"
+              sortable
+            ></Column>
+            <Column
+              field="cl2desc"
+              header="REQUESTED ITEM"
+              sortable
+            ></Column>
+            <Column
+              field="requested_qty"
+              header="REQUESTED QTY"
+              sortable
+            ></Column>
+          </DataTable>
         </div>
 
         <template #footer>
@@ -332,7 +203,7 @@
 
       <!-- Delete confirmation dialog -->
       <Dialog
-        v-model:visible="deleteStockDialog"
+        v-model:visible="deleteItemDialog"
         :style="{ width: '450px' }"
         header="Confirm"
         :modal="true"
@@ -344,8 +215,8 @@
             style="font-size: 2rem"
           />
           <span v-if="form"
-            >Are you sure you want to delete <b>{{ form.cl2desc }}</b> with batch number
-            <b>{{ form.batch_no }}</b> ?</span
+            >Are you sure you want to delete
+            <b>{{ form.firstName }} {{ form.middleName }} {{ form.lastName }} </b> ?</span
           >
         </div>
         <template #footer>
@@ -353,7 +224,7 @@
             label="No"
             icon="pi pi-times"
             class="p-button-text"
-            @click="deleteStockDialog = false"
+            @click="deleteItemDialog = false"
           />
           <Button
             label="Yes"
@@ -370,6 +241,7 @@
 
 <script>
 import { FilterMatchMode } from 'primevue/api';
+import { router } from '@inertiajs/vue3';
 import { Head } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import InputText from 'primevue/inputtext';
@@ -384,6 +256,7 @@ import Avatar from 'primevue/avatar';
 import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
 import AutoComplete from 'primevue/autocomplete';
+import Tag from 'primevue/tag';
 import moment from 'moment';
 
 export default {
@@ -402,10 +275,12 @@ export default {
     Calendar,
     Dropdown,
     AutoComplete,
+    Tag,
   },
   props: {
+    authWardcode: Object,
     items: Object,
-    stocks: Object,
+    requestedStocks: Object,
   },
   data() {
     return {
@@ -414,69 +289,56 @@ export default {
       totalRecords: null,
       rows: null,
       // end paginator
-      stockId: null,
+      requestStockId: null,
       isUpdate: false,
-      createStockDialog: false,
-      deleteStockDialog: false,
+      createRequestStocksDialog: false,
+      deleteItemDialog: false,
       search: '',
       options: {},
       params: {},
-      // manufactured date
-      from_md: null,
-      to_md: null,
-      // delivered date
-      from_dd: null,
-      to_dd: null,
-      // expiration date
-      from_ed: null,
-      to_ed: null,
+      from: null,
+      to: null,
       itemsList: [],
-      stocksList: [],
+      requestStockList: [],
+      // stock list details
+      requestStockListDetails: [],
+      item: null,
+      cl2desc: null,
+      requested_qty: null,
+      approved_qty: null,
+      itemNotSelected: false,
+      itemNotSelectedMsg: null,
+      // end stock list details
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
-      cl1stats: [
-        {
-          name: 'ACTIVE',
-          value: 'A',
-        },
-        {
-          name: 'INACTIVE',
-          value: 'I',
-        },
-      ],
       form: this.$inertia.form({
-        batch_no: null,
-        cl2comb: null,
-        cl2desc: null,
-        quantity: null,
-        manufactured_date: null,
-        delivered_date: null,
-        expiration_date: null,
+        id: null,
+        location: this.wardcode,
+        requested_by: null,
       }),
     };
   },
   // created will be initialize before mounted
   created() {
-    this.totalRecords = this.stocks.total;
-    this.params.page = this.stocks.current_page;
-    this.rows = this.stocks.per_page;
+    this.totalRecords = this.requestedStocks.total;
+    this.params.page = this.requestedStocks.current_page;
+    this.rows = this.requestedStocks.per_page;
   },
   mounted() {
-    // console.log(this.items);
+    this.form.requested_by = this.user.userDetail.employeeid;
+
     this.storeItemsInController();
-    this.storeStocksInContainer();
+    this.storeRequestedStocksInContainer();
 
     this.loading = false;
   },
-  methods: {
-    tzone(date) {
-      if (date == null || date == '') {
-        return null;
-      } else {
-        return moment.tz(date, 'Asia/Manila').format('LLL');
-      }
+  computed: {
+    user() {
+      return this.$page.props.auth.user;
     },
+  },
+  methods: {
     storeItemsInController() {
       this.items.forEach((e) => {
         this.itemsList.push({
@@ -485,82 +347,117 @@ export default {
         });
       });
     },
-    // use storeStocksInContainer() function so that every time you make
+    // use storeRequestedStocksInContainer() function so that every time you make
     // server request such as POST, the data in the table
     // is updated
-    storeStocksInContainer() {
-      this.stocks.data.forEach((e) => {
-        this.stocksList.push({
+    storeRequestedStocksInContainer() {
+      this.requestedStocks.data.forEach((e) => {
+        this.requestStockList.push({
           id: e.id,
-          batch_no: e.batch_no,
-          cl2comb: e.cl2comb,
-          cl2desc: e.item_detail.cl2desc,
-          quantity: e.quantity,
-          manufactured_date: e.manufactured_date === null ? '' : e.manufactured_date,
-          delivered_date: e.delivered_date === null ? '' : e.delivered_date,
-          expiration_date: e.expiration_date === null ? '' : e.expiration_date,
         });
       });
+    },
+    tzone(date) {
+      return moment.tz(date, 'Asia/Manila').format('L');
     },
     onPage(event) {
       this.params.page = event.page + 1;
       this.updateData();
     },
     updateData() {
-      this.stocksList = [];
+      this.usersList = [];
       this.loading = true;
 
-      this.$inertia.get('csrstocks', this.params, {
+      this.$inertia.get('requeststocks', this.params, {
         preserveState: true,
         preserveScroll: true,
         onFinish: (visit) => {
-          this.totalRecords = this.stocks.total;
-          this.stocksList = [];
-          this.storeStocksInContainer();
+          this.totalRecords = this.users.total;
+          this.requestStockList = [];
+          this.storeRequestedStocksInContainer();
           this.loading = false;
         },
       });
     },
-    openCreateItemDialog() {
+    openCreateRequestStocksDialog() {
       this.isUpdate = false;
       this.form.clearErrors();
       this.form.reset();
-      this.stockId = null;
-      this.createStockDialog = true;
+      this.requestStockId = null;
+      this.createRequestStocksDialog = true;
     },
     // emit close dialog
     clickOutsideDialog() {
-      this.$emit('hide', (this.stockId = null), (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
+      this.$emit(
+        'hide',
+        (this.requestStockId = null),
+        (this.isUpdate = false),
+        (this.requestStockListDetails = []),
+        (this.item = null),
+        (this.cl2desc = null),
+        (this.requested_qty = null),
+        (this.approved_qty = null),
+        (this.itemNotSelected = null),
+        (this.itemNotSelectedMsg = null),
+        this.form.clearErrors(),
+        this.form.reset()
+      );
     },
-    editItem(item) {
+    fillRequestContainer() {
+      // check if no selected item
+      if (this.item == null || this.item == '') {
+        this.itemNotSelected = true;
+        this.itemNotSelectedMsg = 'Item not selected.';
+      } else {
+        // check if request qty is not provided
+        if (this.requested_qty == 0 || this.requested_qty == null || this.requested_qty == '') {
+          this.itemNotSelected = true;
+          this.itemNotSelectedMsg = 'Please provide quantity.';
+        } else {
+          // check if item selected is already on the list
+          if (this.requestStockListDetails.some((e) => e.cl2comb === this.item['cl2comb'])) {
+            this.itemNotSelected = true;
+            this.itemNotSelectedMsg = 'Item is already on the list.';
+          } else {
+            this.itemNotSelected = false;
+            this.itemNotSelectedMsg = null;
+
+            this.requestStockListDetails.push({
+              // id: this.nextRequestId++,
+              cl2comb: this.item['cl2comb'],
+              cl2desc: this.item['cl2desc'],
+              requested_qty: this.requested_qty,
+            });
+          }
+        }
+      }
+      console.log(this.requestStockListDetails);
+    },
+    editRequestedStock(item) {
+      //   console.log(item);
+
       this.isUpdate = true;
-      this.createStockDialog = true;
-      this.stockId = item.id;
-      this.form.batch_no = item.batch_no;
-      this.form.cl2comb = item.cl2comb;
-      this.form.quantity = item.quantity;
-      this.form.manufactured_date = item.manufactured_date;
-      this.form.delivered_date = item.delivered_date;
-      this.form.expiration_date = item.expiration_date;
+      this.createRequestStocksDialog = true;
+      this.requestStockId = item.id;
     },
     submit() {
       if (this.isUpdate) {
-        this.form.put(route('csrstocks.update', this.stockId), {
+        this.form.put(route('requeststocks.update', this.requestStockId), {
           preserveScroll: true,
           onSuccess: () => {
-            this.stockId = null;
-            this.createStockDialog = false;
+            this.requestStockId = null;
+            this.createRequestStocksDialog = false;
             this.cancel();
             this.updateData();
             this.updatedMsg();
           },
         });
       } else {
-        this.form.post(route('csrstocks.store'), {
+        this.form.post(route('requeststocks.store'), {
           preserveScroll: true,
           onSuccess: () => {
-            this.stockId = null;
-            this.createStockDialog = false;
+            this.requestStockId = null;
+            this.createRequestStocksDialog = false;
             this.cancel();
             this.updateData();
             this.createdMsg();
@@ -569,43 +466,55 @@ export default {
       }
     },
     confirmDeleteItem(item) {
-      this.stockId = item.id;
-      this.form.batch_no = item.batch_no;
-      this.form.cl2desc = item.cl2desc;
-      this.deleteStockDialog = true;
+      this.requestStockId = item.id;
+      this.deleteItemDialog = true;
     },
     deleteItem() {
-      this.form.delete(route('csrstocks.destroy', this.stockId), {
+      this.form.delete(route('users.destroy', this.requestStockId), {
         preserveScroll: true,
         onSuccess: () => {
-          this.stocksList = [];
-          this.deleteStockDialog = false;
-          this.stockId = null;
+          this.requestStockList = [];
+          this.deleteItemDialog = false;
+          this.requestStockId = null;
           this.form.clearErrors();
           this.form.reset();
           this.updateData();
           this.deletedMsg();
-          this.storeStocksInContainer();
+          this.storeUserInContainer();
         },
       });
     },
     cancel() {
-      this.stockId = null;
+      this.requestStockId = null;
       this.isUpdate = false;
-      this.createStockDialog = false;
+      this.createRequestStocksDialog = false;
       this.form.reset();
       this.form.clearErrors();
-      this.stocksList = [];
-      this.storeStocksInContainer();
+      this.usersList = [];
+      this.storeRequestedStocksInContainer();
     },
     createdMsg() {
-      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Stock created', life: 3000 });
+      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Account created', life: 3000 });
     },
     updatedMsg() {
-      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Stock updated', life: 3000 });
+      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Account updated', life: 3000 });
     },
     deletedMsg() {
-      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Stock deleted', life: 3000 });
+      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Account deleted', life: 3000 });
+    },
+    getLocalDateString(utcStr) {
+      const date = new Date(utcStr);
+      return (
+        date.getFullYear() +
+        '-' +
+        String(date.getMonth() + 1).padStart(2, '0') +
+        '-' +
+        String(date.getDate()).padStart(2, '0') +
+        ' ' +
+        String(date.getHours()).padStart(2, '0') +
+        ':' +
+        String(date.getMinutes()).padStart(2, '0')
+      );
     },
   },
   watch: {
@@ -613,63 +522,23 @@ export default {
       this.params.search = val;
       this.updateData();
     },
-    from_md: function (val) {
+    from: function (val) {
       if (val != null) {
-        let from_md = val;
-        this.params.from_md = from_md;
+        let from = this.getLocalDateString(val);
+        this.params.from = from;
       } else {
-        this.params.from_md = null;
-        this.from_md = null;
+        this.params.from = null;
+        this.from = null;
       }
       this.updateData();
     },
-    to_md: function (val) {
+    to: function (val) {
       if (val != null) {
-        let to_md = val;
-        this.params.to_md = to_md;
+        let to = this.getLocalDateString(val);
+        this.params.to = to;
       } else {
-        this.params.to_md = null;
-        this.to_md = null;
-      }
-      this.updateData();
-    },
-    from_dd: function (val) {
-      if (val != null) {
-        let from_dd = val;
-        this.params.from_dd = from_dd;
-      } else {
-        this.params.from_dd = null;
-        this.from_dd = null;
-      }
-      this.updateData();
-    },
-    to_dd: function (val) {
-      if (val != null) {
-        let to_dd = val;
-        this.params.to_dd = to_dd;
-      } else {
-        this.params.to_dd = null;
-        this.to_dd = null;
-      }
-      this.updateData();
-    },
-    from_ed: function (val) {
-      if (val != null) {
-        let from_ed = val;
-        this.params.from_ed = from_ed;
-      } else {
-        this.params.from_ed = null;
-        this.from_ed = null;
-      }
-      this.updateData();
-    },
-    to_ed: function (val) {
-      if (val != null) {
-        let to_ed = val;
-        this.params.to_ed = to_ed;
-      } else {
-        this.params.to_ed = null;
-        this.to_ed = null;
+        this.params.to = null;
+        this.to = null;
       }
       this.updateData();
     },

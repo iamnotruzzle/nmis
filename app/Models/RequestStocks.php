@@ -34,4 +34,9 @@ class RequestStocks extends Model
     {
         return $this->hasOne(UserDetail::class, 'approved_by', 'employeeid');
     }
+
+    public function request_stocks_details()
+    {
+        return $this->hasMany(RequestStocksDetails::class, 'id', 'request_stocks_id');
+    }
 }
