@@ -110,14 +110,14 @@
         </Column>
       </DataTable>
 
+      <!-- @hide="clickOutsideDialog" -->
       <!-- create & edit dialog -->
       <Dialog
         v-model:visible="createRequestStocksDialog"
         header="Request stock"
         :modal="true"
         class="p-fluid"
-        @hide="clickOutsideDialog"
-        dismissableMask
+        @hide="whenDialogIsHidden"
       >
         <div class="field">
           <label>Item</label>
@@ -397,8 +397,8 @@ export default {
       this.requestStockId = null;
       this.createRequestStocksDialog = true;
     },
-    // emit close dialog
-    clickOutsideDialog() {
+    // when dialog is hidden, do this function
+    whenDialogIsHidden() {
       this.$emit(
         'hide',
         (this.requestStockId = null),
