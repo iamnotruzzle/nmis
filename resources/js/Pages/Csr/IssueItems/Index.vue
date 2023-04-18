@@ -104,6 +104,15 @@
               class="mr-1"
               rounded
               text
+              severity="info"
+              @click="openCreateRequestStocksDialog(slotProps.data)"
+            />
+
+            <Button
+              icon="pi pi-pencil"
+              class="mr-1"
+              rounded
+              text
               severity="warning"
               @click="editRequestedStock(slotProps.data)"
             />
@@ -341,6 +350,7 @@ export default {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       form: this.$inertia.form({
+        isUpdate: false,
         request_stocks_id: null,
         location: null,
         requested_by: null,
@@ -434,12 +444,24 @@ export default {
         },
       });
     },
-    openCreateRequestStocksDialog() {
-      this.isUpdate = false;
+    openCreateRequestStocksDialog(item) {
       this.form.clearErrors();
       this.form.reset();
-      this.requestStockId = null;
+      this.form.request_stocks_id = item.id;
+
+      this.isUpdate = false;
       this.createRequestStocksDialog = true;
+      this.requestStockId = item.id;
+
+      item.request_stocks_details.forEach((e) => {
+        this.requestStockListDetails.push({
+          request_stocks_details_id: e.id,
+          cl2comb: e.cl2comb,
+          cl2desc: e.item_details.cl2desc,
+          requested_qty: e.requested_qty,
+          approved_qty: e.approved_qty,
+        });
+      });
     },
     // when dialog is hidden, do this function
     whenDialogIsHidden() {
@@ -496,6 +518,7 @@ export default {
       this.form.request_stocks_id = item.id;
 
       this.isUpdate = true;
+      this.form.isUpdate = true;
       this.createRequestStocksDialog = true;
       this.requestStockId = item.id;
 
@@ -508,7 +531,7 @@ export default {
           approved_qty: e.approved_qty,
         });
       });
-      console.log(this.requestStockListDetails);
+      //   console.log(this.requestStockListDetails);
     },
     submit() {
       // setup approved by and requestStockListDetails before submitting
@@ -563,7 +586,7 @@ export default {
       this.createRequestStocksDialog = false;
       this.form.reset();
       this.form.clearErrors();
-      this.storeRequestedStocksInContainer();
+      //   this.storeRequestedStocksInContainer();
     },
     createdMsg() {
       this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Stock request created', life: 3000 });

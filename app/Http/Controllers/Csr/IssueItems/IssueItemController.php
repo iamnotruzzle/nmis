@@ -69,11 +69,8 @@ class IssueItemController extends Controller
 
     public function store(Request $request)
     {
-        return Redirect::route('issueitems.index');
-    }
+        dd('store');
 
-    public function update(RequestStocks $requeststock, Request $request)
-    {
         $requestStocksID = $request->request_stocks_id;
 
         $requestStocksContainer = $request->requestStockListDetails;
@@ -183,6 +180,13 @@ class IssueItemController extends Controller
                 }
             }
         }
+
+        return Redirect::route('issueitems.index');
+    }
+
+    public function update(RequestStocks $requeststock, Request $request)
+    {
+        dd('update');
 
         return Redirect::route('issueitems.index');
     }
