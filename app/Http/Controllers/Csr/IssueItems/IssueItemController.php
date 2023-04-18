@@ -69,23 +69,6 @@ class IssueItemController extends Controller
 
     public function store(Request $request)
     {
-        $requestStocks = RequestStocks::create([
-            'location' => $request->location,
-            'status' => 'REQUESTED',
-            'requested_by' => $request->requested_by,
-        ]);
-        $requestStocksID = $requestStocks['id'];
-
-        $requestStockListDetails = $request->requestStockListDetails;
-
-        foreach ($requestStockListDetails as $item) {
-            RequestStocksDetails::create([
-                'request_stocks_id' => $requestStocksID,
-                'cl2comb' => $item['cl2comb'],
-                'requested_qty' => $item['requested_qty'],
-            ]);
-        }
-
         return Redirect::route('issueitems.index');
     }
 
@@ -98,10 +81,15 @@ class IssueItemController extends Controller
         // get location of the request
         $location = RequestStocks::where('id', $requestStocksID)->first();
 
-
         // a block to check if the remaining stocks is enough
         // for the requested stock
         foreach ($requestStocksContainer as $rsc) {
+
+            // update the approved_qty in the RequestStocksDetails table
+            $requestStockDetails = RequestStocksDetails::where('id', $rsc['request_stocks_details_id'])->first();
+            $requestStockDetails->update([
+                'approved_qty' => $rsc['approved_qty']
+            ]);
 
             // check current stock of the item
             $current_stock = CsrStocks::where('cl2comb', $rsc['cl2comb'])

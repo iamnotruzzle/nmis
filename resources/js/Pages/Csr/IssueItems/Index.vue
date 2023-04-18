@@ -508,6 +508,7 @@ export default {
           approved_qty: e.approved_qty,
         });
       });
+      console.log(this.requestStockListDetails);
     },
     submit() {
       // setup approved by and requestStockListDetails before submitting
