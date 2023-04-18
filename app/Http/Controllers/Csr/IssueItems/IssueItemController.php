@@ -91,8 +91,6 @@ class IssueItemController extends Controller
 
     public function update(RequestStocks $requeststock, Request $request)
     {
-        // dd($request);
-
         $requestStocksID = $request->request_stocks_id;
 
         $requestStocksContainer = $request->requestStockListDetails;
@@ -115,9 +113,6 @@ class IssueItemController extends Controller
                 return redirect()->back()->with('message', true);
             }
         }
-
-        //  $rsc['issue_qty'] = approved_qty
-
 
         foreach ($requestStocksContainer as $rsc) {
             // check current stock of the item
@@ -150,6 +145,8 @@ class IssueItemController extends Controller
                         'cl2comb' => $row_to_change_status->cl2comb,
                         'batch_no' => $row->batch_no,
                         'quantity' => $remaining_qty_to_be_issued,
+                        'manufactured_date' => $row->manufactured_date,
+                        'delivered_date' => $row->delivered_date,
                         'expiration_date' => $row->expiration_date,
                     ]);
 
@@ -164,6 +161,7 @@ class IssueItemController extends Controller
                     RequestStocks::where('id', $requestStocksID)
                         ->update([
                             'status' => 'FILLED',
+                            'approved_by' => $request->approved_by,
                         ]);
                 } else {
                     $remaining_qty_to_be_issued = $remaining_qty_to_be_issued - $stock->quantity;
@@ -179,6 +177,8 @@ class IssueItemController extends Controller
                         'cl2comb' => $row_to_change_status->cl2comb,
                         'batch_no' => $row->batch_no,
                         'quantity' => $row->quantity,
+                        'manufactured_date' => $row->manufactured_date,
+                        'delivered_date' => $row->delivered_date,
                         'expiration_date' => $row->expiration_date,
                     ]);
 
@@ -190,6 +190,7 @@ class IssueItemController extends Controller
                     RequestStocks::where('id', $requestStocksID)
                         ->update([
                             'status' => 'FILLED',
+                            'approved_by' => $request->approved_by,
                         ]);
                 }
             }

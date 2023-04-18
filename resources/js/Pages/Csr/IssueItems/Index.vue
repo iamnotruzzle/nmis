@@ -344,6 +344,7 @@ export default {
         request_stocks_id: null,
         location: null,
         requested_by: null,
+        approved_by: null,
         requestStockListDetails: [],
       }),
     };
@@ -509,9 +510,8 @@ export default {
       });
     },
     submit() {
-      // setup location, requested by and requestStockListDetails before submitting
-      this.form.location = this.authWardcode.wardcode;
-      this.form.requested_by = this.user.userDetail.employeeid;
+      // setup approved by and requestStockListDetails before submitting
+      this.form.approved_by = this.user.userDetail.employeeid;
       this.form.requestStockListDetails = this.requestStockListDetails;
 
       if (this.isUpdate) {
