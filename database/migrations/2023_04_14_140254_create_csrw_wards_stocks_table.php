@@ -21,8 +21,8 @@ class CreateCsrwWardsStocksTable extends Migration
             $table->string('location');
             $table->string('cl2comb');
             $table->integer('quantity');
-            $table->dateTime('manufactured_date');
-            $table->dateTime('delivered_date');
+            $table->dateTime('manufactured_date')->nullable();
+            $table->dateTime('delivered_date')->nullable();
             $table->dateTime('expiration_date');
             $table->timestamps();
         });

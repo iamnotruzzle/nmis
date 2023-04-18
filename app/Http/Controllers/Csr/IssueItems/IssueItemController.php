@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Csr\IssueItems;
 
 use App\Http\Controllers\Controller;
+use App\Models\CsrStocks;
 use App\Models\Item;
 use App\Models\RequestStocks;
 use App\Models\RequestStocksDetails;
+use App\Models\WardsStocks;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -89,21 +91,107 @@ class IssueItemController extends Controller
 
     public function update(RequestStocks $requeststock, Request $request)
     {
+        // dd($request);
+
         $requestStocksID = $request->request_stocks_id;
 
-        // if the total count of the container is 0,
-        // delete both RequestStocks and RequestStocksDetails
-        if (count($request->requestStockListDetails) == 0) {
-            RequestStocks::where('id', $requestStocksID)->delete();
-            RequestStocksDetails::where('request_stocks_id', $requestStocksID)->delete();
-        } else {
-            RequestStocksDetails::where('request_stocks_id', $requestStocksID)->delete();
-            foreach ($request->requestStockListDetails as $item) {
-                RequestStocksDetails::create([
-                    'request_stocks_id' => $requestStocksID,
-                    'cl2comb' => $item['cl2comb'],
-                    'requested_qty' => $item['requested_qty'],
-                ]);
+        $requestStocksContainer = $request->requestStockListDetails;
+
+        // get location of the request
+        $location = RequestStocks::where('id', $requestStocksID)->first();
+
+
+        // a block to check if the remaining stocks is enough
+        // for the requested stock
+        foreach ($requestStocksContainer as $rsc) {
+
+            // check current stock of the item
+            $current_stock = CsrStocks::where('cl2comb', $rsc['cl2comb'])
+                ->sum('quantity');
+
+            // check the current value of issue_qty after the loop
+            $remaining_qty_to_be_issued = $rsc['approved_qty'];
+            if ($current_stock < $remaining_qty_to_be_issued) {
+                return redirect()->back()->with('message', true);
+            }
+        }
+
+        //  $rsc['issue_qty'] = approved_qty
+
+
+        foreach ($requestStocksContainer as $rsc) {
+            // check current stock of the item
+            $current_stock = CsrStocks::where('cl2comb', $rsc['cl2comb'])
+                ->sum('quantity');
+
+            // check the current value of issued_qty after the loop
+            $remaining_qty_to_be_issued = $rsc['approved_qty'];
+            $newStockQty = 0;
+
+            // check if remaining_qty_to_be_issued still has a value > than 0
+            while ($remaining_qty_to_be_issued > 0) {
+
+                // get the the specific item that is first to expire and quantity != 0
+                $stock = CsrStocks::where('cl2comb', $rsc['cl2comb'])
+                    ->where('quantity', '!=', 0)
+                    ->orderBy('expiration_date')
+                    ->first();
+
+                // execute if block when condition is met then do the while loop again
+                if ($stock->quantity >= $remaining_qty_to_be_issued) {
+                    $row = CsrStocks::where('id', $stock->id)->first();
+                    $row_to_change_status = RequestStocksDetails::where('id', $rsc['request_stocks_details_id'])->first();
+
+                    $issueditem = WardsStocks::create([
+                        'request_stocks_id' => $row_to_change_status->request_stocks_id,
+                        'request_stocks_detail_id' => $row_to_change_status->id,
+                        'stock_id' => $row->id,
+                        'location' => $location->location,
+                        'cl2comb' => $row_to_change_status->cl2comb,
+                        'batch_no' => $row->batch_no,
+                        'quantity' => $remaining_qty_to_be_issued,
+                        'expiration_date' => $row->expiration_date,
+                    ]);
+
+                    $newStockQty = $row->quantity - $remaining_qty_to_be_issued;
+                    $remaining_qty_to_be_issued = 0;
+
+                    $row::where('id', $stock->id)
+                        ->update([
+                            'quantity' => $newStockQty,
+                        ]);
+
+                    RequestStocks::where('id', $requestStocksID)
+                        ->update([
+                            'status' => 'FILLED',
+                        ]);
+                } else {
+                    $remaining_qty_to_be_issued = $remaining_qty_to_be_issued - $stock->quantity;
+
+                    $row = CsrStocks::where('id', $stock->id)->first();
+                    $row_to_change_status = RequestStocksDetails::where('id', $rsc['request_stocks_details_id'])->first();
+
+                    $issueditem = WardsStocks::create([
+                        'request_stocks_id' => $row_to_change_status->request_stocks_id,
+                        'request_stocks_detail_id' => $row_to_change_status->id,
+                        'stock_id' => $row->id,
+                        'location' => $location->location,
+                        'cl2comb' => $row_to_change_status->cl2comb,
+                        'batch_no' => $row->batch_no,
+                        'quantity' => $row->quantity,
+                        'expiration_date' => $row->expiration_date,
+                    ]);
+
+                    $row::where('id', $stock->id)
+                        ->update([
+                            'quantity' => 0,
+                        ]);
+
+                    RequestStocks::where('id', $requestStocksID)
+                        ->update([
+                            'status' => 'FILLED',
+                        ]);
+                }
             }
         }
 

@@ -94,6 +94,29 @@
             {{ data.requested_at }}
           </template>
         </Column>
+        <Column
+          header="Action"
+          style="min-width: 12rem"
+        >
+          <template #body="slotProps">
+            <Button
+              icon="pi pi-pencil"
+              class="mr-1"
+              rounded
+              text
+              severity="warning"
+              @click="editRequestedStock(slotProps.data)"
+            />
+
+            <Button
+              icon="pi pi-trash"
+              rounded
+              text
+              severity="danger"
+              @click="confirmDeleteItem(slotProps.data)"
+            />
+          </template>
+        </Column>
         <template #expansion="slotProps">
           <div class="p-3">
             <h5 class="text-cyan-500 hover:text-cyan-700">Requested Items</h5>
@@ -114,29 +137,6 @@
                 field="requested_qty"
                 header="Requested qty"
               ></Column>
-              <Column
-                header="Action"
-                style="min-width: 12rem"
-              >
-                <template #body="slotProps">
-                  <Button
-                    icon="pi pi-pencil"
-                    class="mr-1"
-                    rounded
-                    text
-                    severity="warning"
-                    @click="editRequestedStock(slotProps.data)"
-                  />
-
-                  <Button
-                    icon="pi pi-trash"
-                    rounded
-                    text
-                    severity="danger"
-                    @click="confirmDeleteItem(slotProps.data)"
-                  />
-                </template>
-              </Column>
             </DataTable>
           </div>
         </template>
@@ -146,56 +146,22 @@
       <!-- create & edit dialog -->
       <Dialog
         v-model:visible="createRequestStocksDialog"
-        header="Request stock"
+        header="Requested stock"
         :modal="true"
         class="p-fluid"
         @hide="whenDialogIsHidden"
       >
         <div class="field">
-          <label>Item</label>
-          <Dropdown
-            required="true"
-            v-model="item"
-            :options="itemsList"
-            optionLabel="cl2desc"
-            class="w-full mb-3"
-          />
-        </div>
-        <div class="field">
-          <label for="Item">Quantity</label>
-          <InputText
-            id="quantity"
-            v-model.trim="requested_qty"
-            required="true"
-            autofocus
-            type="number"
-            :class="{ 'p-invalid': requested_qty == '' || item == null }"
-            @keyup.enter="fillRequestContainer"
-          />
-          <small
-            class="text-error"
-            v-if="itemNotSelected == true"
-          >
-            {{ itemNotSelectedMsg }}
-          </small>
-        </div>
-        <div class="field mt-8">
-          <label class="mr-2">Requested stock list</label>
-          <i
-            class="pi pi-shopping-cart text-blue-500"
-            style="font-size: 1.5rem"
-          />
           <DataTable
             v-model:filters="requestStockListDetailsFilter"
             :globalFilterFields="['cl2desc']"
             :value="requestStockListDetails"
-            tableStyle="min-width: 50rem"
             class="p-datatable-sm"
             paginator
             :rows="7"
           >
             <template #header>
-              <div class="flex justify-content-end">
+              <div class="flex">
                 <span class="p-input-icon-left">
                   <i class="pi pi-search" />
                   <InputText
@@ -215,14 +181,17 @@
               header="REQUESTED QTY"
               sortable
             ></Column>
-            <Column header="">
+            <Column
+              field="approved_qty"
+              header="APPROVE QTY"
+            >
               <template #body="slotProps">
-                <Button
-                  icon="pi pi-times"
-                  rounded
-                  text
-                  severity="danger"
-                  @click="removeFromRequestContainer(slotProps.data)"
+                <InputText
+                  id="quantity"
+                  v-model.trim="slotProps.data.approved_qty"
+                  required="true"
+                  autofocus
+                  type="number"
                 />
               </template>
             </Column>
@@ -535,6 +504,7 @@ export default {
           cl2comb: e.cl2comb,
           cl2desc: e.item_details.cl2desc,
           requested_qty: e.requested_qty,
+          approved_qty: e.approved_qty,
         });
       });
     },
