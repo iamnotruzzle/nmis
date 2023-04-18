@@ -33,16 +33,11 @@
               <span class="p-input-icon-left mr-2">
                 <i class="pi pi-search" />
                 <InputText
+                  class="w-20rem"
                   v-model="search"
-                  placeholder="Search requestor or item"
+                  placeholder="Search requested by, location or item"
                 />
               </span>
-              <Button
-                label="Request stocks"
-                icon="pi pi-plus"
-                iconPos="right"
-                @click="openCreateRequestStocksDialog"
-              />
             </div>
           </div>
         </template>
@@ -91,26 +86,12 @@
           </template>
         </Column>
         <Column
-          header="Action"
+          field="requested_at"
+          header="REQUESTED AT"
           style="min-width: 12rem"
         >
-          <template #body="slotProps">
-            <Button
-              icon="pi pi-pencil"
-              class="mr-1"
-              rounded
-              text
-              severity="warning"
-              @click="editRequestedStock(slotProps.data)"
-            />
-
-            <Button
-              icon="pi pi-trash"
-              rounded
-              text
-              severity="danger"
-              @click="confirmDeleteItem(slotProps.data)"
-            />
+          <template #body="{ data }">
+            {{ data.requested_at }}
           </template>
         </Column>
         <template #expansion="slotProps">
@@ -133,6 +114,29 @@
                 field="requested_qty"
                 header="Requested qty"
               ></Column>
+              <Column
+                header="Action"
+                style="min-width: 12rem"
+              >
+                <template #body="slotProps">
+                  <Button
+                    icon="pi pi-pencil"
+                    class="mr-1"
+                    rounded
+                    text
+                    severity="warning"
+                    @click="editRequestedStock(slotProps.data)"
+                  />
+
+                  <Button
+                    icon="pi pi-trash"
+                    rounded
+                    text
+                    severity="danger"
+                    @click="confirmDeleteItem(slotProps.data)"
+                  />
+                </template>
+              </Column>
             </DataTable>
           </div>
         </template>
@@ -416,6 +420,7 @@ export default {
             e.requested_by_details.middlname +
             ' ' +
             e.requested_by_details.lastname,
+          requested_at: e.requested_at_details.wardname,
           created_at: e.created_at,
           request_stocks_details: e.request_stocks_details,
         });

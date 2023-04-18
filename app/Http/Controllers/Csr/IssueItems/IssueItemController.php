@@ -30,15 +30,14 @@ class IssueItemController extends Controller
             ->orderBy('cl2desc', 'ASC')
             ->get(['cl2comb', 'cl2desc']);
 
-        // TODO, requestStocks query has 2 where clause on location.
-        // FIX the query where it only needs to use 1 where location instead of 2
-        // to get the requested stocks based on the auth's current login locations
         $requestedStocks = RequestStocks::with(['requested_at_details', 'requested_by_details', 'approved_by_details', 'request_stocks_details.item_details'])
-            ->where('location', '=', $authWardcode->wardcode)
             ->whereHas('requested_by_details', function ($q) use ($searchString) {
                 $q->where('firstname', 'LIKE', '%' . $searchString . '%')
                     ->orWhere('middlename', 'LIKE', '%' . $searchString . '%')
                     ->orWhere('lastname', 'LIKE', '%' . $searchString . '%');
+            })
+            ->orWhereHas('requested_at_details', function ($q) use ($searchString) {
+                $q->where('wardname', 'LIKE', '%' . $searchString . '%');
             })
             ->orWhereHas('request_stocks_details.item_details', function ($q) use ($searchString) {
                 $q->where('cl2desc', 'LIKE', '%' . $searchString . '%');
@@ -55,7 +54,6 @@ class IssueItemController extends Controller
                     $query->whereDate('created_at', '<=', $value);
                 }
             )
-            ->where('location', '=', $authWardcode->wardcode)
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
