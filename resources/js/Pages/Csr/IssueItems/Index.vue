@@ -416,7 +416,7 @@ export default {
             e.requested_by_details.middlname +
             ' ' +
             e.requested_by_details.lastname,
-          created_at: moment.tz(e.created_at, 'Asia/Manila').format('LL'),
+          created_at: e.created_at,
           request_stocks_details: e.request_stocks_details,
         });
       });

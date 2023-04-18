@@ -60,7 +60,7 @@ class IssueItemController extends Controller
             ->paginate(15);
 
 
-        return Inertia::render('Wards/Stocks/Index', [
+        return Inertia::render('Csr/IssueItems/Index', [
             'items' => $items,
             'requestedStocks' => $requestedStocks,
             'authWardcode' => $authWardcode,
