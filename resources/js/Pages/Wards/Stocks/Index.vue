@@ -133,6 +133,10 @@
                 field="requested_qty"
                 header="Requested qty"
               ></Column>
+              <Column
+                field="approved_qty"
+                header="Approved qty"
+              ></Column>
             </DataTable>
           </div>
         </template>
