@@ -100,6 +100,7 @@
         >
           <template #body="slotProps">
             <Button
+              v-if="slotProps.data.status != 'FILLED'"
               icon="pi pi-plus"
               class="mr-1"
               rounded
@@ -107,8 +108,8 @@
               severity="primary"
               @click="openCreateRequestStocksDialog(slotProps.data)"
             />
-
             <Button
+              v-else
               icon="pi pi-pencil"
               class="mr-1"
               rounded
@@ -137,6 +138,10 @@
               <Column
                 field="requested_qty"
                 header="Requested qty"
+              ></Column>
+              <Column
+                field="approved_qty"
+                header="Approved qty"
               ></Column>
             </DataTable>
           </div>
@@ -233,38 +238,6 @@
           />
         </template>
       </Dialog>
-
-      <!-- Delete confirmation dialog -->
-      <Dialog
-        v-model:visible="deleteItemDialog"
-        :style="{ width: '450px' }"
-        header="Confirm"
-        :modal="true"
-        dismissableMask
-      >
-        <div class="flex align-items-center justify-content-center">
-          <i
-            class="pi pi-exclamation-triangle mr-3"
-            style="font-size: 2rem"
-          />
-          <span v-if="form">Are you sure you want to delete this request?</span>
-        </div>
-        <template #footer>
-          <Button
-            label="No"
-            icon="pi pi-times"
-            class="p-button-text"
-            @click="deleteItemDialog = false"
-          />
-          <Button
-            label="Yes"
-            icon="pi pi-check"
-            severity="danger"
-            text
-            @click="deleteItem"
-          />
-        </template>
-      </Dialog>
     </div>
   </app-layout>
 </template>
@@ -323,7 +296,6 @@ export default {
       requestStockId: null,
       isUpdate: false,
       createRequestStocksDialog: false,
-      deleteItemDialog: false,
       search: '',
       options: {},
       params: {},
@@ -563,40 +535,18 @@ export default {
         });
       }
     },
-    confirmDeleteItem(item) {
-      this.requestStockId = item.id;
-      this.deleteItemDialog = true;
-    },
-    deleteItem() {
-      this.form.delete(route('issueitems.destroy', this.requestStockId), {
-        preserveScroll: true,
-        onSuccess: () => {
-          this.requestStockList = [];
-          this.deleteItemDialog = false;
-          this.requestStockId = null;
-          this.form.clearErrors();
-          this.form.reset();
-          this.updateData();
-          this.deletedMsg();
-        },
-      });
-    },
     cancel() {
       this.requestStockId = null;
       this.isUpdate = false;
       this.createRequestStocksDialog = false;
       this.form.reset();
       this.form.clearErrors();
-      //   this.storeRequestedStocksInContainer();
     },
     createdMsg() {
-      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Stock request created', life: 3000 });
+      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Issued item.', life: 3000 });
     },
     updatedMsg() {
-      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Stock request updated', life: 3000 });
-    },
-    deletedMsg() {
-      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Stock request deleted', life: 3000 });
+      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Issued item updated.', life: 3000 });
     },
     getLocalDateString(utcStr) {
       const date = new Date(utcStr);
