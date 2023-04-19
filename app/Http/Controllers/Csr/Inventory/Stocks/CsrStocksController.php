@@ -73,6 +73,7 @@ class CsrStocksController extends Controller
 
     public function store(Request $request)
     {
+        // TODO make batch_no unique
 
         $request->validate([
             'batch_no' => 'required',

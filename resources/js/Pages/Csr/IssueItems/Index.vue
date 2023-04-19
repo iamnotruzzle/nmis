@@ -100,11 +100,11 @@
         >
           <template #body="slotProps">
             <Button
-              icon="pi pi-pencil"
+              icon="pi pi-plus"
               class="mr-1"
               rounded
               text
-              severity="info"
+              severity="primary"
               @click="openCreateRequestStocksDialog(slotProps.data)"
             />
 
@@ -115,14 +115,6 @@
               text
               severity="warning"
               @click="editRequestedStock(slotProps.data)"
-            />
-
-            <Button
-              icon="pi pi-trash"
-              rounded
-              text
-              severity="danger"
-              @click="confirmDeleteItem(slotProps.data)"
             />
           </template>
         </Column>
@@ -350,7 +342,6 @@ export default {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       form: this.$inertia.form({
-        isUpdate: false,
         request_stocks_id: null,
         location: null,
         requested_by: null,
@@ -518,7 +509,6 @@ export default {
       this.form.request_stocks_id = item.id;
 
       this.isUpdate = true;
-      this.form.isUpdate = true;
       this.createRequestStocksDialog = true;
       this.requestStockId = item.id;
 
