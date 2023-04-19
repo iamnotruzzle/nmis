@@ -180,7 +180,10 @@
             <Column
               field="requested_qty"
               header="REQUESTED QTY"
-              sortable
+            ></Column>
+            <Column
+              field="stock_qty"
+              header="Total stock"
             ></Column>
             <Column
               field="approved_qty"
@@ -190,9 +193,11 @@
                 <InputText
                   id="quantity"
                   v-model.trim="slotProps.data.approved_qty"
+                  v-model="app_qty_checker"
                   required="true"
                   autofocus
                   type="number"
+                  :class="{ 'p-invalid': slotProps.data.approved_qty > slotProps.data.stock_qty }"
                 />
               </template>
             </Column>
@@ -214,7 +219,7 @@
             severity="warning"
             text
             type="submit"
-            :disabled="form.processing"
+            :disabled="disabled"
             @click="submit"
           />
           <Button
@@ -223,7 +228,7 @@
             icon="pi pi-check"
             text
             type="submit"
-            :disabled="form.processing"
+            :disabled="disabled"
             @click="submit"
           />
         </template>
@@ -330,6 +335,8 @@ export default {
       requestStockListDetailsFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
+      disabled: true,
+      app_qty_checker: null,
       requestStockListDetails: [],
       item: null,
       cl2desc: null,
@@ -436,6 +443,7 @@ export default {
       });
     },
     openCreateRequestStocksDialog(item) {
+      console.log(item);
       this.form.clearErrors();
       this.form.reset();
       this.form.request_stocks_id = item.id;
@@ -451,6 +459,9 @@ export default {
           cl2desc: e.item_details.cl2desc,
           requested_qty: e.requested_qty,
           approved_qty: e.approved_qty,
+          stock_qty: e.stocks.reduce((accumulator, object) => {
+            return Number(accumulator) + Number(object.quantity);
+          }, 0),
         });
       });
     },
@@ -626,6 +637,18 @@ export default {
         this.to = null;
       }
       this.updateData();
+    },
+    app_qty_checker: function (val) {
+      for (let i = 0; i < this.requestStockListDetails.length; i++) {
+        const e = this.requestStockListDetails[i];
+
+        if (e.approved_qty == null || e.approved_qty > e.stock_qty || val == '') {
+          this.disabled = true;
+          break;
+        } else {
+          this.disabled = false;
+        }
+      }
     },
   },
 };

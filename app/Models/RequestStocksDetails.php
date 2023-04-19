@@ -28,4 +28,9 @@ class RequestStocksDetails extends Model
     {
         return $this->hasOne(Item::class, 'cl2comb', 'cl2comb');
     }
+
+    public function stocks()
+    {
+        return $this->hasMany(CsrStocks::class, 'cl2comb', 'cl2comb');
+    }
 }

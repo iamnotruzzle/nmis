@@ -32,7 +32,13 @@ class IssueItemController extends Controller
             ->orderBy('cl2desc', 'ASC')
             ->get(['cl2comb', 'cl2desc']);
 
-        $requestedStocks = RequestStocks::with(['requested_at_details', 'requested_by_details', 'approved_by_details', 'request_stocks_details.item_details'])
+        $requestedStocks = RequestStocks::with([
+            'requested_at_details',
+            'requested_by_details',
+            'approved_by_details',
+            'request_stocks_details.item_details',
+            'request_stocks_details.stocks'
+        ])
             ->whereHas('requested_by_details', function ($q) use ($searchString) {
                 $q->where('firstname', 'LIKE', '%' . $searchString . '%')
                     ->orWhere('middlename', 'LIKE', '%' . $searchString . '%')
@@ -69,7 +75,7 @@ class IssueItemController extends Controller
 
     public function store(Request $request)
     {
-        // dd('store');
+        dd($request);
 
         $requestStocksID = $request->request_stocks_id;
 
@@ -80,24 +86,20 @@ class IssueItemController extends Controller
 
         // a block to check if the remaining stocks is enough
         // for the requested stock
-        foreach ($requestStocksContainer as $rsc) {
+        // foreach ($requestStocksContainer as $rsc) {
+        //     // check current stock of the item
+        //     $current_stock = CsrStocks::where('cl2comb', $rsc['cl2comb'])
+        //         ->sum('quantity');
 
-            // update the approved_qty in the RequestStocksDetails table
-            $requestStockDetails = RequestStocksDetails::where('id', $rsc['request_stocks_details_id'])->first();
-            $requestStockDetails->update([
-                'approved_qty' => $rsc['approved_qty']
-            ]);
-
-            // check current stock of the item
-            $current_stock = CsrStocks::where('cl2comb', $rsc['cl2comb'])
-                ->sum('quantity');
-
-            // check the current value of issue_qty after the loop
-            $remaining_qty_to_be_issued = $rsc['approved_qty'];
-            if ($current_stock < $remaining_qty_to_be_issued) {
-                return redirect()->back()->with('message', true);
-            }
-        }
+        //     // check the current value of issue_qty after the loop
+        //     $remaining_qty_to_be_issued = $rsc['approved_qty'];
+        //     if ($current_stock < $remaining_qty_to_be_issued) {
+        //         return redirect()->back()->with([
+        //             'message' => 'Not enough stock.'
+        //         ]);
+        //         // return redirect()->route('issueitems.index')->with('message', 'Not enough stock.');
+        //     }
+        // }
 
         foreach ($requestStocksContainer as $rsc) {
             // check current stock of the item
