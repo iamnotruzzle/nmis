@@ -447,7 +447,7 @@ export default {
           return 'primary';
 
         case 'FILLED':
-          return 'success';
+          return 'info';
 
         case 'RECEIVED':
           return 'success';

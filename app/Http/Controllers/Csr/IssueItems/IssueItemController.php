@@ -8,6 +8,7 @@ use App\Models\Item;
 use App\Models\RequestStocks;
 use App\Models\RequestStocksDetails;
 use App\Models\WardsStocks;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -19,6 +20,8 @@ class IssueItemController extends Controller
     public function index(Request $request)
     {
         $searchString = $request->search;
+        $from = $request->from;
+        $to = $request->to;
 
         // get auth wardcode
         $authWardcode = DB::table('csrw_users')
@@ -53,18 +56,17 @@ class IssueItemController extends Controller
             ->when(
                 $request->from,
                 function ($query, $value) {
-                    $query->whereDate('created_at', '>=', $value);
+                    $query->whereDate('created_at', '>=', Carbon::parse($value)->setTimezone('Asia/Manila'));
                 }
             )
             ->when(
                 $request->to,
                 function ($query, $value) {
-                    $query->whereDate('created_at', '<=', $value);
+                    $query->whereDate('created_at', '<=', Carbon::parse($value)->setTimezone('Asia/Manila'));
                 }
             )
             ->orderBy('created_at', 'desc')
             ->paginate(15);
-
 
         return Inertia::render('Csr/IssueItems/Index', [
             'items' => $items,
