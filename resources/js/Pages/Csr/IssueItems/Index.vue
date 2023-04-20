@@ -638,11 +638,20 @@ export default {
       for (let i = 0; i < this.requestStockListDetails.length; i++) {
         const e = this.requestStockListDetails[i];
 
-        if (e.approved_qty == null || e.approved_qty > e.stock_qty || val == '') {
-          this.disabled = true;
-          break;
+        if (this.isUpdate) {
+          if (e.approved_qty == null || e.approved_qty > e.stock_w_approved || val == '') {
+            this.disabled = true;
+            break;
+          } else {
+            this.disabled = false;
+          }
         } else {
-          this.disabled = false;
+          if (e.approved_qty == null || e.approved_qty > e.stock_qty || val == '') {
+            this.disabled = true;
+            break;
+          } else {
+            this.disabled = false;
+          }
         }
       }
     },
