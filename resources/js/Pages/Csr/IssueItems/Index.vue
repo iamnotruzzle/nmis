@@ -35,7 +35,7 @@
                 <InputText
                   class="w-20rem"
                   v-model="search"
-                  placeholder="Search requested by, location or item"
+                  placeholder="Search requested at"
                 />
               </span>
             </div>

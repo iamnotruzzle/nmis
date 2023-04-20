@@ -34,7 +34,7 @@
                 <i class="pi pi-search" />
                 <InputText
                   v-model="search"
-                  placeholder="Search requestor or item"
+                  placeholder="Search requested by"
                 />
               </span>
               <Button

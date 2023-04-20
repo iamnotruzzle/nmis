@@ -35,6 +35,7 @@ class IssueItemController extends Controller
             ->orderBy('cl2desc', 'ASC')
             ->get(['cl2comb', 'cl2desc']);
 
+        // TODO fix $requestedStocks where when() is not working when whereHas() is 2 or more
         $requestedStocks = RequestStocks::with([
             'requested_at_details',
             'requested_by_details',
@@ -42,17 +43,17 @@ class IssueItemController extends Controller
             'request_stocks_details.item_details',
             'request_stocks_details.stocks'
         ])
-            ->whereHas('requested_by_details', function ($q) use ($searchString) {
-                $q->where('firstname', 'LIKE', '%' . $searchString . '%')
-                    ->orWhere('middlename', 'LIKE', '%' . $searchString . '%')
-                    ->orWhere('lastname', 'LIKE', '%' . $searchString . '%');
-            })
-            ->orWhereHas('requested_at_details', function ($q) use ($searchString) {
+            ->whereHas('requested_at_details', function ($q) use ($searchString) {
                 $q->where('wardname', 'LIKE', '%' . $searchString . '%');
             })
-            ->orWhereHas('request_stocks_details.item_details', function ($q) use ($searchString) {
-                $q->where('cl2desc', 'LIKE', '%' . $searchString . '%');
-            })
+            // ->orWhereHas('requested_by_details', function ($q) use ($searchString) {
+            //     $q->where('firstname', 'LIKE', '%' . $searchString . '%')
+            //         ->orWhere('middlename', 'LIKE', '%' . $searchString . '%')
+            //         ->orWhere('lastname', 'LIKE', '%' . $searchString . '%');
+            // })
+            // ->orWhereHas('request_stocks_details.item_details', function ($q) use ($searchString) {
+            //     $q->where('cl2desc', 'LIKE', '%' . $searchString . '%');
+            // })
             ->when(
                 $request->from,
                 function ($query, $value) {
@@ -67,6 +68,7 @@ class IssueItemController extends Controller
             )
             ->orderBy('created_at', 'desc')
             ->paginate(15);
+
 
         return Inertia::render('Csr/IssueItems/Index', [
             'items' => $items,

@@ -33,6 +33,7 @@ class RequestStocksController extends Controller
         // TODO, requestStocks query has 2 where clause on location.
         // FIX the query where it only needs to use 1 where location instead of 2
         // to get the requested stocks based on the auth's current login locations
+        // TODO FIX $requestedStocks where when() is not working when whereHas() is 2 or more
         $requestedStocks = RequestStocks::with(['requested_at_details', 'requested_by_details', 'approved_by_details', 'request_stocks_details.item_details'])
             ->where('location', '=', $authWardcode->wardcode)
             ->whereHas('requested_by_details', function ($q) use ($searchString) {
@@ -40,9 +41,9 @@ class RequestStocksController extends Controller
                     ->orWhere('middlename', 'LIKE', '%' . $searchString . '%')
                     ->orWhere('lastname', 'LIKE', '%' . $searchString . '%');
             })
-            ->orWhereHas('request_stocks_details.item_details', function ($q) use ($searchString) {
-                $q->where('cl2desc', 'LIKE', '%' . $searchString . '%');
-            })
+            // ->orWhereHas('request_stocks_details.item_details', function ($q) use ($searchString) {
+            //     $q->where('cl2desc', 'LIKE', '%' . $searchString . '%');
+            // })
             ->when(
                 $request->from,
                 function ($query, $value) {
