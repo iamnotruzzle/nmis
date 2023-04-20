@@ -77,6 +77,18 @@
           </template>
         </Column>
         <Column
+          field="status"
+          header="STATUS"
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            <Tag
+              :value="data.status"
+              :severity="getSeverity(data.status)"
+            />
+          </template>
+        </Column>
+        <Column
           field="requested_by"
           header="REQUESTED BY"
           style="min-width: 12rem"
@@ -380,8 +392,8 @@ export default {
     tzone(date) {
       return moment.tz(date, 'Asia/Manila').format('LL');
     },
-    getSeverity(item) {
-      switch (item.status) {
+    getSeverity(status) {
+      switch (status) {
         case 'REQUESTED':
           return 'primary';
 
