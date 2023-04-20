@@ -199,6 +199,16 @@
               header="REQUESTED QTY"
             ></Column>
             <Column
+              v-if="isUpdate"
+              field="stock_qty"
+              header="Total stock including approved qty"
+            >
+              <template #body="{ data }">
+                {{ data.stock_w_approved }}
+              </template>
+            </Column>
+            <Column
+              v-else
               field="stock_qty"
               header="Total stock"
             ></Column>
@@ -208,13 +218,28 @@
             >
               <template #body="slotProps">
                 <InputText
+                  v-if="isUpdate"
                   id="quantity"
                   v-model.trim="slotProps.data.approved_qty"
                   v-model="app_qty_checker"
                   required="true"
                   autofocus
                   type="number"
-                  :class="{ 'p-invalid': slotProps.data.approved_qty > slotProps.data.stock_qty }"
+                  :class="{
+                    'p-invalid': slotProps.data.approved_qty > slotProps.data.stock_w_approved,
+                  }"
+                />
+                <InputText
+                  v-else
+                  id="quantity"
+                  v-model.trim="slotProps.data.approved_qty"
+                  v-model="app_qty_checker"
+                  required="true"
+                  autofocus
+                  type="number"
+                  :class="{
+                    'p-invalid': slotProps.data.approved_qty > slotProps.data.stock_qty,
+                  }"
                 />
               </template>
             </Column>
@@ -514,6 +539,15 @@ export default {
           cl2desc: e.item_details.cl2desc,
           requested_qty: e.requested_qty,
           approved_qty: e.approved_qty,
+          staticApproved_qty: e.approved_qty,
+          stock_w_approved:
+            Number(e.approved_qty) +
+            e.stocks.reduce((accumulator, object) => {
+              return Number(accumulator) + Number(object.quantity);
+            }, 0),
+          stock_qty: e.stocks.reduce((accumulator, object) => {
+            return Number(accumulator) + Number(object.quantity);
+          }, 0),
         });
       });
       //   console.log(this.requestStockListDetails);
