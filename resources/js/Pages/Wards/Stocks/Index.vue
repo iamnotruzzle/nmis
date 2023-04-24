@@ -350,6 +350,7 @@ export default {
     authWardcode: Object,
     items: Object,
     requestedStocks: Object,
+    currentWardStocks: Object,
   },
   data() {
     return {
@@ -370,6 +371,7 @@ export default {
       to: null,
       itemsList: [],
       requestStockList: [],
+      currentWardStocksList: [],
       // stock list details
       requestStockListDetailsFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -400,9 +402,10 @@ export default {
     this.rows = this.requestedStocks.per_page;
   },
   mounted() {
-    // console.log(this.requestedStocks);
+    // console.log(this.currentWardStocks);
     this.storeItemsInController();
     this.storeRequestedStocksInContainer();
+    this.storeCurrentWardStocksInContainer();
 
     this.loading = false;
   },
@@ -438,7 +441,17 @@ export default {
           request_stocks_details: e.request_stocks_details,
         });
       });
-      //   console.log(this.requestStockList);
+    },
+    // store current stocks
+    storeCurrentWardStocksInContainer() {
+      //   console.log('current ward stocks: ', this.currentWardStocks);
+      this.currentWardStocks.forEach((e) => {
+        // console.log(e);
+        this.currentWardStocksList.push({
+          item: e.cl2desc,
+          quantity: e.quantity,
+        });
+      });
     },
     tzone(date) {
       return moment.tz(date, 'Asia/Manila').format('LL');

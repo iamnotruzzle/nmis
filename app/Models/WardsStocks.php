@@ -43,4 +43,9 @@ class WardsStocks extends Model
     {
         return $this->hasOne(Location::class, 'location', 'wardcode');
     }
+
+    public function item_details()
+    {
+        return $this->hasOne(Item::class, 'cl2comb', 'cl2comb');
+    }
 }

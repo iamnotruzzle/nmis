@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Item;
 use App\Models\RequestStocks;
 use App\Models\RequestStocksDetails;
+use App\Models\WardsStocks;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -60,11 +61,19 @@ class RequestStocksController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
+        $currentWardStocks =
+            DB::table('csrw_wards_stocks')
+            ->join('hclass2', 'csrw_wards_stocks.cl2comb', '=', 'hclass2.cl2comb')
+            ->select('hclass2.cl2desc', DB::raw('SUM(quantity) as quantity'))
+            ->where('location', $authWardcode->wardcode)
+            ->groupBy('hclass2.cl2desc')
+            ->get();
 
         return Inertia::render('Wards/Stocks/Index', [
             'items' => $items,
             'requestedStocks' => $requestedStocks,
             'authWardcode' => $authWardcode,
+            'currentWardStocks' => $currentWardStocks,
         ]);
     }
 
