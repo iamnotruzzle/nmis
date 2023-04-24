@@ -156,6 +156,63 @@
         </template>
       </DataTable>
 
+      <!-- current ward stocks -->
+      <DataTable
+        class="p-datatable-sm mt-8"
+        dataKey="id"
+        v-model:filters="currentWardStocksFilter"
+        :value="currentWardStocksList"
+        paginator
+        :rows="10"
+        :rowsPerPageOptions="[10, 30, 50]"
+        removableSort
+        sortField="item"
+        :sortOrder="1"
+        filterDisplay="row"
+        showGridlines
+        :loading="loading"
+      >
+        <template #header>
+          <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+            <span class="text-xl text-900 font-bold">Current stocks</span>
+            <div>
+              <span class="p-input-icon-left mr-2">
+                <i class="pi pi-search" />
+                <span class="p-input-icon-left">
+                  <i class="pi pi-search" />
+                  <InputText
+                    v-model="currentWardStocksFilter['global'].value"
+                    placeholder="Search item"
+                  />
+                </span>
+              </span>
+            </div>
+          </div>
+        </template>
+        <template #empty> No item found. </template>
+        <template #loading> Loading item data. Please wait. </template>
+        <Column
+          field="item"
+          header="Item"
+          sortable
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.item }}
+          </template>
+        </Column>
+        <Column
+          field="quantity"
+          header="Quantity"
+          sortable
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.quantity }}
+          </template>
+        </Column>
+      </DataTable>
+
       <!-- @hide="clickOutsideDialog" -->
       <!-- create & edit dialog -->
       <Dialog
@@ -374,6 +431,9 @@ export default {
       currentWardStocksList: [],
       // stock list details
       requestStockListDetailsFilter: {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      },
+      currentWardStocksFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       requestStockListDetails: [],
