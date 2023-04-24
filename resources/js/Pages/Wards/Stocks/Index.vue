@@ -108,6 +108,7 @@
         >
           <template #body="slotProps">
             <Button
+              v-if="slotProps.data.status == 'REQUESTED'"
               icon="pi pi-pencil"
               class="mr-1"
               rounded
@@ -117,6 +118,7 @@
             />
 
             <Button
+              v-if="slotProps.data.status == 'REQUESTED'"
               icon="pi pi-trash"
               rounded
               text
