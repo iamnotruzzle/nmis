@@ -68,7 +68,7 @@ class RequestStocksController extends Controller
             ->join('csrw_request_stocks', 'csrw_wards_stocks.request_stocks_id', '=', 'csrw_request_stocks.id')
             ->select('hclass2.cl2desc', DB::raw('SUM(quantity) as quantity'))
             ->whereRaw("csrw_wards_stocks.location = '" . $authWardcode->wardcode . "' AND
-                      csrw_request_stocks.status = 'DELIVERED'")
+                      csrw_request_stocks.status = 'RECEIVED'")
             ->groupBy('hclass2.cl2desc')
             ->get();
 
@@ -121,6 +121,17 @@ class RequestStocksController extends Controller
                 ]);
             }
         }
+
+        return Redirect::route('requeststocks.index');
+    }
+
+    public function updatedeliverystatus(RequestStocks $requeststock, Request $request)
+    {
+        // update status
+        RequestStocks::where('id', $request->request_stock_id)
+            ->update([
+                'status' => $request->status
+            ]);
 
         return Redirect::route('requeststocks.index');
     }

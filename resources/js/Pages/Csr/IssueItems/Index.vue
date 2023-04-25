@@ -425,7 +425,7 @@ export default {
         case 'FILLED':
           return 'info';
 
-        case 'DELIVERED':
+        case 'RECEIVED':
           return 'success';
 
         default:

@@ -38,3 +38,4 @@ Route::resource('csrstocks', CsrStocksController::class)->middleware(['auth:sanc
 Route::resource('requeststocks', RequestStocksController::class)->middleware(['auth:sanctum', 'verified'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('issueitems', IssueItemController::class)->middleware(['auth:sanctum', 'verified'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('updatestatus', UpdateRequestStockStatus::class)->middleware(['auth:sanctum', 'verified'])->only(['update']);
+Route::put('requeststocks', [RequestStocksController::class, 'updatedeliverystatus'])->name('requeststocks.updatedeliverystatus');;
