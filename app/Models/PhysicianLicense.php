@@ -20,4 +20,9 @@ class PhysicianLicense extends Model
         'employeeid',
         'empstat'
     ];
+
+    public function userDetail()
+    {
+        return $this->hasOne(UserDetail::class, 'employeeid', 'employeeid');
+    }
 }

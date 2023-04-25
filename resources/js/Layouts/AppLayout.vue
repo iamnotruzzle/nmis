@@ -91,6 +91,13 @@ export default {
               comp: 'Wards/Stocks/Index',
             },
             {
+              label: 'W-Patients',
+              icon: 'pi pi-fw pi-home',
+              to: 'wardspatients',
+              prefix: 'wardspatients',
+              comp: 'Wards/Patients/Index',
+            },
+            {
               label: 'Users',
               icon: 'pi pi-fw pi-home',
               to: 'users',

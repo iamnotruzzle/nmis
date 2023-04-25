@@ -36,4 +36,19 @@ class DoctorsOrder extends Model
         'dietcode',
         'resultpdf',
     ];
+
+    public function diet()
+    {
+        return $this->hasMany(DietType::class, 'dietcode', 'dietcode');
+    }
+
+    public function admission()
+    {
+        return $this->hasOne(AdmissionLog::class, 'enccode', 'enccode');
+    }
+
+    public function docOrderType()
+    {
+        return $this->hasOne(DoctorsOrderType::class, 'proccode', 'proccode');
+    }
 }

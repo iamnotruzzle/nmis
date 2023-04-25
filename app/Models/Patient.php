@@ -26,4 +26,19 @@ class Patient extends Model
         'patsuffix', // patient suffix
         'patbdate', // patient birth date
     ];
+
+    public function admission()
+    {
+        return $this->hasMany(AdmissionLog::class, 'hpercode', 'hpercode');
+    }
+
+    public function admissionDate()
+    {
+        return $this->hasMany(AdmissionLog::class, 'hpercode', 'hpercode')->where('disdate', null);
+    }
+
+    public function doctorOrder()
+    {
+        return $this->hasMany(DoctorsOrder::class, 'hpercode', 'hpercode')->orderBy('dodate', 'desc');
+    }
 }

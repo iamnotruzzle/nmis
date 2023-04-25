@@ -31,4 +31,14 @@ class RoomType extends Model
         'roombaby',
         'rmtype'
     ];
+
+    public function ward()
+    {
+        return $this->belongsTo(Location::class, 'wardcode', 'wardcode');
+    }
+
+    public function bed()
+    {
+        return $this->hasMany(BedType::class, 'rmintkey', 'rmintkey');
+    }
 }

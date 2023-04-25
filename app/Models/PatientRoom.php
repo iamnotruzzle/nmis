@@ -20,4 +20,24 @@ class PatientRoom extends Model
         'rmvcode',
         'patrmstat'
     ];
+
+    public function patient()
+    {
+        return $this->hasMany(Patient::class, 'hpercode', 'hpercode');
+    }
+
+    public function ward()
+    {
+        return $this->hasMany(Location::class, 'wardcode', 'wardcode');
+    }
+
+    public function room()
+    {
+        return $this->hasMany(RoomType::class, 'rmintkey', 'rmintkey');
+    }
+
+    public function bed()
+    {
+        return $this->hasMany(BedType::class, 'bdintkey', 'bdintkey');
+    }
 }

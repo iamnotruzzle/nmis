@@ -15,13 +15,6 @@ class WardPatientsController extends Controller
     {
         $searchString = $request->search;
 
-        // $sort_by = '';
-        $order_by = $request->order_by;
-
-        if ($request->order_by == '' || $request->order_by == null) {
-            $order_by = 'asc';
-        }
-
         // get auth wardcode
         $authWardcode = DB::table('csrw_users')
             ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
@@ -37,14 +30,13 @@ class WardPatientsController extends Controller
             'patient.doctorOrder.docOrderType',
             'patient.admission:enccode,disdate',
             // 'patient.admissionDate',
-            'patient.admissionDate.physician.hpersonal:employeeid,lastname,firstname,middlename',
-            'patient.admissionDate.physician2.hpersonal:employeeid,lastname,firstname,middlename',
-            'patient.admissionDate.physician3.hpersonal:employeeid,lastname,firstname,middlename',
-            'patient.admissionDate.physician4.hpersonal:employeeid,lastname,firstname,middlename',
+            'patient.admissionDate.physician.userDetail:employeeid,lastname,firstname,middlename',
+            'patient.admissionDate.physician2.userDetail:employeeid,lastname,firstname,middlename',
+            'patient.admissionDate.physician3.userDetail:employeeid,lastname,firstname,middlename',
+            'patient.admissionDate.physician4.userDetail:employeeid,lastname,firstname,middlename',
             // 'patient.admissionDate.doctorOrder',
             'patient.admissionDate.doctorOrder.diet:dietcode,dietdesc',
             'patient.admissionDate.dischargeOrder',
-            'patient.admissionDate.billStat',
             'patient.admissionDate.bmi:enccode,vsweight,vsheight',
             // adding chargeslip makes the response to slow
             // 'patient.admissionDate.chargeSlip',

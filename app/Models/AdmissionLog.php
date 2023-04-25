@@ -23,4 +23,65 @@ class AdmissionLog extends Model
         'licno',
         'admstat',
     ];
+
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class, 'hpercode', 'hpercode');
+    }
+
+    // physician
+    // this was done because hadmlog has many licno #s as foreign keys
+    public function physician()
+    {
+        return $this->hasMany(PhysicianLicense::class, 'licno', 'licnof');
+    }
+    public function physician2()
+    {
+        return $this->hasMany(PhysicianLicense::class, 'licno', 'licno2');
+    }
+    public function physician3()
+    {
+        return $this->hasMany(PhysicianLicense::class, 'licno', 'licno3');
+    }
+    public function physician4()
+    {
+        return $this->hasMany(PhysicianLicense::class, 'licno', 'licno4');
+    }
+    // end physician
+
+    public function doctorOrder()
+    {
+        return $this->hasMany(DoctorsOrder::class, 'enccode', 'enccode')
+            ->where('orcode', 'DIETT')
+            ->where('dostat', 'A');
+    }
+
+    public function dischargeOrder()
+    {
+        return $this->hasMany(DoctorsOrder::class, 'enccode', 'enccode')
+            ->where('orcode', 'DISCH')
+            ->where('dostat', 'A');
+    }
+
+
+    public function bmi()
+    {
+        return $this->hasMany(PatientHeightWeight::class, 'enccode', 'enccode')
+            ->where('othrstat', 'A')
+            ->orderBy('othrdte', 'DESC');
+    }
+
+    public function diet()
+    {
+        return $this->hasMany(DietType::class, 'orcode', 'dietcode');
+    }
+
+
+
+    // public function chargeSlip()
+    // {
+    //     return $this->hasMany(PatientCharge::class, 'enccode', 'enccode')
+    //         // ->where('chargcode', '!=', 'MISC')
+    //         ->orderBy('pcchrgdte', 'ASC');
+    // }
 }
