@@ -95,6 +95,7 @@
               />
               <div>
                 <i
+                  v-if="data.status != 'RECEIVED'"
                   class="pi pi-check"
                   style="color: skyblue"
                   @click="editStatus(data)"
