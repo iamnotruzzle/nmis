@@ -595,7 +595,9 @@ export default {
         onFinish: (visit) => {
           this.totalRecords = this.requestedStocks.total;
           this.requestStockList = [];
+          this.currentWardStocksList = [];
           this.storeRequestedStocksInContainer();
+          this.storeCurrentWardStocksInContainer();
           this.loading = false;
           this.formUpdateStatus.reset();
         },
