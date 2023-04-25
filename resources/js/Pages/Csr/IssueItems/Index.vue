@@ -111,24 +111,26 @@
           style="min-width: 12rem"
         >
           <template #body="slotProps">
-            <Button
-              v-if="slotProps.data.status != 'FILLED'"
-              icon="pi pi-plus"
-              class="mr-1"
-              rounded
-              text
-              severity="primary"
-              @click="openCreateRequestStocksDialog(slotProps.data)"
-            />
-            <Button
-              v-else
-              icon="pi pi-pencil"
-              class="mr-1"
-              rounded
-              text
-              severity="warning"
-              @click="editRequestedStock(slotProps.data)"
-            />
+            <div v-if="slotProps.data.status != 'RECEIVED'">
+              <Button
+                v-if="slotProps.data.status != 'FILLED'"
+                icon="pi pi-plus"
+                class="mr-1"
+                rounded
+                text
+                severity="primary"
+                @click="openCreateRequestStocksDialog(slotProps.data)"
+              />
+              <Button
+                v-else
+                icon="pi pi-pencil"
+                class="mr-1"
+                rounded
+                text
+                severity="warning"
+                @click="editRequestedStock(slotProps.data)"
+              />
+            </div>
           </template>
         </Column>
         <template #expansion="slotProps">
