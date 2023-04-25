@@ -412,6 +412,7 @@
             id="selling_price"
             v-model.trim="formPrice.selling_price"
             required="true"
+            type="number"
             autofocus
             :class="{ 'p-invalid': formPrice.selling_price == '' }"
             @keyup.enter="submitPrice"
@@ -850,3 +851,19 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+/* Remove arrow for input type number */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+/* END Remove arrow for input type number */
+</style>

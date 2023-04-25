@@ -19,7 +19,7 @@ class ItemPriceController extends Controller
         // dd($request);
 
         $request->validate([
-            'selling_price' => 'required|numeric',
+            'selling_price' => 'required|numeric|min:0',
         ]);
 
         $itemPrices = ItemPrices::create([
@@ -35,7 +35,7 @@ class ItemPriceController extends Controller
     {
         // dd($request);
         $request->validate([
-            'selling_price' => 'required|numeric',
+            'selling_price' => 'required|numeric|min:0',
         ]);
 
         $itemprice->update([

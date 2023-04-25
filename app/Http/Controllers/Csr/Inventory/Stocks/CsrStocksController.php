@@ -78,7 +78,7 @@ class CsrStocksController extends Controller
         $request->validate([
             'batch_no' => 'required',
             'cl2comb' => 'required',
-            'quantity' => 'required|numeric',
+            'quantity' => 'required|numeric|min:0',
             'expiration_date' => 'required',
         ]);
 
@@ -99,7 +99,7 @@ class CsrStocksController extends Controller
         $request->validate([
             'batch_no' => 'required',
             'cl2comb' => 'required',
-            'quantity' => 'required|numeric',
+            'quantity' => 'required|numeric|min:0',
             'expiration_date' => 'required',
         ]);
 
