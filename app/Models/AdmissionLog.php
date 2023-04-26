@@ -33,19 +33,19 @@ class AdmissionLog extends Model
     // this was done because hadmlog has many licno #s as foreign keys
     public function physician()
     {
-        return $this->hasMany(PhysicianLicense::class, 'licno', 'licnof');
+        return $this->hasMany(PhysicianLicense::class, 'licno', 'licnof')->with(['userDetail:employeeid,lastname,firstname,middlename']);
     }
     public function physician2()
     {
-        return $this->hasMany(PhysicianLicense::class, 'licno', 'licno2');
+        return $this->hasMany(PhysicianLicense::class, 'licno', 'licno2')->with(['userDetail:employeeid,lastname,firstname,middlename']);
     }
     public function physician3()
     {
-        return $this->hasMany(PhysicianLicense::class, 'licno', 'licno3');
+        return $this->hasMany(PhysicianLicense::class, 'licno', 'licno3')->with(['userDetail:employeeid,lastname,firstname,middlename']);
     }
     public function physician4()
     {
-        return $this->hasMany(PhysicianLicense::class, 'licno', 'licno4');
+        return $this->hasMany(PhysicianLicense::class, 'licno', 'licno4')->with(['userDetail:employeeid,lastname,firstname,middlename']);
     }
     // end physician
 

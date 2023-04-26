@@ -330,6 +330,7 @@ export default {
     AutoComplete,
   },
   props: {
+    patients: Object,
     categories: Object,
     procTypes: Array,
   },
@@ -373,13 +374,14 @@ export default {
   },
   // created will be initialize before mounted
   created() {
-    this.totalRecords = this.categories.total;
-    this.params.page = this.categories.current_page;
-    this.rows = this.categories.per_page;
+    // this.totalRecords = this.categories.total;
+    // this.params.page = this.categories.current_page;
+    // this.rows = this.categories.per_page;
   },
   mounted() {
-    this.storeProcTypesInContainer();
-    this.storeCategoryInContainer();
+    console.log(this.patients);
+    // this.storeProcTypesInContainer();
+    // this.storeCategoryInContainer();
 
     this.loading = false;
   },

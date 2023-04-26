@@ -23,7 +23,8 @@ class PatientRoom extends Model
 
     public function patient()
     {
-        return $this->hasMany(Patient::class, 'hpercode', 'hpercode');
+        // return $this->hasMany(Patient::class, 'hpercode', 'hpercode');
+        return $this->hasMany(Patient::class, 'hpercode', 'hpercode')->with(['admission', 'admissionDate']);
     }
 
     public function ward()

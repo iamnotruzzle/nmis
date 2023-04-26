@@ -34,11 +34,13 @@ class Patient extends Model
 
     public function admissionDate()
     {
-        return $this->hasMany(AdmissionLog::class, 'hpercode', 'hpercode')->where('disdate', null);
+        // return $this->hasMany(AdmissionLog::class, 'hpercode', 'hpercode')->where('disdate', null);
+        return $this->hasMany(AdmissionLog::class, 'hpercode', 'hpercode')->with(['doctorOrder', 'physician', 'physician2', 'physician3', 'physician4', 'dischargeOrder', 'bmi:enccode,vsweight,vsheight'])->where('disdate', null);
     }
 
     public function doctorOrder()
     {
-        return $this->hasMany(DoctorsOrder::class, 'hpercode', 'hpercode')->orderBy('dodate', 'desc');
+        // return $this->hasMany(DoctorsOrder::class, 'hpercode', 'hpercode')->orderBy('dodate', 'desc');
+        return $this->hasMany(DoctorsOrder::class, 'hpercode', 'hpercode')->with(['docOrderType', 'diet:dietcode,dietdesc'])->orderBy('dodate', 'desc');
     }
 }

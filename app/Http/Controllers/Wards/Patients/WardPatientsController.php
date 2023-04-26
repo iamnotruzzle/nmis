@@ -25,19 +25,18 @@ class WardPatientsController extends Controller
 
         $patients = PatientRoom::with([
             // REMOVE SOME RELATIONSHIP BECAUSE IT's ALREADY REDUNDANT
-            // 'patient',
-            // 'patient.doctorOrder',
-            'patient.doctorOrder.docOrderType',
-            'patient.admission:enccode,disdate',
+            // 'patient.doctorOrder.docOrderType',
+            'patient',
+            // 'patient.admission:enccode,disdate',
             // 'patient.admissionDate',
-            'patient.admissionDate.physician.userDetail:employeeid,lastname,firstname,middlename',
-            'patient.admissionDate.physician2.userDetail:employeeid,lastname,firstname,middlename',
-            'patient.admissionDate.physician3.userDetail:employeeid,lastname,firstname,middlename',
-            'patient.admissionDate.physician4.userDetail:employeeid,lastname,firstname,middlename',
+            // 'patient.admissionDate.physician.userDetail:employeeid,lastname,firstname,middlename',
+            // 'patient.admissionDate.physician2.userDetail:employeeid,lastname,firstname,middlename',
+            // 'patient.admissionDate.physician3.userDetail:employeeid,lastname,firstname,middlename',
+            // 'patient.admissionDate.physician4.userDetail:employeeid,lastname,firstname,middlename',
             // 'patient.admissionDate.doctorOrder',
-            'patient.admissionDate.doctorOrder.diet:dietcode,dietdesc',
-            'patient.admissionDate.dischargeOrder',
-            'patient.admissionDate.bmi:enccode,vsweight,vsheight',
+            // 'patient.admissionDate.doctorOrder.diet:dietcode,dietdesc',
+            // 'patient.admissionDate.dischargeOrder',
+            // 'patient.admissionDate.bmi:enccode,vsweight,vsheight',
             // adding chargeslip makes the response to slow
             // 'patient.admissionDate.chargeSlip',
             'ward:wardcode,wardname,wclcode,wardstat',
@@ -59,9 +58,9 @@ class WardPatientsController extends Controller
             ->join('hperson', 'hpatroom.hpercode', '=', 'hperson.hpercode')->orderBy('hperson.patlast', 'ASC')->select('hpatroom.*')
             ->paginate(15);
 
-        dd($patients);
+        // dd($patients);
 
-        return Inertia::render('Ward/Patients/Index', [
+        return Inertia::render('Wards/Patients/Index', [
             'patients' => $patients
         ]);
     }
