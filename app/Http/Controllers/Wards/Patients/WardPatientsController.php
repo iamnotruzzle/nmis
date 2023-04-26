@@ -24,21 +24,9 @@ class WardPatientsController extends Controller
             ->first();
 
         $patients = PatientRoom::with([
-            // REMOVE SOME RELATIONSHIP BECAUSE IT's ALREADY REDUNDANT
-            // 'patient.doctorOrder.docOrderType',
-            'patient',
-            // 'patient.admission:enccode,disdate',
-            // 'patient.admissionDate',
-            // 'patient.admissionDate.physician.userDetail:employeeid,lastname,firstname,middlename',
-            // 'patient.admissionDate.physician2.userDetail:employeeid,lastname,firstname,middlename',
-            // 'patient.admissionDate.physician3.userDetail:employeeid,lastname,firstname,middlename',
-            // 'patient.admissionDate.physician4.userDetail:employeeid,lastname,firstname,middlename',
-            // 'patient.admissionDate.doctorOrder',
-            // 'patient.admissionDate.doctorOrder.diet:dietcode,dietdesc',
-            // 'patient.admissionDate.dischargeOrder',
-            // 'patient.admissionDate.bmi:enccode,vsweight,vsheight',
-            // adding chargeslip makes the response to slow
-            // 'patient.admissionDate.chargeSlip',
+            // when selecting an eager load table,
+            // don't forget to get the foreign key as well
+            'patient:patfirst,patmiddle,patlast,patsuffix,hpercode',
             'ward:wardcode,wardname,wclcode,wardstat',
             'room:rmintkey,wardcode,rmcode,rmname,rmbed,rmstat',
             'bed:bdintkey,wardcode,rmintkey,bdcode,bdname,bdstat'

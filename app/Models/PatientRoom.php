@@ -24,21 +24,21 @@ class PatientRoom extends Model
     public function patient()
     {
         // return $this->hasMany(Patient::class, 'hpercode', 'hpercode');
-        return $this->hasMany(Patient::class, 'hpercode', 'hpercode')->with(['admission', 'admissionDate']);
+        return $this->hasOne(Patient::class, 'hpercode', 'hpercode')->with('admissionDate');
     }
 
     public function ward()
     {
-        return $this->hasMany(Location::class, 'wardcode', 'wardcode');
+        return $this->hasOne(Location::class, 'wardcode', 'wardcode');
     }
 
     public function room()
     {
-        return $this->hasMany(RoomType::class, 'rmintkey', 'rmintkey');
+        return $this->hasOne(RoomType::class, 'rmintkey', 'rmintkey');
     }
 
     public function bed()
     {
-        return $this->hasMany(BedType::class, 'bdintkey', 'bdintkey');
+        return $this->hasOne(BedType::class, 'bdintkey', 'bdintkey');
     }
 }

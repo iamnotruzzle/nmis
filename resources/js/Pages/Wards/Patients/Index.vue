@@ -1,6 +1,6 @@
 <template>
   <app-layout>
-    <Head title="Template - Categories" />
+    <Head title="Template - Patients" />
 
     <div class="card">
       <Toast />
@@ -9,7 +9,7 @@
       <DataTable
         class="p-datatable-sm"
         v-model:filters="filters"
-        :value="categoriesList"
+        :value="patientsList"
         selectionMode="single"
         lazy
         paginator
@@ -24,17 +24,17 @@
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold">Categories</span>
+            <span class="text-xl text-900 font-bold">Patients</span>
             <div>
               <span class="p-input-icon-left mr-2">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="search"
-                  placeholder="Search category"
+                  placeholder="Search patient"
                 />
               </span>
               <Button
-                label="Add category"
+                label="Add patient"
                 icon="pi pi-plus"
                 iconPos="right"
                 @click="openCreateItemDialog"
@@ -42,71 +42,18 @@
             </div>
           </div>
         </template>
-        <template #empty> No category found. </template>
-        <template #loading> Loading category data. Please wait. </template>
+        <template #empty> No patients found. </template>
+        <template #loading> Loading patients data. Please wait. </template>
         <Column
           field="ptcode"
           header="PTCODE"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.ptcode }}
+            {{ data }}
           </template>
         </Column>
-        <Column
-          field="cl1code"
-          header="CL1CODE"
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ data.cl1code }}
-          </template>
-        </Column>
-        <Column
-          field="cl1code"
-          header="CL1COMB"
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ data.cl1comb }}
-          </template>
-        </Column>
-        <Column
-          field="cl1desc"
-          header="CL1DESC"
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ data.cl1desc }}
-          </template>
-        </Column>
-        <Column
-          field="cl1lock"
-          header="CL1LOCK"
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ data.cl1lock }}
-          </template>
-        </Column>
-        <Column
-          field="cl1stat"
-          header="CL1STAT"
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ data.cl1stat }}
-          </template>
-        </Column>
-        <Column
-          field="cl1upsw"
-          header="CL1UPSW"
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ data.cl1upsw }}
-          </template>
-        </Column>
+
         <Column
           header="Action"
           style="min-width: 12rem"
@@ -134,32 +81,14 @@
 
       <!-- create & edit dialog -->
       <Dialog
-        v-model:visible="createCategoryDialog"
+        v-model:visible="createPatientDialog"
         :style="{ width: '450px' }"
-        header="Category Detail"
+        header="Patient Detail"
         :modal="true"
         class="p-fluid"
         @hide="clickOutsideDialog"
         dismissableMask
       >
-        <div class="field">
-          <label for="ptcode">Ptcode</label>
-          <Dropdown
-            v-model.trim="form.ptcode"
-            required="true"
-            :options="procTypesList"
-            optionLabel="ptdesc"
-            optionValue="ptcode"
-            class="w-full mb-3"
-            :class="{ 'p-invalid': form.ptcode == '' }"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.ptcode"
-          >
-            {{ form.errors.ptcode }}
-          </small>
-        </div>
         <div class="field">
           <label for="cl1code">Cl1code</label>
           <InputText
@@ -177,56 +106,7 @@
             {{ form.errors.cl1code }}
           </small>
         </div>
-        <div class="field">
-          <label for="cl1desc">Cl1desc</label>
-          <InputText
-            id="cl1desc"
-            v-model.trim="form.cl1desc"
-            required="true"
-            autofocus
-            :class="{ 'p-invalid': form.cl1desc == '' }"
-            @keyup.enter="submit"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.cl1desc"
-          >
-            {{ form.errors.cl1desc }}
-          </small>
-        </div>
-        <div class="field">
-          <label for="cl1upsw">Cl1upsw</label>
-          <InputText
-            id="cl1upsw"
-            v-model.trim="form.cl1upsw"
-            required="true"
-            autofocus
-            :class="{ 'p-invalid': form.cl1upsw == '' }"
-            @keyup.enter="submit"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.cl1upsw"
-          >
-            {{ form.errors.cl1upsw }}
-          </small>
-        </div>
-        <div class="field">
-          <label for="cl1stat">Cl1stat</label>
-          <Dropdown
-            v-model="form.cl1stat"
-            :options="cl1stats"
-            optionLabel="name"
-            optionValue="value"
-            class="w-full md:w-14rem"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.cl1stat"
-          >
-            {{ form.errors.cl1stat }}
-          </small>
-        </div>
+
         <template #footer>
           <Button
             label="Cancel"
@@ -259,7 +139,7 @@
 
       <!-- Delete confirmation dialog -->
       <Dialog
-        v-model:visible="deleteCategoryDialog"
+        v-model:visible="deletePatientDialog"
         :style="{ width: '450px' }"
         header="Confirm"
         :modal="true"
@@ -279,7 +159,7 @@
             label="No"
             icon="pi pi-times"
             class="p-button-text"
-            @click="deleteCategoryDialog = false"
+            @click="deletePatientDialog = false"
           />
           <Button
             label="Yes"
@@ -331,8 +211,6 @@ export default {
   },
   props: {
     patients: Object,
-    categories: Object,
-    procTypes: Array,
   },
   data() {
     return {
@@ -343,26 +221,15 @@ export default {
       // end paginator
       cl1comb: null,
       isUpdate: false,
-      createCategoryDialog: false,
-      deleteCategoryDialog: false,
+      createPatientDialog: false,
+      deletePatientDialog: false,
       search: '',
       options: {},
       params: {},
-      categoriesList: [],
-      procTypesList: [],
+      patientsList: [],
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
-      cl1stats: [
-        {
-          name: 'ACTIVE',
-          value: 'A',
-        },
-        {
-          name: 'INACTIVE',
-          value: 'I',
-        },
-      ],
       form: this.$inertia.form({
         ptcode: null,
         cl1code: null,
@@ -374,9 +241,9 @@ export default {
   },
   // created will be initialize before mounted
   created() {
-    // this.totalRecords = this.categories.total;
-    // this.params.page = this.categories.current_page;
-    // this.rows = this.categories.per_page;
+    this.totalRecords = this.patients.total;
+    this.params.page = this.patients.current_page;
+    this.rows = this.patients.per_page;
   },
   mounted() {
     console.log(this.patients);
@@ -386,20 +253,12 @@ export default {
     this.loading = false;
   },
   methods: {
-    storeProcTypesInContainer() {
-      this.procTypes.forEach((e) => {
-        this.procTypesList.push({
-          ptcode: e.ptcode,
-          ptdesc: e.ptdesc,
-        });
-      });
-    },
     // use storeCategoryInContainer() function so that every time you make
     // server request such as POST, the data in the table
     // is updated
     storeCategoryInContainer() {
-      this.categories.data.forEach((e) => {
-        this.categoriesList.push({
+      this.patients.data.forEach((e) => {
+        this.patientsList.push({
           cl1code: e.cl1code,
           cl1comb: e.cl1comb,
           cl1desc: e.cl1desc,
@@ -415,15 +274,15 @@ export default {
       this.updateData();
     },
     updateData() {
-      this.categoriesList = [];
+      this.patientsList = [];
       this.loading = true;
 
-      this.$inertia.get('categories', this.params, {
+      this.$inertia.get('wardspatients', this.params, {
         preserveState: true,
         preserveScroll: true,
         onFinish: (visit) => {
-          this.totalRecords = this.categories.total;
-          this.categoriesList = [];
+          this.totalRecords = this.patients.total;
+          this.patientsList = [];
           this.storeCategoryInContainer();
           this.loading = false;
         },
@@ -434,7 +293,7 @@ export default {
       this.form.clearErrors();
       this.form.reset();
       this.cl1comb = null;
-      this.createCategoryDialog = true;
+      this.createPatientDialog = true;
     },
     // emit close dialog
     clickOutsideDialog() {
@@ -442,7 +301,7 @@ export default {
     },
     editCategory(item) {
       this.isUpdate = true;
-      this.createCategoryDialog = true;
+      this.createPatientDialog = true;
       this.cl1comb = item.cl1comb;
       this.form.ptcode = item.ptcode;
       this.form.cl1code = item.cl1code;
@@ -452,22 +311,22 @@ export default {
     },
     submit() {
       if (this.isUpdate) {
-        this.form.put(route('categories.update', this.cl1comb), {
+        this.form.put(route('wardspatients.update', this.cl1comb), {
           preserveScroll: true,
           onSuccess: () => {
             this.cl1comb = null;
-            this.createCategoryDialog = false;
+            this.createPatientDialog = false;
             this.cancel();
             this.updateData();
             this.updatedMsg();
           },
         });
       } else {
-        this.form.post(route('categories.store'), {
+        this.form.post(route('wardspatients.store'), {
           preserveScroll: true,
           onSuccess: () => {
             this.cl1comb = null;
-            this.createCategoryDialog = false;
+            this.createPatientDialog = false;
             this.cancel();
             this.updateData();
             this.createdMsg();
@@ -478,14 +337,14 @@ export default {
     confirmDeleteItem(item) {
       this.cl1comb = item.cl1comb;
       this.form.cl1desc = item.cl1desc;
-      this.deleteCategoryDialog = true;
+      this.deletePatientDialog = true;
     },
     deleteCategory() {
       this.form.delete(route('categories.destroy', this.cl1comb), {
         preserveScroll: true,
         onSuccess: () => {
-          this.categoriesList = [];
-          this.deleteCategoryDialog = false;
+          this.patientsList = [];
+          this.deletePatientDialog = false;
           this.cl1comb = null;
           this.form.clearErrors();
           this.form.reset();
@@ -498,10 +357,10 @@ export default {
     cancel() {
       this.cl1comb = null;
       this.isUpdate = false;
-      this.createCategoryDialog = false;
+      this.createPatientDialog = false;
       this.form.reset();
       this.form.clearErrors();
-      this.categoriesList = [];
+      this.patientsList = [];
       this.storeCategoryInContainer();
     },
     createdMsg() {

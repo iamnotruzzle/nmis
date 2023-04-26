@@ -66,7 +66,7 @@ class AdmissionLog extends Model
 
     public function bmi()
     {
-        return $this->hasMany(PatientHeightWeight::class, 'enccode', 'enccode')
+        return $this->hasOne(PatientHeightWeight::class, 'enccode', 'enccode')
             ->where('othrstat', 'A')
             ->orderBy('othrdte', 'DESC');
     }
