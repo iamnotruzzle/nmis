@@ -101,6 +101,12 @@
           style="min-width: 12rem"
         >
         </Column>
+        <Column
+          field="physician"
+          header="Physician"
+          style="min-width: 12rem"
+        >
+        </Column>
 
         <Column
           header="Action"
@@ -325,6 +331,48 @@ export default {
         return bmi.toFixed(2);
       }
     },
+    setPhysician(physician, physician2, physician3, physician4) {
+      console.log(physician3);
+      if (physician != null) {
+        return (
+          physician.user_detail.lastname +
+          ', ' +
+          physician.user_detail.firstname +
+          ' ' +
+          physician.user_detail.middlename
+        );
+      }
+
+      if (physician2 != null) {
+        return (
+          physician2.user_detail.lastname +
+          ', ' +
+          physician2.user_detail.firstname +
+          ' ' +
+          physician2.user_detail.middlename
+        );
+      }
+
+      if (physician3 != null) {
+        return (
+          physician3.user_detail.lastname +
+          ', ' +
+          physician3.user_detail.firstname +
+          ' ' +
+          physician3.user_detail.middlename
+        );
+      }
+
+      if (physician4 != null) {
+        return (
+          physician4.user_detail.lastname +
+          ', ' +
+          physician4.user_detail.firstname +
+          ' ' +
+          physician4.user_detail.middlename
+        );
+      }
+    },
     // use storePatientsInContainer() function so that every time you make
     // server request such as POST, the data in the table
     // is updated
@@ -342,12 +390,12 @@ export default {
           cm: this.checkIfBmiExistForHeight(e.patient.admission_date.bmi),
           bmi: this.calculateBmi(e.patient.admission_date.bmi.vsweight, e.patient.admission_date.bmi.vsheight),
           room_bed: e.room.rmname + ' - ' + e.bed.bdname,
-          //   physician:
-          //     e.admission_date.physician3.user_detail.lastname +
-          //     ', ' +
-          //     e.admission_date.physician3.user_detail.firstname +
-          //     ' ' +
-          //     e.admission_date.physician3.user_detail.middlename,
+          physician: this.setPhysician(
+            e.patient.admission_date.physician,
+            e.patient.admission_date.physician2,
+            e.patient.admission_date.physician3,
+            e.patient.admission_date.physician4
+          ),
         });
       });
     },
