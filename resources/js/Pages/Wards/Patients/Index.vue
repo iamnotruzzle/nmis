@@ -45,12 +45,12 @@
         >
         </Column>
         <Column
-          field="lastName"
-          header="LAST NAME"
+          field="patient"
+          header="PATIENT"
           style="min-width: 12rem"
         >
         </Column>
-        <Column
+        <!-- <Column
           field="firstName"
           header="FIRST NAME"
           style="min-width: 12rem"
@@ -67,7 +67,7 @@
           header="SUFFIX"
           style="min-width: 12rem"
         >
-        </Column>
+        </Column> -->
         <Column
           field="admission_date"
           header="ADMISSION DATE"
@@ -300,39 +300,53 @@ export default {
     this.rows = this.patients.per_page;
   },
   mounted() {
-    console.log('mounted', this.patients);
+    // console.log('mounted', this.patients);
     this.storePatientsInContainer();
 
     this.loading = false;
   },
   methods: {
     tzone(date) {
-      return moment.tz(date, 'Asia/Manila').format('LL');
+      return moment.tz(date, 'Asia/Manila').format('LLL');
     },
-    checkIfBmiExistForWeight(bmi) {
-      if (bmi == null) {
+    setPatient(patient) {
+      const suffix = patient.patsuffix == null ? '' : patient.patsuffix;
+
+      return patient.patlast + ', ' + patient.patfirst + ' ' + patient.patmiddle + suffix;
+    },
+    checkIfBmiExistForWeight(e) {
+      if (e.bmi == null) {
         return null;
       } else {
-        return bmi.vsweight == null ? null : bmi.vsweight;
+        if (e.bmi.vsweight == null) {
+          return null;
+        } else {
+          return e.bmi.vsweight == null ? null : e.bmi.vsweight;
+        }
       }
     },
-    checkIfBmiExistForHeight(bmi) {
-      if (bmi == null) {
+    checkIfBmiExistForHeight(e) {
+      if (e.bmi == null) {
         return null;
       } else {
-        return bmi.vsheight == null ? null : bmi.vsheight;
+        if (e.bmi.vsheight == null) {
+          return null;
+        } else {
+          return e.bmi.vsheight == null ? null : e.bmi.vsheight;
+        }
       }
     },
-    calculateBmi(weight, height) {
-      const bmi = (weight / height / height) * 10000;
-      if (bmi == Infinity || isNaN(bmi)) {
-        return null;
-      } else {
-        return bmi.toFixed(2);
-      }
+    calculateBmi(e) {
+      // TODO check individual property first if they are not null
+      const bmi = (e.bmi.vsweight / e.bmi.vsheight / e.bmi.vsheight) * 10000;
+
+      //   if (bmi == Infinity || isNaN(bmi)) {
+      //     return null;
+      //   } else {
+      //     return bmi.toFixed(2);
+      //   }
     },
     setPhysician(physician, physician2, physician3, physician4) {
-      console.log(physician3);
       if (physician != null) {
         return (
           physician.user_detail.lastname +
@@ -380,15 +394,12 @@ export default {
       this.patients.data.forEach((e) => {
         this.patientsList.push({
           hpercode: e.hpercode,
-          firstName: e.patient.patfirst,
-          middleName: e.patient.patmiddle,
-          lastName: e.patient.patlast,
-          suffix: e.patient.patsuffix,
+          patient: this.setPatient(e.patient),
           //   los: ,
           admission_date: e.patient.admission_date.admdate,
-          kg: this.checkIfBmiExistForWeight(e.patient.admission_date.bmi),
-          cm: this.checkIfBmiExistForHeight(e.patient.admission_date.bmi),
-          bmi: this.calculateBmi(e.patient.admission_date.bmi.vsweight, e.patient.admission_date.bmi.vsheight),
+          kg: this.checkIfBmiExistForWeight(e.patient.admission_date),
+          cm: this.checkIfBmiExistForHeight(e.patient.admission_date),
+          bmi: this.calculateBmi(e.patient.admission_date),
           room_bed: e.room.rmname + ' - ' + e.bed.bdname,
           physician: this.setPhysician(
             e.patient.admission_date.physician,
