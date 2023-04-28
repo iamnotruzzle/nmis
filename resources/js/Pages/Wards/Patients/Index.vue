@@ -17,7 +17,7 @@
         ref="dt"
         :totalRecords="totalRecords"
         @page="onPage($event)"
-        dataKey="cl1comb"
+        dataKey="hpercode"
         filterDisplay="row"
         showGridlines
         :loading="loading"
@@ -33,25 +33,73 @@
                   placeholder="Search patient"
                 />
               </span>
-              <Button
-                label="Add patient"
-                icon="pi pi-plus"
-                iconPos="right"
-                @click="openCreateItemDialog"
-              />
             </div>
           </div>
         </template>
         <template #empty> No patients found. </template>
         <template #loading> Loading patients data. Please wait. </template>
         <Column
-          field="ptcode"
-          header="PTCODE"
+          field="hpercode"
+          header="HEALTH RECORD NUMBER"
+          style="min-width: 12rem"
+        >
+        </Column>
+        <Column
+          field="lastName"
+          header="LAST NAME"
+          style="min-width: 12rem"
+        >
+        </Column>
+        <Column
+          field="firstName"
+          header="FIRST NAME"
+          style="min-width: 12rem"
+        >
+        </Column>
+        <Column
+          field="middleName"
+          header="MIDDLE NAME"
+          style="min-width: 12rem"
+        >
+        </Column>
+        <Column
+          field="suffix"
+          header="SUFFIX"
+          style="min-width: 12rem"
+        >
+        </Column>
+        <Column
+          field="admission_date"
+          header="ADMISSION DATE"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data }}
+            {{ tzone(data.admission_date) }}
           </template>
+        </Column>
+        <Column
+          field="kg"
+          header="WEIGHT"
+          style="min-width: 12rem"
+        >
+        </Column>
+        <Column
+          field="cm"
+          header="HEIGHT"
+          style="min-width: 12rem"
+        >
+        </Column>
+        <Column
+          field="bmi"
+          header="BMI"
+          style="min-width: 12rem"
+        >
+        </Column>
+        <Column
+          field="room_bed"
+          header="ROOM | BED"
+          style="min-width: 12rem"
+        >
         </Column>
 
         <Column
@@ -246,26 +294,60 @@ export default {
     this.rows = this.patients.per_page;
   },
   mounted() {
-    console.log(this.patients);
-    // this.storeProcTypesInContainer();
-    // this.storeCategoryInContainer();
+    console.log('mounted', this.patients);
+    this.storePatientsInContainer();
 
     this.loading = false;
   },
   methods: {
-    // use storeCategoryInContainer() function so that every time you make
+    tzone(date) {
+      return moment.tz(date, 'Asia/Manila').format('LL');
+    },
+    checkIfBmiExistForWeight(bmi) {
+      if (bmi == null) {
+        return null;
+      } else {
+        return bmi.vsweight == null ? null : bmi.vsweight;
+      }
+    },
+    checkIfBmiExistForHeight(bmi) {
+      if (bmi == null) {
+        return null;
+      } else {
+        return bmi.vsheight == null ? null : bmi.vsheight;
+      }
+    },
+    calculateBmi(weight, height) {
+      const bmi = (weight / height / height) * 10000;
+      if (bmi == Infinity || isNaN(bmi)) {
+        return null;
+      } else {
+        return bmi.toFixed(2);
+      }
+    },
+    // use storePatientsInContainer() function so that every time you make
     // server request such as POST, the data in the table
     // is updated
-    storeCategoryInContainer() {
+    storePatientsInContainer() {
       this.patients.data.forEach((e) => {
         this.patientsList.push({
-          cl1code: e.cl1code,
-          cl1comb: e.cl1comb,
-          cl1desc: e.cl1desc,
-          cl1lock: e.cl1lock,
-          cl1stat: e.cl1stat,
-          cl1upsw: e.cl1upsw,
-          ptcode: e.ptcode,
+          hpercode: e.hpercode,
+          firstName: e.patient.patfirst,
+          middleName: e.patient.patmiddle,
+          lastName: e.patient.patlast,
+          suffix: e.patient.patsuffix,
+          //   los: ,
+          admission_date: e.patient.admission_date.admdate,
+          kg: this.checkIfBmiExistForWeight(e.patient.admission_date.bmi),
+          cm: this.checkIfBmiExistForHeight(e.patient.admission_date.bmi),
+          bmi: this.calculateBmi(e.patient.admission_date.bmi.vsweight, e.patient.admission_date.bmi.vsheight),
+          room_bed: e.room.rmname + ' - ' + e.bed.bdname,
+          //   physician:
+          //     e.admission_date.physician3.user_detail.lastname +
+          //     ', ' +
+          //     e.admission_date.physician3.user_detail.firstname +
+          //     ' ' +
+          //     e.admission_date.physician3.user_detail.middlename,
         });
       });
     },
@@ -283,7 +365,7 @@ export default {
         onFinish: (visit) => {
           this.totalRecords = this.patients.total;
           this.patientsList = [];
-          this.storeCategoryInContainer();
+          this.storePatientsInContainer();
           this.loading = false;
         },
       });
@@ -350,7 +432,7 @@ export default {
           this.form.reset();
           this.updateData();
           this.deletedMsg();
-          this.storeCategoryInContainer();
+          this.storePatientsInContainer();
         },
       });
     },
@@ -361,7 +443,7 @@ export default {
       this.form.reset();
       this.form.clearErrors();
       this.patientsList = [];
-      this.storeCategoryInContainer();
+      this.storePatientsInContainer();
     },
     createdMsg() {
       this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Category created', life: 3000 });
