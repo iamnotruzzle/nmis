@@ -6,6 +6,7 @@ use App\Http\Controllers\Csr\Inventory\Items\ItemController;
 use App\Http\Controllers\Csr\Inventory\Stocks\CsrStocksController;
 use App\Http\Controllers\Csr\IssueItems\IssueItemController;
 use App\Http\Controllers\Users\UserController;
+use App\Http\Controllers\Wards\Patients\PatientChargeController;
 use App\Http\Controllers\Wards\Patients\WardPatientsController;
 use App\Http\Controllers\Wards\RequestStocks\RequestStocksController;
 use Illuminate\Foundation\Application;
@@ -41,3 +42,4 @@ Route::resource('requeststocks', RequestStocksController::class)->middleware(['a
 Route::put('requeststocks', [RequestStocksController::class, 'updatedeliverystatus'])->name('requeststocks.updatedeliverystatus');
 
 Route::resource('wardspatients', WardPatientsController::class)->middleware(['auth:sanctum', 'verified'])->only(['index', 'store', 'update', 'destroy']);
+Route::resource('patientcharge', PatientChargeController::class)->middleware(['auth:sanctum', 'verified'])->only(['index', 'store', 'update', 'destroy']);
