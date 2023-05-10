@@ -50,24 +50,6 @@
           style="min-width: 12rem"
         >
         </Column>
-        <!-- <Column
-          field="firstName"
-          header="FIRST NAME"
-          style="min-width: 12rem"
-        >
-        </Column>
-        <Column
-          field="middleName"
-          header="MIDDLE NAME"
-          style="min-width: 12rem"
-        >
-        </Column>
-        <Column
-          field="suffix"
-          header="SUFFIX"
-          style="min-width: 12rem"
-        >
-        </Column> -->
         <Column
           field="admission_date"
           header="ADMISSION DATE"
@@ -131,6 +113,9 @@
             />
           </template>
         </Column>
+        <template #footer>
+          <p class="text-right">In total there are {{ patientsList ? patientsList.length : 0 }} patients.</p>
+        </template>
       </DataTable>
 
       <!-- create & edit dialog -->
