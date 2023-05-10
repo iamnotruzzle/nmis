@@ -113,9 +113,6 @@
             />
           </template>
         </Column>
-        <template #footer>
-          <p class="text-right">In total there are {{ patientsList ? patientsList.length : 0 }} patients.</p>
-        </template>
       </DataTable>
 
       <!-- create & edit dialog -->
