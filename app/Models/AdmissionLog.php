@@ -83,10 +83,10 @@ class AdmissionLog extends Model
         // ->orWhere('billstat', 03);
     }
 
-    // public function chargeSlip()
-    // {
-    //     return $this->hasMany(PatientCharge::class, 'enccode', 'enccode')
-    //         // ->where('chargcode', '!=', 'MISC')
-    //         ->orderBy('pcchrgdte', 'ASC');
-    // }
+    public function patientCharge()
+    {
+        return $this->hasMany(PatientCharge::class, 'enccode', 'enccode')
+            // ->where('chargcode', '!=', 'MISC')
+            ->orderBy('pcchrgdte', 'ASC');
+    }
 }
