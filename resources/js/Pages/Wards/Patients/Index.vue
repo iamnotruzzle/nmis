@@ -40,8 +40,8 @@
         <template #loading> Loading patients data. Please wait. </template>
         <Column
           field="hpercode"
-          header="HEALTH RECORD NUMBER"
-          style="min-width: 12rem"
+          header="HEALTH RECORD #"
+          style="max-width: 5rem"
         >
         </Column>
         <Column
@@ -84,19 +84,19 @@
         <Column
           field="kg"
           header="WEIGHT"
-          style="min-width: 12rem"
+          style="min-width: 4rem"
         >
         </Column>
         <Column
           field="cm"
           header="HEIGHT"
-          style="min-width: 12rem"
+          style="min-width: 4rem"
         >
         </Column>
         <Column
           field="bmi"
           header="BMI"
-          style="min-width: 12rem"
+          style="min-width: 4rem"
         >
         </Column>
         <Column
