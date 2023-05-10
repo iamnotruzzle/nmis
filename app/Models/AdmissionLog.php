@@ -76,7 +76,12 @@ class AdmissionLog extends Model
         return $this->hasMany(DietType::class, 'orcode', 'dietcode');
     }
 
-
+    public function patientBillStat()
+    {
+        return $this->hasOne(PatientBillStat::class, 'enccode', 'enccode');
+        // ->where('billstat', 02)
+        // ->orWhere('billstat', 03);
+    }
 
     // public function chargeSlip()
     // {

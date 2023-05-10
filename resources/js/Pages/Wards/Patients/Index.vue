@@ -51,6 +51,28 @@
         >
         </Column>
         <Column
+          field="bill_stat"
+          header="STATUS"
+          style="min-width: 8rem"
+        >
+          <template #body="{ data }">
+            <div class="flex justify-content-center">
+              <Tag
+                v-if="data.bill_stat == '02'"
+                value="BILLED"
+                severity="info"
+                class="px-2"
+              />
+              <Tag
+                v-if="data.bill_stat == '03'"
+                value="MAY GO HOME"
+                severity="success"
+                class="px-2"
+              />
+            </div>
+          </template>
+        </Column>
+        <Column
           field="admission_date"
           header="ADMISSION DATE"
           style="min-width: 12rem"
@@ -226,6 +248,7 @@ import Avatar from 'primevue/avatar';
 import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
 import AutoComplete from 'primevue/autocomplete';
+import Tag from 'primevue/tag';
 import moment from 'moment';
 
 export default {
@@ -244,6 +267,7 @@ export default {
     Calendar,
     Dropdown,
     AutoComplete,
+    Tag,
   },
   props: {
     patients: Object,
@@ -282,7 +306,7 @@ export default {
     this.rows = this.patients.per_page;
   },
   mounted() {
-    console.log('mounted', this.patients);
+    // console.log('mounted', this.patients);
     this.storePatientsInContainer();
 
     this.loading = false;
@@ -378,6 +402,7 @@ export default {
         this.patientsList.push({
           hpercode: e.hpercode,
           patient: this.setPatient(e.patient),
+          bill_stat: e.patient.admission_date.patient_bill_stat.billstat,
           //   los: ,
           admission_date: e.patient.admission_date.admdate,
           kg: this.checkIfBmiExistForWeight(e.patient.admission_date),
