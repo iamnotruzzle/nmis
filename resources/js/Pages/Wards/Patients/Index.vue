@@ -300,7 +300,7 @@ export default {
     this.rows = this.patients.per_page;
   },
   mounted() {
-    // console.log('mounted', this.patients);
+    console.log('mounted', this.patients);
     this.storePatientsInContainer();
 
     this.loading = false;
@@ -337,14 +337,15 @@ export default {
       }
     },
     calculateBmi(e) {
-      // TODO check individual property first if they are not null
-      const bmi = (e.bmi.vsweight / e.bmi.vsheight / e.bmi.vsheight) * 10000;
-
-      //   if (bmi == Infinity || isNaN(bmi)) {
-      //     return null;
-      //   } else {
-      //     return bmi.toFixed(2);
-      //   }
+      if (e.bmi == null) {
+        return null;
+      } else {
+        if (e.bmi.vsheight == null || e.bmi.vsweight == null) {
+          return null;
+        } else {
+          return ((e.bmi.vsweight / e.bmi.vsheight / e.bmi.vsheight) * 10000).toFixed(2);
+        }
+      }
     },
     setPhysician(physician, physician2, physician3, physician4) {
       if (physician != null) {
