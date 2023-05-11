@@ -86,7 +86,10 @@ class AdmissionLog extends Model
     public function patientCharge()
     {
         return $this->hasMany(PatientCharge::class, 'enccode', 'enccode')->with(['typeOfCharge', 'item', 'misc'])
-            // ->where('chargcode', '!=', 'MISC')
+            // adding 2 where is SLOW
+            // ->where('chargcode', 'MISC')
+            // ->orWhere('chargcode', 'DRUMN')
+            //
             ->orderBy('pcchrgdte', 'ASC');
     }
 }

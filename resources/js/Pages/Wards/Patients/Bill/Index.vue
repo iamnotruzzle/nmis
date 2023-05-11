@@ -11,6 +11,8 @@
         removableSort
         sortField="charge_date"
         :sortOrder="-1"
+        paginator
+        :rows="15"
         filterDisplay="row"
         showGridlines
       >
@@ -29,8 +31,8 @@
                 </span>
               </span>
               <!-- <Button
-                label="Add user"
-                icon="pi pi-user-plus"
+                label="Bill patient"
+                icon="pi pi-money-bill"
                 iconPos="right"
                 @click="openCreateItemDialog"
               /> -->
@@ -41,7 +43,6 @@
           field="charge_slip_no"
           header="Charge slip #"
           sortable
-          style="min-width: 12rem"
         >
           <template #body="{ data }">
             {{ data.charge_slip_no }}
@@ -60,7 +61,6 @@
           field="type_of_charge_description"
           header="Type of charge"
           sortable
-          style="min-width: 12rem"
         >
           <template #body="{ data }">
             {{ data.type_of_charge_description }}
@@ -79,7 +79,6 @@
           field="item"
           header="Item"
           sortable
-          style="min-width: 12rem"
         >
           <template #body="{ data }">
             {{ data.item }}
@@ -95,29 +94,27 @@
           </template>
         </Column>
         <Column
+          field="charge_date"
+          header="Charge date"
+          sortable
+        >
+          <template #body="{ data }">
+            {{ tzone(data.charge_date) }}
+          </template>
+        </Column>
+        <Column
           field="quantity"
           header="Quantity"
           sortable
-          style="min-width: 12rem"
         >
           <template #body="{ data }">
             {{ data.quantity }}
-          </template>
-          <template #filter="{ filterModel, filterCallback }">
-            <InputText
-              v-model="filterModel.value"
-              type="text"
-              @input="filterCallback()"
-              class="p-column-filter"
-              placeholder="Search by quantity"
-            />
           </template>
         </Column>
         <Column
           field="price"
           header="Price"
           sortable
-          style="min-width: 12rem"
         >
           <template #body="{ data }">
             {{ data.price }}
@@ -127,20 +124,9 @@
           field="amount"
           header="Amount"
           sortable
-          style="min-width: 12rem"
         >
           <template #body="{ data }">
             {{ data.amount }}
-          </template>
-        </Column>
-        <Column
-          field="charge_date"
-          header="Charge date"
-          sortable
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ tzone(data.charge_date) }}
           </template>
         </Column>
         <template #footer>
@@ -237,19 +223,20 @@ export default {
     },
     storeBillsInContainer() {
       this.bills.admission_date_bill.patient_charge.forEach((e) => {
-        // console.log(e);
-        this.billList.push({
-          charge_slip_no: e.pcchrgcod,
-          //   type_of_charge_code: e.type_of_charge.chrgcode,
-          type_of_charge_description: e.type_of_charge.chrgdesc,
-          item: e.misc != null ? e.misc.hmdesc : e.item.category.cl1desc + ' ' + e.item.cl2desc,
-          quantity: e.pchrgqty,
-          price: e.pchrgup,
-          amount: e.pchrgqty * e.pchrgup,
-          charge_date: e.pcchrgdte,
-        });
+        // only push item when chargcode is misc or drumn
+        if (e.chargcode == 'MISC' || e.chargcode == 'DRUMN') {
+          this.billList.push({
+            charge_slip_no: e.pcchrgcod,
+            //   type_of_charge_code: e.type_of_charge.chrgcode,
+            type_of_charge_description: e.type_of_charge.chrgdesc,
+            item: e.misc != null ? e.misc.hmdesc : e.item.category.cl1desc + ' ' + e.item.cl2desc,
+            quantity: Math.trunc(e.pchrgqty),
+            price: e.pchrgup,
+            amount: (Math.trunc(e.pchrgqty) * Math.round(e.pchrgup * 100)) / 100,
+            charge_date: e.pcchrgdte,
+          });
+        }
       });
-      //   console.log('bill list', this.billList);
     },
     // updateData() {
     //   this.categoriesList = [];
