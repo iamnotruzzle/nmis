@@ -29,15 +29,15 @@ class PatientChargeController extends Controller
         $medical_supplies = Item::with('prices')->has('prices')
             ->get(['cl2comb', 'cl2desc', 'uomcode', 'cl2stat']);
 
-        $current_stock = WardsStocks::with('prices:cl2comb,selling_price,created_at', 'item:cl2comb,cl2desc,uomcode')->has('prices')
-            ->where('wardcode', $authWardcode->wardcode)
-            ->get();
+        // $current_stock = WardsStocks::with('prices:cl2comb,selling_price,created_at', 'item_details:cl2comb,cl2desc,uomcode')->has('prices')
+        //     ->where('location', $authWardcode->wardcode)
+        //     ->get();
 
-        // get current supplies
-        $current_supplies = DB::table('csrw_wards_stocks')
+        // get current ward supplies
+        $current_ward_supplies = DB::table('csrw_wards_stocks')
             ->join('hclass2', 'csrw_wards_stocks.cl2comb', '=', 'hclass2.cl2comb')
-            ->select('hclass2.cl2comb', 'hclass2.cl2desc', DB::raw('SUM(qty) as onhand'))
-            ->where('wardcode', $authWardcode->wardcode)
+            ->select('hclass2.cl2comb', 'hclass2.cl2desc', DB::raw('SUM(quantity) as quantity'))
+            ->where('location', $authWardcode->wardcode)
             ->groupBy('hclass2.cl2comb', 'hclass2.cl2desc')
             ->get();
 
@@ -46,16 +46,18 @@ class PatientChargeController extends Controller
             'admissionDateBill',
         ])
             // this will filter patients that hasn't been discharge
-            ->whereHas('admissionDate', function ($q) use ($enccode) {
+            ->whereHas('admissionDateBill', function ($q) use ($enccode) {
                 $q->where('enccode', $enccode);
             })
-            ->get();
+            ->first();
 
-        return Inertia::render('Ward/Patients/Bill/Index', [
+        // dd($current_ward_supplies);
+
+        return Inertia::render('Wards/Patients/Bill/Index', [
             'bills' => $bills,
             'medical_supplies' => $medical_supplies,
-            'current_supplies' => $current_supplies,
-            'current_stock' => $current_stock,
+            'current_ward_supplies' => $current_ward_supplies,
+            // 'current_stock' => $current_stock,
         ]);
     }
 

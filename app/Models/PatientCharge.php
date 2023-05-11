@@ -52,6 +52,6 @@ class PatientCharge extends Model
 
     public function misc()
     {
-        return $this->hasOne(Miscellaneous::class, 'hmcode', 'itemcode')->with(['category', 'unit']);
+        return $this->hasOne(Miscellaneous::class, 'hmcode', 'itemcode')->with(['unit']);
     }
 }
