@@ -16,7 +16,7 @@
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold">Bills</span>
+            <span class="text-xl text-900 font-bold">Billing</span>
             <div>
               <span class="p-input-icon-left mr-2">
                 <i class="pi pi-search" />
@@ -143,7 +143,9 @@
             {{ tzone(data.charge_date) }}
           </template>
         </Column>
-        <template #footer> Total: {{ totalAmount.toFixed(2) }} </template>
+        <template #footer>
+          <div class="text-right text-lg text-green-600">Total: {{ totalAmount.toFixed(2) }}</div>
+        </template>
       </DataTable>
     </div>
   </app-layout>
