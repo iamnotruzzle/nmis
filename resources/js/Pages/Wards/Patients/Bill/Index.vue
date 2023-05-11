@@ -30,12 +30,12 @@
                   />
                 </span>
               </span>
-              <!-- <Button
+              <Button
                 label="Bill patient"
                 icon="pi pi-money-bill"
                 iconPos="right"
-                @click="openCreateItemDialog"
-              /> -->
+                @click="openCreateBillDialog"
+              />
             </div>
           </div>
         </template>
@@ -183,6 +183,8 @@ export default {
       search: '',
       options: {},
       params: {},
+      isUpdate: false,
+      createBillDialog: false,
       enccode: '',
       patientName: '',
       billList: [],
@@ -224,12 +226,26 @@ export default {
     storeBillsInContainer() {
       this.bills.admission_date_bill.patient_charge.forEach((e) => {
         // only push item when chargcode is misc or drumn
-        if (e.chargcode == 'MISC' || e.chargcode == 'DRUMN') {
+        // if (e.chargcode == 'MISC' || e.chargcode == 'DRUMN') {
+        //   this.billList.push({
+        //     charge_slip_no: e.pcchrgcod,
+        //     //   type_of_charge_code: e.type_of_charge.chrgcode,
+        //     type_of_charge_description: e.type_of_charge.chrgdesc,
+        //     item: e.misc != null ? e.misc.hmdesc : e.item.category.cl1desc + ' ' + e.item.cl2desc,
+        //     quantity: Math.trunc(e.pchrgqty),
+        //     price: e.pchrgup,
+        //     amount: (Math.trunc(e.pchrgqty) * Math.round(e.pchrgup * 100)) / 100,
+        //     charge_date: e.pcchrgdte,
+        //   });
+        // }
+
+        // only push item when chargcode is misc or drumn or drumd(drugs and med oxygen) or drumf(compressed air)
+        if (e.chargcode == 'DRUMD' || e.chargcode == 'DRUMF' || e.chargcode == 'MISC' || e.chargcode == 'DRUMN') {
           this.billList.push({
             charge_slip_no: e.pcchrgcod,
             //   type_of_charge_code: e.type_of_charge.chrgcode,
             type_of_charge_description: e.type_of_charge.chrgdesc,
-            item: e.misc != null ? e.misc.hmdesc : e.item.category.cl1desc + ' ' + e.item.cl2desc,
+            // item: e.misc != null ? e.misc.hmdesc : e.item.category.cl1desc + ' ' + e.item.cl2desc,
             quantity: Math.trunc(e.pchrgqty),
             price: e.pchrgup,
             amount: (Math.trunc(e.pchrgqty) * Math.round(e.pchrgup * 100)) / 100,
@@ -237,6 +253,7 @@ export default {
           });
         }
       });
+      console.log(this.billList);
     },
     // updateData() {
     //   this.categoriesList = [];
@@ -252,6 +269,12 @@ export default {
     //   });
     // },
     // emit close dialog
+    openCreateBillDialog() {
+      this.isUpdate = false;
+      this.form.clearErrors();
+      this.form.reset();
+      this.createBillDialog = true;
+    },
     clickOutsideDialog() {
       this.$emit('hide', this.form.clearErrors(), this.form.reset());
     },
@@ -278,7 +301,6 @@ export default {
     //     });
     //   }
     // },
-    // confirmDeleteItem(item) {
     cancel() {
       this.cl1comb = null;
       this.isUpdate = false;
