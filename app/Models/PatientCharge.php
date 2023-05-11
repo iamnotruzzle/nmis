@@ -40,18 +40,18 @@ class PatientCharge extends Model
         'orinclst',
     ];
 
-    // public function typeOfCharge()
-    // {
-    //     return $this->hasOne(TypeOfCharge::class, 'chrgcode', 'chargcode');
-    // }
+    public function typeOfCharge()
+    {
+        return $this->hasOne(TypeOfCharge::class, 'chrgcode', 'chargcode');
+    }
 
-    // public function item()
-    // {
-    //     return $this->hasOne(Item::class, 'cl2comb', 'itemcode');
-    // }
+    public function item()
+    {
+        return $this->hasOne(Item::class, 'cl2comb', 'itemcode')->with(['category', 'unit']);
+    }
 
-    // public function misc()
-    // {
-    //     return $this->hasOne(Miscellaneous::class, 'hmcode', 'itemcode');
-    // }
+    public function misc()
+    {
+        return $this->hasOne(Miscellaneous::class, 'hmcode', 'itemcode')->with(['category', 'unit']);
+    }
 }

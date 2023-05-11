@@ -29,4 +29,9 @@ class Miscellaneous extends Model
         'priority',
         'discount'
     ];
+
+    public function unit()
+    {
+        return $this->hasOne(UnitOfMeasurement::class, 'uomcode', 'uomcode');
+    }
 }

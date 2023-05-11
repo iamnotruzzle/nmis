@@ -41,6 +41,15 @@ class Patient extends Model
         return $this->hasOne(AdmissionLog::class, 'hpercode', 'hpercode')->with(['physician', 'physician2', 'physician3', 'physician4', 'bmi:enccode,vsweight,vsheight', 'patientBillStat'])->where('disdate', null);
     }
 
+    public function admissionDateBill()
+    {
+        // WITH doctors order
+        // return $this->hasOne(AdmissionLog::class, 'hpercode', 'hpercode')->with(['doctorOrder', 'physician', 'physician2', 'physician3', 'physician4', 'dischargeOrder', 'bmi:enccode,vsweight,vsheight', 'patientBillStat'])->where('disdate', null);
+
+        // WITHOUT doctors order
+        return $this->hasOne(AdmissionLog::class, 'hpercode', 'hpercode')->with(['chargeSlip'])->where('disdate', null);
+    }
+
     public function doctorOrder()
     {
         // return $this->hasMany(DoctorsOrder::class, 'hpercode', 'hpercode')->orderBy('dodate', 'desc');

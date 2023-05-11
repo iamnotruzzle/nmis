@@ -48,4 +48,9 @@ class WardsStocks extends Model
     {
         return $this->hasOne(Item::class, 'cl2comb', 'cl2comb');
     }
+
+    public function prices()
+    {
+        return $this->hasMany(ItemPrices::class, 'cl2comb', 'cl2comb')->orderBy('created_at', 'DESC');
+    }
 }
