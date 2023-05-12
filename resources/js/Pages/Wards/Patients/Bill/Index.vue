@@ -17,8 +17,9 @@
         showGridlines
       >
         <template #header>
+          <span class="text-2xl text-cyan-500 font-bold">{{ patientName }} ( {{ hospitalNumber }} )</span>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold">Billing</span>
+            <span class="text-xl text-900 font-bold">Bills</span>
             <div>
               <span class="p-input-icon-left mr-2">
                 <i class="pi pi-search" />
@@ -187,6 +188,7 @@ export default {
       createBillDialog: false,
       enccode: '',
       patientName: '',
+      hospitalNumber: '',
       billList: [],
       totalAmount: 0,
       filters: {
@@ -213,6 +215,8 @@ export default {
     this.enccode = this.bills.admission_date_bill.enccode;
     // set patient name
     this.patientName = this.bills.patlast + ' ' + this.bills.patfirst + ' ' + this.bills.patmiddle;
+    // set hospital number
+    this.hospitalNumber = this.bills.hpercode;
   },
   methods: {
     tzone(date) {
