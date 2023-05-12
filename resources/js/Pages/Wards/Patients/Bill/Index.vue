@@ -205,7 +205,7 @@ export default {
     };
   },
   mounted() {
-    // console.log('mounted bills', this.bills);
+    console.log('mounted bills', this.bills);
     this.storeBillsInContainer();
     this.getTotalAmount();
 
@@ -225,27 +225,27 @@ export default {
     },
     storeBillsInContainer() {
       this.bills.admission_date_bill.patient_charge.forEach((e) => {
-        // only push item when chargcode is misc or drumn
-        // if (e.chargcode == 'MISC' || e.chargcode == 'DRUMN') {
-        //   this.billList.push({
-        //     charge_slip_no: e.pcchrgcod,
-        //     //   type_of_charge_code: e.type_of_charge.chrgcode,
-        //     type_of_charge_description: e.type_of_charge.chrgdesc,
-        //     item: e.misc != null ? e.misc.hmdesc : e.item.category.cl1desc + ' ' + e.item.cl2desc,
-        //     quantity: Math.trunc(e.pchrgqty),
-        //     price: e.pchrgup,
-        //     amount: (Math.trunc(e.pchrgqty) * Math.round(e.pchrgup * 100)) / 100,
-        //     charge_date: e.pcchrgdte,
-        //   });
-        // }
-
-        // only push item when chargcode is misc or drumn or drumd(drugs and med oxygen) or drumf(compressed air)
-        if (e.chargcode == 'DRUMD' || e.chargcode == 'DRUMF' || e.chargcode == 'MISC' || e.chargcode == 'DRUMN') {
+        // only push item when chargcode are drug and meds oxygen or compressed air
+        if (e.chargcode == 'DRUMD' || e.chargcode == 'DRUMF') {
           this.billList.push({
             charge_slip_no: e.pcchrgcod,
             //   type_of_charge_code: e.type_of_charge.chrgcode,
             type_of_charge_description: e.type_of_charge.chrgdesc,
-            // item: e.misc != null ? e.misc.hmdesc : e.item.category.cl1desc + ' ' + e.item.cl2desc,
+            item: e.type_of_charge.chrgdesc,
+            quantity: Math.trunc(e.pchrgqty),
+            price: e.pchrgup,
+            amount: (Math.trunc(e.pchrgqty) * Math.round(e.pchrgup * 100)) / 100,
+            charge_date: e.pcchrgdte,
+          });
+        }
+
+        // only push item when chargcode are medical supplies or misc
+        if (e.chargcode == 'MISC' || e.chargcode == 'DRUMN') {
+          this.billList.push({
+            charge_slip_no: e.pcchrgcod,
+            //   type_of_charge_code: e.type_of_charge.chrgcode,
+            type_of_charge_description: e.type_of_charge.chrgdesc,
+            item: e.misc != null ? e.misc.hmdesc : e.item.category.cl1desc + ' ' + e.item.cl2desc,
             quantity: Math.trunc(e.pchrgqty),
             price: e.pchrgup,
             amount: (Math.trunc(e.pchrgqty) * Math.round(e.pchrgup * 100)) / 100,
