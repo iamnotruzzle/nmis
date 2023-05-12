@@ -233,7 +233,7 @@ export default {
         if (e.chargcode == 'DRUMD' || e.chargcode == 'DRUMF') {
           this.billList.push({
             charge_slip_no: e.pcchrgcod,
-            //   type_of_charge_code: e.type_of_charge.chrgcode,
+            type_of_charge_code: e.type_of_charge.chrgcode,
             type_of_charge_description: e.type_of_charge.chrgdesc,
             item: e.type_of_charge.chrgdesc,
             quantity: Math.trunc(e.pchrgqty),
@@ -247,7 +247,7 @@ export default {
         if (e.chargcode == 'MISC' || e.chargcode == 'DRUMN') {
           this.billList.push({
             charge_slip_no: e.pcchrgcod,
-            //   type_of_charge_code: e.type_of_charge.chrgcode,
+            type_of_charge_code: e.type_of_charge.chrgcode,
             type_of_charge_description: e.type_of_charge.chrgdesc,
             item: e.misc != null ? e.misc.hmdesc : e.item.category.cl1desc + ' ' + e.item.cl2desc,
             quantity: Math.trunc(e.pchrgqty),
