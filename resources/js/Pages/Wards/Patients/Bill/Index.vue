@@ -214,7 +214,7 @@ export default {
     // set patient enccode
     this.enccode = this.bills.admission_date_bill.enccode;
     // set patient name
-    this.patientName = this.bills.patlast + ' ' + this.bills.patfirst + ' ' + this.bills.patmiddle;
+    this.patientName = this.bills.patlast + ', ' + this.bills.patfirst + ' ' + this.bills.patmiddle;
     // set hospital number
     this.hospitalNumber = this.bills.hpercode;
   },
