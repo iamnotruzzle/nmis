@@ -3,185 +3,187 @@
     <Head title="Template - Bill Patient" />
 
     <div class="card">
-      <DataTable
-        class="p-datatable-sm"
-        dataKey="id"
-        v-model:filters="filters"
-        :value="billList"
-        removableSort
-        sortField="charge_date"
-        :sortOrder="-1"
-        paginator
-        :rows="15"
-        filterDisplay="row"
-        showGridlines
-      >
-        <template #header>
-          <span class="text-2xl text-cyan-500 font-bold">{{ patientName }} ( {{ hospitalNumber }} )</span>
-          <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold">Bills</span>
-            <div>
-              <span class="p-input-icon-left mr-2">
-                <i class="pi pi-search" />
-                <span class="p-input-icon-left">
+      <div class="lg:flex">
+        <DataTable
+          class="p-datatable-sm"
+          dataKey="id"
+          v-model:filters="filters"
+          :value="billList"
+          removableSort
+          sortField="charge_date"
+          :sortOrder="-1"
+          paginator
+          :rows="15"
+          filterDisplay="row"
+          showGridlines
+        >
+          <template #header>
+            <span class="text-2xl text-cyan-500 font-bold">{{ patientName }} ( {{ hospitalNumber }} )</span>
+            <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+              <span class="text-xl text-900 font-bold">Bills</span>
+              <div>
+                <span class="p-input-icon-left mr-2">
                   <i class="pi pi-search" />
-                  <InputText
-                    v-model="filters['global'].value"
-                    placeholder="Keyword Search"
-                  />
+                  <span class="p-input-icon-left">
+                    <i class="pi pi-search" />
+                    <InputText
+                      v-model="filters['global'].value"
+                      placeholder="Keyword Search"
+                    />
+                  </span>
                 </span>
-              </span>
-              <Button
-                label="Bill patient"
-                icon="pi pi-money-bill"
-                iconPos="right"
-                @click="openCreateBillDialog"
+                <Button
+                  label="Bill patient"
+                  icon="pi pi-money-bill"
+                  iconPos="right"
+                  @click="openCreateBillDialog"
+                />
+              </div>
+            </div>
+          </template>
+          <Column
+            field="charge_slip_no"
+            header="Charge slip #"
+            sortable
+          >
+            <template #body="{ data }">
+              {{ data.charge_slip_no }}
+            </template>
+            <template #filter="{ filterModel, filterCallback }">
+              <InputText
+                v-model="filterModel.value"
+                type="text"
+                @input="filterCallback()"
+                class="p-column-filter"
+                placeholder="Search by #"
+              />
+            </template>
+          </Column>
+          <Column
+            field="type_of_charge_description"
+            header="Type of charge"
+            sortable
+          >
+            <template #body="{ data }">
+              {{ data.type_of_charge_description }}
+            </template>
+            <template #filter="{ filterModel, filterCallback }">
+              <InputText
+                v-model="filterModel.value"
+                type="text"
+                @input="filterCallback()"
+                class="p-column-filter"
+                placeholder="Search by type"
+              />
+            </template>
+          </Column>
+          <Column
+            field="item"
+            header="Item"
+            sortable
+          >
+            <template #body="{ data }">
+              {{ data.item }}
+            </template>
+            <template #filter="{ filterModel, filterCallback }">
+              <InputText
+                v-model="filterModel.value"
+                type="text"
+                @input="filterCallback()"
+                class="p-column-filter"
+                placeholder="Search by item"
+              />
+            </template>
+          </Column>
+          <Column
+            field="charge_date"
+            header="Charge date"
+            sortable
+          >
+            <template #body="{ data }">
+              {{ tzone(data.charge_date) }}
+            </template>
+          </Column>
+          <Column
+            field="quantity"
+            header="Quantity"
+            sortable
+          >
+            <template #body="{ data }">
+              {{ data.quantity }}
+            </template>
+          </Column>
+          <Column
+            field="price"
+            header="Price"
+            sortable
+          >
+            <template #body="{ data }">
+              {{ data.price }}
+            </template>
+          </Column>
+          <Column
+            field="amount"
+            header="Amount"
+            sortable
+          >
+            <template #body="{ data }">
+              {{ data.amount }}
+            </template>
+          </Column>
+          <template #footer>
+            <div class="text-right text-lg text-green-600">Total: ₱ {{ totalAmount.toFixed(2) }}</div>
+          </template>
+        </DataTable>
+
+        <DataTable
+          v-model:filters="medicalSuppliesListFilter"
+          :value="medicalSuppliesList"
+          scrollable
+          scrollHeight="h-full"
+          showGridlines
+          class="mdmt-4"
+        >
+          <template #header>
+            <div class="text-2xl text-cyan-500 font-bold mb-2">INSTOCK</div>
+            <div class="p-input-icon-left flex justify-content-end w-full">
+              <i class="pi pi-search" />
+              <InputText
+                v-model="medicalSuppliesListFilter['global'].value"
+                placeholder="Item"
+                class="w-full"
               />
             </div>
-          </div>
-        </template>
-        <Column
-          field="charge_slip_no"
-          header="Charge slip #"
-          sortable
-        >
-          <template #body="{ data }">
-            {{ data.charge_slip_no }}
           </template>
-          <template #filter="{ filterModel, filterCallback }">
-            <InputText
-              v-model="filterModel.value"
-              type="text"
-              @input="filterCallback()"
-              class="p-column-filter"
-              placeholder="Search by #"
-            />
-          </template>
-        </Column>
-        <Column
-          field="type_of_charge_description"
-          header="Type of charge"
-          sortable
-        >
-          <template #body="{ data }">
-            {{ data.type_of_charge_description }}
-          </template>
-          <template #filter="{ filterModel, filterCallback }">
-            <InputText
-              v-model="filterModel.value"
-              type="text"
-              @input="filterCallback()"
-              class="p-column-filter"
-              placeholder="Search by type"
-            />
-          </template>
-        </Column>
-        <Column
-          field="item"
-          header="Item"
-          sortable
-        >
-          <template #body="{ data }">
-            {{ data.item }}
-          </template>
-          <template #filter="{ filterModel, filterCallback }">
-            <InputText
-              v-model="filterModel.value"
-              type="text"
-              @input="filterCallback()"
-              class="p-column-filter"
-              placeholder="Search by item"
-            />
-          </template>
-        </Column>
-        <Column
-          field="charge_date"
-          header="Charge date"
-          sortable
-        >
-          <template #body="{ data }">
-            {{ tzone(data.charge_date) }}
-          </template>
-        </Column>
-        <Column
-          field="quantity"
-          header="Quantity"
-          sortable
-        >
-          <template #body="{ data }">
-            {{ data.quantity }}
-          </template>
-        </Column>
-        <Column
-          field="price"
-          header="Price"
-          sortable
-        >
-          <template #body="{ data }">
-            {{ data.price }}
-          </template>
-        </Column>
-        <Column
-          field="amount"
-          header="Amount"
-          sortable
-        >
-          <template #body="{ data }">
-            {{ data.amount }}
-          </template>
-        </Column>
-        <template #footer>
-          <div class="text-right text-lg text-green-600">Total: ₱ {{ totalAmount.toFixed(2) }}</div>
-        </template>
-      </DataTable>
-
-      <DataTable
-        v-model:filters="medicalSuppliesListFilter"
-        :value="medicalSuppliesList"
-        scrollable
-        scrollHeight="h-full"
-        showGridlines
-        class="mt-4"
-      >
-        <template #header>
-          <div class="text-2xl text-cyan-500 font-bold mb-2">INSTOCK</div>
-          <div class="p-input-icon-left flex justify-content-end w-full">
-            <i class="pi pi-search" />
-            <InputText
-              v-model="medicalSuppliesListFilter['global'].value"
-              placeholder="Item"
-              class="w-full"
-            />
-          </div>
-        </template>
-        <Column
-          field="cl2desc"
-          header="Item"
-        ></Column>
-        <Column
-          field="quantity"
-          header="Qty"
-        >
-          <template #body="{ data }">
-            <span
-              v-if="data.quantity <= 10"
-              class="text-yellow-500 text-bold"
-              >{{ data.quantity }}
-            </span>
-            <span
-              v-else
-              class="text-green-500 text-bold"
-              >{{ data.quantity }}
-            </span>
-          </template>
-        </Column>
-        <Column
-          field="price"
-          header="Price"
-        >
-          <template #body="{ data }"> ₱ {{ data.price }} </template>
-        </Column>
-      </DataTable>
+          <Column
+            field="cl2desc"
+            header="Item"
+          ></Column>
+          <Column
+            field="quantity"
+            header="Qty"
+          >
+            <template #body="{ data }">
+              <span
+                v-if="data.quantity <= 10"
+                class="text-yellow-500 text-bold"
+                >{{ data.quantity }}
+              </span>
+              <span
+                v-else
+                class="text-green-500 text-bold"
+                >{{ data.quantity }}
+              </span>
+            </template>
+          </Column>
+          <Column
+            field="price"
+            header="Price"
+          >
+            <template #body="{ data }"> ₱ {{ data.price }} </template>
+          </Column>
+        </DataTable>
+      </div>
     </div>
   </app-layout>
 </template>
