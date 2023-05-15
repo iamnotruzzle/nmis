@@ -228,6 +228,7 @@ export default {
   props: {
     bills: Object,
     currentStocks: Object,
+    misc: Object,
   },
   data() {
     return {
@@ -241,6 +242,7 @@ export default {
       hospitalNumber: '',
       billList: [],
       currentStocksLisk: [],
+      miscList: [],
       totalAmount: 0,
       currentStocksLiskFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -261,10 +263,11 @@ export default {
     };
   },
   mounted() {
-    console.log('current stocks', this.currentStocks);
+    console.log(this.misc);
     this.storeBillsInContainer();
     this.getTotalAmount();
     this.storeCurrentStockInContainer();
+    this.storeMiscInContainer();
 
     // set patient enccode
     this.enccode = this.bills.admission_date_bill.enccode;
@@ -324,7 +327,18 @@ export default {
           price: med.price,
         });
       });
-      console.log('container', this.currentStocksLisk);
+      //   console.log('container', this.currentStocksLisk);
+    },
+    storeMiscInContainer() {
+      this.misc.forEach((misc) => {
+        this.miscList.push({
+          hmcode: misc.hmcode,
+          hmdesc: misc.hmdesc,
+          hmamt: misc.hmamt,
+          uomcode: misc.uomcode == null ? null : misc.uomcode,
+        });
+      });
+      console.log('container', this.miscList);
     },
     // updateData() {
     //   this.categoriesList = [];
