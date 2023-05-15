@@ -54,15 +54,13 @@ class PatientChargeController extends Controller
             'bills' => $bills,
             'medical_supplies' => $medical_supplies,
             'prices' => $prices,
-            //     'current_ward_supplies_prices' => $current_ward_supplies_prices,
-            //     'current_ward_supplies' => $current_ward_supplies,
         ]);
     }
 
 
     public function store(Request $request)
     {
-        //
+        dd($request);
     }
 
 
