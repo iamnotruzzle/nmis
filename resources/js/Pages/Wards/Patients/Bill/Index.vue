@@ -134,6 +134,54 @@
           <div class="text-right text-lg text-green-600">Total: ₱ {{ totalAmount.toFixed(2) }}</div>
         </template>
       </DataTable>
+
+      <DataTable
+        v-model:filters="medicalSuppliesListFilter"
+        :value="medicalSuppliesList"
+        scrollable
+        scrollHeight="h-full"
+        showGridlines
+        class="mt-4"
+      >
+        <template #header>
+          <div class="text-2xl text-cyan-500 font-bold mb-2">INSTOCK</div>
+          <div class="p-input-icon-left flex justify-content-end w-full">
+            <i class="pi pi-search" />
+            <InputText
+              v-model="medicalSuppliesListFilter['global'].value"
+              placeholder="Item"
+              class="w-full"
+            />
+          </div>
+        </template>
+        <Column
+          field="cl2desc"
+          header="Item"
+        ></Column>
+        <Column
+          field="quantity"
+          header="Qty"
+        >
+          <template #body="{ data }">
+            <span
+              v-if="data.quantity <= 10"
+              class="text-yellow-500 text-bold"
+              >{{ data.quantity }}
+            </span>
+            <span
+              v-else
+              class="text-green-500 text-bold"
+              >{{ data.quantity }}
+            </span>
+          </template>
+        </Column>
+        <Column
+          field="price"
+          header="Price"
+        >
+          <template #body="{ data }"> ₱ {{ data.price }} </template>
+        </Column>
+      </DataTable>
     </div>
   </app-layout>
 </template>
@@ -154,6 +202,7 @@ import Avatar from 'primevue/avatar';
 import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
 import AutoComplete from 'primevue/autocomplete';
+import Tag from 'primevue/tag';
 import moment from 'moment';
 
 export default {
@@ -172,6 +221,7 @@ export default {
     Calendar,
     Dropdown,
     AutoComplete,
+    Tag,
   },
   props: {
     bills: Object,
@@ -190,8 +240,11 @@ export default {
       patientName: '',
       hospitalNumber: '',
       billList: [],
-      medicalSuppliesContainer: [],
+      medicalSuppliesList: [],
       totalAmount: 0,
+      medicalSuppliesListFilter: {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      },
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
         charge_slip_no: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -266,7 +319,7 @@ export default {
       this.medical_supplies.forEach((med) => {
         this.prices.forEach((price) => {
           if (price.cl2comb == med.cl2comb) {
-            this.medicalSuppliesContainer.push({
+            this.medicalSuppliesList.push({
               cl2comb: med.cl2comb,
               cl2desc: med.cl2desc,
               uomcode: med.uomcode == null ? null : med.uomcode,
@@ -276,7 +329,7 @@ export default {
           }
         });
       });
-      console.log('container', this.medicalSuppliesContainer);
+      console.log('container', this.medicalSuppliesList);
     },
     // updateData() {
     //   this.categoriesList = [];
