@@ -25,18 +25,12 @@ class PatientChargeController extends Controller
             ->orderBy('csrw_login_history.created_at', 'desc')
             ->first();
 
-        // get current supplies
-        $medical_supplies = DB::table('csrw_wards_stocks')
-            ->join('hclass2', 'csrw_wards_stocks.cl2comb', '=', 'hclass2.cl2comb')
-            ->select('hclass2.cl2comb', 'hclass2.cl2desc', 'hclass2.uomcode', DB::raw('SUM(quantity) as quantity'))
-            ->where('location', $authWardcode->wardcode)
-            ->groupBy('hclass2.cl2comb', 'hclass2.cl2desc', 'hclass2.uomcode')
+        $currentStocks = DB::table('hclass2')
+            ->join('csrw_wards_stocks', 'csrw_wards_stocks.cl2comb', '=', 'hclass2.cl2comb')
+            ->select(DB::raw("hclass2.cl2comb, hclass2.cl2desc, hclass2.uomcode, SUM(csrw_wards_stocks.quantity) as quantity, (SELECT TOP 1 selling_price FROM csrw_item_prices WHERE cl2comb = csrw_wards_stocks.cl2comb ORDER BY created_at DESC) as 'price'"))
+            ->where('csrw_wards_stocks.location', $authWardcode->wardcode)
+            ->groupBy('hclass2.cl2comb', 'hclass2.cl2desc', 'hclass2.uomcode', 'csrw_wards_stocks.cl2comb')
             ->get();
-
-        $prices = WardsStocks::with('prices:cl2comb,selling_price,created_at', 'item_details:cl2comb,cl2desc,uomcode')->has('prices')
-            ->where('location', $authWardcode->wardcode)
-            ->groupBy('cl2comb')
-            ->get('cl2comb');
 
         // get patients bills
         $bills = Patient::with([
@@ -48,12 +42,9 @@ class PatientChargeController extends Controller
             })
             ->first();
 
-        // dd($current_ward_supplies);
-
         return Inertia::render('Wards/Patients/Bill/Index', [
             'bills' => $bills,
-            'medical_supplies' => $medical_supplies,
-            'prices' => $prices,
+            'currentStocks' => $currentStocks,
         ]);
     }
 

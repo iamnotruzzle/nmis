@@ -137,8 +137,8 @@
         </DataTable>
 
         <DataTable
-          v-model:filters="medicalSuppliesListFilter"
-          :value="medicalSuppliesList"
+          v-model:filters="currentStocksLiskFilter"
+          :value="currentStocksLisk"
           scrollable
           scrollHeight="h-full"
           showGridlines
@@ -149,7 +149,7 @@
             <div class="p-input-icon-left flex justify-content-end w-full">
               <i class="pi pi-search" />
               <InputText
-                v-model="medicalSuppliesListFilter['global'].value"
+                v-model="currentStocksLiskFilter['global'].value"
                 placeholder="Item"
                 class="w-full"
               />
@@ -227,9 +227,7 @@ export default {
   },
   props: {
     bills: Object,
-    medical_supplies: Object,
-    prices: Object,
-    // current_stock: Object,
+    currentStocks: Object,
   },
   data() {
     return {
@@ -242,9 +240,9 @@ export default {
       patientName: '',
       hospitalNumber: '',
       billList: [],
-      medicalSuppliesList: [],
+      currentStocksLisk: [],
       totalAmount: 0,
-      medicalSuppliesListFilter: {
+      currentStocksLiskFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       filters: {
@@ -263,8 +261,7 @@ export default {
     };
   },
   mounted() {
-    console.log('medical supplies', this.medical_supplies);
-    console.log('prices', this.prices);
+    console.log('current stocks', this.currentStocks);
     this.storeBillsInContainer();
     this.getTotalAmount();
     this.storeCurrentStockInContainer();
@@ -318,20 +315,16 @@ export default {
       //   console.log(this.billList);
     },
     storeCurrentStockInContainer() {
-      this.medical_supplies.forEach((med) => {
-        this.prices.forEach((price) => {
-          if (price.cl2comb == med.cl2comb) {
-            this.medicalSuppliesList.push({
-              cl2comb: med.cl2comb,
-              cl2desc: med.cl2desc,
-              uomcode: med.uomcode == null ? null : med.uomcode,
-              quantity: med.quantity,
-              price: price.prices[0].selling_price,
-            });
-          }
+      this.currentStocks.forEach((med) => {
+        this.currentStocksLisk.push({
+          cl2comb: med.cl2comb,
+          cl2desc: med.cl2desc,
+          uomcode: med.uomcode == null ? null : med.uomcode,
+          quantity: med.quantity,
+          price: med.price,
         });
       });
-      console.log('container', this.medicalSuppliesList);
+      console.log('container', this.currentStocksLisk);
     },
     // updateData() {
     //   this.categoriesList = [];
