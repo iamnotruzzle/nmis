@@ -176,7 +176,7 @@ export default {
   props: {
     bills: Object,
     medical_supplies: Object,
-    current_ward_supplies: Object,
+    prices: Object,
     // current_stock: Object,
   },
   data() {
@@ -190,6 +190,7 @@ export default {
       patientName: '',
       hospitalNumber: '',
       billList: [],
+      medicalSuppliesContainer: [],
       totalAmount: 0,
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -207,9 +208,11 @@ export default {
     };
   },
   mounted() {
-    console.log('mounted bills', this.bills);
+    console.log('medical supplies', this.medical_supplies);
+    console.log('prices', this.prices);
     this.storeBillsInContainer();
     this.getTotalAmount();
+    this.storeCurrentStockInContainer();
 
     // set patient enccode
     this.enccode = this.bills.admission_date_bill.enccode;
@@ -257,7 +260,23 @@ export default {
           });
         }
       });
-      console.log(this.billList);
+      //   console.log(this.billList);
+    },
+    storeCurrentStockInContainer() {
+      this.medical_supplies.forEach((med) => {
+        this.prices.forEach((price) => {
+          if (price.cl2comb == med.cl2comb) {
+            this.medicalSuppliesContainer.push({
+              cl2comb: med.cl2comb,
+              cl2desc: med.cl2desc,
+              uomcode: med.uomcode == null ? null : med.uomcode,
+              quantity: med.quantity,
+              price: price.prices[0].selling_price,
+            });
+          }
+        });
+      });
+      console.log('container', this.medicalSuppliesContainer);
     },
     // updateData() {
     //   this.categoriesList = [];
