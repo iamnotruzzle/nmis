@@ -3,6 +3,7 @@
     <Head title="Template - Bill Patient" />
 
     <div class="card">
+      <Toast />
       <div class="lg:flex">
         <DataTable
           class="p-datatable-sm"
@@ -145,7 +146,7 @@
           class="mdmt-4"
         >
           <template #header>
-            <div class="text-2xl text-cyan-500 font-bold mb-2">INSTOCK</div>
+            <div class="text-2xl text-cyan-500 font-bold">INSTOCK</div>
             <div class="p-input-icon-left flex justify-content-end w-full">
               <i class="pi pi-search" />
               <InputText
@@ -187,7 +188,7 @@
         <!-- create bill dialog -->
         <Dialog
           v-model:visible="createBillDialog"
-          header="Bill patient"
+          header="CHARGE PATIENT"
           :modal="true"
           class="p-fluid"
           @hide="whenDialogIsHidden"
@@ -206,11 +207,11 @@
             <label for="Item">Quantity</label>
             <InputText
               id="quantity"
-              v-model.trim="qty"
+              v-model.trim="qtyToCharge"
               required="true"
               autofocus
               type="number"
-              :class="{ 'p-invalid': qty == '' || item == null }"
+              :class="{ 'p-invalid': qtyToCharge == '' || item == null }"
               @keyup.enter="fillRequestContainer"
             />
             <small
@@ -221,7 +222,7 @@
             </small>
           </div>
           <div class="field mt-8">
-            <label class="mr-2 font-bold">ITEMS / SERVICES TO BILL</label>
+            <label class="mr-2 font-bold">ITEMS / SERVICES TO CHARGE</label>
 
             <DataTable
               v-model:filters="itemsToBillFilter"
@@ -249,8 +250,13 @@
                 sortable
               ></Column>
               <Column
-                field="qty"
-                header="QTY"
+                field="currentStock"
+                header="Current Stock"
+                sortable
+              ></Column>
+              <Column
+                field="qtyToCharge"
+                header="Qty to charge"
                 sortable
               ></Column>
               <Column header="">
@@ -260,7 +266,7 @@
                     rounded
                     text
                     severity="danger"
-                    @click="removeFromRequestContainer(slotProps.data)"
+                    @click="removeFromToBillContainer(slotProps.data)"
                   />
                 </template>
               </Column>
@@ -360,7 +366,7 @@ export default {
       itemsToBillList: [],
       item: null, // selected item
       itemDesc: null,
-      qty: null,
+      qtyToCharge: null,
       itemNotSelected: false,
       itemNotSelectedMsg: null,
       totalAmount: 0,
@@ -381,7 +387,9 @@ export default {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       form: this.$inertia.form({
-        password: null,
+        enccode: null,
+        hospitalNumber: null,
+        itemsToBillList: null,
       }),
     };
   },
@@ -496,7 +504,7 @@ export default {
         (this.itemsToBillList = []),
         (this.item = null),
         (this.itemDesc = null),
-        (this.qty = null),
+        (this.qtyToCharge = null),
         (this.itemNotSelected = null),
         (this.itemNotSelectedMsg = null),
         this.form.clearErrors(),
@@ -504,36 +512,49 @@ export default {
       );
     },
     fillRequestContainer() {
+      //   console.log(this.item);
       // check if no selected item
-      if (this.item == null || this.item == '') {
-        this.itemNotSelected = true;
-        this.itemNotSelectedMsg = 'Item not selected.';
-      } else {
-        // check if request qty is not provided
-        if (this.qty == 0 || this.qty == null || this.qty == '') {
+      if (this.item.typeOfCharge == 'DRUMN' && Number(this.item.quantity) < Number(this.qtyToCharge)) {
+        // check if item selected is already on the list
+        if (this.itemsToBillList.some((e) => e.itemCode === this.item['itemCode'])) {
           this.itemNotSelected = true;
-          this.itemNotSelectedMsg = 'Please provide quantity.';
+          this.itemNotSelectedMsg = 'Item is already on the list.';
         } else {
-          // check if item selected is already on the list
-          if (this.itemsToBillList.some((e) => e.itemCode === this.item['itemCode'])) {
+          //   this.stockQtyNotEnough();
+          this.itemNotSelected = true;
+          this.itemNotSelectedMsg = 'Current stock is not enough.';
+        }
+      } else {
+        if (this.item == null || this.item == '') {
+          this.itemNotSelected = true;
+          this.itemNotSelectedMsg = 'Item not selected.';
+        } else {
+          // check if request qty is not provided
+          if (this.qtyToCharge == 0 || this.qtyToCharge == null || this.qtyToCharge == '') {
             this.itemNotSelected = true;
-            this.itemNotSelectedMsg = 'Item is already on the list.';
+            this.itemNotSelectedMsg = 'Please provide quantity.';
           } else {
-            this.itemNotSelected = false;
-            this.itemNotSelectedMsg = null;
-            this.itemsToBillList.push({
-              itemCode: this.item['itemCode'],
-              itemDesc: this.item['itemDesc'],
-              qty: this.qty,
-            });
+            // check if item selected is already on the list
+            if (this.itemsToBillList.some((e) => e.itemCode === this.item['itemCode'])) {
+              this.itemNotSelected = true;
+              this.itemNotSelectedMsg = 'Item is already on the list.';
+            } else {
+              this.itemNotSelected = false;
+              this.itemNotSelectedMsg = null;
+              this.itemsToBillList.push({
+                itemCode: this.item['itemCode'],
+                itemDesc: this.item['itemDesc'],
+                currentStock: this.item['typeOfCharge'] == 'DRUMN' ? this.item['quantity'] : 'Infinite',
+                qtyToCharge: this.qtyToCharge,
+              });
+            }
           }
         }
       }
-      //   console.log(this.requestStockListDetails);
     },
     removeFromToBillContainer(item) {
-      this.toBill.splice(
-        this.toBill.findIndex((e) => e.itemCode === item.itemCode),
+      this.itemsToBillList.splice(
+        this.itemsToBillList.findIndex((e) => e.itemCode === item.itemCode),
         1
       );
     },
@@ -560,31 +581,39 @@ export default {
       this.$emit('hide', this.form.clearErrors(), this.form.reset());
     },
     submit() {
-      //   this.form.post(route('patientcharge.store'), {
-      //     preserveScroll: true,
-      //     onSuccess: () => {
-      //       this.createCategoryDialog = false;
-      //       this.cancel();
-      //       this.updateData();
-      //       this.createdMsg();
-      //     },
-      //   });
+      // set form data
+      this.form.enccode = this.enccode;
+      this.form.hospitalNumber = this.hospitalNumber;
+      this.form.itemsToBillList = this.itemsToBillList;
+
+      this.form.post(route('patientcharge.store'), {
+        preserveScroll: true,
+        onSuccess: () => {
+          this.createBillDialog = false;
+          this.cancel();
+          this.updateData();
+          this.createdMsg();
+        },
+      });
     },
     // },
     cancel() {
       this.itemsToBillList = [];
       this.item = null;
       this.itemDesc = null;
-      this.qty = null;
+      this.qtyToCharge = null;
       this.itemNotSelected = null;
       this.itemNotSelectedMsg = null;
       this.createBillDialog = false;
       this.form.reset();
       this.form.clearErrors();
     },
-    // createdMsg() {
-    //   this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Category created', life: 3000 });
+    // stockQtyNotEnough() {
+    //   this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Current stock is not enough', life: 3000 });
     // },
+    createdMsg() {
+      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Successfully charge patient', life: 3000 });
+    },
     // updatedMsg() {
     //   this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Category updated', life: 3000 });
     // },
