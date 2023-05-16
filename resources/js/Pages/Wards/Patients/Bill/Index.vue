@@ -493,7 +493,10 @@ export default {
     whenDialogIsHidden() {
       this.$emit(
         'hide',
-        (this.toBill = []),
+        (this.itemsToBillList = []),
+        (this.item = null),
+        (this.itemDesc = null),
+        (this.qty = null),
         (this.itemNotSelected = null),
         (this.itemNotSelectedMsg = null),
         this.form.clearErrors(),
