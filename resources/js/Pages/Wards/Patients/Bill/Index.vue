@@ -138,7 +138,7 @@
 
         <DataTable
           v-model:filters="medicalSuppliesListFilter"
-          :value="medicalSuppliesLisk"
+          :value="medicalSuppliesList"
           scrollable
           scrollHeight="h-full"
           showGridlines
@@ -241,8 +241,9 @@ export default {
       patientName: '',
       hospitalNumber: '',
       billList: [],
-      medicalSuppliesLisk: [],
+      medicalSuppliesList: [],
       miscList: [],
+      itemList: [],
       totalAmount: 0,
       medicalSuppliesListFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -263,11 +264,11 @@ export default {
     };
   },
   mounted() {
-    console.log(this.misc);
     this.storeBillsInContainer();
     this.getTotalAmount();
-    this.storeCurrentStockInContainer();
+    this.storeMedicalSuppliesInContainer();
     this.storeMiscInContainer();
+    this.storeItemsInContainer();
 
     // set patient enccode
     this.enccode = this.bills.admission_date_bill.enccode;
@@ -317,9 +318,9 @@ export default {
       });
       //   console.log(this.billList);
     },
-    storeCurrentStockInContainer() {
+    storeMedicalSuppliesInContainer() {
       this.medicalSupplies.forEach((med) => {
-        this.medicalSuppliesLisk.push({
+        this.medicalSuppliesList.push({
           cl2comb: med.cl2comb,
           cl2desc: med.cl2desc,
           uomcode: med.uomcode == null ? null : med.uomcode,
@@ -327,7 +328,7 @@ export default {
           price: med.price,
         });
       });
-      //   console.log('container', this.medicalSuppliesLisk);
+      console.log('medicalSupplies list container', this.medicalSuppliesList);
     },
     storeMiscInContainer() {
       this.misc.forEach((misc) => {
@@ -338,7 +339,33 @@ export default {
           uomcode: misc.uomcode == null ? null : misc.uomcode,
         });
       });
-      console.log('container', this.miscList);
+      console.log('misc list container', this.miscList);
+    },
+    storeItemsInContainer() {
+      // medical supplies
+      this.medicalSupplies.forEach((med) => {
+        this.itemList.push({
+          typeOfCharge: 'DRUMN',
+          itemCode: med.cl2comb,
+          itemDesc: med.cl2desc,
+          unit: med.uomcode == null ? null : med.uomcode,
+          quantity: med.quantity,
+          price: med.price,
+        });
+      });
+
+      // misc
+      this.misc.forEach((misc) => {
+        this.itemList.push({
+          typeOfCharge: 'MISC',
+          itemCode: misc.hmcode,
+          itemDesc: misc.hmdesc,
+          unit: misc.uomcode == null ? null : misc.uomcode,
+          quantity: 999,
+          price: misc.hmamt,
+        });
+      });
+      console.log('item list container', this.itemList);
     },
     // updateData() {
     //   this.categoriesList = [];
