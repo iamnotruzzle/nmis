@@ -361,7 +361,7 @@ export default {
           itemCode: misc.hmcode,
           itemDesc: misc.hmdesc,
           unit: misc.uomcode == null ? null : misc.uomcode,
-          quantity: 999,
+          quantity: 9999,
           price: misc.hmamt,
         });
       });
