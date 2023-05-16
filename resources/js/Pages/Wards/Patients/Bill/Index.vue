@@ -183,6 +183,119 @@
             <template #body="{ data }"> ₱ {{ data.price }} </template>
           </Column>
         </DataTable>
+
+        <!-- create bill dialog -->
+        <Dialog
+          v-model:visible="createBillDialog"
+          header="Bill patient"
+          :modal="true"
+          class="p-fluid"
+          @hide="whenDialogIsHidden"
+        >
+          <div class="field">
+            <label>Item</label>
+            <Dropdown
+              required="true"
+              v-model="item"
+              :options="itemList"
+              optionLabel="itemDesc"
+              class="w-full mb-3"
+            />
+          </div>
+          <div class="field">
+            <label for="Item">Quantity</label>
+            <InputText
+              id="quantity"
+              v-model.trim="qty"
+              required="true"
+              autofocus
+              type="number"
+              :class="{ 'p-invalid': qty == '' || item == null }"
+              @keyup.enter="fillRequestContainer"
+            />
+            <small
+              class="text-error"
+              v-if="itemNotSelected == true"
+            >
+              {{ itemNotSelectedMsg }}
+            </small>
+          </div>
+          <div class="field mt-8">
+            <label class="mr-2 font-bold">ITEMS / SERVICES TO BILL</label>
+
+            <DataTable
+              v-model:filters="itemsToBillFilter"
+              :globalFilterFields="['itemDesc']"
+              :value="itemsToBillList"
+              tableStyle="min-width: 50rem"
+              class="p-datatable-sm"
+              paginator
+              :rows="7"
+            >
+              <template #header>
+                <div class="flex justify-content-end">
+                  <span class="p-input-icon-left">
+                    <i class="pi pi-search" />
+                    <InputText
+                      v-model="itemsToBillFilter['global'].value"
+                      placeholder="Search Item"
+                    />
+                  </span>
+                </div>
+              </template>
+              <Column
+                field="itemDesc"
+                header="ITEM/SERVICE"
+                sortable
+              ></Column>
+              <Column
+                field="qty"
+                header="QTY"
+                sortable
+              ></Column>
+              <Column header="">
+                <template #body="slotProps">
+                  <Button
+                    icon="pi pi-times"
+                    rounded
+                    text
+                    severity="danger"
+                    @click="removeFromRequestContainer(slotProps.data)"
+                  />
+                </template>
+              </Column>
+            </DataTable>
+          </div>
+
+          <template #footer>
+            <Button
+              label="Cancel"
+              icon="pi pi-times"
+              severity="danger"
+              text
+              @click="cancel"
+            />
+            <Button
+              v-if="isUpdate == true"
+              label="Update"
+              icon="pi pi-check"
+              severity="warning"
+              text
+              type="submit"
+              :disabled="form.processing"
+              @click="submit"
+            />
+            <Button
+              v-else
+              label="Save"
+              icon="pi pi-check"
+              text
+              type="submit"
+              :disabled="form.processing"
+              @click="submit"
+            />
+          </template>
+        </Dialog>
       </div>
     </div>
   </app-layout>
@@ -244,6 +357,12 @@ export default {
       medicalSuppliesList: [],
       miscList: [],
       itemList: [],
+      itemsToBillList: [],
+      item: null, // selected item
+      itemDesc: null,
+      qty: null,
+      itemNotSelected: false,
+      itemNotSelectedMsg: null,
       totalAmount: 0,
       medicalSuppliesListFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -257,6 +376,9 @@ export default {
         quantity: { value: null, matchMode: FilterMatchMode.CONTAINS },
         price: { value: null, matchMode: FilterMatchMode.CONTAINS },
         amount: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      },
+      itemsToBillFilter: {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       form: this.$inertia.form({
         password: null,
@@ -328,7 +450,7 @@ export default {
           price: med.price,
         });
       });
-      console.log('medicalSupplies list container', this.medicalSuppliesList);
+      //   console.log('medicalSupplies list container', this.medicalSuppliesList);
     },
     storeMiscInContainer() {
       this.misc.forEach((misc) => {
@@ -339,7 +461,7 @@ export default {
           uomcode: misc.uomcode == null ? null : misc.uomcode,
         });
       });
-      console.log('misc list container', this.miscList);
+      //   console.log('misc list container', this.miscList);
     },
     storeItemsInContainer() {
       // medical supplies
@@ -365,7 +487,52 @@ export default {
           price: misc.hmamt,
         });
       });
-      console.log('item list container', this.itemList);
+      //   console.log('item list container', this.itemList);
+    },
+    // when dialog is hidden, do this function
+    whenDialogIsHidden() {
+      this.$emit(
+        'hide',
+        (this.toBill = []),
+        (this.itemNotSelected = null),
+        (this.itemNotSelectedMsg = null),
+        this.form.clearErrors(),
+        this.form.reset()
+      );
+    },
+    fillRequestContainer() {
+      // check if no selected item
+      if (this.item == null || this.item == '') {
+        this.itemNotSelected = true;
+        this.itemNotSelectedMsg = 'Item not selected.';
+      } else {
+        // check if request qty is not provided
+        if (this.qty == 0 || this.qty == null || this.qty == '') {
+          this.itemNotSelected = true;
+          this.itemNotSelectedMsg = 'Please provide quantity.';
+        } else {
+          // check if item selected is already on the list
+          if (this.itemsToBillList.some((e) => e.itemCode === this.item['itemCode'])) {
+            this.itemNotSelected = true;
+            this.itemNotSelectedMsg = 'Item is already on the list.';
+          } else {
+            this.itemNotSelected = false;
+            this.itemNotSelectedMsg = null;
+            this.itemsToBillList.push({
+              itemCode: this.item['itemCode'],
+              itemDesc: this.item['itemDesc'],
+              qty: this.qty,
+            });
+          }
+        }
+      }
+      //   console.log(this.requestStockListDetails);
+    },
+    removeFromToBillContainer(item) {
+      this.toBill.splice(
+        this.toBill.findIndex((e) => e.itemCode === item.itemCode),
+        1
+      );
     },
     // updateData() {
     //   this.categoriesList = [];
@@ -382,7 +549,6 @@ export default {
     // },
     // emit close dialog
     openCreateBillDialog() {
-      this.isUpdate = false;
       this.form.clearErrors();
       this.form.reset();
       this.createBillDialog = true;
@@ -390,28 +556,17 @@ export default {
     clickOutsideDialog() {
       this.$emit('hide', this.form.clearErrors(), this.form.reset());
     },
-    // submit() {
-    //   if (this.isUpdate) {
-    //     this.form.put(route('patientcharge.update', this.enccode), {
-    //       preserveScroll: true,
-    //       onSuccess: () => {
-    //         this.createCategoryDialog = false;
-    //         this.cancel();
-    //         this.updateData();
-    //         this.updatedMsg();
-    //       },
-    //     });
-    //   } else {
-    //     this.form.post(route('patientcharge.store'), {
-    //       preserveScroll: true,
-    //       onSuccess: () => {
-    //         this.createCategoryDialog = false;
-    //         this.cancel();
-    //         this.updateData();
-    //         this.createdMsg();
-    //       },
-    //     });
-    //   }
+    submit() {
+      //   this.form.post(route('patientcharge.store'), {
+      //     preserveScroll: true,
+      //     onSuccess: () => {
+      //       this.createCategoryDialog = false;
+      //       this.cancel();
+      //       this.updateData();
+      //       this.createdMsg();
+      //     },
+      //   });
+    },
     // },
     cancel() {
       this.cl1comb = null;
