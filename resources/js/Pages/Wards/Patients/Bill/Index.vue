@@ -137,8 +137,8 @@
         </DataTable>
 
         <DataTable
-          v-model:filters="currentStocksLiskFilter"
-          :value="currentStocksLisk"
+          v-model:filters="medicalSuppliesListFilter"
+          :value="medicalSuppliesLisk"
           scrollable
           scrollHeight="h-full"
           showGridlines
@@ -149,7 +149,7 @@
             <div class="p-input-icon-left flex justify-content-end w-full">
               <i class="pi pi-search" />
               <InputText
-                v-model="currentStocksLiskFilter['global'].value"
+                v-model="medicalSuppliesListFilter['global'].value"
                 placeholder="Item"
                 class="w-full"
               />
@@ -227,7 +227,7 @@ export default {
   },
   props: {
     bills: Object,
-    currentStocks: Object,
+    medicalSupplies: Object,
     misc: Object,
   },
   data() {
@@ -241,10 +241,10 @@ export default {
       patientName: '',
       hospitalNumber: '',
       billList: [],
-      currentStocksLisk: [],
+      medicalSuppliesLisk: [],
       miscList: [],
       totalAmount: 0,
-      currentStocksLiskFilter: {
+      medicalSuppliesListFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       filters: {
@@ -318,8 +318,8 @@ export default {
       //   console.log(this.billList);
     },
     storeCurrentStockInContainer() {
-      this.currentStocks.forEach((med) => {
-        this.currentStocksLisk.push({
+      this.medicalSupplies.forEach((med) => {
+        this.medicalSuppliesLisk.push({
           cl2comb: med.cl2comb,
           cl2desc: med.cl2desc,
           uomcode: med.uomcode == null ? null : med.uomcode,
@@ -327,7 +327,7 @@ export default {
           price: med.price,
         });
       });
-      //   console.log('container', this.currentStocksLisk);
+      //   console.log('container', this.medicalSuppliesLisk);
     },
     storeMiscInContainer() {
       this.misc.forEach((misc) => {
