@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Item;
 use App\Models\Miscellaneous;
 use App\Models\Patient;
+use App\Models\TypeOfCharge;
 use App\Models\WardsStocks;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
