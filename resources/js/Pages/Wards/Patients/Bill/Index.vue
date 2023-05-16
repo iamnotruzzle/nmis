@@ -572,13 +572,15 @@ export default {
     },
     // },
     cancel() {
-      this.cl1comb = null;
-      this.isUpdate = false;
-      this.createCategoryDialog = false;
+      this.itemsToBillList = [];
+      this.item = null;
+      this.itemDesc = null;
+      this.qty = null;
+      this.itemNotSelected = null;
+      this.itemNotSelectedMsg = null;
+      this.createBillDialog = false;
       this.form.reset();
       this.form.clearErrors();
-      this.categoriesList = [];
-      this.storeProcTypesInContainer();
     },
     // createdMsg() {
     //   this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Category created', life: 3000 });
