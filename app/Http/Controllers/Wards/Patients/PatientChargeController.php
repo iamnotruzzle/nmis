@@ -11,6 +11,7 @@ use App\Models\WardsStocks;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class PatientChargeController extends Controller
@@ -61,7 +62,57 @@ class PatientChargeController extends Controller
 
     public function store(Request $request)
     {
-        dd($request);
+        // get auth wardcode
+        $authWardcode = DB::table('csrw_users')
+            ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
+            ->select('csrw_login_history.wardcode')
+            ->where('csrw_login_history.employeeid', Auth::user()->employeeid)
+            ->orderBy('csrw_login_history.created_at', 'desc')
+            ->first();
+
+        $enccode = $request->enccode;
+        $hospitalNumber = $request->hospitalNumber;
+        $itemsToBillList = $request->itemsToBillList;
+
+        foreach ($itemsToBillList as $item) {
+
+            if ($item['typeOfCharge'] == 'DRUMN') {
+                $remaining_qty_to_charge = $item['qtyToCharge'];
+                $newStockQty = 0;
+
+                while ($remaining_qty_to_charge > 0) {
+                    // check the current item that is going to expire and qty is 0
+                    $wardStock = WardsStocks::where('cl2comb', $item['itemCode'])
+                        ->where('quantity', '!=', 0)
+                        ->where('location', $authWardcode->wardcode)
+                        ->orderBy('expiration_date', 'ASC')
+                        ->first();
+
+                    // execute if row selected is qty is enough
+                    if ($wardStock->quantity >= $remaining_qty_to_charge) {
+                        // getting the new qty of current editing ward stock
+                        $newStockQty = $wardStock->quantity - $remaining_qty_to_charge;
+                        // setting the new value of remaining_qty_to_charge
+                        $remaining_qty_to_charge = $remaining_qty_to_charge - $wardStock->quantity;
+
+                        $wardStock::where('id', $wardStock->id)
+                            ->update([
+                                'quantity' => $newStockQty,
+                            ]);
+                    } else {
+                        $remaining_qty_to_charge = $remaining_qty_to_charge - $wardStock->quantity;
+
+                        $wardStock::where('id', $wardStock->id)
+                            ->update([
+                                'quantity' => 0
+                            ]);
+                    }
+                }
+            }
+        }
+
+        // return Redirect::route('patientcharge.index');
+        return Redirect::back();
     }
 
 

@@ -512,7 +512,7 @@ export default {
       );
     },
     fillRequestContainer() {
-      //   console.log(this.item);
+      // console.log(this.item);
       // check if no selected item
       if (this.item.typeOfCharge == 'DRUMN' && Number(this.item.quantity) < Number(this.qtyToCharge)) {
         // check if item selected is already on the list
@@ -542,6 +542,7 @@ export default {
               this.itemNotSelected = false;
               this.itemNotSelectedMsg = null;
               this.itemsToBillList.push({
+                typeOfCharge: this.item['typeOfCharge'],
                 itemCode: this.item['itemCode'],
                 itemDesc: this.item['itemDesc'],
                 currentStock: this.item['typeOfCharge'] == 'DRUMN' ? this.item['quantity'] : 'Infinite',
@@ -558,19 +559,13 @@ export default {
         1
       );
     },
-    // updateData() {
-    //   this.categoriesList = [];
-    //   this.loading = true;
-
-    //   this.$inertia.get('patientcharge', this.params, {
-    //     preserveState: true,
-    //     preserveScroll: true,
-    //     onFinish: (visit) => {
-    //       this.billList = [];
-    //       this.storeBillsInContainer();
-    //     },
-    //   });
-    // },
+    updateData() {
+      this.params.enccode = this.enccode;
+      this.$inertia.get('patientcharge', this.params, {
+        preserveState: true,
+        preserveScroll: true,
+      });
+    },
     // emit close dialog
     openCreateBillDialog() {
       this.form.clearErrors();
@@ -587,6 +582,7 @@ export default {
       this.form.itemsToBillList = this.itemsToBillList;
 
       this.form.post(route('patientcharge.store'), {
+        preserveState: true,
         preserveScroll: true,
         onSuccess: () => {
           this.createBillDialog = false;
@@ -594,9 +590,20 @@ export default {
           this.updateData();
           this.createdMsg();
         },
+        onFinish: (visit) => {
+          this.billList = [];
+          this.medicalSuppliesList = [];
+          this.miscList = [];
+          this.itemList = [];
+          this.itemsToBillList = [];
+          this.storeBillsInContainer();
+          this.getTotalAmount();
+          this.storeMedicalSuppliesInContainer();
+          this.storeMiscInContainer();
+          this.storeItemsInContainer();
+        },
       });
     },
-    // },
     cancel() {
       this.itemsToBillList = [];
       this.item = null;
