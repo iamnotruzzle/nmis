@@ -259,6 +259,13 @@
                 header="Qty to charge"
                 sortable
               ></Column>
+              <Column
+                field="price"
+                header="Price per piece"
+                sortable
+              >
+                <template #body="{ data }"> ₱ {{ data.price }} </template>
+              </Column>
               <Column header="">
                 <template #body="slotProps">
                   <Button
@@ -547,6 +554,7 @@ export default {
                 itemDesc: this.item['itemDesc'],
                 currentStock: this.item['typeOfCharge'] == 'DRUMN' ? this.item['quantity'] : 'Infinite',
                 qtyToCharge: this.qtyToCharge,
+                price: this.item['price'],
               });
             }
           }
