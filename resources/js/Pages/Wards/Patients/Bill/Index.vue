@@ -549,6 +549,7 @@ export default {
                 typeOfCharge: this.item['typeOfCharge'],
                 itemCode: this.item['itemCode'],
                 itemDesc: this.item['itemDesc'],
+                unit: this.item['unit'],
                 currentStock: this.item['typeOfCharge'] == 'DRUMN' ? this.item['quantity'] : 'Infinite',
                 qtyToCharge: this.qtyToCharge,
                 price: this.item['price'],

@@ -3,11 +3,15 @@
 namespace App\Http\Controllers\Wards\Patients;
 
 use App\Http\Controllers\Controller;
+use App\Models\CsrwCode;
 use App\Models\Item;
 use App\Models\Miscellaneous;
 use App\Models\Patient;
+use App\Models\PatientAccount;
+use App\Models\PatientCharge;
 use App\Models\TypeOfCharge;
 use App\Models\WardsStocks;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -62,6 +66,8 @@ class PatientChargeController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request);
+
         $srcchrg = '';
 
         // get auth wardcode
@@ -75,6 +81,19 @@ class PatientChargeController extends Controller
         $enccode = $request->enccode;
         $hospitalNumber = $request->hospitalNumber;
         $itemsToBillList = $request->itemsToBillList;
+
+        // create csrw_code
+        $csrw_code = CsrwCode::create([
+            'charge_desc' => 'a',
+            'created_at' => Carbon::now(),
+        ]);
+        // get count of csrcode where year is NOW
+        $currentCodeCount = CsrwCode::whereYear('created_at', Carbon::now()->year)->count();
+        // CW = Central supply room Ward
+        $pcchrgcod = 'CW' . Carbon::now()->format('y') . '-' . sprintf('%06d', $currentCodeCount);
+
+        // get patient account number
+        $acctno = PatientAccount::where('enccode', $enccode)->first(['paacctno']);
 
         foreach ($itemsToBillList as $item) {
 
@@ -103,6 +122,7 @@ class PatientChargeController extends Controller
                                 'quantity' => $newStockQty,
                             ]);
                     } else {
+                        $srcchrg = 'WARD';
                         $remaining_qty_to_charge = $remaining_qty_to_charge - $wardStock->quantity;
 
                         $wardStock::where('id', $wardStock->id)
@@ -111,6 +131,44 @@ class PatientChargeController extends Controller
                             ]);
                     }
                 }
+
+                PatientCharge::create([
+                    'enccode' => $enccode,
+                    'hpercode' => $hospitalNumber,
+                    'upicode' => null,
+                    'pcchrgcod' => $pcchrgcod, // charge slip no.
+                    'pcchrgdte' => Carbon::now(),
+                    'chargcode' => $item['typeOfCharge'], // type of charge (chrgcode from hcharge)
+                    'uomcode' => $item['unit'], // unit
+                    'pchrgqty' =>  $item['qtyToCharge'],
+                    'pchrgup' => $item['price'],
+                    'pcchrgamt' => $item['total'],
+                    'pcstat' => 'A', // always A
+                    'pclock' => 'N', // always N
+                    'updsw' => 'N', // always N
+                    'confdl' => 'N', // always N
+                    'srcchrg' => $srcchrg,
+                    'pcdisch' => 'Y',
+                    'acctno' => $acctno->paacctno, // SELECT * FROM hpatacct --pacctno
+                    'itemcode' => $item['itemCode'], // cl2comb or hmisc hmcode
+                    'entryby' => Auth::user()->employeeid,
+                    'orinclst' => null, // null
+                    'compense' => null, // always null
+                    'proccode' => null, // always null
+                    'discount' => null, // always null
+                    'disamt' => null, // always null
+                    'discbal' => null, // always null
+                    'phicamt' => null, // always null
+                    'rvscode' => null, // always null
+                    'licno' => null, // always null
+                    'hpatkey' => null, // always null
+                    'time_frequency' => null, // always null
+                    'unit_frequency' => null, // always null
+                    'qtyintake' => null, // always null
+                    'uomintake' => null, // always null
+                ]);
+
+                $srcchrg = '';
             }
 
             // if ($item['typeOfCharge'] == 'MISC') {
@@ -148,7 +206,6 @@ class PatientChargeController extends Controller
             // }
         }
 
-        // return Redirect::route('patientcharge.index');
         return Redirect::back();
     }
 
