@@ -109,6 +109,40 @@ class PatientChargeController extends Controller
                     }
                 }
             }
+
+            if ($item['typeOfCharge'] == 'MISC') {
+                $remaining_qty_to_charge = $item['qtyToCharge'];
+                $newStockQty = 0;
+
+                while ($remaining_qty_to_charge > 0) {
+                    // check the current item that is going to expire and qty is 0
+                    $wardStock = WardsStocks::where('cl2comb', $item['itemCode'])
+                        ->where('quantity', '!=', 0)
+                        ->where('location', $authWardcode->wardcode)
+                        ->orderBy('expiration_date', 'ASC')
+                        ->first();
+
+                    // execute if row selected is qty is enough
+                    if ($wardStock->quantity >= $remaining_qty_to_charge) {
+                        // getting the new qty of current editing ward stock
+                        $newStockQty = $wardStock->quantity - $remaining_qty_to_charge;
+                        // setting the new value of remaining_qty_to_charge
+                        $remaining_qty_to_charge = $remaining_qty_to_charge - $wardStock->quantity;
+
+                        $wardStock::where('id', $wardStock->id)
+                            ->update([
+                                'quantity' => $newStockQty,
+                            ]);
+                    } else {
+                        $remaining_qty_to_charge = $remaining_qty_to_charge - $wardStock->quantity;
+
+                        $wardStock::where('id', $wardStock->id)
+                            ->update([
+                                'quantity' => 0
+                            ]);
+                    }
+                }
+            }
         }
 
         // return Redirect::route('patientcharge.index');

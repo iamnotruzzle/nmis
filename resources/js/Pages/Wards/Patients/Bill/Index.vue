@@ -587,7 +587,6 @@ export default {
         onSuccess: () => {
           this.createBillDialog = false;
           this.cancel();
-          this.updateData();
           this.createdMsg();
         },
         onFinish: (visit) => {
