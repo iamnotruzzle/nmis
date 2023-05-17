@@ -266,6 +266,13 @@
               >
                 <template #body="{ data }"> ₱ {{ data.price }} </template>
               </Column>
+              <Column
+                filed="total"
+                header="TOTAL"
+                sortable
+              >
+                <template #body="{ data }"> ₱ {{ data.total }} </template>
+              </Column>
               <Column header="">
                 <template #body="slotProps">
                   <Button
@@ -555,6 +562,7 @@ export default {
                 currentStock: this.item['typeOfCharge'] == 'DRUMN' ? this.item['quantity'] : 'Infinite',
                 qtyToCharge: this.qtyToCharge,
                 price: this.item['price'],
+                total: (this.item['price'] * this.qtyToCharge).toFixed(2),
               });
             }
           }
