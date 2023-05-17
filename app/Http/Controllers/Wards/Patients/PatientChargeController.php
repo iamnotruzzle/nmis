@@ -168,42 +168,52 @@ class PatientChargeController extends Controller
                     'uomintake' => null, // always null
                 ]);
 
+                // reset
                 $srcchrg = '';
             }
 
-            // if ($item['typeOfCharge'] == 'MISC') {
-            //     $remaining_qty_to_charge = $item['qtyToCharge'];
-            //     $newStockQty = 0;
+            if ($item['typeOfCharge'] == 'MISC') {
+                $srcchrg = 'WARD';
 
-            //     while ($remaining_qty_to_charge > 0) {
-            //         // check the current item that is going to expire and qty is 0
-            //         $wardStock = WardsStocks::where('cl2comb', $item['itemCode'])
-            //             ->where('quantity', '!=', 0)
-            //             ->where('location', $authWardcode->wardcode)
-            //             ->orderBy('expiration_date', 'ASC')
-            //             ->first();
+                PatientCharge::create([
+                    'enccode' => $enccode,
+                    'hpercode' => $hospitalNumber,
+                    'upicode' => null,
+                    'pcchrgcod' => $pcchrgcod, // charge slip no.
+                    'pcchrgdte' => Carbon::now(),
+                    'chargcode' => $item['typeOfCharge'], // type of charge (chrgcode from hcharge)
+                    'uomcode' => $item['unit'], // unit
+                    'pchrgqty' =>  $item['qtyToCharge'],
+                    'pchrgup' => $item['price'],
+                    'pcchrgamt' => $item['total'],
+                    'pcstat' => 'A', // always A
+                    'pclock' => 'N', // always N
+                    'updsw' => 'N', // always N
+                    'confdl' => 'N', // always N
+                    'srcchrg' => $srcchrg,
+                    'pcdisch' => 'Y',
+                    'acctno' => $acctno->paacctno, // SELECT * FROM hpatacct --pacctno
+                    'itemcode' => $item['itemCode'], // cl2comb or hmisc hmcode
+                    'entryby' => Auth::user()->employeeid,
+                    'orinclst' => null, // null
+                    'compense' => null, // always null
+                    'proccode' => null, // always null
+                    'discount' => null, // always null
+                    'disamt' => null, // always null
+                    'discbal' => null, // always null
+                    'phicamt' => null, // always null
+                    'rvscode' => null, // always null
+                    'licno' => null, // always null
+                    'hpatkey' => null, // always null
+                    'time_frequency' => null, // always null
+                    'unit_frequency' => null, // always null
+                    'qtyintake' => null, // always null
+                    'uomintake' => null, // always null
+                ]);
 
-            //         // execute if row selected is qty is enough
-            //         if ($wardStock->quantity >= $remaining_qty_to_charge) {
-            //             // getting the new qty of current editing ward stock
-            //             $newStockQty = $wardStock->quantity - $remaining_qty_to_charge;
-            //             // setting the new value of remaining_qty_to_charge
-            //             $remaining_qty_to_charge = $remaining_qty_to_charge - $wardStock->quantity;
-
-            //             $wardStock::where('id', $wardStock->id)
-            //                 ->update([
-            //                     'quantity' => $newStockQty,
-            //                 ]);
-            //         } else {
-            //             $remaining_qty_to_charge = $remaining_qty_to_charge - $wardStock->quantity;
-
-            //             $wardStock::where('id', $wardStock->id)
-            //                 ->update([
-            //                     'quantity' => 0
-            //                 ]);
-            //         }
-            //     }
-            // }
+                // reset
+                $srcchrg = '';
+            }
         }
 
         return Redirect::back();
