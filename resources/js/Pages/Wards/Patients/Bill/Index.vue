@@ -295,23 +295,13 @@
               text
               @click="cancel"
             />
+
             <Button
-              v-if="isUpdate == true"
-              label="Update"
-              icon="pi pi-check"
-              severity="warning"
-              text
-              type="submit"
-              :disabled="form.processing"
-              @click="submit"
-            />
-            <Button
-              v-else
-              label="Save"
+              :disabled="itemsToBillList.length == 0 || form.processing"
+              label="Charge"
               icon="pi pi-check"
               text
               type="submit"
-              :disabled="form.processing"
               @click="submit"
             />
           </template>
