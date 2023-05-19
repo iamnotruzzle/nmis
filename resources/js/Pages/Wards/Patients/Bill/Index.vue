@@ -500,7 +500,31 @@ export default {
           price: misc.hmamt,
         });
       });
-      //   console.log('item list container', this.itemList);
+
+      // oxygen, compressed air, carbon dioxide
+      this.$page.props.tanks.forEach((tank) => {
+        if (tank.dmhdrsub == 'DRUMD') {
+          this.itemList.push({
+            typeOfCharge: 'DRUMD',
+            itemCode: tank.dmdcomb,
+            itemDesc: tank.item,
+            unit: tank.strecode,
+            quantity: 9999,
+            price: tank.price,
+          });
+        }
+
+        if (tank.dmhdrsub == 'DRUMF') {
+          this.itemList.push({
+            typeOfCharge: 'DRUMF',
+            itemCode: tank.dmdcomb,
+            itemDesc: tank.item,
+            unit: tank.strecode,
+            quantity: 9999,
+            price: tank.price,
+          });
+        }
+      });
     },
     // when dialog is hidden, do this function
     whenDialogIsHidden() {
