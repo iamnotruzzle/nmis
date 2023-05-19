@@ -199,6 +199,8 @@
               required="true"
               v-model="item"
               :options="itemList"
+              filter
+              placeholder="Select a Item"
               optionLabel="itemDesc"
               class="w-full mb-3"
             />
