@@ -508,18 +508,7 @@ export default {
         if (tank.dmhdrsub == 'DRUMD') {
           this.itemList.push({
             typeOfCharge: 'DRUMD',
-            itemCode: tank.dmdcomb,
-            itemDesc: tank.item,
-            unit: tank.strecode,
-            quantity: 9999,
-            price: tank.price,
-          });
-        }
-
-        if (tank.dmhdrsub == 'DRUMF') {
-          this.itemList.push({
-            typeOfCharge: 'DRUMF',
-            itemCode: tank.dmdcomb,
+            itemCode: tank.itemcode,
             itemDesc: tank.item,
             unit: tank.strecode,
             quantity: 9999,

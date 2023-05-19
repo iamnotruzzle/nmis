@@ -82,7 +82,7 @@ class PatientChargeController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request);
+        // dd($request->enccode);
 
         $srcchrg = '';
 
@@ -189,6 +189,94 @@ class PatientChargeController extends Controller
             }
 
             if ($item['typeOfCharge'] == 'MISC') {
+                $srcchrg = 'WARD';
+
+                PatientCharge::create([
+                    'enccode' => $enccode,
+                    'hpercode' => $hospitalNumber,
+                    'upicode' => null,
+                    'pcchrgcod' => $pcchrgcod, // charge slip no.
+                    'pcchrgdte' => Carbon::now(),
+                    'chargcode' => $item['typeOfCharge'], // type of charge (chrgcode from hcharge)
+                    'uomcode' => $item['unit'], // unit
+                    'pchrgqty' =>  $item['qtyToCharge'],
+                    'pchrgup' => $item['price'],
+                    'pcchrgamt' => $item['total'],
+                    'pcstat' => 'A', // always A
+                    'pclock' => 'N', // always N
+                    'updsw' => 'N', // always N
+                    'confdl' => 'N', // always N
+                    'srcchrg' => $srcchrg,
+                    'pcdisch' => 'Y',
+                    'acctno' => $acctno->paacctno, // SELECT * FROM hpatacct --pacctno
+                    'itemcode' => $item['itemCode'], // cl2comb or hmisc hmcode
+                    'entryby' => Auth::user()->employeeid,
+                    'orinclst' => null, // null
+                    'compense' => null, // always null
+                    'proccode' => null, // always null
+                    'discount' => null, // always null
+                    'disamt' => null, // always null
+                    'discbal' => null, // always null
+                    'phicamt' => null, // always null
+                    'rvscode' => null, // always null
+                    'licno' => null, // always null
+                    'hpatkey' => null, // always null
+                    'time_frequency' => null, // always null
+                    'unit_frequency' => null, // always null
+                    'qtyintake' => null, // always null
+                    'uomintake' => null, // always null
+                ]);
+
+                // reset
+                $srcchrg = '';
+            }
+
+            // Drugs and Meds (Oxygen), carbon dioxide
+            if ($item['typeOfCharge'] == 'DRUMD') {
+                $srcchrg = 'WARD';
+
+                PatientCharge::create([
+                    'enccode' => $enccode,
+                    'hpercode' => $hospitalNumber,
+                    'upicode' => null,
+                    'pcchrgcod' => $pcchrgcod, // charge slip no.
+                    'pcchrgdte' => Carbon::now(),
+                    'chargcode' => $item['typeOfCharge'], // type of charge (chrgcode from hcharge)
+                    'uomcode' => $item['unit'], // unit
+                    'pchrgqty' =>  $item['qtyToCharge'],
+                    'pchrgup' => $item['price'],
+                    'pcchrgamt' => $item['total'],
+                    'pcstat' => 'A', // always A
+                    'pclock' => 'N', // always N
+                    'updsw' => 'N', // always N
+                    'confdl' => 'N', // always N
+                    'srcchrg' => $srcchrg,
+                    'pcdisch' => 'Y',
+                    'acctno' => $acctno->paacctno, // SELECT * FROM hpatacct --pacctno
+                    'itemcode' => $item['itemCode'], // cl2comb or hmisc hmcode
+                    'entryby' => Auth::user()->employeeid,
+                    'orinclst' => null, // null
+                    'compense' => null, // always null
+                    'proccode' => null, // always null
+                    'discount' => null, // always null
+                    'disamt' => null, // always null
+                    'discbal' => null, // always null
+                    'phicamt' => null, // always null
+                    'rvscode' => null, // always null
+                    'licno' => null, // always null
+                    'hpatkey' => null, // always null
+                    'time_frequency' => null, // always null
+                    'unit_frequency' => null, // always null
+                    'qtyintake' => null, // always null
+                    'uomintake' => null, // always null
+                ]);
+
+                // reset
+                $srcchrg = '';
+            }
+
+            // /Compressed Air
+            if ($item['typeOfCharge'] == 'DRUMF') {
                 $srcchrg = 'WARD';
 
                 PatientCharge::create([
