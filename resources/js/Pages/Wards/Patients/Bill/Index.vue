@@ -212,7 +212,7 @@
               autofocus
               type="number"
               :class="{ 'p-invalid': qtyToCharge == '' || item == null }"
-              @keyup.enter="fillRequestContainer"
+              @keyup.enter="medicalSuppliesQtyValidation"
             />
             <small
               class="text-error"
@@ -515,7 +515,7 @@ export default {
         this.form.reset()
       );
     },
-    fillRequestContainer() {
+    medicalSuppliesQtyValidation() {
       // console.log(this.item);
       // check if no selected item
       if (this.item.typeOfCharge == 'DRUMN' && Number(this.item.quantity) < Number(this.qtyToCharge)) {
