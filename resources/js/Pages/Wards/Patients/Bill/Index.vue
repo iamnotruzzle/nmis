@@ -403,6 +403,7 @@ export default {
     this.storeMedicalSuppliesInContainer();
     this.storeMiscInContainer();
     this.storeItemsInContainer();
+    console.log('tanks', this.$page.props.tanks);
 
     // set patient enccode
     this.enccode = this.bills.admission_date_bill.enccode;

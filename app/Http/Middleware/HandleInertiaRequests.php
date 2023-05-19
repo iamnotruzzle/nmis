@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Models\Location;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -56,6 +57,21 @@ class HandleInertiaRequests extends Middleware
             },
             'auth.user.roles' => function () use ($request) {
                 return ($request->user() ? $request->user()->roles()->pluck('name') : null);
+            },
+            // TANKS = drugs and med (oxygen), compressed air, carbon dioxide
+            'tanks' => function () {
+                return DB::select("SELECT hdmhdrprice.dmdcomb, hdmhdrsub.dmhdrsub, hdmhdr.strecode, CONCAT(hgen.gendesc, ' ', dmdnost, ' ', hdmhdr.dmdnnostp, ' ', hstre.stredesc, ' ', hform.formdesc, ' ', hroute.rtedesc) AS item, (SELECT TOP 1 dmselprice FROM hdmhdrprice WHERE dmdcomb = hdmhdrsub.dmdcomb ORDER BY dmdprdte DESC) as 'price'
+                            FROM hdmhdr
+                            JOIN hdmhdrsub ON hdmhdr.dmdcomb = hdmhdrsub.dmdcomb
+                            JOIN hdmhdrprice ON hdmhdrsub.dmdcomb = hdmhdrprice.dmdcomb
+                            JOIN hdruggrp ON hdmhdr.grpcode = hdruggrp.grpcode
+                            JOIN hgen ON hgen.gencode = hdruggrp.gencode
+                            JOIN hstre ON hdmhdr.strecode = hstre.strecode
+                            JOIN hform ON hdmhdr.formcode = hform.formcode
+                            JOIN hroute ON hdmhdr.rtecode = hroute.rtecode
+                            WHERE hdmhdr.grpcode = '0000000671' OR hdmhdr.grpcode = '0000000764' AND hdmhdrsub.dmhdrsub = 'DRUMF' OR hdmhdr.dmdcomb = '000000002098'
+                            GROUP BY hdmhdrprice.dmdcomb, hdmhdrsub.dmhdrsub, hdmhdr.strecode, hgen.gendesc, dmdnost, hdmhdr.dmdnnostp, hstre.stredesc, hform.formdesc, hroute.rtedesc, hdmhdrsub.dmdcomb;
+                        ");
             },
         ]);
     }
