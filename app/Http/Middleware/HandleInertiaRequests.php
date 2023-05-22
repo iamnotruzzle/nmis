@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Models\Location;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Middleware;
 
@@ -57,6 +58,15 @@ class HandleInertiaRequests extends Middleware
             },
             'auth.user.roles' => function () use ($request) {
                 return ($request->user() ? $request->user()->roles()->pluck('name') : null);
+            },
+            'auth.user.location' => function () {
+                return DB::table('csrw_users')
+                    ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
+                    ->join('hward', 'hward.wardcode', '=', 'csrw_login_history.wardcode')
+                    ->select('hward.wardname')
+                    ->where('csrw_login_history.employeeid', Auth::user()->employeeid)
+                    ->orderBy('csrw_login_history.created_at', 'desc')
+                    ->first();
             },
             // TANKS = drugs and med (oxygen), compressed air, carbon dioxide
             'tanks' => function () {
