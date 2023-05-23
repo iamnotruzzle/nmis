@@ -27,4 +27,9 @@ class Hdruggrp extends Model
         'dms4key',
         'gencode',
     ];
+
+    public function hgen()
+    {
+        return $this->hasOne(Hgen::class, 'gencode', 'gencode');
+    }
 }

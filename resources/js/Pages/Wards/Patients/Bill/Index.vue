@@ -357,6 +357,7 @@ export default {
     bills: Object,
     medicalSupplies: Object,
     misc: Object,
+    tanks: Object,
   },
   data() {
     return {
@@ -403,6 +404,7 @@ export default {
     };
   },
   mounted() {
+    console.log(this.tanks);
     this.storeBillsInContainer();
     this.getTotalAmount();
     this.storeMedicalSuppliesInContainer();
@@ -428,17 +430,35 @@ export default {
     },
     storeBillsInContainer() {
       this.bills.admission_date_bill.patient_charge.forEach((e) => {
-        // only push item when chargcode are drug and meds oxygen or compressed air
-        if (e.chargcode == 'DRUMD' || e.chargcode == 'DRUMF') {
-          this.billList.push({
-            charge_slip_no: e.pcchrgcod,
-            type_of_charge_code: e.type_of_charge.chrgcode,
-            type_of_charge_description: e.type_of_charge.chrgdesc,
-            item: e.type_of_charge.chrgdesc,
-            quantity: Math.trunc(e.pchrgqty),
-            price: e.pchrgup,
-            amount: (Math.trunc(e.pchrgqty) * Math.round(e.pchrgup * 100)) / 100,
-            charge_date: e.pcchrgdte,
+        // only push item when chargcode are drug and meds oxygen, compressed air and carbon dioxide
+        if (e.chargcode == 'DRUMD') {
+          //   this.billList.push({
+          //     charge_slip_no: e.pcchrgcod,
+          //     type_of_charge_code: e.type_of_charge.chrgcode,
+          //     type_of_charge_description: e.type_of_charge.chrgdesc,
+          //     item: e.type_of_charge.chrgdesc,
+          //     itemcode: e.itemcode,
+          //     quantity: Math.trunc(e.pchrgqty),
+          //     price: e.pchrgup,
+          //     amount: (Math.trunc(e.pchrgqty) * Math.round(e.pchrgup * 100)) / 100,
+          //     charge_date: e.pcchrgdte,
+          //   });
+
+          this.tanks.forEach((t) => {
+            if (e.itemcode == t.itemcode && e.uomcode == t.unitcode) {
+              this.billList.push({
+                charge_slip_no: e.pcchrgcod,
+                type_of_charge_code: e.type_of_charge.chrgcode,
+                type_of_charge_description: e.type_of_charge.chrgdesc,
+                // item: e.type_of_charge.chrgdesc,
+                item: t.itemDesc,
+                itemcode: e.itemcode,
+                quantity: Math.trunc(e.pchrgqty),
+                price: e.pchrgup,
+                amount: (Math.trunc(e.pchrgqty) * Math.round(e.pchrgup * 100)) / 100,
+                charge_date: e.pcchrgdte,
+              });
+            }
           });
         }
 
@@ -449,6 +469,7 @@ export default {
             type_of_charge_code: e.type_of_charge.chrgcode,
             type_of_charge_description: e.type_of_charge.chrgdesc,
             item: e.misc != null ? e.misc.hmdesc : e.item.category.cl1desc + ' ' + e.item.cl2desc,
+            itemcode: e.itemcode,
             quantity: Math.trunc(e.pchrgqty),
             price: e.pchrgup,
             amount: (Math.trunc(e.pchrgqty) * Math.round(e.pchrgup * 100)) / 100,

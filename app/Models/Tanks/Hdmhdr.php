@@ -48,4 +48,25 @@ class Hdmhdr extends Model
         'packcode',
         'saltcode',
     ];
+
+
+    public function hdruggrp()
+    {
+        return $this->hasOne(Hdruggrp::class, 'grpcode', 'grpcode')->with(['hgen']);
+    }
+
+    public function hstre()
+    {
+        return $this->hasOne(Hstre::class, 'strecode', 'strecode');
+    }
+
+    public function hform()
+    {
+        return $this->hasOne(Hform::class, 'formcode', 'formcode');
+    }
+
+    public function hroute()
+    {
+        return $this->hasOne(Hroute::class, 'rtecode', 'rtecode');
+    }
 }
