@@ -82,7 +82,7 @@ class PatientChargeController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->enccode);
+        $entryby = Auth::user()->employeeid;
 
         $srcchrg = '';
 
@@ -167,7 +167,7 @@ class PatientChargeController extends Controller
                     'pcdisch' => 'Y',
                     'acctno' => $acctno->paacctno, // SELECT * FROM hpatacct --pacctno
                     'itemcode' => $item['itemCode'], // cl2comb or hmisc hmcode
-                    'entryby' => Auth::user()->employeeid,
+                    'entryby' => $entryby,
                     'orinclst' => null, // null
                     'compense' => null, // always null
                     'proccode' => null, // always null
@@ -210,7 +210,7 @@ class PatientChargeController extends Controller
                     'pcdisch' => 'Y',
                     'acctno' => $acctno->paacctno, // SELECT * FROM hpatacct --pacctno
                     'itemcode' => $item['itemCode'], // cl2comb or hmisc hmcode
-                    'entryby' => Auth::user()->employeeid,
+                    'entryby' => $entryby,
                     'orinclst' => null, // null
                     'compense' => null, // always null
                     'proccode' => null, // always null
@@ -254,7 +254,7 @@ class PatientChargeController extends Controller
                     'pcdisch' => 'Y',
                     'acctno' => $acctno->paacctno, // SELECT * FROM hpatacct --pacctno
                     'itemcode' => $item['itemCode'], // cl2comb or hmisc hmcode
-                    'entryby' => Auth::user()->employeeid,
+                    'entryby' => $entryby,
                     'orinclst' => null, // null
                     'compense' => null, // always null
                     'proccode' => null, // always null
@@ -298,7 +298,7 @@ class PatientChargeController extends Controller
                     'pcdisch' => 'Y',
                     'acctno' => $acctno->paacctno, // SELECT * FROM hpatacct --pacctno
                     'itemcode' => $item['itemCode'], // cl2comb or hmisc hmcode
-                    'entryby' => Auth::user()->employeeid,
+                    'entryby' => $entryby,
                     'orinclst' => null, // null
                     'compense' => null, // always null
                     'proccode' => null, // always null

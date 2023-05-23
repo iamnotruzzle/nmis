@@ -37,6 +37,7 @@ class PatientCharge extends Model
         'pcdish',
         'acctno',
         'itemcode',
+        'entryby',
         'orinclst',
     ];
 
