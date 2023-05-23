@@ -1,10 +1,5 @@
 <template>
   <div class="layout-menu-container">
-    <div class="mb-4">
-      <span class="font-semibold">
-        {{ $page.props.auth.user.location.wardname }}
-      </span>
-    </div>
     <AppSubmenu
       :items="model"
       class="layout-menu"

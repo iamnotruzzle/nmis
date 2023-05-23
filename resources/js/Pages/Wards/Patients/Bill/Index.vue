@@ -4,6 +4,7 @@
 
     <div class="card">
       <Toast />
+
       <div class="lg:flex">
         <DataTable
           class="p-datatable-sm"
@@ -331,6 +332,7 @@ import Dropdown from 'primevue/dropdown';
 import AutoComplete from 'primevue/autocomplete';
 import Tag from 'primevue/tag';
 import moment from 'moment';
+import { Link } from '@inertiajs/vue3';
 
 export default {
   components: {
@@ -349,6 +351,7 @@ export default {
     Dropdown,
     AutoComplete,
     Tag,
+    Link,
   },
   props: {
     bills: Object,
@@ -405,7 +408,7 @@ export default {
     this.storeMedicalSuppliesInContainer();
     this.storeMiscInContainer();
     this.storeItemsInContainer();
-    // console.log('tanks', this.$page.props.tanks);
+    console.log('tanks', this.$page.props.tanks);
 
     // set patient enccode
     this.enccode = this.bills.admission_date_bill.enccode;
@@ -498,23 +501,21 @@ export default {
           itemCode: misc.hmcode,
           itemDesc: misc.hmdesc,
           unit: misc.uomcode == null ? null : misc.uomcode,
-          quantity: 9999,
+          quantity: 99999,
           price: misc.hmamt,
         });
       });
 
       // oxygen, compressed air, carbon dioxide
       this.$page.props.tanks.forEach((tank) => {
-        if (tank.dmhdrsub == 'DRUMD') {
-          this.itemList.push({
-            typeOfCharge: 'DRUMD',
-            itemCode: tank.itemcode,
-            itemDesc: tank.item,
-            unit: tank.strecode,
-            quantity: 9999,
-            price: tank.price,
-          });
-        }
+        this.itemList.push({
+          typeOfCharge: 'DRUMD',
+          itemCode: tank.itemcode,
+          itemDesc: tank.itemDesc,
+          unit: tank.unitcode,
+          quantity: 99999,
+          price: tank.price,
+        });
       });
     },
     // when dialog is hidden, do this function

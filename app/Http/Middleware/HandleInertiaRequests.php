@@ -59,28 +59,27 @@ class HandleInertiaRequests extends Middleware
             'auth.user.roles' => function () use ($request) {
                 return ($request->user() ? $request->user()->roles()->pluck('name') : null);
             },
-            'auth.user.location' => function () {
-                return DB::table('csrw_users')
-                    ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
-                    ->join('hward', 'hward.wardcode', '=', 'csrw_login_history.wardcode')
-                    ->select('hward.wardname')
-                    ->where('csrw_login_history.employeeid', Auth::user()->employeeid)
-                    ->orderBy('csrw_login_history.created_at', 'desc')
-                    ->first();
-            },
             // TANKS = drugs and med (oxygen), compressed air, carbon dioxide
             'tanks' => function () {
-                return DB::select("SELECT CONCAT(hdmhdr.dmdcomb, hdmhdr.dmdctr) as itemcode, hdmhdrsub.dmhdrsub, hdmhdr.strecode, CONCAT(hgen.gendesc, ' ', dmdnost, ' ', hdmhdr.dmdnnostp, ' ', hstre.stredesc, ' ', hform.formdesc, ' ', hroute.rtedesc) AS item, (SELECT TOP 1 dmselprice FROM hdmhdrprice WHERE dmdcomb = hdmhdrsub.dmdcomb ORDER BY dmdprdte DESC) as 'price'
-                            FROM hdmhdr
-                            JOIN hdmhdrsub ON hdmhdr.dmdcomb = hdmhdrsub.dmdcomb
-                            JOIN hdmhdrprice ON hdmhdrsub.dmdcomb = hdmhdrprice.dmdcomb
-                            JOIN hdruggrp ON hdmhdr.grpcode = hdruggrp.grpcode
-                            JOIN hgen ON hgen.gencode = hdruggrp.gencode
-                            JOIN hstre ON hdmhdr.strecode = hstre.strecode
-                            JOIN hform ON hdmhdr.formcode = hform.formcode
-                            JOIN hroute ON hdmhdr.rtecode = hroute.rtecode
-                            WHERE hdmhdr.grpcode = '0000000671' OR hdmhdr.grpcode = '0000000764' AND hdmhdrsub.dmhdrsub = 'DRUMD' OR hdmhdr.dmdcomb = '000000002098'
-                            GROUP BY hdmhdr.dmdcomb, hdmhdr.dmdctr, hdmhdrsub.dmhdrsub, hdmhdr.strecode, hgen.gendesc, dmdnost, hdmhdr.dmdnnostp, hstre.stredesc, hform.formdesc, hroute.rtedesc, hdmhdrsub.dmdcomb;
+                return DB::select("SELECT CONCAT(hdmhdr.dmdcomb, hdmhdr.dmdctr) as itemcode,
+                                    hdmhdrsub.dmhdrsub,
+                                    (SELECT TOP 1 unitcode FROM hdmhdrprice WHERE dmdcomb = hdmhdrsub.dmdcomb ORDER BY dmdprdte DESC) as 'unitcode',
+                                    CONCAT(hgen.gendesc, ' ', dmdnost, ' ', hdmhdr.dmdnnostp, ' ', hstre.stredesc, ' ', hform.formdesc, ' ', hroute.rtedesc) AS itemDesc,
+                                    (SELECT TOP 1 dmselprice FROM hdmhdrprice WHERE dmdcomb = hdmhdrsub.dmdcomb ORDER BY dmdprdte DESC) as 'price'
+                                FROM hdmhdr
+                                JOIN hdmhdrsub ON hdmhdr.dmdcomb = hdmhdrsub.dmdcomb
+                                JOIN hdmhdrprice ON hdmhdrsub.dmdcomb = hdmhdrprice.dmdcomb
+                                JOIN hdruggrp ON hdmhdr.grpcode = hdruggrp.grpcode
+                                JOIN hgen ON hgen.gencode = hdruggrp.gencode
+                                JOIN hstre ON hdmhdr.strecode = hstre.strecode
+                                JOIN hform ON hdmhdr.formcode = hform.formcode
+                                JOIN hroute ON hdmhdr.rtecode = hroute.rtecode
+                                WHERE ((hdmhdr.grpcode = '0000000671' )
+                                OR (hdmhdr.grpcode = '0000000764'
+                                AND hdmhdrsub.dmhdrsub = 'DRUMD' )
+                                OR (hdmhdr.dmdcomb = '000000002098'))
+                                AND hdmhdrsub.stockbal != 0
+                                GROUP BY hdmhdr.dmdcomb, hdmhdr.dmdctr, hdmhdrsub.dmhdrsub, hgen.gendesc, dmdnost, hdmhdr.dmdnnostp, hstre.stredesc, hform.formdesc, hroute.rtedesc, hdmhdrsub.dmdcomb;
                         ");
             },
         ]);
