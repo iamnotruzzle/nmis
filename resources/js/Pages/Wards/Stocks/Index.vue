@@ -239,6 +239,7 @@
             required="true"
             v-model="item"
             :options="itemsList"
+            filter
             optionLabel="cl2desc"
             class="w-full mb-3"
           />

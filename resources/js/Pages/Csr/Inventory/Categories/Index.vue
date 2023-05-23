@@ -148,6 +148,7 @@
             v-model.trim="form.ptcode"
             required="true"
             :options="procTypesList"
+            filter
             optionLabel="ptdesc"
             optionValue="ptcode"
             class="w-full mb-3"

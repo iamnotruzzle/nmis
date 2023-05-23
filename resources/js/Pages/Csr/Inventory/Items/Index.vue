@@ -234,6 +234,7 @@
             v-model.trim="form.cl1comb"
             required="true"
             :options="cl1combsList"
+            filter
             optionLabel="cl1desc"
             optionValue="cl1comb"
             class="w-full mb-3"

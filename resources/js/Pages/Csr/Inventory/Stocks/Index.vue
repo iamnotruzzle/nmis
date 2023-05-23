@@ -216,6 +216,7 @@
             required="true"
             v-model="form.cl2comb"
             :options="itemsList"
+            filter
             dataKey="unit"
             optionLabel="cl2desc"
             optionValue="cl2comb"
