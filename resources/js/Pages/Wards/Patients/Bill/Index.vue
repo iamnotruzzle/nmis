@@ -136,6 +136,30 @@
           <template #footer>
             <div class="text-right text-lg text-green-600">Total: ₱ {{ totalAmount.toFixed(2) }}</div>
           </template>
+          <Column
+            header="Action"
+            style="min-width: 12rem"
+          >
+            <!-- @click="editItem(slotProps.data)" -->
+            <template #body="slotProps">
+              <Button
+                icon="pi pi-pencil"
+                class="mr-1"
+                rounded
+                text
+                severity="warning"
+                @click="editItem(slotProps.data)"
+              />
+
+              <Button
+                icon="pi pi-trash"
+                rounded
+                text
+                severity="danger"
+                @click=""
+              />
+            </template>
+          </Column>
         </DataTable>
 
         <DataTable
@@ -309,6 +333,64 @@
             />
           </template>
         </Dialog>
+
+        <!-- update bill dialog -->
+        <Dialog
+          v-model:visible="updateBillDialog"
+          :style="{ width: '450px' }"
+          header="Charge Detail"
+          :modal="true"
+          class="p-fluid"
+          @hide="clickOutsideDialog"
+          dismissableMask
+        >
+          <div class="field">
+            <label for="item">ITEM / SERVICE</label>
+            <InputText
+              id="item"
+              v-model.trim="form.upd_item"
+              disabled
+            />
+          </div>
+
+          <div class="field">
+            <label for="qtyToCharge">Quantity</label>
+            <InputText
+              id="qtyToCharge"
+              v-model.trim="form.upd_qtyToCharge"
+              required="true"
+              type="number"
+              autofocus
+              :class="{ 'p-invalid': form.upd_qtyToCharge == '' }"
+              @keyup.enter="submit"
+            />
+            <small
+              class="text-error"
+              v-if="itemNotSelected == true"
+            >
+              {{ itemNotSelectedMsg }}
+            </small>
+          </div>
+
+          <template #footer>
+            <Button
+              label="Cancel"
+              icon="pi pi-times"
+              severity="danger"
+              text
+              @click="cancel"
+            />
+            <Button
+              :disabled="updateQtyNotEnough == true || form.upd_qtyToCharge == 0 || form.upd_qtyToCharge == ''"
+              label="Update"
+              icon="pi pi-check"
+              severity="warning"
+              text
+              type="submit"
+              @click="submit"
+            />
+          </template>
+        </Dialog>
       </div>
     </div>
   </app-layout>
@@ -366,6 +448,7 @@ export default {
       params: {},
       isUpdate: false,
       createBillDialog: false,
+      updateBillDialog: false,
       enccode: '',
       patientName: '',
       hospitalNumber: '',
@@ -379,6 +462,7 @@ export default {
       qtyToCharge: null,
       itemNotSelected: false,
       itemNotSelectedMsg: null,
+      updateQtyNotEnough: false,
       totalAmount: 0,
       medicalSuppliesListFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -397,14 +481,23 @@ export default {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       form: this.$inertia.form({
+        isUpdate: false,
         enccode: null,
         hospitalNumber: null,
         itemsToBillList: null,
+        upd_charge_slip_no: null,
+        upd_item: null,
+        upd_itemcode: null,
+        upd_type_of_charge_code: null,
+        upd_qtyToCharge: null,
+        upd_price: null,
+        upd_total: null,
+        upd_charge_date: null,
       }),
     };
   },
   mounted() {
-    console.log(this.tanks);
+    // console.log(this.tanks);
     this.storeBillsInContainer();
     this.getTotalAmount();
     this.storeMedicalSuppliesInContainer();
@@ -432,18 +525,6 @@ export default {
       this.bills.admission_date_bill.patient_charge.forEach((e) => {
         // only push item when chargcode are drug and meds oxygen, compressed air and carbon dioxide
         if (e.chargcode == 'DRUMD') {
-          //   this.billList.push({
-          //     charge_slip_no: e.pcchrgcod,
-          //     type_of_charge_code: e.type_of_charge.chrgcode,
-          //     type_of_charge_description: e.type_of_charge.chrgdesc,
-          //     item: e.type_of_charge.chrgdesc,
-          //     itemcode: e.itemcode,
-          //     quantity: Math.trunc(e.pchrgqty),
-          //     price: e.pchrgup,
-          //     amount: (Math.trunc(e.pchrgqty) * Math.round(e.pchrgup * 100)) / 100,
-          //     charge_date: e.pcchrgdte,
-          //   });
-
           this.tanks.forEach((t) => {
             if (e.itemcode == t.itemcode && e.uomcode == t.unitcode) {
               this.billList.push({
@@ -461,9 +542,8 @@ export default {
             }
           });
         }
-
         // only push item when chargcode are medical supplies or misc
-        if (e.chargcode == 'MISC' || e.chargcode == 'DRUMN') {
+        else if (e.chargcode == 'MISC' || e.chargcode == 'DRUMN') {
           this.billList.push({
             charge_slip_no: e.pcchrgcod,
             type_of_charge_code: e.type_of_charge.chrgcode,
@@ -475,6 +555,8 @@ export default {
             amount: (Math.trunc(e.pchrgqty) * Math.round(e.pchrgup * 100)) / 100,
             charge_date: e.pcchrgdte,
           });
+        } else {
+          return null;
         }
       });
       //   console.log(this.billList);
@@ -549,6 +631,7 @@ export default {
         (this.qtyToCharge = null),
         (this.itemNotSelected = null),
         (this.itemNotSelectedMsg = null),
+        (this.form.isUpdate = false),
         this.form.clearErrors(),
         this.form.reset()
       );
@@ -648,6 +731,21 @@ export default {
         },
       });
     },
+    editItem(item) {
+      console.log(item);
+      this.form.isUpdate = true;
+      this.form.enccode = this.enccode;
+      this.form.hospitalNumber = this.hospitalNumber;
+      this.form.upd_item = item.item;
+      this.form.upd_charge_slip_no = item.charge_slip_no;
+      this.form.upd_itemcode = item.itemcode;
+      this.form.upd_type_of_charge_code = item.type_of_charge_code;
+      this.form.upd_qtyToCharge = item.quantity;
+      this.form.upd_price = item.price;
+      this.form.upd_total = item.amount;
+      this.form.upd_charge_date = item.charge_date;
+      this.updateBillDialog = true;
+    },
     cancel() {
       this.itemsToBillList = [];
       this.item = null;
@@ -656,27 +754,50 @@ export default {
       this.itemNotSelected = null;
       this.itemNotSelectedMsg = null;
       this.createBillDialog = false;
+      this.updateBillDialog = false;
+      this.form.isUpdate = false;
       this.form.reset();
       this.form.clearErrors();
     },
-    // stockQtyNotEnough() {
-    //   this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Current stock is not enough', life: 3000 });
-    // },
     createdMsg() {
       this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Successfully charge patient', life: 3000 });
     },
-    // updatedMsg() {
-    //   this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Category updated', life: 3000 });
-    // },
+    updatedMsg() {
+      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Charge updated', life: 3000 });
+    },
     // deletedMsg() {
     //   this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Category deleted', life: 3000 });
     // },
   },
   watch: {
-    // search: function (val, oldVal) {
-    //   this.params.search = val;
-    //   //   this.updateData();
-    // },
+    'form.upd_qtyToCharge': function (val, oldVal) {
+      let currentStockQty = undefined;
+
+      if (this.form.upd_type_of_charge_code == 'DRUMN') {
+        this.medicalSuppliesList.forEach((e) => {
+          if (e.cl2comb == this.form.upd_itemcode) {
+            currentStockQty = e.quantity;
+          }
+        });
+
+        this.billList.forEach((e) => {
+          if (e.itemcode == this.form.upd_itemcode && this.form.upd_charge_date == e.charge_date) {
+            currentStockQty = Number(currentStockQty) + Number(e.quantity);
+          }
+        });
+
+        if (Number(this.form.upd_qtyToCharge) > currentStockQty) {
+          this.itemNotSelected = true;
+          this.itemNotSelectedMsg = 'Current stock is not enough.';
+          this.updateQtyNotEnough = true;
+        } else {
+          this.itemNotSelected = false;
+          this.updateQtyNotEnough = false;
+        }
+      } else {
+        this.itemNotSelected = false;
+      }
+    },
   },
 };
 </script>

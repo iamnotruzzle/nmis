@@ -91,6 +91,8 @@ class PatientChargeController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request);
+
         $entryby = Auth::user()->employeeid;
 
         $srcchrg = '';
@@ -335,7 +337,7 @@ class PatientChargeController extends Controller
 
     public function update(Request $request, $id)
     {
-        //
+        // dd($request);
     }
 
 
