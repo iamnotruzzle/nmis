@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PatientBillLogs extends Model
+class PatientChargeLogs extends Model
 {
     use HasFactory;
 
-    protected $table = 'csrw_patient_bill_logs';
+    protected $table = 'csrw_patient_charge_logs';
 
     protected $fillable = [
         'id',
