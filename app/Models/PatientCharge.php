@@ -66,4 +66,9 @@ class PatientCharge extends Model
         // ['dmdcomb', 'dmdctr'],
         return $this->hasOne(Hdmhdr::class, $h->dmdcomb . '' . $h->dmdctr, 'itemcode')->with(['hdruggrp', 'hstre', 'hform', 'hroute']);
     }
+
+    public function patient_charge_logs()
+    {
+        return $this->hasOne(PatientChargeLogs::class, ['enccode', 'itemcode', 'pcchrgdte'], ['enccode', 'itemcode', 'pcchrgdte']);
+    }
 }

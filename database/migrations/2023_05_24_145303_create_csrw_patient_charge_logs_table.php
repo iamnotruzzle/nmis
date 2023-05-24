@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCsrwPatientBillLogsTable extends Migration
+class CreateCsrwPatientChargeLogsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateCsrwPatientBillLogsTable extends Migration
      */
     public function up()
     {
-        Schema::create('csrw_patient_bill_logs', function (Blueprint $table) {
+        Schema::create('csrw_patient_charge_logs', function (Blueprint $table) {
             $table->id();
             $table->string('enccode')->nullable();
             $table->string('acctno')->nullable();
@@ -26,7 +26,7 @@ class CreateCsrwPatientBillLogsTable extends Migration
             $table->integer('quantity')->nullable();
             $table->integer('price_per_piece')->nullable();
             $table->integer('price_total')->nullable();
-            $table->dateTime('charge_date')->nullable();
+            $table->dateTime('pcchrgdte')->nullable();
             $table->string('entry_at')->nullable(); // wardcode
             $table->string('entry_by')->nullable(); // employeeid
             $table->timestamps();
@@ -40,6 +40,6 @@ class CreateCsrwPatientBillLogsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('csrw_patient_bill_logs');
+        Schema::dropIfExists('csrw_patient_charge_logs');
     }
 }

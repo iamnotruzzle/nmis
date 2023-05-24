@@ -24,7 +24,7 @@ class PatientChargeLogs extends Model
         'quantity',
         'price_per_piece',
         'price_total',
-        'charge_date',
+        'pcchrgdte', // charge date
         'entry_at',
         'entry_by',
     ];
