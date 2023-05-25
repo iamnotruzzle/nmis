@@ -186,7 +186,6 @@ class PatientChargeController extends Controller
                             'quantity' => $remaining_qty_to_charge,
                             'price_per_piece' => (int)$item['price'] == null ? null : (int)$item['price'],
                             'price_total' => (int)$remaining_qty_to_charge * (int)$item['price'],
-                            // 'pcchrgdte' => Carbon::now(),
                             'pcchrgdte' => $patientChargeDate->pcchrgdte,
                             'entry_at' => $authWardcode->wardcode,
                             'entry_by' => $entryby,
@@ -217,7 +216,6 @@ class PatientChargeController extends Controller
                             'quantity' => $qty,
                             'price_per_piece' => (int)$item['price'] == null ? null : (int)$item['price'],
                             'price_total' => (int)$qty * (int)$item['price'],
-                            // 'pcchrgdte' => Carbon::now(),
                             'pcchrgdte' => $patientChargeDate->pcchrgdte,
                             'entry_at' => $authWardcode->wardcode,
                             'entry_by' => $entryby,
@@ -231,45 +229,6 @@ class PatientChargeController extends Controller
                             ]);
                     }
                 }
-
-                // PatientCharge::create([
-                //     'enccode' => $enccode,
-                //     'hpercode' => $hospitalNumber,
-                //     'upicode' => null,
-                //     'pcchrgcod' => $pcchrgcod, // charge slip no.
-                //     'pcchrgdte' => Carbon::now(),
-                //     'chargcode' => $item['typeOfCharge'], // type of charge (chrgcode from hcharge)
-                //     'uomcode' => $item['unit'], // unit
-                //     'pchrgqty' =>  $item['qtyToCharge'],
-                //     'pchrgup' => $item['price'],
-                //     'pcchrgamt' => $item['total'],
-                //     'pcstat' => 'A', // always A
-                //     'pclock' => 'N', // always N
-                //     'updsw' => 'N', // always N
-                //     'confdl' => 'N', // always N
-                //     'srcchrg' => $srcchrg,
-                //     'pcdisch' => 'Y',
-                //     'acctno' => $acctno->paacctno, // SELECT * FROM hpatacct --pacctno
-                //     'itemcode' => $item['itemCode'], // cl2comb or hmisc hmcode
-                //     'entryby' => $entryby,
-                //     'orinclst' => null, // null
-                //     'compense' => null, // always null
-                //     'proccode' => null, // always null
-                //     'discount' => null, // always null
-                //     'disamt' => null, // always null
-                //     'discbal' => null, // always null
-                //     'phicamt' => null, // always null
-                //     'rvscode' => null, // always null
-                //     'licno' => null, // always null
-                //     'hpatkey' => null, // always null
-                //     'time_frequency' => null, // always null
-                //     'unit_frequency' => null, // always null
-                //     'qtyintake' => null, // always null
-                //     'uomintake' => null, // always null
-                // ]);
-
-                // reset
-                $srcchrg = '';
             }
 
             if ($item['typeOfCharge'] == 'MISC') {
@@ -308,9 +267,6 @@ class PatientChargeController extends Controller
                     'qtyintake' => null, // always null
                     'uomintake' => null, // always null
                 ]);
-
-                // reset
-                $srcchrg = '';
             }
 
             // Drugs and Meds (Oxygen), carbon dioxide
@@ -350,9 +306,6 @@ class PatientChargeController extends Controller
                     'qtyintake' => null, // always null
                     'uomintake' => null, // always null
                 ]);
-
-                // reset
-                $srcchrg = '';
             }
 
             // /Compressed Air
@@ -392,9 +345,6 @@ class PatientChargeController extends Controller
                     'qtyintake' => null, // always null
                     'uomintake' => null, // always null
                 ]);
-
-                // reset
-                $srcchrg = '';
             }
         }
 
