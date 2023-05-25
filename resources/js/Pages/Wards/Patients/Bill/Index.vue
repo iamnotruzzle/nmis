@@ -497,7 +497,7 @@ export default {
     };
   },
   mounted() {
-    // console.log(this.tanks);
+    console.log(this.bills);
     this.storeBillsInContainer();
     this.getTotalAmount();
     this.storeMedicalSuppliesInContainer();
@@ -732,7 +732,7 @@ export default {
       });
     },
     editItem(item) {
-      console.log(item);
+      //   console.log(item);
       this.form.isUpdate = true;
       this.form.enccode = this.enccode;
       this.form.hospitalNumber = this.hospitalNumber;

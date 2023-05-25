@@ -2,20 +2,24 @@
 
 namespace App\Models;
 
+
 use App\Models\Tanks\Hdmhdr;
+use Awobaz\Compoships\Compoships;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class PatientCharge extends Model
 {
+    use Compoships;
     use HasFactory;
 
     protected $table = 'hpatchrg';
-    protected $primaryKey = 'itemcode';
+    // protected $primaryKey = ['enccode', 'itemcode', 'pcchrgdte'];
     // protected $primaryKey = null;
-    public $incrementing = false;
+    // public $incrementing = false;
 
-    // declare primary as string
+    // // declare primary as string
     protected $keyType = 'string';
     public $timestamps = false;
 
@@ -40,6 +44,19 @@ class PatientCharge extends Model
         'itemcode',
         'entryby',
         'orinclst',
+        'compense',
+        'proccode',
+        'discount',
+        'disamt',
+        'discbal',
+        'phicamt',
+        'rvscode',
+        'licno',
+        'hpatkey',
+        'time_frequency',
+        'unit_frequency',
+        'qtyintake',
+        'uomintake',
     ];
 
     public function typeOfCharge()
@@ -67,8 +84,8 @@ class PatientCharge extends Model
         return $this->hasOne(Hdmhdr::class, $h->dmdcomb . '' . $h->dmdctr, 'itemcode')->with(['hdruggrp', 'hstre', 'hform', 'hroute']);
     }
 
-    public function patient_charge_logs()
+    public function patientChargeLogs()
     {
-        return $this->hasOne(PatientChargeLogs::class, ['enccode', 'itemcode', 'pcchrgdte'], ['enccode', 'itemcode', 'pcchrgdte']);
+        return $this->hasMany(PatientChargeLogs::class, ['enccode', 'pcchrgdte', 'itemcode'], ['enccode', 'pcchrgdte', 'itemcode']);
     }
 }
