@@ -9,6 +9,7 @@ use App\Models\Miscellaneous;
 use App\Models\Patient;
 use App\Models\PatientAccount;
 use App\Models\PatientCharge;
+use App\Models\PatientChargeLogs;
 use App\Models\TypeOfCharge;
 use App\Models\WardsStocks;
 use Carbon\Carbon;
@@ -126,7 +127,7 @@ class PatientChargeController extends Controller
 
             if ($item['typeOfCharge'] == 'DRUMN') {
                 $srcchrg = 'WARD';
-                $remaining_qty_to_charge = $item['qtyToCharge'];
+                $remaining_qty_to_charge = $item['qtyToCharge']; // 15
                 $newStockQty = 0;
 
                 while ($remaining_qty_to_charge > 0) {
@@ -135,10 +136,26 @@ class PatientChargeController extends Controller
                         ->where('quantity', '!=', 0)
                         ->where('location', $authWardcode->wardcode)
                         ->orderBy('expiration_date', 'ASC')
-                        ->first();
+                        ->first(); // 10
 
-                    // execute if row selected is qty is enough
+                    // execute if row selected qty is enough
                     if ($wardStock->quantity >= $remaining_qty_to_charge) {
+                        PatientChargeLogs::create([
+                            'enccode' => $enccode,
+                            'acctno' => $acctno->paacctno,
+                            'ward_stocks_id' => $wardStock->id,
+                            'itemcode' => $wardStock->cl2comb,
+                            'manufactured_date' => $wardStock->manufactured_date == null ? null : $wardStock->manufactured_date,
+                            'delivery_date' => $wardStock->delivery_date == null ? null : $wardStock->delivery_date,
+                            'expiration_date' => $wardStock->expiration_date == null ? null : $wardStock->expiration_date,
+                            'quantity' => $remaining_qty_to_charge,
+                            'price_per_piece' => (int)$item['price'] == null ? null : (int)$item['price'],
+                            'price_total' => (int)$remaining_qty_to_charge * (int)$item['price'],
+                            'pcchrgdte' => Carbon::now(),
+                            'entry_at' => $authWardcode->wardcode,
+                            'entry_by' => $entryby,
+                        ]);
+
                         // getting the new qty of current editing ward stock
                         $newStockQty = $wardStock->quantity - $remaining_qty_to_charge;
                         // setting the new value of remaining_qty_to_charge
@@ -149,6 +166,26 @@ class PatientChargeController extends Controller
                                 'quantity' => $newStockQty,
                             ]);
                     } else {
+                        // calculate the value of quantity to insert based on the specific
+                        // stock that will be given
+                        $qty = ($wardStock->quantity - $remaining_qty_to_charge) + $remaining_qty_to_charge;
+
+                        PatientChargeLogs::create([
+                            'enccode' => $enccode,
+                            'acctno' => $acctno->paacctno,
+                            'ward_stocks_id' => $wardStock->id,
+                            'itemcode' => $wardStock->cl2comb,
+                            'manufactured_date' => $wardStock->manufactured_date == null ? null : $wardStock->manufactured_date,
+                            'delivery_date' => $wardStock->delivery_date == null ? null : $wardStock->delivery_date,
+                            'expiration_date' => $wardStock->expiration_date == null ? null : $wardStock->expiration_date,
+                            'quantity' => $qty,
+                            'price_per_piece' => (int)$item['price'] == null ? null : (int)$item['price'],
+                            'price_total' => (int)$qty * (int)$item['price'],
+                            'pcchrgdte' => Carbon::now(),
+                            'entry_at' => $authWardcode->wardcode,
+                            'entry_by' => $entryby,
+                        ]);
+
                         $srcchrg = 'WARD';
                         $remaining_qty_to_charge = $remaining_qty_to_charge - $wardStock->quantity;
 

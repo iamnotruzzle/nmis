@@ -17,7 +17,6 @@ class PatientChargeLogs extends Model
         'acctno',
         'ward_stocks_id',
         'itemcode',
-        'batch_no',
         'manufactured_date',
         'delivery_date',
         'expiration_date',
