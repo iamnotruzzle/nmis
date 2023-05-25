@@ -96,7 +96,7 @@ class PatientChargeController extends Controller
 
         $entryby = Auth::user()->employeeid;
 
-        $srcchrg = '';
+        $srcchrg = 'WARD';
 
         // get auth wardcode
         $authWardcode = DB::table('csrw_users')
@@ -126,7 +126,7 @@ class PatientChargeController extends Controller
         foreach ($itemsToBillList as $item) {
 
             if ($item['typeOfCharge'] == 'DRUMN') {
-                $x = PatientCharge::create([
+                $patientChargeDate = PatientCharge::create([
                     'enccode' => $enccode,
                     'hpercode' => $hospitalNumber,
                     'upicode' => null,
@@ -162,7 +162,6 @@ class PatientChargeController extends Controller
                     'uomintake' => null, // always null
                 ]);
 
-                $srcchrg = 'WARD';
                 $remaining_qty_to_charge = $item['qtyToCharge']; // 15
                 $newStockQty = 0;
 
@@ -188,7 +187,7 @@ class PatientChargeController extends Controller
                             'price_per_piece' => (int)$item['price'] == null ? null : (int)$item['price'],
                             'price_total' => (int)$remaining_qty_to_charge * (int)$item['price'],
                             // 'pcchrgdte' => Carbon::now(),
-                            'pcchrgdte' => $x->pcchrgdte,
+                            'pcchrgdte' => $patientChargeDate->pcchrgdte,
                             'entry_at' => $authWardcode->wardcode,
                             'entry_by' => $entryby,
                         ]);
@@ -219,12 +218,11 @@ class PatientChargeController extends Controller
                             'price_per_piece' => (int)$item['price'] == null ? null : (int)$item['price'],
                             'price_total' => (int)$qty * (int)$item['price'],
                             // 'pcchrgdte' => Carbon::now(),
-                            'pcchrgdte' => $x->pcchrgdte,
+                            'pcchrgdte' => $patientChargeDate->pcchrgdte,
                             'entry_at' => $authWardcode->wardcode,
                             'entry_by' => $entryby,
                         ]);
 
-                        $srcchrg = 'WARD';
                         $remaining_qty_to_charge = $remaining_qty_to_charge - $wardStock->quantity;
 
                         $wardStock::where('id', $wardStock->id)
@@ -275,8 +273,6 @@ class PatientChargeController extends Controller
             }
 
             if ($item['typeOfCharge'] == 'MISC') {
-                $srcchrg = 'WARD';
-
                 PatientCharge::create([
                     'enccode' => $enccode,
                     'hpercode' => $hospitalNumber,
@@ -319,8 +315,6 @@ class PatientChargeController extends Controller
 
             // Drugs and Meds (Oxygen), carbon dioxide
             if ($item['typeOfCharge'] == 'DRUMD') {
-                $srcchrg = 'WARD';
-
                 PatientCharge::create([
                     'enccode' => $enccode,
                     'hpercode' => $hospitalNumber,
@@ -363,8 +357,6 @@ class PatientChargeController extends Controller
 
             // /Compressed Air
             if ($item['typeOfCharge'] == 'DRUMF') {
-                $srcchrg = 'WARD';
-
                 PatientCharge::create([
                     'enccode' => $enccode,
                     'hpercode' => $hospitalNumber,
