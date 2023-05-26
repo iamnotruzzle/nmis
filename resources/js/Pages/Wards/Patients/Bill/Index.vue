@@ -10,7 +10,9 @@
           class="p-datatable-sm"
           dataKey="id"
           v-model:filters="filters"
+          v-model:expandedRows="expandedRows"
           :value="billList"
+          selectionMode="single"
           removableSort
           sortField="charge_date"
           :sortOrder="-1"
@@ -43,6 +45,10 @@
               </div>
             </div>
           </template>
+          <Column
+            expander
+            style="width: 5rem"
+          />
           <Column
             field="charge_slip_no"
             header="Charge slip #"
@@ -136,30 +142,57 @@
           <template #footer>
             <div class="text-right text-lg text-green-600">Total: ₱ {{ totalAmount.toFixed(2) }}</div>
           </template>
-          <Column
-            header="Action"
-            style="min-width: 12rem"
-          >
-            <!-- @click="editItem(slotProps.data)" -->
-            <template #body="slotProps">
-              <Button
-                icon="pi pi-pencil"
-                class="mr-1"
-                rounded
-                text
-                severity="warning"
-                @click="editItem(slotProps.data)"
-              />
+          <template #expansion="slotProps">
+            <div class="p-3">
+              {{ slotProps.data.patient_charge_logs }}
+              <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+                <h5>
+                  <!-- Prices for <span class="text-cyan-500 hover:text-cyan-700">{{ slotProps.data.cl2desc }}</span> -->
+                </h5>
+              </div>
+              <DataTable
+                :dataKey="slotProps.data.patient_charge_logs.id"
+                :value="slotProps.data.patient_charge_logs"
+                paginator
+                :rows="5"
+              >
+                <Column header="EXP. DATE">
+                  <template #body="{ data }">
+                    {{ tzone(data.expiration_date) }}
+                  </template>
+                </Column>
+                <Column header="QuANTITY">
+                  <template #body="{ data }">
+                    {{ data.quantity }}
+                  </template>
+                </Column>
+                <Column
+                  header="Action"
+                  style="min-width: 12rem"
+                >
+                  <!-- @click="editItem(slotProps.data)" -->
+                  <template #body="slotProps">
+                    <Button
+                      icon="pi pi-pencil"
+                      class="mr-1"
+                      rounded
+                      text
+                      severity="warning"
+                      @click="editItem(slotProps.data)"
+                    />
 
-              <Button
-                icon="pi pi-trash"
-                rounded
-                text
-                severity="danger"
-                @click=""
-              />
-            </template>
-          </Column>
+                    <Button
+                      icon="pi pi-trash"
+                      rounded
+                      text
+                      severity="danger"
+                      @click=""
+                    />
+                  </template>
+                </Column>
+              </DataTable>
+            </div>
+          </template>
         </DataTable>
 
         <DataTable
@@ -443,6 +476,7 @@ export default {
   },
   data() {
     return {
+      expandedRows: [],
       search: '',
       options: {},
       params: {},
@@ -514,7 +548,7 @@ export default {
   },
   methods: {
     tzone(date) {
-      return moment.tz(date, 'Asia/Manila').format('LLL');
+      return moment.tz(date, 'Asia/Manila').format('L');
     },
     getTotalAmount() {
       this.billList.forEach((item) => {
@@ -538,6 +572,7 @@ export default {
                 price: e.pchrgup,
                 amount: (Math.trunc(e.pchrgqty) * Math.round(e.pchrgup * 100)) / 100,
                 charge_date: e.pcchrgdte,
+                patient_charge_logs: e.patient_charge_logs.length == 0 ? null : e.patient_charge_logs,
               });
             }
           });
@@ -554,6 +589,7 @@ export default {
             price: e.pchrgup,
             amount: (Math.trunc(e.pchrgqty) * Math.round(e.pchrgup * 100)) / 100,
             charge_date: e.pcchrgdte,
+            patient_charge_logs: e.patient_charge_logs.length == 0 ? null : e.patient_charge_logs,
           });
         } else {
           return null;
