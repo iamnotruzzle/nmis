@@ -378,31 +378,59 @@
           dismissableMask
         >
           <div class="field">
-            <label for="item">ITEM / SERVICE</label>
-            <InputText
-              id="item"
-              v-model.trim="form.upd_item"
-              disabled
-            />
+            <label
+              for="item"
+              class="font-bold text-cyan-500"
+            >
+              ITEM / SERVICE
+            </label>
+            <div>
+              <span
+                class="text-xl text-900"
+                v-text="form.upd_item"
+              ></span>
+            </div>
+          </div>
+
+          <div class="field mt-4">
+            <label
+              for="item"
+              class="font-bold text-cyan-500"
+            >
+              Quantity
+            </label>
+            <div>
+              <span
+                class="text-xl text-900"
+                v-text="form.upd_qtyToCharge"
+              ></span>
+            </div>
           </div>
 
           <div class="field">
-            <label for="qtyToCharge">Quantity</label>
-            <InputText
-              id="qtyToCharge"
-              v-model.trim="form.upd_qtyToCharge"
-              required="true"
-              type="number"
-              autofocus
-              :class="{ 'p-invalid': form.upd_qtyToCharge == '' }"
-              @keyup.enter="submit"
-            />
-            <small
-              class="text-error"
-              v-if="itemNotSelected == true"
-            >
-              {{ itemNotSelectedMsg }}
-            </small>
+            <DataTable :value="form.patient_charge_logs">
+              <template #header>
+                <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+                  <span class="text-xl text-900 font-bold">Return items</span>
+                </div>
+              </template>
+              <Column
+                field="expiration_date"
+                header="EXP. DATE"
+              >
+                <template #body="{ data }">
+                  {{ tzone(data.expiration_date) }}
+                </template>
+              </Column>
+              <Column header="QTY TO RETURN">
+                <template #body="{ data }">
+                  <InputText
+                    type="number"
+                    v-model="data.quantity"
+                  />
+                </template>
+              </Column>
+            </DataTable>
           </div>
 
           <template #footer>
@@ -527,6 +555,7 @@ export default {
         upd_price: null,
         upd_total: null,
         upd_charge_date: null,
+        patient_charge_logs: null,
       }),
     };
   },
@@ -768,7 +797,7 @@ export default {
       });
     },
     editItem(item) {
-      //   console.log(item);
+      console.log('edit', item);
       this.form.isUpdate = true;
       this.form.enccode = this.enccode;
       this.form.hospitalNumber = this.hospitalNumber;
@@ -780,6 +809,7 @@ export default {
       this.form.upd_price = item.price;
       this.form.upd_total = item.amount;
       this.form.upd_charge_date = item.charge_date;
+      this.form.patient_charge_logs = item.patient_charge_logs;
       this.updateBillDialog = true;
     },
     cancel() {
