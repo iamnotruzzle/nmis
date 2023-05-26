@@ -497,7 +497,7 @@ export default {
     };
   },
   mounted() {
-    console.log(this.bills);
+    console.log('bills', this.bills);
     this.storeBillsInContainer();
     this.getTotalAmount();
     this.storeMedicalSuppliesInContainer();
