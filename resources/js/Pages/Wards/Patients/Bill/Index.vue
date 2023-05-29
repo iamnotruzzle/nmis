@@ -404,16 +404,16 @@
             -->
             <InputText
               id="quantity"
-              v-model.trim="form.upd_qtyToCharge"
+              v-model.trim="form.upd_QtyToReturn"
               required="true"
               autofocus
               type="number"
               onkeypress="return event.charCode >= 48 && event.charCode <= 57"
               @keyup.enter="
-                Number(form.upd_qtyToCharge) > Number(form.upd_currentChargeQty) ||
-                form.upd_qtyToCharge == null ||
-                form.upd_qtyToCharge == 0 ||
-                form.upd_qtyToCharge == ''
+                Number(form.upd_QtyToReturn) > Number(form.upd_currentChargeQty) ||
+                form.upd_QtyToReturn == null ||
+                form.upd_QtyToReturn == 0 ||
+                form.upd_QtyToReturn == ''
                   ? ''
                   : submit()
               "
@@ -428,15 +428,16 @@
               text
               @click="cancel"
             />
-            <!-- form.upd_qtyToCharge == null ||
-                form.upd_qtyToCharge == 0 ||
-                form.upd_qtyToCharge == '' -->
+            <!-- form.upd_QtyToReturn == null ||
+                form.upd_QtyToReturn == 0 ||
+                form.upd_QtyToReturn == '' -->
             <Button
               :disabled="
-                Number(form.upd_qtyToCharge) > Number(form.upd_currentChargeQty) ||
-                form.upd_qtyToCharge == null ||
-                form.upd_qtyToCharge == 0 ||
-                form.upd_qtyToCharge == ''
+                Number(form.upd_QtyToReturn) > Number(form.upd_currentChargeQty) ||
+                form.upd_QtyToReturn == null ||
+                form.upd_QtyToReturn == 0 ||
+                form.upd_QtyToReturn == '' ||
+                form.processing
               "
               label="Return"
               icon="pi pi-check"
@@ -553,9 +554,9 @@ export default {
         upd_itemcode: null,
         upd_type_of_charge_code: null,
         upd_currentChargeQty: null,
-        upd_qtyToCharge: null,
+        upd_QtyToReturn: null,
         upd_price: null,
-        upd_charge_date: null,
+        upd_pcchrgdte: null,
       }),
     };
   },
@@ -797,8 +798,8 @@ export default {
       });
     },
     editItem(charge, chargeLogs) {
-      //   console.log('charge', charge.data.item);
-      console.log('chargeLogs', chargeLogs);
+      console.log('charge', charge.data.item);
+      console.log('chargeLogs', chargeLogs.data);
       this.form.isUpdate = true;
       this.form.upd_id = chargeLogs.data.id;
       this.form.upd_ward_stocks_id = chargeLogs.data.ward_stocks_id;
@@ -810,7 +811,7 @@ export default {
       this.form.upd_type_of_charge_code = charge.data.type_of_charge_code;
       this.form.upd_currentChargeQty = chargeLogs.data.quantity;
       this.form.upd_price = chargeLogs.data.price_per_piece;
-      this.form.upd_charge_date = chargeLogs.data.charge_date;
+      this.form.upd_pcchrgdte = chargeLogs.data.pcchrgdte;
       this.updateBillDialog = true;
       //   console.log(this.form.upd_currentChargeQty);
     },
@@ -836,36 +837,6 @@ export default {
     // deletedMsg() {
     //   this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Category deleted', life: 3000 });
     // },
-  },
-  watch: {
-    'form.upd_qtyToCharge': function (val, oldVal) {
-      let currentStockQty = undefined;
-
-      if (this.form.upd_type_of_charge_code == 'DRUMN') {
-        this.medicalSuppliesList.forEach((e) => {
-          if (e.cl2comb == this.form.upd_itemcode) {
-            currentStockQty = e.quantity;
-          }
-        });
-
-        this.billList.forEach((e) => {
-          if (e.itemcode == this.form.upd_itemcode && this.form.upd_charge_date == e.charge_date) {
-            currentStockQty = Number(currentStockQty) + Number(e.quantity);
-          }
-        });
-
-        if (Number(this.form.upd_qtyToCharge) > currentStockQty) {
-          this.itemNotSelected = true;
-          this.itemNotSelectedMsg = 'Current stock is not enough.';
-          this.updateQtyNotEnough = true;
-        } else {
-          this.itemNotSelected = false;
-          this.updateQtyNotEnough = false;
-        }
-      } else {
-        this.itemNotSelected = false;
-      }
-    },
   },
 };
 </script>
