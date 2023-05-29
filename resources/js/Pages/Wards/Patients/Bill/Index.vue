@@ -144,14 +144,12 @@
           </template>
           <template #expansion="slotProps">
             <div class="p-3">
-              {{ slotProps.data.patient_charge_logs }}
               <div class="flex flex-wrap align-items-center justify-content-between gap-2">
                 <h5>
                   <!-- Prices for <span class="text-cyan-500 hover:text-cyan-700">{{ slotProps.data.cl2desc }}</span> -->
                 </h5>
               </div>
               <DataTable
-                :dataKey="slotProps.data.patient_charge_logs.id"
                 :value="slotProps.data.patient_charge_logs"
                 paginator
                 :rows="5"
@@ -171,23 +169,23 @@
                   style="min-width: 12rem"
                 >
                   <!-- @click="editItem(slotProps.data)" -->
-                  <template #body="slotProps">
+                  <template #body="chargeLogs">
                     <Button
                       icon="pi pi-pencil"
                       class="mr-1"
                       rounded
                       text
                       severity="warning"
-                      @click="editItem(slotProps.data)"
+                      @click="editItem(slotProps, chargeLogs)"
                     />
 
-                    <Button
+                    <!-- <Button
                       icon="pi pi-trash"
                       rounded
                       text
                       severity="danger"
                       @click=""
-                    />
+                    /> -->
                   </template>
                 </Column>
               </DataTable>
@@ -195,6 +193,7 @@
           </template>
         </DataTable>
 
+        <!-- current stocks -->
         <DataTable
           v-model:filters="medicalSuppliesListFilter"
           :value="medicalSuppliesList"
@@ -387,50 +386,26 @@
             <div>
               <span
                 class="text-xl text-900"
-                v-text="form.upd_item"
+                v-text="form.upd_item_desc"
               ></span>
             </div>
           </div>
 
           <div class="field mt-4">
             <label
-              for="item"
+              for="quantity"
               class="font-bold text-cyan-500"
             >
-              Quantity
+              Qty to return
             </label>
-            <div>
-              <span
-                class="text-xl text-900"
-                v-text="form.upd_qtyToCharge"
-              ></span>
-            </div>
-          </div>
-
-          <div class="field">
-            <DataTable :value="form.patient_charge_logs">
-              <template #header>
-                <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-                  <span class="text-xl text-900 font-bold">Return items</span>
-                </div>
-              </template>
-              <Column
-                field="expiration_date"
-                header="EXP. DATE"
-              >
-                <template #body="{ data }">
-                  {{ tzone(data.expiration_date) }}
-                </template>
-              </Column>
-              <Column header="QTY TO RETURN">
-                <template #body="{ data }">
-                  <InputText
-                    type="number"
-                    v-model="data.quantity"
-                  />
-                </template>
-              </Column>
-            </DataTable>
+            <InputText
+              id="quantity"
+              v-model.trim="form.upd_qtyToCharge"
+              required="true"
+              autofocus
+              type="number"
+            />
+            <!-- :class="{ 'p-invalid': qtyToCharge == '' || item == null }" -->
           </div>
 
           <template #footer>
@@ -543,24 +518,27 @@ export default {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       form: this.$inertia.form({
+        // for storing
         isUpdate: false,
         enccode: null,
         hospitalNumber: null,
         itemsToBillList: null,
+        // for updating
+        upd_enccode: null,
+        upd_hospitalNumber: null,
         upd_charge_slip_no: null,
-        upd_item: null,
+        upd_item_desc: null,
         upd_itemcode: null,
         upd_type_of_charge_code: null,
+        upd_currentChargeQty: null,
         upd_qtyToCharge: null,
         upd_price: null,
-        upd_total: null,
         upd_charge_date: null,
-        patient_charge_logs: null,
       }),
     };
   },
   mounted() {
-    console.log('bills', this.bills);
+    // console.log('bills', this.bills);
     this.storeBillsInContainer();
     this.getTotalAmount();
     this.storeMedicalSuppliesInContainer();
@@ -796,20 +774,19 @@ export default {
         },
       });
     },
-    editItem(item) {
-      console.log('edit', item);
+    editItem(charge, chargeLogs) {
+      console.log('charge', charge.data.item);
+      //   console.log('chargeLogs', chargeLogs);
       this.form.isUpdate = true;
-      this.form.enccode = this.enccode;
-      this.form.hospitalNumber = this.hospitalNumber;
-      this.form.upd_item = item.item;
-      this.form.upd_charge_slip_no = item.charge_slip_no;
-      this.form.upd_itemcode = item.itemcode;
-      this.form.upd_type_of_charge_code = item.type_of_charge_code;
-      this.form.upd_qtyToCharge = item.quantity;
-      this.form.upd_price = item.price;
-      this.form.upd_total = item.amount;
-      this.form.upd_charge_date = item.charge_date;
-      this.form.patient_charge_logs = item.patient_charge_logs;
+      this.form.upd_enccode = chargeLogs.enccode;
+      this.form.upd_hospitalNumber = chargeLogs.acctno;
+      this.form.upd_item_desc = charge.data.item;
+      this.form.upd_charge_slip_no = charge.data.charge_slip_no;
+      this.form.upd_itemcode = chargeLogs.itemcode;
+      this.form.upd_type_of_charge_code = charge.data.type_of_charge_code;
+      this.form.upd_currentChargeQty = chargeLogs.quantity;
+      this.form.upd_price = chargeLogs.price_per_piece;
+      this.form.upd_charge_date = chargeLogs.charge_date;
       this.updateBillDialog = true;
     },
     cancel() {
