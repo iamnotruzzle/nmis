@@ -409,7 +409,14 @@
               autofocus
               type="number"
               onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-              @keyup.enter="submit"
+              @keyup.enter="
+                Number(form.upd_qtyToCharge) > Number(form.upd_currentChargeQty) ||
+                form.upd_qtyToCharge == null ||
+                form.upd_qtyToCharge == 0 ||
+                form.upd_qtyToCharge == ''
+                  ? ''
+                  : submit()
+              "
             />
           </div>
 
