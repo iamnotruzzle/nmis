@@ -8,7 +8,7 @@
       <div class="lg:flex">
         <DataTable
           class="p-datatable-sm"
-          dataKey="id"
+          :dataKey="billList.uid"
           v-model:filters="filters"
           v-model:expandedRows="expandedRows"
           :value="billList"
@@ -143,10 +143,11 @@
             <div class="text-right text-lg text-green-600">Total: ₱ {{ totalAmount.toFixed(2) }}</div>
           </template>
           <template #expansion="slotProps">
+            <!-- Charge for medical supplies -->
             <div class="p-3">
               <div class="flex flex-wrap align-items-center justify-content-between gap-2">
                 <h5>
-                  <!-- Prices for <span class="text-cyan-500 hover:text-cyan-700">{{ slotProps.data.cl2desc }}</span> -->
+                  <span class="text-cyan-500 hover:text-cyan-700">Medical Supplies</span>
                 </h5>
               </div>
               <DataTable
@@ -168,7 +169,6 @@
                   header="Action"
                   style="min-width: 12rem"
                 >
-                  <!-- @click="editItem(slotProps.data)" -->
                   <template #body="chargeLogs">
                     <Button
                       icon="pi pi-pencil"
@@ -178,14 +178,46 @@
                       severity="warning"
                       @click="editItem(slotProps, chargeLogs)"
                     />
+                  </template>
+                </Column>
+              </DataTable>
+            </div>
 
-                    <!-- <Button
-                      icon="pi pi-trash"
+            <!-- Charge for MISC -->
+            <div class="p-3">
+              <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+                <h5>
+                  <span class="text-cyan-500 hover:text-cyan-700">Miscellaneous</span>
+                </h5>
+              </div>
+              <DataTable
+                :value="slotProps.data.patient_charge_logs"
+                paginator
+                :rows="5"
+              >
+                <Column header="EXP. DATE">
+                  <template #body="{ data }">
+                    {{ tzone(data.expiration_date) }}
+                  </template>
+                </Column>
+                <Column header="QuANTITY">
+                  <template #body="{ data }">
+                    {{ data.quantity }}
+                  </template>
+                </Column>
+                <Column
+                  header="Action"
+                  style="min-width: 12rem"
+                >
+                  <template #body="chargeLogs">
+                    <Button
+                      icon="pi pi-pencil"
+                      class="mr-1"
                       rounded
                       text
-                      severity="danger"
-                      @click=""
-                    /> -->
+                      severity="warning"
+                      @click="editItem(slotProps, chargeLogs)"
+                    />
                   </template>
                 </Column>
               </DataTable>
@@ -586,12 +618,14 @@ export default {
       });
     },
     storeBillsInContainer() {
+      let uid = 0;
       this.bills.admission_date_bill.patient_charge.forEach((e) => {
         // only push item when chargcode are drug and meds oxygen, compressed air and carbon dioxide
         if (e.chargcode == 'DRUMD') {
           this.tanks.forEach((t) => {
             if (e.itemcode == t.itemcode && e.uomcode == t.unitcode) {
               this.billList.push({
+                uid: Number(uid) + 1,
                 charge_slip_no: e.pcchrgcod,
                 type_of_charge_code: e.type_of_charge.chrgcode,
                 type_of_charge_description: e.type_of_charge.chrgdesc,
@@ -610,6 +644,7 @@ export default {
         // only push item when chargcode are medical supplies or misc
         else if (e.chargcode == 'MISC' || e.chargcode == 'DRUMN') {
           this.billList.push({
+            uid: Number(uid) + 1,
             charge_slip_no: e.pcchrgcod,
             type_of_charge_code: e.type_of_charge.chrgcode,
             type_of_charge_description: e.type_of_charge.chrgdesc,

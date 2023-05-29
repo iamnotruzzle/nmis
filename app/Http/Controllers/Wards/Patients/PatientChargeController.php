@@ -233,8 +233,9 @@ class PatientChargeController extends Controller
                     }
                 }
 
+                // MISC
                 if ($item['typeOfCharge'] == 'MISC') {
-                    PatientCharge::create([
+                    $patientMiscChargeDate = PatientCharge::create([
                         'enccode' => $enccode,
                         'hpercode' => $hospitalNumber,
                         'upicode' => null,
@@ -268,12 +269,28 @@ class PatientChargeController extends Controller
                         'unit_frequency' => null, // always null
                         'qtyintake' => null, // always null
                         'uomintake' => null, // always null
+                    ]);
+                    // dd($item);
+                    PatientChargeLogs::create([
+                        'enccode' => $enccode,
+                        'acctno' => $acctno->paacctno,
+                        'ward_stocks_id' => null,
+                        'itemcode' => $item['itemCode'],
+                        'manufactured_date' =>  null,
+                        'delivery_date' => null,
+                        'expiration_date' => null,
+                        'quantity' => (int)$item['qtyToCharge'],
+                        'price_per_piece' => (float)$item['price'],
+                        'price_total' => (float)$item['qtyToCharge'] * (float)$item['price'],
+                        'pcchrgdte' => $patientMiscChargeDate->pcchrgdte,
+                        'entry_at' => $authWardcode->wardcode,
+                        'entry_by' => $entryby,
                     ]);
                 }
 
                 // Drugs and Meds (Oxygen), carbon dioxide
                 if ($item['typeOfCharge'] == 'DRUMD') {
-                    PatientCharge::create([
+                    $patientDrumDChargeDate = PatientCharge::create([
                         'enccode' => $enccode,
                         'hpercode' => $hospitalNumber,
                         'upicode' => null,
@@ -308,11 +325,28 @@ class PatientChargeController extends Controller
                         'qtyintake' => null, // always null
                         'uomintake' => null, // always null
                     ]);
+
+                    // dd($item);
+                    PatientChargeLogs::create([
+                        'enccode' => $enccode,
+                        'acctno' => $acctno->paacctno,
+                        'ward_stocks_id' => null,
+                        'itemcode' => $item['itemCode'],
+                        'manufactured_date' =>  null,
+                        'delivery_date' => null,
+                        'expiration_date' => null,
+                        'quantity' => (int)$item['qtyToCharge'],
+                        'price_per_piece' => (float)$item['price'],
+                        'price_total' => (float)$item['qtyToCharge'] * (float)$item['price'],
+                        'pcchrgdte' => $patientDrumDChargeDate->pcchrgdte,
+                        'entry_at' => $authWardcode->wardcode,
+                        'entry_by' => $entryby,
+                    ]);
                 }
 
                 // /Compressed Air
                 if ($item['typeOfCharge'] == 'DRUMF') {
-                    PatientCharge::create([
+                    $patientDrumFChargeDate = PatientCharge::create([
                         'enccode' => $enccode,
                         'hpercode' => $hospitalNumber,
                         'upicode' => null,
@@ -346,6 +380,23 @@ class PatientChargeController extends Controller
                         'unit_frequency' => null, // always null
                         'qtyintake' => null, // always null
                         'uomintake' => null, // always null
+                    ]);
+
+                    // dd($item);
+                    PatientChargeLogs::create([
+                        'enccode' => $enccode,
+                        'acctno' => $acctno->paacctno,
+                        'ward_stocks_id' => null,
+                        'itemcode' => $item['itemCode'],
+                        'manufactured_date' =>  null,
+                        'delivery_date' => null,
+                        'expiration_date' => null,
+                        'quantity' => (int)$item['qtyToCharge'],
+                        'price_per_piece' => (float)$item['price'],
+                        'price_total' => (float)$item['qtyToCharge'] * (float)$item['price'],
+                        'pcchrgdte' => $patientDrumFChargeDate->pcchrgdte,
+                        'entry_at' => $authWardcode->wardcode,
+                        'entry_by' => $entryby,
                     ]);
                 }
             }
