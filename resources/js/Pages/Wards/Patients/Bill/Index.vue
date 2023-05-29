@@ -398,14 +398,19 @@
             >
               Qty to return
             </label>
+            <!--
+                onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                this method disable numpad '.' and main keyboards '.'
+            -->
             <InputText
               id="quantity"
               v-model.trim="form.upd_qtyToCharge"
               required="true"
               autofocus
               type="number"
+              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+              @keyup.enter="submit"
             />
-            <!-- :class="{ 'p-invalid': qtyToCharge == '' || item == null }" -->
           </div>
 
           <template #footer>
@@ -416,9 +421,17 @@
               text
               @click="cancel"
             />
+            <!-- form.upd_qtyToCharge == null ||
+                form.upd_qtyToCharge == 0 ||
+                form.upd_qtyToCharge == '' -->
             <Button
-              :disabled="updateQtyNotEnough == true || form.upd_qtyToCharge == 0 || form.upd_qtyToCharge == ''"
-              label="Update"
+              :disabled="
+                Number(form.upd_qtyToCharge) > Number(form.upd_currentChargeQty) ||
+                form.upd_qtyToCharge == null ||
+                form.upd_qtyToCharge == 0 ||
+                form.upd_qtyToCharge == ''
+              "
+              label="Return"
               icon="pi pi-check"
               severity="warning"
               text
@@ -524,6 +537,8 @@ export default {
         hospitalNumber: null,
         itemsToBillList: null,
         // for updating
+        upd_id: null,
+        upd_ward_stocks_id: null,
         upd_enccode: null,
         upd_hospitalNumber: null,
         upd_charge_slip_no: null,
@@ -775,19 +790,22 @@ export default {
       });
     },
     editItem(charge, chargeLogs) {
-      console.log('charge', charge.data.item);
-      //   console.log('chargeLogs', chargeLogs);
+      //   console.log('charge', charge.data.item);
+      console.log('chargeLogs', chargeLogs);
       this.form.isUpdate = true;
-      this.form.upd_enccode = chargeLogs.enccode;
-      this.form.upd_hospitalNumber = chargeLogs.acctno;
-      this.form.upd_item_desc = charge.data.item;
+      this.form.upd_id = chargeLogs.data.id;
+      this.form.upd_ward_stocks_id = chargeLogs.data.ward_stocks_id;
+      this.form.upd_enccode = chargeLogs.data.enccode;
+      this.form.upd_hospitalNumber = chargeLogs.data.acctno;
       this.form.upd_charge_slip_no = charge.data.charge_slip_no;
-      this.form.upd_itemcode = chargeLogs.itemcode;
+      this.form.upd_itemcode = chargeLogs.data.itemcode;
+      this.form.upd_item_desc = charge.data.item;
       this.form.upd_type_of_charge_code = charge.data.type_of_charge_code;
-      this.form.upd_currentChargeQty = chargeLogs.quantity;
-      this.form.upd_price = chargeLogs.price_per_piece;
-      this.form.upd_charge_date = chargeLogs.charge_date;
+      this.form.upd_currentChargeQty = chargeLogs.data.quantity;
+      this.form.upd_price = chargeLogs.data.price_per_piece;
+      this.form.upd_charge_date = chargeLogs.data.charge_date;
       this.updateBillDialog = true;
+      //   console.log(this.form.upd_currentChargeQty);
     },
     cancel() {
       this.itemsToBillList = [];

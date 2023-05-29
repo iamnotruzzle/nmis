@@ -349,7 +349,7 @@ class PatientChargeController extends Controller
                 }
             }
         } else {
-            // dd($request);
+            dd($request);
 
             foreach ($request->patient_charge_logs as $pcl) {
                 // dd($pcl);
