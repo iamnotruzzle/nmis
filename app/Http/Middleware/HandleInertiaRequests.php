@@ -60,7 +60,7 @@ class HandleInertiaRequests extends Middleware
                 return ($request->user() ? $request->user()->roles()->pluck('name') : null);
             },
             // TANKS = drugs and med (oxygen), compressed air, carbon dioxide
-            'tanks' => function () {
+            'tanksList' => function () {
                 return DB::select("SELECT CONCAT(hdmhdr.dmdcomb, hdmhdr.dmdctr) as itemcode,
                                     hdmhdrsub.dmhdrsub,
                                     (SELECT TOP 1 unitcode FROM hdmhdrprice WHERE dmdcomb = hdmhdrsub.dmdcomb ORDER BY dmdprdte DESC) as 'unitcode',

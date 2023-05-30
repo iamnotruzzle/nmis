@@ -555,7 +555,7 @@ export default {
     };
   },
   mounted() {
-    // console.log('bills', this.bills);
+    // console.log('bills', this.$page.props.tanksList);
     this.storeBillsInContainer();
     this.getTotalAmount();
     this.storeMedicalSuppliesInContainer();
@@ -677,7 +677,7 @@ export default {
       });
 
       // oxygen, compressed air, carbon dioxide
-      this.$page.props.tanks.forEach((tank) => {
+      this.$page.props.tanksList.forEach((tank) => {
         this.itemList.push({
           typeOfCharge: 'DRUMD',
           itemCode: tank.itemcode,
@@ -799,8 +799,8 @@ export default {
       });
     },
     editItem(charge, chargeLogs) {
-      console.log('charge', charge.data.item);
-      console.log('chargeLogs', chargeLogs.data);
+      //   console.log('charge', charge.data.item);
+      //   console.log('chargeLogs', chargeLogs.data);
       this.form.isUpdate = true;
       this.form.upd_id = chargeLogs.data.id;
       this.form.upd_ward_stocks_id = chargeLogs.data.ward_stocks_id;
