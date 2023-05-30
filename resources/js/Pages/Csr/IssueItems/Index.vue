@@ -230,6 +230,7 @@
                   :class="{
                     'p-invalid': slotProps.data.approved_qty > slotProps.data.stock_w_approved,
                   }"
+                  @keyup.enter="submit"
                 />
                 <InputText
                   v-else
@@ -242,6 +243,7 @@
                   :class="{
                     'p-invalid': slotProps.data.approved_qty > slotProps.data.stock_qty,
                   }"
+                  @keyup.enter="submit"
                 />
               </template>
             </Column>
@@ -263,7 +265,7 @@
             severity="warning"
             text
             type="submit"
-            :disabled="disabled"
+            :disabled="disabled || form.processing"
             @click="submit"
           />
           <Button
@@ -272,7 +274,7 @@
             icon="pi pi-check"
             text
             type="submit"
-            :disabled="disabled"
+            :disabled="disabled || form.processing"
             @click="submit"
           />
         </template>
