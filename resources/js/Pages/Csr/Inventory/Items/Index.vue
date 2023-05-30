@@ -143,19 +143,24 @@
           </template>
         </Column>
         <template #expansion="slotProps">
-          <div class="p-3">
+          <div>
             <!-- {{ slotProps.data }} -->
-            <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-              <h5>
+
+            <div class="flex flex-wrap align-items-center">
+              <div class="text-lg">
                 Prices for <span class="text-cyan-500 hover:text-cyan-700">{{ slotProps.data.cl2desc }}</span>
-              </h5>
+              </div>
+
               <Button
                 label="Add price"
                 icon="pi pi-plus"
                 iconPos="right"
+                size="small"
+                class="ml-2 my-0"
                 @click="openCreateItemPriceDialog(slotProps.data)"
               />
             </div>
+
             <DataTable
               :dataKey="slotProps.cl2comb"
               :value="slotProps.data.prices"

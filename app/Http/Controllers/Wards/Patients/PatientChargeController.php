@@ -186,8 +186,8 @@ class PatientChargeController extends Controller
                                 'delivery_date' => $wardStock->delivery_date == null ? null : $wardStock->delivery_date,
                                 'expiration_date' => $wardStock->expiration_date == null ? null : $wardStock->expiration_date,
                                 'quantity' => $remaining_qty_to_charge,
-                                'price_per_piece' => (int)$item['price'] == null ? null : (int)$item['price'],
-                                'price_total' => (int)$remaining_qty_to_charge * (int)$item['price'],
+                                'price_per_piece' => (float)$item['price'] == null ? null : (float)$item['price'],
+                                'price_total' => (float)$remaining_qty_to_charge * (float)$item['price'],
                                 'pcchrgdte' => $patientChargeDate->pcchrgdte,
                                 'entry_at' => $authWardcode->wardcode,
                                 'entry_by' => $entryby,
@@ -216,8 +216,8 @@ class PatientChargeController extends Controller
                                 'delivery_date' => $wardStock->delivery_date == null ? null : $wardStock->delivery_date,
                                 'expiration_date' => $wardStock->expiration_date == null ? null : $wardStock->expiration_date,
                                 'quantity' => $qty,
-                                'price_per_piece' => (int)$item['price'] == null ? null : (int)$item['price'],
-                                'price_total' => (int)$qty * (int)$item['price'],
+                                'price_per_piece' => (float)$item['price'] == null ? null : (float)$item['price'],
+                                'price_total' => (float)$qty * (float)$item['price'],
                                 'pcchrgdte' => $patientChargeDate->pcchrgdte,
                                 'entry_at' => $authWardcode->wardcode,
                                 'entry_by' => $entryby,
@@ -442,7 +442,7 @@ class PatientChargeController extends Controller
                         'expiration_date' => $previousPatientChargeLogs->expiration_date,
                         'quantity' => (int)$previousPatientChargeLogs->quantity - (int)$upd_QtyToReturn,
                         'price_per_piece' => $previousPatientChargeLogs->price_per_piece,
-                        'price_total' => ((int)$previousPatientChargeLogs->quantity - (int)$upd_QtyToReturn) * $previousPatientChargeLogs->price_per_piece,
+                        'price_total' => ((float)$previousPatientChargeLogs->quantity - (float)$upd_QtyToReturn) * (float)$previousPatientChargeLogs->price_per_piece,
                         'pcchrgdte' => $previousPatientChargeLogs->pcchrgdte,
                         'entry_at' => $authWard,
                         'entry_by' => $authID,
@@ -470,7 +470,7 @@ class PatientChargeController extends Controller
                             'uomcode' => $previousCharge->uomcode, // unit
                             'pchrgqty' =>  (int)$previousCharge->pchrgqty - (int)$upd_QtyToReturn,
                             'pchrgup' => $previousCharge->pchrgup,
-                            'pcchrgamt' => ((int)$previousCharge->pchrgqty - (int)$upd_QtyToReturn) * $previousCharge->pchrgup,
+                            'pcchrgamt' => ((float)$previousCharge->pchrgqty - (float)$upd_QtyToReturn) * (float)$previousCharge->pchrgup,
                             'pcstat' => 'A', // always A
                             'pclock' => 'N', // always N
                             'updsw' => 'N', // always N

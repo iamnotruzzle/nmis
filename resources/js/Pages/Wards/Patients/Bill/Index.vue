@@ -147,49 +147,10 @@
             <div class="p-3">
               <div class="flex flex-wrap align-items-center justify-content-between gap-2">
                 <h5>
-                  <span class="text-cyan-500 hover:text-cyan-700">Medical Supplies</span>
+                  <span class="text-cyan-500 hover:text-cyan-700">Items dispensed</span>
                 </h5>
               </div>
-              <DataTable
-                :value="slotProps.data.patient_charge_logs"
-                paginator
-                :rows="5"
-              >
-                <Column header="EXP. DATE">
-                  <template #body="{ data }">
-                    {{ tzone(data.expiration_date) }}
-                  </template>
-                </Column>
-                <Column header="QuANTITY">
-                  <template #body="{ data }">
-                    {{ data.quantity }}
-                  </template>
-                </Column>
-                <Column
-                  header="Action"
-                  style="min-width: 12rem"
-                >
-                  <template #body="chargeLogs">
-                    <Button
-                      icon="pi pi-pencil"
-                      class="mr-1"
-                      rounded
-                      text
-                      severity="warning"
-                      @click="editItem(slotProps, chargeLogs)"
-                    />
-                  </template>
-                </Column>
-              </DataTable>
-            </div>
 
-            <!-- Charge for MISC -->
-            <div class="p-3">
-              <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-                <h5>
-                  <span class="text-cyan-500 hover:text-cyan-700">Miscellaneous</span>
-                </h5>
-              </div>
               <DataTable
                 :value="slotProps.data.patient_charge_logs"
                 paginator
@@ -200,7 +161,7 @@
                     {{ tzone(data.expiration_date) }}
                   </template>
                 </Column>
-                <Column header="QuANTITY">
+                <Column header="QUANTITY">
                   <template #body="{ data }">
                     {{ data.quantity }}
                   </template>
@@ -302,6 +263,7 @@
               required="true"
               autofocus
               type="number"
+              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
               :class="{ 'p-invalid': qtyToCharge == '' || item == null }"
               @keyup.enter="medicalSuppliesQtyValidation"
             />
@@ -610,7 +572,11 @@ export default {
   },
   methods: {
     tzone(date) {
-      return moment.tz(date, 'Asia/Manila').format('L');
+      if (date == null) {
+        return 'NA';
+      } else {
+        return moment.tz(date, 'Asia/Manila').format('L');
+      }
     },
     getTotalAmount() {
       this.billList.forEach((item) => {

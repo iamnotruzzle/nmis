@@ -23,8 +23,8 @@ class CreateCsrwPatientChargeLogsTable extends Migration
             $table->dateTime('delivery_date')->nullable();
             $table->dateTime('expiration_date')->nullable();
             $table->integer('quantity')->nullable();
-            $table->integer('price_per_piece')->nullable();
-            $table->integer('price_total')->nullable();
+            $table->float('price_per_piece', 8, 2);
+            $table->float('price_total', 8, 2);
             $table->dateTime('pcchrgdte')->nullable();
             $table->string('entry_at')->nullable(); // wardcode
             $table->string('entry_by')->nullable(); // employeeid
