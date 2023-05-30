@@ -7,6 +7,7 @@ use App\Models\Item;
 use App\Models\RequestStocks;
 use App\Models\RequestStocksDetails;
 use App\Models\WardsStocks;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -130,7 +131,8 @@ class RequestStocksController extends Controller
         // update status
         RequestStocks::where('id', $request->request_stock_id)
             ->update([
-                'status' => $request->status
+                'status' => $request->status,
+                'received_date' => Carbon::now(),
             ]);
 
         return Redirect::route('requeststocks.index');
