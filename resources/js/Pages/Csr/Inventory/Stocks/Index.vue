@@ -366,6 +366,166 @@
           />
         </template>
       </Dialog>
+
+      <!-- brand -->
+      <DataTable
+        class="p-datatable-sm mt-8"
+        dataKey="id"
+        v-model:filters="brandFilters"
+        :value="brandsList"
+        paginator
+        :rows="10"
+        :rowsPerPageOptions="[10, 30, 50]"
+        removableSort
+        sortField="name"
+        :sortOrder="1"
+        filterDisplay="row"
+        showGridlines
+      >
+        <template #header>
+          <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+            <span class="text-xl text-900 font-bold">Brands</span>
+            <div>
+              <span class="p-input-icon-left mr-2">
+                <i class="pi pi-search" />
+                <span class="p-input-icon-left">
+                  <i class="pi pi-search" />
+                  <InputText
+                    v-model="brandFilters['global'].value"
+                    placeholder="Search brand"
+                  />
+                </span>
+              </span>
+              <Button
+                label="Add brand"
+                icon="pi pi-plus"
+                iconPos="right"
+                @click="openCreateBrandDialog"
+              />
+            </div>
+          </div>
+        </template>
+        <template #empty> No brand found. </template>
+        <template #loading> Loading brand data. Please wait. </template>
+        <Column
+          field="name"
+          header="Name"
+          sortable
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.name }}
+          </template>
+        </Column>
+        <Column
+          field="status"
+          header="Status"
+          sortable
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.status }}
+          </template>
+        </Column>
+        <Column
+          header="Action"
+          style="min-width: 12rem"
+        >
+          <template #body="slotProps">
+            <Button
+              icon="pi pi-pencil"
+              class="mr-1"
+              rounded
+              text
+              severity="warning"
+              @click="editBrand(slotProps.data)"
+            />
+
+            <!-- <Button
+              icon="pi pi-trash"
+              rounded
+              text
+              severity="danger"
+              @click="confirmDeleteItem(slotProps.data)"
+            /> -->
+          </template>
+        </Column>
+      </DataTable>
+
+      <!-- create & edit dialog -->
+      <Dialog
+        v-model:visible="createBrandDialog"
+        :style="{ width: '450px' }"
+        header="Stock Detail"
+        :modal="true"
+        class="p-fluid"
+        @hide="clickOutsideDialog"
+        dismissableMask
+      >
+        <div class="field">
+          <label for="brand_name">Brand name</label>
+          <InputText
+            id="brand_name"
+            v-model.trim="formBrand.name"
+            required="true"
+            autofocus
+            :class="{ 'p-invalid': formBrand.name == '' }"
+          />
+          <small
+            class="text-error"
+            v-if="formBrand.errors.name"
+          >
+            {{ formBrand.errors.name }}
+          </small>
+        </div>
+
+        <div class="field">
+          <label for="status">Status</label>
+          <Dropdown
+            v-model="formBrand.status"
+            :options="brandStatus"
+            optionLabel="name"
+            optionValue="value"
+            class="w-full md:w-14rem"
+          />
+          <small
+            class="text-error"
+            v-if="formBrand.errors.status"
+          >
+            {{ formBrand.errors.status }}
+          </small>
+        </div>
+
+        <template #footer>
+          <Button
+            label="Cancel"
+            icon="pi pi-times"
+            severity="danger"
+            text
+            @click="cancel"
+          />
+          <Button
+            v-if="isUpdateBrand == true"
+            label="Update"
+            icon="pi pi-check"
+            severity="warning"
+            text
+            type="submit"
+            :disabled="formBrand.processing"
+            @click="submitBrand"
+          />
+          <Button
+            v-else
+            label="Save"
+            icon="pi pi-check"
+            text
+            type="submit"
+            :disabled="formBrand.processing"
+            @click="submitBrand"
+          />
+        </template>
+      </Dialog>
+      <!-- end brand -->
     </div>
   </app-layout>
 </template>
@@ -408,6 +568,7 @@ export default {
   props: {
     items: Object,
     stocks: Object,
+    brands: Object,
   },
   data() {
     return {
@@ -418,8 +579,11 @@ export default {
       // end paginator
       stockId: null,
       isUpdate: false,
+      isUpdateBrand: false,
       createStockDialog: false,
+      createBrandDialog: false,
       deleteStockDialog: false,
+      deleteBrandDialog: false,
       search: '',
       options: {},
       params: {},
@@ -433,8 +597,12 @@ export default {
       from_ed: null,
       to_ed: null,
       itemsList: [],
+      brandsList: [],
       stocksList: [],
       filters: {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      },
+      brandFilters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       cl1stats: [
@@ -456,6 +624,21 @@ export default {
         delivered_date: null,
         expiration_date: null,
       }),
+      formBrand: this.$inertia.form({
+        id: null,
+        name: null,
+        status: null,
+      }),
+      brandStatus: [
+        {
+          name: 'ACTIVE',
+          value: 'A',
+        },
+        {
+          name: 'INACTIVE',
+          value: 'I',
+        },
+      ],
     };
   },
   // created will be initialize before mounted
@@ -468,6 +651,7 @@ export default {
     // console.log(this.items);
     this.storeItemsInController();
     this.storeStocksInContainer();
+    this.storeBrandsInController();
 
     this.loading = false;
   },
@@ -518,7 +702,9 @@ export default {
         onFinish: (visit) => {
           this.totalRecords = this.stocks.total;
           this.stocksList = [];
+          this.brandsList = [];
           this.storeStocksInContainer();
+          this.storeBrandsInController();
           this.loading = false;
         },
       });
@@ -532,7 +718,16 @@ export default {
     },
     // emit close dialog
     clickOutsideDialog() {
-      this.$emit('hide', (this.stockId = null), (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
+      this.$emit(
+        'hide',
+        (this.stockId = null),
+        (this.isUpdate = false),
+        (this.isUpdateBrand = false),
+        this.form.clearErrors(),
+        this.form.reset(),
+        this.formBrand.clearErrors(),
+        this.formBrand.reset()
+      );
     },
     editItem(item) {
       this.isUpdate = true;
@@ -594,9 +789,13 @@ export default {
     cancel() {
       this.stockId = null;
       this.isUpdate = false;
+      this.isUpdateBrand = false;
       this.createStockDialog = false;
+      this.createBrandDialog = false;
       this.form.reset();
       this.form.clearErrors();
+      this.formBrand.reset();
+      this.formBrand.clearErrors();
       this.stocksList = [];
       this.storeStocksInContainer();
     },
@@ -609,6 +808,62 @@ export default {
     deletedMsg() {
       this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Stock deleted', life: 3000 });
     },
+    // brand
+    storeBrandsInController() {
+      this.brands.forEach((e) => {
+        this.brandsList.push({
+          id: e.id,
+          name: e.name,
+          status: e.status,
+        });
+      });
+    },
+    openCreateBrandDialog() {
+      this.isUpdateBrand = false;
+      this.formBrand.clearErrors();
+      this.formBrand.reset();
+      this.createBrandDialog = true;
+    },
+    editBrand(brand) {
+      this.isUpdateBrand = true;
+      this.createBrandDialog = true;
+      this.formBrand.id = brand.id;
+      this.formBrand.name = brand.name;
+      this.formBrand.status = brand.status;
+    },
+    submitBrand() {
+      if (this.isUpdateBrand) {
+        this.formBrand.put(route('csrstocks.updateBrand', this.formBrand.id), {
+          preserveScroll: true,
+          onSuccess: () => {
+            this.createBrandDialog = false;
+            this.cancel();
+            this.updateData();
+            this.updatedBrandMessage();
+          },
+        });
+      } else {
+        this.formBrand.post(route('csrstocks.storeBrand'), {
+          preserveScroll: true,
+          onSuccess: () => {
+            this.createBrandDialog = false;
+            this.cancel();
+            this.updateData();
+            this.createdBrandMessage();
+          },
+        });
+      }
+    },
+    createdBrandMessage() {
+      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Brand created', life: 3000 });
+    },
+    updatedBrandMessage() {
+      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Brand updated', life: 3000 });
+    },
+    deleteBrandMessage() {
+      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Brand deleted', life: 3000 });
+    },
+    // end brand
   },
   watch: {
     search: function (val, oldVal) {

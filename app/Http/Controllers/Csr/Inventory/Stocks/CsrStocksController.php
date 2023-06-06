@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Csr\Inventory\Stocks;
 
 use App\Http\Controllers\Controller;
+use App\Models\Brand;
 use App\Models\CsrStocks;
 use App\Models\Item;
 use Carbon\Carbon;
@@ -65,9 +66,12 @@ class CsrStocksController extends Controller
             ->orderBy('expiration_date', 'asc')
             ->paginate(15);
 
+        $brands = Brand::get();
+
         return Inertia::render('Csr/Inventory/Stocks/Index', [
             'items' => $items,
             'stocks' => $stocks,
+            'brands' => $brands,
         ]);
     }
 
@@ -120,5 +124,28 @@ class CsrStocksController extends Controller
         $csrstock->delete();
 
         return Redirect::route('csrstocks.index');
+    }
+
+    public function storeBrand(Request $request)
+    {
+        // dd($request);
+
+        $request->validate([
+            'name' => 'required|unique:csrw_brands,name',
+            'status' => 'required',
+        ]);
+
+        $brand = Brand::create([
+            'name' => $request->name,
+            'status' => $request->status,
+        ]);
+
+        return Redirect::route('csrstocks.index');
+    }
+
+    public function updateBrand(Request $request)
+    {
+        dd($request);
+        // $items = Item::create([]);
     }
 }
