@@ -24,7 +24,7 @@ class CsrStocksController extends Controller
             ->orderBy('cl2desc', 'ASC')
             ->get(['cl2comb', 'cl2desc']);
 
-        $stocks = CsrStocks::with('itemDetail')
+        $stocks = CsrStocks::with('itemDetail', 'brandDetail')
             ->whereHas('itemDetail', function ($q) use ($searchString) {
                 $q->where('cl2desc', 'LIKE', '%' . $searchString . '%')
                     ->orWhere('batch_no', 'LIKE', '%' . $searchString . '%');
@@ -84,6 +84,7 @@ class CsrStocksController extends Controller
         $request->validate([
             'batch_no' => 'required',
             'cl2comb' => 'required',
+            'brand' => 'required',
             'quantity' => 'required|numeric|min:0',
             'expiration_date' => 'required',
         ]);
@@ -91,6 +92,7 @@ class CsrStocksController extends Controller
         $stocks = CsrStocks::create([
             'batch_no' => $request->batch_no,
             'cl2comb' => $request->cl2comb,
+            'brand' => $request->brand,
             'quantity' => $request->quantity,
             'manufactured_date' => $request->manufactured_date == null ? null : Carbon::parse($request->manufactured_date)->setTimezone('Asia/Manila'),
             'delivered_date' => $request->delivered_date == null ? null : Carbon::parse($request->delivered_date)->setTimezone('Asia/Manila'),
@@ -105,6 +107,7 @@ class CsrStocksController extends Controller
         $request->validate([
             'batch_no' => 'required',
             'cl2comb' => 'required',
+            'brand' => 'required',
             'quantity' => 'required|numeric|min:0',
             'expiration_date' => 'required',
         ]);
@@ -112,6 +115,7 @@ class CsrStocksController extends Controller
         $csrstock->update([
             'batch_no' => $request->batch_no,
             'cl2comb' => $request->cl2comb,
+            'brand' => $request->brand,
             'quantity' => $request->quantity,
             'manufactured_date' => $request->manufactured_date == null ? null : Carbon::parse($request->manufactured_date)->setTimezone('Asia/Manila'),
             'delivered_date' => $request->delivered_date == null ? null : Carbon::parse($request->delivered_date)->setTimezone('Asia/Manila'),

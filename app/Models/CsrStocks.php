@@ -31,4 +31,9 @@ class CsrStocks extends Model
     {
         return $this->hasOne(Item::class, 'cl2comb', 'cl2comb');
     }
+
+    public function brandDetail()
+    {
+        return $this->hasOne(Brand::class, 'id', 'brand');
+    }
 }

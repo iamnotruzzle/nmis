@@ -63,6 +63,15 @@
           </template>
         </Column>
         <Column
+          field="brand"
+          header="BRAND"
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.brand }}
+          </template>
+        </Column>
+        <Column
           field="quantity"
           header="QUANTITY"
           style="min-width: 12rem"
@@ -226,6 +235,25 @@
           <small
             class="text-error"
             v-if="form.errors.cl2comb"
+          >
+          </small>
+        </div>
+        <div class="field">
+          <label for="brand">Brand</label>
+          <Dropdown
+            required="true"
+            v-model="form.brand"
+            :options="brandsList"
+            filter
+            dataKey="id"
+            optionLabel="name"
+            optionValue="id"
+            class="w-full mb-3"
+            :class="{ 'p-invalid': form.brand == '' }"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.brand"
           >
           </small>
         </div>
@@ -619,6 +647,7 @@ export default {
       form: this.$inertia.form({
         batch_no: null,
         cl2comb: null,
+        brand: null,
         cl2desc: null,
         quantity: null,
         manufactured_date: null,
@@ -649,7 +678,7 @@ export default {
     this.rows = this.stocks.per_page;
   },
   mounted() {
-    // console.log(this.items);
+    console.log(this.stocks);
     this.storeItemsInController();
     this.storeStocksInContainer();
     this.storeBrandsInController();
@@ -681,6 +710,7 @@ export default {
           id: e.id,
           batch_no: e.batch_no,
           cl2comb: e.cl2comb,
+          brand: e.brand_detail.name,
           cl2desc: e.item_detail.cl2desc,
           quantity: e.quantity,
           manufactured_date: e.manufactured_date === null ? '' : e.manufactured_date,
