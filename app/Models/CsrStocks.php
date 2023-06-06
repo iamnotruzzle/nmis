@@ -20,6 +20,7 @@ class CsrStocks extends Model
         'id',
         'batch_no',
         'cl2comb',
+        'brand',
         'quantity',
         'manufactured_date',
         'delivered_date',
