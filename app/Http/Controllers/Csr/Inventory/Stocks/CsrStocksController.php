@@ -127,37 +127,4 @@ class CsrStocksController extends Controller
 
         return Redirect::route('csrstocks.index');
     }
-
-    public function storeBrand(Request $request)
-    {
-        // dd($request);
-
-        $request->validate([
-            'name' => 'required|unique:csrw_brands,name',
-            'status' => 'required',
-        ]);
-
-        $brand = Brand::create([
-            'name' => $request->name,
-            'status' => $request->status,
-        ]);
-
-        return Redirect::route('csrstocks.index');
-    }
-
-    public function updateBrand(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|unique:csrw_brands,name,' . $request->id,
-            'status' => 'required',
-        ]);
-
-        Brand::where('id', $request->id)
-            ->update([
-                'name' => $request->name,
-                'status' => $request->status,
-            ]);
-
-        return Redirect::route('csrstocks.index');
-    }
 }

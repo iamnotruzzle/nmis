@@ -834,7 +834,7 @@ export default {
     },
     submitBrand() {
       if (this.isUpdateBrand) {
-        this.formBrand.put(route('csrstocks.updateBrand', this.formBrand.id), {
+        this.formBrand.put(route('brands.update', this.formBrand.id), {
           preserveScroll: true,
           onSuccess: () => {
             this.createBrandDialog = false;
@@ -844,7 +844,7 @@ export default {
           },
         });
       } else {
-        this.formBrand.post(route('csrstocks.storeBrand'), {
+        this.formBrand.post(route('brands.store'), {
           preserveScroll: true,
           onSuccess: () => {
             this.createBrandDialog = false;
