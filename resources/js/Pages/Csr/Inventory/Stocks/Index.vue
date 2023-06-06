@@ -424,7 +424,8 @@
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.status }}
+            <span v-if="data.status == 'A'">ACTIVE</span>
+            <span v-else>INACTIVE</span>
           </template>
         </Column>
         <Column
