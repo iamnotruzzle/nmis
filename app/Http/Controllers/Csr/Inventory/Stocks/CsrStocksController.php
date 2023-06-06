@@ -7,6 +7,8 @@ use App\Models\Brand;
 use App\Models\CsrStocks;
 use App\Models\Item;
 use Carbon\Carbon;
+// use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
@@ -145,7 +147,17 @@ class CsrStocksController extends Controller
 
     public function updateBrand(Request $request)
     {
-        dd($request);
-        // $items = Item::create([]);
+        $request->validate([
+            'name' => 'required|unique:csrw_brands,name,' . $request->id,
+            'status' => 'required',
+        ]);
+
+        Brand::where('id', $request->id)
+            ->update([
+                'name' => $request->name,
+                'status' => $request->status,
+            ]);
+
+        return Redirect::route('csrstocks.index');
     }
 }
