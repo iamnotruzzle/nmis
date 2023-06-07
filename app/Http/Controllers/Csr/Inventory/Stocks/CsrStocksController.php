@@ -121,6 +121,10 @@ class CsrStocksController extends Controller
 
     public function update(CsrStocks $csrstock, Request $request)
     {
+        // dd($request);
+
+        $entry_by = Auth::user()->employeeid;
+
         $request->validate([
             'batch_no' => 'required',
             'cl2comb' => 'required',
@@ -129,7 +133,9 @@ class CsrStocksController extends Controller
             'expiration_date' => 'required',
         ]);
 
-        $csrstock->update([
+        $prevStockDetails = CsrStocks::where('id', $csrstock->id)->first();
+
+        $updated = $csrstock->update([
             'batch_no' => $request->batch_no,
             'cl2comb' => $request->cl2comb,
             'brand' => $request->brand,
@@ -137,6 +143,20 @@ class CsrStocksController extends Controller
             'manufactured_date' => $request->manufactured_date == null ? null : Carbon::parse($request->manufactured_date)->setTimezone('Asia/Manila'),
             'delivered_date' => $request->delivered_date == null ? null : Carbon::parse($request->delivered_date)->setTimezone('Asia/Manila'),
             'expiration_date' => $request->expiration_date == null ? null : Carbon::parse($request->expiration_date)->setTimezone('Asia/Manila'),
+        ]);
+
+        $stockLogs = CsrStocksLogs::create([
+            'batch_no' => $prevStockDetails->batch_no,
+            'cl2comb' => $prevStockDetails->cl2comb,
+            'brand' => $prevStockDetails->brand,
+            'prev_qty' => $prevStockDetails->quantity,
+            'new_qty' => $request->quantity,
+            'manufactured_date' => $prevStockDetails->manufactured_date,
+            'delivered_date' => $prevStockDetails->delivered_date,
+            'expiration_date' => $prevStockDetails->expiration_date,
+            'action' => 'UPDATED',
+            'remarks' => $request->remarks,
+            'entry_by' => $entry_by,
         ]);
 
         return Redirect::route('csrstocks.index');
