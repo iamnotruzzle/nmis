@@ -15,9 +15,9 @@ class CreateCsrwStocksTable extends Migration
     {
         Schema::create('csrw_csr_stocks', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('batch_no');
+            $table->string('batch_no');
             $table->string('cl2comb');
-            $table->bigInteger('brand');
+            $table->bigInteger('brand')->nullable();
             $table->integer('quantity');
             $table->dateTime('manufactured_date')->nullable();
             $table->dateTime('delivered_date')->nullable();
