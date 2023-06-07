@@ -452,8 +452,16 @@
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            <span v-if="data.status == 'A'">ACTIVE</span>
-            <span v-else>INACTIVE</span>
+            <Tag
+              v-if="data.status == 'A'"
+              value="ACTIVE"
+              severity="success"
+            />
+            <Tag
+              v-else
+              value="INACTIVE"
+              severity="danger"
+            />
           </template>
         </Column>
         <Column
@@ -575,6 +583,7 @@ import Avatar from 'primevue/avatar';
 import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
 import AutoComplete from 'primevue/autocomplete';
+import Tag from 'primevue/tag';
 import moment from 'moment';
 
 export default {
@@ -593,6 +602,7 @@ export default {
     Calendar,
     Dropdown,
     AutoComplete,
+    Tag,
   },
   props: {
     items: Object,
