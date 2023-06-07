@@ -391,6 +391,16 @@
             <b>{{ form.batch_no }}</b> ?</span
           >
         </div>
+
+        <div class="field mt-5 flex flex-column">
+          <label for="remarks">REMARKS</label>
+          <Textarea
+            v-model.trim="form.remarks"
+            rows="5"
+            autofocus
+          />
+        </div>
+
         <template #footer>
           <Button
             label="No"

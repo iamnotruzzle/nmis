@@ -111,7 +111,7 @@ class CsrStocksController extends Controller
             'manufactured_date' => $stock->manufactured_date,
             'delivered_date' => $stock->delivered_date,
             'expiration_date' => $stock->expiration_date,
-            'action' => 'CREATED',
+            'action' => 'CREATE',
             'remarks' => NULL,
             'entry_by' => $entry_by,
         ]);
@@ -154,7 +154,7 @@ class CsrStocksController extends Controller
             'manufactured_date' => $prevStockDetails->manufactured_date,
             'delivered_date' => $prevStockDetails->delivered_date,
             'expiration_date' => $prevStockDetails->expiration_date,
-            'action' => 'UPDATED',
+            'action' => 'UPDATE',
             'remarks' => $request->remarks,
             'entry_by' => $entry_by,
         ]);
@@ -162,9 +162,27 @@ class CsrStocksController extends Controller
         return Redirect::route('csrstocks.index');
     }
 
-    public function destroy(CsrStocks $csrstock)
+    public function destroy(CsrStocks $csrstock, Request $request)
     {
+        $entry_by = Auth::user()->employeeid;
+
+        $prevStockDetails = CsrStocks::where('id', $csrstock->id)->first();
+
         $csrstock->delete();
+
+        $stockLogs = CsrStocksLogs::create([
+            'batch_no' => $prevStockDetails->batch_no,
+            'cl2comb' => $prevStockDetails->cl2comb,
+            'brand' => $prevStockDetails->brand,
+            'prev_qty' => $prevStockDetails->quantity,
+            'new_qty' => $prevStockDetails->quantity,
+            'manufactured_date' => $prevStockDetails->manufactured_date,
+            'delivered_date' => $prevStockDetails->delivered_date,
+            'expiration_date' => $prevStockDetails->expiration_date,
+            'action' => 'DELETE',
+            'remarks' => $request->remarks,
+            'entry_by' => $entry_by,
+        ]);
 
         return Redirect::route('csrstocks.index');
     }

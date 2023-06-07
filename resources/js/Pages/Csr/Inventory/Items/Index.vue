@@ -385,6 +385,7 @@
             >Are you sure you want to delete <b>{{ form.cl2desc }}</b> ?</span
           >
         </div>
+
         <template #footer>
           <Button
             label="No"
