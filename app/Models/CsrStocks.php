@@ -36,4 +36,9 @@ class CsrStocks extends Model
     {
         return $this->hasOne(Brand::class, 'id', 'brand');
     }
+
+    public function stockLogs()
+    {
+        return $this->hasOne(CsrStocksLogs::class, 'id', 'csrw_stocks_id');
+    }
 }
