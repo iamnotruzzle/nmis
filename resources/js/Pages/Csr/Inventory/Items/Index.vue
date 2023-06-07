@@ -147,7 +147,7 @@
             <!-- {{ slotProps.data }} -->
 
             <div class="flex flex-wrap align-items-center">
-              <div class="text-lg">
+              <div class="text-2xl font-bold my-3">
                 Prices for <span class="text-cyan-500 hover:text-cyan-700">{{ slotProps.data.cl2desc }}</span>
               </div>
 
@@ -169,7 +169,7 @@
             >
               <Column
                 field="Selling price"
-                header="Selling price"
+                header="SELLING PRICE"
               >
                 <template #body="{ data }">
                   {{ data.selling_price }}
@@ -177,7 +177,7 @@
               </Column>
               <Column
                 field="Entry by"
-                header="Entry by"
+                header="ENTRY BY"
               >
                 <template #body="{ data }">
                   <span v-if="data.user_detail === null"></span>
@@ -189,14 +189,14 @@
               </Column>
               <Column
                 field="created_at"
-                header="Created at"
+                header="CREATED AT"
               >
                 <template #body="{ data }">
                   {{ tzone(data.created_at) }}
                 </template>
               </Column>
               <Column
-                header="Action"
+                header="ACTION"
                 style="min-width: 12rem"
               >
                 <template #body="slotProps">

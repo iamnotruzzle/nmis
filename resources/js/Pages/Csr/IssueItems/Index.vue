@@ -143,7 +143,7 @@
             >
               <Column
                 field="item"
-                header="Item"
+                header="ITEM"
               >
                 <template #body="{ data }">
                   {{ data.item_details.cl2desc }}
@@ -151,11 +151,11 @@
               </Column>
               <Column
                 field="requested_qty"
-                header="Requested qty"
+                header="REQUESTED QTY"
               ></Column>
               <Column
                 field="approved_qty"
-                header="Approved qty"
+                header="APPROVED QTY"
               ></Column>
             </DataTable>
           </div>
