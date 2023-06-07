@@ -89,7 +89,7 @@ class CsrStocksController extends Controller
             'expiration_date' => 'required',
         ]);
 
-        $stocks = CsrStocks::create([
+        $stock = CsrStocks::create([
             'batch_no' => $request->batch_no,
             'cl2comb' => $request->cl2comb,
             'brand' => $request->brand,
