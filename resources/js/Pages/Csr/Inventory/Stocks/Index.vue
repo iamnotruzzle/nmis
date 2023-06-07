@@ -243,7 +243,7 @@
           <Dropdown
             required="true"
             v-model="form.brand"
-            :options="brandsList"
+            :options="brandDropDownList"
             filter
             dataKey="id"
             optionLabel="name"
@@ -627,6 +627,7 @@ export default {
       to_ed: null,
       itemsList: [],
       brandsList: [],
+      brandDropDownList: [],
       stocksList: [],
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -681,7 +682,8 @@ export default {
     console.log(this.stocks);
     this.storeItemsInController();
     this.storeStocksInContainer();
-    this.storeBrandsInController();
+    this.storeBrandsInContainer();
+    this.storeActiveBrandsInContainer();
 
     this.loading = false;
   },
@@ -734,8 +736,10 @@ export default {
           this.totalRecords = this.stocks.total;
           this.stocksList = [];
           this.brandsList = [];
+          this.brandDropDownList = [];
           this.storeStocksInContainer();
-          this.storeBrandsInController();
+          this.storeBrandsInContainer();
+          this.storeActiveBrandsInContainer();
           this.loading = false;
         },
       });
@@ -840,7 +844,7 @@ export default {
       this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Stock deleted', life: 3000 });
     },
     // brand
-    storeBrandsInController() {
+    storeBrandsInContainer() {
       this.brands.forEach((e) => {
         this.brandsList.push({
           id: e.id,
@@ -848,6 +852,10 @@ export default {
           status: e.status,
         });
       });
+    },
+    // filtered list for dropdown, only show brand that is active
+    storeActiveBrandsInContainer() {
+      this.brandDropDownList = this.brands.filter((item) => item.status === 'A');
     },
     openCreateBrandDialog() {
       this.isUpdateBrand = false;
