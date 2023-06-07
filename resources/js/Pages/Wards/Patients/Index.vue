@@ -22,7 +22,7 @@
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold">Patients</span>
+            <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">PATIENTS</span>
             <div>
               <span class="p-input-icon-left mr-2">
                 <i class="pi pi-search" />
@@ -105,13 +105,13 @@
         </Column>
         <Column
           field="physician"
-          header="Physician"
+          header="PHYSICIAN"
           style="min-width: 12rem"
         >
         </Column>
 
         <Column
-          header="Action"
+          header="ACTION"
           style="min-width: 2rem"
         >
           <template #body="{ data }">

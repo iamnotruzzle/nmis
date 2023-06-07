@@ -24,7 +24,7 @@
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold">Stocks</span>
+            <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">STOCKS</span>
             <div>
               <span class="p-input-icon-left mr-2">
                 <i class="pi pi-search" />
@@ -168,7 +168,7 @@
           </template>
         </Column>
         <Column
-          header="Action"
+          header="ACTION"
           style="min-width: 12rem"
         >
           <template #body="slotProps">
@@ -412,7 +412,7 @@
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold">Brands</span>
+            <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">BRANDS</span>
             <div>
               <span class="p-input-icon-left mr-2">
                 <i class="pi pi-search" />
@@ -437,7 +437,7 @@
         <template #loading> Loading brand data. Please wait. </template>
         <Column
           field="name"
-          header="Name"
+          header="NAME"
           sortable
           style="min-width: 12rem"
         >
@@ -447,7 +447,7 @@
         </Column>
         <Column
           field="status"
-          header="Status"
+          header="STATUS"
           sortable
           style="min-width: 12rem"
         >
@@ -465,7 +465,7 @@
           </template>
         </Column>
         <Column
-          header="Action"
+          header="ACTION"
           style="min-width: 12rem"
         >
           <template #body="slotProps">

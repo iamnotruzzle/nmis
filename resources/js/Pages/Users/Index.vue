@@ -27,7 +27,7 @@
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold">Users</span>
+            <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">USERS</span>
             <div>
               <span class="p-input-icon-left mr-2">
                 <i class="pi pi-search" />
@@ -49,7 +49,7 @@
         <template #loading> Loading user data. Please wait. </template>
         <Column
           field="employeeid"
-          header="Employee ID"
+          header="EMPLOYEE ID"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
@@ -74,7 +74,7 @@
         </Column>
         <Column
           field="lastname"
-          header="Last name"
+          header="LAST NAME"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
@@ -83,7 +83,7 @@
         </Column>
         <Column
           field="firstname"
-          header="First name"
+          header="FIRST NAME"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
@@ -92,7 +92,7 @@
         </Column>
         <Column
           field="middlename"
-          header="Middle name"
+          header="MIDDLE NAME"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
@@ -101,7 +101,7 @@
         </Column>
         <Column
           field="empsuffix"
-          header="Suffix"
+          header="SUFFIX"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
@@ -110,7 +110,7 @@
         </Column>
         <Column
           field="role"
-          header="Role"
+          header="ROLE"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
@@ -147,7 +147,7 @@
           </template>
         </Column>
         <Column
-          header="Action"
+          header="ACTION"
           style="min-width: 12rem"
         >
           <template #body="slotProps">

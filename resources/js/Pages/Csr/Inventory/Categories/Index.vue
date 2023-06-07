@@ -24,7 +24,7 @@
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold">Categories</span>
+            <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">CATEGORIES</span>
             <div>
               <span class="p-input-icon-left mr-2">
                 <i class="pi pi-search" />
@@ -108,7 +108,7 @@
           </template>
         </Column>
         <Column
-          header="Action"
+          header="ACTION"
           style="min-width: 12rem"
         >
           <template #body="slotProps">

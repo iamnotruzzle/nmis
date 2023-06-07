@@ -28,7 +28,7 @@
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold">Requested Stocks</span>
+            <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">REQUESTED STOCKS</span>
             <div>
               <span class="p-input-icon-left mr-2">
                 <i class="pi pi-search" />
@@ -114,7 +114,7 @@
           </template>
         </Column>
         <Column
-          header="Action"
+          header="ACTION"
           style="min-width: 12rem"
         >
           <template #body="slotProps">
@@ -140,7 +140,7 @@
         </Column>
         <template #expansion="slotProps">
           <div class="p-3">
-            <h5 class="text-cyan-500 hover:text-cyan-700">Requested Items</h5>
+            <h5 class="text-cyan-500 hover:text-cyan-700">REQUESTED ITEMS</h5>
             <DataTable
               paginator
               :rows="7"
@@ -148,7 +148,7 @@
             >
               <Column
                 field="item"
-                header="Item"
+                header="ITEM"
               >
                 <template #body="{ data }">
                   {{ data.item_details.cl2desc }}
@@ -156,11 +156,11 @@
               </Column>
               <Column
                 field="requested_qty"
-                header="Requested qty"
+                header="REQUESTED QTY"
               ></Column>
               <Column
                 field="approved_qty"
-                header="Approved qty"
+                header="APPROVED QTY"
               ></Column>
             </DataTable>
           </div>
@@ -185,7 +185,7 @@
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold">Current stocks</span>
+            <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">CURRENT STOCKS</span>
             <div>
               <span class="p-input-icon-left mr-2">
                 <i class="pi pi-search" />
@@ -204,7 +204,7 @@
         <template #loading> Loading item data. Please wait. </template>
         <Column
           field="item"
-          header="Item"
+          header="ITEM"
           sortable
           style="min-width: 12rem"
         >
@@ -214,7 +214,7 @@
         </Column>
         <Column
           field="quantity"
-          header="Quantity"
+          header="QUANTITY"
           sortable
           style="min-width: 12rem"
         >

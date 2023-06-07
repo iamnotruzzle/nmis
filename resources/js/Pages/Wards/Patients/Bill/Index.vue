@@ -24,7 +24,7 @@
           <template #header>
             <span class="text-2xl text-cyan-500 font-bold">{{ patientName }} ( {{ hospitalNumber }} )</span>
             <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-              <span class="text-xl text-900 font-bold">Bills</span>
+              <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">BILLS</span>
               <div>
                 <span class="p-input-icon-left mr-2">
                   <i class="pi pi-search" />
@@ -51,7 +51,7 @@
           />
           <Column
             field="charge_slip_no"
-            header="Charge slip #"
+            header="CHARGE SLIP #"
             sortable
           >
             <template #body="{ data }">
@@ -69,7 +69,7 @@
           </Column>
           <Column
             field="type_of_charge_description"
-            header="Type of charge"
+            header="TYPE OF CHARGE"
             sortable
           >
             <template #body="{ data }">
@@ -87,7 +87,7 @@
           </Column>
           <Column
             field="item"
-            header="Item"
+            header="ITEM"
             sortable
           >
             <template #body="{ data }">
@@ -105,7 +105,7 @@
           </Column>
           <Column
             field="charge_date"
-            header="Charge date"
+            header="CHARGE DATE"
             sortable
           >
             <template #body="{ data }">
@@ -114,7 +114,7 @@
           </Column>
           <Column
             field="quantity"
-            header="Quantity"
+            header="QUANTITY"
             sortable
           >
             <template #body="{ data }">
@@ -123,7 +123,7 @@
           </Column>
           <Column
             field="price"
-            header="Price"
+            header="PRICE"
             sortable
           >
             <template #body="{ data }">
@@ -132,7 +132,7 @@
           </Column>
           <Column
             field="amount"
-            header="Amount"
+            header="AMOUNT"
             sortable
           >
             <template #body="{ data }">
@@ -147,7 +147,7 @@
             <div class="p-3">
               <div class="flex flex-wrap align-items-center justify-content-between gap-2">
                 <h5>
-                  <span class="text-cyan-500 hover:text-cyan-700">Items dispensed</span>
+                  <span class="text-cyan-500 hover:text-cyan-700">ITEMS DISPENSED</span>
                 </h5>
               </div>
 
@@ -167,7 +167,7 @@
                   </template>
                 </Column>
                 <Column
-                  header="Action"
+                  header="ACTION"
                   style="min-width: 12rem"
                 >
                   <template #body="chargeLogs">
@@ -208,7 +208,7 @@
           </template>
           <Column
             field="cl2desc"
-            header="Item"
+            header="ITEM"
           ></Column>
           <Column
             field="quantity"
@@ -229,7 +229,7 @@
           </Column>
           <Column
             field="price"
-            header="Price"
+            header="PRICE"
           >
             <template #body="{ data }"> ₱ {{ data.price }} </template>
           </Column>
@@ -304,17 +304,17 @@
               ></Column>
               <Column
                 field="currentStock"
-                header="Current Stock"
+                header="CURRENT STOCK"
                 sortable
               ></Column>
               <Column
                 field="qtyToCharge"
-                header="Qty to charge"
+                header="QTY TO CHARGE"
                 sortable
               ></Column>
               <Column
                 field="price"
-                header="Price per piece"
+                header="PRICE PER PC."
                 sortable
               >
                 <template #body="{ data }"> ₱ {{ data.price }} </template>
