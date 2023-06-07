@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Csr\Inventory\Stocks;
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use App\Models\CsrStocks;
+use App\Models\CsrStocksLogs;
 use App\Models\Item;
 use Carbon\Carbon;
 // use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
@@ -80,6 +82,7 @@ class CsrStocksController extends Controller
     public function store(Request $request)
     {
         // TODO make batch_no unique
+        $entry_by = Auth::user()->employeeid;
 
         $request->validate([
             'batch_no' => 'required',
@@ -97,6 +100,20 @@ class CsrStocksController extends Controller
             'manufactured_date' => $request->manufactured_date == null ? null : Carbon::parse($request->manufactured_date)->setTimezone('Asia/Manila'),
             'delivered_date' => $request->delivered_date == null ? null : Carbon::parse($request->delivered_date)->setTimezone('Asia/Manila'),
             'expiration_date' => $request->expiration_date == null ? null : Carbon::parse($request->expiration_date)->setTimezone('Asia/Manila'),
+        ]);
+
+        $stockLogs = CsrStocksLogs::create([
+            'batch_no' => $stock->batch_no,
+            'cl2comb' => $stock->cl2comb,
+            'brand' => $stock->brand,
+            'prev_qty' => 0,
+            'new_qty' => $stock->quantity,
+            'manufactured_date' => $stock->manufactured_date,
+            'delivered_date' => $stock->delivered_date,
+            'expiration_date' => $stock->expiration_date,
+            'action' => 'CREATED',
+            'remarks' => NULL,
+            'entry_by' => $entry_by,
         ]);
 
         return Redirect::route('csrstocks.index');

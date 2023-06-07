@@ -24,7 +24,7 @@ class CreateCsrwCsrStocksLogsTable extends Migration
             $table->dateTime('delivered_date')->nullable();
             $table->dateTime('expiration_date');
             $table->string('action');
-            $table->string('remarks', 500);
+            $table->string('remarks', 500)->nullable();
             $table->string('entry_by'); // employeeid
             $table->timestamps();
         });
