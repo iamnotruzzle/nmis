@@ -330,6 +330,19 @@
           </small>
         </div>
 
+        <div
+          v-if="isUpdate == true"
+          class="field"
+        >
+          <label for="remarks">Remarks</label>
+          <Textarea
+            v-model.trim="form.remarks"
+            rows="5"
+            autofocus
+            @keyup.enter="submit"
+          />
+        </div>
+
         <template #footer>
           <Button
             label="Cancel"
@@ -584,6 +597,7 @@ import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
 import AutoComplete from 'primevue/autocomplete';
 import Tag from 'primevue/tag';
+import Textarea from 'primevue/textarea';
 import moment from 'moment';
 
 export default {
@@ -603,6 +617,7 @@ export default {
     Dropdown,
     AutoComplete,
     Tag,
+    Textarea,
   },
   props: {
     items: Object,
@@ -664,6 +679,7 @@ export default {
         manufactured_date: null,
         delivered_date: null,
         expiration_date: null,
+        remarks: null,
       }),
       formBrand: this.$inertia.form({
         id: null,
