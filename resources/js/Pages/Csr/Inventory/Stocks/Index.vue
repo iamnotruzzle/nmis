@@ -68,7 +68,7 @@
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.brand }}
+            {{ data.brand_name }}
           </template>
         </Column>
         <Column
@@ -679,7 +679,7 @@ export default {
     this.rows = this.stocks.per_page;
   },
   mounted() {
-    console.log(this.stocks);
+    // console.log(this.stocks);
     this.storeItemsInController();
     this.storeStocksInContainer();
     this.storeBrandsInContainer();
@@ -712,8 +712,9 @@ export default {
           id: e.id,
           batch_no: e.batch_no,
           cl2comb: e.cl2comb,
-          brand: e.brand_detail.name,
           cl2desc: e.item_detail.cl2desc,
+          brand_id: e.brand_detail.id,
+          brand_name: e.brand_detail.name,
           quantity: e.quantity,
           manufactured_date: e.manufactured_date === null ? '' : e.manufactured_date,
           delivered_date: e.delivered_date === null ? '' : e.delivered_date,
@@ -765,11 +766,13 @@ export default {
       );
     },
     editItem(item) {
+      //   console.log(item);
       this.isUpdate = true;
       this.createStockDialog = true;
       this.stockId = item.id;
       this.form.batch_no = item.batch_no;
       this.form.cl2comb = item.cl2comb;
+      this.form.brand = item.brand_id;
       this.form.quantity = item.quantity;
       this.form.manufactured_date = item.manufactured_date;
       this.form.delivered_date = item.delivered_date;
