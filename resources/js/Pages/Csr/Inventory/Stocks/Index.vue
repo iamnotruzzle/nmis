@@ -403,7 +403,7 @@
         :value="brandsList"
         paginator
         :rows="10"
-        :rowsPerPageOptions="[10, 30, 50]"
+        :rowsPerPageOptions="[10, 20, 30]"
         removableSort
         sortField="name"
         :sortOrder="1"

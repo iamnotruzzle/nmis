@@ -19,7 +19,7 @@ class CreateCsrwStocksLogsTable extends Migration
             $table->integer('previous_qty');
             $table->integer('new_qty');
             $table->string('action');
-            $table->string('remarks', 500);
+            $table->string('remarks', 500)->nullable();
             $table->string('entry_by');
             $table->timestamps();
         });
