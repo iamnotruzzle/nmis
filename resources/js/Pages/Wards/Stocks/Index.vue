@@ -545,7 +545,7 @@ export default {
           requested_by:
             e.requested_by_details.firstname +
             ' ' +
-            e.requested_by_details.middlname +
+            e.requested_by_details.middlename +
             ' ' +
             e.requested_by_details.lastname,
           created_at: e.created_at,

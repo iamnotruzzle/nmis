@@ -408,7 +408,7 @@ export default {
           requested_by:
             e.requested_by_details.firstname +
             ' ' +
-            e.requested_by_details.middlname +
+            e.requested_by_details.middlename +
             ' ' +
             e.requested_by_details.lastname,
           requested_at: e.requested_at_details.wardname,
