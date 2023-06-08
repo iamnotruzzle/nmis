@@ -377,7 +377,7 @@ export default {
     this.rows = this.requestedStocks.per_page;
   },
   mounted() {
-    // console.log(this.requestedStocks);
+    console.log(this.requestedStocks);
     this.storeItemsInController();
     this.storeRequestedStocksInContainer();
 
@@ -456,7 +456,7 @@ export default {
       });
     },
     openCreateRequestStocksDialog(item) {
-      console.log(item);
+      //   console.log(item);
       this.form.clearErrors();
       this.form.reset();
       this.form.request_stocks_id = item.id;

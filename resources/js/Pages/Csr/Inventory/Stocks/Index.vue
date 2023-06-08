@@ -334,13 +334,19 @@
           v-if="isUpdate == true"
           class="field"
         >
-          <label for="remarks">Remarks</label>
+          <label for="remarks">Remarks <span class="text-error">(Required)</span></label>
           <Textarea
             v-model.trim="form.remarks"
             rows="5"
             autofocus
-            @keyup.enter="submit"
+            :class="{ 'p-invalid': form.remarks == '' }"
           />
+          <small
+            class="text-error"
+            v-if="form.errors.remarks"
+          >
+            {{ form.errors.remarks }}
+          </small>
         </div>
 
         <template #footer>
@@ -358,7 +364,7 @@
             severity="warning"
             text
             type="submit"
-            :disabled="form.processing"
+            :disabled="form.processing || form.remarks == '' || form.remarks == null"
             @click="submit"
           />
           <Button
@@ -393,12 +399,18 @@
         </div>
 
         <div class="field mt-5 flex flex-column">
-          <label for="remarks">REMARKS</label>
+          <label for="remarks">REMARKS <span class="text-error">(REQUIRED)</span></label>
           <Textarea
             v-model.trim="form.remarks"
             rows="5"
             autofocus
           />
+          <small
+            class="text-error"
+            v-if="form.errors.remarks"
+          >
+            {{ form.errors.remarks }}
+          </small>
         </div>
 
         <template #footer>
@@ -413,6 +425,7 @@
             icon="pi pi-check"
             severity="danger"
             text
+            :disabled="form.remarks == '' || form.remarks == null"
             @click="deleteItem"
           />
         </template>

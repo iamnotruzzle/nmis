@@ -37,10 +37,10 @@ class IssueItemController extends Controller
 
         // TODO fix $requestedStocks where when() is not working when whereHas() is 2 or more
         $requestedStocks = RequestStocks::with([
-            'requested_at_details',
-            'requested_by_details',
+            'requested_at_details:wardcode,wardname',
+            'requested_by_details:employeeid,firstname,middlename,lastname',
             'approved_by_details',
-            'request_stocks_details.item_details',
+            'request_stocks_details.item_details:cl2comb,cl2desc',
             'request_stocks_details.stocks'
         ])
             ->whereHas('requested_at_details', function ($q) use ($searchString) {

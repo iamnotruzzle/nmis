@@ -129,6 +129,7 @@ class CsrStocksController extends Controller
             'cl2comb' => 'required',
             'quantity' => 'required|numeric|min:0',
             'expiration_date' => 'required',
+            'remarks' => 'required'
         ]);
 
         $prevStockDetails = CsrStocks::where('id', $csrstock->id)->first();
@@ -162,6 +163,10 @@ class CsrStocksController extends Controller
 
     public function destroy(CsrStocks $csrstock, Request $request)
     {
+        $request->validate([
+            'remarks' => 'required'
+        ]);
+
         $entry_by = Auth::user()->employeeid;
 
         $prevStockDetails = CsrStocks::where('id', $csrstock->id)->first();
