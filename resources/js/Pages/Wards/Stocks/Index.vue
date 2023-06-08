@@ -327,7 +327,7 @@
             severity="warning"
             text
             type="submit"
-            :disabled="form.processing"
+            :disabled="form.processing || requestStockListDetails == '' || requestStockListDetails == null"
             @click="submit"
           />
           <Button
@@ -754,7 +754,6 @@ export default {
       this.createRequestStocksDialog = false;
       this.form.reset();
       this.form.clearErrors();
-      this.storeRequestedStocksInContainer();
     },
     createdMsg() {
       this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Stock request created', life: 3000 });
