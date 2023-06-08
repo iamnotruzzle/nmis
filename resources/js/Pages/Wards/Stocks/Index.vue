@@ -336,7 +336,7 @@
             icon="pi pi-check"
             text
             type="submit"
-            :disabled="form.processing"
+            :disabled="form.processing || requestStockListDetails == '' || requestStockListDetails == null"
             @click="submit"
           />
         </template>
