@@ -501,10 +501,7 @@ export default {
       //   console.log(data);
 
       data.request_stocks_details.forEach((item) => {
-        // console.log('item', item);
         item.stocks.forEach((e) => {
-          //   console.log(e);
-
           this.issuedItemList.push({
             brand: e.brand_detail.name,
             cl2desc: item.item_details.cl2desc,
@@ -514,7 +511,7 @@ export default {
         });
       });
 
-      console.log(this.issuedItemList);
+      //   console.log(this.issuedItemList);
       this.issuedItemsDialog = true;
     },
     tzone(date) {
