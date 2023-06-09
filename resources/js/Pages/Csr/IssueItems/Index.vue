@@ -498,10 +498,7 @@ export default {
       //   console.log(this.requestStockList);
     },
     viewIssuedItem(data) {
-      //   console.log(data);
-
       data.request_stocks_details.forEach((item) => {
-        // console.log('item', item);
         item.stocks.forEach((e) => {
           this.issuedItemList.push({
             brand: e.brand_detail.name,
