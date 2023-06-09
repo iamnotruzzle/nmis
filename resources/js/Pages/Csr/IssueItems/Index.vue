@@ -135,12 +135,26 @@
         </Column>
         <template #expansion="slotProps">
           <div class="p-3">
-            <h5 class="text-cyan-500 hover:text-cyan-700">REQUESTED ITEMS</h5>
             <DataTable
               paginator
               :rows="7"
               :value="slotProps.data.request_stocks_details"
             >
+              <template #header>
+                <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+                  <span class="text-cyan-500 hover:text-cyan-700">REQUESTED ITEMS</span>
+                  <div>
+                    <Button
+                      icon="pi pi-book"
+                      severity="success"
+                      text
+                      rounded
+                      aria-label="export"
+                      @click="exportIssuedItem(slotProps.data)"
+                    />
+                  </div>
+                </div>
+              </template>
               <Column
                 field="item"
                 header="ITEM"
@@ -377,7 +391,7 @@ export default {
     this.rows = this.requestedStocks.per_page;
   },
   mounted() {
-    console.log(this.requestedStocks);
+    // console.log(this.requestedStocks);
     this.storeItemsInController();
     this.storeRequestedStocksInContainer();
 
@@ -417,6 +431,17 @@ export default {
         });
       });
       //   console.log(this.requestStockList);
+    },
+    exportIssuedItem(data) {
+      //   console.log(data.request_stocks_details);
+
+      let stock_details = [];
+
+      data.request_stocks_details.forEach((item) => {
+        stock_details.push(item.stocks);
+      });
+
+      console.log(stock_details);
     },
     tzone(date) {
       return moment.tz(date, 'Asia/Manila').format('LL');
