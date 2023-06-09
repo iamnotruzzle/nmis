@@ -277,11 +277,11 @@ class IssueItemController extends Controller
                             'quantity' => $newStockQty,
                         ]);
 
-                    RequestStocks::where('id', $requestStocksID)
-                        ->update([
-                            'status' => 'FILLED',
-                            'approved_by' => $request->approved_by,
-                        ]);
+                    // RequestStocks::where('id', $requestStocksID)
+                    //     ->update([
+                    //         'status' => 'FILLED',
+                    //         'approved_by' => $request->approved_by,
+                    //     ]);
                 } else {
                     $remaining_qty_to_be_issued = $remaining_qty_to_be_issued - $stock->quantity;
 
@@ -306,13 +306,37 @@ class IssueItemController extends Controller
                             'quantity' => 0,
                         ]);
 
-                    RequestStocks::where('id', $requestStocksID)
-                        ->update([
-                            'status' => 'FILLED',
-                            'approved_by' => $request->approved_by,
-                        ]);
+                    // RequestStocks::where('id', $requestStocksID)
+                    //     ->update([
+                    //         'status' => 'FILLED',
+                    //         'approved_by' => $request->approved_by,
+                    //     ]);
                 }
             }
+        }
+
+        // get the issued item
+        $rsd = WardsStocks::where('request_stocks_id', $requestStocksID)->get();
+        $rsd_container = [];
+        foreach ($rsd as $value) {
+            array_push($rsd_container, $value['quantity']);
+        }
+        // get an array of all items that are non-zero
+        $tmp = array_filter($rsd_container);
+
+        // check if the filtered array is all zero else change the request stock status to FILLED
+        if (empty($tmp)) {
+            RequestStocks::where('id', $requestStocksID)
+                ->update([
+                    'status' => 'REQUESTED',
+                    'approved_by' => $request->approved_by,
+                ]);
+        } else {
+            RequestStocks::where('id', $requestStocksID)
+                ->update([
+                    'status' => 'FILLED',
+                    'approved_by' => $request->approved_by,
+                ]);
         }
 
         return Redirect::route('issueitems.index');

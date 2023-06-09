@@ -145,6 +145,7 @@
                   <span class="text-cyan-500 hover:text-cyan-700">REQUESTED ITEMS</span>
                   <div>
                     <Button
+                      v-if="slotProps.data.status == 'FILLED'"
                       icon="pi pi-book"
                       severity="success"
                       text
@@ -498,6 +499,7 @@ export default {
       //   console.log(this.requestStockList);
     },
     viewIssuedItem(data) {
+      console.log(data);
       data.request_stocks_details.forEach((item) => {
         item.stocks.forEach((e) => {
           this.issuedItemList.push({
