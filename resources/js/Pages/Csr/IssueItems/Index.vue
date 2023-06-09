@@ -140,7 +140,7 @@
               :rows="7"
               :value="slotProps.data.request_stocks_details"
             >
-              <template #header="{ slotProps }">
+              <template #header>
                 <div class="flex flex-wrap align-items-center justify-content-between gap-2">
                   <span class="text-cyan-500 hover:text-cyan-700">REQUESTED ITEMS</span>
                   <div>
