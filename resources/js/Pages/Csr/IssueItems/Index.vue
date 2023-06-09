@@ -150,7 +150,8 @@
                       text
                       rounded
                       aria-label="export"
-                      @click="exportIssuedItem(slotProps.data)"
+                      @click="viewIssuedItem(slotProps.data)"
+                      size="large"
                     />
                   </div>
                 </div>
@@ -293,6 +294,62 @@
           />
         </template>
       </Dialog>
+
+      <!-- view issued items -->
+      <Dialog
+        v-model:visible="issuedItemsDialog"
+        header="ISSUED ITEMS"
+        :modal="true"
+        class="p-fluid"
+        @hide="whenDialogIsHidden"
+      >
+        <div class="field">
+          <DataTable
+            v-model:filters="issuedItemsFilter"
+            :globalFilterFields="['brand', 'cl2desc']"
+            :value="issuedItemList"
+            class="p-datatable-sm"
+            paginator
+            :rows="7"
+          >
+            <template #header>
+              <div class="flex">
+                <span class="p-input-icon-left">
+                  <i class="pi pi-search" />
+                  <InputText
+                    v-model="issuedItemsFilter['global'].value"
+                    placeholder="Search issued item"
+                  />
+                </span>
+              </div>
+            </template>
+            <Column
+              field="brand"
+              header="BRAND"
+              sortable
+            ></Column>
+            <Column
+              field="cl2desc"
+              header="ITEM"
+              sortable
+            ></Column>
+            <Column
+              field="quantity"
+              header="QTY"
+              sortable
+            ></Column>
+            <Column
+              field="expiration_date"
+              header="EXP. DATE"
+              sortable
+            >
+              <template #body="{ data }">
+                {{ tzone(data.expiration_date) }}
+              </template>
+            </Column>
+          </DataTable>
+        </div>
+      </Dialog>
     </div>
   </app-layout>
 </template>
@@ -351,6 +408,7 @@ export default {
       requestStockId: null,
       isUpdate: false,
       createRequestStocksDialog: false,
+      issuedItemsDialog: false,
       search: '',
       options: {},
       params: {},
@@ -358,8 +416,12 @@ export default {
       to: null,
       itemsList: [],
       requestStockList: [],
+      issuedItemList: [],
       // stock list details
       requestStockListDetailsFilter: {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      },
+      issuedItemsFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       disabled: true,
@@ -403,6 +465,9 @@ export default {
     },
   },
   methods: {
+    tzone(date) {
+      return moment.tz(date, 'Asia/Manila').format('LL');
+    },
     storeItemsInController() {
       this.items.forEach((e) => {
         this.itemsList.push({
@@ -432,16 +497,25 @@ export default {
       });
       //   console.log(this.requestStockList);
     },
-    exportIssuedItem(data) {
-      //   console.log(data.request_stocks_details);
-
-      let stock_details = [];
+    viewIssuedItem(data) {
+      //   console.log(data);
 
       data.request_stocks_details.forEach((item) => {
-        stock_details.push(item.stocks);
+        // console.log('item', item);
+        item.stocks.forEach((e) => {
+          //   console.log(e);
+
+          this.issuedItemList.push({
+            brand: e.brand_detail.name,
+            cl2desc: item.item_details.cl2desc,
+            quantity: e.ward_stocks.quantity,
+            expiration_date: e.ward_stocks.expiration_date,
+          });
+        });
       });
 
-      console.log(stock_details);
+      console.log(this.issuedItemList);
+      this.issuedItemsDialog = true;
     },
     tzone(date) {
       return moment.tz(date, 'Asia/Manila').format('LL');
@@ -516,6 +590,8 @@ export default {
         (this.approved_qty = null),
         (this.itemNotSelected = null),
         (this.itemNotSelectedMsg = null),
+        (this.issuedItemList = []),
+        (this.issuedItemsDialog = false),
         this.form.clearErrors(),
         this.form.reset()
       );

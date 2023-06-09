@@ -41,7 +41,7 @@ class IssueItemController extends Controller
             'requested_by_details:employeeid,firstname,middlename,lastname',
             'approved_by_details',
             'request_stocks_details.item_details:cl2comb,cl2desc',
-            'request_stocks_details.stocks'
+            'request_stocks_details'
         ])
             ->whereHas('requested_at_details', function ($q) use ($searchString) {
                 $q->where('wardname', 'LIKE', '%' . $searchString . '%');

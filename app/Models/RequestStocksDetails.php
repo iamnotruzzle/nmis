@@ -31,6 +31,11 @@ class RequestStocksDetails extends Model
 
     public function stocks()
     {
-        return $this->hasMany(CsrStocks::class, 'cl2comb', 'cl2comb');
+        return $this->hasMany(CsrStocks::class, 'cl2comb', 'cl2comb')->with(['brandDetail:id,name', 'ward_stocks']);
     }
+
+    // public function ward_stocks()
+    // {
+    //     return $this->hasMany(WardsStocks::class, 'request_stocks_detail_id', 'id')->with('item_details:cl2comb,cl2desc');
+    // }
 }

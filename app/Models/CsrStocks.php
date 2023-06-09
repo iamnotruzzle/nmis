@@ -41,4 +41,10 @@ class CsrStocks extends Model
     {
         return $this->hasOne(CsrStocksLogs::class, 'id', 'csrw_stocks_id');
     }
+
+    public function ward_stocks()
+    {
+        // return $this->hasOne(WardsStocks::class, 'stock_id', 'id')->with('item_details:cl2comb,cl2desc');
+        return $this->hasOne(WardsStocks::class, 'stock_id', 'id');
+    }
 }
