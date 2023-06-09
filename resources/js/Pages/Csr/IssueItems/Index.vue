@@ -140,7 +140,7 @@
               :rows="7"
               :value="slotProps.data.request_stocks_details"
             >
-              <template #header>
+              <template #header="{ slotProps }">
                 <div class="flex flex-wrap align-items-center justify-content-between gap-2">
                   <span class="text-cyan-500 hover:text-cyan-700">REQUESTED ITEMS</span>
                   <div>
@@ -501,6 +501,7 @@ export default {
       //   console.log(data);
 
       data.request_stocks_details.forEach((item) => {
+        // console.log('item', item);
         item.stocks.forEach((e) => {
           this.issuedItemList.push({
             brand: e.brand_detail.name,
