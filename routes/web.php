@@ -10,6 +10,7 @@ use App\Http\Controllers\Users\UserController;
 use App\Http\Controllers\Wards\Patients\PatientChargeController;
 use App\Http\Controllers\Wards\Patients\WardPatientsController;
 use App\Http\Controllers\Wards\RequestStocks\RequestStocksController;
+use App\Models\WardsStocksLogs;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -47,3 +48,4 @@ Route::put('requeststocks', [RequestStocksController::class, 'updatedeliverystat
 
 Route::resource('wardspatients', WardPatientsController::class)->middleware(['auth:sanctum', 'verified'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('patientcharge', PatientChargeController::class)->middleware(['auth:sanctum', 'verified'])->only(['index', 'store', 'update', 'destroy']);
+Route::resource('wardsstockslogs', WardsStocksLogs::class)->middleware(['auth:sanctum', 'verified'])->only(['index', 'store', 'update', 'destroy']);

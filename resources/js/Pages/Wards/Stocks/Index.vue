@@ -242,6 +242,31 @@
             {{ tzone2(data.expiration_date) }}
           </template>
         </Column>
+        <Column
+          header="ACTION"
+          style="min-width: 12rem"
+        >
+          <!-- <template #body="slotProps">
+            <Button
+              v-if="slotProps.data.status == 'REQUESTED'"
+              icon="pi pi-pencil"
+              class="mr-1"
+              rounded
+              text
+              severity="warning"
+              @click="editRequestedStock(slotProps.data)"
+            />
+
+            <Button
+              v-if="slotProps.data.status == 'REQUESTED'"
+              icon="pi pi-trash"
+              rounded
+              text
+              severity="danger"
+              @click="confirmDeleteItem(slotProps.data)"
+            />
+          </template> -->
+        </Column>
       </DataTable>
 
       <!-- @hide="clickOutsideDialog" -->
