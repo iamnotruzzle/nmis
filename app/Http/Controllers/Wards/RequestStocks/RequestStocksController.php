@@ -79,9 +79,10 @@ class RequestStocksController extends Controller
             ->join('hclass2', 'csrw_wards_stocks.cl2comb', '=', 'hclass2.cl2comb')
             ->join('csrw_brands', 'csrw_wards_stocks.brand', '=', 'csrw_brands.id')
             ->join('csrw_request_stocks', 'csrw_wards_stocks.request_stocks_id', '=', 'csrw_request_stocks.id')
-            ->select('csrw_brands.name', 'hclass2.cl2desc', 'quantity', 'expiration_date')
+            ->select('csrw_wards_stocks.id', 'csrw_brands.name', 'hclass2.cl2desc', 'quantity', 'expiration_date')
             ->whereRaw("csrw_wards_stocks.location = '" . $authWardcode->wardcode . "' AND
                       csrw_request_stocks.status = 'RECEIVED'")
+            ->orderBy('expiration_date', 'ASC')
             ->get();
 
         // dd($currentWardStocks);
