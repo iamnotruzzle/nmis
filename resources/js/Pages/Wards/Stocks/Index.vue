@@ -929,7 +929,7 @@ export default {
     },
     // ward stocks logs
     editWardStocks(data) {
-      console.log(data);
+      //   console.log(data);
       this.editWardStocksDialog = true;
 
       this.formWardStocks.ward_stock_id = data.ward_stock_id;
