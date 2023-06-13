@@ -489,22 +489,28 @@
         </div>
 
         <template #footer>
-          <!-- <Button
+          <Button
             label="Cancel"
             icon="pi pi-times"
             severity="danger"
             text
             @click="cancel"
           />
+
           <Button
             label="Update"
             icon="pi pi-check"
             severity="warning"
             text
             type="submit"
-            :disabled="form.processing || requestStockListDetails == '' || requestStockListDetails == null"
+            :disabled="
+              formWardStocks.processing ||
+              formWardStocks.quantity == null ||
+              formWardStocks.quantity == '' ||
+              Number(formWardStocks.current_quantity) < Number(formWardStocks.quantity)
+            "
             @click="submit"
-          /> -->
+          />
         </template>
       </Dialog>
     </div>
@@ -609,6 +615,7 @@ export default {
         ward_stock_id: null,
         brand: null,
         item: null,
+        current_quantity: null,
         quantity: null,
         expiration_date: null,
       }),
@@ -909,6 +916,7 @@ export default {
       this.formWardStocks.ward_stock_id = data.id;
       this.formWardStocks.brand = data.brand;
       this.formWardStocks.item = data.item;
+      this.formWardStocks.current_quantity = data.quantity;
       this.formWardStocks.quantity = data.quantity;
       this.formWardStocks.expiration_date = data.expiration_date;
     },
