@@ -177,7 +177,7 @@
         :rows="10"
         :rowsPerPageOptions="[10, 30, 50]"
         removableSort
-        sortField="item"
+        sortField="expiration_date"
         :sortOrder="1"
         filterDisplay="row"
         showGridlines
@@ -246,26 +246,16 @@
           header="ACTION"
           style="min-width: 12rem"
         >
-          <!-- <template #body="slotProps">
+          <template #body="slotProps">
             <Button
-              v-if="slotProps.data.status == 'REQUESTED'"
               icon="pi pi-pencil"
-              class="mr-1"
+              class=""
               rounded
               text
               severity="warning"
-              @click="editRequestedStock(slotProps.data)"
+              @click="editWardStocks(slotProps.data)"
             />
-
-            <Button
-              v-if="slotProps.data.status == 'REQUESTED'"
-              icon="pi pi-trash"
-              rounded
-              text
-              severity="danger"
-              @click="confirmDeleteItem(slotProps.data)"
-            />
-          </template> -->
+          </template>
         </Column>
       </DataTable>
 
@@ -452,6 +442,71 @@
           />
         </template>
       </Dialog>
+
+      <!-- ward stock dialog -->
+      <Dialog
+        v-model:visible="editWardStocksDialog"
+        header="Update stock"
+        :modal="true"
+        class="p-fluid w-4"
+        @hide="whenDialogIsHidden"
+      >
+        <div class="field">
+          <label for="brand">Brand</label>
+          <InputText
+            id="brand"
+            v-model.trim="formWardStocks.brand"
+            readonly
+            class="w-full"
+          />
+        </div>
+        <div class="field">
+          <label for="item">Item</label>
+          <InputText
+            id="item"
+            v-model.trim="formWardStocks.item"
+            readonly
+            class="w-full"
+          />
+        </div>
+        <div class="field">
+          <label for="quantity">Quantity</label>
+          <InputText
+            id="quantity"
+            v-model.trim="formWardStocks.quantity"
+            autofocus
+            class="w-full"
+          />
+        </div>
+        <div class="field">
+          <label for="expiration_date">Expiration_date</label>
+          <InputText
+            id="expiration_date"
+            v-model.trim="formWardStocks.expiration_date"
+            readonly
+            class="w-full"
+          />
+        </div>
+
+        <template #footer>
+          <!-- <Button
+            label="Cancel"
+            icon="pi pi-times"
+            severity="danger"
+            text
+            @click="cancel"
+          />
+          <Button
+            label="Update"
+            icon="pi pi-check"
+            severity="warning"
+            text
+            type="submit"
+            :disabled="form.processing || requestStockListDetails == '' || requestStockListDetails == null"
+            @click="submit"
+          /> -->
+        </template>
+      </Dialog>
     </div>
   </app-layout>
 </template>
@@ -511,6 +566,7 @@ export default {
       requestStockId: null,
       isUpdate: false,
       createRequestStocksDialog: false,
+      editWardStocksDialog: false,
       editStatusDialog: false,
       deleteItemDialog: false,
       search: '',
@@ -549,6 +605,13 @@ export default {
         request_stock_id: null,
         status: null,
       }),
+      formWardStocks: this.$inertia.form({
+        ward_stock_id: null,
+        brand: null,
+        item: null,
+        quantity: null,
+        expiration_date: null,
+      }),
     };
   },
   // created will be initialize before mounted
@@ -558,7 +621,7 @@ export default {
     this.rows = this.requestedStocks.per_page;
   },
   mounted() {
-    console.log(this.currentWardStocks);
+    // console.log(this.currentWardStocks);
     this.storeItemsInController();
     this.storeRequestedStocksInContainer();
     this.storeCurrentWardStocksInContainer();
@@ -602,12 +665,14 @@ export default {
     storeCurrentWardStocksInContainer() {
       //   console.log('current ward stocks: ', this.currentWardStocks);
       this.currentWardStocks.forEach((e) => {
-        // console.log(e);
+        let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('L');
+
         this.currentWardStocksList.push({
+          ward_stock_id: e.id,
           brand: e.name,
           item: e.cl2desc,
           quantity: e.quantity,
-          expiration_date: e.expiration_date,
+          expiration_date: expiration_date.toString(),
         });
       });
     },
@@ -676,6 +741,8 @@ export default {
         (this.itemNotSelectedMsg = null),
         this.form.clearErrors(),
         this.form.reset(),
+        this.formWardStocks.clearErrors(),
+        this.formWardStocks.reset(),
         this.formUpdateStatus.reset()
       );
     },
@@ -802,8 +869,11 @@ export default {
       this.requestStockId = null;
       this.isUpdate = false;
       this.createRequestStocksDialog = false;
+      this.editWardStocksDialog = false;
       this.form.reset();
       this.form.clearErrors();
+      this.formWardStocks.reset();
+      this.formWardStocks.clearErrors();
     },
     createdMsg() {
       this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Stock request created', life: 3000 });
@@ -831,6 +901,18 @@ export default {
         String(date.getMinutes()).padStart(2, '0')
       );
     },
+    // ward stocks logs
+    editWardStocks(data) {
+      console.log(data);
+      this.editWardStocksDialog = true;
+
+      this.formWardStocks.ward_stock_id = data.id;
+      this.formWardStocks.brand = data.brand;
+      this.formWardStocks.item = data.item;
+      this.formWardStocks.quantity = data.quantity;
+      this.formWardStocks.expiration_date = data.expiration_date;
+    },
+    // end ward stocks logs
   },
   watch: {
     search: function (val, oldVal) {
