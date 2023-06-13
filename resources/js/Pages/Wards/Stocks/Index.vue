@@ -509,7 +509,7 @@
               formWardStocks.quantity == '' ||
               Number(formWardStocks.current_quantity) < Number(formWardStocks.quantity)
             "
-            @click="submit"
+            @click="submitEditWardStocks"
           />
         </template>
       </Dialog>
@@ -670,9 +670,10 @@ export default {
     },
     // store current stocks
     storeCurrentWardStocksInContainer() {
-      //   console.log('current ward stocks: ', this.currentWardStocks);
+      moment.suppressDeprecationWarnings = true;
+
       this.currentWardStocks.forEach((e) => {
-        let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('L');
+        let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
 
         this.currentWardStocksList.push({
           ward_stock_id: e.id,
@@ -919,6 +920,20 @@ export default {
       this.formWardStocks.current_quantity = data.quantity;
       this.formWardStocks.quantity = data.quantity;
       this.formWardStocks.expiration_date = data.expiration_date;
+    },
+    submitEditWardStocks() {
+      this.formWardStocks.post(route('wardsstockslogs.store'), {
+        preserveScroll: true,
+        onSuccess: () => {
+          this.editWardStocksDialog = false;
+          this.cancel();
+          this.updateData();
+          this.updatedStockMsg();
+        },
+      });
+    },
+    updatedStockMsg() {
+      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Stock updated', life: 3000 });
     },
     // end ward stocks logs
   },
