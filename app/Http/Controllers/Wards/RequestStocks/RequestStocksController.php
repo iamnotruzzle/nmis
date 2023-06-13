@@ -63,15 +63,28 @@ class RequestStocksController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
+        // GROUP BY AND SUM QTY
+        // $currentWardStocks =
+        //     DB::table('csrw_wards_stocks')
+        //     ->join('hclass2', 'csrw_wards_stocks.cl2comb', '=', 'hclass2.cl2comb')
+        //     ->join('csrw_request_stocks', 'csrw_wards_stocks.request_stocks_id', '=', 'csrw_request_stocks.id')
+        //     ->select('hclass2.cl2desc', DB::raw('SUM(quantity) as quantity'))
+        //     ->whereRaw("csrw_wards_stocks.location = '" . $authWardcode->wardcode . "' AND
+        //               csrw_request_stocks.status = 'RECEIVED'")
+        //     ->groupBy('hclass2.cl2desc')
+        //     ->get();
+
         $currentWardStocks =
             DB::table('csrw_wards_stocks')
             ->join('hclass2', 'csrw_wards_stocks.cl2comb', '=', 'hclass2.cl2comb')
+            ->join('csrw_brands', 'csrw_wards_stocks.brand', '=', 'csrw_brands.id')
             ->join('csrw_request_stocks', 'csrw_wards_stocks.request_stocks_id', '=', 'csrw_request_stocks.id')
-            ->select('hclass2.cl2desc', DB::raw('SUM(quantity) as quantity'))
+            ->select('csrw_brands.name', 'hclass2.cl2desc', 'quantity')
             ->whereRaw("csrw_wards_stocks.location = '" . $authWardcode->wardcode . "' AND
                       csrw_request_stocks.status = 'RECEIVED'")
-            ->groupBy('hclass2.cl2desc')
             ->get();
+
+        // dd($currentWardStocks);
 
         return Inertia::render('Wards/Stocks/Index', [
             'items' => $items,

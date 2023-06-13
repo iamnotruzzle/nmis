@@ -203,6 +203,16 @@
         <template #empty> No item found. </template>
         <template #loading> Loading item data. Please wait. </template>
         <Column
+          field="brand"
+          header="BRAND"
+          sortable
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.brand }}
+          </template>
+        </Column>
+        <Column
           field="item"
           header="ITEM"
           sortable
@@ -559,6 +569,7 @@ export default {
       this.currentWardStocks.forEach((e) => {
         // console.log(e);
         this.currentWardStocksList.push({
+          brand: e.name,
           item: e.cl2desc,
           quantity: e.quantity,
         });
