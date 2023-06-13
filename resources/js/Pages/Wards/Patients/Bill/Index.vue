@@ -555,7 +555,7 @@ export default {
     };
   },
   mounted() {
-    // console.log('bills', this.$page.props.tanksList);
+    // console.log('bills', this.bills.admission_date_bill.enccode);
     this.storeBillsInContainer();
     this.getTotalAmount();
     this.storeMedicalSuppliesInContainer();
