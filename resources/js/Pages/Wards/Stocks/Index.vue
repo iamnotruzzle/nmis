@@ -487,6 +487,21 @@
             class="w-full"
           />
         </div>
+        <div class="field">
+          <label for="remarks">Remarks <span class="text-error">(Required)</span></label>
+          <TextArea
+            v-model.trim="formWardStocks.remarks"
+            rows="5"
+            autofocus
+            :class="{ 'p-invalid': formWardStocks.remarks == '' }"
+          />
+          <small
+            class="text-error"
+            v-if="formWardStocks.errors.remarks"
+          >
+            {{ formWardStocks.errors.remarks }}
+          </small>
+        </div>
 
         <template #footer>
           <Button
@@ -507,7 +522,7 @@
               formWardStocks.processing ||
               formWardStocks.quantity == null ||
               formWardStocks.quantity == '' ||
-              Number(formWardStocks.current_quantity) < Number(formWardStocks.quantity)
+              Number(formWardStocks.current_quantity) <= Number(formWardStocks.quantity)
             "
             @click="submitEditWardStocks"
           />
@@ -534,6 +549,7 @@ import Avatar from 'primevue/avatar';
 import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
 import AutoComplete from 'primevue/autocomplete';
+import TextArea from 'primevue/textarea';
 import Tag from 'primevue/tag';
 import moment from 'moment';
 
@@ -554,6 +570,7 @@ export default {
     Dropdown,
     AutoComplete,
     Tag,
+    TextArea,
   },
   props: {
     authWardcode: Object,
@@ -618,6 +635,7 @@ export default {
         current_quantity: null,
         quantity: null,
         expiration_date: null,
+        remarks: null,
       }),
     };
   },
@@ -914,7 +932,7 @@ export default {
       console.log(data);
       this.editWardStocksDialog = true;
 
-      this.formWardStocks.ward_stock_id = data.id;
+      this.formWardStocks.ward_stock_id = data.ward_stock_id;
       this.formWardStocks.brand = data.brand;
       this.formWardStocks.item = data.item;
       this.formWardStocks.current_quantity = data.quantity;
