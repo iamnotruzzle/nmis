@@ -502,12 +502,14 @@ export default {
       console.log(data);
       data.request_stocks_details.forEach((item) => {
         item.stocks.forEach((e) => {
-          this.issuedItemList.push({
-            brand: e.brand_detail.name,
-            cl2desc: item.item_details.cl2desc,
-            quantity: e.ward_stocks.quantity,
-            expiration_date: e.ward_stocks.expiration_date,
-          });
+          if (e.ward_stocks != null) {
+            this.issuedItemList.push({
+              brand: e.brand_detail.name,
+              cl2desc: item.item_details.cl2desc,
+              quantity: e.ward_stocks.quantity,
+              expiration_date: e.ward_stocks.expiration_date,
+            });
+          }
         });
       });
 
