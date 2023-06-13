@@ -450,6 +450,7 @@
         :modal="true"
         class="p-fluid w-4"
         @hide="whenDialogIsHidden"
+        dismissableMask
       >
         <div class="field">
           <label for="brand">Brand</label>
