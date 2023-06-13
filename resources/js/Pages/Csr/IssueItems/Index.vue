@@ -314,7 +314,7 @@
             :rows="7"
           >
             <template #header>
-              <div class="flex">
+              <div class="flex mb-2">
                 <span class="p-input-icon-left">
                   <i class="pi pi-search" />
                   <InputText

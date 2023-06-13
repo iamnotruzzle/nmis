@@ -20,6 +20,7 @@ class CreateCsrwWardsStocksTable extends Migration
             $table->bigInteger('stock_id');
             $table->string('location');
             $table->string('cl2comb');
+            $table->bigInteger('brand')->nullable();
             $table->integer('quantity');
             $table->dateTime('manufactured_date')->nullable();
             $table->dateTime('delivered_date')->nullable();
