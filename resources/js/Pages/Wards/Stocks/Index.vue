@@ -232,6 +232,16 @@
             {{ data.quantity }}
           </template>
         </Column>
+        <Column
+          field="expiration_date"
+          header="EXPIRATION DATE"
+          sortable
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ tzone2(data.expiration_date) }}
+          </template>
+        </Column>
       </DataTable>
 
       <!-- @hide="clickOutsideDialog" -->
@@ -572,11 +582,15 @@ export default {
           brand: e.name,
           item: e.cl2desc,
           quantity: e.quantity,
+          expiration_date: e.expiration_date,
         });
       });
     },
     tzone(date) {
       return moment.tz(date, 'Asia/Manila').format('LL');
+    },
+    tzone2(date) {
+      return moment.tz(date, 'Asia/Manila').format('L');
     },
     getSeverity(status) {
       switch (status) {
