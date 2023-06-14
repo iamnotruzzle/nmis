@@ -39,6 +39,7 @@ class WardsStocksLogsController extends Controller
             'location' => $prevStockDetails->location,
             'cl2comb' => $prevStockDetails->cl2comb,
             'brand' => $prevStockDetails->brand,
+            'chrgcode' => $prevStockDetails->chrgcode,
             'prev_qty' => $request->current_quantity,
             'new_qty' => $request->quantity,
             'manufactured_date' => $prevStockDetails->manufactured_date,
