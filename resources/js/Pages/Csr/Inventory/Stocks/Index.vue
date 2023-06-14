@@ -49,36 +49,30 @@
           header="BATCH NO."
           style="min-width: 12rem"
         >
-          <template #body="{ data }">
-            {{ data.batch_no }}
-          </template>
         </Column>
         <Column
-          field="item"
+          field="chrgdesc"
+          header="TRUST FUND"
+          style="min-width: 12rem"
+        >
+        </Column>
+        <Column
+          field="cl2desc"
           header="ITEM"
           style="min-width: 12rem"
         >
-          <template #body="{ data }">
-            {{ data.cl2desc }}
-          </template>
         </Column>
         <Column
-          field="brand"
+          field="brand_name"
           header="BRAND"
           style="min-width: 12rem"
         >
-          <template #body="{ data }">
-            {{ data.brand_name }}
-          </template>
         </Column>
         <Column
           field="quantity"
           header="QUANTITY"
           style="min-width: 12rem"
         >
-          <template #body="{ data }">
-            {{ data.quantity }}
-          </template>
         </Column>
         <Column
           field="manufactured_date"
@@ -220,6 +214,27 @@
           </small>
         </div>
         <div class="field">
+          <label for="trustFunds">Trust fund</label>
+          <Dropdown
+            id="trustFunds"
+            required="true"
+            v-model="form.chrgcode"
+            :options="trustFundList"
+            filter
+            showClear
+            dataKey="chrgcode"
+            optionLabel="chrgdesc"
+            optionValue="chrgcode"
+            class="w-full mb-3"
+            :class="{ 'p-invalid': form.chrgcode == '' }"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.chrgcode"
+          >
+          </small>
+        </div>
+        <div class="field">
           <label for="Item">Item</label>
           <Dropdown
             required="true"
@@ -229,13 +244,14 @@
             dataKey="unit"
             optionLabel="cl2desc"
             optionValue="cl2comb"
-            class="w-full mb-3"
+            class="w-full"
             :class="{ 'p-invalid': form.cl2comb == '' }"
           />
           <small
             class="text-error"
             v-if="form.errors.cl2comb"
           >
+            The item field is required.
           </small>
         </div>
         <div class="field">
@@ -245,6 +261,7 @@
             v-model="form.brand"
             :options="brandDropDownList"
             filter
+            showClear
             dataKey="id"
             optionLabel="name"
             optionValue="id"
@@ -673,6 +690,7 @@ export default {
       // expiration date
       from_ed: null,
       to_ed: null,
+      trustFundList: [],
       itemsList: [],
       brandsList: [],
       brandDropDownList: [],
@@ -695,6 +713,7 @@ export default {
       ],
       form: this.$inertia.form({
         batch_no: null,
+        chrgcode: null,
         cl2comb: null,
         brand: null,
         cl2desc: null,
@@ -728,8 +747,9 @@ export default {
     this.rows = this.stocks.per_page;
   },
   mounted() {
-    // console.log(this.stocks);
-    this.storeItemsInController();
+    // console.log(this.$page.props.typeOfCharge);
+    this.storeTrustFundInContainer();
+    this.storeItemsInContainer();
     this.storeStocksInContainer();
     this.storeBrandsInContainer();
     this.storeActiveBrandsInContainer();
@@ -744,7 +764,17 @@ export default {
         return moment.tz(date, 'Asia/Manila').format('LLL');
       }
     },
-    storeItemsInController() {
+    storeTrustFundInContainer() {
+      this.$page.props.typeOfCharge.forEach((e) => {
+        this.trustFundList.push({
+          chrgcode: e.chrgcode,
+          chrgdesc: e.chrgdesc,
+          bentypcod: e.bentypcod,
+          chrgtable: e.chrgtable,
+        });
+      });
+    },
+    storeItemsInContainer() {
       this.items.forEach((e) => {
         this.itemsList.push({
           cl2comb: e.cl2comb,
@@ -760,6 +790,8 @@ export default {
         this.stocksList.push({
           id: e.id,
           batch_no: e.batch_no,
+          chrgcode: e.trust_fund === null ? '' : e.trust_fund.chrgcode,
+          chrgdesc: e.trust_fund === null ? '' : e.trust_fund.chrgdesc,
           cl2comb: e.cl2comb,
           cl2desc: e.item_detail.cl2desc,
           brand_id: e.brand_detail.id,
@@ -770,6 +802,7 @@ export default {
           expiration_date: e.expiration_date === null ? '' : e.expiration_date,
         });
       });
+      //   console.log(this.stocks);
     },
     onPage(event) {
       this.params.page = event.page + 1;
@@ -815,11 +848,12 @@ export default {
       );
     },
     editItem(item) {
-      //   console.log(item);
+      console.log(item);
       this.isUpdate = true;
       this.createStockDialog = true;
       this.stockId = item.id;
       this.form.batch_no = item.batch_no;
+      this.form.chrgcode = item.chrgcode;
       this.form.cl2comb = item.cl2comb;
       this.form.brand = item.brand_id;
       this.form.quantity = item.quantity;

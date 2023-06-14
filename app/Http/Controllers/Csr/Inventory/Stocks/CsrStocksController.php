@@ -26,7 +26,7 @@ class CsrStocksController extends Controller
             ->orderBy('cl2desc', 'ASC')
             ->get(['cl2comb', 'cl2desc']);
 
-        $stocks = CsrStocks::with('itemDetail', 'brandDetail')
+        $stocks = CsrStocks::with('itemDetail', 'brandDetail', 'trust_fund:chrgcode,chrgdesc')
             ->whereHas('itemDetail', function ($q) use ($searchString) {
                 $q->where('cl2desc', 'LIKE', '%' . $searchString . '%')
                     ->orWhere('batch_no', 'LIKE', '%' . $searchString . '%');
@@ -93,6 +93,7 @@ class CsrStocksController extends Controller
 
         $stock = CsrStocks::create([
             'batch_no' => $request->batch_no,
+            'chrgcode' => $request->chrgcode,
             'cl2comb' => $request->cl2comb,
             'brand' => $request->brand,
             'quantity' => $request->quantity,
@@ -103,6 +104,7 @@ class CsrStocksController extends Controller
 
         $stockLogs = CsrStocksLogs::create([
             'batch_no' => $stock->batch_no,
+            'chrgcode' => $stock->chrgcode,
             'cl2comb' => $stock->cl2comb,
             'brand' => $stock->brand,
             'prev_qty' => 0,
@@ -136,6 +138,7 @@ class CsrStocksController extends Controller
 
         $updated = $csrstock->update([
             'batch_no' => $request->batch_no,
+            'chrgcode' => $request->chrgcode,
             'cl2comb' => $request->cl2comb,
             'brand' => $request->brand,
             'quantity' => $request->quantity,
@@ -146,6 +149,7 @@ class CsrStocksController extends Controller
 
         $stockLogs = CsrStocksLogs::create([
             'batch_no' => $prevStockDetails->batch_no,
+            'chrgcode' => $prevStockDetails->chrgcode,
             'cl2comb' => $prevStockDetails->cl2comb,
             'brand' => $prevStockDetails->brand,
             'prev_qty' => $prevStockDetails->quantity,
@@ -175,6 +179,7 @@ class CsrStocksController extends Controller
 
         $stockLogs = CsrStocksLogs::create([
             'batch_no' => $prevStockDetails->batch_no,
+            'chrgcode' => $prevStockDetails->chrgcode,
             'cl2comb' => $prevStockDetails->cl2comb,
             'brand' => $prevStockDetails->brand,
             'prev_qty' => $prevStockDetails->quantity,
