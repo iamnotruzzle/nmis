@@ -21,6 +21,7 @@ class WardsStocks extends Model
         'location',
         'cl2comb',
         'brand',
+        'chrgcode',
         'quantity',
         'manufactured_date',
         'delivered_date',

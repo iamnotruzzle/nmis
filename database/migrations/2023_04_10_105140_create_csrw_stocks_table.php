@@ -18,6 +18,7 @@ class CreateCsrwStocksTable extends Migration
             $table->string('batch_no');
             $table->string('cl2comb');
             $table->bigInteger('brand')->nullable();
+            $table->string('chrgcode')->nullable();
             $table->integer('quantity');
             $table->dateTime('manufactured_date')->nullable();
             $table->dateTime('delivered_date')->nullable();

@@ -21,6 +21,7 @@ class CreateCsrwWardsStocksLogsTable extends Migration
             $table->string('location');
             $table->string('cl2comb');
             $table->bigInteger('brand')->nullable();
+            $table->string('chrgcode')->nullable();
             $table->integer('prev_qty');
             $table->integer('new_qty');
             $table->dateTime('manufactured_date')->nullable();

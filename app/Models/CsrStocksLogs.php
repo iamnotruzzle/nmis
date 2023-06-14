@@ -15,6 +15,7 @@ class CsrStocksLogs extends Model
         'batch_no',
         'cl2comb',
         'brand',
+        'chrgcode',
         'prev_qty',
         'new_qty',
         'manufactured_date',
