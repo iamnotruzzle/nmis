@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\Location;
+use App\Models\TypeOfCharge;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -82,6 +83,9 @@ class HandleInertiaRequests extends Middleware
                                 GROUP BY hdmhdr.dmdcomb, hdmhdr.dmdctr, hdmhdrsub.dmhdrsub, hgen.gendesc, dmdnost, hdmhdr.dmdnnostp, hstre.stredesc, hform.formdesc, hroute.rtedesc, hdmhdrsub.dmdcomb;
                         ");
             },
+            'typeOfCharge' => function () {
+                return TypeOfCharge::where('chrgstat', 'A')->get('chrgcode', 'chrgdesc', 'bentypcod', 'chrgtable');
+            }
         ]);
     }
 }
