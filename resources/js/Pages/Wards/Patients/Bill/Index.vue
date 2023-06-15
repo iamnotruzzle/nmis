@@ -156,6 +156,11 @@
                 paginator
                 :rows="5"
               >
+                <Column header="BRAND">
+                  <template #body="{ data }">
+                    {{ data.brand_details.name }}
+                  </template>
+                </Column>
                 <Column header="EXP. DATE">
                   <template #body="{ data }">
                     {{ tzone(data.expiration_date) }}
@@ -555,7 +560,7 @@ export default {
     };
   },
   mounted() {
-    // console.log('bills', this.bills.admission_date_bill.enccode);
+    // console.log('bills', this.bills);
     this.storeBillsInContainer();
     this.getTotalAmount();
     this.storeMedicalSuppliesInContainer();
