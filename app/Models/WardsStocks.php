@@ -30,7 +30,7 @@ class WardsStocks extends Model
 
     public function request_stocks()
     {
-        return $this->hasOne(RequestStocks::class, 'request_stocks_id', 'id');
+        return $this->hasOne(RequestStocks::class, 'id', 'request_stocks_id');
     }
 
     public function request_stocks_details()
@@ -60,7 +60,7 @@ class WardsStocks extends Model
 
     public function brand_details()
     {
-        return $this->hasOne(Brand::class, 'brand', 'id');
+        return $this->hasOne(Brand::class, 'id', 'brand');
     }
 
     public function trust_fund()

@@ -647,7 +647,7 @@ export default {
     this.rows = this.requestedStocks.per_page;
   },
   mounted() {
-    // console.log(this.currentWardStocks);
+    console.log(this.currentWardStocks);
     this.storeItemsInController();
     this.storeRequestedStocksInContainer();
     this.storeCurrentWardStocksInContainer();
@@ -696,8 +696,8 @@ export default {
 
         this.currentWardStocksList.push({
           ward_stock_id: e.id,
-          brand: e.name,
-          item: e.cl2desc,
+          brand: e.brand_details.name,
+          item: e.item_details.cl2desc,
           quantity: e.quantity,
           expiration_date: expiration_date.toString(),
         });
