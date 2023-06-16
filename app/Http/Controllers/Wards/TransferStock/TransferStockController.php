@@ -29,11 +29,11 @@ class TransferStockController extends Controller
             ->first();
 
         $currentWardStocks = WardsStocks::with(['item_details:cl2comb,cl2desc', 'brand_details:id,name'])
-            ->where('quantity' != 0)
             ->where('location', $authWardcode->wardcode)
+            ->where('quantity', '!=', 0)
             ->get();
 
-        $transferredItems = WardTransferStock::with('ward_stock')
+        $transferredStock = WardTransferStock::with('ward_stock')
             ->when($request->search, function ($query, $value) {
                 $query->where('employeeid', 'LIKE', '%' . $value . '%');
             })
@@ -56,7 +56,7 @@ class TransferStockController extends Controller
 
         return Inertia::render('Wards/TransferStock/Index', [
             'currentWardStocks' => $currentWardStocks,
-            'transferredItems' => $transferredItems,
+            'transferredStock' => $transferredStock,
             'wards' => $wards,
             'employeeids' => $employeeids
         ]);

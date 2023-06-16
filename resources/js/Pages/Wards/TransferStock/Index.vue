@@ -1,18 +1,15 @@
 <template>
   <app-layout>
-    <Head title="Template - Users" />
+    <Head title="Template - Transfer stock" />
 
     <div class="card">
       <Toast />
-      <!--
-            data table sort order
-            asc = 1
-            desc =-1
-        -->
+
+      <!-- v-model:filters="filters" -->
       <DataTable
         class="p-datatable-sm"
         v-model:filters="filters"
-        :value="transferredItemsList"
+        :value="transferredStocksList"
         selectionMode="single"
         lazy
         paginator
@@ -27,109 +24,35 @@
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">TRANSFERRED ITEMS</span>
+            <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">TRANSFERRED STOCKS</span>
             <div>
               <span class="p-input-icon-left mr-2">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="search"
-                  placeholder="Search Employee ID"
+                  placeholder="Search employee id"
                 />
               </span>
               <Button
-                label="Transfer stocks"
-                icon="pi pi-user-plus"
+                label="Transfer stock"
+                icon="pi pi-plus"
                 iconPos="right"
-                @click="openCreateItemDialog"
+                @click="openTransferStockDialog"
               />
             </div>
           </div>
         </template>
         <template #empty> No data found. </template>
         <template #loading> Loading data. Please wait. </template>
-        <Column
-          field="employeeid"
-          header="EMPLOYEE ID"
+        <!-- <Column
+          field="ptcode"
+          header="PTCODE"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.employeeid }}
+            {{ data.ptcode }}
           </template>
-        </Column>
-        <Column
-          field="lastname"
-          header="LAST NAME"
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ data.lastname }}
-          </template>
-        </Column>
-        <Column
-          field="firstname"
-          header="FIRST NAME"
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ data.firstname }}
-          </template>
-        </Column>
-        <Column
-          field="middlename"
-          header="MIDDLE NAME"
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ data.middlename }}
-          </template>
-        </Column>
-        <Column
-          field="empsuffix"
-          header="SUFFIX"
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ data.empsuffix }}
-          </template>
-        </Column>
-        <Column
-          field="role"
-          header="ROLE"
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ data.role }}
-          </template>
-        </Column>
-        <Column
-          header="CREATED AT"
-          filterField="created_at"
-          style="min-width: 10rem"
-          :showFilterMenu="false"
-        >
-          <template #body="{ data }">
-            {{ tzone(data.created_at) }}
-          </template>
-          <template #filter="{}">
-            <Calendar
-              v-model="from"
-              dateFormat="mm-dd-yy"
-              placeholder="FROM"
-              showIcon
-              showButtonBar
-              :hideOnDateTimeSelect="true"
-            />
-            <div class="mt-2"></div>
-            <Calendar
-              v-model="to"
-              dateFormat="mm-dd-yy"
-              placeholder="TO"
-              showIcon
-              showButtonBar
-              :hideOnDateTimeSelect="true"
-            />
-          </template>
-        </Column>
+        </Column> -->
         <Column
           header="ACTION"
           style="min-width: 12rem"
@@ -141,7 +64,7 @@
               rounded
               text
               severity="warning"
-              @click="editItem(slotProps.data)"
+              @click="editCategory(slotProps.data)"
             />
 
             <Button
@@ -157,63 +80,34 @@
 
       <!-- create & edit dialog -->
       <Dialog
-        v-model:visible="createItemDialog"
+        v-model:visible="transferStockDialog"
         :style="{ width: '450px' }"
-        header="User Detail"
+        header="Category Detail"
         :modal="true"
         class="p-fluid"
         @hide="clickOutsideDialog"
         dismissableMask
       >
-        <div class="field">
-          <label for="employeeid">Employee ID</label>
-          <AutoComplete
-            id="employeeid"
-            v-model="form.employeeid"
+        <!-- <div class="field">
+          <label for="ptcode">Ptcode</label>
+          <Dropdown
+            v-model.trim="form.ptcode"
             required="true"
-            optionLabel="employeeid"
-            :suggestions="employeeIdList"
-            @complete="autoCompleteEmployeeID"
-            @item-select="selectedEmployeeID"
-            :class="{ 'p-invalid': form.employeeid == '' }"
-            @keyup.enter="submit"
+            :options="transferredStocksList"
+            filter
+            optionLabel="ptdesc"
+            optionValue="ptcode"
+            class="w-full mb-3"
+            :class="{ 'p-invalid': form.ptcode == '' }"
           />
           <small
             class="text-error"
-            v-if="form.errors.employeeid"
+            v-if="form.errors.ptcode"
           >
-            {{ form.errors.employeeid }}
+            {{ form.errors.ptcode }}
           </small>
-        </div>
-        <div class="field">
-          <label for="password">Password</label>
-          <Password
-            id="password"
-            type="password"
-            toggleMask
-            v-model.trim="form.password"
-            :required="true"
-            :class="{ 'p-invalid': form.password == '' }"
-            @keyup.enter="submit"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.password"
-          >
-            {{ form.errors.password }}
-          </small>
-        </div>
-        <div class="field">
-          <label for="image">Upload image</label>
-          <FileUpload
-            id="image"
-            mode="basic"
-            @input="onUpload"
-            accept="image/*"
-            :maxFileSize="7000000"
-          >
-          </FileUpload>
-        </div>
+        </div> -->
+
         <template #footer>
           <Button
             label="Cancel"
@@ -245,8 +139,8 @@
       </Dialog>
 
       <!-- Delete confirmation dialog -->
-      <Dialog
-        v-model:visible="deleteItemDialog"
+      <!-- <Dialog
+        v-model:visible="deleteTransferredStockDialog"
         :style="{ width: '450px' }"
         header="Confirm"
         :modal="true"
@@ -258,8 +152,7 @@
             style="font-size: 2rem"
           />
           <span v-if="form"
-            >Are you sure you want to delete
-            <b>{{ form.firstName }} {{ form.middleName }} {{ form.lastName }} </b> ?</span
+            >Are you sure you want to delete <b>{{ form.cl1desc }}</b> ?</span
           >
         </div>
         <template #footer>
@@ -267,24 +160,23 @@
             label="No"
             icon="pi pi-times"
             class="p-button-text"
-            @click="deleteItemDialog = false"
+            @click="deleteTransferredStockDialog = false"
           />
           <Button
             label="Yes"
             icon="pi pi-check"
             severity="danger"
             text
-            @click="deleteItem"
+            @click="deleteCategory"
           />
         </template>
-      </Dialog>
+      </Dialog> -->
     </div>
   </app-layout>
 </template>
 
 <script>
 import { FilterMatchMode } from 'primevue/api';
-import { router } from '@inertiajs/vue3';
 import { Head } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import InputText from 'primevue/inputtext';
@@ -299,7 +191,6 @@ import Avatar from 'primevue/avatar';
 import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
 import AutoComplete from 'primevue/autocomplete';
-import Tag from 'primevue/tag';
 import moment from 'moment';
 
 export default {
@@ -318,13 +209,9 @@ export default {
     Calendar,
     Dropdown,
     AutoComplete,
-    Tag,
   },
   props: {
-    currentWardStocks: Object,
-    transferredItems: Object,
-    wards: Object,
-    employeeids: Object,
+    transferredStock: Object,
   },
   data() {
     return {
@@ -333,160 +220,93 @@ export default {
       totalRecords: null,
       rows: null,
       // end paginator
-      itemId: null,
       isUpdate: false,
-      createItemDialog: false,
-      deleteItemDialog: false,
+      transferStockDialog: false,
+      deleteTransferredStockDialog: false,
       search: '',
       options: {},
       params: {},
-      from: null,
-      to: null,
-      transferredItemsList: [],
-      wardList: [],
-      employeeIdList: [],
+      transferredStocksList: [],
       filters: {
-        firstname: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        middlename: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        lastname: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        empsuffix: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        role: { value: null, matchMode: FilterMatchMode.EQUALS },
-        employeeid: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        email: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       form: this.$inertia.form({
-        image: null,
-        role: null,
-        employeeid: null,
-        password: null,
+        // ptcode: null,
       }),
     };
   },
   // created will be initialize before mounted
   created() {
-    this.totalRecords = this.transferredItems.total;
-    this.params.page = this.transferredItems.current_page;
-    this.rows = this.transferredItems.per_page;
+    this.totalRecords = this.transferredStock.total;
+    this.params.page = this.transferredStock.current_page;
+    this.rows = this.transferredStock.per_page;
   },
   mounted() {
-    console.log(this.currentWardStocks);
-    this.storeUserInContainer();
-    this.storeWardInContainer();
+    // this.storeTransferredStockInContainer();
 
     this.loading = false;
   },
   methods: {
-    // use storeUserInContainer() function so that every time you make
-    // server request such as POST, the data in the table
-    // is updated
-    storeUserInContainer() {
-      this.transferredItems.data.forEach((e) => {
-        this.transferredItemsList.push({
-          id: e.id,
-          image: e.image,
-          employeeid: e.employeeid,
-          created_at: e.created_at,
+    storeTransferredStockInContainer() {
+      this.transferredStock.forEach((e) => {
+        this.transferredStocksList.push({
+          //   ptcode: e.ptcode,
         });
       });
-    },
-    storeWardInContainer() {
-      this.wards.data.forEach((e) => {
-        this.wardList.push({
-          wardcode: e.wardcode,
-          wardname: e.wardname,
-        });
-      });
-    },
-    autoCompleteEmployeeID(event) {
-      setTimeout(() => {
-        if (!event.query.trim().length) {
-          this.employeeIdList = [...this.employeeids.employeeid];
-        } else {
-          this.employeeIdList = this.employeeids.filter((e) => {
-            // contains whatever the value
-            return e.employeeid.includes(event.query);
-          });
-        }
-      }, 200);
-    },
-    selectedEmployeeID(e) {
-      this.form.employeeid = e.value.employeeid;
-    },
-    tzone(date) {
-      return moment.tz(date, 'Asia/Manila').format('L');
     },
     onPage(event) {
       this.params.page = event.page + 1;
       this.updateData();
     },
     updateData() {
-      this.transferredItemsList = [];
+      this.transferredStocksList = [];
       this.loading = true;
 
       this.$inertia.get('transferstock', this.params, {
         preserveState: true,
         preserveScroll: true,
         onFinish: (visit) => {
-          this.totalRecords = this.transferredItems.total;
-          this.transferredItemsList = [];
-          this.storeUserInContainer();
+          this.totalRecords = this.transferredStock.total;
+          this.transferredStocksList = [];
+          this.storeTransferredStockInContainer();
           this.loading = false;
         },
       });
     },
-    // assign image name to form.image
-    onUpload(event) {
-      this.form.image = event.target.files[0];
-    },
-    openCreateItemDialog() {
+    openTransferStockDialog() {
       this.isUpdate = false;
       this.form.clearErrors();
       this.form.reset();
-      this.itemId = null;
-      this.createItemDialog = true;
+      this.cl1comb = null;
+      this.transferStockDialog = true;
     },
     // emit close dialog
     clickOutsideDialog() {
-      this.$emit('hide', (this.itemId = null), (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
+      this.$emit('hide', (this.cl1comb = null), (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
     },
-    editItem(item) {
-      //   console.log(item);
-
+    editCategory(item) {
       this.isUpdate = true;
-      this.createItemDialog = true;
-      this.itemId = item.id;
-      this.form.role = item.role;
-      this.form.employeeid = item.employeeid;
-      this.form.password = item.password;
+      this.transferStockDialog = true;
+      this.cl1comb = item.cl1comb;
     },
     submit() {
       if (this.isUpdate) {
-        router.post(
-          `transferstock/${this.itemId}`,
-          {
-            _method: 'put',
-            preserveScroll: true,
-            role: this.form.role,
-            employeeid: this.form.employeeid,
-            password: this.form.password,
-            image: this.form.image,
+        this.form.put(route('transferstock.update', this.form.id), {
+          preserveScroll: true,
+          onSuccess: () => {
+            this.cl1comb = null;
+            this.transferStockDialog = false;
+            this.cancel();
+            this.updateData();
+            this.updatedMsg();
           },
-          {
-            onSuccess: () => {
-              this.itemId = null;
-              this.createItemDialog = false;
-              this.cancel();
-              this.updateData();
-              this.updatedMsg();
-            },
-          }
-        );
+        });
       } else {
         this.form.post(route('transferstock.store'), {
           preserveScroll: true,
           onSuccess: () => {
-            this.itemId = null;
-            this.createItemDialog = false;
+            this.cl1comb = null;
+            this.transferStockDialog = false;
             this.cancel();
             this.updateData();
             this.createdMsg();
@@ -495,83 +315,47 @@ export default {
       }
     },
     confirmDeleteItem(item) {
-      this.itemId = item.id;
-      this.form.role = item.role;
-      this.form.employeeid = item.employeeid;
-      this.form.password = item.password;
-      this.deleteItemDialog = true;
+      this.cl1comb = item.cl1comb;
+      this.form.cl1desc = item.cl1desc;
+      this.deleteTransferredStockDialog = true;
     },
-    deleteItem() {
-      this.form.delete(route('transferstock.destroy', this.itemId), {
+    deleteCategory() {
+      this.form.delete(route('transferstock.destroy', this.cl1comb), {
         preserveScroll: true,
         onSuccess: () => {
-          this.transferredItemsList = [];
-          this.deleteItemDialog = false;
-          this.itemId = null;
+          this.transferredStocksList = [];
+          this.deleteTransferredStockDialog = false;
+          this.cl1comb = null;
           this.form.clearErrors();
           this.form.reset();
           this.updateData();
           this.deletedMsg();
-          this.storeUserInContainer();
+          this.storeTransferredStockInContainer();
         },
       });
     },
     cancel() {
-      this.itemId = null;
+      this.cl1comb = null;
       this.isUpdate = false;
-      this.createItemDialog = false;
+      this.transferStockDialog = false;
       this.form.reset();
       this.form.clearErrors();
-      this.transferredItemsList = [];
-      this.storeUserInContainer();
+      this.transferredStocksList = [];
+      this.storeTransferredStockInContainer();
     },
     createdMsg() {
-      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Account created', life: 3000 });
+      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Transfer stock successfully.', life: 3000 });
     },
     updatedMsg() {
-      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Account updated', life: 3000 });
+      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Updated transferred stock.', life: 3000 });
     },
     deletedMsg() {
-      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Account deleted', life: 3000 });
-    },
-    getLocalDateString(utcStr) {
-      const date = new Date(utcStr);
-      return (
-        date.getFullYear() +
-        '-' +
-        String(date.getMonth() + 1).padStart(2, '0') +
-        '-' +
-        String(date.getDate()).padStart(2, '0') +
-        ' ' +
-        String(date.getHours()).padStart(2, '0') +
-        ':' +
-        String(date.getMinutes()).padStart(2, '0')
-      );
+      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Delete transferred stock.', life: 3000 });
     },
   },
   watch: {
     search: function (val, oldVal) {
       this.params.search = val;
-      this.updateData();
-    },
-    from: function (val) {
-      if (val != null) {
-        let from = this.getLocalDateString(val);
-        this.params.from = from;
-      } else {
-        this.params.from = null;
-        this.from = null;
-      }
-      this.updateData();
-    },
-    to: function (val) {
-      if (val != null) {
-        let to = this.getLocalDateString(val);
-        this.params.to = to;
-      } else {
-        this.params.to = null;
-        this.to = null;
-      }
       this.updateData();
     },
   },
