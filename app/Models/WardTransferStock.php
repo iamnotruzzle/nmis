@@ -22,4 +22,9 @@ class WardTransferStock extends Model
         'remarks',
         'status', // transferred or received
     ];
+
+    public function ward_stock()
+    {
+        return $this->hasOne(WardsStocks::class, 'ward_stock_id', 'id')->with('item_details:cl2comb,cl2desc');
+    }
 }
