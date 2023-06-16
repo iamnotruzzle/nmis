@@ -68,4 +68,9 @@ class WardsStocks extends Model
         // return $this->hasOne(WardsStocks::class, 'stock_id', 'id')->with('item_details:cl2comb,cl2desc');
         return $this->hasOne(TypeOfCharge::class, 'chrgcode', 'chrgcode');
     }
+
+    public function transferredStock()
+    {
+        return $this->hasMany(WardTransferStock::class, 'ward_stock_id', 'id')->orderBy('created_at', 'DESC');
+    }
 }
