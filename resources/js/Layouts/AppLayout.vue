@@ -98,6 +98,13 @@ export default {
               comp: 'Wards/Patients/Index',
             },
             {
+              label: 'W-Transfer-Stocks',
+              icon: 'pi pi-fw pi-home',
+              to: 'transferstock',
+              prefix: 'transferstock',
+              comp: 'Wards/TransferStock/Index',
+            },
+            {
               label: 'Users',
               icon: 'pi pi-fw pi-home',
               to: 'users',
