@@ -134,6 +134,9 @@
           style="min-width: 10rem"
           :showFilterMenu="false"
         >
+          <!-- <template #body="{ data }">
+            {{ tzone(data.expiration_date) }}
+          </template> -->
           <template #filter="{}">
             <Calendar
               v-model="from"
@@ -462,7 +465,7 @@ export default {
     },
     storeWardStockInContainer() {
       this.wardStocks.forEach((e) => {
-        let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
+        // let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
 
         this.wardStocksList.push({
           ward_stock_id: e.id,
@@ -471,7 +474,7 @@ export default {
           cl2comb: e.item_details.cl2comb,
           cl2desc: e.item_details.cl2desc,
           quantity: e.quantity,
-          expiration_date: expiration_date.toString(),
+          expiration_date: e.expiration_date,
         });
       });
     },
