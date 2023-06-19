@@ -85,85 +85,167 @@
         </Column>
       </DataTable>
 
-      <!-- transferred stocks -->
-      <DataTable
-        class="p-datatable-sm mt-8"
-        v-model:filters="transferredStocksFilter"
-        :value="transferredStocksList"
-        selectionMode="single"
-        lazy
-        paginator
-        :rows="rows"
-        ref="dt"
-        :totalRecords="totalRecords"
-        @page="onPage($event)"
-        dataKey="id"
-        filterDisplay="row"
-        showGridlines
-        :loading="loading"
-      >
-        <template #header>
-          <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">TRANSFERRED STOCKS</span>
-          </div>
-        </template>
-        <template #empty> No data found. </template>
-        <template #loading> Loading data. Please wait. </template>
-        <Column
-          field="brand"
-          header="BRAND"
-          style="min-width: 12rem"
-        >
-        </Column>
-        <Column
-          field="item"
-          header="ITEM"
-          style="min-width: 12rem"
-        >
-        </Column>
-        <Column
-          field="quantity"
-          header="QUANTITY"
-          style="min-width: 12rem"
-        >
-        </Column>
-        <Column
-          field="expiration_date"
-          header="EXPIRATION DATE"
-          filterField="expiration_date"
-          style="min-width: 10rem"
-          :showFilterMenu="false"
-        >
-          <!-- <template #body="{ data }">
+      <TabView class="mt-8">
+        <TabPanel header="TRANSFERRED STOCKS">
+          <!-- transferred stocks -->
+          <DataTable
+            class="p-datatable-sm"
+            v-model:filters="transferredStocksFilter"
+            :value="transferredStocksList"
+            selectionMode="single"
+            lazy
+            paginator
+            :rows="rows"
+            ref="dt"
+            :totalRecords="totalRecords"
+            @page="onPage($event)"
+            dataKey="id"
+            filterDisplay="row"
+            showGridlines
+            :loading="loading"
+          >
+            <template #header>
+              <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+                <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">TRANSFERRED STOCKS</span>
+              </div>
+            </template>
+            <template #empty> No data found. </template>
+            <template #loading> Loading data. Please wait. </template>
+            <Column
+              field="brand"
+              header="BRAND"
+              style="min-width: 12rem"
+            >
+            </Column>
+            <Column
+              field="item"
+              header="ITEM"
+              style="min-width: 12rem"
+            >
+            </Column>
+            <Column
+              field="quantity"
+              header="QUANTITY"
+              style="min-width: 12rem"
+            >
+            </Column>
+            <Column
+              field="expiration_date"
+              header="EXPIRATION DATE"
+              filterField="expiration_date"
+              style="min-width: 10rem"
+              :showFilterMenu="false"
+            >
+              <template #filter="{}">
+                <Calendar
+                  v-model="from"
+                  dateFormat="mm-dd-yy"
+                  placeholder="FROM"
+                  showIcon
+                  showButtonBar
+                  :hideOnDateTimeSelect="true"
+                />
+                <div class="mt-2"></div>
+                <Calendar
+                  v-model="to"
+                  dateFormat="mm-dd-yy"
+                  placeholder="TO"
+                  showIcon
+                  showButtonBar
+                  :hideOnDateTimeSelect="true"
+                />
+              </template>
+            </Column>
+            <Column
+              field="from"
+              header="FROM"
+              style="min-width: 12rem"
+            >
+            </Column>
+          </DataTable>
+        </TabPanel>
+        <TabPanel header="TO RECEIVED">
+          <!-- transferred stocks -->
+          <DataTable
+            class="p-datatable-sm"
+            v-model:filters="transferredStocksFilter"
+            :value="transferredStocksList"
+            selectionMode="single"
+            lazy
+            paginator
+            :rows="rows"
+            ref="dt"
+            :totalRecords="totalRecords"
+            @page="onPage($event)"
+            dataKey="id"
+            filterDisplay="row"
+            showGridlines
+            :loading="loading"
+          >
+            <template #header>
+              <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+                <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">TO RECEIVED</span>
+              </div>
+            </template>
+            <template #empty> No data found. </template>
+            <template #loading> Loading data. Please wait. </template>
+            <Column
+              field="brand"
+              header="BRAND"
+              style="min-width: 12rem"
+            >
+            </Column>
+            <Column
+              field="item"
+              header="ITEM"
+              style="min-width: 12rem"
+            >
+            </Column>
+            <Column
+              field="quantity"
+              header="QUANTITY"
+              style="min-width: 12rem"
+            >
+            </Column>
+            <Column
+              field="expiration_date"
+              header="EXPIRATION DATE"
+              filterField="expiration_date"
+              style="min-width: 10rem"
+              :showFilterMenu="false"
+            >
+              <!-- <template #body="{ data }">
             {{ tzone(data.expiration_date) }}
           </template> -->
-          <template #filter="{}">
-            <Calendar
-              v-model="from"
-              dateFormat="mm-dd-yy"
-              placeholder="FROM"
-              showIcon
-              showButtonBar
-              :hideOnDateTimeSelect="true"
-            />
-            <div class="mt-2"></div>
-            <Calendar
-              v-model="to"
-              dateFormat="mm-dd-yy"
-              placeholder="TO"
-              showIcon
-              showButtonBar
-              :hideOnDateTimeSelect="true"
-            />
-          </template>
-        </Column>
-        <Column
-          field="from"
-          header="FROM"
-          style="min-width: 12rem"
-        >
-        </Column>
-      </DataTable>
+              <template #filter="{}">
+                <Calendar
+                  v-model="from"
+                  dateFormat="mm-dd-yy"
+                  placeholder="FROM"
+                  showIcon
+                  showButtonBar
+                  :hideOnDateTimeSelect="true"
+                />
+                <div class="mt-2"></div>
+                <Calendar
+                  v-model="to"
+                  dateFormat="mm-dd-yy"
+                  placeholder="TO"
+                  showIcon
+                  showButtonBar
+                  :hideOnDateTimeSelect="true"
+                />
+              </template>
+            </Column>
+            <Column
+              field="from"
+              header="FROM"
+              style="min-width: 12rem"
+            >
+            </Column>
+          </DataTable>
+        </TabPanel>
+      </TabView>
 
       <!-- create dialog -->
       <Dialog
@@ -305,40 +387,6 @@
           />
         </template>
       </Dialog>
-
-      <!-- Delete confirmation dialog -->
-      <!-- <Dialog
-        v-model:visible="deleteTransferredStockDialog"
-        :style="{ width: '450px' }"
-        header="Confirm"
-        :modal="true"
-        dismissableMask
-      >
-        <div class="flex align-items-center justify-content-center">
-          <i
-            class="pi pi-exclamation-triangle mr-3"
-            style="font-size: 2rem"
-          />
-          <span v-if="form"
-            >Are you sure you want to delete <b>{{ form.cl1desc }}</b> ?</span
-          >
-        </div>
-        <template #footer>
-          <Button
-            label="No"
-            icon="pi pi-times"
-            class="p-button-text"
-            @click="deleteTransferredStockDialog = false"
-          />
-          <Button
-            label="Yes"
-            icon="pi pi-check"
-            severity="danger"
-            text
-            @click="deleteCategory"
-          />
-        </template>
-      </Dialog> -->
     </div>
   </app-layout>
 </template>
@@ -360,6 +408,8 @@ import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
 import AutoComplete from 'primevue/autocomplete';
 import Textarea from 'primevue/textarea';
+import TabView from 'primevue/tabview';
+import TabPanel from 'primevue/tabpanel';
 import moment from 'moment';
 
 export default {
@@ -379,6 +429,8 @@ export default {
     Dropdown,
     AutoComplete,
     Textarea,
+    TabView,
+    TabPanel,
   },
   props: {
     wardStocks: Object,
