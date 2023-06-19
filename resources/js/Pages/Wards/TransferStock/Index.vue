@@ -88,7 +88,7 @@
       <!-- transferred stocks -->
       <DataTable
         class="p-datatable-sm mt-8"
-        v-model:filters="filters"
+        v-model:filters="transferredStocksFilter"
         :value="transferredStocksList"
         selectionMode="single"
         lazy
@@ -105,33 +105,60 @@
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
             <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">TRANSFERRED STOCKS</span>
-            <div>
-              <span class="p-input-icon-left mr-2">
-                <i class="pi pi-search" />
-                <InputText
-                  v-model="search"
-                  placeholder="Search employee id"
-                />
-              </span>
-              <Button
-                label="Transfer stock"
-                icon="pi pi-plus"
-                iconPos="right"
-                @click="openTransferStockDialog"
-              />
-            </div>
           </div>
         </template>
         <template #empty> No data found. </template>
         <template #loading> Loading data. Please wait. </template>
         <Column
-          field="ptcode"
-          header="PTCODE"
+          field="brand"
+          header="BRAND"
           style="min-width: 12rem"
         >
-          <template #body="{ data }">
-            {{ data.ptcode }}
+        </Column>
+        <Column
+          field="item"
+          header="ITEM"
+          style="min-width: 12rem"
+        >
+        </Column>
+        <Column
+          field="quantity"
+          header="QUANTITY"
+          style="min-width: 12rem"
+        >
+        </Column>
+        <Column
+          field="expiration_date"
+          header="EXPIRATION DATE"
+          filterField="expiration_date"
+          style="min-width: 10rem"
+          :showFilterMenu="false"
+        >
+          <template #filter="{}">
+            <Calendar
+              v-model="from"
+              dateFormat="mm-dd-yy"
+              placeholder="FROM"
+              showIcon
+              showButtonBar
+              :hideOnDateTimeSelect="true"
+            />
+            <div class="mt-2"></div>
+            <Calendar
+              v-model="to"
+              dateFormat="mm-dd-yy"
+              placeholder="TO"
+              showIcon
+              showButtonBar
+              :hideOnDateTimeSelect="true"
+            />
           </template>
+        </Column>
+        <Column
+          field="from"
+          header="FROM"
+          style="min-width: 12rem"
+        >
         </Column>
       </DataTable>
 
@@ -361,15 +388,17 @@ export default {
       totalRecords: null,
       rows: null,
       // end paginator
+      from: null,
+      to: null,
       isUpdate: false,
       transferStockDialog: false,
       deleteTransferredStockDialog: false,
       search: '',
       options: {},
       params: {},
-      currentWardStocksList: [],
       wardStocksList: [],
-      filters: {
+      transferredStocksList: [],
+      transferredStocksFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       wardStocksFilter: {
@@ -396,9 +425,9 @@ export default {
     this.rows = this.transferredStock.per_page;
   },
   mounted() {
-    // console.log(this.wardStocks);
+    console.log(this.transferredStock);
+    this.storeTransferredStockInContainer();
     this.storeWardStockInContainer();
-    // this.storeTransferredStockInContainer();
 
     this.loading = false;
   },
@@ -407,11 +436,29 @@ export default {
       return moment.tz(date, 'Asia/Manila').format('LL');
     },
     storeTransferredStockInContainer() {
-      this.transferredStock.forEach((e) => {
-        this.transferredStocksList.push({
-          //   ptcode: e.ptcode,
+      if (this.transferredStock.data.length != 0) {
+        this.transferredStock.data.forEach((e) => {
+          let expiration_date = moment.tz(e.ward_stock.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
+
+          this.transferredStocksList.push({
+            id: e.id,
+            brand: e.ward_stock.brand_details.name,
+            item: e.ward_stock.item_details.cl2desc,
+            quantity: e.quantity,
+            expiration_date: expiration_date,
+            from: e.from,
+          });
         });
-      });
+      } else {
+        this.transferredStocksList.push({
+          id: null,
+          brand: null,
+          item: null,
+          quantity: null,
+          expiration_date: null,
+          from: null,
+        });
+      }
     },
     storeWardStockInContainer() {
       this.wardStocks.forEach((e) => {
@@ -520,10 +567,44 @@ export default {
     deletedMsg() {
       this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Delete transferred stock.', life: 3000 });
     },
+    getLocalDateString(utcStr) {
+      const date = new Date(utcStr);
+      return (
+        date.getFullYear() +
+        '-' +
+        String(date.getMonth() + 1).padStart(2, '0') +
+        '-' +
+        String(date.getDate()).padStart(2, '0') +
+        ' ' +
+        String(date.getHours()).padStart(2, '0') +
+        ':' +
+        String(date.getMinutes()).padStart(2, '0')
+      );
+    },
   },
   watch: {
     search: function (val, oldVal) {
       this.params.search = val;
+      this.updateData();
+    },
+    from: function (val) {
+      if (val != null) {
+        let from = this.getLocalDateString(val);
+        this.params.from = from;
+      } else {
+        this.params.from = null;
+        this.from = null;
+      }
+      this.updateData();
+    },
+    to: function (val) {
+      if (val != null) {
+        let to = this.getLocalDateString(val);
+        this.params.to = to;
+      } else {
+        this.params.to = null;
+        this.to = null;
+      }
       this.updateData();
     },
   },

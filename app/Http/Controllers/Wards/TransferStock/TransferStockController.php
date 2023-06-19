@@ -31,9 +31,6 @@ class TransferStockController extends Controller
             ->get();
 
         $transferredStock = WardTransferStock::with('ward_stock')
-            ->when($request->search, function ($query, $value) {
-                $query->where('employeeid', 'LIKE', '%' . $value . '%');
-            })
             ->when(
                 $request->from,
                 function ($query, $value) {
@@ -46,6 +43,7 @@ class TransferStockController extends Controller
                     $query->whereDate('created_at', '<=', $value);
                 }
             )
+            ->where('to', '=', $authWardcode->wardcode)
             ->orderBy('created_at', 'DESC')
             ->paginate(15);
 
