@@ -28,7 +28,7 @@ class TransferStockController extends Controller
             ->orderBy('csrw_login_history.created_at', 'desc')
             ->first();
 
-        $currentWardStocks = WardsStocks::with(['item_details:cl2comb,cl2desc', 'brand_details:id,name'])
+        $wardStocks = WardsStocks::with(['item_details:cl2comb,cl2desc', 'brand_details:id,name'])
             ->where('location', $authWardcode->wardcode)
             ->where('quantity', '!=', 0)
             ->get();
@@ -52,12 +52,10 @@ class TransferStockController extends Controller
             ->orderBy('created_at', 'DESC')
             ->paginate(15);
 
-        $wards = Location::where('wardstat', 'A')->get(['wardcode', 'wardname']);
 
         return Inertia::render('Wards/TransferStock/Index', [
-            'currentWardStocks' => $currentWardStocks,
+            'wardStocks' => $wardStocks,
             'transferredStock' => $transferredStock,
-            'wards' => $wards,
             'employeeids' => $employeeids
         ]);
     }
@@ -70,11 +68,6 @@ class TransferStockController extends Controller
             'role' => 'required',
         ]);
 
-        if ($request->hasFile('image')) {
-            $image = $request->file('image')->store('image', 'public');
-        } else {
-            $image = null;
-        }
 
         $user = User::create([
             'employeeid' => $request->employeeid,

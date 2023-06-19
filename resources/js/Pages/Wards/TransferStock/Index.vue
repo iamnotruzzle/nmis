@@ -5,9 +5,89 @@
     <div class="card">
       <Toast />
 
-      <!-- v-model:filters="filters" -->
+      <!-- ward stocks -->
       <DataTable
         class="p-datatable-sm"
+        dataKey="ward_stock_id"
+        v-model:filters="wardStocksFilter"
+        :value="wardStocksList"
+        paginator
+        :rows="10"
+        :rowsPerPageOptions="[10, 30, 50]"
+        removableSort
+        sortField="expiration_date"
+        :sortOrder="1"
+        filterDisplay="row"
+        showGridlines
+        :loading="loading"
+      >
+        <template #header>
+          <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+            <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">CURRENT STOCKS</span>
+            <div>
+              <span class="p-input-icon-left mr-2">
+                <i class="pi pi-search" />
+                <span class="p-input-icon-left">
+                  <i class="pi pi-search" />
+                  <InputText
+                    v-model="wardStocksFilter['global'].value"
+                    placeholder="Search item"
+                  />
+                </span>
+              </span>
+            </div>
+          </div>
+        </template>
+        <template #empty> No data found. </template>
+        <template #loading> Loading data. Please wait. </template>
+        <Column
+          field="brand"
+          header="BRAND"
+          style="min-width: 12rem"
+        >
+        </Column>
+        <Column
+          field="item"
+          header="ITEM"
+          style="min-width: 12rem"
+        >
+        </Column>
+        <Column
+          field="quantity"
+          header="QUANTITY"
+          sortable
+          style="min-width: 12rem"
+        >
+        </Column>
+        <Column
+          header="EXP. DATE"
+          sortable
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ tzone(data.expiration_date) }}
+          </template>
+        </Column>
+        <Column
+          header="ACTION"
+          style="min-width: 12rem"
+        >
+          <template #body="slotProps">
+            <Button
+              icon="pi pi-pencil"
+              class="mr-1"
+              rounded
+              text
+              severity="warning"
+              @click="editTransferredStock(slotProps.data)"
+            />
+          </template>
+        </Column>
+      </DataTable>
+
+      <!-- v-model:filters="filters" -->
+      <DataTable
+        class="p-datatable-sm mt-8"
         v-model:filters="filters"
         :value="transferredStocksList"
         selectionMode="single"
@@ -44,36 +124,13 @@
         </template>
         <template #empty> No data found. </template>
         <template #loading> Loading data. Please wait. </template>
-        <!-- <Column
+        <Column
           field="ptcode"
           header="PTCODE"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
             {{ data.ptcode }}
-          </template>
-        </Column> -->
-        <Column
-          header="ACTION"
-          style="min-width: 12rem"
-        >
-          <template #body="slotProps">
-            <Button
-              icon="pi pi-pencil"
-              class="mr-1"
-              rounded
-              text
-              severity="warning"
-              @click="editCategory(slotProps.data)"
-            />
-
-            <Button
-              icon="pi pi-trash"
-              rounded
-              text
-              severity="danger"
-              @click="confirmDeleteItem(slotProps.data)"
-            />
           </template>
         </Column>
       </DataTable>
@@ -211,6 +268,7 @@ export default {
     AutoComplete,
   },
   props: {
+    wardStocks: Object,
     transferredStock: Object,
   },
   data() {
@@ -226,8 +284,12 @@ export default {
       search: '',
       options: {},
       params: {},
-      transferredStocksList: [],
+      currentWardStocksList: [],
+      wardStocksList: [],
       filters: {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      },
+      wardStocksFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       form: this.$inertia.form({
@@ -242,15 +304,31 @@ export default {
     this.rows = this.transferredStock.per_page;
   },
   mounted() {
+    console.log(this.wardStocks);
+    this.storeWardStockInContainer();
     // this.storeTransferredStockInContainer();
 
     this.loading = false;
   },
   methods: {
+    tzone(date) {
+      return moment.tz(date, 'Asia/Manila').format('LL');
+    },
     storeTransferredStockInContainer() {
       this.transferredStock.forEach((e) => {
         this.transferredStocksList.push({
           //   ptcode: e.ptcode,
+        });
+      });
+    },
+    storeWardStockInContainer() {
+      this.wardStocks.forEach((e) => {
+        this.wardStocksList.push({
+          ward_stock_id: e.id,
+          brand: e.brand_details.name,
+          item: e.item_details.cl2desc,
+          quantity: e.quantity,
+          expiration_date: e.expiration_date,
         });
       });
     },
@@ -284,7 +362,7 @@ export default {
     clickOutsideDialog() {
       this.$emit('hide', (this.cl1comb = null), (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
     },
-    editCategory(item) {
+    editTransferredStock(item) {
       this.isUpdate = true;
       this.transferStockDialog = true;
       this.cl1comb = item.cl1comb;
@@ -314,7 +392,7 @@ export default {
         });
       }
     },
-    confirmDeleteItem(item) {
+    confirmDeleteTransferredStock(item) {
       this.cl1comb = item.cl1comb;
       this.form.cl1desc = item.cl1desc;
       this.deleteTransferredStockDialog = true;
