@@ -233,6 +233,20 @@
             readonly
           />
         </div>
+        <div class="field">
+          <label for="remarks">Remarks</label>
+          <Textarea
+            v-model.trim="form.remarks"
+            rows="5"
+            autofocus
+          />
+          <small
+            class="text-error"
+            v-if="form.remarks == null"
+          >
+            Remarks is required.
+          </small>
+        </div>
 
         <template #footer>
           <Button
@@ -254,7 +268,8 @@
               Number(form.quantity) == 0 ||
               Number(form.quantity) > Number(form.prevQuantity) ||
               form.to == null ||
-              form.requested_by == null
+              form.requested_by == null ||
+              form.remarks == null
             "
             @click="submit"
           />
@@ -314,6 +329,7 @@ import Avatar from 'primevue/avatar';
 import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
 import AutoComplete from 'primevue/autocomplete';
+import Textarea from 'primevue/textarea';
 import moment from 'moment';
 
 export default {
@@ -332,6 +348,7 @@ export default {
     Calendar,
     Dropdown,
     AutoComplete,
+    Textarea,
   },
   props: {
     wardStocks: Object,
@@ -368,6 +385,7 @@ export default {
         quantity: null,
         prevQuantity: null,
         expiration_date: null,
+        remarks: null,
       }),
     };
   },
@@ -450,7 +468,8 @@ export default {
         Number(this.form.quantity) != 0 &&
         Number(this.form.quantity) != null &&
         this.form.to != null &&
-        this.form.requested_by != null
+        this.form.requested_by != null &&
+        this.form.remarks != null
       ) {
         this.form.post(route('transferstock.store'), {
           preserveScroll: true,

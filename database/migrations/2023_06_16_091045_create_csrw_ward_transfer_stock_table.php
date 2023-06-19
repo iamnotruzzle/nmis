@@ -20,6 +20,7 @@ class CreateCsrwWardTransferStockTable extends Migration
             $table->string('to');
             $table->string('requested_by');
             $table->string('approved_by');
+            $table->integer('quantity');
             $table->string('remarks', 500);
             $table->string('status'); // transferred or received
             $table->timestamps();

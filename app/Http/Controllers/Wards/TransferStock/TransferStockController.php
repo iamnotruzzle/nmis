@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Wards\TransferStock;
 
 use App\Http\Controllers\Controller;
-use App\Models\Location;
 use App\Models\UserDetail;
 use App\Models\WardsStocks;
 use App\Models\WardTransferStock;
@@ -18,8 +17,6 @@ class TransferStockController extends Controller
 
     public function index(Request $request)
     {
-        $employeeids = UserDetail::where('empstat', 'A')->get('employeeid');
-
         // get auth wardcode
         $authWardcode = DB::table('csrw_users')
             ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
@@ -56,25 +53,46 @@ class TransferStockController extends Controller
         return Inertia::render('Wards/TransferStock/Index', [
             'wardStocks' => $wardStocks,
             'transferredStock' => $transferredStock,
-            'employeeids' => $employeeids
         ]);
     }
 
 
     public function store(Request $request)
     {
-        dd($request);
+        // dd($request);
+
+        $authWardcode = DB::table('csrw_users')
+            ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
+            ->select('csrw_login_history.wardcode')
+            ->where('csrw_login_history.employeeid', Auth::user()->employeeid)
+            ->orderBy('csrw_login_history.created_at', 'desc')
+            ->first();
 
         $request->validate([
             'quantity' => 'required',
+            'to' => 'required',
+            'requested_by' => 'required',
+            'remarks' => 'required',
         ]);
 
+        $transferredStocks = WardTransferStock::create([
+            'ward_stock_id' => $request->ward_stock_id,
+            'from' => $authWardcode->wardcode,
+            'to' => $request->to,
+            'requested_by' => $request->requested_by,
+            'approved_by' => Auth::user()->employeeid,
+            'quantity' => $request->quantity,
+            'remarks' => $request->remarks,
+            'status' => 'TRANSFERRED',
+        ]);
 
-        // $user = User::create([
-        //     'employeeid' => $request->employeeid,
-        //     'password' => bcrypt($request->password),
-        //     'image' => $image,
-        // ]);
+        // get current stock data
+        $stockThatBeingTransferred = WardsStocks::where('id', $request->ward_stock_id)->first();
+
+        // update new stock quantity
+        $stockThatBeingTransferred->update([
+            'quantity' => (int)$stockThatBeingTransferred->quantity - (int)$request->quantity
+        ]);
 
         return Redirect::route('transferstock.index');
     }
