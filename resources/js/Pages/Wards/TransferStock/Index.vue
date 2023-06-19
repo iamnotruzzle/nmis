@@ -41,13 +41,13 @@
         <template #empty> No data found. </template>
         <template #loading> Loading data. Please wait. </template>
         <Column
-          field="brand"
+          field="brand_name"
           header="BRAND"
           style="min-width: 12rem"
         >
         </Column>
         <Column
-          field="item"
+          field="cl2desc"
           header="ITEM"
           style="min-width: 12rem"
         >
@@ -79,13 +79,13 @@
               rounded
               text
               severity="warning"
-              @click="editTransferredStock(slotProps.data)"
+              @click="transferStock(slotProps.data)"
             />
           </template>
         </Column>
       </DataTable>
 
-      <!-- v-model:filters="filters" -->
+      <!-- transferred stocks -->
       <DataTable
         class="p-datatable-sm mt-8"
         v-model:filters="filters"
@@ -135,35 +135,104 @@
         </Column>
       </DataTable>
 
-      <!-- create & edit dialog -->
+      <!-- create dialog -->
       <Dialog
         v-model:visible="transferStockDialog"
         :style="{ width: '450px' }"
-        header="Category Detail"
+        header="Transfer stock"
         :modal="true"
         class="p-fluid"
         @hide="clickOutsideDialog"
         dismissableMask
       >
-        <!-- <div class="field">
-          <label for="ptcode">Ptcode</label>
-          <Dropdown
-            v-model.trim="form.ptcode"
-            required="true"
-            :options="transferredStocksList"
-            filter
-            optionLabel="ptdesc"
-            optionValue="ptcode"
-            class="w-full mb-3"
-            :class="{ 'p-invalid': form.ptcode == '' }"
+        <div class="field">
+          <label for="item">Item</label>
+          <InputText
+            id="item"
+            v-model.trim="form.cl2desc"
+            readonly
+            class="w-full"
+          />
+        </div>
+        <div class="field">
+          <label for="quantity">Quantity</label>
+          <InputText
+            id="quantity"
+            v-model.number="form.quantity"
+            class="w-full"
+            autofocus
+            type="number"
+            @keyup.enter="submit"
+            :class="{ 'p-invalid': Number(form.quantity) > Number(form.prevQuantity) }"
           />
           <small
             class="text-error"
-            v-if="form.errors.ptcode"
+            v-if="Number(form.quantity) > Number(form.prevQuantity)"
           >
-            {{ form.errors.ptcode }}
+            Current stock quantity is not enough.
           </small>
-        </div> -->
+          <small
+            class="text-error"
+            v-if="Number(form.quantity) == 0"
+          >
+            Quantity is required.
+          </small>
+          <small
+            class="text-error"
+            v-if="form.errors.quantity"
+          >
+            {{ form.errors.quantity }}
+          </small>
+        </div>
+        <div class="field">
+          <label for="ward">Ward</label>
+          <Dropdown
+            id="ward"
+            v-model.trim="form.to"
+            required="true"
+            :options="$page.props.locations"
+            filter
+            optionLabel="wardname"
+            optionValue="wardcode"
+            class="w-full mb-3"
+            :class="{ 'p-invalid': form.to == '' }"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.to"
+          >
+            {{ form.errors.to }}
+          </small>
+        </div>
+        <div class="field">
+          <label for="requested_by">Requested by</label>
+          <Dropdown
+            id="requested_by"
+            v-model.trim="form.requested_by"
+            required="true"
+            :options="$page.props.employees"
+            filter
+            optionLabel="employeeid"
+            optionValue="employeeid"
+            class="w-full mb-3"
+            :class="{ 'p-invalid': form.requested_by == '' }"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.requested_by"
+          >
+            {{ form.errors.requested_by }}
+          </small>
+        </div>
+        <div class="field">
+          <label for="expiration_date">Expiration date</label>
+          <InputText
+            id="quantity"
+            v-model.trim="form.expiration_date"
+            class="w-full"
+            readonly
+          />
+        </div>
 
         <template #footer>
           <Button
@@ -173,23 +242,20 @@
             text
             @click="cancel"
           />
+
           <Button
-            v-if="isUpdate == true"
-            label="Update"
-            icon="pi pi-check"
-            severity="warning"
-            text
-            type="submit"
-            :disabled="form.processing"
-            @click="submit"
-          />
-          <Button
-            v-else
             label="Save"
             icon="pi pi-check"
             text
             type="submit"
-            :disabled="form.processing"
+            :disabled="
+              form.processing ||
+              form.quantity == null ||
+              Number(form.quantity) == 0 ||
+              Number(form.quantity) > Number(form.prevQuantity) ||
+              form.to == null ||
+              form.requested_by == null
+            "
             @click="submit"
           />
         </template>
@@ -293,7 +359,15 @@ export default {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       form: this.$inertia.form({
-        // ptcode: null,
+        ward_stock_id: null,
+        to: null,
+        requested_by: null,
+        brand: null,
+        cl2comb: null,
+        cl2desc: null,
+        quantity: null,
+        prevQuantity: null,
+        expiration_date: null,
       }),
     };
   },
@@ -304,7 +378,7 @@ export default {
     this.rows = this.transferredStock.per_page;
   },
   mounted() {
-    console.log(this.wardStocks);
+    // console.log(this.wardStocks);
     this.storeWardStockInContainer();
     // this.storeTransferredStockInContainer();
 
@@ -323,12 +397,16 @@ export default {
     },
     storeWardStockInContainer() {
       this.wardStocks.forEach((e) => {
+        let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
+
         this.wardStocksList.push({
           ward_stock_id: e.id,
-          brand: e.brand_details.name,
-          item: e.item_details.cl2desc,
+          brand_id: e.brand_details.id,
+          brand_name: e.brand_details.name,
+          cl2comb: e.item_details.cl2comb,
+          cl2desc: e.item_details.cl2desc,
           quantity: e.quantity,
-          expiration_date: e.expiration_date,
+          expiration_date: expiration_date.toString(),
         });
       });
     },
@@ -345,45 +423,38 @@ export default {
         preserveScroll: true,
         onFinish: (visit) => {
           this.totalRecords = this.transferredStock.total;
+          this.wardStocksList = [];
           this.transferredStocksList = [];
+          this.storeWardStockInContainer();
           this.storeTransferredStockInContainer();
           this.loading = false;
         },
       });
     },
-    openTransferStockDialog() {
-      this.isUpdate = false;
-      this.form.clearErrors();
-      this.form.reset();
-      this.cl1comb = null;
-      this.transferStockDialog = true;
-    },
     // emit close dialog
     clickOutsideDialog() {
       this.$emit('hide', (this.cl1comb = null), (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
     },
-    editTransferredStock(item) {
-      this.isUpdate = true;
+    transferStock(item) {
+      console.log(item.quantity);
       this.transferStockDialog = true;
-      this.cl1comb = item.cl1comb;
+      this.form.ward_stock_id = item.ward_stock_id;
+      this.form.cl2desc = item.cl2desc;
+      this.form.prevQuantity = item.quantity;
+      this.form.expiration_date = item.expiration_date;
     },
     submit() {
-      if (this.isUpdate) {
-        this.form.put(route('transferstock.update', this.form.id), {
-          preserveScroll: true,
-          onSuccess: () => {
-            this.cl1comb = null;
-            this.transferStockDialog = false;
-            this.cancel();
-            this.updateData();
-            this.updatedMsg();
-          },
-        });
-      } else {
+      // the form is submitted only if the conditions is met
+      if (
+        Number(this.form.quantity) <= Number(this.form.prevQuantity) &&
+        Number(this.form.quantity) != 0 &&
+        Number(this.form.quantity) != null &&
+        this.form.to != null &&
+        this.form.requested_by != null
+      ) {
         this.form.post(route('transferstock.store'), {
           preserveScroll: true,
           onSuccess: () => {
-            this.cl1comb = null;
             this.transferStockDialog = false;
             this.cancel();
             this.updateData();

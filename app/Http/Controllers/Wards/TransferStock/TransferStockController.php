@@ -63,17 +63,18 @@ class TransferStockController extends Controller
 
     public function store(Request $request)
     {
+        dd($request);
 
         $request->validate([
-            'role' => 'required',
+            'quantity' => 'required',
         ]);
 
 
-        $user = User::create([
-            'employeeid' => $request->employeeid,
-            'password' => bcrypt($request->password),
-            'image' => $image,
-        ]);
+        // $user = User::create([
+        //     'employeeid' => $request->employeeid,
+        //     'password' => bcrypt($request->password),
+        //     'image' => $image,
+        // ]);
 
         return Redirect::route('transferstock.index');
     }

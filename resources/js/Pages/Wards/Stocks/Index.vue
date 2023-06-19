@@ -480,7 +480,7 @@
           />
         </div>
         <div class="field">
-          <label for="expiration_date">Expiration_date</label>
+          <label for="expiration_date">Expiration date</label>
           <InputText
             id="expiration_date"
             v-model.trim="formWardStocks.expiration_date"
@@ -647,7 +647,7 @@ export default {
     this.rows = this.requestedStocks.per_page;
   },
   mounted() {
-    console.log(this.currentWardStocks);
+    // console.log(this.currentWardStocks);
     this.storeItemsInController();
     this.storeRequestedStocksInContainer();
     this.storeCurrentWardStocksInContainer();

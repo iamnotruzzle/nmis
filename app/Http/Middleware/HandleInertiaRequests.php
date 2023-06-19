@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Models\Location;
 use App\Models\TypeOfCharge;
+use App\Models\UserDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -50,6 +51,9 @@ class HandleInertiaRequests extends Middleware
             //     : null,
             'auth.user.userDetail' => function () use ($request) {
                 return ($request->user() ? $request->user()->userDetail : null);
+            },
+            'employees' => function () {
+                return UserDetail::where('empstat', 'A')->orderBy('employeeid', 'ASC')->get();
             },
             'locations' => function () {
                 return Location::where('wardstat', 'A')->orderBy('wardname', 'ASC')->get();
