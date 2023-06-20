@@ -43,7 +43,26 @@ class TransferStockController extends Controller
                     $query->whereDate('created_at', '<=', $value);
                 }
             )
+            ->where('from', '=', $authWardcode->wardcode)
+            ->where('status', 'TRANSFERRED')
+            ->orderBy('created_at', 'DESC')
+            ->paginate(15);
+
+        $toReceive = WardTransferStock::with('ward_stock')
+            ->when(
+                $request->from,
+                function ($query, $value) {
+                    $query->whereDate('created_at', '>=', $value);
+                }
+            )
+            ->when(
+                $request->to,
+                function ($query, $value) {
+                    $query->whereDate('created_at', '<=', $value);
+                }
+            )
             ->where('to', '=', $authWardcode->wardcode)
+            ->where('status', 'TRANSFERRED')
             ->orderBy('created_at', 'DESC')
             ->paginate(15);
         // breakpoint
@@ -51,6 +70,7 @@ class TransferStockController extends Controller
         return Inertia::render('Wards/TransferStock/Index', [
             'wardStocks' => $wardStocks,
             'transferredStock' => $transferredStock,
+            'toReceive' => $toReceive,
         ]);
     }
 

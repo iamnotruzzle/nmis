@@ -435,6 +435,7 @@ export default {
   props: {
     wardStocks: Object,
     transferredStock: Object,
+    toReceive: Object,
   },
   data() {
     return {
@@ -453,7 +454,11 @@ export default {
       params: {},
       wardStocksList: [],
       transferredStocksList: [],
+      toReceiveList: [],
       transferredStocksFilter: {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      },
+      toReceiveFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       wardStocksFilter: {
