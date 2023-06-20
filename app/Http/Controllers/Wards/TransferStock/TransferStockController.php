@@ -46,7 +46,7 @@ class TransferStockController extends Controller
             ->where('to', '=', $authWardcode->wardcode)
             ->orderBy('created_at', 'DESC')
             ->paginate(15);
-
+        // breakpoint
 
         return Inertia::render('Wards/TransferStock/Index', [
             'wardStocks' => $wardStocks,
