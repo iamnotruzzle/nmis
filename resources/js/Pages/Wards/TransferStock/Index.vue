@@ -149,7 +149,18 @@
               field="status"
               header="STATUS"
             >
-              <template #body="slotProps"> <Tag :value="slotProps.data.status" severity:="success" /> </template>
+              <template #body="slotProps">
+                <Tag
+                  v-if="slotProps.data.status == 'TRANSFERRED'"
+                  :value="slotProps.data.status"
+                  severity="warning"
+                />
+                <Tag
+                  v-else
+                  :value="slotProps.data.status"
+                  severity="success"
+                />
+              </template>
             </Column>
           </DataTable>
         </TabPanel>
