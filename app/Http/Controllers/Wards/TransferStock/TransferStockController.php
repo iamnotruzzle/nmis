@@ -98,13 +98,43 @@ class TransferStockController extends Controller
 
     public function updatetransferstatus(WardTransferStock $wardtransferstock, Request $request)
     {
+        // get auth wardcode
+        $authWardcode = DB::table('csrw_users')
+            ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
+            ->select('csrw_login_history.wardcode')
+            ->where('csrw_login_history.employeeid', Auth::user()->employeeid)
+            ->orderBy('csrw_login_history.created_at', 'desc')
+            ->first();
+
         // dd($request->id);
+        $wardTransferID = $request->id;
 
         // update status
-        WardTransferStock::where('id', $request->id)
-            ->update([
-                'status' => 'RECEIVED',
-            ]);
+        $transferredStock = WardTransferStock::where('id', $wardTransferID)->first();
+
+        $transferredStock->update([
+            'status' => 'RECEIVED',
+        ]);
+
+        // dd($transferredStock);
+
+        $wardStock = WardsStocks::where('id', $transferredStock->ward_stock_id)->first();
+        // dd($wardStock);
+
+        // create the stock
+        WardsStocks::create([
+            'request_stocks_id' => $wardStock->request_stocks_id,
+            'request_stocks_detail_id' => $wardStock->request_stocks_detail_id,
+            'stock_id' => $wardStock->stock_id,
+            'location' => $authWardcode->wardcode,
+            'cl2comb' => $wardStock->cl2comb,
+            'brand' => $wardStock->brand,
+            'chrgcode' => $wardStock->chrgcode,
+            'quantity' => $transferredStock->quantity,
+            'manufactured_date' => $wardStock->manufactured_date,
+            'delivered_date' => $wardStock->delivered_date,
+            'expiration_date' => $wardStock->expiration_date,
+        ]);
 
         return Redirect::route('transferstock.index');
     }
