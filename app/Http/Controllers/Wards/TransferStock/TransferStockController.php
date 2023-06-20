@@ -66,6 +66,7 @@ class TransferStockController extends Controller
             ->orderBy('created_at', 'DESC')
             ->paginate(15);
 
+
         return Inertia::render('Wards/TransferStock/Index', [
             'wardStocks' => $wardStocks,
             'transferredStock' => $transferredStock,
