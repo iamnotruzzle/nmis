@@ -214,14 +214,12 @@
             </Column>
             <Column header="ACTION">
               <template #body="slotProps">
-                <Button
-                  icon="pi pi-pencil"
-                  class="mr-1"
-                  rounded
-                  text
-                  severity="warning"
-                  @click="transferStock(slotProps.data)"
-                />
+                <i
+                  v-if="slotProps.data.status != 'RECEIVED'"
+                  class="pi pi-check"
+                  style="color: skyblue"
+                  @click="receivedStock(slotProps)"
+                ></i>
               </template>
             </Column>
           </DataTable>
@@ -368,6 +366,38 @@
           />
         </template>
       </Dialog>
+
+      <!-- received stock dialog -->
+      <Dialog
+        v-model:visible="receivedItemDialog"
+        :style="{ width: '450px' }"
+        header="Confirm"
+        :modal="true"
+        dismissableMask
+      >
+        <div class="flex align-items-center justify-content-center">
+          <i
+            class="pi pi-exclamation-triangle mr-3"
+            style="font-size: 2rem"
+          />
+          <span v-if="form"> You're about to receive a transferred stock. Proceed? </span>
+        </div>
+        <template #footer>
+          <Button
+            label="No"
+            icon="pi pi-times"
+            class="p-button-text"
+            @click="receivedItemDialog = false"
+          />
+          <Button
+            label="Yes"
+            icon="pi pi-check"
+            severity="danger"
+            text
+            @click="updateReceivedStockStatus"
+          />
+        </template>
+      </Dialog>
     </div>
   </app-layout>
 </template>
@@ -430,6 +460,7 @@ export default {
       to: null,
       isUpdate: false,
       transferStockDialog: false,
+      receivedItemDialog: false,
       deleteTransferredStockDialog: false,
       search: '',
       options: {},
@@ -458,12 +489,15 @@ export default {
         expiration_date: null,
         remarks: null,
       }),
+      formReceiveStock: this.$inertia.form({
+        id: null,
+      }),
     };
   },
   // created will be initialize before mounted
   created() {},
   mounted() {
-    console.log(this.transferredStock);
+    // console.log(this.transferredStock);
     this.storeTransferredStockInContainer();
     this.storeWardStockInContainer();
 
@@ -500,6 +534,7 @@ export default {
               quantity: e.quantity,
               expiration_date: expiration_date,
               from: e.ward_from.wardname,
+              status: e.status,
             });
           }
         });
@@ -539,6 +574,7 @@ export default {
         onFinish: (visit) => {
           this.wardStocksList = [];
           this.transferredStocksList = [];
+          this.toReceiveList = [];
           this.storeWardStockInContainer();
           this.storeTransferredStockInContainer();
           this.loading = false;
@@ -610,8 +646,8 @@ export default {
     createdMsg() {
       this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Transfer stock successfully.', life: 3000 });
     },
-    updatedMsg() {
-      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Updated transferred stock.', life: 3000 });
+    stockReceivedMsg() {
+      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Stock received.', life: 3000 });
     },
     deletedMsg() {
       this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Delete transferred stock.', life: 3000 });
@@ -629,6 +665,22 @@ export default {
         ':' +
         String(date.getMinutes()).padStart(2, '0')
       );
+    },
+    receivedStock(item) {
+      console.log(item);
+      this.receivedItemDialog = true;
+      this.formReceiveStock.id = item.data.id;
+    },
+    updateReceivedStockStatus() {
+      this.formReceiveStock.put(route('transferstock.updatetransferstatus', this.formReceiveStock), {
+        preserveScroll: true,
+        onSuccess: () => {
+          this.receivedItemDialog = false;
+          this.cancel();
+          this.updateData();
+          this.stockReceivedMsg();
+        },
+      });
     },
   },
   watch: {

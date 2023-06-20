@@ -52,4 +52,4 @@ Route::resource('patientcharge', PatientChargeController::class)->middleware(['a
 Route::resource('wardsstockslogs', WardsStocksLogsController::class)->middleware(['auth:sanctum', 'verified'])->only(['index', 'store', 'update', 'destroy']);
 
 Route::resource('transferstock', TransferStockController::class)->middleware(['auth:sanctum', 'verified'])->only(['index', 'store', 'update', 'destroy']);
-Route::put('transferstock', [RequestStocksController::class, 'updatetransferstatus'])->name('transferstock.updatetransferstatus');
+Route::put('transferstock', [TransferStockController::class, 'updatetransferstatus'])->name('transferstock.updatetransferstatus');

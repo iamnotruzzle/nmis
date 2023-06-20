@@ -98,10 +98,12 @@ class TransferStockController extends Controller
 
     public function updatetransferstatus(WardTransferStock $wardtransferstock, Request $request)
     {
+        // dd($request->id);
+
         // update status
-        WardTransferStock::where('id', $request->request_stock_id)
+        WardTransferStock::where('id', $request->id)
             ->update([
-                'status' => $request->status,
+                'status' => 'RECEIVED',
             ]);
 
         return Redirect::route('transferstock.index');
