@@ -90,8 +90,8 @@
           <DataTable
             class="p-datatable-sm"
             dataKey="ward_stock_id"
-            v-model:filters="wardStocksFilter"
-            :value="wardStocksList"
+            v-model:filters="transferredStocksFilter"
+            :value="transferredStocksList"
             paginator
             :rows="10"
             :rowsPerPageOptions="[10, 30, 50]"
@@ -103,16 +103,15 @@
             :loading="loading"
           >
             <template #header>
-              <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-                <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">CURRENT STOCKS</span>
+              <div class="flex flex-wrap align-items-center justify-content-end">
                 <div>
                   <span class="p-input-icon-left mr-2">
                     <i class="pi pi-search" />
                     <span class="p-input-icon-left">
                       <i class="pi pi-search" />
                       <InputText
-                        v-model="wardStocksFilter['global'].value"
-                        placeholder="Search item"
+                        v-model="transferredStocksFilter['global'].value"
+                        placeholder="Search"
                       />
                     </span>
                   </span>
@@ -122,37 +121,97 @@
             <template #empty> No data found. </template>
             <template #loading> Loading data. Please wait. </template>
             <Column
-              field="brand_name"
+              field="brand"
               header="BRAND"
-              style="min-width: 12rem"
             >
             </Column>
             <Column
-              field="cl2desc"
+              field="item"
               header="ITEM"
-              style="min-width: 12rem"
             >
             </Column>
             <Column
               field="quantity"
               header="QUANTITY"
-              sortable
-              style="min-width: 12rem"
             >
             </Column>
             <Column
+              field="expiration_date"
               header="EXP. DATE"
-              sortable
-              style="min-width: 12rem"
             >
-              <template #body="{ data }">
-                {{ tzone(data.expiration_date) }}
-              </template>
             </Column>
             <Column
-              header="ACTION"
-              style="min-width: 12rem"
+              field="to"
+              header="TO"
             >
+            </Column>
+            <Column
+              field="status"
+              header="STATUS"
+            >
+            </Column>
+          </DataTable>
+        </TabPanel>
+        <TabPanel header="TO RECEIVE">
+          <DataTable
+            class="p-datatable-sm"
+            dataKey="ward_stock_id"
+            v-model:filters="toReceiveFilter"
+            :value="toReceiveList"
+            paginator
+            :rows="10"
+            :rowsPerPageOptions="[10, 30, 50]"
+            removableSort
+            sortField="expiration_date"
+            :sortOrder="1"
+            filterDisplay="row"
+            showGridlines
+            :loading="loading"
+          >
+            <template #header>
+              <div class="flex flex-wrap align-items-center justify-content-end">
+                <div>
+                  <span class="p-input-icon-left mr-2">
+                    <i class="pi pi-search" />
+                    <span class="p-input-icon-left">
+                      <i class="pi pi-search" />
+                      <InputText
+                        v-model="toReceiveFilter['global'].value"
+                        placeholder="Search"
+                      />
+                    </span>
+                  </span>
+                </div>
+              </div>
+            </template>
+            <template #empty> No data found. </template>
+            <template #loading> Loading data. Please wait. </template>
+            <Column
+              field="brand"
+              header="BRAND"
+            >
+            </Column>
+            <Column
+              field="item"
+              header="ITEM"
+            >
+            </Column>
+            <Column
+              field="quantity"
+              header="QUANTITY"
+            >
+            </Column>
+            <Column
+              field="expiration_date"
+              header="EXP. DATE"
+            >
+            </Column>
+            <Column
+              field="from"
+              header="FROM"
+            >
+            </Column>
+            <Column header="ACTION">
               <template #body="slotProps">
                 <Button
                   icon="pi pi-pencil"
@@ -354,6 +413,7 @@ export default {
     TabPanel,
   },
   props: {
+    authWardcode: Object,
     wardStocks: Object,
     transferredStock: Object,
   },
@@ -408,21 +468,36 @@ export default {
   },
   methods: {
     tzone(date) {
-      return moment.tz(date, 'Asia/Manila').format('LL');
+      return moment.tz(date, 'Asia/Manila').format('MM/DD/YYYY');
     },
     storeTransferredStockInContainer() {
       if (this.transferredStock.length != 0) {
         this.transferredStock.forEach((e) => {
           let expiration_date = moment.tz(e.ward_stock.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
 
-          if (e.status == 'TRANSFERRED') {
+          // list of items this auth ward transferred
+          if (e.from == this.authWardcode.wardcode) {
             this.transferredStocksList.push({
               id: e.id,
               brand: e.ward_stock.brand_details.name,
               item: e.ward_stock.item_details.cl2desc,
               quantity: e.quantity,
               expiration_date: expiration_date,
-              from: e.from,
+              to: e.ward_to.wardname,
+              status: e.status,
+            });
+          }
+
+          // list of items to receive
+          if (e.to == this.authWardcode.wardcode) {
+            this.toReceiveList.push({
+              id: e.id,
+              brand: e.ward_stock.brand_details.name,
+              item: e.ward_stock.item_details.cl2desc,
+              quantity: e.quantity,
+              expiration_date: expiration_date,
+              from: e.ward_from.wardname,
+              status: e.status,
             });
           }
         });

@@ -32,11 +32,12 @@ class TransferStockController extends Controller
 
         $transferredStock = WardTransferStock::with('ward_stock', 'ward_from:wardcode,wardname', 'ward_to:wardcode,wardname')
             ->where('from', '=', $authWardcode->wardcode)
-            ->orWhere('from', '=', $authWardcode->wardcode)
+            ->orWhere('to', '=', $authWardcode->wardcode)
             ->orderBy('created_at', 'DESC')
             ->get();
 
         return Inertia::render('Wards/TransferStock/Index', [
+            'authWardcode' => $authWardcode,
             'wardStocks' => $wardStocks,
             'transferredStock' => $transferredStock,
         ]);

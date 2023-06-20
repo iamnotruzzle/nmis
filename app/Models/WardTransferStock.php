@@ -30,11 +30,11 @@ class WardTransferStock extends Model
 
     public function ward_from()
     {
-        return $this->hasOne(Location::class, 'wardcode', 'ward_stock_id');
+        return $this->hasOne(Location::class, 'wardcode', 'from');
     }
 
     public function ward_to()
     {
-        return $this->hasOne(Location::class, 'wardcode', 'ward_stock_id');
+        return $this->hasOne(Location::class, 'wardcode', 'to');
     }
 }
