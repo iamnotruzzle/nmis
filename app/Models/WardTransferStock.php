@@ -27,4 +27,14 @@ class WardTransferStock extends Model
     {
         return $this->hasOne(WardsStocks::class, 'id', 'ward_stock_id')->with(['item_details:cl2comb,cl2desc', 'brand_details:id,name']);
     }
+
+    public function ward_from()
+    {
+        return $this->hasOne(Location::class, 'wardcode', 'ward_stock_id');
+    }
+
+    public function ward_to()
+    {
+        return $this->hasOne(Location::class, 'wardcode', 'ward_stock_id');
+    }
 }

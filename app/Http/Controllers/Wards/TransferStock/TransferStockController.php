@@ -30,7 +30,7 @@ class TransferStockController extends Controller
             ->where('quantity', '!=', 0)
             ->get();
 
-        $transferredStock = WardTransferStock::with('ward_stock')
+        $transferredStock = WardTransferStock::with('ward_stock', 'ward_from:wardcode,wardname', 'ward_to:wardcode,wardname')
             ->where('from', '=', $authWardcode->wardcode)
             ->orWhere('from', '=', $authWardcode->wardcode)
             ->orderBy('created_at', 'DESC')

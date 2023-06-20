@@ -87,38 +87,48 @@
 
       <TabView class="mt-8">
         <TabPanel header="TRANSFERRED STOCKS">
-          <!-- transferred stocks -->
           <DataTable
             class="p-datatable-sm"
-            v-model:filters="transferredStocksFilter"
-            :value="transferredStocksList"
-            selectionMode="single"
-            lazy
+            dataKey="ward_stock_id"
+            v-model:filters="wardStocksFilter"
+            :value="wardStocksList"
             paginator
-            :rows="rows"
-            ref="dt"
-            :totalRecords="totalRecords"
-            @page="onPage($event)"
-            dataKey="id"
+            :rows="10"
+            :rowsPerPageOptions="[10, 30, 50]"
+            removableSort
+            sortField="expiration_date"
+            :sortOrder="1"
             filterDisplay="row"
             showGridlines
             :loading="loading"
           >
             <template #header>
               <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-                <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">TRANSFERRED STOCKS</span>
+                <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">CURRENT STOCKS</span>
+                <div>
+                  <span class="p-input-icon-left mr-2">
+                    <i class="pi pi-search" />
+                    <span class="p-input-icon-left">
+                      <i class="pi pi-search" />
+                      <InputText
+                        v-model="wardStocksFilter['global'].value"
+                        placeholder="Search item"
+                      />
+                    </span>
+                  </span>
+                </div>
               </div>
             </template>
             <template #empty> No data found. </template>
             <template #loading> Loading data. Please wait. </template>
             <Column
-              field="brand"
+              field="brand_name"
               header="BRAND"
               style="min-width: 12rem"
             >
             </Column>
             <Column
-              field="item"
+              field="cl2desc"
               header="ITEM"
               style="min-width: 12rem"
             >
@@ -126,122 +136,33 @@
             <Column
               field="quantity"
               header="QUANTITY"
+              sortable
               style="min-width: 12rem"
             >
             </Column>
             <Column
-              field="expiration_date"
-              header="EXPIRATION DATE"
-              filterField="expiration_date"
-              style="min-width: 10rem"
-              :showFilterMenu="false"
+              header="EXP. DATE"
+              sortable
+              style="min-width: 12rem"
             >
-              <template #filter="{}">
-                <Calendar
-                  v-model="from"
-                  dateFormat="mm-dd-yy"
-                  placeholder="FROM"
-                  showIcon
-                  showButtonBar
-                  :hideOnDateTimeSelect="true"
-                />
-                <div class="mt-2"></div>
-                <Calendar
-                  v-model="to"
-                  dateFormat="mm-dd-yy"
-                  placeholder="TO"
-                  showIcon
-                  showButtonBar
-                  :hideOnDateTimeSelect="true"
-                />
+              <template #body="{ data }">
+                {{ tzone(data.expiration_date) }}
               </template>
             </Column>
             <Column
-              field="from"
-              header="FROM"
+              header="ACTION"
               style="min-width: 12rem"
             >
-            </Column>
-          </DataTable>
-        </TabPanel>
-        <TabPanel header="TO RECEIVED">
-          <!-- transferred stocks -->
-          <DataTable
-            class="p-datatable-sm"
-            v-model:filters="transferredStocksFilter"
-            :value="transferredStocksList"
-            selectionMode="single"
-            lazy
-            paginator
-            :rows="rows"
-            ref="dt"
-            :totalRecords="totalRecords"
-            @page="onPage($event)"
-            dataKey="id"
-            filterDisplay="row"
-            showGridlines
-            :loading="loading"
-          >
-            <template #header>
-              <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-                <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">TO RECEIVED</span>
-              </div>
-            </template>
-            <template #empty> No data found. </template>
-            <template #loading> Loading data. Please wait. </template>
-            <Column
-              field="brand"
-              header="BRAND"
-              style="min-width: 12rem"
-            >
-            </Column>
-            <Column
-              field="item"
-              header="ITEM"
-              style="min-width: 12rem"
-            >
-            </Column>
-            <Column
-              field="quantity"
-              header="QUANTITY"
-              style="min-width: 12rem"
-            >
-            </Column>
-            <Column
-              field="expiration_date"
-              header="EXPIRATION DATE"
-              filterField="expiration_date"
-              style="min-width: 10rem"
-              :showFilterMenu="false"
-            >
-              <!-- <template #body="{ data }">
-            {{ tzone(data.expiration_date) }}
-          </template> -->
-              <template #filter="{}">
-                <Calendar
-                  v-model="from"
-                  dateFormat="mm-dd-yy"
-                  placeholder="FROM"
-                  showIcon
-                  showButtonBar
-                  :hideOnDateTimeSelect="true"
-                />
-                <div class="mt-2"></div>
-                <Calendar
-                  v-model="to"
-                  dateFormat="mm-dd-yy"
-                  placeholder="TO"
-                  showIcon
-                  showButtonBar
-                  :hideOnDateTimeSelect="true"
+              <template #body="slotProps">
+                <Button
+                  icon="pi pi-pencil"
+                  class="mr-1"
+                  rounded
+                  text
+                  severity="warning"
+                  @click="transferStock(slotProps.data)"
                 />
               </template>
-            </Column>
-            <Column
-              field="from"
-              header="FROM"
-              style="min-width: 12rem"
-            >
             </Column>
           </DataTable>
         </TabPanel>
@@ -435,13 +356,11 @@ export default {
   props: {
     wardStocks: Object,
     transferredStock: Object,
-    toReceive: Object,
   },
   data() {
     return {
       // paginator
       loading: false,
-      totalRecords: null,
       rows: null,
       // end paginator
       from: null,
@@ -479,11 +398,7 @@ export default {
     };
   },
   // created will be initialize before mounted
-  created() {
-    this.totalRecords = this.transferredStock.total;
-    this.params.page = this.transferredStock.current_page;
-    this.rows = this.transferredStock.per_page;
-  },
+  created() {},
   mounted() {
     console.log(this.transferredStock);
     this.storeTransferredStockInContainer();
@@ -496,18 +411,20 @@ export default {
       return moment.tz(date, 'Asia/Manila').format('LL');
     },
     storeTransferredStockInContainer() {
-      if (this.transferredStock.data.length != 0) {
-        this.transferredStock.data.forEach((e) => {
+      if (this.transferredStock.length != 0) {
+        this.transferredStock.forEach((e) => {
           let expiration_date = moment.tz(e.ward_stock.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
 
-          this.transferredStocksList.push({
-            id: e.id,
-            brand: e.ward_stock.brand_details.name,
-            item: e.ward_stock.item_details.cl2desc,
-            quantity: e.quantity,
-            expiration_date: expiration_date,
-            from: e.from,
-          });
+          if (e.status == 'TRANSFERRED') {
+            this.transferredStocksList.push({
+              id: e.id,
+              brand: e.ward_stock.brand_details.name,
+              item: e.ward_stock.item_details.cl2desc,
+              quantity: e.quantity,
+              expiration_date: expiration_date,
+              from: e.from,
+            });
+          }
         });
       } else {
         this.transferredStocksList.push({
@@ -535,10 +452,6 @@ export default {
         });
       });
     },
-    onPage(event) {
-      this.params.page = event.page + 1;
-      this.updateData();
-    },
     updateData() {
       this.transferredStocksList = [];
       this.loading = true;
@@ -547,7 +460,6 @@ export default {
         preserveState: true,
         preserveScroll: true,
         onFinish: (visit) => {
-          this.totalRecords = this.transferredStock.total;
           this.wardStocksList = [];
           this.transferredStocksList = [];
           this.storeWardStockInContainer();
