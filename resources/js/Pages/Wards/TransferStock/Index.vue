@@ -149,6 +149,7 @@
               field="status"
               header="STATUS"
             >
+              <template #body="slotProps"> <Tag :value="slotProps.data.status" severity:="success" /> </template>
             </Column>
           </DataTable>
         </TabPanel>
@@ -390,6 +391,7 @@ import AutoComplete from 'primevue/autocomplete';
 import Textarea from 'primevue/textarea';
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
+import Tag from 'primevue/tag';
 import moment from 'moment';
 
 export default {
@@ -411,6 +413,7 @@ export default {
     Textarea,
     TabView,
     TabPanel,
+    Tag,
   },
   props: {
     authWardcode: Object,
@@ -497,7 +500,6 @@ export default {
               quantity: e.quantity,
               expiration_date: expiration_date,
               from: e.ward_from.wardname,
-              status: e.status,
             });
           }
         });

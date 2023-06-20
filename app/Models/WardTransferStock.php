@@ -37,4 +37,14 @@ class WardTransferStock extends Model
     {
         return $this->hasOne(Location::class, 'wardcode', 'to');
     }
+
+    public function requested_by()
+    {
+        return $this->hasOne(UserDetail::class, 'employeeid', 'requested_by');
+    }
+
+    public function approved_by()
+    {
+        return $this->hasOne(UserDetail::class, 'employeeid', 'requested_by');
+    }
 }
