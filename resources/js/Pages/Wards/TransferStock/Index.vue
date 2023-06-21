@@ -156,10 +156,11 @@
                   severity="warning"
                 />
                 <Tag
-                  v-else
+                  v-else-if="slotProps.data.status == 'RECEIVED'"
                   :value="slotProps.data.status"
                   severity="success"
                 />
+                <p v-else></p>
               </template>
             </Column>
           </DataTable>
