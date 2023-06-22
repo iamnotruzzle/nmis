@@ -219,6 +219,19 @@
                 </template>
               </Column>
             </DataTable>
+
+            <!-- :option="option" -->
+            <div>
+              <div class="text-2xl font-bold mt-4">
+                <span>Price changes</span>
+              </div>
+
+              <v-chart
+                class="h-30rem w-full ma-0 pa-0"
+                :option="option"
+                autoresize
+              />
+            </div>
           </div>
         </template>
       </DataTable>
@@ -517,6 +530,13 @@ import AutoComplete from 'primevue/autocomplete';
 import Textarea from 'primevue/textarea';
 import InputNumber from 'primevue/inputnumber';
 import moment from 'moment';
+import { use } from 'echarts/core';
+import { CanvasRenderer } from 'echarts/renderers';
+import { LineChart } from 'echarts/charts';
+import { TitleComponent, TooltipComponent, LegendComponent, GridComponent } from 'echarts/components';
+import VChart, { THEME_KEY } from 'vue-echarts';
+
+use([CanvasRenderer, LineChart, TitleComponent, TooltipComponent, LegendComponent, GridComponent]);
 
 export default {
   components: {
@@ -536,6 +556,7 @@ export default {
     AutoComplete,
     Textarea,
     InputNumber,
+    VChart,
   },
   props: {
     cl1combs: Array,
@@ -544,6 +565,33 @@ export default {
   },
   data() {
     return {
+      // chart
+      option: {
+        grid: {
+          show: true,
+          left: '10%',
+          top: '5%',
+          right: '10%',
+          bottom: '10%',
+        },
+        tooltip: {
+          trigger: 'axis',
+        },
+        xAxis: {
+          type: 'category',
+          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        },
+        yAxis: {
+          type: 'value',
+        },
+        series: [
+          {
+            data: [150, 230, 224, 218, 135, 147, 260],
+            type: 'line',
+          },
+        ],
+      },
+      // end chart
       // data table expand
       expandedRows: [],
       // end data table expand
