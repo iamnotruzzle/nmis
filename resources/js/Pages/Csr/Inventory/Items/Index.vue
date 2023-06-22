@@ -148,7 +148,7 @@
 
             <div class="flex flex-wrap align-items-center">
               <div class="text-2xl font-bold my-3">
-                Prices for <span class="text-cyan-500 hover:text-cyan-700">{{ slotProps.data.cl2desc }}</span>
+                Prices for <span class="text-cyan-500 hover:text-cyan-700">[ {{ slotProps.data.cl2desc }} ]</span>
               </div>
 
               <Button
