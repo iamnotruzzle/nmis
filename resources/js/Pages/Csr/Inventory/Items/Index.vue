@@ -171,9 +171,7 @@
                 field="Selling price"
                 header="SELLING PRICE"
               >
-                <template #body="{ data }">
-                  {{ data.selling_price }}
-                </template>
+                <template #body="{ data }"> ₱ {{ data.selling_price }} </template>
               </Column>
               <Column
                 field="Entry by"
@@ -570,24 +568,27 @@ export default {
         // grid = changes the margin and padding of the chart
         grid: {
           show: true,
-          left: '10%',
+          left: '15%',
           top: '5%',
-          right: '10%',
+          right: '15%',
           bottom: '10%',
         },
         tooltip: {
           trigger: 'axis',
+          valueFormatter: (value) => '₱ ' + value,
         },
         xAxis: {
           type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          //   data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          data: [],
         },
         yAxis: {
           type: 'value',
         },
         series: [
           {
-            data: [150, 230, 224, 218, 135, 147, 260],
+            // data: [150, 230, 224, 218, 135, 147, 260],
+            data: [],
             type: 'line',
           },
         ],
@@ -903,6 +904,26 @@ export default {
     search: function (val, oldVal) {
       this.params.search = val;
       this.updateData();
+    },
+    expandedRows: function (data) {
+      this.option.xAxis.data = [];
+      this.option.series[0].data = [];
+
+      //   console.log(data[0]);
+      data[0].prices.forEach((e) => {
+        // console.log(e);
+        if (e.selling_price.length != 0) {
+          //   console.log(e.selling_price);
+          this.option.xAxis.data.push(this.tzone(e.created_at));
+          //   this.option.series[0].data.push(Number(e.selling_price).toFixed(2));
+          this.option.series[0].data.push(Number(e.selling_price).toFixed(2));
+        } else {
+          this.option.xAxis.data.push(null);
+          this.option.series.data.push(null);
+        }
+      });
+
+      console.log(this.option);
     },
   },
 };
