@@ -226,7 +226,7 @@
 
               <v-chart
                 class="h-30rem w-full ma-0 pa-0"
-                :option="option"
+                :option="slotProps.data.priceChanges"
                 autoresize
               />
             </div>
@@ -563,37 +563,6 @@ export default {
   },
   data() {
     return {
-      // chart
-      option: {
-        // grid = changes the margin and padding of the chart
-        grid: {
-          show: true,
-          left: '15%',
-          top: '5%',
-          right: '15%',
-          bottom: '10%',
-        },
-        tooltip: {
-          trigger: 'axis',
-          valueFormatter: (value) => '₱ ' + value,
-        },
-        xAxis: {
-          type: 'category',
-          //   data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-          data: [],
-        },
-        yAxis: {
-          type: 'value',
-        },
-        series: [
-          {
-            // data: [150, 230, 224, 218, 135, 147, 260],
-            data: [],
-            type: 'line',
-          },
-        ],
-      },
-      // end chart
       // data table expand
       expandedRows: [],
       // end data table expand
@@ -669,6 +638,53 @@ export default {
     },
   },
   methods: {
+    priceChangesOptions(data) {
+      //   console.log(data);
+      let option = {
+        grid: {
+          show: true,
+          left: '15%',
+          top: '5%',
+          right: '15%',
+          bottom: '10%',
+        },
+        tooltip: {
+          trigger: 'axis',
+          valueFormatter: (value) => '₱ ' + value,
+        },
+        xAxis: {
+          type: 'category',
+          //   data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          data: [],
+        },
+        yAxis: {
+          type: 'value',
+        },
+        series: [
+          {
+            // data: [150, 230, 224, 218, 135, 147, 260],
+            data: [],
+            type: 'line',
+          },
+        ],
+      };
+
+      //   console.log(data);
+      data.forEach((e) => {
+        // console.log(e);
+        if (e.selling_price.length != 0) {
+          //   console.log(e.selling_price);
+          option.xAxis.data.push(this.tzone(e.created_at));
+          //   this.option.series[0].data.push(Number(e.selling_price).toFixed(2));
+          option.series[0].data.push(Number(e.selling_price).toFixed(2));
+        } else {
+          option.xAxis.data.push(null);
+          option.series.data.push(null);
+        }
+      });
+
+      return option;
+    },
     tzone(date) {
       return moment.tz(date, 'Asia/Manila').format('LLL');
     },
@@ -693,6 +709,7 @@ export default {
     // is updated
     storeItemInContainer() {
       this.items.data.forEach((e) => {
+        // console.log(e);
         this.itemsList.push({
           cl2comb: e.cl2comb,
           cl1comb: e.cl1comb,
@@ -704,6 +721,7 @@ export default {
           cl2upsw: e.cl2upsw,
           pharmaceutical: e.pharmaceutical,
           prices: e.prices.length === 0 ? [] : e.prices,
+          priceChanges: this.priceChangesOptions(e.prices),
         });
       });
     },
@@ -904,26 +922,6 @@ export default {
     search: function (val, oldVal) {
       this.params.search = val;
       this.updateData();
-    },
-    expandedRows: function (data) {
-      this.option.xAxis.data = [];
-      this.option.series[0].data = [];
-
-      //   console.log(data[0]);
-      data[0].prices.forEach((e) => {
-        // console.log(e);
-        if (e.selling_price.length != 0) {
-          //   console.log(e.selling_price);
-          this.option.xAxis.data.push(this.tzone(e.created_at));
-          //   this.option.series[0].data.push(Number(e.selling_price).toFixed(2));
-          this.option.series[0].data.push(Number(e.selling_price).toFixed(2));
-        } else {
-          this.option.xAxis.data.push(null);
-          this.option.series.data.push(null);
-        }
-      });
-
-      console.log(this.option);
     },
   },
 };
