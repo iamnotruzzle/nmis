@@ -567,6 +567,7 @@ export default {
     return {
       // chart
       option: {
+        // grid = changes the margin and padding of the chart
         grid: {
           show: true,
           left: '10%',
