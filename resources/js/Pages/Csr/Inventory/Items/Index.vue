@@ -226,7 +226,6 @@
                 <Dropdown
                   v-model="dateFilter"
                   :options="dateFilterList"
-                  placeholder="FILTER"
                   optionLabel="name"
                   optionValue="value"
                   class="w-full md:w-14rem"
@@ -590,7 +589,7 @@ export default {
       createItemPriceDialog: false,
       deleteItemPriceDialog: false,
       // end price
-      dateFilter: null,
+      dateFilter: 'NO FILTER',
       search: '',
       options: {},
       params: {},
