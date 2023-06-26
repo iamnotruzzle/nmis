@@ -982,7 +982,8 @@ export default {
       this.updateData();
     },
     dateFilter: function (val, oldVal) {
-      //   console.log('item list', this.itemsList);
+      // this watches the dateFilter property value that will filter
+      // the price changes
     },
   },
 };
