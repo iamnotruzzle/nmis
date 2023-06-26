@@ -713,7 +713,7 @@ export default {
       });
     },
     priceChangesOptions(data) {
-      //   console.log(data.prices);
+      let priceDetails = data.prices;
       let option = {
         grid: {
           show: true,
@@ -746,11 +746,11 @@ export default {
       //   //   console.log(data);
       switch (this.dateFilter) {
         case 'NO FILTER':
-          data.prices.forEach((e) => {
+          priceDetails.forEach((e) => {
             // console.log(e);
             if (e.selling_price.length != 0) {
               //   console.log(e.selling_price);
-              option.xAxis.data.push(this.tzone(e.created_at));
+              option.xAxis.data.push(moment(e.created_at).format('M/D/YYYY, h:mm:ss a'));
               //   this.option.series[0].data.push(Number(e.selling_price).toFixed(2));
               option.series[0].data.push(Number(e.selling_price).toFixed(2));
             } else {
@@ -760,12 +760,12 @@ export default {
           });
           break;
         case 'yesterday':
-          data.prices.forEach((e) => {
+          priceDetails.forEach((e) => {
             // console.log(moment(e.created_at).format('LL'), '--', moment().format('LL'));
             if (e.selling_price.length != 0) {
               let created_at = moment(e.created_at).format('LL');
               if (moment(created_at).subtract(1, 'days') === moment().subtract(1, 'days')) {
-                option.xAxis.data.push(this.tzone(e.created_at));
+                option.xAxis.data.push(moment(e.created_at).format('M/D/YYYY, h:mm:ss a'));
                 option.series[0].data.push(Number(e.selling_price).toFixed(2));
               }
             } else {
@@ -775,13 +775,13 @@ export default {
           });
           break;
         case 'today':
-          data.prices.forEach((e) => {
+          priceDetails.forEach((e) => {
             // console.log(moment(e.created_at).format('LL'), '--', moment().format('LL'));
             if (e.selling_price.length != 0) {
               let created_at = moment(e.created_at).format('LL');
               let today = moment().format('LL');
               if (moment(created_at).isSame(today)) {
-                option.xAxis.data.push(this.tzone(e.created_at));
+                option.xAxis.data.push(moment(e.created_at).format('M/D/YYYY, h:mm:ss a'));
                 option.series[0].data.push(Number(e.selling_price).toFixed(2));
               }
             } else {
@@ -791,12 +791,12 @@ export default {
           });
           break;
         case 'this week':
-          data.prices.forEach((e) => {
+          priceDetails.forEach((e) => {
             // console.log(moment(e.created_at).format('LL'), '--', moment().format('LL'));
             if (e.selling_price.length != 0) {
               let created_at = moment(e.created_at).format('LL');
               if (moment(created_at).week() === moment().week()) {
-                option.xAxis.data.push(this.tzone(e.created_at));
+                option.xAxis.data.push(moment(e.created_at).format('M/D/YYYY, h:mm:ss a'));
                 option.series[0].data.push(Number(e.selling_price).toFixed(2));
               }
             } else {
@@ -806,12 +806,13 @@ export default {
           });
           break;
         case 'this month':
-          data.prices.forEach((e) => {
+          priceDetails.forEach((e) => {
             // console.log(moment(e.created_at).format('LL'), '--', moment().format('LL'));
             if (e.selling_price.length != 0) {
               let created_at = moment(e.created_at).format('LL');
               if (moment(created_at).month() === moment().month()) {
-                option.xAxis.data.push(this.tzone(e.created_at));
+                // option.xAxis.data.push(this.tzone(e.created_at));
+                option.xAxis.data.push(moment(e.created_at).format('M/D/YYYY, h:mm:ss a'));
                 option.series[0].data.push(Number(e.selling_price).toFixed(2));
               }
             } else {
@@ -821,12 +822,12 @@ export default {
           });
           break;
         case 'this year':
-          data.prices.forEach((e) => {
+          priceDetails.forEach((e) => {
             // console.log(moment(e.created_at).format('LL'), '--', moment().format('LL'));
             if (e.selling_price.length != 0) {
               let created_at = moment(e.created_at).format('LL');
               if (moment(created_at).year() === moment().year()) {
-                option.xAxis.data.push(this.tzone(e.created_at));
+                option.xAxis.data.push(moment(e.created_at).format('M/D/YYYY, h:mm:ss a'));
                 option.series[0].data.push(Number(e.selling_price).toFixed(2));
               }
             } else {
