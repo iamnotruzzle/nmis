@@ -777,6 +777,51 @@ export default {
             }
           });
           break;
+        case 'this week':
+          data.prices.forEach((e) => {
+            // console.log(moment(e.created_at).format('LL'), '--', moment().format('LL'));
+            if (e.selling_price.length != 0) {
+              let created_at = moment(e.created_at).format('LL');
+              if (moment(created_at).week() === moment().week()) {
+                option.xAxis.data.push(this.tzone(e.created_at));
+                option.series[0].data.push(Number(e.selling_price).toFixed(2));
+              }
+            } else {
+              option.xAxis.data.push(null);
+              option.series.data.push(null);
+            }
+          });
+          break;
+        case 'this month':
+          data.prices.forEach((e) => {
+            // console.log(moment(e.created_at).format('LL'), '--', moment().format('LL'));
+            if (e.selling_price.length != 0) {
+              let created_at = moment(e.created_at).format('LL');
+              if (moment(created_at).month() === moment().month()) {
+                option.xAxis.data.push(this.tzone(e.created_at));
+                option.series[0].data.push(Number(e.selling_price).toFixed(2));
+              }
+            } else {
+              option.xAxis.data.push(null);
+              option.series.data.push(null);
+            }
+          });
+          break;
+        case 'this year':
+          data.prices.forEach((e) => {
+            // console.log(moment(e.created_at).format('LL'), '--', moment().format('LL'));
+            if (e.selling_price.length != 0) {
+              let created_at = moment(e.created_at).format('LL');
+              if (moment(created_at).year() === moment().year()) {
+                option.xAxis.data.push(this.tzone(e.created_at));
+                option.series[0].data.push(Number(e.selling_price).toFixed(2));
+              }
+            } else {
+              option.xAxis.data.push(null);
+              option.series.data.push(null);
+            }
+          });
+          break;
         default:
           break;
       }
