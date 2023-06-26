@@ -747,11 +747,8 @@ export default {
       switch (this.dateFilter) {
         case 'NO FILTER':
           priceDetails.forEach((e) => {
-            // console.log(e);
             if (e.selling_price.length != 0) {
-              //   console.log(e.selling_price);
-              option.xAxis.data.push(moment(e.created_at).format('M/D/YYYY, h:mm:ss a'));
-              //   this.option.series[0].data.push(Number(e.selling_price).toFixed(2));
+              option.xAxis.data.push(moment(e.created_at).format('YYYY-MM-DD, hh:mm'));
               option.series[0].data.push(Number(e.selling_price).toFixed(2));
             } else {
               option.xAxis.data.push(null);
@@ -761,11 +758,10 @@ export default {
           break;
         case 'yesterday':
           priceDetails.forEach((e) => {
-            // console.log(moment(e.created_at).format('LL'), '--', moment().format('LL'));
             if (e.selling_price.length != 0) {
               let created_at = moment(e.created_at).format('LL');
               if (moment(created_at).subtract(1, 'days') === moment().subtract(1, 'days')) {
-                option.xAxis.data.push(moment(e.created_at).format('M/D/YYYY, h:mm:ss a'));
+                option.xAxis.data.push(moment(e.created_at).format('YYYY-MM-DD, hh:mm'));
                 option.series[0].data.push(Number(e.selling_price).toFixed(2));
               }
             } else {
@@ -776,12 +772,11 @@ export default {
           break;
         case 'today':
           priceDetails.forEach((e) => {
-            // console.log(moment(e.created_at).format('LL'), '--', moment().format('LL'));
             if (e.selling_price.length != 0) {
               let created_at = moment(e.created_at).format('LL');
               let today = moment().format('LL');
               if (moment(created_at).isSame(today)) {
-                option.xAxis.data.push(moment(e.created_at).format('M/D/YYYY, h:mm:ss a'));
+                option.xAxis.data.push(moment(e.created_at).format('YYYY-MM-DD, hh:mm'));
                 option.series[0].data.push(Number(e.selling_price).toFixed(2));
               }
             } else {
@@ -792,11 +787,10 @@ export default {
           break;
         case 'this week':
           priceDetails.forEach((e) => {
-            // console.log(moment(e.created_at).format('LL'), '--', moment().format('LL'));
             if (e.selling_price.length != 0) {
               let created_at = moment(e.created_at).format('LL');
               if (moment(created_at).week() === moment().week()) {
-                option.xAxis.data.push(moment(e.created_at).format('M/D/YYYY, h:mm:ss a'));
+                option.xAxis.data.push(moment(e.created_at).format('YYYY-MM-DD, hh:mm'));
                 option.series[0].data.push(Number(e.selling_price).toFixed(2));
               }
             } else {
@@ -807,12 +801,11 @@ export default {
           break;
         case 'this month':
           priceDetails.forEach((e) => {
-            // console.log(moment(e.created_at).format('LL'), '--', moment().format('LL'));
             if (e.selling_price.length != 0) {
               let created_at = moment(e.created_at).format('LL');
               if (moment(created_at).month() === moment().month()) {
                 // option.xAxis.data.push(this.tzone(e.created_at));
-                option.xAxis.data.push(moment(e.created_at).format('M/D/YYYY, h:mm:ss a'));
+                option.xAxis.data.push(moment(e.created_at).format('YYYY-MM-DD, hh:mm'));
                 option.series[0].data.push(Number(e.selling_price).toFixed(2));
               }
             } else {
@@ -823,11 +816,10 @@ export default {
           break;
         case 'this year':
           priceDetails.forEach((e) => {
-            // console.log(moment(e.created_at).format('LL'), '--', moment().format('LL'));
             if (e.selling_price.length != 0) {
               let created_at = moment(e.created_at).format('LL');
               if (moment(created_at).year() === moment().year()) {
-                option.xAxis.data.push(moment(e.created_at).format('M/D/YYYY, h:mm:ss a'));
+                option.xAxis.data.push(moment(e.created_at).format('YYYY-MM-DD, hh:mm'));
                 option.series[0].data.push(Number(e.selling_price).toFixed(2));
               }
             } else {
