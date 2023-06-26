@@ -713,7 +713,11 @@ export default {
       });
     },
     priceChangesOptions(data) {
-      let priceDetails = data.prices;
+      // sort the date to ascending order
+      let priceDetails = data.prices.sort((a, b) =>
+        moment(a.created_at, 'DD-MM-YYYY').diff(moment(b.created_at, 'DD-MM-YYYY'))
+      );
+      console.log(priceDetails);
       let option = {
         grid: {
           show: true,
