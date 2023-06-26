@@ -219,9 +219,8 @@
               </Column>
             </DataTable>
 
-            <!-- :option="option" -->
             <div class="w-11 flex flex-column">
-              <div class="text-2xl font-bold mt-4 flex justify-content-between mx-8">
+              <div class="text-2xl font-bold mt-4 flex justify-content-around align-items-center">
                 <span>Price changes</span>
                 <Dropdown
                   v-model="dateFilter"
@@ -710,7 +709,6 @@ export default {
           cl2upsw: e.cl2upsw,
           pharmaceutical: e.pharmaceutical,
           prices: e.prices.length === 0 ? [] : e.prices,
-          priceChanges: {},
         });
       });
     },
@@ -755,6 +753,21 @@ export default {
               option.xAxis.data.push(this.tzone(e.created_at));
               //   this.option.series[0].data.push(Number(e.selling_price).toFixed(2));
               option.series[0].data.push(Number(e.selling_price).toFixed(2));
+            } else {
+              option.xAxis.data.push(null);
+              option.series.data.push(null);
+            }
+          });
+          break;
+        case 'yesterday':
+          data.prices.forEach((e) => {
+            // console.log(moment(e.created_at).format('LL'), '--', moment().format('LL'));
+            if (e.selling_price.length != 0) {
+              let created_at = moment(e.created_at).format('LL');
+              if (moment(created_at).subtract(1, 'days') === moment().subtract(1, 'days')) {
+                option.xAxis.data.push(this.tzone(e.created_at));
+                option.series[0].data.push(Number(e.selling_price).toFixed(2));
+              }
             } else {
               option.xAxis.data.push(null);
               option.series.data.push(null);
@@ -1026,10 +1039,11 @@ export default {
       this.params.search = val;
       this.updateData();
     },
-    dateFilter: function (val, oldVal) {
-      // this watches the dateFilter property value that will filter
-      // the price changes
-    },
+    // uncomment watcher for dateFIlter if not working
+    // dateFilter: function (val, oldVal) {
+    //   // this watches the dateFilter property value that will filter
+    //   // the price changes
+    // },
   },
 };
 </script>
