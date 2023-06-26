@@ -224,9 +224,11 @@
               <div class="text-2xl font-bold mt-4 flex justify-content-between mx-8">
                 <span>Price changes</span>
                 <Dropdown
-                  v-model="selectedCity"
+                  v-model="dateFilter"
                   :options="dateFilterList"
                   placeholder="FILTER"
+                  optionLabel="name"
+                  optionValue="value"
                   class="w-full md:w-14rem"
                 />
               </div>
@@ -594,7 +596,33 @@ export default {
       params: {},
       itemsList: [],
       cl1combsList: [],
-      dateFilterList: ['yesterday', 'today', 'this week', 'this month', 'this year'], // TODO add quarterly filter
+      // TODO add quarterly filter
+      dateFilterList: [
+        {
+          name: 'NO FILTER',
+          value: null,
+        },
+        {
+          name: 'yesterday',
+          value: 'yesterday',
+        },
+        {
+          name: 'today',
+          value: 'today',
+        },
+        {
+          name: 'this week',
+          value: 'this week',
+        },
+        {
+          name: 'this month',
+          value: 'this month',
+        },
+        {
+          name: 'this year',
+          value: 'this year',
+        },
+      ],
       unitsList: [],
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
