@@ -600,7 +600,7 @@ export default {
       dateFilterList: [
         {
           name: 'NO FILTER',
-          value: null,
+          value: 'NO FILTER',
         },
         {
           name: 'yesterday',
