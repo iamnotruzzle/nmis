@@ -600,7 +600,7 @@ export default {
       dateFilterList: [
         {
           name: 'NO FILTER',
-          value: null,
+          value: 'NO FILTER',
         },
         {
           name: 'yesterday',
@@ -959,6 +959,29 @@ export default {
     search: function (val, oldVal) {
       this.params.search = val;
       this.updateData();
+    },
+    dateFilter: function (val) {
+      //   console.log(val);
+      switch (val) {
+        case 'NO FILTER':
+          console.log('NO FILTER');
+          break;
+        case 'yesterday':
+          console.log('yesterday');
+          break;
+        case 'today':
+          console.log('today');
+          break;
+        case 'this week':
+          console.log('this week');
+          break;
+        case 'this month':
+          console.log('this month');
+          break;
+        case 'this year':
+          console.log('this year');
+          break;
+      }
     },
   },
 };
