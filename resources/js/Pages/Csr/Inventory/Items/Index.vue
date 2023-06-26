@@ -143,10 +143,10 @@
           </template>
         </Column>
         <template #expansion="slotProps">
-          <div>
+          <div class="max-w-full flex flex-column align-items-center">
             <!-- {{ slotProps.data }} -->
 
-            <div class="flex flex-wrap align-items-center">
+            <div class="flex align-items-center w-full">
               <div class="text-2xl font-bold my-3">
                 Prices for <span class="text-cyan-500 hover:text-cyan-700">[ {{ slotProps.data.cl2desc }} ]</span>
               </div>
@@ -166,6 +166,7 @@
               :value="slotProps.data.prices"
               paginator
               :rows="5"
+              class="w-full"
             >
               <Column
                 field="Selling price"
@@ -219,9 +220,15 @@
             </DataTable>
 
             <!-- :option="option" -->
-            <div>
-              <div class="text-2xl font-bold mt-4">
+            <div class="w-11 flex flex-column">
+              <div class="text-2xl font-bold mt-4 flex justify-content-between mx-8">
                 <span>Price changes</span>
+                <Dropdown
+                  v-model="selectedCity"
+                  :options="dateFilterList"
+                  placeholder="FILTER"
+                  class="w-full md:w-14rem"
+                />
               </div>
 
               <v-chart
@@ -581,11 +588,13 @@ export default {
       createItemPriceDialog: false,
       deleteItemPriceDialog: false,
       // end price
+      dateFilter: null,
       search: '',
       options: {},
       params: {},
       itemsList: [],
       cl1combsList: [],
+      dateFilterList: ['yesterday', 'today', 'this week', 'this month', 'this year'], // TODO add quarterly filter
       unitsList: [],
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
