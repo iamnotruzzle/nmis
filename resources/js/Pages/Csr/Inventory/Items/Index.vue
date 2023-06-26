@@ -234,7 +234,7 @@
 
               <v-chart
                 class="h-30rem w-full ma-0 pa-0"
-                :option="slotProps.data.priceChanges"
+                :option="priceChangesOptions(slotProps.data)"
                 autoresize
               />
             </div>
@@ -674,53 +674,6 @@ export default {
     },
   },
   methods: {
-    priceChangesOptions(data) {
-      //   console.log(data);
-      let option = {
-        grid: {
-          show: true,
-          left: '15%',
-          top: '5%',
-          right: '15%',
-          bottom: '10%',
-        },
-        tooltip: {
-          trigger: 'axis',
-          valueFormatter: (value) => '₱ ' + value,
-        },
-        xAxis: {
-          type: 'category',
-          //   data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-          data: [],
-        },
-        yAxis: {
-          type: 'value',
-        },
-        series: [
-          {
-            // data: [150, 230, 224, 218, 135, 147, 260],
-            data: [],
-            type: 'line',
-          },
-        ],
-      };
-
-      //   console.log(data);
-      data.forEach((e) => {
-        // console.log(e);
-        if (e.selling_price.length != 0) {
-          //   console.log(e.selling_price);
-          option.xAxis.data.push(this.tzone(e.created_at));
-          //   this.option.series[0].data.push(Number(e.selling_price).toFixed(2));
-          option.series[0].data.push(Number(e.selling_price).toFixed(2));
-        } else {
-          option.xAxis.data.push(null);
-          option.series.data.push(null);
-        }
-      });
-
-      return option;
-    },
     tzone(date) {
       return moment.tz(date, 'Asia/Manila').format('LLL');
     },
@@ -757,9 +710,78 @@ export default {
           cl2upsw: e.cl2upsw,
           pharmaceutical: e.pharmaceutical,
           prices: e.prices.length === 0 ? [] : e.prices,
-          priceChanges: this.priceChangesOptions(e.prices),
+          priceChanges: {},
         });
       });
+    },
+    priceChangesOptions(data) {
+      //   console.log(data.prices);
+      let option = {
+        grid: {
+          show: true,
+          left: '15%',
+          top: '5%',
+          right: '15%',
+          bottom: '10%',
+        },
+        tooltip: {
+          trigger: 'axis',
+          valueFormatter: (value) => '₱ ' + value,
+        },
+        xAxis: {
+          type: 'category',
+          //   data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          data: [],
+        },
+        yAxis: {
+          type: 'value',
+        },
+        series: [
+          {
+            // data: [150, 230, 224, 218, 135, 147, 260],
+            data: [],
+            type: 'line',
+          },
+        ],
+      };
+
+      //   //   console.log(data);
+      switch (this.dateFilter) {
+        case 'NO FILTER':
+          data.prices.forEach((e) => {
+            // console.log(e);
+            if (e.selling_price.length != 0) {
+              //   console.log(e.selling_price);
+              option.xAxis.data.push(this.tzone(e.created_at));
+              //   this.option.series[0].data.push(Number(e.selling_price).toFixed(2));
+              option.series[0].data.push(Number(e.selling_price).toFixed(2));
+            } else {
+              option.xAxis.data.push(null);
+              option.series.data.push(null);
+            }
+          });
+          break;
+        case 'today':
+          data.prices.forEach((e) => {
+            // console.log(moment(e.created_at).format('LL'), '--', moment().format('LL'));
+            if (e.selling_price.length != 0) {
+              let created_at = moment(e.created_at).format('LL');
+              let today = moment().format('LL');
+              if (moment(created_at).isSame(today)) {
+                option.xAxis.data.push(this.tzone(e.created_at));
+                option.series[0].data.push(Number(e.selling_price).toFixed(2));
+              }
+            } else {
+              option.xAxis.data.push(null);
+              option.series.data.push(null);
+            }
+          });
+          break;
+        default:
+          break;
+      }
+
+      return option;
     },
     onPage(event) {
       this.params.page = event.page + 1;
@@ -958,6 +980,9 @@ export default {
     search: function (val, oldVal) {
       this.params.search = val;
       this.updateData();
+    },
+    dateFilter: function (val, oldVal) {
+      //   console.log('item list', this.itemsList);
     },
   },
 };
