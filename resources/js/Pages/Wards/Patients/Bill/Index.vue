@@ -667,14 +667,16 @@ export default {
     storeItemsInContainer() {
       // medical supplies
       this.medicalSupplies.forEach((med) => {
-        this.itemList.push({
-          typeOfCharge: 'DRUMN',
-          itemCode: med.cl2comb,
-          itemDesc: med.cl2desc,
-          unit: med.uomcode == null ? null : med.uomcode,
-          quantity: med.quantity,
-          price: med.price,
-        });
+        if (med.price != null) {
+          this.itemList.push({
+            typeOfCharge: 'DRUMN',
+            itemCode: med.cl2comb,
+            itemDesc: med.cl2desc,
+            unit: med.uomcode == null ? null : med.uomcode,
+            quantity: med.quantity,
+            price: med.price,
+          });
+        }
       });
 
       // misc
