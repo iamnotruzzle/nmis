@@ -591,6 +591,7 @@ export default {
       }
     },
     getTotalAmount() {
+      this.totalAmount = 0;
       this.billList.forEach((item) => {
         this.totalAmount += Number(item.amount);
       });
