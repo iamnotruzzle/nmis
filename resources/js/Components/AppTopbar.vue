@@ -4,7 +4,7 @@
       href="/"
       class="layout-topbar-logo"
     >
-      APP TITLE
+      CSRW
     </Link>
     <button
       class="p-link layout-menu-button layout-topbar-button"
