@@ -714,7 +714,9 @@ export default {
     },
     priceChangesOptions(data) {
       // sort the date to ascending order
-      let priceDetails = data.prices.sort((a, b) =>
+
+      let result = data.prices;
+      let priceDetails = [...result].sort((a, b) =>
         moment(a.created_at, 'DD-MM-YYYY, hh:mm:ss').diff(moment(b.created_at, 'DD-MM-YYYY, hh:mm:ss'))
       );
       console.log(priceDetails);
