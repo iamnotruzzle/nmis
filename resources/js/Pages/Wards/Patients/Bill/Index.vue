@@ -144,13 +144,17 @@
           </template>
           <template #expansion="slotProps">
             <!-- Charge for medical supplies -->
-            <div class="p-3">
+            <!-- v-if="slotProps.data.patient_charge_logs != null" -->
+            <div
+              class="p-3"
+              v-if="slotProps.data.patient_charge_logs != null"
+            >
               <div class="flex flex-wrap align-items-center justify-content-between gap-2">
                 <h5>
                   <span class="text-cyan-500 hover:text-cyan-700">ITEMS DISPENSED</span>
                 </h5>
               </div>
-
+              <!-- {{ slotProps.data }} -->
               <DataTable
                 :value="slotProps.data.patient_charge_logs"
                 paginator
@@ -158,7 +162,10 @@
               >
                 <Column header="BRAND">
                   <template #body="{ data }">
-                    {{ data.brand_details.name }}
+                    <!-- {{ data }} -->
+                    <!-- {{ data.brand_details.name }} -->
+                    <span v-if="data.brand_details != null">{{ data.brand_details.name }}</span>
+                    <span v-else>NA</span>
                   </template>
                 </Column>
                 <Column header="EXP. DATE">
