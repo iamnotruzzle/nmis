@@ -80,12 +80,13 @@ class CsrStocksController extends Controller
             ->groupBy('csrw_csr_stocks_report.cl2comb', 'hclass2.cl2desc')
             ->get();
 
-        dd($stockReports);
+        // dd($stockReports);
 
         return Inertia::render('Csr/Inventory/Stocks/Index', [
             'items' => $items,
             'stocks' => $stocks,
             'brands' => $brands,
+            'stockReports' => $stockReports,
         ]);
     }
 
@@ -202,9 +203,13 @@ class CsrStocksController extends Controller
 
         $prevStockDetails = CsrStocks::where('id', $csrstock->id)->first();
 
+        $reports = CsrStocksReport::where('stock_id', $csrstock->id)->first();
+
         $csrstock->delete();
+        $reports->delete();
 
         $stockLogs = CsrStocksLogs::create([
+            'stock_id' => $prevStockDetails->id,
             'batch_no' => $prevStockDetails->batch_no,
             'chrgcode' => $prevStockDetails->chrgcode,
             'cl2comb' => $prevStockDetails->cl2comb,
