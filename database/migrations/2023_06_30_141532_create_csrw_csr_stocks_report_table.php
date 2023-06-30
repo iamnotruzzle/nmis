@@ -15,7 +15,7 @@ class CreateCsrwCsrStocksReportTable extends Migration
     {
         Schema::create('csrw_csr_stocks_report', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('stock_id')->nullable();
+            $table->bigInteger('stock_id');
             $table->string('cl2comb');
             $table->integer('qty');
             $table->timestamps();

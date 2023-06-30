@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use App\Models\CsrStocks;
 use App\Models\CsrStocksLogs;
+use App\Models\CsrStocksReport;
 use App\Models\Item;
 use Carbon\Carbon;
 // use Illuminate\Contracts\Validation\Rule;
@@ -103,6 +104,7 @@ class CsrStocksController extends Controller
         ]);
 
         $stockLogs = CsrStocksLogs::create([
+            'stock_id' => $stock->id,
             'batch_no' => $stock->batch_no,
             'chrgcode' => $stock->chrgcode,
             'cl2comb' => $stock->cl2comb,
@@ -115,6 +117,12 @@ class CsrStocksController extends Controller
             'action' => 'CREATE',
             'remarks' => NULL,
             'entry_by' => $entry_by,
+        ]);
+
+        $stockReports = CsrStocksReport::create([
+            'stock_id' => $stock->id,
+            'cl2comb' => $stock->cl2comb,
+            'qty' => $stock->quantity,
         ]);
 
         return Redirect::route('csrstocks.index');
@@ -148,6 +156,7 @@ class CsrStocksController extends Controller
         ]);
 
         $stockLogs = CsrStocksLogs::create([
+            'stock_id' => $prevStockDetails->id,
             'batch_no' => $prevStockDetails->batch_no,
             'chrgcode' => $prevStockDetails->chrgcode,
             'cl2comb' => $prevStockDetails->cl2comb,
@@ -161,6 +170,13 @@ class CsrStocksController extends Controller
             'remarks' => $request->remarks,
             'entry_by' => $entry_by,
         ]);
+
+        $stockReports = CsrStocksReport::where('stock_id', $csrstock->id)
+            ->update([
+                'stock_id' => $prevStockDetails->id,
+                'cl2comb' => $request->cl2comb,
+                'qty' => $request->quantity,
+            ]);
 
         return Redirect::route('csrstocks.index');
     }

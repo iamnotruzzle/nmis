@@ -12,6 +12,7 @@ class CsrStocksLogs extends Model
 
     protected $fillable = [
         'id',
+        'stock_id',
         'batch_no',
         'cl2comb',
         'brand',
