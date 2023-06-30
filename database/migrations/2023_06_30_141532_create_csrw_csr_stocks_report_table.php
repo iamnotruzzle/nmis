@@ -18,6 +18,7 @@ class CreateCsrwCsrStocksReportTable extends Migration
             $table->bigInteger('stock_id');
             $table->string('cl2comb');
             $table->integer('qty');
+            $table->dateTime('stock_created_at');
             $table->timestamps();
         });
     }

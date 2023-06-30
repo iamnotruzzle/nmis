@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
@@ -73,6 +74,14 @@ class CsrStocksController extends Controller
 
         $brands = Brand::get();
 
+        $stockReports = DB::table('csrw_csr_stocks_report')
+            ->join('hclass2', 'csrw_csr_stocks_report.cl2comb', '=', 'hclass2.cl2comb')
+            ->select(DB::raw("hclass2.cl2desc, SUM(csrw_csr_stocks_report.qty) as quantity"))
+            ->groupBy('csrw_csr_stocks_report.cl2comb', 'hclass2.cl2desc')
+            ->get();
+
+        dd($stockReports);
+
         return Inertia::render('Csr/Inventory/Stocks/Index', [
             'items' => $items,
             'stocks' => $stocks,
@@ -123,6 +132,7 @@ class CsrStocksController extends Controller
             'stock_id' => $stock->id,
             'cl2comb' => $stock->cl2comb,
             'qty' => $stock->quantity,
+            'stock_created_at' => $stock->created_at,
         ]);
 
         return Redirect::route('csrstocks.index');
@@ -176,6 +186,7 @@ class CsrStocksController extends Controller
                 'stock_id' => $prevStockDetails->id,
                 'cl2comb' => $request->cl2comb,
                 'qty' => $request->quantity,
+                'stock_created_at' => $prevStockDetails->created_at,
             ]);
 
         return Redirect::route('csrstocks.index');

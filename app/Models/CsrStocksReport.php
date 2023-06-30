@@ -16,5 +16,6 @@ class CsrStocksReport extends Model
         'stock_id',
         'cl2comb',
         'qty',
+        'stock_created_at',
     ];
 }
