@@ -182,6 +182,7 @@ class CsrStocksController extends Controller
             'entry_by' => $entry_by,
         ]);
 
+
         $stockReports = CsrStocksReport::where('stock_id', $csrstock->id)
             ->update([
                 'stock_id' => $prevStockDetails->id,
