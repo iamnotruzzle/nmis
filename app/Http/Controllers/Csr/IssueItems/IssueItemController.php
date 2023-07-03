@@ -138,6 +138,7 @@ class IssueItemController extends Controller
                     $row::where('id', $stock->id)
                         ->update([
                             'quantity' => $newStockQty,
+                            'deployed' => 'yes'
                         ]);
 
                     RequestStocks::where('id', $requestStocksID)
@@ -169,6 +170,7 @@ class IssueItemController extends Controller
                     $row::where('id', $stock->id)
                         ->update([
                             'quantity' => 0,
+                            'deployed' => 'yes'
                         ]);
 
                     RequestStocks::where('id', $requestStocksID)
@@ -198,7 +200,7 @@ class IssueItemController extends Controller
         // get the wards stocks where requestStocksId is true
         $wardStocks = WardsStocks::where('request_stocks_id', $requestStocksID)->get();
 
-        // loop throught the wards stocks
+        // loop through the wards stocks
         foreach ($wardStocks as $ws) {
             // get the stock where the stock id is true
             $stock = CsrStocks::where('id', $ws['stock_id'])->first();
@@ -281,6 +283,7 @@ class IssueItemController extends Controller
                     $row::where('id', $stock->id)
                         ->update([
                             'quantity' => $newStockQty,
+                            'deployed' => 'yes'
                         ]);
 
                     // RequestStocks::where('id', $requestStocksID)
@@ -312,6 +315,7 @@ class IssueItemController extends Controller
                     $row::where('id', $stock->id)
                         ->update([
                             'quantity' => 0,
+                            'deployed' => 'yes'
                         ]);
 
                     // RequestStocks::where('id', $requestStocksID)

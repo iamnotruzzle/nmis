@@ -166,22 +166,30 @@
           style="min-width: 12rem"
         >
           <template #body="slotProps">
-            <Button
-              icon="pi pi-pencil"
-              class="mr-1"
-              rounded
-              text
-              severity="warning"
-              @click="editItem(slotProps.data)"
-            />
+            <div v-if="slotProps.data.deployed == 'no'">
+              <Button
+                icon="pi pi-pencil"
+                class="mr-1"
+                rounded
+                text
+                severity="warning"
+                @click="editItem(slotProps.data)"
+              />
 
-            <Button
-              icon="pi pi-trash"
-              rounded
-              text
-              severity="danger"
-              @click="confirmDeleteItem(slotProps.data)"
-            />
+              <Button
+                icon="pi pi-trash"
+                rounded
+                text
+                severity="danger"
+                @click="confirmDeleteItem(slotProps.data)"
+              />
+            </div>
+            <span
+              v-else
+              class="font-bold text-xl text-error"
+            >
+              NA
+            </span>
           </template>
         </Column>
       </DataTable>
@@ -638,6 +646,7 @@ import Dropdown from 'primevue/dropdown';
 import AutoComplete from 'primevue/autocomplete';
 import Tag from 'primevue/tag';
 import Textarea from 'primevue/textarea';
+
 import moment from 'moment';
 
 export default {
@@ -800,6 +809,7 @@ export default {
           manufactured_date: e.manufactured_date === null ? '' : e.manufactured_date,
           delivered_date: e.delivered_date === null ? '' : e.delivered_date,
           expiration_date: e.expiration_date === null ? '' : e.expiration_date,
+          deployed: e.deployed,
         });
       });
       //   console.log(this.stocks);
