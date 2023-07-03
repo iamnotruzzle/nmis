@@ -23,6 +23,7 @@ class CreateCsrwStocksTable extends Migration
             $table->dateTime('manufactured_date')->nullable();
             $table->dateTime('delivered_date')->nullable();
             $table->dateTime('expiration_date');
+            $table->string('deployed');
             $table->timestamps();
         });
     }

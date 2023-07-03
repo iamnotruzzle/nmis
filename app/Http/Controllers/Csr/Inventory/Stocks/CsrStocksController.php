@@ -111,6 +111,7 @@ class CsrStocksController extends Controller
             'manufactured_date' => $request->manufactured_date == null ? null : Carbon::parse($request->manufactured_date)->setTimezone('Asia/Manila'),
             'delivered_date' => $request->delivered_date == null ? null : Carbon::parse($request->delivered_date)->setTimezone('Asia/Manila'),
             'expiration_date' => $request->expiration_date == null ? null : Carbon::parse($request->expiration_date)->setTimezone('Asia/Manila'),
+            'deployed' => 'no',
         ]);
 
         $stockLogs = CsrStocksLogs::create([
@@ -164,6 +165,7 @@ class CsrStocksController extends Controller
             'manufactured_date' => $request->manufactured_date == null ? null : Carbon::parse($request->manufactured_date)->setTimezone('Asia/Manila'),
             'delivered_date' => $request->delivered_date == null ? null : Carbon::parse($request->delivered_date)->setTimezone('Asia/Manila'),
             'expiration_date' => $request->expiration_date == null ? null : Carbon::parse($request->expiration_date)->setTimezone('Asia/Manila'),
+            'deployed' => 'no',
         ]);
 
         $stockLogs = CsrStocksLogs::create([

@@ -26,6 +26,7 @@ class CsrStocks extends Model
         'manufactured_date',
         'delivered_date',
         'expiration_date',
+        'deployed' // Y or N
     ];
 
     public function itemDetail()
