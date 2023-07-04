@@ -47,37 +47,50 @@
         <Column
           field="batch_no"
           header="BATCH NO."
-          style="min-width: 12rem"
         >
         </Column>
         <Column
           field="chrgdesc"
           header="TRUST FUND"
-          style="min-width: 12rem"
         >
         </Column>
         <Column
           field="cl2desc"
           header="ITEM"
-          style="min-width: 12rem"
         >
         </Column>
         <Column
           field="brand_name"
           header="BRAND"
-          style="min-width: 12rem"
         >
         </Column>
         <Column
           field="quantity"
-          header="QUANTITY"
-          style="min-width: 12rem"
+          header="QTY"
         >
+        </Column>
+        <Column header="STATUS">
+          <template #body="slotProps">
+            <Tag
+              v-if="slotProps.data.quantity > 30"
+              value="INSTOCK"
+              severity="success"
+            />
+            <Tag
+              v-else-if="slotProps.data.quantity >= 1 && slotProps.data.quantity <= 30"
+              value="LOWSTOCK"
+              severity="warning"
+            />
+            <Tag
+              v-else
+              value="OUTOFSTOCK"
+              severity="danger"
+            />
+          </template>
         </Column>
         <Column
           field="manufactured_date"
-          header="MANUFACTURED DATE"
-          style="min-width: 12rem"
+          header="MFD. DATE"
           :showFilterMenu="false"
         >
           <template #body="{ data }">
@@ -105,8 +118,7 @@
         </Column>
         <Column
           field="delivered_date"
-          header="DELIVERY DATE"
-          style="min-width: 12rem"
+          header="DD. DATE"
           :showFilterMenu="false"
         >
           <template #body="{ data }">
@@ -134,8 +146,7 @@
         </Column>
         <Column
           field="expiration_date"
-          header="EXPIRATION DATE"
-          style="min-width: 12rem"
+          header="EXP. DATE"
           :showFilterMenu="false"
         >
           <template #body="{ data }">
@@ -161,12 +172,12 @@
             />
           </template>
         </Column>
-        <Column
-          header="ACTION"
-          style="min-width: 12rem"
-        >
+        <Column header="ACTION">
           <template #body="slotProps">
-            <div v-if="slotProps.data.deployed == 'no'">
+            <div
+              v-if="slotProps.data.deployed == 'no'"
+              class="flex flex-row"
+            >
               <Button
                 icon="pi pi-pencil"
                 class="mr-1"
@@ -184,12 +195,7 @@
                 @click="confirmDeleteItem(slotProps.data)"
               />
             </div>
-            <span
-              v-else
-              class="font-bold text-xl text-error"
-            >
-              NA
-            </span>
+            <span v-else></span>
           </template>
         </Column>
       </DataTable>
