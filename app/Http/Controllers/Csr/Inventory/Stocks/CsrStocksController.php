@@ -92,6 +92,8 @@ class CsrStocksController extends Controller
 
     public function store(Request $request)
     {
+        // dd(Carbon::parse($request->expiration_date)->setTimezone('Asia/Manila'));
+
         // TODO make batch_no unique
         $entry_by = Auth::user()->employeeid;
 

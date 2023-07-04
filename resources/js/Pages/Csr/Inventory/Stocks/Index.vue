@@ -69,25 +69,6 @@
           header="QTY"
         >
         </Column>
-        <Column header="STATUS">
-          <template #body="slotProps">
-            <Tag
-              v-if="slotProps.data.quantity > 30"
-              value="INSTOCK"
-              severity="success"
-            />
-            <Tag
-              v-else-if="slotProps.data.quantity >= 1 && slotProps.data.quantity <= 30"
-              value="LOWSTOCK"
-              severity="warning"
-            />
-            <Tag
-              v-else
-              value="OUTOFSTOCK"
-              severity="danger"
-            />
-          </template>
-        </Column>
         <Column
           field="manufactured_date"
           header="MFD. DATE"
@@ -136,7 +117,6 @@
             <div class="mt-2"></div>
             <Calendar
               v-model="to_dd"
-              dateFormat="mm-dd-yy"
               placeholder="TO"
               showIcon
               showButtonBar
@@ -150,12 +130,19 @@
           :showFilterMenu="false"
         >
           <template #body="{ data }">
-            {{ tzone(data.expiration_date) }}
+            <div class="flex flex-column">
+              <div>
+                {{ tzone(data.expiration_date) }}
+              </div>
+
+              <div class="mt-2">
+                <span class="text-lg text-error">{{ checkIfAboutToExpire(data.expiration_date) }}</span>
+              </div>
+            </div>
           </template>
           <template #filter="{}">
             <Calendar
               v-model="from_ed"
-              dateFormat="mm-dd-yy"
               placeholder="FROM"
               showIcon
               showButtonBar
@@ -164,12 +151,34 @@
             <div class="mt-2"></div>
             <Calendar
               v-model="to_ed"
-              dateFormat="mm-dd-yy"
               placeholder="TO"
               showIcon
               showButtonBar
               :hideOnDateTimeSelect="true"
             />
+          </template>
+        </Column>
+        <Column header="STATUS">
+          <template #body="slotProps">
+            <div class="flex flex-column">
+              <div>
+                <Tag
+                  v-if="slotProps.data.quantity > 30"
+                  value="INSTOCK"
+                  severity="success"
+                />
+                <Tag
+                  v-else-if="slotProps.data.quantity >= 1 && slotProps.data.quantity <= 30"
+                  value="LOWSTOCK"
+                  severity="warning"
+                />
+                <Tag
+                  v-else
+                  value="OUTOFSTOCK"
+                  severity="danger"
+                />
+              </div>
+            </div>
           </template>
         </Column>
         <Column header="ACTION">
@@ -313,8 +322,7 @@
             dateFormat="mm-dd-yy"
             showIcon
             showButtonBar
-            showTime
-            hourFormat="12"
+            :minDate="minimumDate"
             :hideOnDateTimeSelect="true"
           />
           <small
@@ -331,8 +339,7 @@
             dateFormat="mm-dd-yy"
             showIcon
             showButtonBar
-            showTime
-            hourFormat="12"
+            :minDate="minimumDate"
             :hideOnDateTimeSelect="true"
           />
           <small
@@ -349,8 +356,7 @@
             dateFormat="mm-dd-yy"
             showIcon
             showButtonBar
-            showTime
-            hourFormat="12"
+            :minDate="minimumDate"
             :hideOnDateTimeSelect="true"
           />
           <small
@@ -653,7 +659,7 @@ import AutoComplete from 'primevue/autocomplete';
 import Tag from 'primevue/tag';
 import Textarea from 'primevue/textarea';
 
-import moment from 'moment';
+import moment, { now } from 'moment';
 
 export default {
   components: {
@@ -681,6 +687,7 @@ export default {
   },
   data() {
     return {
+      minimumDate: null,
       // paginator
       loading: false,
       totalRecords: null,
@@ -762,7 +769,9 @@ export default {
     this.rows = this.stocks.per_page;
   },
   mounted() {
-    // console.log(this.$page.props.typeOfCharge);
+    // console.log(moment.tz(moment(), 'Asia/Manila').format('LLL'));
+
+    this.setMinimumdate();
     this.storeTrustFundInContainer();
     this.storeItemsInContainer();
     this.storeStocksInContainer();
@@ -776,7 +785,38 @@ export default {
       if (date == null || date == '') {
         return null;
       } else {
-        return moment.tz(date, 'Asia/Manila').format('LLL');
+        return moment.tz(date, 'Asia/Manila').format('LL');
+      }
+    },
+    checkIfAboutToExpire(date) {
+      let current_date = moment.tz(moment(), 'Asia/Manila');
+      let exp_date = moment.tz(date, 'Asia/Manila');
+
+      // adding +1 to include the starting date
+      let date_diff = exp_date.diff(current_date, 'days') + 1;
+
+      if (current_date.format('MM-DD-YY') == exp_date.format('MM-DD-YY')) {
+        return 'Item has expired.';
+      } else if (date_diff == 1) {
+        return date_diff + ' day remaining.';
+      } else {
+        return date_diff + ' days remaining.';
+      }
+    },
+    setMinimumdate() {
+      this.minimumDate = new Date();
+      let returnVal = 0;
+      let dateToday = new Date();
+      let getDate = dateToday.getDate();
+      let getHour = dateToday.getHours();
+
+      if (getHour >= 12 && getDate == 1) {
+        this.minimumDate.setDate(dateToday.getDate() + 14);
+      } else if (getHour >= 12 && getDate == 15) {
+        this.minimumDate.setMonth(dateToday.getMonth() + 1, 1);
+      } else if (getHour < 12 && getDate == 13) {
+        this.minimumDate.setMonth(dateToday.getMonth() + 1, 1);
+      } else {
       }
     },
     storeTrustFundInContainer() {
