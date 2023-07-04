@@ -864,7 +864,7 @@ export default {
       );
     },
     editItem(item) {
-      console.log(item);
+      // console.log(item);
       this.isUpdate = true;
       this.createStockDialog = true;
       this.stockId = item.id;
