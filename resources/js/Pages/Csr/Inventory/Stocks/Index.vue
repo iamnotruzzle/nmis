@@ -769,7 +769,7 @@ export default {
   mounted() {
     // console.log(moment.tz(moment(), 'Asia/Manila').format('LLL'));
 
-    this.setMinimumdate();
+    this.setMinimumDate();
     this.storeTrustFundInContainer();
     this.storeItemsInContainer();
     this.storeStocksInContainer();
@@ -801,7 +801,7 @@ export default {
         return date_diff + ' days remaining.';
       }
     },
-    setMinimumdate() {
+    setMinimumDate() {
       this.minimumDate = new Date();
       let returnVal = 0;
       let dateToday = new Date();
