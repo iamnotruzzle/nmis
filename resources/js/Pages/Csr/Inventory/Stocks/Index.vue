@@ -322,7 +322,6 @@
             dateFormat="mm-dd-yy"
             showIcon
             showButtonBar
-            :minDate="minimumDate"
             :hideOnDateTimeSelect="true"
           />
           <small
@@ -339,7 +338,6 @@
             dateFormat="mm-dd-yy"
             showIcon
             showButtonBar
-            :minDate="minimumDate"
             :hideOnDateTimeSelect="true"
           />
           <small
