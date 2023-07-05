@@ -79,7 +79,6 @@
         <Column
           field="status"
           header="STATUS"
-          style="min-width: 12rem"
         >
           <template #body="{ data }">
             <Tag
@@ -91,25 +90,58 @@
         <Column
           field="requested_by"
           header="REQUESTED BY"
-          style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.requested_by }}
+            <div class="flex flex-row align-items-center">
+              <img
+                v-if="data.requested_by_image != null"
+                :src="`/storage/${data.requested_by_image}`"
+                class="w-4rem h-4rem rounded-card"
+              />
+              <img
+                v-else
+                src="storage/no_profile.png"
+                class="w-10rem h-10rem rounded-card"
+              />
+
+              <span class="font-semibold text-xl pl-3">
+                {{ data.requested_by }}
+              </span>
+            </div>
+          </template>
+        </Column>
+        <Column
+          field="approved_by"
+          header="APPROVED BY"
+        >
+          <template #body="{ data }">
+            <div class="flex flex-row align-items-center">
+              <img
+                v-if="data.approved_by_image != null"
+                :src="`/storage/${data.approved_by_image}`"
+                class="w-4rem h-4rem rounded-card"
+              />
+              <img
+                v-else
+                src="storage/no_profile.png"
+                class="w-10rem h-10rem rounded-card"
+              />
+
+              <span class="font-semibold text-xl pl-3">
+                {{ data.approved_by }}
+              </span>
+            </div>
           </template>
         </Column>
         <Column
           field="requested_at"
           header="REQUESTED AT"
-          style="min-width: 12rem"
         >
           <template #body="{ data }">
             {{ data.requested_at }}
           </template>
         </Column>
-        <Column
-          header="ACTION"
-          style="min-width: 12rem"
-        >
+        <Column header="ACTION">
           <template #body="slotProps">
             <div v-if="slotProps.data.status != 'RECEIVED'">
               <Button
@@ -491,6 +523,14 @@ export default {
             e.requested_by_details.middlename +
             ' ' +
             e.requested_by_details.lastname,
+          requested_by_image: e.requested_by_details.user_account.image,
+          approved_by:
+            e.approved_by_details.firstname +
+            ' ' +
+            e.approved_by_details.middlename +
+            ' ' +
+            e.approved_by_details.lastname,
+          approved_by_image: e.approved_by_details.user_account.image,
           requested_at: e.requested_at_details.wardname,
           created_at: e.created_at,
           request_stocks_details: e.request_stocks_details,
@@ -777,4 +817,10 @@ input[type='number'] {
   -moz-appearance: textfield;
 }
 /* END Remove arrow for input type number */
+
+.rounded-card {
+  border-radius: 50%;
+  /* min-height: 100px;
+  min-width: 100px; */
+}
 </style>

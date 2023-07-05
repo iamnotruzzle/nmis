@@ -672,7 +672,7 @@ export default {
     this.rows = this.requestedStocks.per_page;
   },
   mounted() {
-    console.log(this.requestedStocks.data);
+    // console.log(this.requestedStocks.data);
 
     this.storeItemsInController();
     this.storeRequestedStocksInContainer();
