@@ -55,8 +55,8 @@
         <Column
           header="CREATED AT"
           filterField="created_at"
-          style="min-width: 10rem"
           :showFilterMenu="false"
+          style="max-width: 5rem"
         >
           <template #body="{ data }">
             {{ tzone(data.created_at) }}
@@ -84,7 +84,6 @@
         <Column
           field="status"
           header="STATUS"
-          style="min-width: 12rem"
         >
           <template #body="{ data }">
             <div class="flex justify-content-center align-content-center">
@@ -107,16 +106,27 @@
         <Column
           field="requested_by"
           header="REQUESTED BY"
-          style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.requested_by }}
+            <div class="flex flex-row align-items-center">
+              <img
+                v-if="data.image != null"
+                :src="`/storage/${data.image}`"
+                class="w-4rem h-4rem rounded-card"
+              />
+              <img
+                v-else
+                src="storage/no_profile.png"
+                class="w-10rem h-10rem rounded-card"
+              />
+
+              <span class="font-semibold text-xl pl-2">
+                {{ data.requested_by }}
+              </span>
+            </div>
           </template>
         </Column>
-        <Column
-          header="ACTION"
-          style="min-width: 12rem"
-        >
+        <Column header="ACTION">
           <template #body="slotProps">
             <Button
               v-if="slotProps.data.status == 'REQUESTED'"
@@ -140,7 +150,7 @@
         </Column>
         <template #expansion="slotProps">
           <div class="p-3">
-            <h5 class="text-cyan-500 hover:text-cyan-700">REQUESTED ITEMS</h5>
+            <h5 class="text-cyan-500 hover:text-cyan-700">ITEMS</h5>
             <DataTable
               paginator
               :rows="7"
@@ -206,7 +216,6 @@
           field="brand"
           header="BRAND"
           sortable
-          style="min-width: 12rem"
         >
           <template #body="{ data }">
             {{ data.brand }}
@@ -216,7 +225,6 @@
           field="item"
           header="ITEM"
           sortable
-          style="min-width: 12rem"
         >
           <template #body="{ data }">
             {{ data.item }}
@@ -226,7 +234,6 @@
           field="quantity"
           header="QUANTITY"
           sortable
-          style="min-width: 12rem"
         >
           <template #body="{ data }">
             {{ data.quantity }}
@@ -236,16 +243,12 @@
           field="expiration_date"
           header="EXPIRATION DATE"
           sortable
-          style="min-width: 12rem"
         >
           <template #body="{ data }">
             {{ tzone2(data.expiration_date) }}
           </template>
         </Column>
-        <Column
-          header="ACTION"
-          style="min-width: 12rem"
-        >
+        <Column header="ACTION">
           <template #body="slotProps">
             <Button
               icon="pi pi-pencil"
@@ -647,7 +650,8 @@ export default {
     this.rows = this.requestedStocks.per_page;
   },
   mounted() {
-    // console.log(this.currentWardStocks);
+    console.log(this.requestedStocks.data);
+
     this.storeItemsInController();
     this.storeRequestedStocksInContainer();
     this.storeCurrentWardStocksInContainer();
@@ -682,6 +686,7 @@ export default {
             e.requested_by_details.middlename +
             ' ' +
             e.requested_by_details.lastname,
+          image: e.requested_by_details.user_account.image,
           created_at: e.created_at,
           request_stocks_details: e.request_stocks_details,
         });
@@ -984,3 +989,11 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.rounded-card {
+  border-radius: 50%;
+  /* min-height: 100px;
+  min-width: 100px; */
+}
+</style>

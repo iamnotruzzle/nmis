@@ -38,4 +38,9 @@ class UserDetail extends Model
         'contactno',
         'opdstat',
     ];
+
+    public function user_account()
+    {
+        return $this->hasOne(User::class, 'employeeid', 'employeeid');
+    }
 }

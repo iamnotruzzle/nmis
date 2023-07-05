@@ -27,7 +27,7 @@ class RequestStocks extends Model
 
     public function requested_by_details()
     {
-        return $this->hasOne(UserDetail::class, 'employeeid', 'requested_by');
+        return $this->hasOne(UserDetail::class, 'employeeid', 'requested_by')->with('user_account:id,employeeid,image');
     }
 
     public function approved_by_details()
