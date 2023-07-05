@@ -136,10 +136,11 @@
                 :src="`/storage/${data.approved_by_image}`"
                 class="w-4rem h-4rem rounded-card"
               />
+
               <img
-                v-else
+                v-if="data.approved_by != null && data.approved_by_image == null"
                 src="storage/no_profile.png"
-                class="w-10rem h-10rem rounded-card"
+                class="w-4rem h-4rem rounded-card"
               />
 
               <span class="font-semibold text-xl pl-3">
@@ -710,12 +711,14 @@ export default {
             e.requested_by_details.lastname,
           requested_by_image: e.requested_by_details.user_account.image,
           approved_by:
-            e.approved_by_details.firstname +
-            ' ' +
-            e.approved_by_details.middlename +
-            ' ' +
-            e.approved_by_details.lastname,
-          approved_by_image: e.approved_by_details.user_account.image,
+            e.approved_by_details != null
+              ? e.approved_by_details.firstname +
+                ' ' +
+                e.approved_by_details.middlename +
+                ' ' +
+                e.approved_by_details.lastname
+              : null,
+          approved_by_image: e.approved_by_details != null ? e.approved_by_details.user_account.image : null,
           created_at: e.created_at,
           request_stocks_details: e.request_stocks_details,
         });
