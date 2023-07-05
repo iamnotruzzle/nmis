@@ -21,4 +21,9 @@ class LoginHistory extends Model
     {
         return $this->belongsTo(UserDetail::class); //use user detail class
     }
+
+    public function locationName()
+    {
+        return $this->hasOne(Location::class, 'wardcode', 'wardcode');
+    }
 }

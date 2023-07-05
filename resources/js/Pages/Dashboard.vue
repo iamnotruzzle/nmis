@@ -91,5 +91,8 @@ export default {
       word: 'SUPPPP',
     };
   },
+  mounted() {
+    // console.log(this.$page.props.auth.user.location.location_name.wardname);
+  },
 };
 </script>

@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\Location;
+use App\Models\LoginHistory;
 use App\Models\TypeOfCharge;
 use App\Models\UserDetail;
 use Illuminate\Http\Request;
@@ -51,6 +52,10 @@ class HandleInertiaRequests extends Middleware
             //     : null,
             'auth.user.userDetail' => function () use ($request) {
                 return ($request->user() ? $request->user()->userDetail : null);
+            },
+            'auth.user.location' => function () use ($request) {
+                return ($request->user() ? LoginHistory::with('locationName')->where('employeeid', Auth::user()->employeeid)->orderBy('created_at', 'DESC')->first() : null);
+                // return LoginHistory::with('locationName')->where('employeeid', Auth::user()->employeeid)->orderBy('created_at', 'DESC')->first();
             },
             'employees' => function () {
                 return UserDetail::where('empstat', 'A')->orderBy('employeeid', 'ASC')->get();
