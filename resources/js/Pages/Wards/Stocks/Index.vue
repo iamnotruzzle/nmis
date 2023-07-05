@@ -110,7 +110,7 @@
             <div class="flex flex-row align-items-center">
               <img
                 v-if="data.requested_by_image != null"
-                :src="`/storage/${data.requested_by_image}`"
+                :src="`storage/${data.requested_by_image}`"
                 class="w-4rem h-4rem rounded-card"
               />
               <img
@@ -133,7 +133,7 @@
             <div class="flex flex-row align-items-center">
               <img
                 v-if="data.approved_by_image != null"
-                :src="`/storage/${data.approved_by_image}`"
+                :src="`storage/${data.approved_by_image}`"
                 class="w-4rem h-4rem rounded-card"
               />
 

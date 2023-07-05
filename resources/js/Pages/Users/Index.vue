@@ -60,7 +60,7 @@
           <template #body="{ data }">
             <Avatar
               v-if="data.image != null"
-              :image="`/storage/${data.image}`"
+              :image="`storage/${data.image}`"
               shape="circle"
               size="large"
             />

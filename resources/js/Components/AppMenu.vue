@@ -5,7 +5,7 @@
         <div class="flex flex-column align-items-center">
           <img
             v-if="image != null"
-            :src="`/storage/${image}`"
+            :src="`storage/${image}`"
             class="w-10rem h-10rem rounded-card m-auto"
           />
           <img
