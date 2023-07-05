@@ -56,7 +56,6 @@
           header="CREATED AT"
           filterField="created_at"
           :showFilterMenu="false"
-          style="max-width: 5rem"
         >
           <template #body="{ data }">
             {{ tzone(data.created_at) }}
@@ -110,8 +109,8 @@
           <template #body="{ data }">
             <div class="flex flex-row align-items-center">
               <img
-                v-if="data.image != null"
-                :src="`/storage/${data.image}`"
+                v-if="data.requested_by_image != null"
+                :src="`/storage/${data.requested_by_image}`"
                 class="w-4rem h-4rem rounded-card"
               />
               <img
@@ -120,8 +119,31 @@
                 class="w-10rem h-10rem rounded-card"
               />
 
-              <span class="font-semibold text-xl pl-2">
+              <span class="font-semibold text-xl pl-3">
                 {{ data.requested_by }}
+              </span>
+            </div>
+          </template>
+        </Column>
+        <Column
+          field="approved_by"
+          header="APPROVED BY"
+        >
+          <template #body="{ data }">
+            <div class="flex flex-row align-items-center">
+              <img
+                v-if="data.approved_by_image != null"
+                :src="`/storage/${data.approved_by_image}`"
+                class="w-4rem h-4rem rounded-card"
+              />
+              <img
+                v-else
+                src="storage/no_profile.png"
+                class="w-10rem h-10rem rounded-card"
+              />
+
+              <span class="font-semibold text-xl pl-3">
+                {{ data.approved_by }}
               </span>
             </div>
           </template>
@@ -686,7 +708,14 @@ export default {
             e.requested_by_details.middlename +
             ' ' +
             e.requested_by_details.lastname,
-          image: e.requested_by_details.user_account.image,
+          requested_by_image: e.requested_by_details.user_account.image,
+          approved_by:
+            e.approved_by_details.firstname +
+            ' ' +
+            e.approved_by_details.middlename +
+            ' ' +
+            e.approved_by_details.lastname,
+          approved_by_image: e.approved_by_details.user_account.image,
           created_at: e.created_at,
           request_stocks_details: e.request_stocks_details,
         });

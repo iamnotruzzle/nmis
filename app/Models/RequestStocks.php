@@ -32,7 +32,7 @@ class RequestStocks extends Model
 
     public function approved_by_details()
     {
-        return $this->hasOne(UserDetail::class, 'employeeid', 'approved_by');
+        return $this->hasOne(UserDetail::class, 'employeeid', 'approved_by')->with('user_account:id,employeeid,image');
     }
 
     public function request_stocks_details()
