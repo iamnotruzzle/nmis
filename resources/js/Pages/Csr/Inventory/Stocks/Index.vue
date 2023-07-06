@@ -793,7 +793,12 @@ export default {
       // adding +1 to include the starting date
       let date_diff = exp_date.diff(current_date, 'days') + 1;
 
-      if (current_date.format('MM-DD-YY') == exp_date.format('MM-DD-YY')) {
+      //   console.log(current_date.format('MM-DD-YY') == exp_date.format('MM-DD-YY'));
+
+      if (
+        current_date.format('MM-DD-YY') == exp_date.format('MM-DD-YY') ||
+        exp_date.format('MM-DD-YY') < current_date.format('MM-DD-YY')
+      ) {
         return 'Item has expired.';
       } else if (date_diff == 1) {
         return date_diff + ' day remaining.';
