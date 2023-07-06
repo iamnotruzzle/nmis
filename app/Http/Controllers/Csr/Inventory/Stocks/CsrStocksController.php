@@ -74,6 +74,7 @@ class CsrStocksController extends Controller
 
         $brands = Brand::get();
 
+        // TODO stock reports***********************
         $stockReports = DB::table('csrw_csr_stocks_report')
             ->join('hclass2', 'csrw_csr_stocks_report.cl2comb', '=', 'hclass2.cl2comb')
             ->select(DB::raw("hclass2.cl2desc, SUM(csrw_csr_stocks_report.qty) as quantity"))
@@ -81,6 +82,8 @@ class CsrStocksController extends Controller
             ->get();
 
         // dd($stockReports);
+
+        // *****************************************
 
         return Inertia::render('Csr/Inventory/Stocks/Index', [
             'items' => $items,
