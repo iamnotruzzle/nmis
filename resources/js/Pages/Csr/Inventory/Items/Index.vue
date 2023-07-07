@@ -749,7 +749,7 @@ export default {
         ],
       };
 
-      //   //   console.log(data);
+      moment.suppressDeprecationWarnings = true;
       switch (this.dateFilter) {
         case 'NO FILTER':
           priceDetails.forEach((e) => {
@@ -765,7 +765,7 @@ export default {
         case 'yesterday':
           priceDetails.forEach((e) => {
             if (e.selling_price.length != 0) {
-              let created_at = moment(e.created_at).format('LL');
+              let created_at = moment(e.created_at);
 
               // if created_ate is equal to yesterday
               if (moment(created_at).format('MM/DD/YYYY') === moment().subtract(1, 'days').format('MM/DD/YYYY')) {
@@ -781,8 +781,8 @@ export default {
         case 'today':
           priceDetails.forEach((e) => {
             if (e.selling_price.length != 0) {
-              let created_at = moment(e.created_at).format('LL');
-              let today = moment().format('LL');
+              let created_at = moment(e.created_at).format('MM/DD/YYYY');
+              let today = moment().format('MM/DD/YYYY');
               if (moment(created_at).isSame(today)) {
                 option.xAxis.data.push(moment(e.created_at).format('YYYY-MM-DD, hh:mm'));
                 option.series[0].data.push(Number(e.selling_price).toFixed(2));
@@ -796,7 +796,7 @@ export default {
         case 'this week':
           priceDetails.forEach((e) => {
             if (e.selling_price.length != 0) {
-              let created_at = moment(e.created_at).format('LL');
+              let created_at = moment(e.created_at).format('MM/DD/YYYY');
               if (moment(created_at).week() === moment().week()) {
                 option.xAxis.data.push(moment(e.created_at).format('YYYY-MM-DD, hh:mm'));
                 option.series[0].data.push(Number(e.selling_price).toFixed(2));
@@ -810,7 +810,7 @@ export default {
         case 'this month':
           priceDetails.forEach((e) => {
             if (e.selling_price.length != 0) {
-              let created_at = moment(e.created_at).format('LL');
+              let created_at = moment(e.created_at).format('MM/DD/YYYY');
               if (moment(created_at).month() === moment().month()) {
                 // option.xAxis.data.push(this.tzone(e.created_at));
                 option.xAxis.data.push(moment(e.created_at).format('YYYY-MM-DD, hh:mm'));
