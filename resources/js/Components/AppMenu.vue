@@ -10,7 +10,7 @@
           />
           <img
             v-else
-            src="storage/no_profile.png"
+            src="images/no_profile.png"
             class="w-10rem h-10rem rounded-card"
           />
         </div>

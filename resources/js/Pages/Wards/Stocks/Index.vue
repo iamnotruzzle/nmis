@@ -115,7 +115,7 @@
               />
               <img
                 v-else
-                src="storage/no_profile.png"
+                src="images/no_profile.png"
                 class="w-10rem h-10rem rounded-card"
               />
 
@@ -139,7 +139,7 @@
 
               <img
                 v-if="data.approved_by != null && data.approved_by_image == null"
-                src="storage/no_profile.png"
+                src="images/no_profile.png"
                 class="w-4rem h-4rem rounded-card"
               />
 
