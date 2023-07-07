@@ -719,7 +719,7 @@ export default {
       let priceDetails = [...result].sort((a, b) =>
         moment(a.created_at, 'DD-MM-YYYY, hh:mm:ss').diff(moment(b.created_at, 'DD-MM-YYYY, hh:mm:ss'))
       );
-      console.log(priceDetails);
+      //   console.log(priceDetails);
       let option = {
         grid: {
           show: true,
@@ -766,7 +766,9 @@ export default {
           priceDetails.forEach((e) => {
             if (e.selling_price.length != 0) {
               let created_at = moment(e.created_at).format('LL');
-              if (moment(created_at).subtract(1, 'days') === moment().subtract(1, 'days')) {
+
+              // if created_ate is equal to yesterday
+              if (moment(created_at).format('MM/DD/YYYY') === moment().subtract(1, 'days').format('MM/DD/YYYY')) {
                 option.xAxis.data.push(moment(e.created_at).format('YYYY-MM-DD, hh:mm'));
                 option.series[0].data.push(Number(e.selling_price).toFixed(2));
               }

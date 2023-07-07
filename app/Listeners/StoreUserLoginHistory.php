@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Models\LoginHistory;
+use App\Models\User;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Http\Request;
@@ -30,9 +31,15 @@ class StoreUserLoginHistory
     {
         // dd($this->request);
 
+        $user = User::where('employeeid', $this->request->login)->first();
+
         LoginHistory::create([
             'employeeid' => $this->request->login,
             'wardcode' => $this->request->wardcode
         ]);
+
+        // if $user's designation is csr then create wardcode as csr
+        // if $user's designation is ward then create wardcode $this->request->wardcode
+        // if $user's designation is super-admin then create wardcode as super-admin
     }
 }
