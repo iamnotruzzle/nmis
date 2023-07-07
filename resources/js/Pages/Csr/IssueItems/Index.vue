@@ -518,20 +518,11 @@ export default {
         this.requestStockList.push({
           id: e.id,
           status: e.status,
-          requested_by:
-            e.requested_by_details.firstname +
-            ' ' +
-            e.requested_by_details.middlename +
-            ' ' +
-            e.requested_by_details.lastname,
+          requested_by: e.requested_by_details.firstname + ' ' + e.requested_by_details.lastname,
           requested_by_image: e.requested_by_details.user_account.image,
           approved_by:
             e.approved_by_details != null
-              ? e.approved_by_details.firstname +
-                ' ' +
-                e.approved_by_details.middlename +
-                ' ' +
-                e.approved_by_details.lastname
+              ? e.approved_by_details.firstname + ' ' + e.approved_by_details.lastname
               : null,
           approved_by_image: e.approved_by_details != null ? e.approved_by_details.user_account.image : null,
           requested_at: e.requested_at_details.wardname,
