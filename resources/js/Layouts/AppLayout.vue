@@ -53,7 +53,7 @@ export default {
               icon: 'pi pi-fw pi-home',
               to: 'dashboard',
               prefix: 'dashboard',
-              comp: 'Dashboard',
+              comp: 'Dashboard/Index',
             },
             {
               label: 'Categories',
