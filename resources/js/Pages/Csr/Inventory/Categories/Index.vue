@@ -1,6 +1,6 @@
 <template>
   <app-layout>
-    <Head title="Template - Categories" />
+    <Head title="InvenTrackr - Categories" />
 
     <div class="card">
       <Toast />

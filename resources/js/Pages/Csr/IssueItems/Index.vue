@@ -1,6 +1,6 @@
 <template>
   <app-layout>
-    <Head title="Template - Issue Items" />
+    <Head title="InvenTrackr - Issue Items" />
 
     <div class="card">
       <Toast />

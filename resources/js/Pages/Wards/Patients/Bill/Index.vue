@@ -1,6 +1,6 @@
 <template>
   <app-layout>
-    <Head title="Template - Bill Patient" />
+    <Head title="InvenTrackr - Bill Patient" />
 
     <div class="card">
       <Toast />
