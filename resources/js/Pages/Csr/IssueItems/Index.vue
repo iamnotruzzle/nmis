@@ -101,7 +101,7 @@
               <img
                 v-else
                 src="images/no_profile.png"
-                class="w-10rem h-10rem rounded-card"
+                class="w-4rem h-4rem rounded-card"
               />
 
               <span class="font-semibold text-xl pl-3">

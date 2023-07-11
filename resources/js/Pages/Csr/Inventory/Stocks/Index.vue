@@ -295,6 +295,7 @@
             class="text-error"
             v-if="form.errors.brand"
           >
+            {{ form.errors.brand }}
           </small>
         </div>
         <div class="field">

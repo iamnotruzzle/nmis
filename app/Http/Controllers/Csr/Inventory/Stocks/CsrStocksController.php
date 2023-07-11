@@ -72,6 +72,8 @@ class CsrStocksController extends Controller
             ->orderBy('expiration_date', 'asc')
             ->paginate(15);
 
+        // dd($stocks);
+
         $brands = Brand::get();
 
         // stock reports ********************
@@ -105,6 +107,7 @@ class CsrStocksController extends Controller
         $request->validate([
             'batch_no' => 'required',
             'cl2comb' => 'required',
+            'brand' => 'required',
             'quantity' => 'required|numeric|min:0',
             'expiration_date' => 'required',
         ]);
@@ -156,6 +159,7 @@ class CsrStocksController extends Controller
         $request->validate([
             'batch_no' => 'required',
             'cl2comb' => 'required',
+            'brand' => 'required',
             'quantity' => 'required|numeric|min:0',
             'expiration_date' => 'required',
             'remarks' => 'required'
