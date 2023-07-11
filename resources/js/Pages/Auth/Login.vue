@@ -30,7 +30,7 @@
             <div class="text-900 text-3xl font-medium mb-3">Welcome</div>
             <span class="text-600 font-medium">Sign in to continue</span>
           </div>
-          <transition-group
+          <!-- <transition-group
             name="p-message"
             tag="div"
             v-if="form.errors"
@@ -42,52 +42,76 @@
             >
               {{ error }}
             </Message>
-          </transition-group>
+          </transition-group> -->
           <div class="w-full md:w-10 mx-auto">
-            <label
-              for="location"
-              class="block text-900 text-xl font-medium mb-2"
-            >
-              Location
-            </label>
-            <Dropdown
-              v-model="form.wardcode"
-              :options="locationsList"
-              optionLabel="wardname"
-              optionValue="wardcode"
-              class="w-full mb-3"
-            />
+            <div class="mb-3">
+              <label
+                for="location"
+                class="block text-900 text-xl font-medium mb-2"
+              >
+                Location
+              </label>
+              <Dropdown
+                v-model="form.wardcode"
+                :options="locationsList"
+                optionLabel="wardname"
+                optionValue="wardcode"
+                class="w-full"
+              />
+              <small
+                class="text-error"
+                v-if="form.wardcode == null"
+              >
+                Location is required.
+              </small>
+            </div>
 
-            <label
-              for="employeeid"
-              class="block text-900 text-xl font-medium mb-2"
-            >
-              Employee ID
-            </label>
-            <InputText
-              id="employeeid"
-              v-model="form.login"
-              name="login"
-              type="text"
-              class="w-full mb-3"
-              style="padding: 1rem"
-            />
+            <div class="mb-3">
+              <label
+                for="employeeid"
+                class="block text-900 text-xl font-medium mb-2"
+              >
+                Employee ID
+              </label>
+              <InputText
+                id="employeeid"
+                v-model="form.login"
+                name="login"
+                type="text"
+                class="w-full"
+                style="padding: 1rem"
+              />
+              <small
+                class="text-error"
+                v-if="form.errors.login"
+              >
+                {{ form.errors.login }}
+              </small>
+            </div>
 
-            <label
-              for="password"
-              class="block text-900 font-medium text-xl mb-2"
-            >
-              Password
-            </label>
-            <Password
-              id="password"
-              v-model="form.password"
-              :toggleMask="true"
-              class="w-full mb-5"
-              inputClass="w-full"
-              :feedback="false"
-              @keyup.enter="submit"
-            ></Password>
+            <div class="mb-5">
+              <label
+                for="password"
+                class="block text-900 font-medium text-xl mb-2"
+              >
+                Password
+              </label>
+              <Password
+                id="password"
+                v-model="form.password"
+                :toggleMask="true"
+                class="w-full"
+                inputClass="w-full"
+                :feedback="false"
+                @keyup.enter="submit"
+              ></Password>
+              <small
+                class="text-error"
+                v-if="form.errors.password"
+              >
+                {{ form.errors.password }}
+              </small>
+            </div>
 
             <Button
               type="submit"
@@ -157,15 +181,11 @@ export default {
       });
     },
     submit() {
-      this.form
-        // .transform((data) => ({
-        //   ...data,
-        //   remember: this.form.remember ? 'on' : '',
-        // }))
-        .post(this.route('login'), {
+      if (this.form.wardcode != null) {
+        this.form.post(this.route('login'), {
           onFinish: () => this.form.reset('password'),
         });
-      //   console.log(this.form);
+      }
     },
   },
 };
