@@ -32,19 +32,20 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'delete-users']);
 
         // create default user
-        $superAdminUser = User::factory()->create([
-            // 'firstName' => 'super',
-            // 'middleName' => null,
-            // 'lastName' => 'admin',
-            // 'suffix' => null,
-            'employeeid' => 'sa',
-            // 'email' => 'sa@sa.com',
-            'image' => null,
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'remember_token' => Str::random(10),
-        ]);
+        // $superAdminUser = User::factory()->create([
+        //     // 'firstName' => 'super',
+        //     // 'middleName' => null,
+        //     // 'lastName' => 'admin',
+        //     // 'suffix' => null,
+        //     'employeeid' => 'sa',
+        //     // 'email' => 'sa@sa.com',
+        //     'image' => null,
+        //     'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        //     'designation' => 'admin',
+        //     'remember_token' => Str::random(10),
+        // ]);
 
-        $superAdminUser = User::factory()->create([
+        $customUser1 = User::factory()->create([
             // 'firstName' => 'super',
             // 'middleName' => null,
             // 'lastName' => 'admin',
@@ -53,42 +54,60 @@ class RoleAndPermissionSeeder extends Seeder
             // 'email' => 'sa@sa.com',
             'image' => null,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'designation' => 'csr',
             'remember_token' => Str::random(10),
         ]);
 
-
-        $adminUser = User::factory()->create([
-            // 'firstName' => 'admin',
+        $customUser2 = User::factory()->create([
+            // 'firstName' => 'super',
             // 'middleName' => null,
             // 'lastName' => 'admin',
             // 'suffix' => null,
-            'employeeid' => 'admin',
-            // 'email' => 'admin@admin.com',
+            'employeeid' => '000078',
+            // 'email' => 'sa@sa.com',
             'image' => null,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'designation' => 'ward',
             'remember_token' => Str::random(10),
         ]);
 
-        $user = User::factory()->create([
-            // 'firstName' => 'user',
-            // 'middleName' => null,
-            // 'lastName' => 'user',
-            // 'suffix' => null,
-            'employeeid' => 'user',
-            // 'email' => 'user@user.com',
-            'image' => null,
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'remember_token' => Str::random(10),
-        ]);
+
+        // $adminUser = User::factory()->create([
+        //     // 'firstName' => 'admin',
+        //     // 'middleName' => null,
+        //     // 'lastName' => 'admin',
+        //     // 'suffix' => null,
+        //     'employeeid' => 'admin',
+        //     // 'email' => 'admin@admin.com',
+        //     'image' => null,
+        //     'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        //     'remember_token' => Str::random(10),
+        // ]);
+
+        // $user = User::factory()->create([
+        //     // 'firstName' => 'user',
+        //     // 'middleName' => null,
+        //     // 'lastName' => 'user',
+        //     // 'suffix' => null,
+        //     'employeeid' => 'user',
+        //     // 'email' => 'user@user.com',
+        //     'image' => null,
+        //     'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        //     'remember_token' => Str::random(10),
+        // ]);
+
+        $customUser1->assignRole($superAdminRole);
+        $customUser2->assignRole($superAdminRole);
+
 
         // assign role to the created super-admin user
-        $superAdminUser->assignRole($superAdminRole);
+        // $superAdminUser->assignRole($superAdminRole);
 
         // assign role to the created admin user
-        $adminUser->assignRole($adminRole);
+        // $adminUser->assignRole($adminRole);
 
         // assign role to the created editor user
-        $user->assignRole($userRole);
+        // $user->assignRole($userRole);
 
         // $user->givePermissionTo([
         //     // users

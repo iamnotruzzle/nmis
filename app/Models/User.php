@@ -33,7 +33,8 @@ class User extends Authenticatable
         // 'email',
         'employeeid',
         'password',
-        'image'
+        'image',
+        'designation'
     ];
 
     /**

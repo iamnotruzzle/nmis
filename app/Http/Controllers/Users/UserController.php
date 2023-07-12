@@ -63,6 +63,7 @@ class UserController extends Controller
             // 'permissions' => 'required',
             'employeeid' => 'required|string|unique:csrw_users,employeeid|max:14',
             'password' => 'required|min:8',
+            'designation' => 'required',
         ]);
 
         if ($request->hasFile('image')) {
@@ -75,6 +76,7 @@ class UserController extends Controller
             'employeeid' => $request->employeeid,
             'password' => bcrypt($request->password),
             'image' => $image,
+            'designation' => $request->designation,
         ]);
 
         // dd($user);
@@ -106,7 +108,8 @@ class UserController extends Controller
                     'max:14',
                     Rule::unique('csrw_users')->ignore($user->id)
                 ],
-                'password' => 'required|min:8'
+                'password' => 'required|min:8',
+                'designation' => 'required',
             ]);
 
             if ($request->hasFile('image')) {
@@ -117,7 +120,8 @@ class UserController extends Controller
             $user->update([
                 'employeeid' => $request->employeeid,
                 'password' => bcrypt($request->password),
-                'image' => $image
+                'image' => $image,
+                'designation' => $request->designation,
             ]);
         } else {
             $request->validate([
@@ -130,6 +134,7 @@ class UserController extends Controller
                     'max:14',
                     Rule::unique('csrw_users')->ignore($user->id)
                 ],
+                'designation' => 'required',
             ]);
 
             if ($request->hasFile('image')) {
@@ -139,7 +144,8 @@ class UserController extends Controller
 
             $user->update([
                 'employeeid' => $request->employeeid,
-                'image' => $image
+                'image' => $image,
+                'designation' => $request->designation,
             ]);
         }
 

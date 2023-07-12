@@ -30,7 +30,7 @@
             <div class="text-900 text-3xl font-medium mb-3">Welcome</div>
             <span class="text-600 font-medium">Sign in to continue</span>
           </div>
-          <!-- <transition-group
+          <transition-group
             name="p-message"
             tag="div"
             v-if="form.errors"
@@ -42,12 +42,12 @@
             >
               {{ error }}
             </Message>
-          </transition-group> -->
+          </transition-group>
           <div class="w-full md:w-10 mx-auto">
             <div class="mb-3">
               <label
                 for="location"
-                class="block text-900 text-xl font-medium mb-2"
+                class="block text-900 text-xl font-medium mb-1"
               >
                 Location
               </label>
@@ -56,20 +56,16 @@
                 :options="locationsList"
                 optionLabel="wardname"
                 optionValue="wardcode"
+                filter
                 class="w-full"
-              />
-              <small
-                class="text-error"
-                v-if="form.wardcode == null"
               >
-                Location is required.
-              </small>
+              </Dropdown>
             </div>
 
             <div class="mb-3">
               <label
                 for="employeeid"
-                class="block text-900 text-xl font-medium mb-2"
+                class="block text-900 text-xl font-medium mb-1"
               >
                 Employee ID
               </label>
@@ -81,18 +77,12 @@
                 class="w-full"
                 style="padding: 1rem"
               />
-              <small
-                class="text-error"
-                v-if="form.errors.login"
-              >
-                {{ form.errors.login }}
-              </small>
             </div>
 
             <div class="mb-5">
               <label
                 for="password"
-                class="block text-900 font-medium text-xl mb-2"
+                class="block text-900 font-medium text-xl mb-1"
               >
                 Password
               </label>
@@ -105,12 +95,6 @@
                 :feedback="false"
                 @keyup.enter="submit"
               ></Password>
-              <small
-                class="text-error"
-                v-if="form.errors.password"
-              >
-                {{ form.errors.password }}
-              </small>
             </div>
 
             <Button
@@ -186,6 +170,8 @@ export default {
           onFinish: () => this.form.reset('password'),
         });
       }
+
+      //   console.log(this.$page);
     },
   },
 };

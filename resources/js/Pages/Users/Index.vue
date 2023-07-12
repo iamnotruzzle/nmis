@@ -118,6 +118,15 @@
           </template>
         </Column>
         <Column
+          field="designation"
+          header="DESIGNATION"
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.designation }}
+          </template>
+        </Column>
+        <Column
           header="CREATED AT"
           filterField="created_at"
           style="min-width: 10rem"
@@ -236,6 +245,23 @@
             {{ form.errors.role }}
           </small>
         </div>
+
+        <div class="field">
+          <label for="designation">Designation</label>
+          <Dropdown
+            v-model="form.designation"
+            :options="designation"
+            placeholder="Designation"
+            class="w-full md:w-14rem"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.designation"
+          >
+            {{ form.errors.designation }}
+          </small>
+        </div>
+
         <div class="field">
           <label for="image">Upload image</label>
           <FileUpload
@@ -384,6 +410,7 @@ export default {
         employeeid: { value: null, matchMode: FilterMatchMode.CONTAINS },
         email: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
+      designation: ['admin', 'csr', 'ward'],
       roles: [
         {
           name: 'super-admin',
@@ -403,6 +430,7 @@ export default {
         role: null,
         employeeid: null,
         password: null,
+        designation: null,
       }),
     };
   },
@@ -428,10 +456,11 @@ export default {
             id: e.id,
             image: e.image,
             employeeid: e.employeeid,
+            designation: e.designation,
             role: e.roles[0].name,
             lastname: e.user_detail.lastname,
             firstname: e.user_detail.firstname,
-            middlename: e.user_detail.middlename,
+            middlename: e.user_detail.middlename == null ? null : e.user_detail.middlename,
             empsuffix: e.user_detail.empsuffix,
             created_at: e.created_at,
           });
@@ -440,6 +469,7 @@ export default {
             id: e.id,
             image: e.image,
             employeeid: e.employeeid,
+            designation: e.designation,
             role: e.roles[0].name,
             created_at: e.created_at,
           });
@@ -505,6 +535,7 @@ export default {
       this.createItemDialog = true;
       this.itemId = item.id;
       this.form.role = item.role;
+      this.form.designation = item.designation;
       this.form.employeeid = item.employeeid;
       this.form.password = item.password;
     },
@@ -517,6 +548,7 @@ export default {
             preserveScroll: true,
             role: this.form.role,
             employeeid: this.form.employeeid,
+            designation: this.form.designation,
             password: this.form.password,
             image: this.form.image,
           },

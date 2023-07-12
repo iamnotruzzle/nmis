@@ -17,6 +17,7 @@ class CreateCsrwUsersTable extends Migration
             $table->id();
             $table->string('employeeid')->unique();
             $table->text('image')->nullable();
+            $table->string('designation'); // admin, csr, admin
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

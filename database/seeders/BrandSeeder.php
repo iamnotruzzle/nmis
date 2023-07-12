@@ -14,7 +14,7 @@ class BrandSeeder extends Seeder
      */
     public function run()
     {
-        $superAdminUser = Brand::factory()->create([
+        $superAdminUser = Brand::create([
 
             // 'suffix' => null,
             'name' => 'NO BRAND',

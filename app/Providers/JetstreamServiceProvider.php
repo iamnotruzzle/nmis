@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Fortify;
 use Laravel\Jetstream\Jetstream;
 
@@ -34,12 +35,21 @@ class JetstreamServiceProvider extends ServiceProvider
         Jetstream::deleteUsersUsing(DeleteUser::class);
 
         Fortify::authenticateUsing(function (Request $request) {
-            $user = User::where('employeeid', $request->login)->first();
-
             // dd($request);
 
+            $user = User::where('employeeid', $request->login)->first();
+
             if ($user && Hash::check($request->password, $user->password)) {
-                return $user;
+                if ($request->wardcode == 'CSR' && $user->designation == 'csr') {
+                    return $user;
+                } elseif ($request->wardcode != 'CSR' && $request->wardcode != 'ADMIN' && $user->designation == 'ward') {
+                    return $user;
+                } elseif ($request->wardcode == 'ADMIN' && $user->designation == 'admin') {
+                    return $user;
+                } else {
+                    throw ValidationException::withMessages(["You don't have permission to access this location."]);
+                    // return redirect()->back()->withErrors("You don't have permission to access this location.");
+                }
             }
         });
     }
