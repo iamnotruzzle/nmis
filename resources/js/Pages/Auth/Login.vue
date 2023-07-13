@@ -165,13 +165,9 @@ export default {
       });
     },
     submit() {
-      if (this.form.wardcode != null) {
-        this.form.post(this.route('login'), {
-          onFinish: () => this.form.reset('password'),
-        });
-      }
-
-      //   console.log(this.$page);
+      this.form.post(this.route('login'), {
+        onFinish: () => this.form.reset('password'),
+      });
     },
   },
 };
