@@ -542,6 +542,7 @@
         >
           <template #body="slotProps">
             <Button
+              v-if="slotProps.data.name != 'NO BRAND'"
               icon="pi pi-pencil"
               class="mr-1"
               rounded

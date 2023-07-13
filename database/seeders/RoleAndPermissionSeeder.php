@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Brand;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -115,5 +116,6 @@ class RoleAndPermissionSeeder extends Seeder
         //     'create-icu-bed-entry',
         //     'create-non-icu-bed',
         // ]);
+
     }
 }
