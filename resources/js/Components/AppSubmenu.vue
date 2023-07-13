@@ -40,7 +40,8 @@
             exact
             role="menuitem"
           >
-            <i :class="item.icon"></i>
+            <!-- <i :class="item.icon"></i> -->
+            <v-icon :name="item.icon" />
             <span>{{ item.label }}</span>
             <i
               v-if="item.items"
@@ -61,7 +62,7 @@
             :target="item.target"
             role="menuitem"
           >
-            <i :class="item.icon"></i>
+            <v-icon :name="item.icon" />
             <span>{{ item.label }}</span>
             <i
               v-if="item.items"
