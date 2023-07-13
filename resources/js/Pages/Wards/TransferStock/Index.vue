@@ -293,7 +293,7 @@
             id="ward"
             v-model.trim="form.to"
             required="true"
-            :options="$page.props.locations"
+            :options="locationsList"
             filter
             optionLabel="wardname"
             optionValue="wardcode"
@@ -477,6 +477,7 @@ export default {
       search: '',
       options: {},
       params: {},
+      locationsList: [],
       wardStocksList: [],
       transferredStocksList: [],
       toReceiveList: [],
@@ -509,7 +510,7 @@ export default {
   // created will be initialize before mounted
   created() {},
   mounted() {
-    // console.log(this.transferredStock);
+    this.storeLocationsInContainer();
     this.storeTransferredStockInContainer();
     this.storeWardStockInContainer();
 
@@ -518,6 +519,18 @@ export default {
   methods: {
     tzone(date) {
       return moment.tz(date, 'Asia/Manila').format('MM/DD/YYYY');
+    },
+    storeLocationsInContainer() {
+      this.$page.props.locations.forEach((e) => {
+        if (e.wardcode == 'CSR' || e.wardcode == 'ADMIN') {
+          return null;
+        } else {
+          this.locationsList.push({
+            wardcode: e.wardcode,
+            wardname: e.wardname,
+          });
+        }
+      });
     },
     storeTransferredStockInContainer() {
       if (this.transferredStock.length != 0) {
@@ -598,7 +611,7 @@ export default {
       this.$emit('hide', (this.cl1comb = null), (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
     },
     transferStock(item) {
-      console.log(item.quantity);
+      //   console.log(item.quantity);
       this.transferStockDialog = true;
       this.form.ward_stock_id = item.ward_stock_id;
       this.form.cl2desc = item.cl2desc;
@@ -679,7 +692,7 @@ export default {
       );
     },
     receivedStock(item) {
-      console.log(item);
+      //   console.log(item);
       this.receivedItemDialog = true;
       this.formReceiveStock.id = item.data.id;
     },

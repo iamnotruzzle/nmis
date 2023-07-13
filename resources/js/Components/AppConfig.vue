@@ -259,7 +259,7 @@ export default {
     },
     changeTheme() {
       let theme = this.themeScheme + '-' + this.themeColor;
-      console.log(this.$appState.theme);
+      //   console.log(this.$appState.theme);
       let themeElement = document.getElementById('theme-link');
       themeElement.setAttribute('href', themeElement.getAttribute('href').replace(this.$appState.theme, theme));
       this.$appState.theme = theme;
