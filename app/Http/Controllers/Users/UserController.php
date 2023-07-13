@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\UserDetail;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -26,6 +27,8 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
+        // dd(Auth::user());
+
         $employeeids = UserDetail::where('empstat', 'A')->get('employeeid');
 
         $users = User::with(['roles', 'permissions', 'userDetail'])

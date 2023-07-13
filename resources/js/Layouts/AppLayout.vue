@@ -70,35 +70,35 @@ export default {
               comp: 'Csr/Inventory/Items/Index',
             },
             {
-              label: 'CSR-Stocks',
+              label: 'Stocks',
               icon: 'pi pi-fw pi-home',
               to: 'csrstocks',
               prefix: 'csrstocks',
               comp: 'Csr/Inventory/Stocks/Index',
             },
             {
-              label: 'CSR-Issue Items',
+              label: 'Issue Items',
               icon: 'pi pi-fw pi-home',
               to: 'issueitems',
               prefix: 'issueitems',
               comp: 'Csr/IssueItems/Index',
             },
             {
-              label: 'W-Stocks',
+              label: 'Stocks',
               icon: 'pi pi-fw pi-home',
               to: 'requeststocks',
               prefix: 'requeststocks',
               comp: 'Wards/Stocks/Index',
             },
             {
-              label: 'W-Patients',
+              label: 'Patients',
               icon: 'pi pi-fw pi-home',
               to: 'wardspatients',
               prefix: 'wardspatients',
               comp: 'Wards/Patients/Index',
             },
             {
-              label: 'W-Transfer-Stocks',
+              label: 'Transfer-Stocks',
               icon: 'pi pi-fw pi-home',
               to: 'transferstock',
               prefix: 'transferstock',
@@ -131,19 +131,94 @@ export default {
     },
   },
   mounted() {
+    // console.log(this.$page.props.user.designation);
     this.$nextTick(() => {
       this.onload();
     });
+
     this.removeRoutesIfNonAdmin();
   },
   methods: {
     removeRoutesIfNonAdmin() {
-      // if auth users role is user, remove users page in the array
-      if (this.user.roles[0] == 'user') {
+      // admin
+      if (this.$page.props.user.designation == 'admin') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'csrstocks';
+        });
+      }
+      if (this.$page.props.user.designation == 'admin') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'issueitems';
+        });
+      }
+      if (this.$page.props.user.designation == 'admin') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'requeststocks';
+        });
+      }
+      if (this.$page.props.user.designation == 'admin') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'wardspatients';
+        });
+      }
+      if (this.$page.props.user.designation == 'admin') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'transferstock';
+        });
+      }
+      // end admin
+
+      // csr
+      // if auth users designation is csr, remove requeststocks page in the array
+      if (this.$page.props.user.designation == 'csr') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'requeststocks';
+        });
+      }
+      if (this.$page.props.user.designation == 'csr') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'wardspatients';
+        });
+      }
+      if (this.$page.props.user.designation == 'csr') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'transferstock';
+        });
+      }
+      if (this.$page.props.user.designation == 'csr') {
         this.menu[0].items = this.menu[0].items.filter(function (obj) {
           return obj.to !== 'users';
         });
       }
+      // end csr
+
+      // ward
+      if (this.$page.props.user.designation == 'ward') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'categories';
+        });
+      }
+      if (this.$page.props.user.designation == 'ward') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'items';
+        });
+      }
+      if (this.$page.props.user.designation == 'ward') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'csrstocks';
+        });
+      }
+      if (this.$page.props.user.designation == 'ward') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'issueitems';
+        });
+      }
+      if (this.$page.props.user.designation == 'ward') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'users';
+        });
+      }
+      // end ward
     },
     onload() {
       document.documentElement.style.fontSize = 13 + 'px';

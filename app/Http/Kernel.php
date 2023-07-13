@@ -2,6 +2,10 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\Designation_admin;
+use App\Http\Middleware\Designation_csr;
+use App\Http\Middleware\Designation_csr_or_admin;
+use App\Http\Middleware\Designation_ward;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -67,5 +71,9 @@ class Kernel extends HttpKernel
         'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
         'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
         'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
+        'designation_admin' => Designation_admin::class,
+        'designation_csr_or_admin' => Designation_csr_or_admin::class,
+        'designation_csr' => Designation_csr::class,
+        'designation_ward' => Designation_ward::class
     ];
 }
