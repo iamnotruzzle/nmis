@@ -579,6 +579,8 @@ import AutoComplete from 'primevue/autocomplete';
 import TextArea from 'primevue/textarea';
 import Tag from 'primevue/tag';
 import moment from 'moment';
+import NProgress from 'nprogress';
+import Echo from 'laravel-echo';
 
 export default {
   components: {
@@ -673,7 +675,24 @@ export default {
     this.rows = this.requestedStocks.per_page;
   },
   mounted() {
-    // console.log(this.requestedStocks.data);
+    // issued = name of the channel
+    // ItemIssued = name of the event
+    // Channel = user doesn't need to authenticated or authorize
+    window.Echo.channel('issued').listen('ItemIssued', (e) => {
+      this.$inertia.get('requeststocks', this.params, {
+        preserveState: true,
+        preserveScroll: true,
+        onFinish: (visit) => {
+          this.totalRecords = this.requestedStocks.total;
+          this.requestStockList = [];
+          this.currentWardStocksList = [];
+          this.storeRequestedStocksInContainer();
+          this.storeCurrentWardStocksInContainer();
+          this.loading = false;
+          this.formUpdateStatus.reset();
+        },
+      });
+    });
 
     this.storeItemsInController();
     this.storeRequestedStocksInContainer();
@@ -688,6 +707,7 @@ export default {
   },
   methods: {
     storeItemsInController() {
+      this.itemsList = []; // reset
       this.items.forEach((e) => {
         this.itemsList.push({
           cl2comb: e.cl2comb,
@@ -699,6 +719,8 @@ export default {
     // server request such as POST, the data in the table
     // is updated
     storeRequestedStocksInContainer() {
+      this.requestStockList = []; // reset
+
       this.requestedStocks.data.forEach((e) => {
         this.requestStockList.push({
           id: e.id,
@@ -717,6 +739,8 @@ export default {
     },
     // store current stocks
     storeCurrentWardStocksInContainer() {
+      this.currentWardStocksList = []; // reset
+
       moment.suppressDeprecationWarnings = true;
 
       this.currentWardStocks.forEach((e) => {
@@ -757,7 +781,6 @@ export default {
       this.updateData();
     },
     updateData() {
-      this.usersList = [];
       this.loading = true;
 
       this.$inertia.get('requeststocks', this.params, {

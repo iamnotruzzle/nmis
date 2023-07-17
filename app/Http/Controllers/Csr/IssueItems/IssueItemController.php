@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Csr\IssueItems;
 
+use App\Events\ItemIssued;
 use App\Http\Controllers\Controller;
 use App\Models\CsrStocks;
 use App\Models\Item;
@@ -181,6 +182,8 @@ class IssueItemController extends Controller
                 }
             }
         }
+
+        event(new ItemIssued('Item issued.'));
 
         return Redirect::route('issueitems.index');
     }
