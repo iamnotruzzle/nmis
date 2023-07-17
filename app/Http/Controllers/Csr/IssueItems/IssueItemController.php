@@ -80,8 +80,6 @@ class IssueItemController extends Controller
 
     public function store(Request $request)
     {
-        // dd('store');
-
         $requestStocksID = $request->request_stocks_id;
 
         $requestStocksContainer = $request->requestStockListDetails;
@@ -183,7 +181,7 @@ class IssueItemController extends Controller
             }
         }
 
-        event(new ItemIssued('Item issued.'));
+        event(new ItemIssued($location->location));
 
         return Redirect::route('issueitems.index');
     }

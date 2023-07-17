@@ -679,19 +679,25 @@ export default {
     // ItemIssued = name of the event
     // Channel = user doesn't need to authenticated or authorize
     window.Echo.channel('issued').listen('ItemIssued', (e) => {
-      this.$inertia.get('requeststocks', this.params, {
-        preserveState: true,
-        preserveScroll: true,
-        onFinish: (visit) => {
-          this.totalRecords = this.requestedStocks.total;
-          this.requestStockList = [];
-          this.currentWardStocksList = [];
-          this.storeRequestedStocksInContainer();
-          this.storeCurrentWardStocksInContainer();
-          this.loading = false;
-          this.formUpdateStatus.reset();
-        },
-      });
+      console.log(e);
+
+      // the condition is that if the callback message/location is == authwarcode then
+      // refresh the data
+      if (e.message == this.$page.props.authWardcode.wardcode) {
+        this.$inertia.get('requeststocks', this.params, {
+          preserveState: true,
+          preserveScroll: true,
+          onFinish: (visit) => {
+            this.totalRecords = this.requestedStocks.total;
+            this.requestStockList = [];
+            this.currentWardStocksList = [];
+            this.storeRequestedStocksInContainer();
+            this.storeCurrentWardStocksInContainer();
+            this.loading = false;
+            this.formUpdateStatus.reset();
+          },
+        });
+      }
     });
 
     this.storeItemsInController();

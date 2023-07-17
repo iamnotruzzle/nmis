@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\RequestStocks;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -9,6 +10,9 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class ItemIssued implements ShouldBroadcast
 {
@@ -16,24 +20,23 @@ class ItemIssued implements ShouldBroadcast
 
     public $message;
 
-    /**
-     * Create a new event instance.
-     *
-     * @return void
-     */
     public function __construct($message)
     {
         $this->message = $message;
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return \Illuminate\Broadcasting\Channel|array
-     */
+
     public function broadcastOn()
     {
         // Channel = user doesn't need to authenticated or authorize
         return new Channel('issued');
     }
+
+    // this function allows us to share data in the frontend
+    // public function broadcastWith()
+    // {
+    //     $latestIssuedRequest = RequestStocks::orderBy('id', 'DESC')->first();
+
+    //     return ['latestIssuedRequest' => $latestIssuedRequest];
+    // }
 }
