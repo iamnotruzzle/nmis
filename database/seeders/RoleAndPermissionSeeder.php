@@ -46,7 +46,20 @@ class RoleAndPermissionSeeder extends Seeder
         //     'remember_token' => Str::random(10),
         // ]);
 
-        $customUser1 = User::factory()->create([
+        $admin = User::factory()->create([
+            // 'firstName' => 'super',
+            // 'middleName' => null,
+            // 'lastName' => 'admin',
+            // 'suffix' => null,
+            'employeeid' => '000037',
+            // 'email' => 'sa@sa.com',
+            'image' => null,
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'designation' => 'admin',
+            'remember_token' => Str::random(10),
+        ]);
+
+        $csr = User::factory()->create([
             // 'firstName' => 'super',
             // 'middleName' => null,
             // 'lastName' => 'admin',
@@ -59,7 +72,7 @@ class RoleAndPermissionSeeder extends Seeder
             'remember_token' => Str::random(10),
         ]);
 
-        $customUser2 = User::factory()->create([
+        $wards = User::factory()->create([
             // 'firstName' => 'super',
             // 'middleName' => null,
             // 'lastName' => 'admin',
@@ -97,8 +110,9 @@ class RoleAndPermissionSeeder extends Seeder
         //     'remember_token' => Str::random(10),
         // ]);
 
-        $customUser1->assignRole($superAdminRole);
-        $customUser2->assignRole($superAdminRole);
+        $admin->assignRole($superAdminRole);
+        $csr->assignRole($superAdminRole);
+        $wards->assignRole($superAdminRole);
 
 
         // assign role to the created super-admin user

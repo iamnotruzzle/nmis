@@ -695,28 +695,32 @@ export default {
       this.form.approved_by = this.user.userDetail.employeeid;
       this.form.requestStockListDetails = this.requestStockListDetails;
 
-      if (this.isUpdate) {
-        this.form.put(route('issueitems.update', this.requestStockId), {
-          preserveScroll: true,
-          onSuccess: () => {
-            this.requestStockId = null;
-            this.createRequestStocksDialog = false;
-            this.cancel();
-            this.updateData();
-            this.updatedMsg();
-          },
-        });
-      } else {
-        this.form.post(route('issueitems.store'), {
-          preserveScroll: true,
-          onSuccess: () => {
-            this.requestStockId = null;
-            this.createRequestStocksDialog = false;
-            this.cancel();
-            this.updateData();
-            this.createdMsg();
-          },
-        });
+      // prevents submitting the form using enter key when this.disabled is true or the
+      // approved qty <= total stock
+      if (this.disabled != true) {
+        if (this.isUpdate) {
+          this.form.put(route('issueitems.update', this.requestStockId), {
+            preserveScroll: true,
+            onSuccess: () => {
+              this.requestStockId = null;
+              this.createRequestStocksDialog = false;
+              this.cancel();
+              this.updateData();
+              this.updatedMsg();
+            },
+          });
+        } else {
+          this.form.post(route('issueitems.store'), {
+            preserveScroll: true,
+            onSuccess: () => {
+              this.requestStockId = null;
+              this.createRequestStocksDialog = false;
+              this.cancel();
+              this.updateData();
+              this.createdMsg();
+            },
+          });
+        }
       }
     },
     cancel() {
