@@ -510,6 +510,26 @@ export default {
   // created will be initialize before mounted
   created() {},
   mounted() {
+    window.Echo.channel('issued').listen('ItemIssued', (e) => {
+      this.transferredStocksList = [];
+      this.loading = true;
+
+      if (e.message == this.$page.props.authWardcode.wardcode) {
+        this.$inertia.get('transferstock', this.params, {
+          preserveState: true,
+          preserveScroll: true,
+          onFinish: (visit) => {
+            this.wardStocksList = [];
+            this.transferredStocksList = [];
+            this.toReceiveList = [];
+            this.storeWardStockInContainer();
+            this.storeTransferredStockInContainer();
+            this.loading = false;
+          },
+        });
+      }
+    });
+
     this.storeLocationsInContainer();
     this.storeTransferredStockInContainer();
     this.storeWardStockInContainer();

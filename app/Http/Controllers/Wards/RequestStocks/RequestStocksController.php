@@ -163,6 +163,8 @@ class RequestStocksController extends Controller
                 'received_date' => Carbon::now(),
             ]);
 
+        event(new RequestStock('Item requested.'));
+
         return Redirect::route('requeststocks.index');
     }
 
