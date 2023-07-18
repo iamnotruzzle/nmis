@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Wards\RequestStocks;
 
+use App\Events\RequestStock;
 use App\Http\Controllers\Controller;
 use App\Models\Item;
 use App\Models\RequestStocks;
@@ -123,6 +124,8 @@ class RequestStocksController extends Controller
             ]);
         }
 
+        event(new RequestStock('Item requested.'));
+
         return Redirect::route('requeststocks.index');
     }
 
@@ -145,6 +148,8 @@ class RequestStocksController extends Controller
                 ]);
             }
         }
+
+        event(new RequestStock('Item requested.'));
 
         return Redirect::route('requeststocks.index');
     }
@@ -170,6 +175,8 @@ class RequestStocksController extends Controller
 
         // delete request stock details
         RequestStocksDetails::where('request_stocks_id', $requestStocksID)->delete();
+
+        event(new RequestStock('Item requested.'));
 
         return Redirect::route('requeststocks.index');
     }

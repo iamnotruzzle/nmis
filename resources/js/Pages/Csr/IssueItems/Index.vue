@@ -410,6 +410,7 @@ import Dropdown from 'primevue/dropdown';
 import AutoComplete from 'primevue/autocomplete';
 import Tag from 'primevue/tag';
 import moment from 'moment';
+import Echo from 'laravel-echo';
 
 export default {
   components: {
@@ -490,6 +491,22 @@ export default {
     this.rows = this.requestedStocks.per_page;
   },
   mounted() {
+    window.Echo.channel('request').listen('RequestStock', (e) => {
+      this.usersList = [];
+      this.loading = true;
+
+      this.$inertia.get('issueitems', this.params, {
+        preserveState: true,
+        preserveScroll: true,
+        onFinish: (visit) => {
+          this.totalRecords = this.requestedStocks.total;
+          this.requestStockList = [];
+          this.storeRequestedStocksInContainer();
+          this.loading = false;
+        },
+      });
+    });
+
     // console.log(this.requestedStocks);
     this.storeItemsInController();
     this.storeRequestedStocksInContainer();

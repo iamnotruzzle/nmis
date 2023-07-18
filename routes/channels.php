@@ -20,3 +20,7 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 Broadcast::channel('issued', function () {
     return true;
 });
+
+Broadcast::channel('request', function () {
+    return true;
+});
