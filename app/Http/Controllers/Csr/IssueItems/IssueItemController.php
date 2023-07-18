@@ -352,11 +352,16 @@ class IssueItemController extends Controller
                 ]);
         }
 
+        event(new ItemIssued($location->location));
+
         return Redirect::route('issueitems.index');
     }
 
     public function destroy(RequestStocks $requeststock, Request $request)
     {
+        // dd($requeststock);
+        // event(new ItemIssued($location->location));
+
         return Redirect::route('issueitems.index');
     }
 }

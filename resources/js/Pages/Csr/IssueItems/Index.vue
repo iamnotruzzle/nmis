@@ -144,7 +144,10 @@
         </Column>
         <Column header="ACTION">
           <template #body="slotProps">
-            <div v-if="slotProps.data.status != 'RECEIVED'">
+            <div
+              v-if="slotProps.data.status != 'RECEIVED'"
+              class="text-center"
+            >
               <Button
                 v-if="slotProps.data.status != 'FILLED'"
                 icon="pi pi-plus"
