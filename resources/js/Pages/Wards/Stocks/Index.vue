@@ -679,8 +679,6 @@ export default {
     // ItemIssued = name of the event
     // Channel = user doesn't need to authenticated or authorize
     window.Echo.channel('issued').listen('ItemIssued', (e) => {
-      console.log(e);
-
       // the condition is that if the callback message/location is == authwarcode then
       // refresh the data
       if (e.message == this.$page.props.authWardcode.wardcode) {
