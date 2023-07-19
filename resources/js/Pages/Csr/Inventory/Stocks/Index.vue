@@ -850,8 +850,8 @@ export default {
         this.stocksList.push({
           id: e.id,
           batch_no: e.batch_no,
-          chrgcode: e.fund_source === null ? '' : e.fund_source.chrgcode,
-          chrgdesc: e.fund_source === null ? '' : e.fund_source.chrgdesc,
+          chrgcode: e.type_of_charge === null ? '' : e.type_of_charge.chrgcode,
+          chrgdesc: e.type_of_charge === null ? '' : e.type_of_charge.chrgdesc,
           cl2comb: e.cl2comb,
           cl2desc: e.item_detail.cl2desc,
           brand_id: e.brand_detail.id,

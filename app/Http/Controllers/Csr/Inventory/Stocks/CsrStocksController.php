@@ -28,7 +28,7 @@ class CsrStocksController extends Controller
             ->orderBy('cl2desc', 'ASC')
             ->get(['cl2comb', 'cl2desc']);
 
-        $stocks = CsrStocks::with('itemDetail', 'brandDetail', 'fund_source:chrgcode,chrgdesc')
+        $stocks = CsrStocks::with('itemDetail', 'brandDetail', 'typeOfCharge:chrgcode,chrgdesc')
             ->whereHas('itemDetail', function ($q) use ($searchString) {
                 $q->where('cl2desc', 'LIKE', '%' . $searchString . '%')
                     ->orWhere('batch_no', 'LIKE', '%' . $searchString . '%');
