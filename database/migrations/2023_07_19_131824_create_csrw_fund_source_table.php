@@ -15,9 +15,9 @@ class CreateCsrwFundSourceTable extends Migration
     {
         Schema::create('csrw_fund_source', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('fsid');
+            $table->string('fsid');
             $table->string('fsName');
-            $table->bigInteger('cluster_code');
+            $table->string('cluster_code');
             $table->timestamps();
         });
     }

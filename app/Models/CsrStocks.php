@@ -55,4 +55,9 @@ class CsrStocks extends Model
         // return $this->hasOne(WardsStocks::class, 'stock_id', 'id')->with('item_details:cl2comb,cl2desc');
         return $this->hasOne(TypeOfCharge::class, 'chrgcode', 'chrgcode');
     }
+
+    public function fundSource()
+    {
+        return $this->hasOne(FundSource::class, 'fsid', 'chrgcode');
+    }
 }

@@ -248,13 +248,14 @@
             dataKey="chrgcode"
             optionLabel="chrgdesc"
             optionValue="chrgcode"
-            class="w-full mb-3"
+            class="w-full"
             :class="{ 'p-invalid': form.fund_source == '' }"
           />
           <small
             class="text-error"
             v-if="form.errors.fund_source"
           >
+            {{ form.errors.fund_source }}
           </small>
         </div>
         <div class="field">
@@ -769,7 +770,7 @@ export default {
     this.rows = this.stocks.per_page;
   },
   mounted() {
-    // console.log(moment.tz(moment(), 'Asia/Manila').format('LLL'));
+    // console.log(this.stocks);
 
     this.setMinimumDate();
     this.storeFundSourceInContainer();
@@ -859,8 +860,8 @@ export default {
         this.stocksList.push({
           id: e.id,
           batch_no: e.batch_no,
-          chrgcode: e.type_of_charge === null ? '' : e.type_of_charge.chrgcode,
-          chrgdesc: e.type_of_charge === null ? '' : e.type_of_charge.chrgdesc,
+          chrgcode: e.type_of_charge === null ? e.fund_source.fsid : e.type_of_charge.chrgcode,
+          chrgdesc: e.type_of_charge === null ? e.fund_source.fsName : e.type_of_charge.chrgdesc,
           cl2comb: e.cl2comb,
           cl2desc: e.item_detail.cl2desc,
           brand_id: e.brand_detail.id,
