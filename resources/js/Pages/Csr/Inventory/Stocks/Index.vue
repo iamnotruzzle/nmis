@@ -51,7 +51,7 @@
         </Column>
         <Column
           field="chrgdesc"
-          header="TRUST FUND"
+          header="FUND SOURCE"
         >
         </Column>
         <Column
@@ -237,12 +237,12 @@
           </small>
         </div>
         <div class="field">
-          <label for="trustFunds">Trust fund</label>
+          <label for="fundSource">Fund source</label>
           <Dropdown
-            id="trustFunds"
+            id="fundSource"
             required="true"
             v-model="form.chrgcode"
-            :options="trustFundList"
+            :options="fundSourceList"
             filter
             showClear
             dataKey="chrgcode"
@@ -712,7 +712,7 @@ export default {
       // expiration date
       from_ed: null,
       to_ed: null,
-      trustFundList: [],
+      fundSourceList: [],
       itemsList: [],
       brandsList: [],
       brandDropDownList: [],
@@ -772,7 +772,7 @@ export default {
     // console.log(moment.tz(moment(), 'Asia/Manila').format('LLL'));
 
     this.setMinimumDate();
-    this.storeTrustFundInContainer();
+    this.storeFundSourceInContainer();
     this.storeItemsInContainer();
     this.storeStocksInContainer();
     this.storeBrandsInContainer();
@@ -824,9 +824,9 @@ export default {
       } else {
       }
     },
-    storeTrustFundInContainer() {
+    storeFundSourceInContainer() {
       this.$page.props.typeOfCharge.forEach((e) => {
-        this.trustFundList.push({
+        this.fundSourceList.push({
           chrgcode: e.chrgcode,
           chrgdesc: e.chrgdesc,
           bentypcod: e.bentypcod,
@@ -850,8 +850,8 @@ export default {
         this.stocksList.push({
           id: e.id,
           batch_no: e.batch_no,
-          chrgcode: e.trust_fund === null ? '' : e.trust_fund.chrgcode,
-          chrgdesc: e.trust_fund === null ? '' : e.trust_fund.chrgdesc,
+          chrgcode: e.fund_source === null ? '' : e.fund_source.chrgcode,
+          chrgdesc: e.fund_source === null ? '' : e.fund_source.chrgdesc,
           cl2comb: e.cl2comb,
           cl2desc: e.item_detail.cl2desc,
           brand_id: e.brand_detail.id,

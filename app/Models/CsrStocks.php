@@ -50,7 +50,7 @@ class CsrStocks extends Model
         return $this->hasOne(WardsStocks::class, 'stock_id', 'id');
     }
 
-    public function trust_fund()
+    public function fund_source()
     {
         // return $this->hasOne(WardsStocks::class, 'stock_id', 'id')->with('item_details:cl2comb,cl2desc');
         return $this->hasOne(TypeOfCharge::class, 'chrgcode', 'chrgcode');

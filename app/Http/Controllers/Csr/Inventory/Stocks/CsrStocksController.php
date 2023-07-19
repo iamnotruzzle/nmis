@@ -28,7 +28,7 @@ class CsrStocksController extends Controller
             ->orderBy('cl2desc', 'ASC')
             ->get(['cl2comb', 'cl2desc']);
 
-        $stocks = CsrStocks::with('itemDetail', 'brandDetail', 'trust_fund:chrgcode,chrgdesc')
+        $stocks = CsrStocks::with('itemDetail', 'brandDetail', 'fund_source:chrgcode,chrgdesc')
             ->whereHas('itemDetail', function ($q) use ($searchString) {
                 $q->where('cl2desc', 'LIKE', '%' . $searchString . '%')
                     ->orWhere('batch_no', 'LIKE', '%' . $searchString . '%');
@@ -114,7 +114,7 @@ class CsrStocksController extends Controller
 
         $stock = CsrStocks::create([
             'batch_no' => $request->batch_no,
-            'chrgcode' => $request->chrgcode,
+            'chrgcode' => $request->fund_source,
             'cl2comb' => $request->cl2comb,
             'brand' => $request->brand,
             'quantity' => $request->quantity,
@@ -169,7 +169,7 @@ class CsrStocksController extends Controller
 
         $updated = $csrstock->update([
             'batch_no' => $request->batch_no,
-            'chrgcode' => $request->chrgcode,
+            'chrgcode' => $request->fund_source,
             'cl2comb' => $request->cl2comb,
             'brand' => $request->brand,
             'quantity' => $request->quantity,
