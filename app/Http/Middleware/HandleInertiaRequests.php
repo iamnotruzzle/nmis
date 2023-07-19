@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\FundSource;
 use App\Models\Location;
 use App\Models\LoginHistory;
 use App\Models\TypeOfCharge;
@@ -96,6 +97,9 @@ class HandleInertiaRequests extends Middleware
                 return TypeOfCharge::where('chrgstat', 'A')
                     ->where('chrgtable', 'NONDR')
                     ->get(['chrgcode', 'chrgdesc', 'bentypcod', 'chrgtable']);
+            },
+            'fundSource' => function () {
+                return FundSource::get(['id', 'fsid', 'fsName', 'cluster_code']);
             }
         ]);
     }

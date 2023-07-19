@@ -833,6 +833,15 @@ export default {
           chrgtable: e.chrgtable,
         });
       });
+
+      this.$page.props.fundSource.forEach((e) => {
+        this.fundSourceList.push({
+          chrgcode: e.fsid,
+          chrgdesc: e.fsName,
+          bentypcod: null,
+          chrgtable: null,
+        });
+      });
     },
     storeItemsInContainer() {
       this.items.forEach((e) => {
