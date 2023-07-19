@@ -94,7 +94,7 @@ class HandleInertiaRequests extends Middleware
             },
             'typeOfCharge' => function () {
                 return TypeOfCharge::where('chrgstat', 'A')
-                    ->where('fund', 'Y')
+                    ->where('chrgtable', 'NONDR')
                     ->get(['chrgcode', 'chrgdesc', 'bentypcod', 'chrgtable']);
             }
         ]);
