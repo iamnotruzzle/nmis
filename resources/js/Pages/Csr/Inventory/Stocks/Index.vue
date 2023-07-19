@@ -241,7 +241,7 @@
           <Dropdown
             id="fundSource"
             required="true"
-            v-model="form.chrgcode"
+            v-model="form.fund_source"
             :options="fundSourceList"
             filter
             showClear
@@ -249,11 +249,11 @@
             optionLabel="chrgdesc"
             optionValue="chrgcode"
             class="w-full mb-3"
-            :class="{ 'p-invalid': form.chrgcode == '' }"
+            :class="{ 'p-invalid': form.fund_source == '' }"
           />
           <small
             class="text-error"
-            v-if="form.errors.chrgcode"
+            v-if="form.errors.fund_source"
           >
           </small>
         </div>
@@ -735,7 +735,7 @@ export default {
       ],
       form: this.$inertia.form({
         batch_no: null,
-        chrgcode: null,
+        fund_source: null,
         cl2comb: null,
         brand: null,
         cl2desc: null,
@@ -914,7 +914,7 @@ export default {
       this.createStockDialog = true;
       this.stockId = item.id;
       this.form.batch_no = item.batch_no;
-      this.form.chrgcode = item.chrgcode;
+      this.form.fund_source = item.chrgcode;
       this.form.cl2comb = item.cl2comb;
       this.form.brand = item.brand_id;
       this.form.quantity = item.quantity;

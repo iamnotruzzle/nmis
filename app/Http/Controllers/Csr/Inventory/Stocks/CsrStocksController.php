@@ -114,7 +114,7 @@ class CsrStocksController extends Controller
 
         $stock = CsrStocks::create([
             'batch_no' => $request->batch_no,
-            'chrgcode' => $request->chrgcode,
+            'chrgcode' => $request->fund_source,
             'cl2comb' => $request->cl2comb,
             'brand' => $request->brand,
             'quantity' => $request->quantity,
