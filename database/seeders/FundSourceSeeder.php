@@ -14,7 +14,7 @@ class FundSourceSeeder extends Seeder
      */
     public function run()
     {
-        FundSource::create([
+        $fundSource = [
             [
                 'fsid' => 1,
                 'fsName' => 'Regular Agency Fund',
@@ -150,6 +150,8 @@ class FundSourceSeeder extends Seeder
                 'fsName' => 'Contingency Fund',
                 'cluster_code' => 05,
             ],
-        ]);
+        ];
+
+        FundSource::insert($fundSource);
     }
 }
