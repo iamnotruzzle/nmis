@@ -1,5 +1,6 @@
 <?php
 
+use App\Exports\CsrStocksReport;
 use App\Http\Controllers\Csr\Inventory\Categories\CategoryController;
 use App\Http\Controllers\Csr\Inventory\ItemPrice\ItemPriceController;
 use App\Http\Controllers\Csr\Inventory\Items\ItemController;
@@ -7,6 +8,7 @@ use App\Http\Controllers\Csr\Inventory\Stocks\Brand\BrandController;
 use App\Http\Controllers\Csr\Inventory\Stocks\CsrStocksController;
 use App\Http\Controllers\Csr\IssueItems\IssueItemController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Reports\Csr\CsrStocksReportController;
 use App\Http\Controllers\Users\UserController;
 use App\Http\Controllers\Wards\Patients\PatientChargeController;
 use App\Http\Controllers\Wards\Patients\WardPatientsController;
@@ -16,7 +18,7 @@ use App\Http\Controllers\Wards\TransferStock\TransferStockController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+use Maatwebsite\Excel\Facades\Excel;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,3 +60,6 @@ Route::resource('wardsstockslogs', WardsStocksLogsController::class)->middleware
 Route::resource('transferstock', TransferStockController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
 Route::put('transferstock', [TransferStockController::class, 'updatetransferstatus', 'designation_ward'])->name('transferstock.updatetransferstatus');
 // end ward routes
+
+
+Route::get('csrstocks/export/', [CsrStocksReportController::class, 'export']);
