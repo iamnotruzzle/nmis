@@ -3,6 +3,7 @@
 use App\Http\Controllers\Csr\Inventory\Categories\CategoryController;
 use App\Http\Controllers\Csr\Inventory\ItemPrice\ItemPriceController;
 use App\Http\Controllers\Csr\Inventory\Items\ItemController;
+use App\Http\Controllers\Csr\Inventory\Reports\CsrReportsController;
 use App\Http\Controllers\Csr\Inventory\Stocks\Brand\BrandController;
 use App\Http\Controllers\Csr\Inventory\Stocks\CsrStocksController;
 use App\Http\Controllers\Csr\IssueItems\IssueItemController;

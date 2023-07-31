@@ -71,11 +71,17 @@ class CsrStocksController extends Controller
             ->orderBy('expiration_date', 'asc')
             ->paginate(15);
 
-        // dd($stocks);
-
+        // brands
         $brands = Brand::get();
 
-        // end stock reports *****************
+        $csr_report = DB::table('csrw_csr_stocks')
+            ->join('hclass2', 'csrw_csr_stocks.cl2comb', '=', 'hclass2.cl2comb')
+            ->select('hclass2.cl2comb', 'hclass2.cl2desc', DB::raw('SUM(csrw_csr_stocks.quantity) as quantity'))
+            ->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
+            ->groupBy('hclass2.cl2comb', 'hclass2.cl2desc')
+            ->get();
+
+        dd($csr_report);
 
         return Inertia::render('Csr/Inventory/Stocks/Index', [
             'items' => $items,
