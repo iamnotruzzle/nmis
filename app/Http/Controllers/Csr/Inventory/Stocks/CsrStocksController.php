@@ -75,24 +75,12 @@ class CsrStocksController extends Controller
 
         $brands = Brand::get();
 
-        // stock reports ********************
-
-        // TODO add date filter
-        $stockReports = DB::table('csrw_csr_stocks_report')
-            ->join('hclass2', 'csrw_csr_stocks_report.cl2comb', '=', 'hclass2.cl2comb')
-            ->select(DB::raw("hclass2.cl2desc, SUM(csrw_csr_stocks_report.qty) as quantity"))
-            ->groupBy('csrw_csr_stocks_report.cl2comb', 'hclass2.cl2desc')
-            ->get();
-
-        // dd($stockReports);
-
         // end stock reports *****************
 
         return Inertia::render('Csr/Inventory/Stocks/Index', [
             'items' => $items,
             'stocks' => $stocks,
             'brands' => $brands,
-            'stockReports' => $stockReports,
         ]);
     }
 
