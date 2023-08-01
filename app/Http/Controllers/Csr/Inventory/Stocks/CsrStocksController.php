@@ -23,14 +23,14 @@ class CsrStocksController extends Controller
         $searchString = $request->search;
 
 
-        $items = Item::with('unitOfMeasurement')
+        $items = Item::with('unit')
             ->where('cl2stat', 'A')
             ->orderBy('cl2desc', 'ASC')
             ->get();
 
         // dd($items);
 
-        $stocks = CsrStocks::with('unitOfMeasurement:uomcode,uomdesc', 'itemDetail', 'brandDetail', 'typeOfCharge:chrgcode,chrgdesc', 'fundSource:id,fsid,fsName,cluster_code')
+        $stocks = CsrStocks::with('unit:uomcode,uomdesc', 'itemDetail', 'brandDetail', 'typeOfCharge:chrgcode,chrgdesc', 'fundSource:id,fsid,fsName,cluster_code')
             ->whereHas('itemDetail', function ($q) use ($searchString) {
                 $q->where('cl2desc', 'LIKE', '%' . $searchString . '%')
                     ->orWhere('batch_no', 'LIKE', '%' . $searchString . '%');

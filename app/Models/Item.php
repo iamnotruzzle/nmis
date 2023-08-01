@@ -50,7 +50,7 @@ class Item extends Model
     }
 
     // medical supplies unit
-    public function unitOfMeasurement()
+    public function unit()
     {
         return $this->hasOne(UnitOfMeasurement::class, 'uomcode', 'uomcode');
     }

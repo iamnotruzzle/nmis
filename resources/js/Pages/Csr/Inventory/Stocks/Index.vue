@@ -869,8 +869,8 @@ export default {
         this.itemsList.push({
           cl2comb: e.cl2comb,
           cl2desc: e.cl2desc,
-          uomcode: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomcode,
-          uomdesc: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomdesc,
+          uomcode: e.unit == null ? null : e.unit.uomcode,
+          uomdesc: e.unit == null ? null : e.unit.uomdesc,
         });
       });
     },
@@ -886,8 +886,8 @@ export default {
           chrgdesc: e.type_of_charge === null ? e.fund_source.fsName : e.type_of_charge.chrgdesc,
           cl2comb: e.cl2comb,
           cl2desc: e.item_detail.cl2desc,
-          uomcode: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomcode,
-          uomdesc: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomdesc,
+          uomcode: e.unit == null ? null : e.unit.uomcode,
+          uomdesc: e.unit == null ? null : e.unit.uomdesc,
           brand_id: e.brand_detail.id,
           brand_name: e.brand_detail.name,
           quantity: e.quantity,
