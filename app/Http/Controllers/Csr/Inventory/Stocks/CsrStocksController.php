@@ -23,11 +23,14 @@ class CsrStocksController extends Controller
         $searchString = $request->search;
 
 
-        $items = Item::where('cl2stat', 'A')
+        $items = Item::with('unitOfMeasurement')
+            ->where('cl2stat', 'A')
             ->orderBy('cl2desc', 'ASC')
-            ->get(['cl2comb', 'cl2desc']);
+            ->get();
 
-        $stocks = CsrStocks::with('itemDetail', 'brandDetail', 'typeOfCharge:chrgcode,chrgdesc', 'fundSource:id,fsid,fsName,cluster_code')
+        // dd($items);
+
+        $stocks = CsrStocks::with('unitOfMeasurement:uomcode,uomdesc', 'itemDetail', 'brandDetail', 'typeOfCharge:chrgcode,chrgdesc', 'fundSource:id,fsid,fsName,cluster_code')
             ->whereHas('itemDetail', function ($q) use ($searchString) {
                 $q->where('cl2desc', 'LIKE', '%' . $searchString . '%')
                     ->orWhere('batch_no', 'LIKE', '%' . $searchString . '%');
@@ -114,6 +117,7 @@ class CsrStocksController extends Controller
             'batch_no' => $request->batch_no,
             'chrgcode' => $request->fund_source,
             'cl2comb' => $request->cl2comb,
+            'uomcode' => $request->uomcode,
             'brand' => $request->brand,
             'quantity' => $request->quantity,
             'manufactured_date' => $request->manufactured_date == null ? null : Carbon::parse($request->manufactured_date)->setTimezone('Asia/Manila'),
@@ -126,6 +130,7 @@ class CsrStocksController extends Controller
             'batch_no' => $stock->batch_no,
             'chrgcode' => $stock->chrgcode,
             'cl2comb' => $stock->cl2comb,
+            'uomcode' => $stock->uomcode,
             'brand' => $stock->brand,
             'prev_qty' => 0,
             'new_qty' => $stock->quantity,
@@ -162,6 +167,7 @@ class CsrStocksController extends Controller
             'batch_no' => $request->batch_no,
             'chrgcode' => $request->fund_source,
             'cl2comb' => $request->cl2comb,
+            'uomcode' => $request->uomcode,
             'brand' => $request->brand,
             'quantity' => $request->quantity,
             'manufactured_date' => $request->manufactured_date == null ? null : Carbon::parse($request->manufactured_date)->setTimezone('Asia/Manila'),
@@ -174,6 +180,7 @@ class CsrStocksController extends Controller
             'batch_no' => $prevStockDetails->batch_no,
             'chrgcode' => $prevStockDetails->chrgcode,
             'cl2comb' => $prevStockDetails->cl2comb,
+            'uomcode' => $prevStockDetails->uomcode,
             'brand' => $prevStockDetails->brand,
             'prev_qty' => $prevStockDetails->quantity,
             'new_qty' => $request->quantity,
@@ -206,6 +213,7 @@ class CsrStocksController extends Controller
             'batch_no' => $prevStockDetails->batch_no,
             'chrgcode' => $prevStockDetails->chrgcode,
             'cl2comb' => $prevStockDetails->cl2comb,
+            'uomcode' => $prevStockDetails->uomcode,
             'brand' => $prevStockDetails->brand,
             'prev_qty' => $prevStockDetails->quantity,
             'new_qty' => $prevStockDetails->quantity,

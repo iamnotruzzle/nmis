@@ -10,7 +10,7 @@ class Item extends Model
     use HasFactory;
 
     protected $table = 'hclass2';
-    protected $primaryKey = 'cl2comb';
+    // protected $primaryKey = 'cl2comb';
     public $incrementing = false;
     // declare primary as string
     protected $keyType = 'string';
@@ -50,7 +50,7 @@ class Item extends Model
     }
 
     // medical supplies unit
-    public function unit()
+    public function unitOfMeasurement()
     {
         return $this->hasOne(UnitOfMeasurement::class, 'uomcode', 'uomcode');
     }

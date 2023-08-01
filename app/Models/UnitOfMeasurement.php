@@ -10,7 +10,7 @@ class UnitOfMeasurement extends Model
     use HasFactory;
 
     protected $table = 'huom';
-    protected $primaryKey = 'uomcode';
+    // protected $primaryKey = 'uomcode';
     public $incrementing = false;
 
     protected $keyType = 'string';

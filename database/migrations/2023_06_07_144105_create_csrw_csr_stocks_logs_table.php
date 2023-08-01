@@ -18,6 +18,7 @@ class CreateCsrwCsrStocksLogsTable extends Migration
             $table->bigInteger('stock_id');
             $table->string('batch_no');
             $table->string('cl2comb');
+            $table->string('uomcode')->nullable();
             $table->bigInteger('brand')->nullable();
             $table->string('chrgcode')->nullable();
             $table->integer('prev_qty');

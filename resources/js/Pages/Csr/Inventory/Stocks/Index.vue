@@ -71,6 +71,11 @@
         >
         </Column>
         <Column
+          field="uomdesc"
+          header="Unit"
+        >
+        </Column>
+        <Column
           field="brand_name"
           header="BRAND"
         >
@@ -282,6 +287,14 @@
           >
             The item field is required.
           </small>
+        </div>
+        <div class="field">
+          <label for="quantity">Unit</label>
+          <InputText
+            id="quantity"
+            v-model.trim="selectedItemsUomDesc"
+            readonly
+          />
         </div>
         <div class="field">
           <label for="brand">Brand</label>
@@ -739,10 +752,12 @@ export default {
           value: 'I',
         },
       ],
+      selectedItemsUomDesc: null,
       form: this.$inertia.form({
         batch_no: null,
         fund_source: null,
         cl2comb: null,
+        uomcode: null,
         brand: null,
         cl2desc: null,
         quantity: null,
@@ -775,7 +790,7 @@ export default {
     this.rows = this.stocks.per_page;
   },
   mounted() {
-    // console.log(this.stocks);
+    // console.log(this.items);
 
     this.setMinimumDate();
     this.storeFundSourceInContainer();
@@ -787,9 +802,6 @@ export default {
     this.loading = false;
   },
   methods: {
-    generateReport() {
-      this.$inertia.get('csrstocks/export/');
-    },
     tzone(date) {
       if (date == null || date == '') {
         return null;
@@ -857,6 +869,8 @@ export default {
         this.itemsList.push({
           cl2comb: e.cl2comb,
           cl2desc: e.cl2desc,
+          uomcode: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomcode,
+          uomdesc: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomdesc,
         });
       });
     },
@@ -872,6 +886,8 @@ export default {
           chrgdesc: e.type_of_charge === null ? e.fund_source.fsName : e.type_of_charge.chrgdesc,
           cl2comb: e.cl2comb,
           cl2desc: e.item_detail.cl2desc,
+          uomcode: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomcode,
+          uomdesc: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomdesc,
           brand_id: e.brand_detail.id,
           brand_name: e.brand_detail.name,
           quantity: e.quantity,
@@ -933,6 +949,7 @@ export default {
       this.form.batch_no = item.batch_no;
       this.form.fund_source = item.chrgcode;
       this.form.cl2comb = item.cl2comb;
+      this.form.uomcode = item.uomcode;
       this.form.brand = item.brand_id;
       this.form.quantity = item.quantity;
       this.form.manufactured_date = item.manufactured_date;
@@ -1132,6 +1149,20 @@ export default {
         this.to_ed = null;
       }
       this.updateData();
+    },
+    'form.cl2comb': function (val) {
+      this.selectedItemsUomDesc = null;
+
+      this.itemsList.forEach((e) => {
+        if (e.cl2comb == val) {
+          if (e.uomdesc != null) {
+            this.selectedItemsUomDesc = e.uomdesc;
+            this.form.uomcode = e.uomcode;
+          } else {
+            this.selectedItemsUomDesc = null;
+          }
+        }
+      });
     },
   },
 };

@@ -20,6 +20,7 @@ class CsrStocks extends Model
         'id',
         'batch_no',
         'cl2comb',
+        'uomcode',
         'brand',
         'chrgcode',
         'quantity',
@@ -58,5 +59,11 @@ class CsrStocks extends Model
     public function fundSource()
     {
         return $this->hasOne(FundSource::class, 'fsid', 'chrgcode');
+    }
+
+    // medical supplies unit
+    public function unitOfMeasurement()
+    {
+        return $this->hasOne(UnitOfMeasurement::class, 'uomcode', 'uomcode');
     }
 }
