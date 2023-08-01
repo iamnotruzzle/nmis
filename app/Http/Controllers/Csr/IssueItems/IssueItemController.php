@@ -137,7 +137,6 @@ class IssueItemController extends Controller
                     $row::where('id', $stock->id)
                         ->update([
                             'quantity' => $newStockQty,
-                            'deployed' => 'yes'
                         ]);
 
                     RequestStocks::where('id', $requestStocksID)
@@ -169,7 +168,6 @@ class IssueItemController extends Controller
                     $row::where('id', $stock->id)
                         ->update([
                             'quantity' => 0,
-                            'deployed' => 'yes'
                         ]);
 
                     RequestStocks::where('id', $requestStocksID)
@@ -284,7 +282,6 @@ class IssueItemController extends Controller
                     $row::where('id', $stock->id)
                         ->update([
                             'quantity' => $newStockQty,
-                            'deployed' => 'yes'
                         ]);
 
                     // RequestStocks::where('id', $requestStocksID)
@@ -316,7 +313,6 @@ class IssueItemController extends Controller
                     $row::where('id', $stock->id)
                         ->update([
                             'quantity' => 0,
-                            'deployed' => 'yes'
                         ]);
 
                     // RequestStocks::where('id', $requestStocksID)

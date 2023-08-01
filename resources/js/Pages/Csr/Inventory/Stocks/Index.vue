@@ -194,28 +194,22 @@
         </Column>
         <Column header="ACTION">
           <template #body="slotProps">
-            <div
-              v-if="slotProps.data.deployed == 'no'"
-              class="flex flex-row"
-            >
-              <Button
-                icon="pi pi-pencil"
-                class="mr-1"
-                rounded
-                text
-                severity="warning"
-                @click="editItem(slotProps.data)"
-              />
+            <Button
+              icon="pi pi-pencil"
+              class="mr-1"
+              rounded
+              text
+              severity="warning"
+              @click="editItem(slotProps.data)"
+            />
 
-              <Button
-                icon="pi pi-trash"
-                rounded
-                text
-                severity="danger"
-                @click="confirmDeleteItem(slotProps.data)"
-              />
-            </div>
-            <span v-else></span>
+            <Button
+              icon="pi pi-trash"
+              rounded
+              text
+              severity="danger"
+              @click="confirmDeleteItem(slotProps.data)"
+            />
           </template>
         </Column>
       </DataTable>
@@ -884,7 +878,6 @@ export default {
           manufactured_date: e.manufactured_date === null ? '' : e.manufactured_date,
           delivered_date: e.delivered_date === null ? '' : e.delivered_date,
           expiration_date: e.expiration_date === null ? '' : e.expiration_date,
-          deployed: e.deployed,
         });
       });
       //   console.log(this.stocks);

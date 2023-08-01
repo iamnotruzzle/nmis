@@ -74,14 +74,18 @@ class CsrStocksController extends Controller
         // brands
         $brands = Brand::get();
 
+        //////////////////////////////////////////////////
+        $report = [];
+
         $csr_report = DB::table('csrw_csr_stocks')
             ->join('hclass2', 'csrw_csr_stocks.cl2comb', '=', 'hclass2.cl2comb')
             ->select('hclass2.cl2comb', 'hclass2.cl2desc', DB::raw('SUM(csrw_csr_stocks.quantity) as quantity'))
-            ->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
+            // ->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
             ->groupBy('hclass2.cl2comb', 'hclass2.cl2desc')
             ->get();
 
-        dd($csr_report);
+        // dd($csr_report);
+        //////////////////////////////////////////////////
 
         return Inertia::render('Csr/Inventory/Stocks/Index', [
             'items' => $items,
@@ -115,7 +119,6 @@ class CsrStocksController extends Controller
             'manufactured_date' => $request->manufactured_date == null ? null : Carbon::parse($request->manufactured_date)->setTimezone('Asia/Manila'),
             'delivered_date' => $request->delivered_date == null ? null : Carbon::parse($request->delivered_date)->setTimezone('Asia/Manila'),
             'expiration_date' => $request->expiration_date == null ? null : Carbon::parse($request->expiration_date)->setTimezone('Asia/Manila'),
-            'deployed' => 'no',
         ]);
 
         $stockLogs = CsrStocksLogs::create([
@@ -164,7 +167,6 @@ class CsrStocksController extends Controller
             'manufactured_date' => $request->manufactured_date == null ? null : Carbon::parse($request->manufactured_date)->setTimezone('Asia/Manila'),
             'delivered_date' => $request->delivered_date == null ? null : Carbon::parse($request->delivered_date)->setTimezone('Asia/Manila'),
             'expiration_date' => $request->expiration_date == null ? null : Carbon::parse($request->expiration_date)->setTimezone('Asia/Manila'),
-            'deployed' => 'no',
         ]);
 
         $stockLogs = CsrStocksLogs::create([
