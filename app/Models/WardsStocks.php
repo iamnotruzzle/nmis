@@ -23,6 +23,7 @@ class WardsStocks extends Model
         'brand',
         'chrgcode',
         'quantity',
+        'from',
         'manufactured_date',
         'delivered_date',
         'expiration_date',

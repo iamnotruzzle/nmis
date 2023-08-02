@@ -23,6 +23,7 @@ class CreateCsrwWardsStocksTable extends Migration
             $table->bigInteger('brand')->nullable();
             $table->string('chrgcode')->nullable();
             $table->integer('quantity');
+            $table->string('from');
             $table->dateTime('manufactured_date')->nullable();
             $table->dateTime('delivered_date')->nullable();
             $table->dateTime('expiration_date');
