@@ -199,22 +199,24 @@
         </Column>
         <Column header="ACTION">
           <template #body="slotProps">
-            <Button
-              icon="pi pi-pencil"
-              class="mr-1"
-              rounded
-              text
-              severity="warning"
-              @click="editItem(slotProps.data)"
-            />
+            <div class="flex flex-row m-0 p-0">
+              <Button
+                icon="pi pi-pencil"
+                class="mr-1"
+                rounded
+                text
+                severity="warning"
+                @click="editItem(slotProps.data)"
+              />
 
-            <Button
-              icon="pi pi-trash"
-              rounded
-              text
-              severity="danger"
-              @click="confirmDeleteItem(slotProps.data)"
-            />
+              <Button
+                icon="pi pi-trash"
+                rounded
+                text
+                severity="danger"
+                @click="confirmDeleteItem(slotProps.data)"
+              />
+            </div>
           </template>
         </Column>
       </DataTable>

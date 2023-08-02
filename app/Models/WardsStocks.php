@@ -50,7 +50,7 @@ class WardsStocks extends Model
 
     public function item_details()
     {
-        return $this->hasOne(Item::class, 'cl2comb', 'cl2comb');
+        return $this->hasOne(Item::class, 'cl2comb', 'cl2comb')->with('unit:uomcode,uomdesc');
     }
 
     public function prices()
