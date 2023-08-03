@@ -7,6 +7,7 @@ use App\Http\Controllers\Csr\Inventory\Reports\CsrReportsController;
 use App\Http\Controllers\Csr\Inventory\Stocks\Brand\BrandController;
 use App\Http\Controllers\Csr\Inventory\Stocks\CsrStocksController;
 use App\Http\Controllers\Csr\IssueItems\IssueItemController;
+use App\Http\Controllers\Csr\Reports\ReportsController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Reports\Csr\CsrStocksReportController;
 use App\Http\Controllers\Users\UserController;
@@ -46,6 +47,7 @@ Route::resource('itemprices', ItemPriceController::class)->middleware(['auth:san
 Route::resource('brands', BrandController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('csrstocks', CsrStocksController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('issueitems', IssueItemController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
+Route::resource('csrreports', ReportsController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index']);
 // end csr routes
 
 

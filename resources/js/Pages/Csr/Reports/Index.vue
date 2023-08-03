@@ -1,0 +1,143 @@
+<template>
+  <app-layout>
+    <Head title="InvenTrackr - Reports" />
+
+    <div class="card">
+      <table>
+        <col />
+        <colgroup span="2"></colgroup>
+        <colgroup span="2"></colgroup>
+        <tr>
+          <td rowspan="2"></td>
+          <th
+            colspan="2"
+            scope="colgroup"
+          >
+            Mars
+          </th>
+          <th
+            colspan="2"
+            scope="colgroup"
+          >
+            Venus
+          </th>
+        </tr>
+        <tr>
+          <th scope="col">Produced</th>
+          <th scope="col">Sold</th>
+          <th scope="col">Produced</th>
+          <th scope="col">Sold</th>
+        </tr>
+        <tr>
+          <th scope="row">Teddy Bears</th>
+          <td>50,000</td>
+          <td>30,000</td>
+          <td>100,000</td>
+          <td>80,000</td>
+        </tr>
+        <tr>
+          <th scope="row">Board Games</th>
+          <td>10,000</td>
+          <td>5,000</td>
+          <td>12,000</td>
+          <td>9,000</td>
+        </tr>
+      </table>
+    </div>
+  </app-layout>
+</template>
+
+<script>
+import { Head } from '@inertiajs/vue3';
+import AppLayout from '@/Layouts/AppLayout.vue';
+import moment from 'moment';
+
+export default {
+  components: {
+    AppLayout,
+    Head,
+  },
+  props: {
+    // users: Object,
+  },
+  data() {
+    return {
+      options: {},
+      params: {},
+      from: null,
+      to: null,
+      reportsContainer: [],
+    };
+  },
+  mounted() {
+    this.storeReportsInContainer();
+  },
+  methods: {
+    // use storeUserInContainer() function so that every time you make
+    // server request such as POST, the data in the table
+    // is updated
+    storeReportsInContainer() {
+      //   this.usersList.push({
+      //     id: e.id,
+      //     image: e.image,
+      //     employeeid: e.employeeid,
+      //     designation: e.designation,
+      //     role: e.roles[0].name,
+      //     created_at: e.created_at,
+      //   });
+    },
+
+    updateData() {
+      this.usersList = [];
+      this.loading = true;
+
+      this.$inertia.get('csrreports', this.params, {
+        preserveState: true,
+        preserveScroll: true,
+        onFinish: (visit) => {
+          this.totalRecords = this.users.total;
+          this.usersList = [];
+          this.storeUserInContainer();
+          this.loading = false;
+        },
+      });
+    },
+    getLocalDateString(utcStr) {
+      const date = new Date(utcStr);
+      return (
+        date.getFullYear() +
+        '-' +
+        String(date.getMonth() + 1).padStart(2, '0') +
+        '-' +
+        String(date.getDate()).padStart(2, '0') +
+        ' ' +
+        String(date.getHours()).padStart(2, '0') +
+        ':' +
+        String(date.getMinutes()).padStart(2, '0')
+      );
+    },
+  },
+  watch: {
+    from: function (val) {
+      if (val != null) {
+        let from = this.getLocalDateString(val);
+        this.params.from = from;
+      } else {
+        this.params.from = null;
+        this.from = null;
+      }
+      this.updateData();
+    },
+    to: function (val) {
+      if (val != null) {
+        let to = this.getLocalDateString(val);
+        this.params.to = to;
+      } else {
+        this.params.to = null;
+        this.to = null;
+      }
+      this.updateData();
+    },
+  },
+};
+</script>

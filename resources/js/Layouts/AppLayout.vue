@@ -77,6 +77,13 @@ export default {
               comp: 'Csr/Inventory/Stocks/Index',
             },
             {
+              label: 'Reports',
+              icon: 'si-microsoftexcel',
+              to: 'csrreports',
+              prefix: 'csrreports',
+              comp: 'Csr/ReportsIndex',
+            },
+            {
               label: 'Issue Items',
               icon: 'md-handshake-sharp',
               to: 'issueitems',
@@ -216,6 +223,11 @@ export default {
       if (this.$page.props.user.designation == 'ward') {
         this.menu[0].items = this.menu[0].items.filter(function (obj) {
           return obj.to !== 'users';
+        });
+      }
+      if (this.$page.props.user.designation == 'ward') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'csrreports';
         });
       }
       // end ward
