@@ -7,6 +7,7 @@ use App\Models\Brand;
 use App\Models\CsrStocks;
 use App\Models\CsrStocksLogs;
 use App\Models\Item;
+use App\Models\WardsStocks;
 use Carbon\Carbon;
 // use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Validation\Rule;
@@ -82,12 +83,20 @@ class CsrStocksController extends Controller
 
         $csr_report = DB::table('csrw_csr_stocks')
             ->join('hclass2', 'csrw_csr_stocks.cl2comb', '=', 'hclass2.cl2comb')
-            ->select('hclass2.cl2comb', 'hclass2.cl2desc', DB::raw('SUM(csrw_csr_stocks.quantity) as quantity'))
+            ->leftJoin('huom', 'csrw_csr_stocks.uomcode', '=', 'huom.uomcode')
+            ->select('hclass2.cl2comb', 'hclass2.cl2desc', 'huom.uomdesc', DB::raw('SUM(csrw_csr_stocks.quantity) as quantity'))
             // ->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
-            ->groupBy('hclass2.cl2comb', 'hclass2.cl2desc')
+            ->groupBy('hclass2.cl2comb', 'hclass2.cl2desc', 'huom.uomdesc')
             ->get();
 
-        // dd($csr_report);
+        $ward_report_from_csr =
+            DB::table('csrw_wards_stocks')
+            ->select('cl2comb', DB::raw('SUM(quantity) as quantity'))
+            ->where('from', 'CSR')
+            ->groupBy('cl2comb')
+            ->get();
+
+        // dd($ward_report_from_csr);
         //////////////////////////////////////////////////
 
         return Inertia::render('Csr/Inventory/Stocks/Index', [
