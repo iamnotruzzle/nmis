@@ -81,7 +81,7 @@ export default {
               icon: 'si-microsoftexcel',
               to: 'csrreports',
               prefix: 'csrreports',
-              comp: 'Csr/ReportsIndex',
+              comp: 'Csr/Reports/Index',
             },
             {
               label: 'Issue Items',

@@ -3,6 +3,18 @@
     <Head title="InvenTrackr - Reports" />
 
     <div class="card">
+      <div class="mb-5 flex justify-content-between">
+        <span class="font-bold text-4xl">Reports</span>
+        <a
+          href="http://csrw.test/csrstocks/export/"
+          target="_blank"
+        >
+          <i
+            class="pi pi-file-excel"
+            :style="{ color: 'green', 'font-size': '2rem' }"
+          ></i>
+        </a>
+      </div>
       <table class="table">
         <col />
         <colgroup span="2"></colgroup>

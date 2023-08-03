@@ -24,18 +24,8 @@
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <div>
-              <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700 mr-2">STOCKS</span>
-              <a
-                href="http://csrw.test/csrstocks/export/"
-                target="_blank"
-              >
-                <i
-                  class="pi pi-file-excel"
-                  :style="{ color: 'green', 'font-size': '2rem' }"
-                ></i>
-              </a>
-            </div>
+            <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700 mr-2">STOCKS</span>
+
             <div>
               <span class="p-input-icon-left mr-2">
                 <i class="pi pi-search" />
