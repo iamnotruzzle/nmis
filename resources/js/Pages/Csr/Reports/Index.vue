@@ -16,70 +16,93 @@
         </a>
       </div>
       <table class="table">
-        <col />
+        <!-- <col />
         <colgroup span="2"></colgroup>
-        <colgroup span="2"></colgroup>
+        <colgroup span="2"></colgroup> -->
         <tr>
           <td
             rowspan="2"
             class="group-header"
           >
-            ITEM
+            ITEM DESCRIPTION
+          </td>
+          <td
+            rowspan="2"
+            class="group-header"
+          >
+            UNIT
+          </td>
+          <td
+            rowspan="2"
+            class="group-header"
+          >
+            UNIT COST
           </td>
           <th
+            scope="colgroup"
+            class="group-header"
+          >
+            CSR
+          </th>
+          <th
+            scope="colgroup"
+            class="group-header"
+          >
+            WARDS
+          </th>
+          <th
             colspan="2"
             scope="colgroup"
             class="group-header"
           >
-            Mars
-          </th>
-          <th
-            colspan="2"
-            scope="colgroup"
-            class="group-header"
-          >
-            Venus
+            TOTAL BEGINNING BALANCE
           </th>
         </tr>
+
         <tr>
           <th
             scope="col"
             class="header"
           >
-            Produced
+            QUANTITY
           </th>
           <th
             scope="col"
             class="header"
           >
-            Sold
+            QUANTITY
           </th>
           <th
             scope="col"
             class="header"
           >
-            Produced
+            TOTAL QUANTITY
           </th>
           <th
             scope="col"
             class="header"
           >
-            Sold
+            TOTAL COST
           </th>
         </tr>
+
         <tr>
-          <th scope="row">Teddy Bears</th>
-          <td>50,000</td>
-          <td>30,000</td>
-          <td>100,000</td>
-          <td>80,000</td>
+          <th scope="row">ITEM</th>
+          <td>UNIT</td>
+          <td>UNIT COST</td>
+          <td>CSR QUANTITY</td>
+          <td>WARDS QUANTITY</td>
+          <td>10000</td>
+          <td>10000</td>
         </tr>
         <tr>
-          <th scope="row">Board Games</th>
-          <td>10,000</td>
-          <td>5,000</td>
-          <td>12,000</td>
-          <td>9,000</td>
+          <th scope="row">ITEM</th>
+          <td>UNIT</td>
+          <td>UNIT COST</td>
+          <td>CSR QUANTITY</td>
+          <td>WARDS QUANTITY</td>
+          <td>10000</td>
+          <td>10000</td>
         </tr>
       </table>
     </div>
@@ -192,7 +215,7 @@ td {
   padding: 10px;
 }
 .group-header {
-  text-align: start;
+  text-align: center;
   font-size: 190%;
   font-weight: 900;
   background-color: rgb(0, 156, 120);
