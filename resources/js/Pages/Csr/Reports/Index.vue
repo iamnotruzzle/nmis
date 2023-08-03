@@ -3,7 +3,7 @@
     <Head title="InvenTrackr - Reports" />
 
     <div class="card">
-      <table>
+      <table class="table">
         <col />
         <colgroup span="2"></colgroup>
         <colgroup span="2"></colgroup>
@@ -12,21 +12,43 @@
           <th
             colspan="2"
             scope="colgroup"
+            class="group-header"
           >
             Mars
           </th>
           <th
             colspan="2"
             scope="colgroup"
+            class="group-header"
           >
             Venus
           </th>
         </tr>
         <tr>
-          <th scope="col">Produced</th>
-          <th scope="col">Sold</th>
-          <th scope="col">Produced</th>
-          <th scope="col">Sold</th>
+          <th
+            scope="col"
+            class="header"
+          >
+            Produced
+          </th>
+          <th
+            scope="col"
+            class="header"
+          >
+            Sold
+          </th>
+          <th
+            scope="col"
+            class="header"
+          >
+            Produced
+          </th>
+          <th
+            scope="col"
+            class="header"
+          >
+            Sold
+          </th>
         </tr>
         <tr>
           <th scope="row">Teddy Bears</th>
@@ -141,3 +163,25 @@ export default {
   },
 };
 </script>
+<style scoped>
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+table,
+th,
+td {
+  border: 1px solid;
+  padding: 10px;
+}
+.group-header {
+  text-align: start;
+  font-size: 190%;
+  font-weight: 900;
+  background-color: rgb(0, 156, 120);
+}
+.header {
+  font-size: 150%;
+  font-weight: 900;
+}
+</style>
