@@ -86,23 +86,17 @@
           </th>
         </tr>
 
-        <tr>
-          <th scope="row">ITEM</th>
-          <td>UNIT</td>
-          <td>UNIT COST</td>
-          <td>CSR QUANTITY</td>
-          <td>WARDS QUANTITY</td>
-          <td>10000</td>
-          <td>10000</td>
-        </tr>
-        <tr>
-          <th scope="row">ITEM</th>
-          <td>UNIT</td>
-          <td>UNIT COST</td>
-          <td>CSR QUANTITY</td>
-          <td>WARDS QUANTITY</td>
-          <td>10000</td>
-          <td>10000</td>
+        <tr
+          v-for="rc in reportsContainer"
+          :key="rc.cl2comb"
+        >
+          <th scope="row">{{ rc.item_description }}</th>
+          <td>{{ rc.unit }}</td>
+          <td>{{ rc.unit_cost }}</td>
+          <td>{{ rc.csr_quantity }}</td>
+          <td>{{ rc.ward_quantity }}</td>
+          <td>{{ rc.total_beg_total_quantity }}</td>
+          <td>{{ rc.total_beg_total_cost }}</td>
         </tr>
       </table>
     </div>
@@ -120,7 +114,7 @@ export default {
     Head,
   },
   props: {
-    // users: Object,
+    reports: Object,
   },
   data() {
     return {
@@ -132,21 +126,24 @@ export default {
     };
   },
   mounted() {
+    console.log(this.reports);
+
     this.storeReportsInContainer();
   },
   methods: {
-    // use storeUserInContainer() function so that every time you make
-    // server request such as POST, the data in the table
-    // is updated
     storeReportsInContainer() {
-      //   this.usersList.push({
-      //     id: e.id,
-      //     image: e.image,
-      //     employeeid: e.employeeid,
-      //     designation: e.designation,
-      //     role: e.roles[0].name,
-      //     created_at: e.created_at,
-      //   });
+      this.reports.forEach((e) => {
+        this.reportsContainer.push({
+          cl2comb: e.cl2comb,
+          item_description: e.item_description,
+          unit: e.unit,
+          unit_cost: e.unit_cost,
+          csr_quantity: e.csr_quantity,
+          ward_quantity: e.ward_quantity,
+          total_beg_total_quantity: e.total_beg_total_quantity,
+          total_beg_total_cost: e.total_beg_total_cost,
+        });
+      });
     },
 
     updateData() {
