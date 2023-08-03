@@ -8,7 +8,12 @@
         <colgroup span="2"></colgroup>
         <colgroup span="2"></colgroup>
         <tr>
-          <td rowspan="2"></td>
+          <td
+            rowspan="2"
+            class="group-header"
+          >
+            ITEM
+          </td>
           <th
             colspan="2"
             scope="colgroup"
