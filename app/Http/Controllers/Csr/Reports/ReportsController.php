@@ -21,6 +21,7 @@ class ReportsController extends Controller
             // ->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
             ->groupBy('hclass2.cl2comb', 'hclass2.cl2desc', 'huom.uomdesc', 'csrw_item_prices.selling_price')
             ->get();
+        // dd($csr_report);
 
         $ward_report_from_csr =
             DB::table('csrw_wards_stocks')
@@ -28,19 +29,13 @@ class ReportsController extends Controller
             ->where('from', 'CSR')
             ->groupBy('cl2comb')
             ->get();
-
-        // foreach ($csr_report as $item) {
-        //     $reports[] = (object) [
-        //         'cl2comb' => $item->cl2comb,
-        //         'item' => $item->cl2desc,
-        //         'unit' => $item->uomdesc,
-        //         'unit_cost' => $item->selling_price,
-        //         'csr_quantity' => $item->quantity,
-        //     ];
-        // }
+        // dd($ward_report_from_csr);
 
         for ($csr = 0; $csr < count($csr_report); $csr++) {
             foreach ($ward_report_from_csr as $ward) {
+                // if csr item has no match found in ward item
+                // then push all detail
+                // else only push csr info
                 if ($csr_report[$csr]->cl2comb == $ward->cl2comb) {
                     $reports[$csr] = (object) [
                         'cl2comb' => $csr_report[$csr]->cl2comb,
@@ -49,8 +44,8 @@ class ReportsController extends Controller
                         'unit_cost' => $csr_report[$csr]->selling_price,
                         'csr_quantity' => $csr_report[$csr]->quantity,
                         'ward_quantity' => $ward->quantity,
-                        'total_beg_total_quantity' => 0,
-                        'total_beg_total_cost' => 0,
+                        'total_beg_total_quantity' => $csr_report[$csr]->quantity + $ward->quantity,
+                        'total_beg_total_cost' => ($csr_report[$csr]->quantity + $ward->quantity) * $csr_report[$csr]->selling_price,
                     ];
                 } else {
                     $reports[$csr] = (object) [
@@ -60,8 +55,8 @@ class ReportsController extends Controller
                         'unit_cost' => $csr_report[$csr]->selling_price,
                         'csr_quantity' => $csr_report[$csr]->quantity,
                         'ward_quantity' => 0,
-                        'total_beg_total_quantity' => 0,
-                        'total_beg_total_cost' => 0,
+                        'total_beg_total_quantity' => $csr_report[$csr]->quantity + 0,
+                        'total_beg_total_cost' => ($csr_report[$csr]->quantity + 0) * $csr_report[$csr]->selling_price,
                     ];
                 }
             }
