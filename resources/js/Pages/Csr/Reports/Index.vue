@@ -217,11 +217,11 @@ td {
 .group-header {
   text-align: center;
   font-size: 190%;
-  font-weight: 900;
+  font-weight: 700;
   background-color: rgb(0, 156, 120);
 }
 .header {
   font-size: 150%;
-  font-weight: 900;
+  font-weight: 500;
 }
 </style>
