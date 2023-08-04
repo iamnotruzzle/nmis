@@ -57,6 +57,13 @@
           >
             TOTAL BEGINNING BALANCE
           </th>
+          <th
+            colspan="2"
+            scope="colgroup"
+            class="group-header"
+          >
+            SUPPLIES ISSUED TO WARDS
+          </th>
         </tr>
 
         <tr>
@@ -84,6 +91,18 @@
           >
             TOTAL COST
           </th>
+          <th
+            scope="col"
+            class="header"
+          >
+            TOTAL QUANTITY
+          </th>
+          <th
+            scope="col"
+            class="header"
+          >
+            TOTAL COST
+          </th>
         </tr>
 
         <tr
@@ -95,6 +114,9 @@
           <td>{{ rc.unit_cost }}</td>
           <td>{{ rc.csr_quantity }}</td>
           <td>{{ rc.ward_quantity }}</td>
+          <td>{{ rc.total_beg_total_quantity }}</td>
+          <td>{{ rc.total_beg_total_cost }}</td>
+          <!-- SUPPLIES ISSUED TO WARDS -->
           <td>{{ rc.total_beg_total_quantity }}</td>
           <td>{{ rc.total_beg_total_cost }}</td>
         </tr>
