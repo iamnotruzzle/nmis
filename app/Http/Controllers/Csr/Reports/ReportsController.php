@@ -25,7 +25,7 @@ class ReportsController extends Controller
 
         $ward_report_from_csr =
             DB::table('csrw_wards_stocks')
-            // ->select('cl2comb', DB::raw('SUM(quantity) as quantity'))
+            ->select('cl2comb', DB::raw('SUM(quantity) as quantity'))
             // ->where('from', 'CSR')
             ->groupBy('cl2comb')
             ->get();
