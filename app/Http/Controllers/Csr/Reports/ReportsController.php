@@ -13,14 +13,17 @@ class ReportsController extends Controller
     {
         $reports = array();
 
-        $csr_report = DB::table('csrw_csr_stocks')
-            ->join('hclass2', 'csrw_csr_stocks.cl2comb', '=', 'hclass2.cl2comb')
-            ->leftJoin('huom', 'csrw_csr_stocks.uomcode', '=', 'huom.uomcode')
-            ->leftJoin('csrw_item_prices', 'csrw_csr_stocks.cl2comb', '=', 'csrw_item_prices.cl2comb')
-            ->select('hclass2.cl2comb', 'hclass2.cl2desc', 'huom.uomdesc', 'csrw_item_prices.selling_price', DB::raw('SUM(csrw_csr_stocks.quantity) as quantity'))
-            // ->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
-            ->groupBy('hclass2.cl2comb', 'hclass2.cl2desc', 'huom.uomdesc', 'csrw_item_prices.selling_price')
-            ->get();
+        $csr_report = DB::select(
+            "SELECT hclass2.cl2comb,
+                    hclass2.cl2desc,
+                    huom.uomdesc,
+                    (SELECT TOP 1 selling_price FROM csrw_item_prices WHERE cl2comb = hclass2.cl2comb ORDER BY created_at DESC) as 'selling_price',
+                        SUM(csrw_csr_stocks.quantity) as quantity
+                        FROM csrw_csr_stocks
+                        JOIN hclass2 ON csrw_csr_stocks.cl2comb = hclass2.cl2comb
+                        LEFT JOIN huom ON csrw_csr_stocks.uomcode = huom.uomcode
+                        GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc;"
+        );
         // dd($csr_report);
 
         $ward_report_from_csr =
