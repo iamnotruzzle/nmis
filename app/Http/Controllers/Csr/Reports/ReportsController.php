@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Csr\Reports;
 
 use App\Http\Controllers\Controller;
+use App\Models\PatientChargeLogs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -33,6 +34,13 @@ class ReportsController extends Controller
             ->groupBy('cl2comb')
             ->get();
         // dd($ward_report_from_csr);
+
+        $patient_charge_logs =
+            DB::table('csrw_patient_charge_logs')
+            ->select('itemcode', DB::raw('SUM(quantity) as quantity'))
+            ->groupBy('itemcode')
+            ->get();
+        // dd($patient_charge_logs);
 
         for ($csr = 0; $csr < count($csr_report); $csr++) {
             foreach ($ward_report_from_csr as $ward) {
@@ -65,9 +73,19 @@ class ReportsController extends Controller
             }
         }
 
-
+        foreach ($reports as $r) {
+            foreach ($patient_charge_logs as $pcl) {
+                if ($pcl->itemcode == $r->cl2comb) {
+                    $r->consumption_quantity = $pcl->quantity;
+                    $r->consumption_total_cost = $r->unit_cost * $pcl->quantity;
+                } else {
+                    $r->consumption_quantity = 0;
+                    $r->consumption_total_cost = 0;
+                }
+            }
+        }
         // dd($reports);
-        //////////////////////////////////////////////////
+
 
         return Inertia::render('Csr/Reports/Index', [
             'reports' => $reports
