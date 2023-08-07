@@ -143,6 +143,7 @@
           <!-- SUPPLIES ISSUED TO WARDS -->
           <td>{{ rc.supplies_issued_to_wards_quantity }}</td>
           <td>{{ rc.supplies_issued_to_wards_total_cost }}</td>
+          <!-- CONSUMPTION -->
           <td>{{ rc.consumption_quantity }}</td>
           <td>{{ rc.consumption_total_cost }}</td>
         </tr>
