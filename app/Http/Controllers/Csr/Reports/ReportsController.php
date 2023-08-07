@@ -19,21 +19,34 @@ class ReportsController extends Controller
                     hclass2.cl2desc,
                     huom.uomdesc,
                     (SELECT TOP 1 selling_price FROM csrw_item_prices WHERE cl2comb = hclass2.cl2comb ORDER BY created_at DESC) as 'selling_price',
-                        SUM(csrw_csr_stocks.quantity) as quantity
-                        FROM csrw_csr_stocks
-                        JOIN hclass2 ON csrw_csr_stocks.cl2comb = hclass2.cl2comb
-                        LEFT JOIN huom ON csrw_csr_stocks.uomcode = huom.uomcode
-                        GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc;"
+                    SUM(csrw_csr_stocks.quantity) as csr_quantity,
+                    csrw_wards_stocks.wards_quantity
+                    FROM csrw_csr_stocks
+                    JOIN hclass2 ON csrw_csr_stocks.cl2comb = hclass2.cl2comb
+                    LEFT JOIN (
+                        SELECT ward.cl2comb, SUM(ward.quantity) as wards_quantity
+                        FROM csrw_wards_stocks as ward
+                        GROUP BY ward.cl2comb
+                    ) csrw_wards_stocks ON csrw_csr_stocks.cl2comb = csrw_wards_stocks.cl2comb
+                    LEFT JOIN huom ON csrw_csr_stocks.uomcode = huom.uomcode
+                    GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc, csrw_wards_stocks.wards_quantity
+                    ORDER BY hclass2.cl2desc ASC;"
         );
-        // dd($csr_report);
 
-        $ward_report_from_csr =
-            DB::table('csrw_wards_stocks')
-            ->select('cl2comb', DB::raw('SUM(quantity) as quantity'))
-            // ->where('from', 'CSR')
-            ->groupBy('cl2comb')
-            ->get();
-        // dd($ward_report_from_csr);
+        foreach ($csr_report as $e) {
+            $reports[] = (object) [
+                'cl2comb' => $e->cl2comb,
+                'item_description' => $e->cl2desc,
+                'unit' => $e->uomdesc,
+                'unit_cost' => $e->selling_price,
+                'csr_quantity' => $e->csr_quantity,
+                'ward_quantity' => $e->wards_quantity,
+                'total_beg_total_quantity' => $e->csr_quantity + $e->wards_quantity,
+                'total_beg_total_cost' => ($e->csr_quantity + $e->wards_quantity) * $e->selling_price,
+                'supplies_issued_to_wards_quantity' => $e->wards_quantity,
+                'supplies_issued_to_wards_total_cost' => $e->wards_quantity * $e->selling_price,
+            ];
+        }
 
         $patient_charge_logs =
             DB::table('csrw_patient_charge_logs')
@@ -41,37 +54,6 @@ class ReportsController extends Controller
             ->groupBy('itemcode')
             ->get();
         // dd($patient_charge_logs);
-
-        for ($csr = 0; $csr < count($csr_report); $csr++) {
-            foreach ($ward_report_from_csr as $ward) {
-                // if csr item has no match found in ward item
-                // then push all detail
-                // else only push csr info
-                if ($csr_report[$csr]->cl2comb == $ward->cl2comb) {
-                    $reports[$csr] = (object) [
-                        'cl2comb' => $csr_report[$csr]->cl2comb,
-                        'item_description' => $csr_report[$csr]->cl2desc,
-                        'unit' => $csr_report[$csr]->uomdesc,
-                        'unit_cost' => $csr_report[$csr]->selling_price,
-                        'csr_quantity' => $csr_report[$csr]->quantity,
-                        'ward_quantity' => $ward->quantity,
-                        'total_beg_total_quantity' => $csr_report[$csr]->quantity + $ward->quantity,
-                        'total_beg_total_cost' => ($csr_report[$csr]->quantity + $ward->quantity) * $csr_report[$csr]->selling_price,
-                    ];
-                } else {
-                    $reports[$csr] = (object) [
-                        'cl2comb' => $csr_report[$csr]->cl2comb,
-                        'item_description' => $csr_report[$csr]->cl2desc,
-                        'unit' => $csr_report[$csr]->uomdesc,
-                        'unit_cost' => $csr_report[$csr]->selling_price,
-                        'csr_quantity' => $csr_report[$csr]->quantity,
-                        'ward_quantity' => 0,
-                        'total_beg_total_quantity' => $csr_report[$csr]->quantity + 0,
-                        'total_beg_total_cost' => ($csr_report[$csr]->quantity + 0) * $csr_report[$csr]->selling_price,
-                    ];
-                }
-            }
-        }
 
         foreach ($reports as $r) {
             foreach ($patient_charge_logs as $pcl) {
@@ -84,8 +66,6 @@ class ReportsController extends Controller
                 }
             }
         }
-        // dd($reports);
-
 
         return Inertia::render('Csr/Reports/Index', [
             'reports' => $reports

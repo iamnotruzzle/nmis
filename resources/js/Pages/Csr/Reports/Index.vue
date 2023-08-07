@@ -64,21 +64,31 @@
           >
             SUPPLIES ISSUED TO WARDS
           </th>
+          <th
+            colspan="2"
+            scope="colgroup"
+            class="group-header"
+          >
+            CONSUMPTION
+          </th>
         </tr>
 
         <tr>
+          <!-- csr -->
           <th
             scope="col"
             class="header"
           >
             QUANTITY
           </th>
+          <!-- wards -->
           <th
             scope="col"
             class="header"
           >
             QUANTITY
           </th>
+          <!-- total beginning balance -->
           <th
             scope="col"
             class="header"
@@ -91,11 +101,25 @@
           >
             TOTAL COST
           </th>
+          <!-- supplies issued to wards -->
           <th
             scope="col"
             class="header"
           >
             TOTAL QUANTITY
+          </th>
+          <th
+            scope="col"
+            class="header"
+          >
+            TOTAL COST
+          </th>
+          <!-- CONSUMPTiON -->
+          <th
+            scope="col"
+            class="header"
+          >
+            QUANTITY
           </th>
           <th
             scope="col"
@@ -117,8 +141,10 @@
           <td>{{ rc.total_beg_total_quantity }}</td>
           <td>{{ rc.total_beg_total_cost }}</td>
           <!-- SUPPLIES ISSUED TO WARDS -->
-          <td>{{ rc.total_beg_total_quantity }}</td>
-          <td>{{ rc.total_beg_total_cost }}</td>
+          <td>{{ rc.supplies_issued_to_wards_quantity }}</td>
+          <td>{{ rc.supplies_issued_to_wards_total_cost }}</td>
+          <td>{{ rc.consumption_quantity }}</td>
+          <td>{{ rc.consumption_total_cost }}</td>
         </tr>
       </table>
     </div>
@@ -162,8 +188,12 @@ export default {
           unit_cost: e.unit_cost,
           csr_quantity: e.csr_quantity,
           ward_quantity: e.ward_quantity,
+          supplies_issued_to_wards_quantity: e.supplies_issued_to_wards_quantity,
+          supplies_issued_to_wards_total_cost: e.supplies_issued_to_wards_total_cost,
           total_beg_total_quantity: e.total_beg_total_quantity,
           total_beg_total_cost: e.total_beg_total_cost,
+          consumption_quantity: e.consumption_quantity,
+          consumption_total_cost: e.consumption_total_cost,
         });
       });
     },
