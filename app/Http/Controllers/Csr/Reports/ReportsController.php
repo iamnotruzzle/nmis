@@ -52,8 +52,8 @@ class ReportsController extends Controller
                 'ward_quantity' => $e->wards_quantity,
                 'total_beg_total_quantity' => $e->csr_quantity + $e->wards_quantity,
                 'total_beg_total_cost' => ($e->csr_quantity + $e->wards_quantity) * $e->selling_price,
-                'supplies_issued_to_wards_quantity' => $e->wards_quantity,
-                'supplies_issued_to_wards_total_cost' => $e->wards_quantity * $e->selling_price,
+                'supplies_issued_to_wards_quantity' => $e->wards_quantity + $e->consumption_quantity,
+                'supplies_issued_to_wards_total_cost' => ($e->wards_quantity + $e->consumption_quantity) * $e->selling_price,
                 'consumption_quantity' => $e->consumption_quantity,
                 'consumption_total_cost' => $e->consumption_total_cost
             ];
