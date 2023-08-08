@@ -15,9 +15,9 @@ class CreateCsrwWardsStocksTable extends Migration
     {
         Schema::create('csrw_wards_stocks', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('request_stocks_id');
-            $table->bigInteger('request_stocks_detail_id');
-            $table->bigInteger('stock_id');
+            $table->bigInteger('request_stocks_id')->nullable();
+            $table->bigInteger('request_stocks_detail_id')->nullable();
+            $table->bigInteger('stock_id')->nullable();
             $table->string('location');
             $table->string('cl2comb');
             $table->bigInteger('brand')->nullable();
