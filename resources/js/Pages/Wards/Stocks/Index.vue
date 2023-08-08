@@ -488,12 +488,20 @@
         @hide="whenDialogIsHidden"
       >
         <div class="field">
+          <label>Brand</label>
+          <InputText
+            v-model.trim="formConsignment.brand"
+            autofocus
+          />
+        </div>
+        <div class="field">
           <label>Item</label>
           <Dropdown
             required="true"
-            v-model="item"
+            v-model="form.cl2comb"
             :options="itemsList"
             filter
+            optionValue="cl2comb"
             optionLabel="cl2desc"
             class="w-full mb-3"
           />
@@ -502,12 +510,48 @@
           <label>Quantity</label>
           <InputText
             id="quantity"
-            v-model.trim="requested_qty"
+            v-model.trim="formConsignment.quantity"
             required="true"
             autofocus
             type="number"
-            :class="{ 'p-invalid': requested_qty == '' || item == null }"
+            :class="{ 'p-invalid': formConsignment.quantity == '' || formConsignment.quantity == null }"
           />
+        </div>
+        <div class="field">
+          <label for="manufactured_date">Manufactured date</label>
+          <Calendar
+            v-model="formConsignment.manufactured_date"
+            dateFormat="mm-dd-yy"
+            showIcon
+            showButtonBar
+            :hideOnDateTimeSelect="true"
+          />
+        </div>
+        <div class="field">
+          <label for="delivered_date">Delivered date</label>
+          <Calendar
+            v-model="formConsignment.delivered_date"
+            dateFormat="mm-dd-yy"
+            showIcon
+            showButtonBar
+            :hideOnDateTimeSelect="true"
+          />
+        </div>
+        <div class="field">
+          <label for="expiration_date">Expiration date</label>
+          <Calendar
+            v-model="formConsignment.expiration_date"
+            dateFormat="mm-dd-yy"
+            showIcon
+            showButtonBar
+            :hideOnDateTimeSelect="true"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.expiration_date"
+          >
+            {{ form.errors.expiration_date }}
+          </small>
         </div>
 
         <template #footer>
@@ -733,7 +777,7 @@ export default {
         brand: null,
         cl2comb: null,
         quantity: null,
-        manufacture_date: null,
+        manufactured_date: null,
         delivered_date: null,
         expiration_date: null,
       }),
