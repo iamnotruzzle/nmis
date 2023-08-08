@@ -222,19 +222,28 @@
             <div>
               <span class="p-input-icon-left mr-2">
                 <i class="pi pi-search" />
-                <span class="p-input-icon-left">
-                  <i class="pi pi-search" />
-                  <InputText
-                    v-model="currentWardStocksFilter['global'].value"
-                    placeholder="Search item"
-                  />
-                </span>
+                <InputText
+                  v-model="currentWardStocksFilter['global'].value"
+                  placeholder="Search item"
+                />
               </span>
+              <Button
+                label="Consignment"
+                icon="pi pi-plus"
+                iconPos="right"
+                @click="openConsignmentDialog"
+              />
             </div>
           </div>
         </template>
         <template #empty> No item found. </template>
         <template #loading> Loading item data. Please wait. </template>
+        <Column
+          field="from"
+          header="FROM"
+          sortable
+        >
+        </Column>
         <Column
           field="brand"
           header="BRAND"
@@ -469,7 +478,69 @@
         </template>
       </Dialog>
 
-      <!-- ward stock dialog -->
+      <!-- Consignment -->
+      <Dialog
+        v-model:visible="consignmentDialog"
+        header="Consignment"
+        :modal="true"
+        class="p-fluid"
+        :style="{ width: '20vw' }"
+        @hide="whenDialogIsHidden"
+      >
+        <div class="field">
+          <label>Item</label>
+          <Dropdown
+            required="true"
+            v-model="item"
+            :options="itemsList"
+            filter
+            optionLabel="cl2desc"
+            class="w-full mb-3"
+          />
+        </div>
+        <div class="field">
+          <label>Quantity</label>
+          <InputText
+            id="quantity"
+            v-model.trim="requested_qty"
+            required="true"
+            autofocus
+            type="number"
+            :class="{ 'p-invalid': requested_qty == '' || item == null }"
+          />
+        </div>
+
+        <template #footer>
+          <Button
+            label="Cancel"
+            icon="pi pi-times"
+            severity="danger"
+            text
+            @click="cancel"
+          />
+          <Button
+            v-if="isUpdate == true"
+            label="Update"
+            icon="pi pi-check"
+            severity="warning"
+            text
+            type="submit"
+            :disabled="form.processing || requestStockListDetails == '' || requestStockListDetails == null"
+            @click="submit"
+          />
+          <Button
+            v-else
+            label="Save"
+            icon="pi pi-check"
+            text
+            type="submit"
+            :disabled="form.processing || requestStockListDetails == '' || requestStockListDetails == null"
+            @click="submit"
+          />
+        </template>
+      </Dialog>
+
+      <!-- update ward stock dialog -->
       <Dialog
         v-model:visible="editWardStocksDialog"
         header="Update stock"
@@ -618,6 +689,7 @@ export default {
       requestStockId: null,
       isUpdate: false,
       createRequestStocksDialog: false,
+      consignmentDialog: false,
       editWardStocksDialog: false,
       editStatusDialog: false,
       deleteItemDialog: false,
@@ -656,6 +728,14 @@ export default {
       formUpdateStatus: this.$inertia.form({
         request_stock_id: null,
         status: null,
+      }),
+      formConsignment: this.$inertia.form({
+        brand: null,
+        cl2comb: null,
+        quantity: null,
+        manufacture_date: null,
+        delivered_date: null,
+        expiration_date: null,
       }),
       formWardStocks: this.$inertia.form({
         ward_stock_id: null,
@@ -751,6 +831,7 @@ export default {
         let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
 
         this.currentWardStocksList.push({
+          from: e.from,
           ward_stock_id: e.id,
           brand: e.brand_details.name,
           item: e.item_details.cl2desc,
@@ -807,6 +888,11 @@ export default {
       this.form.reset();
       this.requestStockId = null;
       this.createRequestStocksDialog = true;
+    },
+    openConsignmentDialog() {
+      this.formConsignment.clearErrors();
+      this.formConsignment.reset();
+      this.consignmentDialog = true;
     },
     // when dialog is hidden, do this function
     whenDialogIsHidden() {
