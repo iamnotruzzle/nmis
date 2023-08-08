@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Wards\RequestStocks;
 
 use App\Events\RequestStock;
 use App\Http\Controllers\Controller;
+use App\Models\Brand;
 use App\Models\Item;
 use App\Models\RequestStocks;
 use App\Models\RequestStocksDetails;
@@ -74,12 +75,14 @@ class RequestStocksController extends Controller
             )
             ->get();
 
+        $brands = Brand::get();
 
         return Inertia::render('Wards/Stocks/Index', [
             'items' => $items,
             'requestedStocks' => $requestedStocks,
             'authWardcode' => $authWardcode,
             'currentWardStocks' => $currentWardStocks,
+            'brands' => $brands,
         ]);
     }
 

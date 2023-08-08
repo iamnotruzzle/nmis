@@ -488,23 +488,43 @@
         @hide="whenDialogIsHidden"
       >
         <div class="field">
-          <label>Brand</label>
-          <InputText
-            v-model.trim="formConsignment.brand"
-            autofocus
+          <label for="brand">Brand</label>
+          <Dropdown
+            required="true"
+            v-model="formConsignment.brand"
+            :options="brandsList"
+            filter
+            showClear
+            dataKey="id"
+            optionLabel="name"
+            optionValue="id"
+            class="w-full mb-3"
+            :class="{ 'p-invalid': formConsignment.brand == '' }"
           />
+          <small
+            class="text-error"
+            v-if="formConsignment.errors.brand"
+          >
+            {{ formConsignment.errors.brand }}
+          </small>
         </div>
         <div class="field">
           <label>Item</label>
           <Dropdown
             required="true"
-            v-model="form.cl2comb"
+            v-model="formConsignment.cl2comb"
             :options="itemsList"
             filter
             optionValue="cl2comb"
             optionLabel="cl2desc"
             class="w-full mb-3"
           />
+          <small
+            class="text-error"
+            v-if="formConsignment.errors.cl2comb"
+          >
+            {{ formConsignment.errors.cl2comb }}
+          </small>
         </div>
         <div class="field">
           <label>Quantity</label>
@@ -516,6 +536,12 @@
             type="number"
             :class="{ 'p-invalid': formConsignment.quantity == '' || formConsignment.quantity == null }"
           />
+          <small
+            class="text-error"
+            v-if="formConsignment.errors.quantity"
+          >
+            {{ formConsignment.errors.quantity }}
+          </small>
         </div>
         <div class="field">
           <label for="manufactured_date">Manufactured date</label>
@@ -548,9 +574,9 @@
           />
           <small
             class="text-error"
-            v-if="form.errors.expiration_date"
+            v-if="formConsignment.errors.expiration_date"
           >
-            {{ form.errors.expiration_date }}
+            {{ formConsignment.errors.expiration_date }}
           </small>
         </div>
 
@@ -563,23 +589,17 @@
             @click="cancel"
           />
           <Button
-            v-if="isUpdate == true"
-            label="Update"
-            icon="pi pi-check"
-            severity="warning"
-            text
-            type="submit"
-            :disabled="form.processing || requestStockListDetails == '' || requestStockListDetails == null"
-            @click="submit"
-          />
-          <Button
-            v-else
             label="Save"
             icon="pi pi-check"
             text
             type="submit"
-            :disabled="form.processing || requestStockListDetails == '' || requestStockListDetails == null"
-            @click="submit"
+            :disabled="
+              formConsignment.processing ||
+              formConsignment.cl2comb == null ||
+              formConsignment.quantity == null ||
+              formConsignment.expiration_date == null
+            "
+            @click="submitConsignment"
           />
         </template>
       </Dialog>
@@ -721,6 +741,7 @@ export default {
     items: Object,
     requestedStocks: Object,
     currentWardStocks: Object,
+    brands: Object,
   },
   data() {
     return {
@@ -745,6 +766,7 @@ export default {
       itemsList: [],
       requestStockList: [],
       currentWardStocksList: [],
+      brandsList: [],
       // stock list details
       requestStockListDetailsFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -774,6 +796,7 @@ export default {
         status: null,
       }),
       formConsignment: this.$inertia.form({
+        authLocation: null,
         brand: null,
         cl2comb: null,
         quantity: null,
@@ -799,6 +822,7 @@ export default {
     this.rows = this.requestedStocks.per_page;
   },
   mounted() {
+    this.storeBrandsInContainer();
     // issued = name of the channel
     // ItemIssued = name of the event
     // Channel = user doesn't need to authenticated or authorize
@@ -834,6 +858,14 @@ export default {
     },
   },
   methods: {
+    storeBrandsInContainer() {
+      this.brands.forEach((e) => {
+        this.brandsList.push({
+          id: e.id,
+          name: e.name,
+        });
+      });
+    },
     storeItemsInController() {
       this.itemsList = []; // reset
       this.items.forEach((e) => {
@@ -1059,6 +1091,28 @@ export default {
         });
       }
     },
+    submitConsignment() {
+      this.formConsignment.authLocation = this.$page.props.authWardcode.wardcode;
+      if (
+        this.formConsignment.cl2comb != null ||
+        this.formConsignment.cl2comb != '' ||
+        this.formConsignment.quantity != null ||
+        this.formConsignment.quantity != '' ||
+        this.formConsignment.quantity != 0 ||
+        this.formConsignment.expiration_date != null ||
+        this.formConsignment.expiration_date != ''
+      ) {
+        this.formConsignment.post(route('consignment.store'), {
+          preserveScroll: true,
+          onSuccess: () => {
+            this.formConsignment.reset();
+            this.cancel();
+            this.updateData();
+            this.createdMsg();
+          },
+        });
+      }
+    },
     confirmDeleteItem(item) {
       this.requestStockId = item.id;
       this.deleteItemDialog = true;
@@ -1082,6 +1136,7 @@ export default {
       this.isUpdate = false;
       this.createRequestStocksDialog = false;
       this.editWardStocksDialog = false;
+      this.consignmentDialog = false;
       this.form.reset();
       this.form.clearErrors();
       this.formWardStocks.reset();
