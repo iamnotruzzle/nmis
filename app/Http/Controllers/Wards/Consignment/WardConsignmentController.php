@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Wards\Consignment;
 
 use App\Http\Controllers\Controller;
+use App\Models\WardsStocks;
 use App\Models\WardsStocksLogs;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
 class WardConsignmentController extends Controller
@@ -16,31 +18,50 @@ class WardConsignmentController extends Controller
 
     public function store(Request $request)
     {
-        dd($request);
+        // dd($request);
+
+        $entry_by = Auth::user()->employeeid;
+
         $request->validate([
+            'fund_source' => 'required',
             'brand' => 'required',
             'cl2comb' => 'required',
             'quantity' => 'required',
             'expiration_date' => 'required',
         ]);
 
-        // $wardStockLogs = WardsStocksLogs::create([
-        //     'request_stocks_id' => $prevStockDetails->request_stocks_id,
-        //     'request_stocks_detail_id' => $prevStockDetails->request_stocks_detail_id,
-        //     'stock_id' => $prevStockDetails->stock_id,
-        //     'location' => $prevStockDetails->location,
-        //     'cl2comb' => $prevStockDetails->cl2comb,
-        //     'brand' => $prevStockDetails->brand,
-        //     'chrgcode' => $prevStockDetails->chrgcode,
-        //     'prev_qty' => $request->current_quantity,
-        //     'new_qty' => $request->quantity,
-        //     'manufactured_date' => $prevStockDetails->manufactured_date,
-        //     'delivered_date' => $prevStockDetails->delivered_date,
-        //     'expiration_date' => $prevStockDetails->expiration_date,
-        //     'action' => 'UPDATE',
-        //     'remarks' => $request->remarks,
-        //     'entry_by' => $entry_by,
-        // ]);
+        $consignment = WardsStocks::create([
+            'request_stocks_id' => null,
+            'request_stocks_detail_id' => null,
+            'stock_id' => null,
+            'location' => $request->authLocation,
+            'brand' => $request->brand,
+            'cl2comb' => $request->cl2comb,
+            'chrgcode' => $request->fund_source,
+            'quantity' => $request->quantity,
+            'from' => 'CONSIGNMENT',
+            'manufactured_date' => $request->manufactured_date,
+            'delivered_date' => $request->delivered_date,
+            'expiration_date' => $request->expiration_date,
+        ]);
+
+        $wardStockLogs = WardsStocksLogs::create([
+            'request_stocks_id' => null,
+            'request_stocks_detail_id' => null,
+            'stock_id' => null,
+            'location' => $request->authLocation,
+            'cl2comb' => $request->cl2comb,
+            'brand' => $request->brand,
+            'chrgcode' => $request->fund_source,
+            'prev_qty' => 0,
+            'new_qty' => $request->quantity,
+            'manufactured_date' => $request->manufactured_date,
+            'delivered_date' => $request->delivered_date,
+            'expiration_date' => $request->expiration_date,
+            'action' => 'create',
+            'remarks' => null,
+            'entry_by' => $entry_by,
+        ]);
 
         return Redirect::route('requeststocks.index');
     }

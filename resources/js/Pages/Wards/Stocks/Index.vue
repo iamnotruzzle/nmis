@@ -488,6 +488,28 @@
         @hide="whenDialogIsHidden"
       >
         <div class="field">
+          <label for="fundSource">Fund source</label>
+          <Dropdown
+            id="fundSource"
+            required="true"
+            v-model="formConsignment.fund_source"
+            :options="fundSourceList"
+            filter
+            showClear
+            dataKey="chrgcode"
+            optionLabel="chrgdesc"
+            optionValue="chrgcode"
+            class="w-full"
+            :class="{ 'p-invalid': formConsignment.fund_source == '' }"
+          />
+          <small
+            class="text-error"
+            v-if="formConsignment.errors.fund_source"
+          >
+            {{ formConsignment.errors.fund_source }}
+          </small>
+        </div>
+        <div class="field">
           <label for="brand">Brand</label>
           <Dropdown
             required="true"
@@ -595,6 +617,7 @@
             type="submit"
             :disabled="
               formConsignment.processing ||
+              formConsignment.fund_source == null ||
               formConsignment.cl2comb == null ||
               formConsignment.quantity == null ||
               formConsignment.expiration_date == null
@@ -775,6 +798,7 @@ export default {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       requestStockListDetails: [],
+      fundSourceList: [],
       item: null,
       cl2desc: null,
       requested_qty: null,
@@ -797,6 +821,7 @@ export default {
       }),
       formConsignment: this.$inertia.form({
         authLocation: null,
+        fund_source: null,
         brand: null,
         cl2comb: null,
         quantity: null,
@@ -846,6 +871,7 @@ export default {
       }
     });
 
+    this.storeFundSourceInContainer();
     this.storeItemsInController();
     this.storeRequestedStocksInContainer();
     this.storeCurrentWardStocksInContainer();
@@ -858,6 +884,25 @@ export default {
     },
   },
   methods: {
+    storeFundSourceInContainer() {
+      this.$page.props.typeOfCharge.forEach((e) => {
+        this.fundSourceList.push({
+          chrgcode: e.chrgcode,
+          chrgdesc: e.chrgdesc,
+          bentypcod: e.bentypcod,
+          chrgtable: e.chrgtable,
+        });
+      });
+
+      this.$page.props.fundSource.forEach((e) => {
+        this.fundSourceList.push({
+          chrgcode: e.fsid,
+          chrgdesc: e.fsName,
+          bentypcod: null,
+          chrgtable: null,
+        });
+      });
+    },
     storeBrandsInContainer() {
       this.brands.forEach((e) => {
         this.brandsList.push({
@@ -1094,6 +1139,8 @@ export default {
     submitConsignment() {
       this.formConsignment.authLocation = this.$page.props.authWardcode.wardcode;
       if (
+        this.formConsignment.fund_source != null ||
+        this.formConsignment.fund_source != '' ||
         this.formConsignment.cl2comb != null ||
         this.formConsignment.cl2comb != '' ||
         this.formConsignment.quantity != null ||

@@ -73,6 +73,7 @@ class RequestStocksController extends Controller
                     return $query->where('status', 'RECEIVED');
                 }
             )
+            ->orWhere('request_stocks_id', null)
             ->get();
 
         $brands = Brand::get();
