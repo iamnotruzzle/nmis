@@ -707,7 +707,7 @@
               formWardStocks.processing ||
               formWardStocks.quantity == null ||
               formWardStocks.quantity == '' ||
-              Number(formWardStocks.current_quantity) <= Number(formWardStocks.quantity)
+              Number(formWardStocks.current_quantity) < Number(formWardStocks.quantity)
             "
             @click="submitEditWardStocks"
           />
