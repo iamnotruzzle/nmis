@@ -404,10 +404,6 @@
             >
               Qty to return
             </label>
-            <!--
-                onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-                this method disable numpad '.' and main keyboards '.'
-            -->
             <InputText
               id="quantity"
               v-model.trim="form.upd_QtyToReturn"
