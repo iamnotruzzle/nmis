@@ -41,6 +41,12 @@
         <template #empty> No data found. </template>
         <template #loading> Loading data. Please wait. </template>
         <Column
+          field="from"
+          header="FROM"
+          style="min-width: 12rem"
+        >
+        </Column>
+        <Column
           field="brand_name"
           header="BRAND"
           style="min-width: 12rem"
@@ -600,6 +606,7 @@ export default {
 
         this.wardStocksList.push({
           ward_stock_id: e.id,
+          from: e.from,
           brand_id: e.brand_details.id,
           brand_name: e.brand_details.name,
           cl2comb: e.item_details.cl2comb,

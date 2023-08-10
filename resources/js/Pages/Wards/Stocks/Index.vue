@@ -764,6 +764,7 @@ export default {
     items: Object,
     requestedStocks: Object,
     currentWardStocks: Object,
+    currentWardStocks2: Object,
     brands: Object,
   },
   data() {
@@ -949,6 +950,19 @@ export default {
       moment.suppressDeprecationWarnings = true;
 
       this.currentWardStocks.forEach((e) => {
+        let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
+
+        this.currentWardStocksList.push({
+          from: e.from,
+          ward_stock_id: e.id,
+          brand: e.brand_details.name,
+          item: e.item_details.cl2desc,
+          quantity: e.quantity,
+          expiration_date: expiration_date.toString(),
+        });
+      });
+
+      this.currentWardStocks2.forEach((e) => {
         let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
 
         this.currentWardStocksList.push({

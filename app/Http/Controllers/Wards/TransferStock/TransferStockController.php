@@ -26,11 +26,13 @@ class TransferStockController extends Controller
             ->first();
 
         $wardStocks = WardsStocks::with(['item_details:cl2comb,cl2desc', 'brand_details:id,name', 'request_stocks'])
+            ->where('location', $authWardcode->wardcode)
+            ->where('quantity', '!=', 0)
             ->whereHas('request_stocks', function ($query) {
                 return $query->where('status', 'RECEIVED');
             })
-            ->where('location', $authWardcode->wardcode)
-            ->where('quantity', '!=', 0)
+            ->orWhere('request_stocks_id', null)
+
             ->get();
 
         $transferredStock = WardTransferStock::with(

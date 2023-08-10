@@ -67,13 +67,18 @@ class RequestStocksController extends Controller
 
         $currentWardStocks = WardsStocks::with(['item_details:cl2comb,cl2desc', 'brand_details:id,name', 'request_stocks'])
             ->where('location', $authWardcode->wardcode)
+            ->where('quantity', '!=', 0)
             ->whereHas(
                 'request_stocks',
                 function ($query) {
                     return $query->where('status', 'RECEIVED');
                 }
             )
-            ->orWhere('request_stocks_id', null)
+            ->get();
+        $currentWardStocks2 = WardsStocks::with(['item_details:cl2comb,cl2desc', 'brand_details:id,name', 'request_stocks'])
+            ->where('request_stocks_id', null)
+            ->where('location', $authWardcode->wardcode)
+            ->where('quantity', '!=', 0)
             ->get();
 
         $brands = Brand::get();
@@ -83,6 +88,7 @@ class RequestStocksController extends Controller
             'requestedStocks' => $requestedStocks,
             'authWardcode' => $authWardcode,
             'currentWardStocks' => $currentWardStocks,
+            'currentWardStocks2' => $currentWardStocks2,
             'brands' => $brands,
         ]);
     }
