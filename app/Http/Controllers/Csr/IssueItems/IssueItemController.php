@@ -273,6 +273,7 @@ class IssueItemController extends Controller
                         'brand' => $row->brand,
                         'batch_no' => $row->batch_no,
                         'quantity' => $remaining_qty_to_be_issued,
+                        'from' => 'CSR',
                         'manufactured_date' => $row->manufactured_date,
                         'delivered_date' => $row->delivered_date,
                         'expiration_date' => $row->expiration_date,

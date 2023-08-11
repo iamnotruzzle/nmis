@@ -255,7 +255,7 @@
             <Column
               v-if="isUpdate"
               field="stock_qty"
-              header="Total stock including approved qty"
+              header="Current stock including approved qty"
             >
               <template #body="{ data }">
                 {{ data.stock_w_approved }}
@@ -272,29 +272,11 @@
             >
               <template #body="slotProps">
                 <InputText
-                  v-if="isUpdate"
                   id="quantity"
                   v-model.trim="slotProps.data.approved_qty"
-                  v-model="app_qty_checker"
                   required="true"
                   autofocus
                   type="number"
-                  :class="{
-                    'p-invalid': slotProps.data.approved_qty > slotProps.data.stock_w_approved,
-                  }"
-                  @keyup.enter="submit"
-                />
-                <InputText
-                  v-else
-                  id="quantity"
-                  v-model.trim="slotProps.data.approved_qty"
-                  v-model="app_qty_checker"
-                  required="true"
-                  autofocus
-                  type="number"
-                  :class="{
-                    'p-invalid': slotProps.data.approved_qty > slotProps.data.stock_qty,
-                  }"
                   @keyup.enter="submit"
                 />
               </template>
@@ -317,7 +299,7 @@
             severity="warning"
             text
             type="submit"
-            :disabled="disabled || form.processing"
+            :disabled="form.processing"
             @click="submit"
           />
           <Button
@@ -326,7 +308,7 @@
             icon="pi pi-check"
             text
             type="submit"
-            :disabled="disabled || form.processing"
+            :disabled="form.processing"
             @click="submit"
           />
         </template>
@@ -462,7 +444,7 @@ export default {
       issuedItemsFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
-      disabled: true,
+      disabled: false,
       app_qty_checker: null,
       requestStockListDetails: [],
       item: null,
@@ -719,27 +701,53 @@ export default {
       // approved qty <= total stock
       if (this.disabled != true) {
         if (this.isUpdate) {
-          this.form.put(route('issueitems.update', this.requestStockId), {
-            preserveScroll: true,
-            onSuccess: () => {
-              this.requestStockId = null;
-              this.createRequestStocksDialog = false;
-              this.cancel();
-              this.updateData();
-              this.updatedMsg();
-            },
+          console.log(this.requestStockListDetails);
+
+          this.requestStockListDetails.forEach((e) => {
+            e.approved_qty = e.approved_qty == '' || e.approved_qty == null ? 0 : e.approved_qty;
           });
+
+          let isQtyEnough = this.requestStockListDetails.every(function (e) {
+            return Number(e.approved_qty) <= Number(e.stock_w_approved);
+          });
+
+          if (isQtyEnough) {
+            this.form.put(route('issueitems.update', this.requestStockId), {
+              preserveScroll: true,
+              onSuccess: () => {
+                this.requestStockId = null;
+                this.createRequestStocksDialog = false;
+                this.cancel();
+                this.updateData();
+                this.updatedMsg();
+              },
+            });
+          } else {
+            this.qtyIsNotEnough();
+          }
         } else {
-          this.form.post(route('issueitems.store'), {
-            preserveScroll: true,
-            onSuccess: () => {
-              this.requestStockId = null;
-              this.createRequestStocksDialog = false;
-              this.cancel();
-              this.updateData();
-              this.createdMsg();
-            },
+          this.requestStockListDetails.forEach((e) => {
+            e.approved_qty = e.approved_qty == '' || e.approved_qty == null ? 0 : e.approved_qty;
           });
+
+          let isQtyEnough = this.requestStockListDetails.every(function (e) {
+            return Number(e.approved_qty) <= Number(e.stock_qty);
+          });
+
+          if (isQtyEnough) {
+            this.form.post(route('issueitems.store'), {
+              preserveScroll: true,
+              onSuccess: () => {
+                this.requestStockId = null;
+                this.createRequestStocksDialog = false;
+                this.cancel();
+                this.updateData();
+                this.createdMsg();
+              },
+            });
+          } else {
+            this.qtyIsNotEnough();
+          }
         }
       }
     },
@@ -755,6 +763,9 @@ export default {
     },
     updatedMsg() {
       this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Issued item updated.', life: 3000 });
+    },
+    qtyIsNotEnough() {
+      this.$toast.add({ severity: 'error', summary: 'Failed', detail: 'Stock quantity is not enough.', life: 3000 });
     },
     getLocalDateString(utcStr) {
       const date = new Date(utcStr);
@@ -795,27 +806,6 @@ export default {
         this.to = null;
       }
       this.updateData();
-    },
-    app_qty_checker: function (val) {
-      for (let i = 0; i < this.requestStockListDetails.length; i++) {
-        const e = this.requestStockListDetails[i];
-
-        if (this.isUpdate) {
-          if (e.approved_qty == null || e.approved_qty > e.stock_w_approved || val == '') {
-            this.disabled = true;
-            break;
-          } else {
-            this.disabled = false;
-          }
-        } else {
-          if (e.approved_qty == null || e.approved_qty > e.stock_qty || val == '') {
-            this.disabled = true;
-            break;
-          } else {
-            this.disabled = false;
-          }
-        }
-      }
     },
   },
 };
