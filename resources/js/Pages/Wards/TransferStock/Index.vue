@@ -466,6 +466,7 @@ export default {
   props: {
     authWardcode: Object,
     wardStocks: Object,
+    wardStocksConsignments: Object,
     transferredStock: Object,
   },
   data() {
@@ -602,6 +603,21 @@ export default {
     },
     storeWardStockInContainer() {
       this.wardStocks.forEach((e) => {
+        // let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
+
+        this.wardStocksList.push({
+          ward_stock_id: e.id,
+          from: e.from,
+          brand_id: e.brand_details.id,
+          brand_name: e.brand_details.name,
+          cl2comb: e.item_details.cl2comb,
+          cl2desc: e.item_details.cl2desc,
+          quantity: e.quantity,
+          expiration_date: e.expiration_date,
+        });
+      });
+
+      this.wardStocksConsignments.forEach((e) => {
         // let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
 
         this.wardStocksList.push({
