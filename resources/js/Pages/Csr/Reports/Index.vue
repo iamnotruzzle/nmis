@@ -197,6 +197,8 @@ export default {
           consumption_total_cost: e.consumption_total_cost,
         });
       });
+
+      console.log('container', this.reportsContainer);
     },
 
     updateData() {
