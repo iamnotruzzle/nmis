@@ -28,7 +28,7 @@ class ReportsController extends Controller
                 LEFT JOIN (
                     SELECT ward.cl2comb, SUM(ward.quantity) as wards_quantity
                     FROM csrw_wards_stocks as ward
-                    WHERE 'csrw_wards_stocks.from' = 'CSR'
+                    WHERE ward.[from] = 'CSR'
                     GROUP BY ward.cl2comb
                 ) csrw_wards_stocks ON hclass2.cl2comb = csrw_wards_stocks.cl2comb
                 LEFT JOIN (
