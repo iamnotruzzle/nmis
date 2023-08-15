@@ -71,6 +71,25 @@
           >
             CONSUMPTION
           </th>
+          <th
+            scope="colgroup"
+            class="group-header"
+          >
+            CSR
+          </th>
+          <th
+            scope="colgroup"
+            class="group-header"
+          >
+            WARDS
+          </th>
+          <th
+            colspan="2"
+            scope="colgroup"
+            class="group-header"
+          >
+            TOTAL ENDING BALANCE
+          </th>
         </tr>
 
         <tr>
@@ -127,6 +146,31 @@
           >
             TOTAL COST
           </th>
+          <!-- TOTAL ENDING BALANCE -->
+          <th
+            scope="col"
+            class="header"
+          >
+            QUANTITY
+          </th>
+          <th
+            scope="col"
+            class="header"
+          >
+            QUANTITY
+          </th>
+          <th
+            scope="col"
+            class="header"
+          >
+            TOTAL QUANTITY
+          </th>
+          <th
+            scope="col"
+            class="header"
+          >
+            TOTAL COST
+          </th>
         </tr>
 
         <tr
@@ -146,6 +190,11 @@
           <!-- CONSUMPTION -->
           <td>{{ rc.consumption_quantity }}</td>
           <td>{{ rc.consumption_total_cost }}</td>
+          <!-- TOTAL ENDING BALANCE -->
+          <td>{{ rc.csr_quantity_ending_bal }}</td>
+          <td>{{ rc.ward_quantity_ending_bal }}</td>
+          <td>{{ rc.total_end_total_quantity }}</td>
+          <td>{{ rc.total_end_total_cost }}</td>
         </tr>
       </table>
     </div>
@@ -195,6 +244,10 @@ export default {
           total_beg_total_cost: e.total_beg_total_cost,
           consumption_quantity: e.consumption_quantity,
           consumption_total_cost: e.consumption_total_cost,
+          csr_quantity_ending_bal: e.csr_quantity_ending_bal,
+          ward_quantity_ending_bal: e.ward_quantity_ending_bal,
+          total_end_total_quantity: e.total_end_total_quantity,
+          total_end_total_cost: e.total_end_total_cost,
         });
       });
 

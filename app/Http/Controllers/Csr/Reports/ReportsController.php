@@ -56,10 +56,10 @@ class ReportsController extends Controller
                 'supplies_issued_to_wards_total_cost' => ($e->wards_quantity + $e->consumption_quantity) * $e->selling_price,
                 'consumption_quantity' => $e->consumption_quantity,
                 'consumption_total_cost' => $e->consumption_total_cost,
-                'csr_quantity_ending_bal' => $e->csr_quantity,
-                'ward_quantity_ending_bal' => $e->wards_quantity,
-                'total_end_total_quantity' => $e->csr_quantity + $e->wards_quantity,
-                'total_end_total_cost' => ($e->csr_quantity + $e->wards_quantity) * $e->selling_price,
+                'csr_quantity_ending_bal' => $e->csr_quantity - ($e->wards_quantity + $e->consumption_quantity),
+                'ward_quantity_ending_bal' => 0,
+                'total_end_total_quantity' => 0,
+                'total_end_total_cost' => 0,
             ];
         }
         // dd($reports);
