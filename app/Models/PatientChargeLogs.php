@@ -26,6 +26,7 @@ class PatientChargeLogs extends Model
         'ward_stocks_id',
         'brand',
         'itemcode',
+        'from',
         'manufactured_date',
         'delivery_date',
         'expiration_date',

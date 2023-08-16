@@ -34,6 +34,7 @@ class ReportsController extends Controller
                 LEFT JOIN (
                     SELECT charge.itemcode, SUM(charge.quantity) as charge_quantity, SUM(charge.price_total) as charge_total
                     FROM csrw_patient_charge_logs as charge
+                    WHERE charge.[from] = 'CSR'
                     GROUP BY charge.itemcode
                 ) csrw_patient_charge_logs ON csrw_csr_stocks.cl2comb = csrw_patient_charge_logs.itemcode
                 LEFT JOIN huom ON csrw_csr_stocks.uomcode = huom.uomcode
