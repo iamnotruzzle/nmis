@@ -20,21 +20,14 @@ class CsrStocksReport implements FromArray, WithHeadings
     public function headings(): array
     {
         return [
-            'ID',
-            'BATCH_NO',
-            'CL2COMB',
-            'BRAND',
-            'FUND_SOURCE',
-            'QUANTITY',
-            'MANUFACTURED_DATE',
-            'DELIVERED_DATE',
-            'EXPIRATION_DATE',
+            ['REGULAR FUND', 'UNIT', 'UNIT COST', 'CSR', '', 'WARD', '', 'TOTAL BEGINNING BALANCE', '', 'SUPPLIES ISSUED TO WARDS', '', 'CONSUMPTION', '', 'CSR', '', 'WARD', 'TOTAL ENDING BALANCE'],
+            ['ITEM DESCRIPTION', '', '', 'QUANTITY', 'TOTAL COST', 'QUANTITY', 'TOTAL COST', 'TOTAL QUANTITY', 'TOTAL COST', 'QUANTITY', 'TOTAL COST', 'QUANTITY', 'TOTAL COST', 'QUANTITY', 'TOTAL COST', 'QUANTITY', 'TOTAL COST', 'TOTAL QUANTITY', 'TOTAL COST'],
         ];
     }
 
     // for array
     public function array(): array
     {
-        return $this->data->toArray();
+        return collect($this->data)->toArray();
     }
 }
