@@ -24,7 +24,10 @@
             rowspan="2"
             class="group-header bg-white colored-header"
           >
-            ITEM DESCRIPTION
+            <div class="flex flex-column">
+              <span>REGULAR FUND</span>
+              <span>ITEM DESCRIPTION</span>
+            </div>
           </td>
           <td
             rowspan="2"
@@ -223,9 +226,13 @@
           <!-- CONSUMPTION -->
           <td>{{ rc.consumption_quantity }}</td>
           <td>{{ rc.consumption_total_cost }}</td>
-          <!-- TOTAL ENDING BALANCE -->
+          <!-- CSR -->
           <td>{{ rc.csr_quantity_ending_bal }}</td>
+          <td>{{ rc.csr_total_cost_ending_bal }}</td>
+          <!-- WARD -->
           <td>{{ rc.ward_quantity_ending_bal }}</td>
+          <td>{{ rc.ward_total_cost_ending_bal }}</td>
+          <!-- TOTAL ENDING BALANCE -->
           <td>{{ rc.total_end_total_quantity }}</td>
           <td>{{ rc.total_end_total_cost }}</td>
         </tr>
