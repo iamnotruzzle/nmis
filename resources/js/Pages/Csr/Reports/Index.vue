@@ -24,9 +24,9 @@
             rowspan="2"
             class="group-header bg-white colored-header"
           >
-            <div class="flex flex-column">
-              <span>REGULAR FUND</span>
-              <span>ITEM DESCRIPTION</span>
+            <div>
+              <p>REGULAR FUND</p>
+              <p>ITEM DESCRIPTION</p>
             </div>
           </td>
           <td
