@@ -61,9 +61,9 @@ class ReportsController extends Controller
                 'consumption_total_cost' => $e->consumption_total_cost,
                 'csr_quantity_ending_bal' => $e->csr_quantity,
                 'csr_total_cost_ending_bal' => $e->csr_quantity * $e->selling_price,
-                'ward_quantity_ending_bal' => 0,
+                'ward_quantity_ending_bal' => ($e->wards_quantity + $e->consumption_quantity) - $e->consumption_quantity,
                 'ward_total_cost_ending_bal' => 0,
-                'total_end_total_quantity' => 0,
+                'total_end_total_quantity' => $e->csr_quantity + ($e->wards_quantity + $e->consumption_quantity) - $e->consumption_quantity,
                 'total_end_total_cost' => 0,
             ];
         }
