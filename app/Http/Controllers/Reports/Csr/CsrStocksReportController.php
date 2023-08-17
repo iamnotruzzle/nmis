@@ -48,7 +48,7 @@ class CsrStocksReportController extends Controller
 
         foreach ($csr_report as $e) {
             $reports[] = (object) [
-                // 'cl2comb' => $e->cl2comb,
+                'cl2comb' => $e->cl2comb,
                 'item_description' => $e->cl2desc,
                 'unit' => $e->uomdesc,
                 'unit_cost' => $e->selling_price,
@@ -64,10 +64,10 @@ class CsrStocksReportController extends Controller
                 'consumption_total_cost' => $e->consumption_total_cost,
                 'csr_quantity_ending_bal' => $e->csr_quantity,
                 'csr_total_cost_ending_bal' => $e->csr_quantity * $e->selling_price,
-                'ward_quantity_ending_bal' => ($e->wards_quantity + ($e->wards_quantity + $e->consumption_quantity)) - $e->consumption_quantity,
-                'ward_total_cost_ending_bal' => 0,
-                'total_end_total_quantity' => 0,
-                'total_end_total_cost' => 0,
+                'ward_quantity_ending_bal' => ($e->wards_quantity + $e->consumption_quantity) - $e->consumption_quantity,
+                'ward_total_cost_ending_bal' => (($e->wards_quantity + $e->consumption_quantity) - $e->consumption_quantity) * $e->selling_price,
+                'total_end_total_quantity' => $e->csr_quantity + ($e->wards_quantity + $e->consumption_quantity) - $e->consumption_quantity,
+                'total_end_total_cost' => ($e->csr_quantity + ($e->wards_quantity + $e->consumption_quantity) - $e->consumption_quantity) * $e->selling_price,
             ];
         }
 
