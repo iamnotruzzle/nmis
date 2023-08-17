@@ -20,7 +20,7 @@ class CsrStocksReport implements FromArray, WithHeadings
     public function headings(): array
     {
         return [
-            ['REGULAR FUND', 'UNIT', 'UNIT COST', 'CSR', '', 'WARD', '', 'TOTAL BEGINNING BALANCE', '', 'SUPPLIES ISSUED TO WARDS', '', 'CONSUMPTION', '', 'CSR', '', 'WARD', 'TOTAL ENDING BALANCE'],
+            ['REGULAR FUND', 'UNIT', 'UNIT COST',  'CSR', '', 'WARD', '', 'TOTAL BEGINNING BALANCE', '', 'SUPPLIES ISSUED TO WARDS', '', 'CONSUMPTION', '', 'CSR', '', 'WARD', '', 'TOTAL ENDING BALANCE'],
             ['ITEM DESCRIPTION', '', '', 'QUANTITY', 'TOTAL COST', 'QUANTITY', 'TOTAL COST', 'TOTAL QUANTITY', 'TOTAL COST', 'QUANTITY', 'TOTAL COST', 'QUANTITY', 'TOTAL COST', 'QUANTITY', 'TOTAL COST', 'QUANTITY', 'TOTAL COST', 'TOTAL QUANTITY', 'TOTAL COST'],
         ];
     }

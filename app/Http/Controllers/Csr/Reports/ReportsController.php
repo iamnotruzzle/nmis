@@ -45,7 +45,6 @@ class ReportsController extends Controller
 
         foreach ($csr_report as $e) {
             $reports[] = (object) [
-                'cl2comb' => $e->cl2comb,
                 'item_description' => $e->cl2desc,
                 'unit' => $e->uomdesc,
                 'unit_cost' => $e->selling_price,
