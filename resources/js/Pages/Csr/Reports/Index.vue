@@ -5,15 +5,37 @@
     <div class="card">
       <div class="mb-5 flex justify-content-between">
         <span class="font-bold text-4xl">Reports</span>
-        <a
-          href="http://csrw.test/csrstocks/export/"
-          target="_blank"
-        >
-          <i
-            class="pi pi-file-excel"
-            :style="{ color: 'green', 'font-size': '2rem' }"
-          ></i>
-        </a>
+        <div class="flex flex-row align-items-center">
+          <div class="flex flex-row">
+            <Calendar
+              v-model="from"
+              dateFormat="mm-dd-yy"
+              placeholder="FROM"
+              showIcon
+              showButtonBar
+              :hideOnDateTimeSelect="true"
+              class="mr-2"
+            />
+            <Calendar
+              v-model="to"
+              dateFormat="mm-dd-yy"
+              placeholder="TO"
+              showIcon
+              showButtonBar
+              :hideOnDateTimeSelect="true"
+              class="mr-2"
+            />
+          </div>
+          <a
+            href="http://csrw.test/csrstocks/export/"
+            target="_blank"
+          >
+            <i
+              class="pi pi-file-excel"
+              :style="{ color: 'green', 'font-size': '2rem' }"
+            ></i>
+          </a>
+        </div>
       </div>
       <table class="table">
         <!-- <col />
@@ -244,12 +266,14 @@
 <script>
 import { Head } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
+import Calendar from 'primevue/calendar';
 import moment from 'moment';
 
 export default {
   components: {
     AppLayout,
     Head,
+    Calendar,
   },
   props: {
     reports: Object,
@@ -295,21 +319,18 @@ export default {
         });
       });
 
-      console.log('container', this.reportsContainer);
+      //   console.log('container', this.reportsContainer);
     },
 
     updateData() {
-      this.usersList = [];
-      this.loading = true;
+      this.reportsContainer = [];
 
       this.$inertia.get('csrreports', this.params, {
         preserveState: true,
         preserveScroll: true,
         onFinish: (visit) => {
-          this.totalRecords = this.users.total;
-          this.usersList = [];
-          this.storeUserInContainer();
-          this.loading = false;
+          this.reportsContainer = [];
+          this.storeReportsInContainer();
         },
       });
     },

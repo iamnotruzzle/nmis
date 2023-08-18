@@ -10,7 +10,7 @@ use Inertia\Inertia;
 
 class ReportsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $reports = array();
 
@@ -38,6 +38,7 @@ class ReportsController extends Controller
                     GROUP BY charge.itemcode
                 ) csrw_patient_charge_logs ON csrw_csr_stocks.cl2comb = csrw_patient_charge_logs.itemcode
                 LEFT JOIN huom ON csrw_csr_stocks.uomcode = huom.uomcode
+                WHERE created_at >= '$request->from' AND created_at <= '$request->to'
                 GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc, csrw_wards_stocks.wards_quantity, csrw_patient_charge_logs.charge_quantity, csrw_patient_charge_logs.charge_total
                 ORDER BY hclass2.cl2desc ASC;"
         );
