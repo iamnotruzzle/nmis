@@ -27,7 +27,7 @@
             />
           </div>
           <a
-            href="http://csrw.test/csrstocks/export/"
+            :href="`csrstocks/export?from=${params.from}&to=${params.to}`"
             target="_blank"
           >
             <i
@@ -267,13 +267,17 @@
 import { Head } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Calendar from 'primevue/calendar';
+import Button from 'primevue/button';
 import moment from 'moment';
+import { Link } from '@inertiajs/vue3';
 
 export default {
   components: {
     AppLayout,
     Head,
     Calendar,
+    Button,
+    Link,
   },
   props: {
     reports: Object,
@@ -288,7 +292,7 @@ export default {
     };
   },
   mounted() {
-    console.log(this.reports);
+    // console.log(this.reports);
 
     this.storeReportsInContainer();
   },
@@ -352,7 +356,8 @@ export default {
   watch: {
     from: function (val) {
       if (val != null) {
-        let from = this.getLocalDateString(val);
+        let from = moment(val).format('LL');
+        // console.log('from', from);
         this.params.from = from;
       } else {
         this.params.from = null;
@@ -362,7 +367,8 @@ export default {
     },
     to: function (val) {
       if (val != null) {
-        let to = this.getLocalDateString(val);
+        let to = moment(val).add(1, 'd').format('LL');
+        // console.log('to', to);
         this.params.to = to;
       } else {
         this.params.to = null;

@@ -49,6 +49,8 @@ Route::resource('brands', BrandController::class)->middleware(['auth:sanctum', '
 Route::resource('csrstocks', CsrStocksController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('issueitems', IssueItemController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('csrreports', ReportsController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index']);
+Route::get('csrstocks/export/', [CsrStocksReportController::class, 'export']);
+// Route::resource('csrstocks/export/', [CsrStocksReportController::class, 'export'])->only(['index']);
 // end csr routes
 
 
@@ -64,6 +66,3 @@ Route::resource('wardsstockslogs', WardsStocksLogsController::class)->middleware
 Route::resource('transferstock', TransferStockController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
 Route::put('transferstock', [TransferStockController::class, 'updatetransferstatus', 'designation_ward'])->name('transferstock.updatetransferstatus');
 // end ward routes
-
-
-Route::get('csrstocks/export/', [CsrStocksReportController::class, 'export']);
