@@ -36,6 +36,7 @@ class PatientChargeLogs extends Model
         'pcchrgdte', // charge date
         'entry_at',
         'entry_by',
+        'tscode',
     ];
 
     public function patientCharge()

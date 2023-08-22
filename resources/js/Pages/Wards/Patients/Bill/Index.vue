@@ -559,11 +559,12 @@ export default {
         upd_QtyToReturn: null,
         upd_price: null,
         upd_pcchrgdte: null,
+        tscode: null,
       }),
     };
   },
   mounted() {
-    // console.log('bills', this.bills);
+    console.log('bills', this.bills.admission_date_bill.tscode);
     this.storeBillsInContainer();
     this.getTotalAmount();
     this.storeMedicalSuppliesInContainer();
@@ -786,6 +787,7 @@ export default {
       this.form.enccode = this.enccode;
       this.form.hospitalNumber = this.hospitalNumber;
       this.form.itemsToBillList = this.itemsToBillList;
+      this.form.tscode = this.bills.admission_date_bill.tscode;
 
       this.form.post(route('patientcharge.store'), {
         preserveState: true,

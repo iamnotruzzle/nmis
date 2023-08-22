@@ -93,7 +93,7 @@ class PatientChargeController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->isUpdate);
+        // dd($request->tscode);
 
         $entryby = Auth::user()->employeeid;
 
@@ -191,6 +191,7 @@ class PatientChargeController extends Controller
                                 'price_per_piece' => (float)$item['price'] == null ? null : (float)$item['price'],
                                 'price_total' => (float)$remaining_qty_to_charge * (float)$item['price'],
                                 'pcchrgdte' => $patientChargeDate->pcchrgdte,
+                                'tscode' => $request->tscode,
                                 'entry_at' => $authWardcode->wardcode,
                                 'entry_by' => $entryby,
                             ]);
@@ -223,6 +224,7 @@ class PatientChargeController extends Controller
                                 'price_per_piece' => (float)$item['price'] == null ? null : (float)$item['price'],
                                 'price_total' => (float)$qty * (float)$item['price'],
                                 'pcchrgdte' => $patientChargeDate->pcchrgdte,
+                                'tscode' => $request->tscode,
                                 'entry_at' => $authWardcode->wardcode,
                                 'entry_by' => $entryby,
                             ]);
@@ -287,6 +289,7 @@ class PatientChargeController extends Controller
                         'price_per_piece' => (float)$item['price'],
                         'price_total' => (float)$item['qtyToCharge'] * (float)$item['price'],
                         'pcchrgdte' => $patientMiscChargeDate->pcchrgdte,
+                        'tscode' => $request->tscode,
                         'entry_at' => $authWardcode->wardcode,
                         'entry_by' => $entryby,
                     ]);
@@ -343,6 +346,7 @@ class PatientChargeController extends Controller
                         'price_per_piece' => (float)$item['price'],
                         'price_total' => (float)$item['qtyToCharge'] * (float)$item['price'],
                         'pcchrgdte' => $patientDrumDChargeDate->pcchrgdte,
+                        'tscode' => $request->tscode,
                         'entry_at' => $authWardcode->wardcode,
                         'entry_by' => $entryby,
                     ]);
@@ -399,6 +403,7 @@ class PatientChargeController extends Controller
                         'price_per_piece' => (float)$item['price'],
                         'price_total' => (float)$item['qtyToCharge'] * (float)$item['price'],
                         'pcchrgdte' => $patientDrumFChargeDate->pcchrgdte,
+                        'tscode' => $request->tscode,
                         'entry_at' => $authWardcode->wardcode,
                         'entry_by' => $entryby,
                     ]);
@@ -450,6 +455,7 @@ class PatientChargeController extends Controller
                         'price_per_piece' => $previousPatientChargeLogs->price_per_piece,
                         'price_total' => ((float)$previousPatientChargeLogs->quantity - (float)$upd_QtyToReturn) * (float)$previousPatientChargeLogs->price_per_piece,
                         'pcchrgdte' => $previousPatientChargeLogs->pcchrgdte,
+                        'tscode' => $request->tscode,
                         'entry_at' => $authWard,
                         'entry_by' => $authID,
                         'created_at' => $previousPatientChargeLogs->created_at,
@@ -532,6 +538,7 @@ class PatientChargeController extends Controller
                         'price_per_piece' => $previousPatientChargeLogs->price_per_piece,
                         'price_total' => ((float)$previousPatientChargeLogs->quantity - (float)$upd_QtyToReturn) * (float)$previousPatientChargeLogs->price_per_piece,
                         'pcchrgdte' => $previousPatientChargeLogs->pcchrgdte,
+                        'tscode' => $request->tscode,
                         'entry_at' => $authWard,
                         'entry_by' => $authID,
                         'created_at' => $previousPatientChargeLogs->created_at,
@@ -614,6 +621,7 @@ class PatientChargeController extends Controller
                         'price_per_piece' => $previousPatientChargeLogs->price_per_piece,
                         'price_total' => ((float)$previousPatientChargeLogs->quantity - (float)$upd_QtyToReturn) * (float)$previousPatientChargeLogs->price_per_piece,
                         'pcchrgdte' => $previousPatientChargeLogs->pcchrgdte,
+                        'tscode' => $request->tscode,
                         'entry_at' => $authWard,
                         'entry_by' => $authID,
                         'created_at' => $previousPatientChargeLogs->created_at,
