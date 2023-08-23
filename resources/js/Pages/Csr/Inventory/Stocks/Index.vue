@@ -281,9 +281,9 @@
           </small>
         </div>
         <div class="field">
-          <label for="quantity">Unit</label>
+          <label for="unit">Unit</label>
           <InputText
-            id="quantity"
+            id="unit"
             v-model.trim="selectedItemsUomDesc"
             readonly
           />

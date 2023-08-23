@@ -263,6 +263,12 @@
           </template>
         </Column>
         <Column
+          field="unit"
+          header="UNIT"
+          sortable
+        >
+        </Column>
+        <Column
           field="quantity"
           header="QUANTITY"
           sortable
@@ -549,6 +555,14 @@
           </small>
         </div>
         <div class="field">
+          <label for="unit">Unit</label>
+          <InputText
+            id="unit"
+            v-model.trim="selectedItemsUomDesc"
+            readonly
+          />
+        </div>
+        <div class="field">
           <label>Quantity</label>
           <InputText
             id="quantity"
@@ -783,6 +797,7 @@ export default {
       editStatusDialog: false,
       deleteItemDialog: false,
       search: '',
+      selectedItemsUomDesc: null,
       options: {},
       params: {},
       from: null,
@@ -825,6 +840,7 @@ export default {
         fund_source: null,
         brand: null,
         cl2comb: null,
+        uomcode: null,
         quantity: null,
         manufactured_date: null,
         delivered_date: null,
@@ -848,6 +864,8 @@ export default {
     this.rows = this.requestedStocks.per_page;
   },
   mounted() {
+    // console.log(this.currentWardStocks2);
+
     this.storeBrandsInContainer();
     // issued = name of the channel
     // ItemIssued = name of the event
@@ -918,6 +936,8 @@ export default {
         this.itemsList.push({
           cl2comb: e.cl2comb,
           cl2desc: e.cl2desc,
+          uomcode: e.unit == null ? null : e.unit.uomcode,
+          uomdesc: e.unit == null ? null : e.unit.uomdesc,
         });
       });
     },
@@ -957,6 +977,7 @@ export default {
           ward_stock_id: e.id,
           brand: e.brand_details.name,
           item: e.item_details.cl2desc,
+          unit: e.unit_of_measurement.uomdesc,
           quantity: e.quantity,
           expiration_date: expiration_date.toString(),
         });
@@ -970,6 +991,7 @@ export default {
           ward_stock_id: e.id,
           brand: e.brand_details.name,
           item: e.item_details.cl2desc,
+          unit: e.unit_of_measurement.uomdesc,
           quantity: e.quantity,
           expiration_date: expiration_date.toString(),
         });
@@ -1281,6 +1303,21 @@ export default {
         this.to = null;
       }
       this.updateData();
+    },
+    'formConsignment.cl2comb': function (val) {
+      this.selectedItemsUomDesc = null;
+
+      this.itemsList.forEach((e) => {
+        if (e.cl2comb == val) {
+          if (e.uomdesc != null) {
+            // console.log(e.uomdesc);
+            this.selectedItemsUomDesc = e.uomdesc;
+            this.formConsignment.uomcode = e.uomcode;
+          } else {
+            this.selectedItemsUomDesc = null;
+          }
+        }
+      });
     },
   },
 };

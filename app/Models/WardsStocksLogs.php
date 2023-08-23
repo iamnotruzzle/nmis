@@ -17,6 +17,7 @@ class WardsStocksLogs extends Model
         'stock_id',
         'location',
         'cl2comb',
+        'uomcode',
         'brand',
         'chrgcode',
         'prev_qty',
@@ -28,4 +29,9 @@ class WardsStocksLogs extends Model
         'remarks',
         'entry_by'
     ];
+
+    public function unit_of_measurement()
+    {
+        return $this->hasOne(UnitOfMeasurement::class, 'uomcode', 'uomcode');
+    }
 }

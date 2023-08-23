@@ -20,6 +20,7 @@ class WardsStocks extends Model
         'stock_id',
         'location',
         'cl2comb',
+        'uomcode',
         'brand',
         'chrgcode',
         'quantity',
@@ -73,5 +74,10 @@ class WardsStocks extends Model
     public function transferredStock()
     {
         return $this->hasMany(WardTransferStock::class, 'ward_stock_id', 'id')->orderBy('created_at', 'DESC');
+    }
+
+    public function unit_of_measurement()
+    {
+        return $this->hasOne(UnitOfMeasurement::class, 'uomcode', 'uomcode');
     }
 }

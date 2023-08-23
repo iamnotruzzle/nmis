@@ -31,9 +31,10 @@ class RequestStocksController extends Controller
             ->orderBy('csrw_login_history.created_at', 'desc')
             ->first();
 
-        $items = Item::where('cl2stat', 'A')
+        $items = Item::with('unit')
+            ->where('cl2stat', 'A')
             ->orderBy('cl2desc', 'ASC')
-            ->get(['cl2comb', 'cl2desc']);
+            ->get();
 
         // TODO, requestStocks query has 2 where clause on location.
         // FIX the query where it only needs to use 1 where location instead of 2
@@ -65,7 +66,7 @@ class RequestStocksController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        $currentWardStocks = WardsStocks::with(['item_details:cl2comb,cl2desc', 'brand_details:id,name', 'request_stocks'])
+        $currentWardStocks = WardsStocks::with(['item_details:cl2comb,cl2desc', 'brand_details:id,name', 'request_stocks', 'unit_of_measurement:uomcode,uomdesc'])
             ->where('location', $authWardcode->wardcode)
             ->where('quantity', '!=', 0)
             ->whereHas(
@@ -75,7 +76,7 @@ class RequestStocksController extends Controller
                 }
             )
             ->get();
-        $currentWardStocks2 = WardsStocks::with(['item_details:cl2comb,cl2desc', 'brand_details:id,name', 'request_stocks'])
+        $currentWardStocks2 = WardsStocks::with(['item_details:cl2comb,cl2desc', 'brand_details:id,name', 'request_stocks', 'unit_of_measurement:uomcode,uomdesc'])
             ->where('request_stocks_id', null)
             ->where('location', $authWardcode->wardcode)
             ->where('quantity', '!=', 0)
