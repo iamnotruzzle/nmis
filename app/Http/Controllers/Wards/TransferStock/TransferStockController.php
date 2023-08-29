@@ -148,6 +148,7 @@ class TransferStockController extends Controller
             'brand' => $wardStock->brand,
             'chrgcode' => $wardStock->chrgcode,
             'quantity' => $transferredStock->quantity,
+            'uomcode' => $wardStock->uomcode,
             'from' => 'WARD',
             'manufactured_date' => $wardStock->manufactured_date,
             'delivered_date' => $wardStock->delivered_date,
