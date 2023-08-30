@@ -978,7 +978,7 @@ export default {
           ward_stock_id: e.id,
           brand: e.brand_details.name,
           item: e.item_details.cl2desc,
-          unit: e.unit_of_measurement.uomdesc,
+          unit: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomdesc,
           quantity: e.quantity,
           expiration_date: expiration_date.toString(),
         });
@@ -992,7 +992,7 @@ export default {
           ward_stock_id: e.id,
           brand: e.brand_details.name,
           item: e.item_details.cl2desc,
-          unit: e.unit_of_measurement.uomdesc,
+          unit: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomdesc,
           quantity: e.quantity,
           expiration_date: expiration_date.toString(),
         });
