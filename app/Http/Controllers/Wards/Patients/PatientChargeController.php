@@ -60,6 +60,8 @@ class PatientChargeController extends Controller
             })
             ->first();
 
+        // dd($bills);
+
         // TODO optimize, find a way to combine bills and tanks query
         // TANKS = drugs and med (oxygen), compressed air, carbon dioxide
         $tanks = DB::select("SELECT CONCAT(hdmhdr.dmdcomb, hdmhdr.dmdctr) as itemcode,

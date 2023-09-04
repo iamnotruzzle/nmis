@@ -3,10 +3,11 @@
 namespace App\Models;
 
 
+use App\Models\Item;
 use App\Models\Tanks\Hdmhdr;
 use Awobaz\Compoships\Compoships;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 
 class PatientCharge extends Model
@@ -66,6 +67,7 @@ class PatientCharge extends Model
 
     public function item()
     {
+        // ORIG code
         return $this->hasOne(Item::class, 'cl2comb', 'itemcode')->with(['category', 'unit']);
     }
 
@@ -77,7 +79,7 @@ class PatientCharge extends Model
     public function tank()
     {
         $h = new Hdmhdr();
-        // dd($h);
+
         $dmdcomb = $h->dmdcomb . '' . $h->dmdctr;
 
         // ['dmdcomb', 'dmdctr'],
