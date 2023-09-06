@@ -83,7 +83,7 @@
           <th
             :colspan="consumption_tsdesc_count"
             scope="colgroup"
-            class="group-header bg-white colored-header"
+            class="group-header bg-white colored-header text-center"
           >
             CONSUMPTION
           </th>
