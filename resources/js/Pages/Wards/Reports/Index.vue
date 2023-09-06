@@ -2,7 +2,108 @@
   <app-layout>
     <Head title="InvenTrackr - Reports" />
 
-    <div class="card"></div>
+    <div class="card">
+      <!-- <div class="mb-5 flex justify-content-between">
+        <span class="font-bold text-4xl">Reports</span>
+        <div class="flex flex-row align-items-center">
+          <div class="flex flex-row">
+            <Calendar
+              v-model="from"
+              dateFormat="mm-dd-yy"
+              placeholder="FROM"
+              showIcon
+              showButtonBar
+              :hideOnDateTimeSelect="true"
+              class="mr-2"
+            />
+            <Calendar
+              v-model="to"
+              dateFormat="mm-dd-yy"
+              placeholder="TO"
+              showIcon
+              showButtonBar
+              :hideOnDateTimeSelect="true"
+              class="mr-2"
+            />
+          </div>
+          <a
+            :href="`csrstocks/export?from=${params.from}&to=${params.to}`"
+            target="_blank"
+          >
+            <i
+              class="pi pi-file-excel"
+              :style="{ color: 'green', 'font-size': '2rem' }"
+            ></i>
+          </a>
+        </div>
+      </div> -->
+
+      <table class="table">
+        <tr>
+          <td
+            rowspan="2"
+            class="group-header bg-white colored-header"
+          >
+            <div>
+              <p>ITEM DESCRIPTION</p>
+            </div>
+          </td>
+          <td
+            rowspan="2"
+            class="group-header bg-white colored-header"
+          >
+            UNIT
+          </td>
+          <th
+            rowspan="1"
+            scope="colgroup"
+            class="group-header bg-white colored-header"
+          >
+            ESTIMATED BUDGET
+          </th>
+          <td
+            rowspan="2"
+            class="group-header bg-white colored-header"
+          >
+            BEGINNING BALANCE
+          </td>
+          <td
+            rowspan="2"
+            class="group-header bg-white colored-header"
+          >
+            RECEIVED FROM CSR
+          </td>
+          <td
+            rowspan="2"
+            class="group-header bg-white colored-header"
+          >
+            TOTAL STOCK
+          </td>
+        </tr>
+
+        <tr>
+          <!-- ESTIMATED BUDGET -->
+          <th
+            scope="col"
+            class="header bg-white colored-header"
+          >
+            UNIT COST
+          </th>
+        </tr>
+
+        <tr
+          v-for="rc in reportsContainer"
+          :key="rc.cl2comb"
+        >
+          <th scope="row">{{ rc.item_description }}</th>
+          <td>{{ rc.unit }}</td>
+          <td>{{ rc.unit_cost }}</td>
+          <td>{{ rc.beginning_balance }}</td>
+          <td>{{ rc.from_csr }}</td>
+          <td>{{ rc.total_stock }}</td>
+        </tr>
+      </table>
+    </div>
   </app-layout>
 </template>
 
@@ -35,7 +136,7 @@ export default {
     };
   },
   mounted() {
-    console.log('reports', this.reports);
+    // console.log('reports', this.reports);
 
     this.storeReportsInContainer();
   },
@@ -47,6 +148,7 @@ export default {
           item_description: e.item_description,
           unit: e.unit,
           unit_cost: e.unit_cost,
+          beginning_balance: 0,
           from_csr: e.from_csr,
           total_stock: e.total_stock,
           consumption: e.consumption.filter((x) => x.cl2comb == e.cl2comb),
