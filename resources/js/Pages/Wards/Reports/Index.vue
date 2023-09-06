@@ -79,6 +79,14 @@
           >
             TOTAL STOCK
           </td>
+          <!-- :rowspan="0" -->
+          <th
+            :colspan="consumption_tsdesc_count"
+            scope="colgroup"
+            class="group-header bg-white colored-header"
+          >
+            CONSUMPTION
+          </th>
         </tr>
 
         <tr>
@@ -88,6 +96,13 @@
             class="header bg-white colored-header"
           >
             UNIT COST
+          </th>
+          <th
+            scope="col"
+            class="header bg-white colored-header"
+            v-for="rc in reportsContainer"
+          >
+            {{ rc.consumption[0].tsdesc }}
           </th>
         </tr>
 
@@ -101,6 +116,9 @@
           <td>{{ rc.beginning_balance }}</td>
           <td>{{ rc.from_csr }}</td>
           <td>{{ rc.total_stock }}</td>
+          <td v-for="c in rc.consumption">
+            {{ c.QTY }}
+          </td>
         </tr>
       </table>
     </div>
@@ -133,12 +151,15 @@ export default {
       from: null,
       to: null,
       reportsContainer: [],
+      consumptionContainer: [],
+      consumption_tsdesc_count: null,
     };
   },
   mounted() {
     // console.log('reports', this.reports);
 
     this.storeReportsInContainer();
+    this.storeConsumptionInContainer();
   },
   methods: {
     storeReportsInContainer() {
@@ -155,7 +176,14 @@ export default {
         });
       });
 
-      console.log('container', this.reportsContainer);
+      //   console.log('container', this.reportsContainer);
+    },
+    storeConsumptionInContainer() {
+      this.reports[0].consumption.forEach((e) => {
+        this.consumptionContainer.push(e.tsdesc);
+      });
+
+      this.consumption_tsdesc_count = new Set(this.consumptionContainer).size;
     },
 
     updateData() {
