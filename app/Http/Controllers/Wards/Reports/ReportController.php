@@ -17,43 +17,43 @@ class ReportController extends Controller
 
         // dd($request->to);
 
-        if (is_null($request->from) || is_null($request->to)) {
-            $from = Carbon::now()->startOfMonth();
-            $to = Carbon::now();
-            // dd($from);
-            // $request->from = Carbon::now();
-            // $request->to = Carbon::now();
+        // if (is_null($request->from) || is_null($request->to)) {
+        //     $from = Carbon::now()->startOfMonth();
+        //     $to = Carbon::now();
+        //     // dd($from);
+        //     // $request->from = Carbon::now();
+        //     // $request->to = Carbon::now();
 
-            $csr_report = DB::select(
-                "SELECT hclass2.cl2comb,
-                hclass2.cl2desc,
-                huom.uomdesc as UNIT,
-                (SELECT TOP 1 selling_price FROM csrw_item_prices WHERE cl2comb = hclass2.cl2comb ORDER BY created_at DESC) as 'UNIT COST',
-                sum(CASE WHEN [from]='CSR' THEN quantity ELSE 0 END) as 'RECEIVED FROM CSR',
-                SUM(ward.quantity) as 'TOTAL STOCK'
-                FROM csrw_wards_stocks as ward
-                JOIN hclass2 ON ward.cl2comb = hclass2.cl2comb
-                LEFT JOIN huom ON ward.uomcode = huom.uomcode
-                GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc
-                ORDER BY hclass2.cl2desc ASC;"
-            );
-        } else {
-            // $csr_report = DB::select(
-            //     "SELECT hclass2.cl2comb,
-            //     hclass2.cl2desc,
-            //     huom.uomdesc as UNIT,
-            //     (SELECT TOP 1 selling_price FROM csrw_item_prices WHERE cl2comb = hclass2.cl2comb ORDER BY created_at DESC) as 'UNIT COST',
-            //     SUM(csrw_wards_stocks.quantity) as 'TOTAL STOCK'
-            //     FROM csrw_wards_stocks
-            //     JOIN hclass2 ON csrw_wards_stocks.cl2comb = hclass2.cl2comb
-            //     LEFT JOIN huom ON csrw_wards_stocks.uomcode = huom.uomcode
-            //     GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc, csrw_wards_stocks.quantity
-            //     ORDER BY hclass2.cl2desc ASC;"
-            // );
-        }
+        //     // $ward_report = DB::select(
+        //     //     "SELECT hclass2.cl2comb,
+        //     //     hclass2.cl2desc as ITEM,
+        //     //     huom.uomdesc as UNIT,
+        //     //     (SELECT TOP 1 selling_price FROM csrw_item_prices WHERE cl2comb = hclass2.cl2comb ORDER BY created_at DESC) as 'UNIT COST',
+        //     //     sum(CASE WHEN [from]='CSR' THEN quantity ELSE 0 END) as 'RECEIVED FROM CSR',
+        //     //     SUM(ward.quantity) as 'TOTAL STOCK'
+        //     //     FROM csrw_wards_stocks as ward
+        //     //     JOIN hclass2 ON ward.cl2comb = hclass2.cl2comb
+        //     //     LEFT JOIN huom ON ward.uomcode = huom.uomcode
+        //     //     GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc
+        //     //     ORDER BY hclass2.cl2desc ASC;"
+        //     // );
+        // } else {
+        //     // $csr_report = DB::select(
+        //     //     "SELECT hclass2.cl2comb,
+        //     //     hclass2.cl2desc,
+        //     //     huom.uomdesc as UNIT,
+        //     //     (SELECT TOP 1 selling_price FROM csrw_item_prices WHERE cl2comb = hclass2.cl2comb ORDER BY created_at DESC) as 'UNIT COST',
+        //     //     SUM(csrw_wards_stocks.quantity) as 'TOTAL STOCK'
+        //     //     FROM csrw_wards_stocks
+        //     //     JOIN hclass2 ON csrw_wards_stocks.cl2comb = hclass2.cl2comb
+        //     //     LEFT JOIN huom ON csrw_wards_stocks.uomcode = huom.uomcode
+        //     //     GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc, csrw_wards_stocks.quantity
+        //     //     ORDER BY hclass2.cl2desc ASC;"
+        //     // );
+        // }
         // dd($csr_report);
 
-        // foreach ($csr_report as $e) {
+        // foreach ($ward_report as $e) {
         //     $reports[] = (object) [
         //         'item_description' => $e->cl2desc,
         //         'unit' => $e->uomdesc,
@@ -78,7 +78,45 @@ class ReportController extends Controller
         // }
         // dd($reports);
 
-        return Inertia::render('Csr/Reports/Index', [
+
+        $ward_report = DB::select(
+            "SELECT hclass2.cl2comb,
+                hclass2.cl2desc as cl2desc,
+                huom.uomdesc as uomdesc,
+                (SELECT TOP 1 selling_price FROM csrw_item_prices WHERE cl2comb = hclass2.cl2comb ORDER BY created_at DESC) as 'unit_cost',
+                sum(CASE WHEN [from]='CSR' THEN quantity ELSE 0 END) as 'from_csr',
+                SUM(ward.quantity) as 'total_stock'
+                FROM csrw_wards_stocks as ward
+                JOIN hclass2 ON ward.cl2comb = hclass2.cl2comb
+                LEFT JOIN huom ON ward.uomcode = huom.uomcode
+                GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc
+                ORDER BY hclass2.cl2desc ASC;"
+        );
+        // dd($ward_report);
+
+        $consumption = DB::select(
+            "SELECT cl.tscode, htyp.tsdesc, hclass2.cl2comb, hclass2.cl2desc, SUM(cl.quantity) as QTY
+            FROM htypser as htyp
+            JOIN csrw_patient_charge_logs as cl on htyp.tscode = cl.tscode
+            JOIN hclass2 ON cl.itemcode = hclass2.cl2comb
+            WHERE cl.[from] = 'CSR'
+            GROUP BY cl.tscode, htyp.tsdesc, hclass2.cl2comb, hclass2.cl2desc;"
+        );
+
+        foreach ($ward_report as $e) {
+            $reports[] = (object) [
+                'cl2comb' => $e->cl2comb,
+                'item_description' => $e->cl2desc,
+                'unit' => $e->uomdesc,
+                'unit_cost' => $e->unit_cost,
+                'from_csr' => $e->from_csr,
+                'total_stock' => $e->total_stock,
+                'consumption' => $consumption
+            ];
+        }
+        // dd($reports);
+
+        return Inertia::render('Wards/Reports/Index', [
             'reports' => $reports
         ]);
     }

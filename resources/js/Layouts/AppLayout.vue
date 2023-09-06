@@ -112,6 +112,13 @@ export default {
               comp: 'Wards/TransferStock/Index',
             },
             {
+              label: 'Reports',
+              icon: 'si-microsoftexcel',
+              to: 'wardreports',
+              prefix: 'wardreports',
+              comp: 'Ward/Reports/Index',
+            },
+            {
               label: 'Users',
               icon: 'la-users-solid',
               to: 'users',
@@ -195,6 +202,11 @@ export default {
       if (this.$page.props.user.designation == 'csr') {
         this.menu[0].items = this.menu[0].items.filter(function (obj) {
           return obj.to !== 'users';
+        });
+      }
+      if (this.$page.props.user.designation == 'csr') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'wardreports';
         });
       }
       // end csr
