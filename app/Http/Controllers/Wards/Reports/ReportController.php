@@ -17,43 +17,46 @@ class ReportController extends Controller
 
         // dd($request->to);
 
-        // if (is_null($request->from) || is_null($request->to)) {
-        //     $from = Carbon::now()->startOfMonth();
-        //     $to = Carbon::now();
-        //     // dd($from);
-        //     // $request->from = Carbon::now();
-        //     // $request->to = Carbon::now();
+        if (is_null($request->from) || is_null($request->to)) {
+            $from = Carbon::now()->startOfMonth();
+            $to = Carbon::now();
+            // dd($from);
+            // $request->from = Carbon::now();
+            // $request->to = Carbon::now();
 
-        //     // $ward_report = DB::select(
-        //     //     "SELECT hclass2.cl2comb,
-        //     //     hclass2.cl2desc as ITEM,
-        //     //     huom.uomdesc as UNIT,
-        //     //     (SELECT TOP 1 selling_price FROM csrw_item_prices WHERE cl2comb = hclass2.cl2comb ORDER BY created_at DESC) as 'UNIT COST',
-        //     //     sum(CASE WHEN [from]='CSR' THEN quantity ELSE 0 END) as 'RECEIVED FROM CSR',
-        //     //     SUM(ward.quantity) as 'TOTAL STOCK'
-        //     //     FROM csrw_wards_stocks as ward
-        //     //     JOIN hclass2 ON ward.cl2comb = hclass2.cl2comb
-        //     //     LEFT JOIN huom ON ward.uomcode = huom.uomcode
-        //     //     GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc
-        //     //     ORDER BY hclass2.cl2desc ASC;"
-        //     // );
-        // } else {
-        //     // $csr_report = DB::select(
-        //     //     "SELECT hclass2.cl2comb,
-        //     //     hclass2.cl2desc,
-        //     //     huom.uomdesc as UNIT,
-        //     //     (SELECT TOP 1 selling_price FROM csrw_item_prices WHERE cl2comb = hclass2.cl2comb ORDER BY created_at DESC) as 'UNIT COST',
-        //     //     SUM(csrw_wards_stocks.quantity) as 'TOTAL STOCK'
-        //     //     FROM csrw_wards_stocks
-        //     //     JOIN hclass2 ON csrw_wards_stocks.cl2comb = hclass2.cl2comb
-        //     //     LEFT JOIN huom ON csrw_wards_stocks.uomcode = huom.uomcode
-        //     //     GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc, csrw_wards_stocks.quantity
-        //     //     ORDER BY hclass2.cl2desc ASC;"
-        //     // );
-        // }
-
-        $ward_report = DB::select(
-            "SELECT hclass2.cl2comb,
+            $ward_report = DB::select(
+                "SELECT hclass2.cl2comb,
+                hclass2.cl2desc as cl2desc,
+                huom.uomdesc as uomdesc,
+                (SELECT TOP 1 selling_price FROM csrw_item_prices WHERE cl2comb = hclass2.cl2comb ORDER BY created_at DESC) as 'unit_cost',
+                sum(CASE WHEN [from]='CSR' THEN quantity ELSE 0 END) as 'from_csr',
+                SUM(ward.quantity) as 'total_stock',
+                (SELECT SUM(CASE WHEN tscode = 'SURG' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'surgery',
+                (SELECT SUM(CASE WHEN tscode = 'GYNE' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'obgyne',
+                -- (SELECT SUM(CASE WHEN tscode = 'GYNE' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'urology',
+                (SELECT SUM(CASE WHEN tscode = 'ORTHO' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'ortho',
+                (SELECT SUM(CASE WHEN tscode = 'PEDIA' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'pedia',
+                -- (SELECT SUM(CASE WHEN tscode = 'PEDIA' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'med',
+                (SELECT SUM(CASE WHEN tscode = 'OPHTH' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'optha',
+                (SELECT SUM(CASE WHEN tscode = 'ENT' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'ent',
+                -- (SELECT SUM(CASE WHEN tscode = 'OPHTH' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'neuro',
+                csrw_patient_charge_logs.charge_quantity as total_consumption
+                FROM csrw_wards_stocks as ward
+                JOIN hclass2 ON ward.cl2comb = hclass2.cl2comb
+                LEFT JOIN huom ON ward.uomcode = huom.uomcode
+                LEFT JOIN (
+                    SELECT charge.itemcode, SUM(charge.quantity) as charge_quantity, SUM(charge.price_total) as charge_total
+                    FROM csrw_patient_charge_logs as charge
+                    WHERE charge.[from] = 'CSR'
+                    GROUP BY charge.itemcode
+                ) csrw_patient_charge_logs ON ward.cl2comb = csrw_patient_charge_logs.itemcode
+                WHERE ward.created_at BETWEEN '$from' AND '$to'
+                GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc, csrw_patient_charge_logs.charge_quantity
+                ORDER BY hclass2.cl2desc ASC;"
+            );
+        } else {
+            $ward_report = DB::select(
+                "SELECT hclass2.cl2comb,
             hclass2.cl2desc as cl2desc,
             huom.uomdesc as uomdesc,
             (SELECT TOP 1 selling_price FROM csrw_item_prices WHERE cl2comb = hclass2.cl2comb ORDER BY created_at DESC) as 'unit_cost',
@@ -78,9 +81,13 @@ class ReportController extends Controller
                 WHERE charge.[from] = 'CSR'
                 GROUP BY charge.itemcode
             ) csrw_patient_charge_logs ON ward.cl2comb = csrw_patient_charge_logs.itemcode
+               WHERE ward.created_at BETWEEN '$request->from' AND '$request->to'
             GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc, csrw_patient_charge_logs.charge_quantity
             ORDER BY hclass2.cl2desc ASC;"
-        );
+            );
+        }
+
+
 
 
         foreach ($ward_report as $e) {
