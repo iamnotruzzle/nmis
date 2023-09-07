@@ -2,7 +2,10 @@
   <app-layout>
     <Head title="InvenTrackr - Reports" />
 
-    <div class="card">
+    <div
+      class="card"
+      style="width: 100%"
+    >
       <div class="mb-5 flex justify-content-between">
         <span class="font-bold text-4xl">Reports</span>
         <div class="flex flex-row align-items-center">
@@ -37,228 +40,231 @@
           </a>
         </div>
       </div>
-      <table class="table">
-        <!-- <col />
+
+      <div style="overflow-x: auto">
+        <table class="table">
+          <!-- <col />
         <colgroup span="2"></colgroup>
         <colgroup span="2"></colgroup> -->
-        <tr>
-          <td
-            rowspan="2"
-            class="group-header bg-white colored-header"
-          >
-            <div>
-              <p>REGULAR FUND</p>
-              <p>ITEM DESCRIPTION</p>
-            </div>
-          </td>
-          <td
-            rowspan="2"
-            class="group-header bg-white colored-header"
-          >
-            UNIT
-          </td>
-          <td
-            rowspan="2"
-            class="group-header bg-white colored-header"
-          >
-            UNIT COST
-          </td>
-          <th
-            colspan="2"
-            scope="colgroup"
-            class="group-header bg-yellow-400 colored-header"
-          >
-            CSR
-          </th>
-          <th
-            colspan="2"
-            scope="colgroup"
-            class="group-header bg-yellow-400 colored-header"
-          >
-            WARDS
-          </th>
-          <th
-            colspan="2"
-            scope="colgroup"
-            class="group-header bg-yellow-400 colored-header"
-          >
-            TOTAL BEGINNING BALANCE
-          </th>
-          <th
-            colspan="2"
-            scope="colgroup"
-            class="group-header bg-green-400 colored-header"
-          >
-            SUPPLIES ISSUED TO WARDS
-          </th>
-          <th
-            colspan="2"
-            scope="colgroup"
-            class="group-header bg-yellow-600 colored-header"
-          >
-            CONSUMPTION
-          </th>
-          <th
-            colspan="2"
-            scope="colgroup"
-            class="group-header bg-cyan-400 colored-header"
-          >
-            CSR
-          </th>
-          <th
-            colspan="2"
-            scope="colgroup"
-            class="group-header bg-cyan-400 colored-header"
-          >
-            WARDS
-          </th>
-          <th
-            colspan="2"
-            scope="colgroup"
-            class="group-header bg-cyan-400 colored-header"
-          >
-            TOTAL ENDING BALANCE
-          </th>
-        </tr>
+          <tr>
+            <td
+              rowspan="2"
+              class="group-header bg-white colored-header"
+            >
+              <div>
+                <p>REGULAR FUND</p>
+                <p>ITEM DESCRIPTION</p>
+              </div>
+            </td>
+            <td
+              rowspan="2"
+              class="group-header bg-white colored-header"
+            >
+              UNIT
+            </td>
+            <td
+              rowspan="2"
+              class="group-header bg-white colored-header"
+            >
+              UNIT COST
+            </td>
+            <th
+              colspan="2"
+              scope="colgroup"
+              class="group-header bg-yellow-400 colored-header"
+            >
+              CSR
+            </th>
+            <th
+              colspan="2"
+              scope="colgroup"
+              class="group-header bg-yellow-400 colored-header"
+            >
+              WARDS
+            </th>
+            <th
+              colspan="2"
+              scope="colgroup"
+              class="group-header bg-yellow-400 colored-header"
+            >
+              TOTAL BEGINNING BALANCE
+            </th>
+            <th
+              colspan="2"
+              scope="colgroup"
+              class="group-header bg-green-400 colored-header"
+            >
+              SUPPLIES ISSUED TO WARDS
+            </th>
+            <th
+              colspan="2"
+              scope="colgroup"
+              class="group-header bg-yellow-600 colored-header"
+            >
+              CONSUMPTION
+            </th>
+            <th
+              colspan="2"
+              scope="colgroup"
+              class="group-header bg-cyan-400 colored-header"
+            >
+              CSR
+            </th>
+            <th
+              colspan="2"
+              scope="colgroup"
+              class="group-header bg-cyan-400 colored-header"
+            >
+              WARDS
+            </th>
+            <th
+              colspan="2"
+              scope="colgroup"
+              class="group-header bg-cyan-400 colored-header"
+            >
+              TOTAL ENDING BALANCE
+            </th>
+          </tr>
 
-        <tr>
-          <!-- csr -->
-          <th
-            scope="col"
-            class="header bg-yellow-400 colored-header"
-          >
-            QUANTITY
-          </th>
-          <th
-            scope="col"
-            class="header bg-yellow-400 colored-header"
-          >
-            TOTAL COST
-          </th>
-          <!-- wards -->
-          <th
-            scope="col"
-            class="header bg-yellow-400 colored-header"
-          >
-            QUANTITY
-          </th>
-          <th
-            scope="col"
-            class="header bg-yellow-400 colored-header"
-          >
-            TOTAL COST
-          </th>
-          <!-- total beginning balance -->
-          <th
-            scope="col"
-            class="header bg-yellow-400 colored-header"
-          >
-            TOTAL QUANTITY
-          </th>
-          <th
-            scope="col"
-            class="header bg-yellow-400 colored-header"
-          >
-            TOTAL COST
-          </th>
-          <!-- supplies issued to wards -->
-          <th
-            scope="col"
-            class="header bg-green-400 colored-header"
-          >
-            TOTAL QUANTITY
-          </th>
-          <th
-            scope="col"
-            class="header bg-green-400 colored-header"
-          >
-            TOTAL COST
-          </th>
-          <!-- CONSUMPTiON -->
-          <th
-            scope="col"
-            class="header bg-yellow-600 colored-header"
-          >
-            QUANTITY
-          </th>
-          <th
-            scope="col"
-            class="header bg-yellow-600 colored-header"
-          >
-            TOTAL COST
-          </th>
-          <!-- TOTAL ENDING BALANCE -->
-          <!-- TOTAL ENDING BALANCE CSR-->
-          <th
-            scope="col"
-            class="header bg-cyan-400 colored-header"
-          >
-            QUANTITY
-          </th>
-          <th
-            scope="col"
-            class="header bg-cyan-400 colored-header"
-          >
-            TOTAL COST
-          </th>
-          <!-- TOTAL ENDING BALANCE WARD-->
-          <th
-            scope="col"
-            class="header bg-cyan-400 colored-header"
-          >
-            QUANTITY
-          </th>
-          <th
-            scope="col"
-            class="header bg-cyan-400 colored-header"
-          >
-            TOTAL COST
-          </th>
-          <!-- TOTAL ENDING BALANCE-->
-          <th
-            scope="col"
-            class="header bg-cyan-400 colored-header"
-          >
-            TOTAL QUANTITY
-          </th>
-          <th
-            scope="col"
-            class="header bg-cyan-400 colored-header"
-          >
-            TOTAL COST
-          </th>
-        </tr>
+          <tr>
+            <!-- csr -->
+            <th
+              scope="col"
+              class="header bg-yellow-400 colored-header"
+            >
+              QUANTITY
+            </th>
+            <th
+              scope="col"
+              class="header bg-yellow-400 colored-header"
+            >
+              TOTAL COST
+            </th>
+            <!-- wards -->
+            <th
+              scope="col"
+              class="header bg-yellow-400 colored-header"
+            >
+              QUANTITY
+            </th>
+            <th
+              scope="col"
+              class="header bg-yellow-400 colored-header"
+            >
+              TOTAL COST
+            </th>
+            <!-- total beginning balance -->
+            <th
+              scope="col"
+              class="header bg-yellow-400 colored-header"
+            >
+              TOTAL QUANTITY
+            </th>
+            <th
+              scope="col"
+              class="header bg-yellow-400 colored-header"
+            >
+              TOTAL COST
+            </th>
+            <!-- supplies issued to wards -->
+            <th
+              scope="col"
+              class="header bg-green-400 colored-header"
+            >
+              TOTAL QUANTITY
+            </th>
+            <th
+              scope="col"
+              class="header bg-green-400 colored-header"
+            >
+              TOTAL COST
+            </th>
+            <!-- CONSUMPTiON -->
+            <th
+              scope="col"
+              class="header bg-yellow-600 colored-header"
+            >
+              QUANTITY
+            </th>
+            <th
+              scope="col"
+              class="header bg-yellow-600 colored-header"
+            >
+              TOTAL COST
+            </th>
+            <!-- TOTAL ENDING BALANCE -->
+            <!-- TOTAL ENDING BALANCE CSR-->
+            <th
+              scope="col"
+              class="header bg-cyan-400 colored-header"
+            >
+              QUANTITY
+            </th>
+            <th
+              scope="col"
+              class="header bg-cyan-400 colored-header"
+            >
+              TOTAL COST
+            </th>
+            <!-- TOTAL ENDING BALANCE WARD-->
+            <th
+              scope="col"
+              class="header bg-cyan-400 colored-header"
+            >
+              QUANTITY
+            </th>
+            <th
+              scope="col"
+              class="header bg-cyan-400 colored-header"
+            >
+              TOTAL COST
+            </th>
+            <!-- TOTAL ENDING BALANCE-->
+            <th
+              scope="col"
+              class="header bg-cyan-400 colored-header"
+            >
+              TOTAL QUANTITY
+            </th>
+            <th
+              scope="col"
+              class="header bg-cyan-400 colored-header"
+            >
+              TOTAL COST
+            </th>
+          </tr>
 
-        <tr
-          v-for="rc in reportsContainer"
-          :key="rc.cl2comb"
-        >
-          <th scope="row">{{ rc.item_description }}</th>
-          <td>{{ rc.unit }}</td>
-          <td>{{ rc.unit_cost }}</td>
-          <td>{{ rc.csr_quantity }}</td>
-          <td>{{ rc.csr_total_cost }}</td>
-          <td>{{ rc.ward_quantity }}</td>
-          <td>{{ rc.ward_total_cost }}</td>
-          <td>{{ rc.total_beg_total_quantity }}</td>
-          <td>{{ rc.total_beg_total_cost }}</td>
-          <!-- SUPPLIES ISSUED TO WARDS -->
-          <td>{{ rc.supplies_issued_to_wards_quantity }}</td>
-          <td>{{ rc.supplies_issued_to_wards_total_cost }}</td>
-          <!-- CONSUMPTION -->
-          <td>{{ rc.consumption_quantity }}</td>
-          <td>{{ rc.consumption_total_cost }}</td>
-          <!-- CSR -->
-          <td>{{ rc.csr_quantity_ending_bal }}</td>
-          <td>{{ rc.csr_total_cost_ending_bal }}</td>
-          <!-- WARD -->
-          <td>{{ rc.ward_quantity_ending_bal }}</td>
-          <td>{{ rc.ward_total_cost_ending_bal }}</td>
-          <!-- TOTAL ENDING BALANCE -->
-          <td>{{ rc.total_end_total_quantity }}</td>
-          <td>{{ rc.total_end_total_cost }}</td>
-        </tr>
-      </table>
+          <tr
+            v-for="rc in reportsContainer"
+            :key="rc.cl2comb"
+          >
+            <th scope="row">{{ rc.item_description }}</th>
+            <td>{{ rc.unit }}</td>
+            <td>{{ rc.unit_cost }}</td>
+            <td>{{ rc.csr_quantity }}</td>
+            <td>{{ rc.csr_total_cost }}</td>
+            <td>{{ rc.ward_quantity }}</td>
+            <td>{{ rc.ward_total_cost }}</td>
+            <td>{{ rc.total_beg_total_quantity }}</td>
+            <td>{{ rc.total_beg_total_cost }}</td>
+            <!-- SUPPLIES ISSUED TO WARDS -->
+            <td>{{ rc.supplies_issued_to_wards_quantity }}</td>
+            <td>{{ rc.supplies_issued_to_wards_total_cost }}</td>
+            <!-- CONSUMPTION -->
+            <td>{{ rc.consumption_quantity }}</td>
+            <td>{{ rc.consumption_total_cost }}</td>
+            <!-- CSR -->
+            <td>{{ rc.csr_quantity_ending_bal }}</td>
+            <td>{{ rc.csr_total_cost_ending_bal }}</td>
+            <!-- WARD -->
+            <td>{{ rc.ward_quantity_ending_bal }}</td>
+            <td>{{ rc.ward_total_cost_ending_bal }}</td>
+            <!-- TOTAL ENDING BALANCE -->
+            <td>{{ rc.total_end_total_quantity }}</td>
+            <td>{{ rc.total_end_total_cost }}</td>
+          </tr>
+        </table>
+      </div>
     </div>
   </app-layout>
 </template>
