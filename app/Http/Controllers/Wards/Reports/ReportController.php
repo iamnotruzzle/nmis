@@ -104,6 +104,7 @@ class ReportController extends Controller
                 'total_consumption' => $e->total_consumption,
                 'total_cons_estimated_cost' => $e->total_consumption * $e->unit_cost,
                 'ending_balance' => $e->total_stock - $e->total_consumption,
+                'actual_inventory' => $e->total_stock - $e->total_consumption,
             ];
         }
         // dd($reports);

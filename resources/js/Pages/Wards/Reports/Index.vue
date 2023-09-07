@@ -105,6 +105,12 @@
           >
             ENDING BALANCE
           </td>
+          <td
+            rowspan="2"
+            class="group-header bg-white colored-header text-center"
+          >
+            ACTUAL INVENTORY
+          </td>
         </tr>
 
         <tr>
@@ -201,6 +207,7 @@
           <td>{{ rc.total_consumption }}</td>
           <td>{{ rc.total_cons_estimated_cost }}</td>
           <td>{{ rc.ending_balance }}</td>
+          <td>{{ rc.actual_inventory }}</td>
         </tr>
       </table>
     </div>
@@ -263,6 +270,7 @@ export default {
           total_consumption: e.total_consumption,
           total_cons_estimated_cost: e.total_cons_estimated_cost,
           ending_balance: e.ending_balance,
+          actual_inventory: e.actual_inventory,
         });
       });
 
