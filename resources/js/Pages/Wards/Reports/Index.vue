@@ -93,6 +93,18 @@
           >
             TOTAL CONSUMPTION
           </td>
+          <th
+            scope="colgroup"
+            class="group-header bg-white colored-header text-center"
+          >
+            TOTAL CONSUMPTION
+          </th>
+          <td
+            rowspan="2"
+            class="group-header bg-white colored-header text-center"
+          >
+            ENDING BALANCE
+          </td>
         </tr>
 
         <tr>
@@ -158,6 +170,13 @@
           >
             NEURO
           </th>
+          <!-- TOTAL CONSUMPTION -->
+          <th
+            scope="col"
+            class="header bg-white colored-header"
+          >
+            (ESTIMATED COST)
+          </th>
         </tr>
 
         <tr
@@ -180,6 +199,8 @@
           <td>{{ rc.ent }}</td>
           <td>{{ rc.neuro }}</td>
           <td>{{ rc.total_consumption }}</td>
+          <td>{{ rc.total_cons_estimated_cost }}</td>
+          <td>{{ rc.ending_balance }}</td>
         </tr>
       </table>
     </div>
@@ -227,19 +248,21 @@ export default {
           item_description: e.item_description,
           unit: e.unit,
           unit_cost: e.unit_cost,
-          beginning_balance: 0,
+          beginning_balance: e.beginning_balance,
           from_csr: e.from_csr,
           total_stock: e.total_stock,
           surgery: e.surgery,
           obgyne: e.obgyne,
-          urology: 0,
+          urology: e.urology,
           ortho: e.ortho,
           pedia: e.pedia,
-          med: 0,
+          med: e.med,
           optha: e.optha,
           ent: e.ent,
-          neuro: 0,
+          neuro: e.neuro,
           total_consumption: e.total_consumption,
+          total_cons_estimated_cost: e.total_cons_estimated_cost,
+          ending_balance: e.ending_balance,
         });
       });
 
