@@ -81,12 +81,18 @@
           </td>
           <!-- :rowspan="0" -->
           <th
-            :colspan="consumption_tsdesc_count"
+            colspan="9"
             scope="colgroup"
             class="group-header bg-white colored-header text-center"
           >
             CONSUMPTION
           </th>
+          <td
+            rowspan="2"
+            class="group-header bg-white colored-header"
+          >
+            TOTAL CONSUMPTION
+          </td>
         </tr>
 
         <tr>
@@ -97,12 +103,60 @@
           >
             UNIT COST
           </th>
+          <!-- CONSUMPTION -->
           <th
             scope="col"
             class="header bg-white colored-header"
-            v-for="rc in reportsContainer"
           >
-            {{ rc.consumption[0].tsdesc }}
+            SURGERY
+          </th>
+          <th
+            scope="col"
+            class="header bg-white colored-header"
+          >
+            OB-GYNE
+          </th>
+          <th
+            scope="col"
+            class="header bg-white colored-header"
+          >
+            UROLOGY
+          </th>
+          <th
+            scope="col"
+            class="header bg-white colored-header"
+          >
+            ORTHO
+          </th>
+          <th
+            scope="col"
+            class="header bg-white colored-header"
+          >
+            PEDIA
+          </th>
+          <th
+            scope="col"
+            class="header bg-white colored-header"
+          >
+            MED
+          </th>
+          <th
+            scope="col"
+            class="header bg-white colored-header"
+          >
+            OPTHA
+          </th>
+          <th
+            scope="col"
+            class="header bg-white colored-header"
+          >
+            ENT
+          </th>
+          <th
+            scope="col"
+            class="header bg-white colored-header"
+          >
+            NEURO
           </th>
         </tr>
 
@@ -116,9 +170,16 @@
           <td>{{ rc.beginning_balance }}</td>
           <td>{{ rc.from_csr }}</td>
           <td>{{ rc.total_stock }}</td>
-          <td v-for="c in rc.consumption">
-            {{ c.QTY }}
-          </td>
+          <td>{{ rc.surgery }}</td>
+          <td>{{ rc.obgyne }}</td>
+          <td>{{ rc.urology }}</td>
+          <td>{{ rc.ortho }}</td>
+          <td>{{ rc.pedia }}</td>
+          <td>{{ rc.med }}</td>
+          <td>{{ rc.optha }}</td>
+          <td>{{ rc.ent }}</td>
+          <td>{{ rc.neuro }}</td>
+          <td>{{ rc.total_consumption }}</td>
         </tr>
       </table>
     </div>
@@ -151,15 +212,12 @@ export default {
       from: null,
       to: null,
       reportsContainer: [],
-      consumptionContainer: [],
-      consumption_tsdesc_count: null,
     };
   },
   mounted() {
     // console.log('reports', this.reports);
 
     this.storeReportsInContainer();
-    this.storeConsumptionInContainer();
   },
   methods: {
     storeReportsInContainer() {
@@ -172,18 +230,20 @@ export default {
           beginning_balance: 0,
           from_csr: e.from_csr,
           total_stock: e.total_stock,
-          consumption: e.consumption.filter((x) => x.cl2comb == e.cl2comb),
+          surgery: e.surgery,
+          obgyne: e.obgyne,
+          urology: 0,
+          ortho: e.ortho,
+          pedia: e.pedia,
+          med: 0,
+          optha: e.optha,
+          ent: e.ent,
+          neuro: 0,
+          total_consumption: e.total_consumption,
         });
       });
 
       //   console.log('container', this.reportsContainer);
-    },
-    storeConsumptionInContainer() {
-      this.reports[0].consumption.forEach((e) => {
-        this.consumptionContainer.push(e.tsdesc);
-      });
-
-      this.consumption_tsdesc_count = new Set(this.consumptionContainer).size;
     },
 
     updateData() {
