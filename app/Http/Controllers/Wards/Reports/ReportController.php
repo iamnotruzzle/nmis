@@ -22,6 +22,7 @@ class ReportController extends Controller
             ->where('csrw_login_history.employeeid', Auth::user()->employeeid)
             ->orderBy('csrw_login_history.created_at', 'desc')
             ->first();
+        // dd($authWardcode->wardcode);
 
         if (is_null($request->from) || is_null($request->to)) {
             $from = Carbon::now()->startOfMonth();
@@ -56,8 +57,7 @@ class ReportController extends Controller
                     WHERE charge.[from] = 'CSR'
                     GROUP BY charge.itemcode
                 ) csrw_patient_charge_logs ON ward.cl2comb = csrw_patient_charge_logs.itemcode
-                WHERE ward.wardcode = $authWardcode->wardcode
-                WHERE ward.created_at BETWEEN '$from' AND '$to'
+                WHERE ward.location LIKE '$authWardcode->wardcode' AND ward.created_at BETWEEN '$from' AND '$to'
                 GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc, csrw_patient_charge_logs.charge_quantity
                 ORDER BY hclass2.cl2desc ASC;"
             );
@@ -88,8 +88,7 @@ class ReportController extends Controller
                     WHERE charge.[from] = 'CSR'
                     GROUP BY charge.itemcode
                 ) csrw_patient_charge_logs ON ward.cl2comb = csrw_patient_charge_logs.itemcode
-                WHERE ward.wardcode = $authWardcode->wardcode
-                WHERE ward.created_at BETWEEN '$request->from' AND '$request->to'
+                WHERE ward.location LIKE '$authWardcode->wardcode' AND ward.created_at BETWEEN '$request->from' AND '$request->to'
                 GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc, csrw_patient_charge_logs.charge_quantity
                 ORDER BY hclass2.cl2desc ASC;"
             );
@@ -116,8 +115,8 @@ class ReportController extends Controller
                 // 'neuro' => 'NA',
                 'total_consumption' => $e->total_consumption,
                 'total_cons_estimated_cost' => $e->total_consumption * $e->unit_cost,
-                'ending_balance' => $e->total_stock - $e->total_consumption,
-                'actual_inventory' => $e->total_stock - $e->total_consumption,
+                'ending_balance' => $e->total_stock - $e->total_consumption <= 0 ? 0 : $e->total_stock - $e->total_consumption,
+                'actual_inventory' => $e->total_stock - $e->total_consumption <= 0 ? 0 : $e->total_stock - $e->total_consumption,
             ];
         }
         // dd($reports);

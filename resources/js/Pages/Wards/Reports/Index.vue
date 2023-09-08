@@ -30,7 +30,7 @@
             />
           </div>
           <a
-            :href="`csrstocks/export?from=${params.from}&to=${params.to}`"
+            :href="`wardstocks/export?from=${params.from}&to=${params.to}`"
             target="_blank"
           >
             <i
