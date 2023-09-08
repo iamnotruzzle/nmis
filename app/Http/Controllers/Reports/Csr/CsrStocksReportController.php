@@ -107,6 +107,6 @@ class CsrStocksReportController extends Controller
             ];
         }
 
-        return Excel::download(new CsrStocksReport($reports), 'csr_stocks.xlsx');
+        return Excel::download(new CsrStocksReport($reports), 'report.xlsx');
     }
 }

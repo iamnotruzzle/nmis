@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Wards\Reports;
+namespace App\Http\Controllers\Reports\Ward;
 
+use App\Exports\WardStocksReport;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Inertia\Inertia;
+use Maatwebsite\Excel\Facades\Excel;
 
-class ReportController extends Controller
+class WardStocksReportController extends Controller
 {
-
-    public function index(Request $request)
+    public function export(Request $request)
     {
         $reports = array();
 
@@ -122,8 +122,6 @@ class ReportController extends Controller
         }
         // dd($reports);
 
-        return Inertia::render('Wards/Reports/Index', [
-            'reports' => $reports
-        ]);
+        return Excel::download(new WardStocksReport($reports), 'report.xlsx');
     }
 }
