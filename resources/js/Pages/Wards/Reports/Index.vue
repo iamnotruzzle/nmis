@@ -85,7 +85,7 @@
             </td>
             <!-- :rowspan="0" -->
             <th
-              colspan="9"
+              colspan="6"
               scope="colgroup"
               class="group-header bg-white colored-header text-center"
             >
@@ -138,12 +138,12 @@
             >
               OB-GYNE
             </th>
-            <th
+            <!-- <th
               scope="col"
               class="header bg-white colored-header"
             >
               UROLOGY
-            </th>
+            </th> -->
             <th
               scope="col"
               class="header bg-white colored-header"
@@ -156,12 +156,12 @@
             >
               PEDIA
             </th>
-            <th
+            <!-- <th
               scope="col"
               class="header bg-white colored-header"
             >
               MED
-            </th>
+            </th> -->
             <th
               scope="col"
               class="header bg-white colored-header"
@@ -174,12 +174,12 @@
             >
               ENT
             </th>
-            <th
+            <!-- <th
               scope="col"
               class="header bg-white colored-header"
             >
               NEURO
-            </th>
+            </th> -->
             <!-- TOTAL CONSUMPTION -->
             <th
               scope="col"
@@ -201,13 +201,13 @@
             <td>{{ rc.total_stock }}</td>
             <td>{{ rc.surgery }}</td>
             <td>{{ rc.obgyne }}</td>
-            <td>{{ rc.urology }}</td>
+            <!-- <td>{{ rc.urology }}</td> -->
             <td>{{ rc.ortho }}</td>
             <td>{{ rc.pedia }}</td>
-            <td>{{ rc.med }}</td>
+            <!-- <td>{{ rc.med }}</td> -->
             <td>{{ rc.optha }}</td>
             <td>{{ rc.ent }}</td>
-            <td>{{ rc.neuro }}</td>
+            <!-- <td>{{ rc.neuro }}</td> -->
             <td>{{ rc.total_consumption }}</td>
             <td>{{ rc.total_cons_estimated_cost }}</td>
             <td>{{ rc.ending_balance }}</td>
@@ -265,13 +265,13 @@ export default {
           total_stock: e.total_stock,
           surgery: e.surgery,
           obgyne: e.obgyne,
-          urology: e.urology,
+          //   urology: e.urology,
           ortho: e.ortho,
           pedia: e.pedia,
-          med: e.med,
+          //   med: e.med,
           optha: e.optha,
           ent: e.ent,
-          neuro: e.neuro,
+          //   neuro: e.neuro,
           total_consumption: e.total_consumption,
           total_cons_estimated_cost: e.total_cons_estimated_cost,
           ending_balance: e.ending_balance,
