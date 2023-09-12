@@ -21,8 +21,8 @@ class WardStocksReport implements FromArray, WithHeadings
     public function headings(): array
     {
         return [
-            ['REGULAR FUND', 'UNIT', 'UNIT COST',  'CSR', '', 'WARD', '', 'TOTAL BEGINNING BALANCE', '', 'SUPPLIES ISSUED TO WARDS', '', 'CONSUMPTION', '', 'CSR', '', 'WARD', '', 'TOTAL ENDING BALANCE'],
-            ['ITEM DESCRIPTION', '', '', 'QUANTITY', 'TOTAL COST', 'QUANTITY', 'TOTAL COST', 'TOTAL QUANTITY', 'TOTAL COST', 'QUANTITY', 'TOTAL COST', 'QUANTITY', 'TOTAL COST', 'QUANTITY', 'TOTAL COST', 'QUANTITY', 'TOTAL COST', 'TOTAL QUANTITY', 'TOTAL COST'],
+            ['ITEM DESCRIPTION', 'UNIT', 'ESTIMATED BUDGET', 'BEGINNING BALANCE', 'RECEIVED FROM CSR', 'TOTAL STOCK', '', '', 'CONSUMPTION', '', '', '', 'TOTAL CONSUMPTION', 'TOTAL CONSUMPTION', 'ENDING BALANCE', 'ACTUAL INVENTORY'],
+            ['', '', 'UNIT COST', '', '', '', 'SURGERY', 'OB-GYNE', 'ORTHO', 'PEDIA', 'OPTHA', 'ENT', '', '(ESTIMATED COST)', '', ''],
         ];
     }
 
