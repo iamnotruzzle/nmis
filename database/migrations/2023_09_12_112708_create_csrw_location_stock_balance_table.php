@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCsrwEndingBalanceTable extends Migration
+class CreateCsrwLocationStockBalanceTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateCsrwEndingBalanceTable extends Migration
      */
     public function up()
     {
-        Schema::create('csrw_ending_balance', function (Blueprint $table) {
+        Schema::create('csrw_location_stock_balance', function (Blueprint $table) {
             $table->id();
             $table->string('location');
             $table->string('cl2comb');
-            $table->string('ending_balance');
+            $table->integer('ending_balance');
+            $table->integer('starting_balance');
             $table->string('entry_by');
             $table->timestamps();
         });
@@ -30,6 +31,6 @@ class CreateCsrwEndingBalanceTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('csrw_ending_balance');
+        Schema::dropIfExists('csrw_location_stock_balance');
     }
 }

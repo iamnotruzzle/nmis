@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class EndingBalance extends Model
+class LocationStockBalance extends Model
 {
     use HasFactory;
 
-    protected $table = 'csrw_ending_balance';
+    protected $table = 'csrw_location_stock_balance';
 
     protected $fillable = [
         'id',
@@ -18,6 +18,11 @@ class EndingBalance extends Model
         'ending_balance',
         'entry_by',
     ];
+
+    public function item()
+    {
+        return $this->hasOne(Item::class, 'cl2comb', 'cl2comb');
+    }
 
     public function userDetail()
     {
