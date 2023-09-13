@@ -13,7 +13,7 @@ use Inertia\Inertia;
 
 class LocationStockBalanceController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         // get auth wardcode
         $authWardcode = DB::table('csrw_users')
@@ -30,6 +30,18 @@ class LocationStockBalanceController extends Controller
 
         $locationStockBalance = LocationStockBalance::with(['item:cl2comb,cl2desc', 'user_detail'])
             ->where('location', $authWardcode->wardcode)
+            ->when(
+                $request->from,
+                function ($query, $value) {
+                    $query->whereDate('created_at', '>=', $value);
+                }
+            )
+            ->when(
+                $request->to,
+                function ($query, $value) {
+                    $query->whereDate('created_at', '<=', $value);
+                }
+            )
             ->paginate(10);
 
         return Inertia::render('Balance/Index', [
