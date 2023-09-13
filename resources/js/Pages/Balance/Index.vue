@@ -136,6 +136,16 @@
             :class="{ 'p-invalid': form.ending_balance }"
           />
         </div>
+        <div class="field">
+          <label>Starting balance</label>
+          <InputText
+            v-model.trim="form.starting_balance"
+            required="true"
+            autofocus
+            type="number"
+            :class="{ 'p-invalid': form.starting_balance }"
+          />
+        </div>
 
         <template #footer>
           <Button
@@ -253,11 +263,11 @@ export default {
   },
   methods: {
     storeStockBalanceInContainer() {
-      //   this.locationStockBalance.forEach((e) => {
-      //     this.balanceContainer.push({
-      //       cl2comb: e.cl2comb,
-      //     });
-      //   });
+      this.locationStockBalance.data.forEach((e) => {
+        this.balanceContainer.push({
+          cl2comb: e.cl2comb,
+        });
+      });
       //   console.log('container', this.reportsContainer);
     },
     storeItemsInController() {
@@ -297,9 +307,19 @@ export default {
       this.form.reset();
       this.itemId = null;
       this.createItemDialog = true;
+      this.form.location = this.$page.props.auth.user.location.location_name.wardcode;
+      this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid;
     },
     clickOutsideDialog() {
-      this.$emit('hide', (this.itemId = null), (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
+      this.$emit(
+        'hide',
+        (this.itemId = null),
+        (this.isUpdate = false),
+        this.form.clearErrors(),
+        this.form.reset(),
+        (this.form.location = this.$page.props.auth.user.location.location_name.wardcode),
+        (this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid)
+      );
     },
     editItem(item) {
       //   console.log(item);
@@ -355,7 +375,8 @@ export default {
           this.form.reset();
           this.updateData();
           this.deletedMsg();
-          this.storeUserInContainer();
+          this.form.location = this.$page.props.auth.user.location.location_name.wardcode;
+          this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid;
         },
       });
     },
@@ -365,6 +386,8 @@ export default {
       this.createItemDialog = false;
       this.form.reset();
       this.form.clearErrors();
+      this.form.location = this.$page.props.auth.user.location.location_name.wardcode;
+      this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid;
     },
     createdMsg() {
       this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Account created', life: 3000 });
