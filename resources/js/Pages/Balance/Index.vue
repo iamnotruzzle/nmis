@@ -75,6 +75,15 @@
           </template>
         </Column>
         <Column
+          field="entry_by"
+          header="ENTRY BY"
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.entry_by }}
+          </template>
+        </Column>
+        <Column
           header="CREATED AT"
           filterField="created_at"
           style="min-width: 10rem"
@@ -334,7 +343,7 @@ export default {
     this.rows = this.locationStockBalance.per_page;
   },
   mounted() {
-    // console.log('stock bal', this.locationStockBalance);
+    console.log('stock bal', this.locationStockBalance);
 
     this.storeStockBalanceInContainer();
     this.storeItemsInController();
@@ -353,6 +362,7 @@ export default {
           cl2desc: e.item.cl2desc,
           ending_balance: e.ending_balance,
           starting_balance: e.starting_balance,
+          entry_by: e.user_detail.firstname + ' ' + e.user_detail.lastname,
         });
       });
       //   console.log('container', this.reportsContainer);
