@@ -214,6 +214,39 @@
           />
         </template>
       </Dialog>
+
+      <Dialog
+        v-model:visible="deleteItemDialog"
+        :style="{ width: '450px' }"
+        header="Confirm"
+        :modal="true"
+        dismissableMask
+      >
+        <div class="flex align-items-center justify-content-center">
+          <i
+            class="pi pi-exclamation-triangle mr-3"
+            style="font-size: 2rem"
+          />
+          <span v-if="form"
+            >Are you sure you want to delete <b>{{ form.cl2desc }} </b> ?</span
+          >
+        </div>
+        <template #footer>
+          <Button
+            label="No"
+            icon="pi pi-times"
+            class="p-button-text"
+            @click="deleteItemDialog = false"
+          />
+          <Button
+            label="Yes"
+            icon="pi pi-check"
+            severity="danger"
+            text
+            @click="deleteItem"
+          />
+        </template>
+      </Dialog>
     </div>
   </app-layout>
 </template>
@@ -422,13 +455,17 @@ export default {
       this.itemId = item.id;
       this.deleteItemDialog = true;
     },
+    confirmDeleteItem(item) {
+      this.form.id = item.id;
+      this.form.cl2desc = item.cl2desc;
+      this.deleteItemDialog = true;
+    },
     deleteItem() {
-      this.form.delete(route('stockbal.destroy', this.itemId), {
+      this.form.delete(route('stockbal.destroy', this.form.id), {
         preserveScroll: true,
         onSuccess: () => {
           this.balanceContainer = [];
           this.deleteItemDialog = false;
-          this.itemId = null;
           this.form.clearErrors();
           this.form.reset();
           this.updateData();
