@@ -334,7 +334,7 @@ export default {
     this.rows = this.locationStockBalance.per_page;
   },
   mounted() {
-    console.log('stock bal', this.locationStockBalance);
+    // console.log('stock bal', this.locationStockBalance);
 
     this.storeStockBalanceInContainer();
     this.storeItemsInController();
@@ -409,7 +409,7 @@ export default {
       );
     },
     editItem(item) {
-      console.log(item);
+      //   console.log(item);
       this.isUpdate = true;
       this.createItemDialog = true;
       this.form.id = item.id;
