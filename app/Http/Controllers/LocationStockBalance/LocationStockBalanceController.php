@@ -57,9 +57,25 @@ class LocationStockBalanceController extends Controller
         return redirect()->back();
     }
 
-    public function update(Request $request, $id)
+    public function update(LocationStockBalance $stockbal, Request $request)
     {
-        //
+        $request->validate([
+            'cl2comb' => 'required',
+            'ending_balance' => 'required',
+            'starting_balance' => 'required',
+        ]);
+
+        $stockbal->update([
+            'location' => $request->location,
+            'cl2comb' => $request->cl2comb,
+            'ending_balance' => $request->ending_balance,
+            'starting_balance' => $request->starting_balance,
+            'entry_by' => $request->entry_by,
+        ]);
+
+        // dd($lsb);
+
+        return redirect()->back();
     }
 
     public function destroy($id)

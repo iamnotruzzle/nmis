@@ -6,6 +6,8 @@
       class="card"
       style="width: 100%"
     >
+      <Toast />
+
       <DataTable
         class="p-datatable-sm"
         v-model:filters="filters"
@@ -132,6 +134,7 @@
         :modal="true"
         class="p-fluid"
         @hide="whenDialogIsHidden"
+        dismissableMask
       >
         <div class="field">
           <label>Item</label>
@@ -191,6 +194,17 @@
             @click="cancel"
           />
           <Button
+            v-if="isUpdate == true"
+            label="Update"
+            icon="pi pi-check"
+            text
+            type="submit"
+            severity="warning"
+            :disabled="form.processing"
+            @click="submit"
+          />
+          <Button
+            v-else
             label="Save"
             icon="pi pi-check"
             text
@@ -271,6 +285,7 @@ export default {
         cl2comb: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       form: this.$inertia.form({
+        id: null,
         location: null,
         cl2comb: null,
         ending_balance: null,
@@ -300,6 +315,7 @@ export default {
     storeStockBalanceInContainer() {
       this.locationStockBalance.data.forEach((e) => {
         this.balanceContainer.push({
+          id: e.id,
           cl2comb: e.item.cl2comb,
           cl2desc: e.item.cl2desc,
           ending_balance: e.ending_balance,
@@ -318,7 +334,7 @@ export default {
       });
     },
     updateData() {
-      this.reportsContainer = [];
+      this.balanceContainer = [];
       this.loading = true;
 
       this.$inertia.get('stockbal', this.params, {
@@ -326,7 +342,7 @@ export default {
         preserveScroll: true,
         onFinish: (visit) => {
           //   this.totalRecords = this.users.total;
-          this.reportsContainer = [];
+          this.balanceContainer = [];
           this.storeStockBalanceInContainer();
           this.loading = false;
         },
@@ -360,21 +376,24 @@ export default {
       );
     },
     editItem(item) {
-      //   console.log(item);
+      console.log(item);
       this.isUpdate = true;
       this.createItemDialog = true;
-      this.form.role = item.role;
+      this.form.id = item.id;
+      this.form.cl2comb = item.cl2comb;
+      this.form.ending_balance = item.ending_balance;
+      this.form.starting_balance = item.starting_balance;
     },
     submit() {
+      let id = this.form.id;
       if (this.isUpdate) {
-        this.form.put(route('stockbal.update'), {
+        this.form.put(route('stockbal.update', id), {
           preserveScroll: true,
           onSuccess: () => {
-            this.itemId = null;
             this.createItemDialog = false;
             this.cancel();
             this.updateData();
-            this.createdMsg();
+            this.updatedMsg();
           },
         });
       } else {
@@ -390,7 +409,14 @@ export default {
       }
     },
     whenDialogIsHidden() {
-      this.$emit('hide', this.form.clearErrors(), this.form.reset());
+      this.$emit(
+        'hide',
+        (this.isUpdate = false),
+        this.form.clearErrors(),
+        this.form.reset(),
+        (this.form.location = this.$page.props.auth.user.location.location_name.wardcode),
+        (this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid)
+      );
     },
     confirmDeleteItem(item) {
       this.itemId = item.id;
