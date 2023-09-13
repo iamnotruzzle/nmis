@@ -25,7 +25,7 @@ class LocationStockBalance extends Model
         return $this->hasOne(Item::class, 'cl2comb', 'cl2comb');
     }
 
-    public function userDetail()
+    public function user_detail()
     {
         return $this->hasOne(UserDetail::class, 'employeeid', 'entry_by');
     }

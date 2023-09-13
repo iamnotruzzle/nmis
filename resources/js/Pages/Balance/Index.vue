@@ -51,7 +51,25 @@
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.item }}
+            {{ data.cl2desc }}
+          </template>
+        </Column>
+        <Column
+          field="ending_balance"
+          header="ENDING BALANCE"
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.ending_balance }}
+          </template>
+        </Column>
+        <Column
+          field="starting_balance"
+          header="STARTING BALANCE"
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.starting_balance }}
           </template>
         </Column>
         <Column
@@ -123,8 +141,15 @@
             :options="itemsList"
             filter
             optionLabel="cl2desc"
+            optionValue="cl2comb"
             class="w-full mb-3"
           />
+          <small
+            class="text-error"
+            v-if="form.errors.cl2comb"
+          >
+            Item is required.
+          </small>
         </div>
         <div class="field">
           <label>Ending balance</label>
@@ -135,6 +160,12 @@
             type="number"
             :class="{ 'p-invalid': form.ending_balance }"
           />
+          <small
+            class="text-error"
+            v-if="form.errors.ending_balance"
+          >
+            {{ form.errors.ending_balance }}
+          </small>
         </div>
         <div class="field">
           <label>Starting balance</label>
@@ -145,6 +176,12 @@
             type="number"
             :class="{ 'p-invalid': form.starting_balance }"
           />
+          <small
+            class="text-error"
+            v-if="form.errors.starting_balance"
+          >
+            {{ form.errors.starting_balance }}
+          </small>
         </div>
 
         <template #footer>
@@ -265,7 +302,10 @@ export default {
     storeStockBalanceInContainer() {
       this.locationStockBalance.data.forEach((e) => {
         this.balanceContainer.push({
-          cl2comb: e.cl2comb,
+          cl2comb: e.item.cl2comb,
+          cl2desc: e.item.cl2desc,
+          ending_balance: e.ending_balance,
+          starting_balance: e.starting_balance,
         });
       });
       //   console.log('container', this.reportsContainer);
@@ -323,14 +363,9 @@ export default {
     },
     editItem(item) {
       //   console.log(item);
-
       this.isUpdate = true;
       this.createItemDialog = true;
-      this.itemId = item.id;
       this.form.role = item.role;
-      this.form.designation = item.designation;
-      this.form.employeeid = item.employeeid;
-      this.form.password = item.password;
     },
     submit() {
       if (this.isUpdate) {
@@ -348,7 +383,6 @@ export default {
         this.form.post(route('stockbal.store'), {
           preserveScroll: true,
           onSuccess: () => {
-            this.itemId = null;
             this.createItemDialog = false;
             this.cancel();
             this.updateData();
@@ -390,13 +424,28 @@ export default {
       this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid;
     },
     createdMsg() {
-      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Account created', life: 3000 });
+      this.$toast.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Starting and ending balance declared',
+        life: 3000,
+      });
     },
     updatedMsg() {
-      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Account updated', life: 3000 });
+      this.$toast.add({
+        severity: 'warn',
+        summary: 'Success',
+        detail: 'Starting and ending balance updated',
+        life: 3000,
+      });
     },
     deletedMsg() {
-      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Account deleted', life: 3000 });
+      this.$toast.add({
+        severity: 'error',
+        summary: 'Success',
+        detail: 'Starting and ending balance deleted',
+        life: 3000,
+      });
     },
     getLocalDateString(utcStr) {
       const date = new Date(utcStr);
