@@ -315,7 +315,7 @@ export default {
       itemsList: [],
       balanceContainer: [],
       filters: {
-        cl2comb: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       form: this.$inertia.form({
         id: null,

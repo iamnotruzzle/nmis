@@ -15,6 +15,8 @@ class LocationStockBalanceController extends Controller
 {
     public function index(Request $request)
     {
+        $searchString = $request->search;
+
         // get auth wardcode
         $authWardcode = DB::table('csrw_users')
             ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
@@ -42,6 +44,9 @@ class LocationStockBalanceController extends Controller
                     $query->whereDate('created_at', '<=', $value);
                 }
             )
+            ->whereHas('item', function ($q) use ($searchString) {
+                $q->where('cl2desc', 'LIKE', '%' . $searchString . '%');
+            })
             ->paginate(10);
 
         return Inertia::render('Balance/Index', [
