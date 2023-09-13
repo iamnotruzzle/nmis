@@ -864,8 +864,8 @@ export default {
     this.rows = this.requestedStocks.per_page;
   },
   mounted() {
-    console.log('current 1', this.currentWardStocks);
-    console.log('current 2', this.currentWardStocks2);
+    // console.log('current 1', this.currentWardStocks);
+    // console.log('current 2', this.currentWardStocks2);
 
     this.storeBrandsInContainer();
     // issued = name of the channel

@@ -77,6 +77,13 @@ export default {
               comp: 'Csr/Inventory/Stocks/Index',
             },
             {
+              label: 'Stock balance',
+              icon: 'la-boxes-solid',
+              to: 'stockbal',
+              prefix: 'stockbal',
+              comp: 'Balance/Index',
+            },
+            {
               label: 'Reports',
               icon: 'si-microsoftexcel',
               to: 'csrreports',
@@ -84,7 +91,7 @@ export default {
               comp: 'Csr/Reports/Index',
             },
             {
-              label: 'Issue Items',
+              label: 'Issue items',
               icon: 'md-handshake-sharp',
               to: 'issueitems',
               prefix: 'issueitems',
@@ -105,7 +112,7 @@ export default {
               comp: 'Wards/Patients/Index',
             },
             {
-              label: 'Transfer-Stocks',
+              label: 'Transfer stocks',
               icon: 'md-handshake-sharp',
               to: 'transferstock',
               prefix: 'transferstock',

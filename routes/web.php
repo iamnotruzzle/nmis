@@ -9,6 +9,7 @@ use App\Http\Controllers\Csr\Inventory\Stocks\CsrStocksController;
 use App\Http\Controllers\Csr\IssueItems\IssueItemController;
 use App\Http\Controllers\Csr\Reports\ReportsController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\LocationStockBalance\LocationStockBalanceController;
 use App\Http\Controllers\Reports\Csr\CsrStocksReportController;
 use App\Http\Controllers\Reports\Ward\WardStocksReportController;
 use App\Http\Controllers\Users\UserController;
@@ -19,6 +20,8 @@ use App\Http\Controllers\Wards\Reports\ReportController;
 use App\Http\Controllers\Wards\RequestStocks\RequestStocksController;
 use App\Http\Controllers\Wards\RequestStocks\WardsStocksLogs\WardsStocksLogsController;
 use App\Http\Controllers\Wards\TransferStock\TransferStockController;
+use App\Models\Location;
+use App\Models\LocationStockBalance;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -52,6 +55,7 @@ Route::resource('csrstocks', CsrStocksController::class)->middleware(['auth:sanc
 Route::resource('issueitems', IssueItemController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('csrreports', ReportsController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index']);
 Route::get('csrstocks/export/', [CsrStocksReportController::class, 'export']);
+Route::resource('stockbal', LocationStockBalanceController::class)->middleware(['auth:sanctum', 'verified'])->only(['index', 'store', 'update', 'destroy']);
 // Route::resource('csrstocks/export/', [CsrStocksReportController::class, 'export'])->only(['index']);
 // end csr routes
 

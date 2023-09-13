@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\LocationStockBalance;
 
 use App\Http\Controllers\Controller;
+use App\Models\LocationStockBalance;
 use App\Models\WardsStocks;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,8 +27,13 @@ class LocationStockBalanceController extends Controller
             ->where('from', 'CSR')
             ->get();
 
-        return Inertia::render('Wards/Stocks/Index', [
-            // 'items' => $items,
+        $locationStockBalance = LocationStockBalance::with(['item:cl2comb,cl2desc, userDetail'])
+            ->where('location', $authWardcode->wardcode)
+            ->paginate(10);
+
+        return Inertia::render('Balance/Index', [
+            'currentWardStocks' => $currentWardStocks,
+            'locationStockBalance' => $locationStockBalance,
         ]);
     }
 
