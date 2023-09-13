@@ -158,7 +158,6 @@
             required="true"
             autofocus
             type="number"
-            :class="{ 'p-invalid': form.ending_balance }"
           />
           <small
             class="text-error"
@@ -174,7 +173,6 @@
             required="true"
             autofocus
             type="number"
-            :class="{ 'p-invalid': form.starting_balance }"
           />
           <small
             class="text-error"
