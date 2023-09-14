@@ -84,6 +84,15 @@
           </template>
         </Column>
         <Column
+          field="updated_by"
+          header="UPDATED BY"
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.updated_by }}
+          </template>
+        </Column>
+        <Column
           header="CREATED AT"
           filterField="created_at"
           style="min-width: 10rem"
@@ -170,6 +179,7 @@
             required="true"
             autofocus
             type="number"
+            @keyup.enter="submit"
           />
           <small
             class="text-error"
@@ -185,6 +195,7 @@
             required="true"
             autofocus
             type="number"
+            @keyup.enter="submit"
           />
           <small
             class="text-error"
@@ -362,7 +373,8 @@ export default {
           cl2desc: e.item.cl2desc,
           ending_balance: e.ending_balance,
           starting_balance: e.starting_balance,
-          entry_by: e.user_detail.firstname + ' ' + e.user_detail.lastname,
+          entry_by: e.entry_by.firstname + ' ' + e.entry_by.lastname,
+          updated_by: e.updated_by == null ? null : e.updated_by.firstname + ' ' + e.updated_by.lastname,
         });
       });
       //   console.log('container', this.reportsContainer);

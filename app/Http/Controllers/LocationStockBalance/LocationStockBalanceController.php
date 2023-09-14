@@ -30,7 +30,7 @@ class LocationStockBalanceController extends Controller
             ->where('from', 'CSR')
             ->get();
 
-        $locationStockBalance = LocationStockBalance::with(['item:cl2comb,cl2desc', 'user_detail'])
+        $locationStockBalance = LocationStockBalance::with(['item:cl2comb,cl2desc', 'entry_by', 'updated_by'])
             ->where('location', $authWardcode->wardcode)
             ->when(
                 $request->from,
@@ -47,6 +47,7 @@ class LocationStockBalanceController extends Controller
             ->whereHas('item', function ($q) use ($searchString) {
                 $q->where('cl2desc', 'LIKE', '%' . $searchString . '%');
             })
+            ->orderBy('created_at', 'DESC')
             ->paginate(10);
 
         return Inertia::render('Balance/Index', [
