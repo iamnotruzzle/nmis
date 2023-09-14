@@ -87,7 +87,7 @@ class LocationStockBalanceController extends Controller
             'cl2comb' => $request->cl2comb,
             'ending_balance' => $request->ending_balance,
             'starting_balance' => $request->starting_balance,
-            'entry_by' => $request->entry_by,
+            'updated_by' => $request->entry_by,
         ]);
 
         // dd($lsb);

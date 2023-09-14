@@ -18,6 +18,7 @@ class LocationStockBalance extends Model
         'ending_balance',
         'starting_balance',
         'entry_by',
+        'updated_by',
     ];
 
     public function item()
