@@ -17,12 +17,6 @@ class CsrStocksReportController extends Controller
         $reports = array();
 
         if (is_null($request->from) || is_null($request->to)) {
-            $from = Carbon::now()->startOfMonth();
-            $to = Carbon::now();
-            // dd($from);
-            // $request->from = Carbon::now();
-            // $request->to = Carbon::now();
-
             $csr_report = DB::select(
                 "SELECT hclass2.cl2comb,
                 hclass2.cl2desc,
@@ -47,7 +41,7 @@ class CsrStocksReportController extends Controller
                     GROUP BY charge.itemcode
                 ) csrw_patient_charge_logs ON csrw_csr_stocks.cl2comb = csrw_patient_charge_logs.itemcode
                 LEFT JOIN huom ON csrw_csr_stocks.uomcode = huom.uomcode
-                WHERE created_at BETWEEN '$from' AND '$to'
+                WHERE created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
                 GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc, csrw_wards_stocks.wards_quantity, csrw_patient_charge_logs.charge_quantity, csrw_patient_charge_logs.charge_total
                 ORDER BY hclass2.cl2desc ASC;"
             );
