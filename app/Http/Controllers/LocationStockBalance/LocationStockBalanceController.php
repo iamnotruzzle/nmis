@@ -75,11 +75,16 @@ class LocationStockBalanceController extends Controller
         //     $isExist = true;
         // }
 
-        $request->validate([
-            'cl2comb' => [new StockBalanceRule($request->cl2comb)],
-            'ending_balance' => 'required',
-            'starting_balance' => 'required',
-        ]);
+        $request->validate(
+            [
+                'cl2comb' => ['required', new StockBalanceRule($request->cl2comb)],
+                'ending_balance' => 'required',
+                'starting_balance' => 'required',
+            ],
+            [
+                'cl2comb.required' => 'Item field is required.',
+            ]
+        );
 
         LocationStockBalance::create([
             'location' => $request->location,
