@@ -369,9 +369,9 @@ export default {
   watch: {
     from: function (val) {
       if (val != null) {
-        let from = moment(val).format('LL');
+        // let from = moment(val).format('LL');
         // console.log('from', from);
-        this.params.from = from;
+        this.params.from = val;
       } else {
         this.params.from = null;
         this.from = null;
@@ -380,9 +380,9 @@ export default {
     },
     to: function (val) {
       if (val != null) {
-        let to = moment(val).add(1, 'd').format('LL');
+        // let to = moment(val).add(1, 'd').format('LL');
         // console.log('to', to);
-        this.params.to = to;
+        this.params.to = val;
       } else {
         this.params.to = null;
         this.to = null;
