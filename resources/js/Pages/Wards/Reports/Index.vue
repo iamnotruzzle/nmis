@@ -29,7 +29,13 @@
               class="mr-2"
             />
           </div>
+          <i
+            v-if="from == null || to == null"
+            class="pi pi-file-excel"
+            :style="{ color: 'gray', 'font-size': '2rem' }"
+          ></i>
           <a
+            v-else
             :href="`wardstocks/export?from=${params.from}&to=${params.to}`"
             target="_blank"
           >

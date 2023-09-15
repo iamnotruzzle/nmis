@@ -25,12 +25,6 @@ class ReportController extends Controller
         // dd($authWardcode->wardcode);
 
         if (is_null($request->from) || is_null($request->to)) {
-            $from = Carbon::now()->startOfMonth();
-            $to = Carbon::now();
-            // dd($from);
-            // $request->from = Carbon::now();
-            // $request->to = Carbon::now();
-
             $ward_report = DB::select(
                 "SELECT hclass2.cl2comb,
                 hclass2.cl2desc as cl2desc,
@@ -57,7 +51,7 @@ class ReportController extends Controller
                     WHERE charge.[from] = 'CSR'
                     GROUP BY charge.itemcode
                 ) csrw_patient_charge_logs ON ward.cl2comb = csrw_patient_charge_logs.itemcode
-                WHERE ward.location LIKE '$authWardcode->wardcode' AND ward.created_at BETWEEN '$from' AND '$to'
+                WHERE ward.location LIKE '$authWardcode->wardcode' AND ward.created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
                 GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc, csrw_patient_charge_logs.charge_quantity
                 ORDER BY hclass2.cl2desc ASC;"
             );
