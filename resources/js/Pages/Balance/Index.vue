@@ -163,13 +163,13 @@
             filter
             optionLabel="cl2desc"
             optionValue="cl2comb"
-            class="w-full mb-3"
+            class="w-full"
           />
           <small
             class="text-error"
             v-if="form.errors.cl2comb"
           >
-            Item is required.
+            {{ form.errors.cl2comb }}
           </small>
         </div>
         <div class="field">

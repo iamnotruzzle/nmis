@@ -5,6 +5,7 @@ namespace App\Http\Controllers\LocationStockBalance;
 use App\Http\Controllers\Controller;
 use App\Models\LocationStockBalance;
 use App\Models\WardsStocks;
+use App\Rules\StockBalanceRule;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -59,23 +60,23 @@ class LocationStockBalanceController extends Controller
 
     public function store(Request $request)
     {
-        $isExist = false;
-        $date = Carbon::now()->subDays(30); // get last 30 days
+        // dd($request->cl2comb);
+        // $date = Carbon::now()->subDays(30); // get last 30 days
 
-        $s = LocationStockBalance::where('cl2comb', $request->cl2comb)
-            ->where('created_at', '>=', $date)
-            ->count();
-        // dd($s);
+        // $s = LocationStockBalance::where('cl2comb', $request->cl2comb)
+        //     ->where('created_at', '>=', $date)
+        //     ->count();
+        // // dd($s);
 
-        // if the item is listed in the last 30 days.
-        // then error a message will pop out saying the item is listed
-        // in the last 30days
-        if ($s != 0) {
-            $isExist = true;
-        }
+        // // if the item is listed in the last 30 days.
+        // // then error a message will pop out saying the item is listed
+        // // in the last 30days
+        // if ($s != 0) {
+        //     $isExist = true;
+        // }
 
         $request->validate([
-            'cl2comb' => 'required',
+            'cl2comb' => [new StockBalanceRule($request->cl2comb)],
             'ending_balance' => 'required',
             'starting_balance' => 'required',
         ]);
