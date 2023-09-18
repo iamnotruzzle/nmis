@@ -474,8 +474,8 @@ export default {
   },
   mounted() {
     window.Echo.channel('request').listen('RequestStock', (e) => {
-      this.usersList = [];
       this.loading = true;
+      this.totalRecords = this.requestedStocks.total;
 
       this.$inertia.get('issueitems', this.params, {
         preserveState: true,
@@ -575,7 +575,6 @@ export default {
       this.updateData();
     },
     updateData() {
-      this.usersList = [];
       this.loading = true;
 
       this.$inertia.get('issueitems', this.params, {
