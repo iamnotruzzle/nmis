@@ -70,6 +70,8 @@ class WardStocksReportController extends Controller
                 "SELECT hclass2.cl2comb,
                 hclass2.cl2desc as cl2desc,
                 huom.uomdesc as uomdesc,
+                csrw_location_stock_balance.ending_balance as ending_balance,
+                csrw_location_stock_balance.beginning_balance as beginning_balance,
                 (SELECT TOP 1 selling_price FROM csrw_item_prices WHERE cl2comb = hclass2.cl2comb ORDER BY created_at DESC) as 'unit_cost',
                 sum(CASE WHEN [from]='CSR' THEN quantity ELSE 0 END) as 'from_csr',
                 SUM(ward.quantity) as 'total_stock',
@@ -92,8 +94,14 @@ class WardStocksReportController extends Controller
                     WHERE charge.[from] = 'CSR'
                     GROUP BY charge.itemcode
                 ) csrw_patient_charge_logs ON ward.cl2comb = csrw_patient_charge_logs.itemcode
-                WHERE ward.location LIKE '$authWardcode->wardcode' AND ward.created_at BETWEEN '$request->from' AND '$request->to'
-                GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc, csrw_patient_charge_logs.charge_quantity
+                LEFT JOIN (
+                    SELECT stockbal.cl2comb, SUM(stockbal.ending_balance) as ending_balance, SUM(stockbal.beginning_balance) as beginning_balance
+                    FROM csrw_location_stock_balance as stockbal
+                    WHERE stockbal.location LIKE '$authWardcode->wardcode'
+                    GROUP BY stockbal.cl2comb
+                ) csrw_location_stock_balance ON ward.cl2comb = csrw_location_stock_balance.cl2comb
+                  WHERE ward.location LIKE '$authWardcode->wardcode' AND ward.created_at BETWEEN '$request->from' AND '$request->to'
+                GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc, csrw_patient_charge_logs.charge_quantity, csrw_location_stock_balance.ending_balance, csrw_location_stock_balance.beginning_balance
                 ORDER BY hclass2.cl2desc ASC;"
             );
         }
@@ -119,7 +127,7 @@ class WardStocksReportController extends Controller
                 // 'neuro' => 'NA',
                 'total_consumption' => $e->total_consumption,
                 'total_cons_estimated_cost' => $e->total_consumption * $e->unit_cost,
-                'ending_balance' => $e->total_stock - $e->total_consumption <= 0 ? 0 : $e->total_stock - $e->total_consumption,
+                'ending_balance' => $e->beginning_balance - $e->total_consumption,
                 'actual_inventory' => $e->total_stock - $e->total_consumption <= 0 ? 0 : $e->total_stock - $e->total_consumption,
             ];
         }
