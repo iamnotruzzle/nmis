@@ -16,7 +16,7 @@ class LocationStockBalance extends Model
         'location',
         'cl2comb',
         'ending_balance',
-        'starting_balance',
+        'beginning_balance',
         'entry_by',
         'updated_by',
     ];

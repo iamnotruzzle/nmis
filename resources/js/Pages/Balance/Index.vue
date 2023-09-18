@@ -66,12 +66,12 @@
           </template>
         </Column>
         <Column
-          field="starting_balance"
+          field="beginning_balance"
           header="STARTING BALANCE"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.starting_balance }}
+            {{ data.beginning_balance }}
           </template>
         </Column>
         <Column
@@ -191,7 +191,7 @@
         <div class="field">
           <label>Starting balance</label>
           <InputText
-            v-model.trim="form.starting_balance"
+            v-model.trim="form.beginning_balance"
             required="true"
             autofocus
             type="number"
@@ -199,9 +199,9 @@
           />
           <small
             class="text-error"
-            v-if="form.errors.starting_balance"
+            v-if="form.errors.beginning_balance"
           >
-            {{ form.errors.starting_balance }}
+            {{ form.errors.beginning_balance }}
           </small>
         </div>
 
@@ -342,7 +342,7 @@ export default {
         location: null,
         cl2comb: null,
         ending_balance: null,
-        starting_balance: null,
+        beginning_balance: null,
         entry_by: null,
       }),
     };
@@ -372,7 +372,7 @@ export default {
           cl2comb: e.item.cl2comb,
           cl2desc: e.item.cl2desc,
           ending_balance: e.ending_balance,
-          starting_balance: e.starting_balance,
+          beginning_balance: e.beginning_balance,
           entry_by: e.entry_by.firstname + ' ' + e.entry_by.lastname,
           updated_by: e.updated_by == null ? null : e.updated_by.firstname + ' ' + e.updated_by.lastname,
         });
@@ -437,7 +437,7 @@ export default {
       this.form.id = item.id;
       this.form.cl2comb = item.cl2comb;
       this.form.ending_balance = item.ending_balance;
-      this.form.starting_balance = item.starting_balance;
+      this.form.beginning_balance = item.beginning_balance;
     },
     submit() {
       let id = this.form.id;

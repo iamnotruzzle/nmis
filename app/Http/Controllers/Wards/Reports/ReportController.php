@@ -29,6 +29,8 @@ class ReportController extends Controller
                 "SELECT hclass2.cl2comb,
                 hclass2.cl2desc as cl2desc,
                 huom.uomdesc as uomdesc,
+                csrw_location_stock_balance.ending_balance as ending_balance,
+                csrw_location_stock_balance.beginning_balance as beginning_balance,
                 (SELECT TOP 1 selling_price FROM csrw_item_prices WHERE cl2comb = hclass2.cl2comb ORDER BY created_at DESC) as 'unit_cost',
                 sum(CASE WHEN [from]='CSR' THEN quantity ELSE 0 END) as 'from_csr',
                 SUM(ward.quantity) as 'total_stock',
@@ -51,8 +53,14 @@ class ReportController extends Controller
                     WHERE charge.[from] = 'CSR'
                     GROUP BY charge.itemcode
                 ) csrw_patient_charge_logs ON ward.cl2comb = csrw_patient_charge_logs.itemcode
+                LEFT JOIN (
+                    SELECT stockbal.cl2comb, SUM(stockbal.ending_balance) as ending_balance, SUM(stockbal.beginning_balance) as beginning_balance
+                    FROM csrw_location_stock_balance as stockbal
+                    WHERE stockbal.location LIKE '$authWardcode->wardcode'
+                    GROUP BY stockbal.cl2comb
+                ) csrw_location_stock_balance ON ward.cl2comb = csrw_location_stock_balance.cl2comb
                 WHERE ward.location LIKE '$authWardcode->wardcode' AND ward.created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
-                GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc, csrw_patient_charge_logs.charge_quantity
+                GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc, csrw_patient_charge_logs.charge_quantity, csrw_location_stock_balance.ending_balance, csrw_location_stock_balance.beginning_balance
                 ORDER BY hclass2.cl2desc ASC;"
             );
         } else {
@@ -95,7 +103,7 @@ class ReportController extends Controller
                 'item_description' => $e->cl2desc,
                 'unit' => $e->uomdesc,
                 'unit_cost' => $e->unit_cost,
-                'beginning_balance' => 'NA',
+                'beginning_balance' => $e->beginning_balance,
                 'from_csr' => $e->from_csr,
                 'total_stock' => $e->total_stock,
                 'surgery' => $e->surgery,

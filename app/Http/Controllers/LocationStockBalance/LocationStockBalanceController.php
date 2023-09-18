@@ -79,7 +79,7 @@ class LocationStockBalanceController extends Controller
             [
                 'cl2comb' => ['required', new StockBalanceRule($request->cl2comb)],
                 'ending_balance' => 'required',
-                'starting_balance' => 'required',
+                'beginning_balance' => 'required',
             ],
             [
                 'cl2comb.required' => 'Item field is required.',
@@ -90,7 +90,7 @@ class LocationStockBalanceController extends Controller
             'location' => $request->location,
             'cl2comb' => $request->cl2comb,
             'ending_balance' => $request->ending_balance,
-            'starting_balance' => $request->starting_balance,
+            'beginning_balance' => $request->beginning_balance,
             'entry_by' => $request->entry_by,
         ]);
 
@@ -102,14 +102,14 @@ class LocationStockBalanceController extends Controller
         $request->validate([
             'cl2comb' => 'required',
             'ending_balance' => 'required',
-            'starting_balance' => 'required',
+            'beginning_balance' => 'required',
         ]);
 
         $stockbal->update([
             'location' => $request->location,
             'cl2comb' => $request->cl2comb,
             'ending_balance' => $request->ending_balance,
-            'starting_balance' => $request->starting_balance,
+            'beginning_balance' => $request->beginning_balance,
             'updated_by' => $request->entry_by,
         ]);
 
