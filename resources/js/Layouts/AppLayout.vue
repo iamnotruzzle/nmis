@@ -169,6 +169,21 @@ export default {
       }
       if (this.$page.props.user.designation == 'admin') {
         this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'csrreports';
+        });
+      }
+      if (this.$page.props.user.designation == 'admin') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'wardreports';
+        });
+      }
+      if (this.$page.props.user.designation == 'admin') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'stockbal';
+        });
+      }
+      if (this.$page.props.user.designation == 'admin') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
           return obj.to !== 'issueitems';
         });
       }
