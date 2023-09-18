@@ -16,6 +16,8 @@ class WardStocksReportController extends Controller
     {
         $reports = array();
 
+        // dd($request->from);
+
         $authWardcode = DB::table('csrw_users')
             ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
             ->select('csrw_login_history.wardcode')
@@ -25,8 +27,6 @@ class WardStocksReportController extends Controller
         // dd($authWardcode->wardcode);
 
         if (is_null($request->from) || is_null($request->to)) {
-
-
             $ward_report = DB::select(
                 "SELECT hclass2.cl2comb,
                 hclass2.cl2desc as cl2desc,
