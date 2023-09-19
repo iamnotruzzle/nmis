@@ -473,19 +473,25 @@ export default {
     this.rows = this.requestedStocks.per_page;
   },
   mounted() {
-    window.Echo.channel('request').listen('RequestStock', (e) => {
-      this.loading = true;
+    window.Echo.channel('request').listen('RequestStock', (args) => {
       this.totalRecords = this.requestedStocks.total;
 
-      this.$inertia.get('issueitems', this.params, {
-        preserveState: true,
-        preserveScroll: true,
-        onFinish: (visit) => {
-          this.totalRecords = this.requestedStocks.total;
-          this.requestStockList = [];
-          this.storeRequestedStocksInContainer();
-          this.loading = false;
-        },
+      this.requestStockList = [];
+      args.message.data.forEach((e) => {
+        this.requestStockList.push({
+          id: e.id,
+          status: e.status,
+          requested_by: e.requested_by_details.firstname + ' ' + e.requested_by_details.lastname,
+          requested_by_image: e.requested_by_details.user_account.image,
+          approved_by:
+            e.approved_by_details != null
+              ? e.approved_by_details.firstname + ' ' + e.approved_by_details.lastname
+              : null,
+          approved_by_image: e.approved_by_details != null ? e.approved_by_details.user_account.image : null,
+          requested_at: e.requested_at_details.wardname,
+          created_at: e.created_at,
+          request_stocks_details: e.request_stocks_details,
+        });
       });
     });
 

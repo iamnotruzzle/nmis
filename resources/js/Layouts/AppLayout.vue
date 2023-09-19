@@ -231,6 +231,11 @@ export default {
           return obj.to !== 'wardreports';
         });
       }
+      if (this.$page.props.user.designation == 'csr') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'stockbal';
+        });
+      }
       // end csr
 
       // ward
