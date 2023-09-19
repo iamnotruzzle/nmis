@@ -15,11 +15,6 @@ class CategoryController extends Controller
 {
     public function index(Request $request)
     {
-        // TODO ask if ptstat condition is needed
-        // $procTypes = ProcTypeForHclass::where('ptstat', 'A')
-        //     ->orderBy('ptdesc', 'ASC')
-        //     ->get();
-
         $procTypes = ProcTypeForHclass::orderBy('ptdesc', 'ASC')
             ->get();
 

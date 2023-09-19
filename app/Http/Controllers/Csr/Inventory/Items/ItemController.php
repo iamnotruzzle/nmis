@@ -20,7 +20,6 @@ class ItemController extends Controller
             ->orderBy('cl1comb', 'ASC')
             ->get(['cl1comb', 'cl1desc']);
 
-        // TODO ask if uomstat condition is needed
         $units = UnitOfMeasurement::where('uomstat', 'A')
             ->orderBy('uomdesc', 'ASC')
             ->get(['uomcode', 'uomdesc']);

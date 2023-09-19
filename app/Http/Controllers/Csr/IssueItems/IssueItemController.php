@@ -36,7 +36,6 @@ class IssueItemController extends Controller
             ->orderBy('cl2desc', 'ASC')
             ->get(['cl2comb', 'cl2desc']);
 
-        // TODO fix $requestedStocks where when() is not working when whereHas() is 2 or more
         $requestedStocks = RequestStocks::with([
             'requested_at_details:wardcode,wardname',
             'requested_by_details:employeeid,firstname,middlename,lastname',

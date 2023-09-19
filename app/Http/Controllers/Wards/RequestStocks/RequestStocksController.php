@@ -36,10 +36,6 @@ class RequestStocksController extends Controller
             ->orderBy('cl2desc', 'ASC')
             ->get();
 
-        // TODO, requestStocks query has 2 where clause on location.
-        // FIX the query where it only needs to use 1 where location instead of 2
-        // to get the requested stocks based on the auth's current login locations
-        // TODO FIX $requestedStocks where when() is not working when whereHas() is 2 or more
         $requestedStocks = RequestStocks::with(['requested_at_details', 'requested_by_details', 'approved_by_details', 'request_stocks_details.item_details'])
             ->where('location', '=', $authWardcode->wardcode)
             ->whereHas('requested_by_details', function ($q) use ($searchString) {
