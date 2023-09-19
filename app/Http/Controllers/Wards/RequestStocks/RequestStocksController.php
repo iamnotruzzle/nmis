@@ -110,18 +110,7 @@ class RequestStocksController extends Controller
         }
 
         // the parameters result will be send into the frontend
-        // check the mounted of the page
-        event(new RequestStock(
-            $requestedStocks = RequestStocks::with([
-                'requested_at_details:wardcode,wardname',
-                'requested_by_details:employeeid,firstname,middlename,lastname',
-                'approved_by_details',
-                'request_stocks_details.item_details:cl2comb,cl2desc',
-                'request_stocks_details'
-            ])
-                ->orderBy('created_at', 'desc')
-                ->paginate(15)
-        ));
+        event(new RequestStock('Item requested.'));
 
         return Redirect::route('requeststocks.index');
     }
@@ -147,18 +136,7 @@ class RequestStocksController extends Controller
         }
 
         // the parameters result will be send into the frontend
-        // check the mounted of the page
-        event(new RequestStock(
-            $requestedStocks = RequestStocks::with([
-                'requested_at_details:wardcode,wardname',
-                'requested_by_details:employeeid,firstname,middlename,lastname',
-                'approved_by_details',
-                'request_stocks_details.item_details:cl2comb,cl2desc',
-                'request_stocks_details'
-            ])
-                ->orderBy('created_at', 'desc')
-                ->paginate(15)
-        ));
+        event(new RequestStock('Item requested.'));
 
         return Redirect::route('requeststocks.index');
     }
@@ -173,18 +151,8 @@ class RequestStocksController extends Controller
             ]);
 
         // the parameters result will be send into the frontend
-        // check the mounted of the page
-        event(new RequestStock(
-            $requestedStocks = RequestStocks::with([
-                'requested_at_details:wardcode,wardname',
-                'requested_by_details:employeeid,firstname,middlename,lastname',
-                'approved_by_details',
-                'request_stocks_details.item_details:cl2comb,cl2desc',
-                'request_stocks_details'
-            ])
-                ->orderBy('created_at', 'desc')
-                ->paginate(15)
-        ));
+        event(new RequestStock('Item requested.'));
+
 
         return Redirect::route('requeststocks.index');
     }
@@ -200,18 +168,7 @@ class RequestStocksController extends Controller
         RequestStocksDetails::where('request_stocks_id', $requestStocksID)->delete();
 
         // the parameters result will be send into the frontend
-        // check the mounted of the page
-        event(new RequestStock(
-            $requestedStocks = RequestStocks::with([
-                'requested_at_details:wardcode,wardname',
-                'requested_by_details:employeeid,firstname,middlename,lastname',
-                'approved_by_details',
-                'request_stocks_details.item_details:cl2comb,cl2desc',
-                'request_stocks_details'
-            ])
-                ->orderBy('created_at', 'desc')
-                ->paginate(15)
-        ));
+        event(new RequestStock('Item requested.'));
 
         return Redirect::route('requeststocks.index');
     }

@@ -474,28 +474,14 @@ export default {
   },
   mounted() {
     window.Echo.channel('request').listen('RequestStock', (args) => {
-      this.totalRecords = this.requestedStocks.total;
-
-      this.requestStockList = [];
-      args.message.data.forEach((e) => {
-        this.requestStockList.push({
-          id: e.id,
-          status: e.status,
-          requested_by: e.requested_by_details.firstname + ' ' + e.requested_by_details.lastname,
-          requested_by_image: e.requested_by_details.user_account.image,
-          approved_by:
-            e.approved_by_details != null
-              ? e.approved_by_details.firstname + ' ' + e.approved_by_details.lastname
-              : null,
-          approved_by_image: e.approved_by_details != null ? e.approved_by_details.user_account.image : null,
-          requested_at: e.requested_at_details.wardname,
-          created_at: e.created_at,
-          request_stocks_details: e.request_stocks_details,
-        });
+      router.reload({
+        onSuccess: (e) => {
+          this.requestStockList = [];
+          this.storeRequestedStocksInContainer();
+        },
       });
     });
 
-    // console.log(this.requestedStocks);
     this.storeItemsInController();
     this.storeRequestedStocksInContainer();
 
