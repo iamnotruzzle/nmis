@@ -186,10 +186,7 @@ class IssueItemController extends Controller
         event(new ItemIssued(
             [
                 $location->location,
-                $requestedStocks = RequestStocks::with(['requested_at_details', 'requested_by_details', 'approved_by_details', 'request_stocks_details.item_details'])
-                    ->where('location', '=', $location->location)
-                    ->orderBy('created_at', 'desc')
-                    ->paginate(10)
+                'Item/s issued.'
             ]
         ));
 
@@ -368,10 +365,7 @@ class IssueItemController extends Controller
         event(new ItemIssued(
             [
                 $location->location,
-                $requestedStocks = RequestStocks::with(['requested_at_details', 'requested_by_details', 'approved_by_details', 'request_stocks_details.item_details'])
-                    ->where('location', '=', $location->location)
-                    ->orderBy('created_at', 'desc')
-                    ->paginate(10)
+                'Item/s issued.'
             ]
         ));
 

@@ -153,7 +153,6 @@ class RequestStocksController extends Controller
         // the parameters result will be send into the frontend
         event(new RequestStock('Item requested.'));
 
-
         return Redirect::route('requeststocks.index');
     }
 
