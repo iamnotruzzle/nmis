@@ -67,7 +67,7 @@ class IssueItemController extends Controller
                 }
             )
             ->orderBy('created_at', 'desc')
-            ->paginate(15);
+            ->paginate(10);
 
 
         return Inertia::render('Csr/IssueItems/Index', [
@@ -182,7 +182,16 @@ class IssueItemController extends Controller
             }
         }
 
-        event(new ItemIssued($location->location));
+        // pass this the parameter in the frontends mounted
+        event(new ItemIssued(
+            [
+                $location->location,
+                $requestedStocks = RequestStocks::with(['requested_at_details', 'requested_by_details', 'approved_by_details', 'request_stocks_details.item_details'])
+                    ->where('location', '=', $location->location)
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(10)
+            ]
+        ));
 
         return Redirect::route('issueitems.index');
     }
@@ -355,15 +364,22 @@ class IssueItemController extends Controller
                 ]);
         }
 
-        event(new ItemIssued($location->location));
+        // pass this the parameter in the frontends mounted
+        event(new ItemIssued(
+            [
+                $location->location,
+                $requestedStocks = RequestStocks::with(['requested_at_details', 'requested_by_details', 'approved_by_details', 'request_stocks_details.item_details'])
+                    ->where('location', '=', $location->location)
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(10)
+            ]
+        ));
 
         return Redirect::route('issueitems.index');
     }
 
     public function destroy(RequestStocks $requeststock, Request $request)
     {
-        // dd($requeststock);
-        // event(new ItemIssued($location->location));
 
         return Redirect::route('issueitems.index');
     }

@@ -864,29 +864,28 @@ export default {
     this.rows = this.requestedStocks.per_page;
   },
   mounted() {
-    // console.log('current 1', this.currentWardStocks);
-    // console.log('current 2', this.currentWardStocks2);
-
     this.storeBrandsInContainer();
-    // issued = name of the channel
-    // ItemIssued = name of the event
-    // Channel = user doesn't need to authenticated or authorize
-    window.Echo.channel('issued').listen('ItemIssued', (e) => {
-      // the condition is that if the callback message/location is == authwarcode then
-      // refresh the data
-      if (e.message == this.$page.props.authWardcode.wardcode) {
-        this.$inertia.get('requeststocks', this.params, {
-          preserveState: true,
-          preserveScroll: true,
-          onFinish: (visit) => {
-            this.totalRecords = this.requestedStocks.total;
-            this.requestStockList = [];
-            this.currentWardStocksList = [];
-            this.storeRequestedStocksInContainer();
-            this.storeCurrentWardStocksInContainer();
-            this.loading = false;
-            this.formUpdateStatus.reset();
-          },
+
+    window.Echo.channel('issued').listen('ItemIssued', (args) => {
+      if (args.message[0] == this.$page.props.authWardcode.wardcode) {
+        // reset requesStockList
+        this.requestStockList = [];
+
+        this.totalRecords = this.requestedStocks.total;
+        args.message[1].data.forEach((e) => {
+          this.requestStockList.push({
+            id: e.id,
+            status: e.status,
+            requested_by: e.requested_by_details.firstname + ' ' + e.requested_by_details.lastname,
+            requested_by_image: e.requested_by_details.user_account.image,
+            approved_by:
+              e.approved_by_details != null
+                ? e.approved_by_details.firstname + ' ' + e.approved_by_details.lastname
+                : null,
+            approved_by_image: e.approved_by_details != null ? e.approved_by_details.user_account.image : null,
+            created_at: e.created_at,
+            request_stocks_details: e.request_stocks_details,
+          });
         });
       }
     });
