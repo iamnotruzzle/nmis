@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Csr\Dashboard\DashboardController as CsrDashboardController;
 use App\Http\Controllers\Csr\Inventory\Categories\CategoryController;
 use App\Http\Controllers\Csr\Inventory\ItemPrice\ItemPriceController;
 use App\Http\Controllers\Csr\Inventory\Items\ItemController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\Reports\Csr\CsrStocksReportController;
 use App\Http\Controllers\Reports\Ward\WardStocksReportController;
 use App\Http\Controllers\Users\UserController;
 use App\Http\Controllers\Wards\Consignment\WardConsignmentController;
+use App\Http\Controllers\Wards\Dashboard\DashboardController as WardDashboardController;
 use App\Http\Controllers\Wards\Patients\PatientChargeController;
 use App\Http\Controllers\Wards\Patients\WardPatientsController;
 use App\Http\Controllers\Wards\Reports\ReportController;
@@ -47,6 +49,7 @@ Route::resource('users', UserController::class)->middleware(['auth:sanctum', 've
 // end admin routes
 
 // csr routes
+Route::resource('csrdashboard', CsrDashboardController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('categories', CategoryController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('items', ItemController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('itemprices', ItemPriceController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
@@ -61,6 +64,7 @@ Route::resource('stockbal', LocationStockBalanceController::class)->middleware([
 
 
 // ward routes
+Route::resource('warddashboard', WardDashboardController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('requeststocks', RequestStocksController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
 Route::put('requeststocks', [RequestStocksController::class, 'updatedeliverystatus'])->name('requeststocks.updatedeliverystatus');
 Route::resource('consignment', WardConsignmentController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
