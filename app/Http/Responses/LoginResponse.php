@@ -18,7 +18,8 @@ class LoginResponse implements LoginResponseContract
         return $request->wantsJson()
             ? response()->json(['two_factor' => false])
             : redirect()->intended(
-                Auth::user()->designation == 'admin' || Auth::user()->designation == 'csr' ? 'csrdashboard' : 'warddashboard'
+                // Auth::user()->designation == 'admin' || Auth::user()->designation == 'csr' ? 'csrdashboard' : 'warddashboard'
+                (Auth::user()->designation == 'admin') ? 'admindashboard' : ((Auth::user()->designation == 'csr') ? 'csrdashboard' : 'warddashboard')
             );
     }
 }

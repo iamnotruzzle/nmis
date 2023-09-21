@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Dashboard\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Csr\Dashboard\DashboardController as CsrDashboardController;
 use App\Http\Controllers\Csr\Inventory\Categories\CategoryController;
 use App\Http\Controllers\Csr\Inventory\ItemPrice\ItemPriceController;
@@ -45,6 +46,7 @@ Route::redirect('/', 'login');
 Route::resource('dashboard', DashboardController::class)->middleware(['auth:sanctum', 'verified'])->only(['index']);
 
 // admin routes
+Route::resource('admindashboard', AdminDashboardController::class)->middleware(['auth:sanctum', 'verified', 'designation_admin'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('users', UserController::class)->middleware(['auth:sanctum', 'verified', 'designation_admin'])->only(['index', 'store', 'update', 'destroy']);
 // end admin routes
 
