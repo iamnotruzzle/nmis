@@ -9,40 +9,48 @@
                 <span class="block text-500 font-medium mb-3">Completed request</span>
                 <div>
                   <p>
-                    <span class="text-900 font-medium text-xl">{{ completed_request_week_container }}&nbsp</span>
-                    <span>this week</span>
+                    <span class="text-900 font-medium text-xl">{{ completed_request_month_container }}&nbsp</span>
+                    <span>this month</span>
                   </p>
                 </div>
               </div>
-              <div
-                class="flex align-items-center justify-content-center bg-blue-100 border-round"
-                style="width: 2.5rem; height: 2.5rem"
-              >
-                <Link href="issueitems">
+              <Link href="issueitems">
+                <div
+                  class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                  style="width: 2.5rem; height: 2.5rem"
+                >
                   <i class="pi pi-send text-blue-500 text-xl"></i>
-                </Link>
-              </div>
+                </div>
+              </Link>
             </div>
-            <span class="text-green-500 font-medium">{{ completed_request_today_container }}&nbsp</span>
-            <span class="text-500">today</span>
+            <span class="text-green-500 font-medium">{{ completed_request_week_container }}&nbsp</span>
+            <span class="text-500">this week</span>
           </div>
         </div>
         <div class="col-12 md:col-6 lg:col-3">
           <div class="surface-card shadow-2 p-3 border-round">
             <div class="flex justify-content-between mb-3">
+              <!-- ₱ -->
               <div>
-                <span class="block text-500 font-medium mb-3">Revenue</span>
-                <div class="text-900 font-medium text-xl">₱2.100</div>
+                <span class="block text-500 font-medium mb-3">Total unit cost of issued items</span>
+                <div>
+                  <p>
+                    <span class="text-900 font-medium text-xl">₱&nbsp{{ completed_request_month_container }}&nbsp</span>
+                    <span>this month</span>
+                  </p>
+                </div>
               </div>
-              <div
-                class="flex align-items-center justify-content-center bg-orange-100 border-round"
-                style="width: 2.5rem; height: 2.5rem"
-              >
-                <i class="pi pi-map-marker text-orange-500 text-xl"></i>
-              </div>
+              <Link href="issueitems">
+                <div
+                  class="flex align-items-center justify-content-center bg-green-100 border-round"
+                  style="width: 2.5rem; height: 2.5rem"
+                >
+                  <i class="pi pi-money-bill text-green-500 text-xl"></i>
+                </div>
+              </Link>
             </div>
-            <span class="text-green-500 font-medium">%52+ </span>
-            <span class="text-500">since last week</span>
+            <span class="text-green-500 font-medium">{{ completed_request_week_container }}&nbsp</span>
+            <span class="text-500">week</span>
           </div>
         </div>
         <div class="col-12 md:col-6 lg:col-3">
@@ -96,23 +104,23 @@ export default {
     Link,
   },
   props: {
-    completed_request_this_week: Number,
-    completed_request_today: Number,
+    completed_request_this_month: Number,
+    completed_request_week: Number,
   },
   data() {
     return {
+      completed_request_month_container: null,
       completed_request_week_container: null,
-      completed_request_today_container: null,
     };
   },
   mounted() {
-    console.log(this.completed_request_this_week);
+    console.log(this.completed_request_this_month);
     this.storeCompletedRequestsCount();
   },
   methods: {
     storeCompletedRequestsCount() {
-      this.completed_request_week_container = this.completed_request_this_week;
-      this.completed_request_today_container = this.completed_request_today;
+      this.completed_request_month_container = this.completed_request_this_month;
+      this.completed_request_week_container = this.completed_request_week;
     },
   },
 };
