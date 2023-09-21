@@ -18,7 +18,9 @@
                 class="flex align-items-center justify-content-center bg-blue-100 border-round"
                 style="width: 2.5rem; height: 2.5rem"
               >
-                <i class="pi pi-send text-blue-500 text-xl"></i>
+                <Link href="issueitems">
+                  <i class="pi pi-send text-blue-500 text-xl"></i>
+                </Link>
               </div>
             </div>
             <span class="text-green-500 font-medium">{{ completed_request_today_container }}&nbsp</span>
@@ -86,10 +88,12 @@
 
 <script>
 import AppLayout from '@/Layouts/AppLayout.vue';
+import { Link } from '@inertiajs/vue3';
 
 export default {
   components: {
     AppLayout,
+    Link,
   },
   props: {
     completed_request_this_week: Number,
