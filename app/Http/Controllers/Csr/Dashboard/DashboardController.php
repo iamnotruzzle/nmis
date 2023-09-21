@@ -32,12 +32,20 @@ class DashboardController extends Controller
             WHERE rsd.created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
             GROUP BY rsd.cl2comb"
         );
+        $total_cost_week = DB::select(
+            "SELECT ((SELECT SUM(approved_qty) FROM csrw_request_stocks_details WHERE cl2comb = rsd.cl2comb) * (SELECT TOP 1 selling_price FROM csrw_item_prices WHERE cl2comb = rsd.cl2comb ORDER BY created_at DESC)) as total_cost
+            FROM csrw_request_stocks_details as rsd
+            JOIN csrw_item_prices as prices ON rsd.cl2comb = prices.cl2comb
+            WHERE DateDiff(wk,getdate(),rsd.created_at) =  0
+            GROUP BY rsd.cl2comb"
+        );
 
         return Inertia::render('Csr/Dashboard/Index', [
             'completed_request_month' => $completed_request_month,
             'completed_request_week' => $completed_request_week,
             'completed_request_today' => $completed_request_today,
             'total_cost_month' => $total_cost_month,
+            'total_cost_week' => $total_cost_week,
         ]);
     }
 
