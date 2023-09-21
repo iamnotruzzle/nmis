@@ -32,6 +32,7 @@ class DashboardController extends Controller
             WHERE rsd.created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
             GROUP BY rsd.cl2comb"
         );
+        // for total_cost_week. 0 = first day of week is sunday, 1 = first day of week is monday
         $total_cost_week = DB::select(
             "SELECT ((SELECT SUM(approved_qty) FROM csrw_request_stocks_details WHERE cl2comb = rsd.cl2comb) * (SELECT TOP 1 selling_price FROM csrw_item_prices WHERE cl2comb = rsd.cl2comb ORDER BY created_at DESC)) as total_cost
             FROM csrw_request_stocks_details as rsd
