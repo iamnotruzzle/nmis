@@ -13,11 +13,11 @@
                 class="flex align-items-center justify-content-center bg-blue-100 border-round"
                 style="width: 2.5rem; height: 2.5rem"
               >
-                <i class="pi pi-shopping-cart text-blue-500 text-xl"></i>
+                <i class="pi pi-send text-blue-500 text-xl"></i>
               </div>
             </div>
-            <span class="text-green-500 font-medium">24 new </span>
-            <span class="text-500">since last visit</span>
+            <span class="text-green-500 font-medium">24 item/s </span>
+            <span class="text-500">issued today</span>
           </div>
         </div>
         <div class="col-12 md:col-6 lg:col-3">
