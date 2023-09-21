@@ -51,9 +51,23 @@ export default {
             {
               label: 'Dashboard',
               icon: 'co-chart-line',
-              to: 'dashboard',
-              prefix: 'dashboard',
-              comp: 'Dashboard/Index',
+              to: 'admindashboard',
+              prefix: 'admindashboard',
+              comp: 'Admin/Dashboard/Index',
+            },
+            {
+              label: 'Dashboard',
+              icon: 'co-chart-line',
+              to: 'csrdashboard',
+              prefix: 'csrdashboard',
+              comp: 'Csr/Dashboard/Index',
+            },
+            {
+              label: 'Dashboard',
+              icon: 'co-chart-line',
+              to: 'warddashboard',
+              prefix: 'warddashboard',
+              comp: 'Ward/Dashboard/Index',
             },
             {
               label: 'Categories',
@@ -202,10 +216,25 @@ export default {
           return obj.to !== 'transferstock';
         });
       }
+      if (this.$page.props.user.designation == 'admin') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'csrdashboard';
+        });
+      }
+      if (this.$page.props.user.designation == 'admin') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'warddashboard';
+        });
+      }
       // end admin
 
       // csr
       // if auth users designation is csr, remove requeststocks page in the array
+      if (this.$page.props.user.designation == 'csr') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'dashboard';
+        });
+      }
       if (this.$page.props.user.designation == 'csr') {
         this.menu[0].items = this.menu[0].items.filter(function (obj) {
           return obj.to !== 'requeststocks';
@@ -234,6 +263,16 @@ export default {
       if (this.$page.props.user.designation == 'csr') {
         this.menu[0].items = this.menu[0].items.filter(function (obj) {
           return obj.to !== 'stockbal';
+        });
+      }
+      if (this.$page.props.user.designation == 'csr') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'admindashboard';
+        });
+      }
+      if (this.$page.props.user.designation == 'csr') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'warddashboard';
         });
       }
       // end csr
@@ -267,6 +306,16 @@ export default {
       if (this.$page.props.user.designation == 'ward') {
         this.menu[0].items = this.menu[0].items.filter(function (obj) {
           return obj.to !== 'csrreports';
+        });
+      }
+      if (this.$page.props.user.designation == 'ward') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'admindashboard';
+        });
+      }
+      if (this.$page.props.user.designation == 'ward') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'csrdashboard';
         });
       }
       // end ward
