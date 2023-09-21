@@ -45,13 +45,13 @@
           <div class="surface-card shadow-2 p-3 border-round">
             <div class="mb-3">
               <div class="flex justify-content-between">
-                <span class="block text-xl text-900 font-bold">Completed request</span>
+                <span class="block text-xl text-900 font-bold">Total cost of issued items</span>
                 <Link href="issueitems">
                   <div
-                    class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                    class="flex align-items-center justify-content-center bg-green-100 border-round"
                     style="width: 2.5rem; height: 2.5rem"
                   >
-                    <i class="pi pi-send text-blue-500 text-xl"></i>
+                    <i class="pi pi-money-bill text-green-500 text-xl"></i>
                   </div>
                 </Link>
               </div>
@@ -62,7 +62,7 @@
             >
               <template #header>
                 <div class="flex justify-content-start">
-                  <p class="text-xl text-blue-500 font-semibold">{{ currentMonth }}</p>
+                  <p class="text-xl text-green-500 font-semibold">{{ currentMonth }}</p>
                 </div>
               </template>
               <Column
@@ -178,7 +178,7 @@ export default {
     Column,
   },
   props: {
-    completed_request_this_month: Number,
+    completed_request_month: Number,
     completed_request_week: Number,
     completed_request_today: Number,
   },
@@ -192,20 +192,20 @@ export default {
     };
   },
   mounted() {
-    console.log(this.completed_request_this_month);
+    console.log(this.completed_request_month);
     this.storeCompletedRequestsCount();
     this.storeValueInRequestContainer();
     this.getCurrentMonth();
   },
   methods: {
     storeCompletedRequestsCount() {
-      this.completed_request_month_container = this.completed_request_this_month;
+      this.completed_request_month_container = this.completed_request_month;
       this.completed_request_week_container = this.completed_request_week;
       this.completed_request_today_container = this.completed_request_today;
     },
     storeValueInRequestContainer() {
       this.completed_request_container.push({
-        month: this.completed_request_this_month,
+        month: this.completed_request_month,
         week: this.completed_request_week,
         today: this.completed_request_today,
       });
