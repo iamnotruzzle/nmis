@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Wards\Dashboard;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
@@ -14,7 +15,7 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        dd('wards');
+        return Inertia::render('Csr/Dashboard/Index', []);
     }
 
     /**
