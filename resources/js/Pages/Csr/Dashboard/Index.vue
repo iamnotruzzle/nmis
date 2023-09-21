@@ -9,7 +9,7 @@
                 <span class="block text-500 font-medium mb-3">Completed request</span>
                 <div>
                   <p>
-                    <span class="text-900 font-medium text-xl">{{ completed_request_week_container }} &nbsp</span>
+                    <span class="text-900 font-medium text-xl">{{ completed_request_week_container }}&nbsp</span>
                     <span>this week</span>
                   </p>
                 </div>
@@ -21,7 +21,7 @@
                 <i class="pi pi-send text-blue-500 text-xl"></i>
               </div>
             </div>
-            <span class="text-green-500 font-medium">{{ completed_request_today_container }} &nbsp</span>
+            <span class="text-green-500 font-medium">{{ completed_request_today_container }}&nbsp</span>
             <span class="text-500">today</span>
           </div>
         </div>
