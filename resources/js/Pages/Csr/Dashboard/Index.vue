@@ -65,18 +65,15 @@
                   <p class="text-xl text-green-500 font-semibold">{{ currentMonth }}</p>
                 </div>
               </template>
-              <Column
-                field="month"
-                header="MONTHLY"
-              ></Column>
-              <Column
-                field="week"
-                header="WEEKLY"
-              ></Column>
-              <Column
-                field="today"
-                header="TODAY"
-              ></Column>
+              <Column header="MONTHLY">
+                <template #body="{ data }"> ₱ {{ data.month }} </template>
+              </Column>
+              <Column header="WEEKLY">
+                <template #body="{ data }"> ₱ {{ data.week }} </template>
+              </Column>
+              <Column header="TODAY">
+                <template #body="{ data }"> ₱ {{ data.today }} </template></Column
+              >
             </DataTable>
           </div>
         </div>
@@ -207,6 +204,13 @@ export default {
       });
     },
     storeValueInTotalCostContainer() {
+      // currency formatter
+      const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 2,
+      });
+
       let month = 0;
       let week = 0;
       let today = 0;
@@ -222,9 +226,9 @@ export default {
       });
 
       this.total_cost_container.push({
-        month: month,
-        week: week,
-        today: today,
+        month: formatter.format(month).replace('$', '').trim(),
+        week: formatter.format(week).replace('$', '').trim(),
+        today: formatter.format(today).replace('$', '').trim(),
       });
     },
     getCurrentMonth() {
