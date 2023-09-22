@@ -57,7 +57,7 @@
               </div>
             </div>
             <DataTable
-              :value="completed_request_container"
+              :value="total_cost_container"
               showGridlines
             >
               <template #header>
@@ -181,33 +181,50 @@ export default {
     completed_request_month: Number,
     completed_request_week: Number,
     completed_request_today: Number,
+    total_cost_month: Object,
+    total_cost_week: Object,
+    total_cost_today: Object,
   },
   data() {
     return {
-      completed_request_month_container: null,
-      completed_request_week_container: null,
-      completed_request_today_container: null,
       completed_request_container: [],
+      total_cost_container: [],
       currentMonth: null,
     };
   },
   mounted() {
-    console.log(this.completed_request_month);
-    this.storeCompletedRequestsCount();
+    // console.log(this.total_cost_month);
     this.storeValueInRequestContainer();
+    this.storeValueInTotalCostContainer();
     this.getCurrentMonth();
   },
   methods: {
-    storeCompletedRequestsCount() {
-      this.completed_request_month_container = this.completed_request_month;
-      this.completed_request_week_container = this.completed_request_week;
-      this.completed_request_today_container = this.completed_request_today;
-    },
     storeValueInRequestContainer() {
       this.completed_request_container.push({
         month: this.completed_request_month,
         week: this.completed_request_week,
         today: this.completed_request_today,
+      });
+    },
+    storeValueInTotalCostContainer() {
+      let month = 0;
+      let week = 0;
+      let today = 0;
+
+      this.total_cost_month.forEach((e) => {
+        month += Number(e.total_cost);
+      });
+      this.total_cost_week.forEach((e) => {
+        week += Number(e.total_cost);
+      });
+      this.total_cost_today.forEach((e) => {
+        today += Number(e.total_cost);
+      });
+
+      this.total_cost_container.push({
+        month: month,
+        week: week,
+        today: today,
       });
     },
     getCurrentMonth() {
