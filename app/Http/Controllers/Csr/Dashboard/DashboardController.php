@@ -49,6 +49,16 @@ class DashboardController extends Controller
             GROUP BY rsd.cl2comb"
         );
 
+        // most requested items
+        $most_requested_month = DB::select(
+            "SELECT TOP 5 hc.cl2desc as item,  SUM(rsd.requested_qty) as quantity
+            FROM csrw_request_stocks_details as rsd
+            JOIN hclass2 as hc ON rsd.cl2comb = hc.cl2comb
+            WHERE rsd.created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
+            GROUP BY rsd.cl2comb, hc.cl2desc, rsd.requested_qty
+            ORDER BY quantity DESC;"
+        );
+
 
         return Inertia::render('Csr/Dashboard/Index', [
             'completed_request_month' => $completed_request_month,
@@ -57,6 +67,7 @@ class DashboardController extends Controller
             'total_cost_month' => $total_cost_month,
             'total_cost_week' => $total_cost_week,
             'total_cost_today' => $total_cost_today,
+            'most_requested_month' => $most_requested_month,
         ]);
     }
 

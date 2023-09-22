@@ -81,37 +81,34 @@
           <div class="surface-card shadow-2 p-3 border-round">
             <div class="mb-3">
               <div class="flex justify-content-between">
-                <span class="block text-xl text-900 font-bold">Completed request</span>
+                <span class="block text-xl text-900 font-bold">Top 5 requested items</span>
                 <Link href="issueitems">
                   <div
-                    class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                    class="flex align-items-center justify-content-center bg-pink-100 border-round"
                     style="width: 2.5rem; height: 2.5rem"
                   >
-                    <i class="pi pi-send text-blue-500 text-xl"></i>
+                    <i class="pi pi-heart text-pink-500 text-xl"></i>
                   </div>
                 </Link>
               </div>
             </div>
             <DataTable
-              :value="completed_request_container"
+              :value="most_requested_container"
               showGridlines
+              class="p-datatable-sm"
             >
               <template #header>
                 <div class="flex justify-content-start">
-                  <p class="text-xl text-blue-500 font-semibold">{{ currentMonth }}</p>
+                  <p class="text-xl text-pink-500 font-semibold">{{ currentMonth }}</p>
                 </div>
               </template>
               <Column
-                field="month"
-                header="MONTHLY"
+                field="item"
+                header="ITEM"
               ></Column>
               <Column
-                field="week"
-                header="WEEKLY"
-              ></Column>
-              <Column
-                field="today"
-                header="TODAY"
+                field="quantity"
+                header="quantity"
               ></Column>
             </DataTable>
           </div>
@@ -181,18 +178,22 @@ export default {
     total_cost_month: Object,
     total_cost_week: Object,
     total_cost_today: Object,
+    most_requested_month: Object,
+    most_requested_week: Object,
   },
   data() {
     return {
       completed_request_container: [],
       total_cost_container: [],
+      most_requested_container: [],
       currentMonth: null,
     };
   },
   mounted() {
-    // console.log(this.total_cost_month);
+    console.log(this.most_requested_month);
     this.storeValueInRequestContainer();
     this.storeValueInTotalCostContainer();
+    this.storeValueInMostRequestedContainer();
     this.getCurrentMonth();
   },
   methods: {
@@ -229,6 +230,14 @@ export default {
         month: formatter.format(month).replace('$', '').trim(),
         week: formatter.format(week).replace('$', '').trim(),
         today: formatter.format(today).replace('$', '').trim(),
+      });
+    },
+    storeValueInMostRequestedContainer() {
+      this.most_requested_month.forEach((e) => {
+        this.most_requested_container.push({
+          item: e.item,
+          quantity: e.quantity,
+        });
       });
     },
     getCurrentMonth() {
