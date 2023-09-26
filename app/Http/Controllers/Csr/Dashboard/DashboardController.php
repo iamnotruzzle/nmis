@@ -25,6 +25,14 @@ class DashboardController extends Controller
         $pending_requests_month = RequestStocks::where('status', 'REQUESTED')
             ->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->count();
 
+        // total cost of issued items
+        $total_issued_cost_month = DB::select(
+            "SELECT (SUM(rsd.approved_qty) * (SELECT TOP 1 selling_price FROM csrw_item_prices WHERE cl2comb = rsd.cl2comb ORDER BY created_at DESC)) as total_cost
+            FROM csrw_request_stocks_details  as rsd
+            WHERE rsd.created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
+            GROUP BY rsd.cl2comb;"
+        );
+
         // most requested items
         $most_requested_month = DB::select(
             "SELECT TOP 5 hc.cl2desc as item,  SUM(rsd.requested_qty) as quantity
@@ -39,6 +47,7 @@ class DashboardController extends Controller
         return Inertia::render('Csr/Dashboard/Index', [
             'completed_requests_month' => $completed_requests_month,
             'pending_requests_month' => $pending_requests_month,
+            'total_issued_cost_month' => $total_issued_cost_month,
             'most_requested_month' => $most_requested_month,
         ]);
     }
