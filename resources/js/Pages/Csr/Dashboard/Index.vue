@@ -40,7 +40,7 @@
                     class="flex align-items-center justify-content-center bg-yellow-100 border-round"
                     style="width: 3rem; height: 3rem"
                   >
-                    <i class="pi pi-send text-yellow-500 text-xl"></i>
+                    <i class="pi pi-shopping-cart text-yellow-500 text-xl"></i>
                   </div>
                 </Link>
               </div>
@@ -64,7 +64,7 @@
                     class="flex align-items-center justify-content-center bg-green-100 border-round"
                     style="width: 3rem; height: 3rem"
                   >
-                    <i class="pi pi-send text-green-500 text-xl"></i>
+                    <i class="pi pi-money-bill text-green-500 text-xl"></i>
                   </div>
                 </Link>
               </div>
