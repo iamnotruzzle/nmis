@@ -59,7 +59,7 @@
                   <span class="block text-xl text-900 font-bold">Total cost of issued stocks</span>
                 </div>
 
-                <Link href="issueitems">
+                <Link href="csrreports">
                   <div
                     class="flex align-items-center justify-content-center bg-green-100 border-round"
                     style="width: 3rem; height: 3rem"
@@ -110,7 +110,7 @@
               ></Column>
               <Column
                 field="quantity"
-                header="quantity"
+                header="QTY"
               ></Column>
             </DataTable>
           </div>
