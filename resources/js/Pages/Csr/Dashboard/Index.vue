@@ -79,7 +79,7 @@
       </div>
       <div class="my-2"></div>
       <div class="grid">
-        <div class="col-12 md:col-6 lg:col-3">
+        <div class="col-12 md:col-6 lg:col-6">
           <div class="surface-card shadow-2 p-3 border-round">
             <div class="mb-3">
               <div class="flex justify-content-between">

@@ -141,8 +141,16 @@
                 {{ tzone(data.expiration_date) }}
               </div>
 
-              <div class="mt-2">
-                <span class="text-lg text-error">{{ checkIfAboutToExpire(data.expiration_date) }}</span>
+              <div class="mays-2">
+                <span
+                  :class="
+                    checkIfAboutToExpire(data.expiration_date) != 'Item has expired.'
+                      ? 'text-lg text-green-500'
+                      : 'text-lg text-error'
+                  "
+                >
+                  {{ checkIfAboutToExpire(data.expiration_date) }}
+                </span>
               </div>
             </div>
           </template>
