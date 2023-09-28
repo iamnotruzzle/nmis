@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -31,7 +32,8 @@ class RequestStocksDetails extends Model
 
     public function stocks()
     {
-        return $this->hasMany(CsrStocks::class, 'cl2comb', 'cl2comb')->with(['brandDetail:id,name', 'ward_stocks']);
+        return $this->hasMany(CsrStocks::class, 'cl2comb', 'cl2comb')->with(['brandDetail:id,name', 'ward_stocks'])
+            ->whereDate('expiration_date', '>', Carbon::today());
     }
 
     // public function ward_stocks()

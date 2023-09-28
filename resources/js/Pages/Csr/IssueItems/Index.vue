@@ -268,7 +268,7 @@
             ></Column>
             <Column
               field="approved_qty"
-              header="APPROVE QTY"
+              header="APPROVED QTY"
             >
               <template #body="slotProps">
                 <InputText

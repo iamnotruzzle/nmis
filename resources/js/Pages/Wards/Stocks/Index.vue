@@ -872,6 +872,7 @@ export default {
           onSuccess: (e) => {
             this.requestStockList = [];
             this.storeRequestedStocksInContainer();
+            this.createRequestStocksDialog = false;
           },
         });
       }

@@ -95,6 +95,7 @@ class IssueItemController extends Controller
 
             // check current stock of the item
             $current_stock = CsrStocks::where('cl2comb', $rsc['cl2comb'])
+                ->whereDate('expiration_date', '>', Carbon::today())
                 ->sum('quantity');
 
             // check the current value of issued_qty after the loop
@@ -107,6 +108,7 @@ class IssueItemController extends Controller
                 // get the the specific item that is first to expire and quantity != 0
                 $stock = CsrStocks::where('cl2comb', $rsc['cl2comb'])
                     ->where('quantity', '!=', 0)
+                    ->whereDate('expiration_date', '>', Carbon::today())
                     ->orderBy('expiration_date')
                     ->first();
 
