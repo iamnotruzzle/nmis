@@ -40,6 +40,7 @@ class PatientChargeController extends Controller
             ->join('csrw_request_stocks', 'csrw_request_stocks.id', '=', 'csrw_wards_stocks.request_stocks_id')
             ->select(DB::raw("hclass2.cl2comb, hclass2.cl2desc, hclass2.uomcode, SUM(csrw_wards_stocks.quantity) as quantity, (SELECT TOP 1 selling_price FROM csrw_item_prices WHERE cl2comb = csrw_wards_stocks.cl2comb ORDER BY created_at DESC) as 'price'"))
             ->where('csrw_wards_stocks.location', $authWardcode->wardcode)
+            ->where('csrw_wards_stocks.expiration_date', '>', Carbon::today())
             ->where('csrw_request_stocks.status', 'RECEIVED')
             ->groupBy('hclass2.cl2comb', 'hclass2.cl2desc', 'hclass2.uomcode', 'csrw_wards_stocks.cl2comb')
             ->get();
@@ -173,6 +174,7 @@ class PatientChargeController extends Controller
                         $wardStock = WardsStocks::where('cl2comb', $item['itemCode'])
                             ->where('quantity', '!=', 0)
                             ->where('location', $authWardcode->wardcode)
+                            ->where('expiration_date', '>', Carbon::today())
                             ->orderBy('expiration_date', 'ASC')
                             ->first(); // 10
 
