@@ -96,7 +96,7 @@
               :options="status"
               optionLabel="name"
               optionValue="code"
-              placeholder="STATUS"
+              placeholder="NO FILTER"
               class="w-full"
             />
           </template>
@@ -480,6 +480,7 @@ export default {
       }),
       selectedStatus: null,
       status: [
+        { name: 'NO FILTER', code: '' },
         { name: 'REQUESTED', code: 'REQUESTED' },
         { name: 'FILLED', code: 'FILLED' },
         { name: 'RECEIVED', code: 'RECEIVED' },
