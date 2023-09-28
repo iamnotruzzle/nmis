@@ -79,11 +79,25 @@
         <Column
           field="status"
           header="STATUS"
+          filterField="status"
+          :showFilterMenu="false"
         >
           <template #body="{ data }">
-            <Tag
-              :value="data.status"
-              :severity="getSeverity(data.status)"
+            <div class="text-center">
+              <Tag
+                :value="data.status"
+                :severity="getSeverity(data.status)"
+              />
+            </div>
+          </template>
+          <template #filter="{}">
+            <Dropdown
+              v-model="selectedStatus"
+              :options="status"
+              optionLabel="name"
+              optionValue="code"
+              placeholder="STATUS"
+              class="w-full"
             />
           </template>
         </Column>
@@ -464,6 +478,12 @@ export default {
         approved_by: null,
         requestStockListDetails: [],
       }),
+      selectedStatus: null,
+      status: [
+        { name: 'REQUESTED', code: 'REQUESTED' },
+        { name: 'FILLED', code: 'FILLED' },
+        { name: 'RECEIVED', code: 'RECEIVED' },
+      ],
     };
   },
   // created will be initialize before mounted
@@ -796,6 +816,12 @@ export default {
         this.params.to = null;
         this.to = null;
       }
+      this.updateData();
+    },
+    selectedStatus: function (val) {
+      //   console.log(val['code']);
+      this.params.status = this.selectedStatus;
+
       this.updateData();
     },
   },

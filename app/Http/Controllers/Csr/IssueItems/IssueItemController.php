@@ -66,6 +66,12 @@ class IssueItemController extends Controller
                     $query->whereDate('created_at', '<=', Carbon::parse($value)->setTimezone('Asia/Manila'));
                 }
             )
+            ->when(
+                $request->status,
+                function ($query, $value) {
+                    $query->where('status', $value);
+                }
+            )
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
