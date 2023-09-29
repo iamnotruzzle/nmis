@@ -85,7 +85,7 @@
               <div class="flex justify-content-between">
                 <div class="flex flex-column">
                   <span class="text-xl text-pink-500 font-semibold">{{ currentMonth }}</span>
-                  <span class="block text-xl text-900 font-bold">Top 5 requested stock</span>
+                  <span class="block text-xl text-900 font-bold">Top 5 requested stocks</span>
                 </div>
 
                 <Link href="issueitems">
