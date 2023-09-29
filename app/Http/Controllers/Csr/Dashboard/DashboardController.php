@@ -39,7 +39,7 @@ class DashboardController extends Controller
             FROM csrw_request_stocks_details as rsd
             JOIN hclass2 as hc ON rsd.cl2comb = hc.cl2comb
             WHERE rsd.created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
-            GROUP BY rsd.cl2comb, hc.cl2desc, rsd.requested_qty
+            GROUP BY rsd.cl2comb, hc.cl2desc
             ORDER BY quantity DESC;"
         );
 

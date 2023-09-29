@@ -2,7 +2,7 @@
   <app-layout>
     <div class="surface-ground">
       <div class="grid">
-        <div class="col-12 md:col-6 lg:col-4">
+        <div class="col-12 md:col-4 lg:col-4">
           <div class="surface-card shadow-2 p-3 border-round">
             <div class="mb-3">
               <div class="flex justify-content-between">
@@ -26,7 +26,7 @@
             </div>
           </div>
         </div>
-        <div class="col-12 md:col-6 lg:col-4">
+        <div class="col-12 md:col-4 lg:col-4">
           <div class="surface-card shadow-2 p-3 border-round">
             <div class="mb-3">
               <div class="flex justify-content-between">
@@ -50,7 +50,7 @@
             </div>
           </div>
         </div>
-        <div class="col-12 md:col-6 lg:col-4">
+        <div class="col-12 md:col-4 lg:col-4">
           <div class="surface-card shadow-2 p-3 border-round">
             <div class="mb-3">
               <div class="flex justify-content-between">
@@ -79,11 +79,15 @@
       </div>
       <div class="my-2"></div>
       <div class="grid">
-        <div class="col-12 md:col-6 lg:col-6">
+        <div class="col-12 md:col-12 lg:col-8">
           <div class="surface-card shadow-2 p-3 border-round">
             <div class="mb-3">
               <div class="flex justify-content-between">
-                <span class="block text-xl text-900 font-bold">Top 5 requested items</span>
+                <div class="flex flex-column">
+                  <span class="text-xl text-pink-500 font-semibold">{{ currentMonth }}</span>
+                  <span class="block text-xl text-900 font-bold">Top 5 requested stock</span>
+                </div>
+
                 <Link href="issueitems">
                   <div
                     class="flex align-items-center justify-content-center bg-pink-100 border-round"
@@ -94,28 +98,14 @@
                 </Link>
               </div>
             </div>
-            <DataTable
-              :value="most_requested_container"
-              showGridlines
-              class="p-datatable-sm"
-            >
-              <template #header>
-                <div class="flex justify-content-start">
-                  <p class="text-xl text-pink-500 font-semibold">{{ currentMonth }}</p>
-                </div>
-              </template>
-              <Column
-                field="item"
-                header="ITEM"
-              ></Column>
-              <Column
-                field="quantity"
-                header="QTY"
-              ></Column>
-            </DataTable>
+            <v-chart
+              class="h-20rem w-full ma-0 pa-0"
+              :option="mostRequestedItemsOptions()"
+              autoresize
+            />
           </div>
         </div>
-        <div class="col-12 md:col-6 lg:col-6">
+        <div class="col-12 md:col-12 lg:col-4">
           <div class="surface-card shadow-2 p-3 border-round">
             <div class="mb-3">
               <div class="flex justify-content-between">
@@ -169,6 +159,13 @@ import { Link } from '@inertiajs/vue3';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import moment, { now } from 'moment';
+import { use } from 'echarts/core';
+import { CanvasRenderer } from 'echarts/renderers';
+import { PieChart } from 'echarts/charts';
+import { TitleComponent, TooltipComponent, LegendComponent, GridComponent } from 'echarts/components';
+import VChart, { THEME_KEY } from 'vue-echarts';
+
+use([CanvasRenderer, PieChart, TitleComponent, TooltipComponent, LegendComponent, GridComponent]);
 
 export default {
   components: {
@@ -176,6 +173,7 @@ export default {
     Link,
     DataTable,
     Column,
+    VChart,
   },
   props: {
     completed_requests_month: Number,
@@ -230,6 +228,41 @@ export default {
           expiration_date: e.expiration_date,
         });
       });
+    },
+    mostRequestedItemsOptions() {
+      let option = {
+        title: {
+          left: 'center',
+          textStyle: {
+            fontSize: 18,
+            fontWeight: 'bold',
+            color: '#FFFFFF',
+          },
+        },
+        label: {
+          color: '#fff',
+        },
+        tooltip: {
+          trigger: 'item',
+        },
+        series: [
+          {
+            name: 'ITEM',
+            type: 'pie',
+            radius: '90%', // chart size
+            data: [],
+          },
+        ],
+      };
+
+      this.most_requested_container.forEach((e) => {
+        option.series[0].data.push({
+          value: e.quantity,
+          name: e.item,
+        });
+      });
+
+      return option;
     },
     getCurrentMonth() {
       this.currentMonth = moment().format('MMMM');
