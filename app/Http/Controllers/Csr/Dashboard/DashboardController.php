@@ -43,12 +43,20 @@ class DashboardController extends Controller
             ORDER BY quantity DESC;"
         );
 
+        $new_stocks = DB::select(
+            "SELECT TOP 5 h2.cl2desc as item, csr.expiration_date as expiration_date
+            FROM csrw_csr_stocks as csr
+            JOIN hclass2 as h2 ON csr.cl2comb = h2.cl2comb
+            ORDER BY csr.created_at DESC;"
+        );
+
 
         return Inertia::render('Csr/Dashboard/Index', [
             'completed_requests_month' => $completed_requests_month,
             'pending_requests_month' => $pending_requests_month,
             'total_issued_cost_month' => $total_issued_cost_month,
             'most_requested_month' => $most_requested_month,
+            'new_stocks' => $new_stocks,
         ]);
     }
 

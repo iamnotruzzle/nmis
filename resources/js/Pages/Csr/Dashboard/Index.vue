@@ -134,7 +134,7 @@
               </div>
             </div>
             <DataTable
-              :value="most_requested_container"
+              :value="new_stocks_container"
               showGridlines
               class="p-datatable-sm"
             >
@@ -148,9 +148,13 @@
                 header="ITEM"
               ></Column>
               <Column
-                field="quantity"
-                header="QTY"
-              ></Column>
+                field="expiration_date"
+                header="EXP. DATE"
+              >
+                <template #body="{ data }">
+                  {{ tzone(data.expiration_date) }}
+                </template>
+              </Column>
             </DataTable>
           </div>
         </div>
@@ -164,7 +168,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import { Link } from '@inertiajs/vue3';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import moment from 'moment';
+import moment, { now } from 'moment';
 
 export default {
   components: {
@@ -178,6 +182,7 @@ export default {
     pending_requests_month: Number,
     total_issued_cost_month: Object,
     most_requested_month: Object,
+    new_stocks: Object,
   },
   data() {
     return {
@@ -185,6 +190,7 @@ export default {
       pending_requests_month_container: null,
       total_issued_cost_month_container: 0,
       most_requested_container: [],
+      new_stocks_container: [],
       currentMonth: null,
     };
   },
@@ -194,6 +200,7 @@ export default {
     this.storePendingRequests();
     this.storeTotalIssuedCost();
     this.storeValueInMostRequestedContainer();
+    this.storeValueInNewStocksContainer();
     this.getCurrentMonth();
   },
   methods: {
@@ -216,8 +223,23 @@ export default {
         });
       });
     },
+    storeValueInNewStocksContainer() {
+      this.new_stocks.forEach((e) => {
+        this.new_stocks_container.push({
+          item: e.item,
+          expiration_date: e.expiration_date,
+        });
+      });
+    },
     getCurrentMonth() {
       this.currentMonth = moment().format('MMMM');
+    },
+    tzone(date) {
+      if (date == null || date == '') {
+        return null;
+      } else {
+        return moment.tz(date, 'Asia/Manila').format('LL');
+      }
     },
   },
 };
