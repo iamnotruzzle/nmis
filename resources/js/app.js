@@ -27,6 +27,7 @@ import {
   MdLogoutSharp,
   RiFileExcel2Line,
   SiMicrosoftexcel,
+  MdNewreleasesOutlined,
 } from 'oh-vue-icons/icons';
 addIcons(
   CoChartLine,
@@ -38,7 +39,8 @@ addIcons(
   FaUserInjured,
   MdLogoutSharp,
   RiFileExcel2Line,
-  SiMicrosoftexcel
+  SiMicrosoftexcel,
+  MdNewreleasesOutlined
 );
 
 moment.tz.setDefault('Asia/Manila');

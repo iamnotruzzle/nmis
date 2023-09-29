@@ -115,6 +115,45 @@
             </DataTable>
           </div>
         </div>
+        <div class="col-12 md:col-6 lg:col-6">
+          <div class="surface-card shadow-2 p-3 border-round">
+            <div class="mb-3">
+              <div class="flex justify-content-between">
+                <span class="block text-xl text-900 font-bold">New stocks</span>
+                <Link href="csrstocks">
+                  <div
+                    class="flex align-items-center justify-content-center bg-purple-100 border-round"
+                    style="width: 2.5rem; height: 2.5rem"
+                  >
+                    <v-icon
+                      name="md-newreleases-outlined"
+                      class="text-purple-500 text-xl"
+                    ></v-icon>
+                  </div>
+                </Link>
+              </div>
+            </div>
+            <DataTable
+              :value="most_requested_container"
+              showGridlines
+              class="p-datatable-sm"
+            >
+              <template #header>
+                <div class="flex justify-content-start">
+                  <p class="text-xl text-purple-500 font-semibold">{{ currentMonth }}</p>
+                </div>
+              </template>
+              <Column
+                field="item"
+                header="ITEM"
+              ></Column>
+              <Column
+                field="quantity"
+                header="QTY"
+              ></Column>
+            </DataTable>
+          </div>
+        </div>
       </div>
     </div>
   </app-layout>
