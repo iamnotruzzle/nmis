@@ -2,6 +2,7 @@
 
 namespace App\Rules;
 
+use App\Models\Item;
 use App\Models\LocationStockBalance;
 use Carbon\Carbon;
 use Illuminate\Contracts\Validation\Rule;
@@ -18,6 +19,7 @@ class StockBalanceNotDeclaredYetRule implements Rule
     public function __construct($params)
     {
         $this->cl2comb = $params;
+        $this->noBalance = array();
 
         // dd('__construct');
     }
@@ -47,23 +49,22 @@ class StockBalanceNotDeclaredYetRule implements Rule
             ->where('location', $authWardcode->wardcode)
             ->count();
 
-        // dd($stockBalCount);
+        if ($stockBalCount == 0) {
+            $stockBalDesc = Item::where('cl2comb', $this->cl2comb)
+                ->first();
+
+            $this->noBalance = trim($stockBalDesc['cl2desc']);
+        }
 
         if ($stockBalCount == 0) {
             return false; // false means the validation didn't pass then show validation error
         } else {
             return true;
         }
-        // dd($stockBalCount);
     }
 
-    /**
-     * Get the validation error message.
-     *
-     * @return string
-     */
     public function message()
     {
-        return 'The stock balance has not yet been declared.';
+        return '' . $this->noBalance . ' stock balance has not yet been declared.';
     }
 }

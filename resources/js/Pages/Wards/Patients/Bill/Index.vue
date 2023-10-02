@@ -270,7 +270,7 @@
               class="text-error"
               v-if="stockBalanceDeclared != false"
             >
-              The stock balance has not yet been declared.
+              {{ $page.props.errors['itemsToBillList.0.itemCode'] }}
             </small>
           </div>
           <div class="field">
