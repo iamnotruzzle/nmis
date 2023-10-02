@@ -266,12 +266,6 @@
               optionLabel="itemDesc"
               class="w-full"
             />
-            <small
-              class="text-error"
-              v-if="stockBalanceDeclared != false"
-            >
-              {{ $page.props.errors['itemsToBillList.0.itemCode'] }}
-            </small>
           </div>
           <div class="field">
             <label for="Item">Quantity</label>
@@ -294,6 +288,13 @@
           </div>
           <div class="field mt-8">
             <label class="mr-2 font-bold">ITEMS / SERVICES TO CHARGE</label>
+
+            <p
+              class="text-error text-xl font-semibold"
+              v-if="stockBalanceDeclared != false"
+            >
+              {{ $page.props.errors['itemsToBillList.0.itemCode'].toUpperCase() }}
+            </p>
 
             <DataTable
               v-model:filters="itemsToBillFilter"
@@ -804,20 +805,23 @@ export default {
           this.cancel();
           this.createdMsg();
         },
-        onFinish: (visit) => {
-          this.billList = [];
-          this.medicalSuppliesList = [];
-          this.miscList = [];
-          this.itemList = [];
-          this.itemsToBillList = [];
-          this.storeBillsInContainer();
-          this.getTotalAmount();
-          this.storeMedicalSuppliesInContainer();
-          this.storeMiscInContainer();
-          this.storeItemsInContainer();
-        },
         onError: (errors) => {
           this.stockBalanceDeclared = true;
+        },
+        onFinish: (visit) => {
+          //   console.log('object');
+          if (this.stockBalanceDeclared != true) {
+            this.billList = [];
+            this.medicalSuppliesList = [];
+            this.miscList = [];
+            this.itemList = [];
+            this.itemsToBillList = [];
+            this.storeBillsInContainer();
+            this.getTotalAmount();
+            this.storeMedicalSuppliesInContainer();
+            this.storeMiscInContainer();
+            this.storeItemsInContainer();
+          }
         },
       });
     },
