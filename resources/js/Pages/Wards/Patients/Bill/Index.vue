@@ -255,7 +255,7 @@
           class="p-fluid"
           @hide="whenDialogIsHidden"
         >
-          <div class="field">
+          <div class="field mb-3">
             <label>Item</label>
             <Dropdown
               required="true"
@@ -264,8 +264,14 @@
               filter
               placeholder="Select a Item"
               optionLabel="itemDesc"
-              class="w-full mb-3"
+              class="w-full"
             />
+            <small
+              class="text-error"
+              v-if="stockBalanceDeclared != false"
+            >
+              The stock balance has not yet been declared.
+            </small>
           </div>
           <div class="field">
             <label for="Item">Quantity</label>
@@ -502,6 +508,7 @@ export default {
   },
   data() {
     return {
+      stockBalanceDeclared: false,
       expandedRows: [],
       search: '',
       options: {},
@@ -808,6 +815,9 @@ export default {
           this.storeMedicalSuppliesInContainer();
           this.storeMiscInContainer();
           this.storeItemsInContainer();
+        },
+        onError: (errors) => {
+          this.stockBalanceDeclared = true;
         },
       });
     },

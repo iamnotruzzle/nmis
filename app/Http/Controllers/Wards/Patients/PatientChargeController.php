@@ -12,11 +12,13 @@ use App\Models\PatientCharge;
 use App\Models\PatientChargeLogs;
 use App\Models\TypeOfCharge;
 use App\Models\WardsStocks;
+use App\Rules\StockBalanceNotDeclaredYetRule;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use stdClass;
 
@@ -95,7 +97,16 @@ class PatientChargeController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->tscode);
+        $data = $request;
+
+        foreach ($data->itemsToBillList as $e) {
+            // dd($e);
+            $data->validate(
+                [
+                    "itemsToBillList.*.itemCode" => ['required', new StockBalanceNotDeclaredYetRule($e['itemCode'])],
+                ],
+            );
+        }
 
         $entryby = Auth::user()->employeeid;
 
