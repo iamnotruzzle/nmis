@@ -286,7 +286,7 @@
               {{ itemNotSelectedMsg }}
             </small>
           </div>
-          <div class="field mt-8">
+          <div class="field mt-4">
             <label class="mr-2 font-bold">ITEMS / SERVICES TO CHARGE</label>
 
             <p
