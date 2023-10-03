@@ -312,9 +312,8 @@ export default {
     Link,
   },
   props: {
-    currentWardStocks: Object,
+    currentStocks: Object,
     locationStockBalance: Object,
-    currentWardStocks: Array,
   },
   data() {
     return {
@@ -381,12 +380,31 @@ export default {
     },
     storeItemsInController() {
       this.itemsList = []; // reset
-      this.currentWardStocks.forEach((e) => {
+      this.currentStocks.forEach((e) => {
         this.itemsList.push({
           cl2comb: e.item_details.cl2comb,
           cl2desc: e.item_details.cl2desc,
         });
       });
+
+      this.sortItemsList(this.itemsList, 'cl2desc');
+    },
+    sortItemsList(arr, propertyName, order = 'ascending') {
+      const sortedArr = this.itemsList.sort((a, b) => {
+        if (a[propertyName] < b[propertyName]) {
+          return -1;
+        }
+        if (a[propertyName] > b[propertyName]) {
+          return 1;
+        }
+        return 0;
+      });
+
+      if (order === 'descending') {
+        return sortedArr.reverse();
+      }
+
+      this.itemsList = sortedArr;
     },
     updateData() {
       this.balanceContainer = [];

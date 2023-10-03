@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\LocationStockBalance;
 
 use App\Http\Controllers\Controller;
+use App\Models\CsrStocks;
 use App\Models\LocationStockBalance;
 use App\Models\WardsStocks;
 use App\Rules\StockBalanceRule;
@@ -19,6 +20,8 @@ class LocationStockBalanceController extends Controller
     {
         $searchString = $request->search;
 
+        $currentStocks = null;
+
         // get auth wardcode
         $authWardcode = DB::table('csrw_users')
             ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
@@ -27,10 +30,16 @@ class LocationStockBalanceController extends Controller
             ->orderBy('csrw_login_history.created_at', 'desc')
             ->first();
 
-        $currentWardStocks = WardsStocks::with('item_details:cl2comb,cl2desc')
-            ->where('location', $authWardcode->wardcode)
-            ->where('from', 'CSR')
-            ->get();
+        if ($authWardcode->wardcode == 'CSR') {
+            $currentStocks = CsrStocks::with('item_details:cl2comb,cl2desc')
+                ->groupBy('cl2comb')
+                ->get(['cl2comb']);
+        } else {
+            $currentStocks = WardsStocks::with('item_details:cl2comb,cl2desc')
+                ->where('location', $authWardcode->wardcode)
+                ->where('from', 'CSR')
+                ->get();
+        }
 
         $locationStockBalance = LocationStockBalance::with(['item:cl2comb,cl2desc', 'entry_by', 'updated_by'])
             ->where('location', $authWardcode->wardcode)
@@ -53,7 +62,7 @@ class LocationStockBalanceController extends Controller
             ->paginate(10);
 
         return Inertia::render('Balance/Index', [
-            'currentWardStocks' => $currentWardStocks,
+            'currentStocks' => $currentStocks,
             'locationStockBalance' => $locationStockBalance,
         ]);
     }
