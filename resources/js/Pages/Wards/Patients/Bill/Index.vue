@@ -712,6 +712,7 @@ export default {
     whenDialogIsHidden() {
       this.$emit(
         'hide',
+        (this.stockBalanceDeclared = false),
         (this.itemsToBillList = []),
         (this.item = null),
         (this.itemDesc = null),
@@ -844,6 +845,7 @@ export default {
       //   console.log(this.form.upd_currentChargeQty);
     },
     cancel() {
+      this.stockBalanceDeclared = false;
       this.itemsToBillList = [];
       this.item = null;
       this.itemDesc = null;
