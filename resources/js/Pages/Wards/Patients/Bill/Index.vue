@@ -572,7 +572,7 @@ export default {
     };
   },
   mounted() {
-    console.log('bills', this.bills.admission_date_bill.tscode);
+    // console.log('bills', this.bills.admission_date_bill.tscode);
     this.storeBillsInContainer();
     this.getTotalAmount();
     this.storeMedicalSuppliesInContainer();

@@ -9,6 +9,7 @@ use App\Models\Item;
 use App\Models\RequestStocks;
 use App\Models\RequestStocksDetails;
 use App\Models\WardsStocks;
+use App\Rules\CsrStockBalanceNotDeclaredYetRule;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -91,6 +92,18 @@ class IssueItemController extends Controller
 
         // get location of the request
         $location = RequestStocks::where('id', $requestStocksID)->first();
+
+        $data = $request;
+        foreach ($data->requestStockListDetails as $e) {
+            // dd($e);
+            $data->validate(
+                [
+                    "requestStockListDetails.*.cl2comb" => ['required', new CsrStockBalanceNotDeclaredYetRule($e['cl2comb'])],
+                ],
+            );
+        }
+
+        dd('bef');
 
         foreach ($requestStocksContainer as $rsc) {
             // update the approved_qty in the RequestStocksDetails table

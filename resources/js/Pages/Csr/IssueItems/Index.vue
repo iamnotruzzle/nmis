@@ -256,6 +256,12 @@
                   />
                 </span>
               </div>
+              <p
+                class="text-error text-xl font-semibold my-1"
+                v-if="stockBalanceDeclared != false"
+              >
+                {{ $page.props.errors['requestStockListDetails.0.cl2comb'].toUpperCase() }}
+              </p>
             </template>
             <Column
               field="cl2desc"
@@ -433,6 +439,7 @@ export default {
   },
   data() {
     return {
+      stockBalanceDeclared: false,
       expandedRows: null,
       // paginator
       loading: false,
@@ -628,6 +635,7 @@ export default {
     whenDialogIsHidden() {
       this.$emit(
         'hide',
+        (this.stockBalanceDeclared = false),
         (this.requestStockId = null),
         (this.isUpdate = false),
         (this.requestStockListDetails = []),
@@ -733,6 +741,18 @@ export default {
                 this.updateData();
                 this.updatedMsg();
               },
+              onError: (errors) => {
+                this.stockBalanceDeclared = true;
+              },
+              onFinish: (visit) => {
+                if (this.stockBalanceDeclared != true) {
+                  this.requestStockId = null;
+                  this.createRequestStocksDialog = false;
+                  this.cancel();
+                  this.updateData();
+                  this.updatedMsg();
+                }
+              },
             });
           } else {
             this.qtyIsNotEnough();
@@ -756,6 +776,18 @@ export default {
                 this.updateData();
                 this.createdMsg();
               },
+              onError: (errors) => {
+                this.stockBalanceDeclared = true;
+              },
+              onFinish: (visit) => {
+                if (this.stockBalanceDeclared != true) {
+                  this.requestStockId = null;
+                  this.createRequestStocksDialog = false;
+                  this.cancel();
+                  this.updateData();
+                  this.updatedMsg();
+                }
+              },
             });
           } else {
             this.qtyIsNotEnough();
@@ -764,6 +796,7 @@ export default {
       }
     },
     cancel() {
+      this.stockBalanceDeclared = false;
       this.requestStockId = null;
       this.isUpdate = false;
       this.createRequestStocksDialog = false;
