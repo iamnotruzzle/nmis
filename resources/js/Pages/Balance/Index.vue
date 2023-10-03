@@ -353,7 +353,7 @@ export default {
     this.rows = this.locationStockBalance.per_page;
   },
   mounted() {
-    console.log('stock bal', this.locationStockBalance);
+    // console.log('stock bal', this.locationStockBalance);
 
     this.storeStockBalanceInContainer();
     this.storeItemsInController();
