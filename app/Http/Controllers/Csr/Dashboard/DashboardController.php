@@ -29,8 +29,9 @@ class DashboardController extends Controller
         $total_issued_cost_month = DB::select(
             "SELECT (SUM(rsd.approved_qty) * (SELECT TOP 1 selling_price FROM csrw_item_prices WHERE cl2comb = rsd.cl2comb ORDER BY created_at DESC)) as total_cost
             FROM csrw_request_stocks_details  as rsd
-            WHERE rsd.created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
-            GROUP BY rsd.cl2comb;"
+            JOIN csrw_request_stocks as rs on rsd.request_stocks_id = rs.id
+            WHERE rs.received_date BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
+            GROUP BY rsd.cl2comb, rs.received_date;"
         );
 
         // most requested items
