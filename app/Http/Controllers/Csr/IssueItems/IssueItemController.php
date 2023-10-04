@@ -103,7 +103,7 @@ class IssueItemController extends Controller
             );
         }
 
-        dd('bef');
+        // dd('bef');
 
         foreach ($requestStocksContainer as $rsc) {
             // update the approved_qty in the RequestStocksDetails table
