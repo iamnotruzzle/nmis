@@ -156,6 +156,7 @@
 <script>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { Link } from '@inertiajs/vue3';
+import { router } from '@inertiajs/vue3';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import moment, { now } from 'moment';
@@ -164,6 +165,7 @@ import { CanvasRenderer } from 'echarts/renderers';
 import { PieChart } from 'echarts/charts';
 import { TitleComponent, TooltipComponent, LegendComponent, GridComponent } from 'echarts/components';
 import VChart, { THEME_KEY } from 'vue-echarts';
+import Echo from 'laravel-echo';
 
 use([CanvasRenderer, PieChart, TitleComponent, TooltipComponent, LegendComponent, GridComponent]);
 
@@ -193,7 +195,25 @@ export default {
     };
   },
   mounted() {
-    // console.log(this.completed_requests_month);
+    window.Echo.channel('request').listen('RequestStock', (args) => {
+      router.reload({
+        onSuccess: (e) => {
+          this.completed_requests_month_container = null;
+          this.pending_requests_month_container = null;
+          this.total_issued_cost_month_container = 0;
+          this.most_requested_container = [];
+          this.new_stocks_container = [];
+
+          this.storeCompletedRequests();
+          this.storePendingRequests();
+          this.storeTotalIssuedCost();
+          this.storeValueInMostRequestedContainer();
+          this.storeValueInNewStocksContainer();
+          this.getCurrentMonth();
+        },
+      });
+    });
+
     this.storeCompletedRequests();
     this.storePendingRequests();
     this.storeTotalIssuedCost();
@@ -249,7 +269,7 @@ export default {
           {
             name: 'ITEM',
             type: 'pie',
-            radius: '90%', // chart size
+            radius: '85%', // chart size
             data: [],
           },
         ],
