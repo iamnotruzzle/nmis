@@ -18,17 +18,15 @@ class CategoryController extends Controller
         $procTypes = ProcTypeForHclass::orderBy('ptdesc', 'ASC')
             ->get();
 
-        $categories = Category::when($request->search, function ($query, $value) {
-            $query->where('cl1comb', 'LIKE', '%' . $value . '%')
-                ->orWhere('cl1desc', 'LIKE', '%' . $value . '%');
-        })
-            ->where('cl1stat', 'A')
-            ->orderBy('cl1desc', 'ASC')
+        $mainCategory = ProcTypeForHclass::with('subCategory')
+            ->when($request->search, function ($query, $value) {
+                $query->where('ptdesc', 'LIKE', '%' . $value . '%');
+            })
+            ->orderBy('dateasof', 'DESC')
             ->paginate(15);
 
         return Inertia::render('Csr/Inventory/Categories/Index', [
-            'categories' => $categories,
-            'procTypes' => $procTypes,
+            'mainCategory' => $mainCategory,
         ]);
     }
 

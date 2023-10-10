@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
+    // SECONDARY CATEGORY
     use HasFactory;
 
     protected $table = 'hclass1';

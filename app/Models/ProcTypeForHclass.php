@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProcTypeForHclass extends Model
 {
+    // MAIN CATEGORY
     use HasFactory;
 
     protected $table = 'hproctyp'; // list of proc type for hclass tables
@@ -20,4 +21,9 @@ class ProcTypeForHclass extends Model
         'ptcode',
         'ptdesc',
     ];
+
+    public function subCategory()
+    {
+        return $this->hasMany(Category::class, 'ptcode', 'ptcode');
+    }
 }
