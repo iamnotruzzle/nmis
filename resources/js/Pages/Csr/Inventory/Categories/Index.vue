@@ -7,7 +7,7 @@
 
       <DataTable
         class="p-datatable-sm"
-        dataKey="cl2comb"
+        dataKey="ptcode"
         v-model:filters="filters"
         v-model:expandedRows="expandedRows"
         :value="mainCategoriesList"
