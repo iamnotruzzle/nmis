@@ -1,6 +1,6 @@
 <template>
   <app-layout>
-    <Head title="InvenTrackr - Items" />
+    <Head title="InvenTrackr - Categories" />
 
     <div class="card">
       <Toast />
@@ -33,10 +33,10 @@
                 />
               </span>
               <Button
-                label="Add item"
+                label="Add Category"
                 icon="pi pi-plus"
                 iconPos="right"
-                @click="openCreateItemDialog"
+                @click="openCreateCategoryDialog"
               />
             </div>
           </div>
@@ -61,6 +61,24 @@
           header="PTDESC"
           style="min-width: 12rem"
         >
+        </Column>
+        <Column
+          field="ptstat"
+          header="PTSTAT"
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            <Tag
+              v-if="data.ptstat == 'A'"
+              value="ACTIVE"
+              severity="success"
+            />
+            <Tag
+              v-else
+              value="INACTIVE"
+              severity="danger"
+            />
+          </template>
         </Column>
         <Column
           header="ACTION"
@@ -143,7 +161,7 @@
       </DataTable>
 
       <!-- create & edit dialog -->
-      <!-- <Dialog
+      <Dialog
         v-model:visible="createItemDialog"
         :style="{ width: '450px' }"
         header="Item Detail"
@@ -153,110 +171,40 @@
         dismissableMask
       >
         <div class="field">
-          <label for="cl1comb">Category</label>
-          <Dropdown
-            v-model.trim="form.cl1comb"
-            required="true"
-            :options="cl1combsList"
-            filter
-            optionLabel="cl1desc"
-            optionValue="cl1comb"
-            class="w-full mb-3"
-            :class="{ 'p-invalid': form.cl1comb == '' }"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.cl1comb"
-          >
-            {{ form.errors.cl1comb }}
-          </small>
-        </div>
-        <div class="field">
-          <label for="cl2code">Cl2code</label>
+          <label for="ptcode">Ptcode</label>
           <InputText
-            id="cl2code"
-            v-model.trim="form.cl2code"
+            id="ptcode"
+            v-model.trim="form.ptcode"
             required="true"
             autofocus
-            :class="{ 'p-invalid': form.cl2code == '' }"
+            :class="{ 'p-invalid': form.ptcode == '' }"
             @keyup.enter="submit"
           />
           <small
             class="text-error"
-            v-if="form.errors.cl2code"
+            v-if="form.errors.ptcode"
           >
-            {{ form.errors.cl2code }}
+            {{ form.errors.ptcode }}
           </small>
         </div>
         <div class="field">
-          <label for="cl2desc">Cl2desc</label>
-          <Textarea
-            id="cl1code"
-            v-model.trim="form.cl2desc"
-            required="true"
-            rows="5"
-            autofocus
-            :class="{ 'p-invalid': form.cl2desc == '' }"
-            @keyup.enter="submit"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.cl2desc"
-          >
-            {{ form.errors.cl2desc }}
-          </small>
-        </div>
-        <div class="field">
-          <label for="unit">UNIT</label>
-          <Dropdown
-            required="true"
-            v-model="form.unit"
-            :options="unitsList"
-            dataKey="unit"
-            optionLabel="uomdesc"
-            optionValue="uomdesc"
-            class="w-full mb-3"
-            :class="{ 'p-invalid': form.unit == '' }"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.unit"
-          >
-          </small>
-        </div>
-        <div class="field">
-          <label for="cl2upsw">Cl2upsw</label>
+          <label for="ptdesc">Ptdesc</label>
           <InputText
-            id="cl2upsw"
-            v-model.trim="form.cl2upsw"
+            id="ptdesc"
+            v-model.trim="form.ptdesc"
             required="true"
             autofocus
-            :class="{ 'p-invalid': form.cl2upsw == '' }"
+            :class="{ 'p-invalid': form.ptdesc == '' }"
             @keyup.enter="submit"
           />
           <small
             class="text-error"
-            v-if="form.errors.cl2upsw"
+            v-if="form.errors.ptdesc"
           >
-            {{ form.errors.cl2upsw }}
+            {{ form.errors.ptdesc }}
           </small>
         </div>
-        <div class="field">
-          <label for="cl2stat">Cl2stat</label>
-          <Dropdown
-            v-model="form.cl2stat"
-            :options="cl2stats"
-            optionLabel="name"
-            optionValue="value"
-            class="w-full md:w-14rem"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.cl2stat"
-          >
-            {{ form.errors.cl2stat }}
-          </small>
-        </div>
+
         <template #footer>
           <Button
             label="Cancel"
@@ -285,7 +233,7 @@
             @click="submit"
           />
         </template>
-      </Dialog> -->
+      </Dialog>
 
       <!-- Delete confirmation dialog -->
       <!-- <Dialog
@@ -435,6 +383,7 @@ import Dropdown from 'primevue/dropdown';
 import AutoComplete from 'primevue/autocomplete';
 import Textarea from 'primevue/textarea';
 import InputNumber from 'primevue/inputnumber';
+import Tag from 'primevue/tag';
 import moment from 'moment';
 
 export default {
@@ -455,6 +404,7 @@ export default {
     AutoComplete,
     Textarea,
     InputNumber,
+    Tag,
   },
   props: {
     mainCategory: Array,
@@ -486,7 +436,12 @@ export default {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       form: this.$inertia.form({
+        ptcode: null,
         ptdesc: null,
+        ptstat: null,
+        ptstat: null,
+        ptlock: null,
+        ptupsw: null,
       }),
     };
   },
@@ -545,7 +500,7 @@ export default {
         },
       });
     },
-    openCreateItemDialog() {
+    openCreateCategoryDialog() {
       this.isUpdate = false;
       this.form.clearErrors();
       this.form.reset();
