@@ -20,6 +20,12 @@ class ProcTypeForHclass extends Model
     protected $fillable = [
         'ptcode',
         'ptdesc',
+        'dateasof',
+        'ptstat',
+        'ptlock',
+        'ptupsw',
+        'ptdtmd',
+        'chrgcode',
     ];
 
     public function subCategory()

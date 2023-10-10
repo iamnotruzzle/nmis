@@ -162,7 +162,7 @@
 
       <!-- create & edit dialog -->
       <Dialog
-        v-model:visible="createItemDialog"
+        v-model:visible="createCategoryDialog"
         :style="{ width: '450px' }"
         header="Item Detail"
         :modal="true"
@@ -210,6 +210,7 @@
             v-model="form.ptstat"
             :options="status"
             optionLabel="name"
+            optionValue="code"
             placeholder="Select status"
             class="w-full"
           />
@@ -437,7 +438,7 @@ export default {
       // end paginator
       itemId: null,
       isUpdate: false,
-      createItemDialog: false,
+      createCategoryDialog: false,
       deleteItemDialog: false,
       // categories
       priceId: null,
@@ -460,8 +461,6 @@ export default {
         ptdesc: null,
         ptstat: null,
         ptstat: null,
-        ptlock: null,
-        ptupsw: null,
       }),
     };
   },
@@ -473,9 +472,7 @@ export default {
   },
   mounted() {
     // console.log(this.mainCategory);
-    this.stormCategoriesInContainer();
-
-    // console.log(this.items);
+    this.storeCategoriesInContainer();
 
     this.loading = false;
   },
@@ -489,7 +486,7 @@ export default {
       return moment.tz(date, 'Asia/Manila').format('LLL');
     },
 
-    stormCategoriesInContainer() {
+    storeCategoriesInContainer() {
       this.mainCategory.data.forEach((e) => {
         this.mainCategoriesList.push({
           ptcode: e.ptcode,
@@ -513,9 +510,9 @@ export default {
         preserveState: true,
         preserveScroll: true,
         onFinish: (visit) => {
-          this.totalRecords = this.categories.total;
+          this.totalRecords = this.mainCategory.total;
           this.mainCategoriesList = [];
-          this.stormCategoriesInContainer();
+          this.storeCategoriesInContainer();
           this.loading = false;
         },
       });
@@ -525,7 +522,7 @@ export default {
       this.form.clearErrors();
       this.form.reset();
       this.itemId = null;
-      this.createItemDialog = true;
+      this.createCategoryDialog = true;
     },
     // emit close dialog
     clickOutsideDialog() {
@@ -533,15 +530,11 @@ export default {
     },
     editItem(item) {
       this.isUpdate = true;
-      this.createItemDialog = true;
-      this.itemId = item.cl2comb;
-      this.form.cl2comb = item.cl2comb;
-      this.form.cl1comb = item.cl1comb;
-      this.form.cl2code = item.cl2code;
-      this.form.cl2desc = item.cl2desc;
-      this.form.unit = item.uomcode;
-      this.form.cl2stat = item.cl2stat;
-      this.form.cl2upsw = item.cl2upsw;
+      this.createCategoryDialog = true;
+      this.itemId = item.ptcode;
+      this.form.ptcode = item.ptcode;
+      this.form.ptdesc = item.ptdesc;
+      this.form.ptstat = item.ptstat;
     },
     submit() {
       if (this.isUpdate) {
@@ -549,7 +542,7 @@ export default {
           preserveScroll: true,
           onSuccess: () => {
             this.itemId = null;
-            this.createItemDialog = false;
+            this.createCategoryDialog = false;
             this.cancel();
             this.updateData();
             this.updatedMsg();
@@ -559,8 +552,7 @@ export default {
         this.form.post(route('categories.store'), {
           preserveScroll: true,
           onSuccess: () => {
-            this.itemId = null;
-            this.createItemDialog = false;
+            this.createCategoryDialog = false;
             this.cancel();
             this.updateData();
             this.createdMsg();
@@ -584,18 +576,18 @@ export default {
           this.form.reset();
           this.updateData();
           this.deletedMsg();
-          this.stormCategoriesInContainer();
+          this.storeCategoriesInContainer();
         },
       });
     },
     cancel() {
       this.itemId = null;
       this.isUpdate = false;
-      this.createItemDialog = false;
+      this.createCategoryDialog = false;
       this.form.reset();
       this.form.clearErrors();
       this.mainCategoriesList = [];
-      this.stormCategoriesInContainer();
+      this.storeCategoriesInContainer();
     },
     createdMsg() {
       this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Item created', life: 3000 });
@@ -649,7 +641,7 @@ export default {
           preserveScroll: true,
           onSuccess: () => {
             this.priceId = null;
-            this.createItemDialog = false;
+            this.createCategoryDialog = false;
             this.cancelPrice();
             this.updateData();
             this.createdPriceMsg();
@@ -672,7 +664,7 @@ export default {
           this.formPrice.reset();
           this.updateData();
           this.deletedPriceMsg();
-          //   this.stormCategoriesInContainer();
+          //   this.storeCategoriesInContainer();
         },
       });
     },

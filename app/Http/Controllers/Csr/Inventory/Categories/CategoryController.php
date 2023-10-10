@@ -33,52 +33,42 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'ptcode' => 'required|max:5',
-            'cl1code' => 'required|unique:hclass1,cl1code|max:5',
-            'cl1desc' => 'required|max:20',
-            'cl1stat' => 'required|max:1',
-            'cl1upsw' => 'required|max:1',
+            'ptcode' => 'required||unique:hproctyp,ptcode|max:5',
+            'ptdesc' => 'required|unique:hproctyp,ptdesc|max:30',
+            'ptstat' => 'required',
         ]);
 
-        $categories = Category::create([
+        $categories = ProcTypeForHclass::create([
             'ptcode' => $request->ptcode,
-            'cl1code' => $request->cl1code,
-            'cl1comb' => $request->ptcode . '' . $request->cl1code,
-            'cl1desc' => $request->cl1desc,
-            'cl1stat' => $request->cl1stat,
-            'cl1lock' => 'N',
-            'cl1upsw' => $request->cl1upsw,
-            'cl1dtmd' => NULL,
-            'compense' => NULL,
+            'ptdesc' => $request->ptdesc,
+            'ptstat' => $request->ptstat,
+            'dateasof' => Carbon::now(),
+            'ptlock' => 'N',
+            'ptupsw' => 'P',
+            'ptdtmd' => NULL,
+            'chrgcode' => NULL,
         ]);
 
         return Redirect::route('categories.index');
     }
 
-    public function update(Category $category, Request $request)
+    public function update(ProcTypeForHclass $category, Request $request)
     {
         $request->validate([
-            'ptcode' => 'required|max:5',
-            'cl1code' => [
-                'required',
-                'max:5',
-                Rule::unique('hclass1')->ignore($request->cl1code, 'cl1code') // 'cl1code' is the column
-            ],
-            'cl1desc' => 'required|max:20',
-            'cl1stat' => 'required|max:1',
-            'cl1upsw' => 'required|max:1',
+            'ptcode' => 'required||unique:hproctyp,ptcode|max:5',
+            'ptdesc' => 'required|unique:hproctyp,ptdesc|max:30',
+            'ptstat' => 'required',
         ]);
 
         $category->update([
             'ptcode' => $request->ptcode,
-            'cl1code' => $request->cl1code,
-            'cl1comb' => $request->ptcode . '' . $request->cl1code,
-            'cl1desc' => $request->cl1desc,
-            'cl1stat' => $request->cl1stat,
-            'cl1lock' => 'N',
-            'cl1upsw' => $request->cl1upsw,
-            'cl1dtmd' => NULL,
-            'compense' => NULL,
+            'ptdesc' => $request->ptdesc,
+            'ptstat' => $request->ptstat,
+            'dateasof' => Carbon::now(),
+            'ptlock' => 'N',
+            'ptupsw' => 'P',
+            'ptdtmd' => NULL,
+            'chrgcode' => NULL,
         ]);
 
         return Redirect::route('categories.index');
