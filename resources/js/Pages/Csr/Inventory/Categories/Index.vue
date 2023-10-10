@@ -254,7 +254,7 @@
 
       <!-- Delete confirmation dialog -->
       <!-- <Dialog
-        v-model:visible="deleteItemDialog"
+        v-model:visible="deleteCategoryDialog"
         :style="{ width: '450px' }"
         header="Confirm"
         :modal="true"
@@ -275,7 +275,7 @@
             label="No"
             icon="pi pi-times"
             class="p-button-text"
-            @click="deleteItemDialog = false"
+            @click="deleteCategoryDialog = false"
           />
           <Button
             label="Yes"
@@ -439,7 +439,7 @@ export default {
       itemId: null,
       isUpdate: false,
       createCategoryDialog: false,
-      deleteItemDialog: false,
+      deleteCategoryDialog: false,
       // categories
       priceId: null,
       isPriceUpdate: false,
@@ -560,17 +560,17 @@ export default {
         });
       }
     },
-    confirmDeleteItem(item) {
-      this.itemId = item.cl2comb;
-      this.form.cl2desc = item.cl2desc;
-      this.deleteItemDialog = true;
+    confirmDeleteItem(category) {
+      this.itemId = category.ptcode;
+      this.form.ptdesc = category.ptdesc;
+      this.deleteCategoryDialog = true;
     },
     deleteItem() {
       this.form.delete(route('categories.destroy', this.itemId), {
         preserveScroll: true,
         onSuccess: () => {
           this.mainCategoriesList = [];
-          this.deleteItemDialog = false;
+          this.deleteCategoryDialog = false;
           this.itemId = null;
           this.form.clearErrors();
           this.form.reset();
@@ -590,13 +590,13 @@ export default {
       this.storeCategoriesInContainer();
     },
     createdMsg() {
-      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Item created', life: 3000 });
+      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Category created', life: 3000 });
     },
     updatedMsg() {
-      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Item updated', life: 3000 });
+      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Category updated', life: 3000 });
     },
     deletedMsg() {
-      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Item deleted', life: 3000 });
+      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Category deleted', life: 3000 });
     },
     // ********** prices
     openCreateItemPriceDialog(item) {

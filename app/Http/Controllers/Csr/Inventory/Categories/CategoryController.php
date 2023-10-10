@@ -54,9 +54,20 @@ class CategoryController extends Controller
 
     public function update(ProcTypeForHclass $category, Request $request)
     {
+        // category
+        $cat = ProcTypeForHclass::where('ptcode', $request->ptcode)->first();
+
         $request->validate([
-            'ptcode' => 'required||unique:hproctyp,ptcode|max:5',
-            'ptdesc' => 'required|unique:hproctyp,ptdesc|max:30',
+            'ptcode' => [
+                'required',
+                'max:5',
+                Rule::unique('hproctyp')->ignore($request->ptcode, 'ptcode')
+            ],
+            'ptdesc' => [
+                'required',
+                'max:30',
+                Rule::unique('hproctyp')->ignore($request->ptdesc, 'ptdesc')
+            ],
             'ptstat' => 'required',
         ]);
 
@@ -74,7 +85,7 @@ class CategoryController extends Controller
         return Redirect::route('categories.index');
     }
 
-    public function destroy(Category $category)
+    public function destroy(ProcTypeForHclass $category)
     {
         $category->delete();
 
