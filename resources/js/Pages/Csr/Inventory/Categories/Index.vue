@@ -99,7 +99,7 @@
               rounded
               text
               severity="danger"
-              @click="confirmDeleteItem(slotProps.data)"
+              @click="confirmDeleteCategory(slotProps.data)"
             />
           </template>
         </Column>
@@ -253,7 +253,7 @@
       </Dialog>
 
       <!-- Delete confirmation dialog -->
-      <!-- <Dialog
+      <Dialog
         v-model:visible="deleteCategoryDialog"
         :style="{ width: '450px' }"
         header="Confirm"
@@ -266,7 +266,7 @@
             style="font-size: 2rem"
           />
           <span v-if="form"
-            >Are you sure you want to delete <b>{{ form.cl2desc }}</b> ?</span
+            >Are you sure you want to delete <b>{{ form.ptdesc }}</b> ?</span
           >
         </div>
 
@@ -285,7 +285,7 @@
             @click="deleteItem"
           />
         </template>
-      </Dialog> -->
+      </Dialog>
 
       <!-- create & edit price dialog -->
       <!-- <Dialog
@@ -560,7 +560,7 @@ export default {
         });
       }
     },
-    confirmDeleteItem(category) {
+    confirmDeleteCategory(category) {
       this.itemId = category.ptcode;
       this.form.ptdesc = category.ptdesc;
       this.deleteCategoryDialog = true;
