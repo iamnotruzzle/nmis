@@ -204,6 +204,22 @@
             {{ form.errors.ptdesc }}
           </small>
         </div>
+        <div class="field">
+          <label for="ptstat">Ptstat</label>
+          <Dropdown
+            v-model="form.ptstat"
+            :options="status"
+            optionLabel="name"
+            placeholder="Select status"
+            class="w-full"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.ptstat"
+          >
+            {{ form.errors.ptstat }}
+          </small>
+        </div>
 
         <template #footer>
           <Button
@@ -423,7 +439,7 @@ export default {
       isUpdate: false,
       createItemDialog: false,
       deleteItemDialog: false,
-      // price
+      // categories
       priceId: null,
       isPriceUpdate: false,
       createItemPriceDialog: false,
@@ -435,6 +451,10 @@ export default {
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
+      status: [
+        { name: 'Active', code: 'A' },
+        { name: 'Inactive', code: 'I' },
+      ],
       form: this.$inertia.form({
         ptcode: null,
         ptdesc: null,
