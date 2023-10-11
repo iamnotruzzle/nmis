@@ -17,6 +17,7 @@
         :rows="rows"
         ref="dt"
         :totalRecords="totalRecords"
+        showGridlines
         @page="onPage($event)"
         filterDisplay="row"
         :loading="loading"
@@ -66,6 +67,7 @@
           field="ptstat"
           header="PTSTAT"
           style="min-width: 12rem"
+          :showFilterMenu="false"
         >
           <template #body="{ data }">
             <Tag
@@ -77,6 +79,16 @@
               v-else
               value="INACTIVE"
               severity="danger"
+            />
+          </template>
+          <template #filter="{}">
+            <Dropdown
+              v-model="selectedStatus"
+              :options="statusFilter"
+              optionLabel="name"
+              optionValue="code"
+              placeholder="NO FILTER"
+              class="w-full"
             />
           </template>
         </Column>
@@ -503,6 +515,7 @@ export default {
       createSubCategoryDialog: false,
       deleteSubCategoryDialog: false,
       search: '',
+      selectedStatus: null,
       options: {},
       params: {},
       mainCategoriesList: [],
@@ -510,6 +523,11 @@ export default {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       status: [
+        { name: 'Active', code: 'A' },
+        { name: 'Inactive', code: 'I' },
+      ],
+      statusFilter: [
+        { name: 'NO FILTER', code: null },
         { name: 'Active', code: 'A' },
         { name: 'Inactive', code: 'I' },
       ],
@@ -749,6 +767,12 @@ export default {
   watch: {
     search: function (val, oldVal) {
       this.params.search = val;
+      this.updateData();
+    },
+    selectedStatus: function (val) {
+      //   console.log(val['code']);
+      this.params.status = this.selectedStatus;
+
       this.updateData();
     },
   },

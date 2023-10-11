@@ -22,6 +22,12 @@ class CategoryController extends Controller
             ->when($request->search, function ($query, $value) {
                 $query->where('ptdesc', 'LIKE', '%' . $value . '%');
             })
+            ->when(
+                $request->status,
+                function ($query, $value) {
+                    $query->where('ptstat', $value);
+                }
+            )
             ->orderBy('dateasof', 'DESC')
             ->paginate(15);
 
