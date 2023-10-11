@@ -481,7 +481,7 @@ export default {
     Tag,
   },
   props: {
-    mainCategory: Array,
+    mainCategory: Object,
   },
   data() {
     return {
