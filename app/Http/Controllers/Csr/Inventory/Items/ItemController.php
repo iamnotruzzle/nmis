@@ -29,7 +29,13 @@ class ItemController extends Controller
                 $query->where('cl2comb', 'LIKE', '%' . $value . '%')
                     ->orWhere('cl2desc', 'LIKE', '%' . $value . '%');
             })
-            ->where('cl2stat', 'A')
+            ->when(
+                $request->status,
+                function ($query, $value) {
+                    $query->where('cl2stat', $value);
+                }
+            )
+            // ->where('cl2stat', 'A')
             ->orderBy('cl2desc', 'ASC')
             ->paginate(15);
 

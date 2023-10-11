@@ -16,6 +16,7 @@
         paginator
         :rows="rows"
         ref="dt"
+        showGridlines
         :totalRecords="totalRecords"
         @page="onPage($event)"
         filterDisplay="row"
@@ -96,9 +97,29 @@
           field="cl2stat"
           header="STATUS"
           style="min-width: 12rem"
+          :showFilterMenu="false"
         >
           <template #body="{ data }">
-            {{ data.cl2stat }}
+            <Tag
+              v-if="data.cl2stat == 'A'"
+              value="ACTIVE"
+              severity="success"
+            />
+            <Tag
+              v-else
+              value="INACTIVE"
+              severity="danger"
+            />
+          </template>
+          <template #filter="{}">
+            <Dropdown
+              v-model="selectedStatus"
+              :options="statusFilter"
+              optionLabel="name"
+              optionValue="code"
+              placeholder="NO FILTER"
+              class="w-full"
+            />
           </template>
         </Column>
         <Column
@@ -500,6 +521,7 @@ import Dropdown from 'primevue/dropdown';
 import AutoComplete from 'primevue/autocomplete';
 import Textarea from 'primevue/textarea';
 import InputNumber from 'primevue/inputnumber';
+import Tag from 'primevue/tag';
 import moment from 'moment';
 import { use } from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
@@ -528,6 +550,7 @@ export default {
     Textarea,
     InputNumber,
     VChart,
+    Tag,
   },
   props: {
     cl1combs: Array,
@@ -555,6 +578,12 @@ export default {
       deleteItemPriceDialog: false,
       // end price
       dateFilter: 'NO FILTER',
+      selectedStatus: null,
+      statusFilter: [
+        { name: 'NO FILTER', code: null },
+        { name: 'Active', code: 'A' },
+        { name: 'Inactive', code: 'I' },
+      ],
       search: '',
       options: {},
       params: {},
@@ -1007,6 +1036,12 @@ export default {
     //   // this watches the dateFilter property value that will filter
     //   // the price changes
     // },
+    selectedStatus: function (val) {
+      //   console.log(val['code']);
+      this.params.status = this.selectedStatus;
+
+      this.updateData();
+    },
   },
 };
 </script>
