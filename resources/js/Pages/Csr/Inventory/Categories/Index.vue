@@ -30,7 +30,7 @@
                 <i class="pi pi-search" />
                 <InputText
                   v-model="search"
-                  placeholder="Search item"
+                  placeholder="Search category"
                 />
               </span>
               <Button
@@ -125,7 +125,7 @@
               </div>
 
               <Button
-                label="Add price"
+                label="Add sub-category"
                 icon="pi pi-plus"
                 iconPos="right"
                 size="small"
@@ -414,7 +414,7 @@
         </template>
       </Dialog>
 
-      <!-- Delete item price confirmation dialog -->
+      <!-- Delete category confirmation dialog -->
       <Dialog
         v-model:visible="deleteSubCategoryDialog"
         :style="{ width: '450px' }"
@@ -428,7 +428,7 @@
             style="font-size: 2rem"
           />
           <span v-if="form">
-            Are you sure you want to delete <b>{{ formSubCategory.cl1desc }}</b> price ?
+            Are you sure you want to delete <b>{{ formSubCategory.cl1desc }}</b> ?
           </span>
         </div>
         <template #footer>
@@ -510,7 +510,6 @@ export default {
       createCategoryDialog: false,
       deleteCategoryDialog: false,
       // categories
-      priceId: null,
       isSubCategoryUpdate: false,
       createSubCategoryDialog: false,
       deleteSubCategoryDialog: false,
@@ -686,11 +685,10 @@ export default {
       this.isSubCategoryUpdate = false;
       this.createSubCategoryDialog = true;
     },
-    // emit price close dialog
+    // emit category close dialog
     clickOutsideSubCategoryDialog() {
       this.$emit(
         'hide',
-        (this.priceId = null),
         (this.isSubCategoryUpdate = false),
         this.formSubCategory.clearErrors(),
         this.formSubCategory.reset()
