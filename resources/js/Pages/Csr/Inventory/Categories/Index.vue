@@ -560,7 +560,7 @@ export default {
           subCategory: e.sub_category.length == 0 ? null : e.sub_category,
         });
       });
-      console.log(this.mainCategoriesList);
+      //   console.log(this.mainCategoriesList);
     },
     onPage(event) {
       this.params.page = event.page + 1;
@@ -679,7 +679,7 @@ export default {
       );
     },
     editSubCategory(e) {
-      console.log(e);
+      //   console.log(e);
       this.isSubCategoryUpdate = true;
       this.createSubCategoryDialog = true;
       this.formSubCategory.cl1comb = e.cl1comb;
