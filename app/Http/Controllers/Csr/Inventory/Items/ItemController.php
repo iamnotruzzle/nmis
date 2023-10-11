@@ -42,6 +42,8 @@ class ItemController extends Controller
 
     public function store(Request $request)
     {
+        dd($request);
+
         $request->validate([
             'cl1comb' => 'required|max:20',
             'cl2code' => 'required|unique:hclass2,cl2code|max:10',
@@ -67,7 +69,7 @@ class ItemController extends Controller
             'cl2dteas' => Carbon::now(),
             'cl2stat' => $request->cl2stat,
             'cl2lock' => 'N',
-            'cl2upsw' => $request->cl2upsw,
+            'cl2upsw' => 'P',
             'cl2dtmd' => NULL,
             'curcode' => NULL,
             'cl2purp' => NULL,
@@ -119,7 +121,7 @@ class ItemController extends Controller
             // 'cl2dteas' => Carbon::now(),
             'cl2stat' => $request->cl2stat,
             'cl2lock' => 'N',
-            'cl2upsw' => $request->cl2upsw,
+            'cl2upsw' => 'P',
             'cl2dtmd' => NULL,
             'curcode' => NULL,
             'cl2purp' => NULL,

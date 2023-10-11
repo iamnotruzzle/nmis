@@ -102,24 +102,6 @@
           </template>
         </Column>
         <Column
-          field="cl2lock"
-          header="CL2LOCK"
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ data.cl2lock }}
-          </template>
-        </Column>
-        <Column
-          field="cl2upsw"
-          header="CL2UPSW"
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ data.cl2upsw }}
-          </template>
-        </Column>
-        <Column
           header="ACTION"
           style="min-width: 12rem"
         >
@@ -312,6 +294,7 @@
             v-model="form.unit"
             :options="unitsList"
             dataKey="unit"
+            filter
             optionLabel="uomdesc"
             optionValue="uomdesc"
             class="w-full mb-3"
@@ -324,30 +307,13 @@
           </small>
         </div>
         <div class="field">
-          <label for="cl2upsw">Cl2upsw</label>
-          <InputText
-            id="cl2upsw"
-            v-model.trim="form.cl2upsw"
-            required="true"
-            autofocus
-            :class="{ 'p-invalid': form.cl2upsw == '' }"
-            @keyup.enter="submit"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.cl2upsw"
-          >
-            {{ form.errors.cl2upsw }}
-          </small>
-        </div>
-        <div class="field">
           <label for="cl2stat">Cl2stat</label>
           <Dropdown
             v-model="form.cl2stat"
             :options="cl2stats"
             optionLabel="name"
             optionValue="value"
-            class="w-full md:w-14rem"
+            class="w-full"
           />
           <small
             class="text-error"
@@ -642,7 +608,6 @@ export default {
         cl2desc: null,
         unit: null,
         cl2stat: null,
-        cl2upsw: null,
       }),
       formPrice: this.$inertia.form({
         id: null,
@@ -705,8 +670,6 @@ export default {
           cl2desc: e.cl2desc,
           uomcode: e.unit === null ? '' : e.unit.uomdesc,
           cl2stat: e.cl2stat,
-          cl2lock: e.cl2lock,
-          cl2upsw: e.cl2upsw,
           pharmaceutical: e.pharmaceutical,
           prices: e.prices.length === 0 ? [] : e.prices,
         });
@@ -882,7 +845,6 @@ export default {
       this.form.cl2desc = item.cl2desc;
       this.form.unit = item.uomcode;
       this.form.cl2stat = item.cl2stat;
-      this.form.cl2upsw = item.cl2upsw;
     },
     submit() {
       if (this.isUpdate) {
