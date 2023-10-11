@@ -118,7 +118,7 @@
                 iconPos="right"
                 size="small"
                 class="ml-2 my-0"
-                @click="openCreateItemPriceDialog(slotProps.data)"
+                @click="openCreateSubCategoryDialog(slotProps.data)"
               />
             </div>
 
@@ -129,6 +129,15 @@
               :rows="5"
               class="w-full"
             >
+              <Column header="PTCODE">
+                <template #body="{ data }"> {{ data.ptcode }} </template>
+              </Column>
+              <Column header="CL1CODE">
+                <template #body="{ data }"> {{ data.cl1code }} </template>
+              </Column>
+              <Column header="CL1COMB">
+                <template #body="{ data }"> {{ data.cl1comb }} </template>
+              </Column>
               <Column header="NAME">
                 <template #body="{ data }"> {{ data.cl1desc }} </template>
               </Column>
@@ -136,14 +145,14 @@
                 header="ACTION"
                 style="min-width: 12rem"
               >
-                <!-- <template #body="slotProps">
+                <template #body="slotProps">
                   <Button
                     icon="pi pi-pencil"
                     class="mr-1"
                     rounded
                     text
                     severity="warning"
-                    @click="editPrice(slotProps.data)"
+                    @click="editSubCategory(slotProps.data)"
                   />
 
                   <Button
@@ -151,9 +160,9 @@
                     rounded
                     text
                     severity="danger"
-                    @click="confirmDeletePrice(slotProps.data)"
+                    @click="confirmDeleteSubCategory(slotProps.data)"
                   />
-                </template> -->
+                </template>
               </Column>
             </DataTable>
           </div>
@@ -287,51 +296,99 @@
         </template>
       </Dialog>
 
-      <!-- create & edit price dialog -->
-      <!-- <Dialog
-        v-model:visible="createItemPriceDialog"
+      <!-- create & edit sub category dialog -->
+      <Dialog
+        v-model:visible="createSubCategoryDialog"
         :style="{ width: '450px' }"
-        header="Price Detail"
+        header="Sub-category"
         :modal="true"
         class="p-fluid"
-        @hide="clickOutsidePriceDialog"
+        @hide="clickOutsideSubCategoryDialog"
         dismissableMask
       >
         <div class="field">
-          <label for="selling_price">Selling price</label>
+          <label for="ptcode">Ptcode</label>
           <InputText
-            id="selling_price"
-            v-model.trim="formPrice.selling_price"
+            id="ptcode"
+            v-model.trim="formSubCategory.ptcode"
             required="true"
-            type="number"
             autofocus
-            :class="{ 'p-invalid': formPrice.selling_price == '' }"
-            @keyup.enter="submitPrice"
+            disabled
           />
           <small
             class="text-error"
-            v-if="formPrice.errors.selling_price"
+            v-if="formSubCategory.errors.ptcode"
           >
-            {{ formPrice.errors.selling_price }}
+            {{ formSubCategory.errors.ptcode }}
           </small>
         </div>
+        <div class="field">
+          <label for="cl1code">Cl1code</label>
+          <InputText
+            id="cl1code"
+            v-model.trim="formSubCategory.cl1code"
+            required="true"
+            autofocus
+            @keyup.enter="submitSubCategory"
+          />
+          <small
+            class="text-error"
+            v-if="formSubCategory.errors.cl1code"
+          >
+            {{ formSubCategory.errors.cl1code }}
+          </small>
+        </div>
+        <div class="field">
+          <label for="cl1desc">Cl1desc</label>
+          <InputText
+            id="cl1desc"
+            v-model.trim="formSubCategory.cl1desc"
+            required="true"
+            autofocus
+            @keyup.enter="submitSubCategory"
+          />
+          <small
+            class="text-error"
+            v-if="formSubCategory.errors.cl1desc"
+          >
+            {{ formSubCategory.errors.cl1desc }}
+          </small>
+        </div>
+        <div class="field">
+          <label for="cl1stat">cl1stat</label>
+          <Dropdown
+            v-model="formSubCategory.cl1stat"
+            :options="status"
+            optionLabel="name"
+            optionValue="code"
+            placeholder="Select status"
+            class="w-full"
+          />
+          <small
+            class="text-error"
+            v-if="formSubCategory.errors.cl1stat"
+          >
+            {{ formSubCategory.errors.cl1stat }}
+          </small>
+        </div>
+
         <template #footer>
           <Button
             label="Cancel"
             icon="pi pi-times"
             severity="danger"
             text
-            @click="cancelPrice"
+            @click="cancelSubCategory"
           />
           <Button
-            v-if="isPriceUpdate == true"
+            v-if="isSubCategoryUpdate == true"
             label="Update"
             icon="pi pi-check"
             severity="warning"
             text
             type="submit"
-            :disabled="formPrice.processing"
-            @click="submitPrice"
+            :disabled="formSubCategory.processing"
+            @click="submitSubCategory"
           />
           <Button
             v-else
@@ -339,15 +396,15 @@
             icon="pi pi-check"
             text
             type="submit"
-            :disabled="formPrice.processing"
-            @click="submitPrice"
+            :disabled="formSubCategory.processing"
+            @click="submitSubCategory"
           />
         </template>
-      </Dialog> -->
+      </Dialog>
 
       <!-- Delete item price confirmation dialog -->
-      <!-- <Dialog
-        v-model:visible="deleteItemPriceDialog"
+      <Dialog
+        v-model:visible="deleteSubCategoryDialog"
         :style="{ width: '450px' }"
         header="Confirm"
         :modal="true"
@@ -359,7 +416,7 @@
             style="font-size: 2rem"
           />
           <span v-if="form">
-            Are you sure you want to delete <b>₱ {{ formPrice.selling_price }}</b> price ?
+            Are you sure you want to delete <b>{{ formSubCategory.cl1desc }}</b> price ?
           </span>
         </div>
         <template #footer>
@@ -367,17 +424,17 @@
             label="No"
             icon="pi pi-times"
             class="p-button-text"
-            @click="deleteItemPriceDialog = false"
+            @click="deleteSubCategoryDialog = false"
           />
           <Button
             label="Yes"
             icon="pi pi-check"
             severity="danger"
             text
-            @click="deletePrice"
+            @click="deleteSubCategory"
           />
         </template>
-      </Dialog> -->
+      </Dialog>
     </div>
   </app-layout>
 </template>
@@ -442,9 +499,9 @@ export default {
       deleteCategoryDialog: false,
       // categories
       priceId: null,
-      isPriceUpdate: false,
-      createItemPriceDialog: false,
-      deleteItemPriceDialog: false,
+      isSubCategoryUpdate: false,
+      createSubCategoryDialog: false,
+      deleteSubCategoryDialog: false,
       search: '',
       options: {},
       params: {},
@@ -461,6 +518,13 @@ export default {
         ptdesc: null,
         ptstat: null,
         ptstat: null,
+      }),
+      formSubCategory: this.$inertia.form({
+        cl1comb: null,
+        ptcode: null,
+        cl1code: null,
+        cl1desc: null,
+        cl1stat: null,
       }),
     };
   },
@@ -598,93 +662,89 @@ export default {
     deletedMsg() {
       this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Category deleted', life: 3000 });
     },
-    // ********** prices
-    openCreateItemPriceDialog(item) {
-      this.formPrice.id = item.id;
-      this.formPrice.cl2comb = item.cl2comb;
-      this.isPriceUpdate = false;
-      this.priceId = item.id;
-      this.createItemPriceDialog = true;
+    // ********** sub category
+    openCreateSubCategoryDialog(e) {
+      this.formSubCategory.ptcode = e.ptcode;
+      this.isSubCategoryUpdate = false;
+      this.createSubCategoryDialog = true;
     },
     // emit price close dialog
-    clickOutsidePriceDialog() {
+    clickOutsideSubCategoryDialog() {
       this.$emit(
         'hide',
         (this.priceId = null),
-        (this.isPriceUpdate = false),
-        this.formPrice.clearErrors(),
-        this.formPrice.reset()
+        (this.isSubCategoryUpdate = false),
+        this.formSubCategory.clearErrors(),
+        this.formSubCategory.reset()
       );
     },
-    editPrice(item) {
-      this.isPriceUpdate = true;
-      this.createItemPriceDialog = true;
-      this.priceId = item.id;
-      this.formPrice.id = item.id;
-      this.formPrice.cl2comb = item.cl2comb;
-      this.formPrice.selling_price = item.selling_price;
+    editSubCategory(e) {
+      console.log(e);
+      this.isSubCategoryUpdate = true;
+      this.createSubCategoryDialog = true;
+      this.formSubCategory.cl1comb = e.cl1comb;
+      this.formSubCategory.ptcode = e.ptcode;
+      this.formSubCategory.cl1code = e.cl1code;
+      this.formSubCategory.cl1desc = e.cl1desc;
+      this.formSubCategory.cl1stat = e.cl1stat;
     },
-    submitPrice() {
-      if (this.isPriceUpdate) {
-        this.formPrice.put(route('itemprices.update', this.priceId), {
+    submitSubCategory() {
+      if (this.isSubCategoryUpdate) {
+        this.formSubCategory.put(route('subcategories.update', this.formSubCategory.cl1comb), {
           preserveScroll: true,
           onSuccess: () => {
-            this.priceId = null;
-            this.createItemPriceDialog = false;
-            this.cancelPrice();
+            this.createSubCategoryDialog = false;
+            this.cancelSubCategory();
             this.updateData();
-            this.updatedPriceMsg();
+            this.updatedSubCategory();
           },
         });
       } else {
-        this.formPrice.post(route('itemprices.store'), {
+        this.formSubCategory.post(route('subcategories.store'), {
           preserveScroll: true,
           onSuccess: () => {
-            this.priceId = null;
             this.createCategoryDialog = false;
-            this.cancelPrice();
+            this.cancelSubCategory();
             this.updateData();
-            this.createdPriceMsg();
+            this.createdSubCategory();
           },
         });
       }
     },
-    confirmDeletePrice(item) {
-      this.priceId = item.id;
-      this.formPrice.selling_price = item.selling_price;
-      this.deleteItemPriceDialog = true;
+    confirmDeleteSubCategory(e) {
+      this.formSubCategory.cl1comb = e.cl1comb;
+      this.formSubCategory.cl1desc = e.cl1desc;
+      this.deleteSubCategoryDialog = true;
     },
-    deletePrice() {
-      this.form.delete(route('itemprices.destroy', this.priceId), {
+    deleteSubCategory() {
+      this.formSubCategory.delete(route('subcategories.destroy', this.formSubCategory.cl1comb), {
         preserveScroll: true,
         onSuccess: () => {
-          this.deleteItemPriceDialog = false;
-          this.priceId = null;
-          this.formPrice.clearErrors();
-          this.formPrice.reset();
+          this.deleteSubCategoryDialog = false;
+          this.formSubCategory.clearErrors();
+          this.formSubCategory.reset();
           this.updateData();
-          this.deletedPriceMsg();
+          this.deletedSubCategory();
           //   this.storeCategoriesInContainer();
         },
       });
     },
-    cancelPrice() {
-      this.priceId = null;
-      this.isPriceUpdate = false;
-      this.createItemPriceDialog = false;
-      this.formPrice.reset();
-      this.formPrice.clearErrors();
+    cancelSubCategory() {
+      this.isSubCategoryUpdate = false;
+      this.createSubCategoryDialog = false;
+      this.formSubCategory.reset();
+      this.formSubCategory.clearErrors();
     },
-    createdPriceMsg() {
-      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Price created', life: 3000 });
+    createdSubCategory() {
+      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Sub-category created', life: 3000 });
     },
-    updatedPriceMsg() {
-      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Price updated', life: 3000 });
+    updatedSubCategory() {
+      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Sub-category updated', life: 3000 });
     },
-    deletedPriceMsg() {
-      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Price deleted', life: 3000 });
+    deletedSubCategory() {
+      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Sub-category deleted', life: 3000 });
     },
-    // ********** end prices
+    // ********** end sub category
   },
   watch: {
     search: function (val, oldVal) {

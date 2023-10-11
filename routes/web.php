@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\Dashboard\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Csr\Dashboard\DashboardController as CsrDashboardController;
 use App\Http\Controllers\Csr\Inventory\Categories\CategoryController;
+use App\Http\Controllers\Csr\Inventory\Categories\SubCategory\SubCategoryController;
 use App\Http\Controllers\Csr\Inventory\ItemPrice\ItemPriceController;
 use App\Http\Controllers\Csr\Inventory\Items\ItemController;
 use App\Http\Controllers\Csr\Inventory\Reports\CsrReportsController;
@@ -53,6 +54,7 @@ Route::resource('users', UserController::class)->middleware(['auth:sanctum', 've
 // csr routes
 Route::resource('csrdashboard', CsrDashboardController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('categories', CategoryController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
+Route::resource('subcategories', SubCategoryController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('items', ItemController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('itemprices', ItemPriceController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('brands', BrandController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
