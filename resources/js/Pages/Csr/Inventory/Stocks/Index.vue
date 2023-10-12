@@ -818,9 +818,10 @@ export default {
 
       //   console.log(current_date.format('MM-DD-YY') == exp_date.format('MM-DD-YY'));
 
+      //    exp_date.format('MM-DD-YY') < current_date.format('MM-DD-YY')
       if (
         current_date.format('MM-DD-YY') == exp_date.format('MM-DD-YY') ||
-        exp_date.format('MM-DD-YY') < current_date.format('MM-DD-YY')
+        Date.parse(exp_date) < Date.parse(current_date)
       ) {
         return 'Item has expired.';
       } else if (date_diff == 1) {
