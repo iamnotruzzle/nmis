@@ -522,7 +522,7 @@ export default {
   },
   methods: {
     tzone(date) {
-      return moment.tz(date, 'Asia/Manila').format('LL');
+      return moment.tz(date, 'Asia/Manila').format('L');
     },
     storeItemsInController() {
       this.items.forEach((e) => {
@@ -571,9 +571,6 @@ export default {
 
       //   console.log(this.issuedItemList);
       this.issuedItemsDialog = true;
-    },
-    tzone(date) {
-      return moment.tz(date, 'Asia/Manila').format('LL');
     },
     getSeverity(status) {
       switch (status) {

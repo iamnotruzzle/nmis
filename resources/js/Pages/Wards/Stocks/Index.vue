@@ -283,7 +283,23 @@
           sortable
         >
           <template #body="{ data }">
-            {{ tzone2(data.expiration_date) }}
+            <div class="flex flex-column">
+              <div>
+                {{ tzone(data.expiration_date) }}
+              </div>
+
+              <div class="mays-2">
+                <span
+                  :class="
+                    checkIfAboutToExpire(data.expiration_date) != 'Item has expired.'
+                      ? 'text-lg text-green-500'
+                      : 'text-lg text-error'
+                  "
+                >
+                  {{ checkIfAboutToExpire(data.expiration_date) }}
+                </span>
+              </div>
+            </div>
           </template>
         </Column>
         <Column header="ACTION">
@@ -986,10 +1002,32 @@ export default {
       });
     },
     tzone(date) {
-      return moment.tz(date, 'Asia/Manila').format('LL');
+      if (date == null || date == '') {
+        return null;
+      } else {
+        return moment.tz(date, 'Asia/Manila').format('LL');
+      }
     },
-    tzone2(date) {
-      return moment.tz(date, 'Asia/Manila').format('L');
+    checkIfAboutToExpire(date) {
+      let current_date = moment.tz(moment(), 'Asia/Manila');
+      let exp_date = moment.tz(date, 'Asia/Manila');
+
+      // adding +1 to include the starting date
+      let date_diff = exp_date.diff(current_date, 'days') + 1;
+
+      //   console.log(current_date.format('MM-DD-YY') == exp_date.format('MM-DD-YY'));
+
+      //    exp_date.format('MM-DD-YY') < current_date.format('MM-DD-YY')
+      if (
+        current_date.format('MM-DD-YY') == exp_date.format('MM-DD-YY') ||
+        Date.parse(exp_date) < Date.parse(current_date)
+      ) {
+        return 'Item has expired.';
+      } else if (date_diff == 1) {
+        return date_diff + ' day remaining.';
+      } else {
+        return date_diff + ' days remaining.';
+      }
     },
     getSeverity(status) {
       switch (status) {
