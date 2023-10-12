@@ -20,6 +20,7 @@ class CreateCsrwLocationStockBalanceTable extends Migration
             $table->integer('ending_balance');
             $table->integer('beginning_balance');
             $table->string('entry_by');
+            $table->string('updated_by')->nullable();
             $table->timestamps();
         });
     }
