@@ -109,7 +109,7 @@ class WardStocksReportController extends Controller
 
         foreach ($ward_report as $e) {
             $reports[] = (object) [
-                // 'cl2comb' => $e->cl2comb,
+                'cl2comb' => $e->cl2comb,
                 'item_description' => $e->cl2desc,
                 'unit' => $e->uomdesc,
                 'unit_cost' => $e->unit_cost,
@@ -127,7 +127,7 @@ class WardStocksReportController extends Controller
                 // 'neuro' => 'NA',
                 'total_consumption' => $e->total_consumption,
                 'total_cons_estimated_cost' => $e->total_consumption * $e->unit_cost,
-                'ending_balance' => $e->beginning_balance - $e->total_consumption,
+                'ending_balance' => $e->ending_balance,
                 'actual_inventory' => $e->total_stock - $e->total_consumption <= 0 ? 0 : $e->total_stock - $e->total_consumption,
             ];
         }
