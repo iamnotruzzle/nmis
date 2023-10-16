@@ -317,9 +317,9 @@ export default {
           item_description: e.item_description,
           unit: e.unit,
           unit_cost: e.unit_cost,
-          csr_quantity: e.csr_quantity,
+          csr_quantity: e.csr_quantity, // csr beginning balance
           csr_total_cost: e.csr_total_cost,
-          ward_quantity: e.ward_quantity,
+          ward_quantity: e.ward_quantity, // ward beginning balance
           ward_total_cost: e.ward_total_cost,
           supplies_issued_to_wards_quantity: e.supplies_issued_to_wards_quantity,
           supplies_issued_to_wards_total_cost: e.supplies_issued_to_wards_total_cost,
