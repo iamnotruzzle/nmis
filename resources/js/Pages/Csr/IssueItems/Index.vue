@@ -718,7 +718,7 @@ export default {
       // approved qty <= total stock
       if (this.disabled != true) {
         if (this.isUpdate) {
-          console.log(this.requestStockListDetails);
+          //   console.log(this.requestStockListDetails);
 
           this.requestStockListDetails.forEach((e) => {
             e.approved_qty = e.approved_qty == '' || e.approved_qty == null ? 0 : e.approved_qty;

@@ -380,11 +380,20 @@ export default {
     },
     storeItemsInController() {
       this.itemsList = []; // reset
+      //   this.currentStocks.forEach((e) => {
+      //     this.itemsList.push({
+      //       cl2comb: e.item_details.cl2comb,
+      //       cl2desc: e.item_details.cl2desc,
+      //     });
+      //   });
+
       this.currentStocks.forEach((e) => {
-        this.itemsList.push({
-          cl2comb: e.item_details.cl2comb,
-          cl2desc: e.item_details.cl2desc,
-        });
+        if (e.clsb_cl2comb == null) {
+          this.itemsList.push({
+            cl2comb: e.hc_cl2comb,
+            cl2desc: e.cl2desc,
+          });
+        }
       });
 
       this.sortItemsList(this.itemsList, 'cl2desc');

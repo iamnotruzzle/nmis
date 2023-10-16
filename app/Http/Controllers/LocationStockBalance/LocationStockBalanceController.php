@@ -31,14 +31,29 @@ class LocationStockBalanceController extends Controller
             ->first();
 
         if ($authWardcode->wardcode == 'CSR') {
-            $currentStocks = CsrStocks::with('item_details:cl2comb,cl2desc')
-                ->groupBy('cl2comb')
-                ->get(['cl2comb']);
+            $currentStocks = DB::select(
+                "SELECT clsb_csr.cl2comb as clsb_cl2comb, hc.cl2comb as hc_cl2comb, hc.cl2desc
+                FROM csrw_csr_stocks as csr
+                JOIN hclass2 as hc on csr.cl2comb = hc.cl2comb
+                LEFT JOIN (
+                    SELECT id, cl2comb, ending_balance, beginning_balance
+                    FROM csrw_location_stock_balance
+                    WHERE location = 'CSR' AND created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
+                ) AS clsb_csr ON csr.cl2comb = clsb_csr.cl2comb;"
+            );
         } else {
-            $currentStocks = WardsStocks::with('item_details:cl2comb,cl2desc')
-                ->where('location', $authWardcode->wardcode)
-                ->where('from', 'CSR')
-                ->get();
+            $currentStocks =  DB::select(
+                "SELECT clsb_ward.cl2comb as clsb_cl2comb, hc.cl2comb as hc_cl2comb, hc.cl2desc
+                    FROM csrw_wards_stocks as ward
+                    JOIN hclass2 as hc on ward.cl2comb = hc.cl2comb
+                    left JOIN (
+                        SELECT id, cl2comb, ending_balance, beginning_balance
+                        FROM csrw_location_stock_balance
+                        WHERE location = '$authWardcode->wardcode' AND created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
+                    ) AS clsb_ward ON ward.cl2comb = clsb_ward.cl2comb
+                    WHERE [from] =  'CSR' AND location = '$authWardcode->wardcode'
+                    GROUP BY hc.cl2comb, clsb_ward.cl2comb, hc.cl2desc;"
+            );
         }
 
         $locationStockBalance = LocationStockBalance::with(['item:cl2comb,cl2desc', 'entry_by', 'updated_by'])
