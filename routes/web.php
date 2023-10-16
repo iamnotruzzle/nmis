@@ -15,6 +15,7 @@ use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\LocationStockBalance\LocationStockBalanceController;
 use App\Http\Controllers\Reports\Csr\CsrStocksReportController;
 use App\Http\Controllers\Reports\Ward\WardStocksReportController;
+use App\Http\Controllers\Users\User\ProfileController;
 use App\Http\Controllers\Users\UserController;
 use App\Http\Controllers\Wards\Consignment\WardConsignmentController;
 use App\Http\Controllers\Wards\Dashboard\DashboardController as WardDashboardController;
@@ -49,6 +50,7 @@ Route::resource('dashboard', DashboardController::class)->middleware(['auth:sanc
 // admin routes
 Route::resource('admindashboard', AdminDashboardController::class)->middleware(['auth:sanctum', 'verified', 'designation_admin'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('users', UserController::class)->middleware(['auth:sanctum', 'verified', 'designation_admin'])->only(['index', 'store', 'update', 'destroy']);
+Route::resource('profile', ProfileController::class)->middleware(['auth:sanctum', 'verified'])->only(['store']);
 // end admin routes
 
 // csr routes

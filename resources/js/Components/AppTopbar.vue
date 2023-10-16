@@ -36,25 +36,7 @@
       <li>
         <Button
           class="p-button-link p-link layout-topbar-button"
-          @click="goToDashboard"
-        >
-          <i class="pi pi-calendar"></i>
-          <span>Events</span>
-        </Button>
-      </li>
-      <li>
-        <Button
-          class="p-button-link p-link layout-topbar-button"
-          @click="goToDashboard"
-        >
-          <i class="pi pi-cog"></i>
-          <span>Settings</span>
-        </Button>
-      </li>
-      <li>
-        <Button
-          class="p-button-link p-link layout-topbar-button"
-          @click="goToDashboard"
+          @click="openCreateItemDialog"
         >
           <i class="pi pi-user"></i>
           <span>Profile</span>
@@ -78,25 +60,7 @@
       <li>
         <Button
           class="p-button-link p-link layout-topbar-button"
-          @click="goToDashboard"
-        >
-          <i class="pi pi-calendar"></i>
-          <span>Events</span>
-        </Button>
-      </li>
-      <li>
-        <Button
-          class="p-button-link p-link layout-topbar-button"
-          @click="goToDashboard"
-        >
-          <i class="pi pi-cog"></i>
-          <span>Settings</span>
-        </Button>
-      </li>
-      <li>
-        <Button
-          class="p-button-link p-link layout-topbar-button"
-          @click="goToDashboard"
+          @click="openCreateItemDialog"
         >
           <i class="pi pi-user"></i>
           <span>Profile</span>
@@ -113,21 +77,92 @@
       </li>
     </ul>
   </div>
+
+  <Dialog
+    v-model:visible="createItemDialog"
+    :style="{ width: '450px' }"
+    header="Change Password"
+    :modal="true"
+    class="p-fluid"
+    @hide="clickOutsideDialog"
+    dismissableMask
+  >
+    <div class="field">
+      <label for="image">Upload image</label>
+      <FileUpload
+        id="image"
+        mode="basic"
+        @input="onUpload"
+        accept="image/*"
+        :maxFileSize="7000000"
+      >
+      </FileUpload>
+    </div>
+    <div class="field">
+      <label for="password">Password</label>
+      <Password
+        id="password"
+        type="password"
+        toggleMask
+        v-model.trim="form.password"
+        :required="true"
+        :class="{ 'p-invalid': form.password == '' }"
+        @keyup.enter="submit"
+      />
+      <small
+        class="text-error"
+        v-if="form.errors.password"
+      >
+        {{ form.errors.password }}
+      </small>
+    </div>
+    <template #footer>
+      <Button
+        label="Cancel"
+        icon="pi pi-times"
+        severity="danger"
+        text
+        @click="cancel"
+      />
+      <Button
+        label="Save"
+        icon="pi pi-check"
+        text
+        type="submit"
+        :disabled="form.processing"
+        @click="submit"
+      />
+    </template>
+  </Dialog>
 </template>
 
 <script>
 import { Link } from '@inertiajs/vue3';
 import Button from 'primevue/button';
+import Dialog from 'primevue/dialog';
+import Password from 'primevue/password';
+import FileUpload from 'primevue/fileupload';
+import { FilterMatchMode } from 'primevue/api';
+import { router } from '@inertiajs/vue3';
 
 export default {
+  emits: ['menu-toggle', 'hide'],
   components: {
     Link,
     Button,
+    Dialog,
+    FileUpload,
+    Password,
   },
   data() {
     return {
+      createItemDialog: false,
       topbarMenuActive: false,
       outsideClickListener: null,
+      form: this.$inertia.form({
+        image: null,
+        password: null,
+      }),
     };
   },
   mounted() {
@@ -142,9 +177,6 @@ export default {
     },
     onTopBarMenuToggle() {
       this.topbarMenuActive = !this.topbarMenuActive;
-    },
-    goToDashboard() {
-      this.$inertia.get(this.route('dashboard'));
     },
     bindOutsideClickListener() {
       if (!this.outsideClickListener) {
@@ -175,6 +207,32 @@ export default {
     },
     logout() {
       this.$inertia.post(this.route('logout'));
+    },
+    clickOutsideDialog() {
+      this.$emit('hide', this.form.clearErrors(), this.form.reset());
+    },
+    cancel() {
+      this.createItemDialog = false;
+      this.form.reset();
+      this.form.clearErrors();
+    },
+    onUpload(event) {
+      this.form.image = event.target.files[0];
+    },
+    openCreateItemDialog() {
+      this.form.clearErrors();
+      this.form.reset();
+      this.createItemDialog = true;
+    },
+    submit() {
+      this.form.post(route('profile.store'), {
+        preserveScroll: true,
+        onSuccess: () => {
+          this.itemId = null;
+          this.createItemDialog = false;
+          this.cancel();
+        },
+      });
     },
   },
 };
