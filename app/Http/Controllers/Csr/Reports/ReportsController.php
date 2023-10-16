@@ -57,7 +57,7 @@ class ReportsController extends Controller
                     SELECT cl2comb, SUM(ending_balance) as ending_balance, SUM(beginning_balance) as beginning_balance
                     FROM csrw_location_stock_balance
                     WHERE location != 'CSR'
-                    GROUP BY cl2comb, ending_balance, beginning_balance
+                    GROUP BY cl2comb
                 ) AS clsb_ward ON hclass2.cl2comb = clsb_ward.cl2comb
                 WHERE created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
                 GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc, csrw_wards_stocks.wards_quantity, csrw_patient_charge_logs.charge_quantity, csrw_patient_charge_logs.charge_total,
@@ -102,7 +102,7 @@ class ReportsController extends Controller
                     SELECT cl2comb, SUM(ending_balance) as ending_balance, SUM(beginning_balance) as beginning_balance
                     FROM csrw_location_stock_balance
                     WHERE location != 'CSR'
-                    GROUP BY cl2comb, ending_balance, beginning_balance
+                    GROUP BY cl2comb
                 ) AS clsb_ward ON hclass2.cl2comb = clsb_ward.cl2comb
                 WHERE created_at BETWEEN '$request->from' AND '$request->to'
                 GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc, csrw_wards_stocks.wards_quantity, csrw_patient_charge_logs.charge_quantity, csrw_patient_charge_logs.charge_total,
