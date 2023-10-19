@@ -62,13 +62,13 @@ export default {
               prefix: 'csrdashboard',
               comp: 'Csr/Dashboard/Index',
             },
-            {
-              label: 'Dashboard',
-              icon: 'co-chart-line',
-              to: 'warddashboard',
-              prefix: 'warddashboard',
-              comp: 'Ward/Dashboard/Index',
-            },
+            // {
+            //   label: 'Dashboard',
+            //   icon: 'co-chart-line',
+            //   to: 'warddashboard',
+            //   prefix: 'warddashboard',
+            //   comp: 'Ward/Dashboard/Index',
+            // },
             {
               label: 'Reports',
               icon: 'si-microsoftexcel',
@@ -257,11 +257,6 @@ export default {
       if (this.$page.props.user.designation == 'csr') {
         this.menu[0].items = this.menu[0].items.filter(function (obj) {
           return obj.to !== 'admindashboard';
-        });
-      }
-      if (this.$page.props.user.designation == 'csr') {
-        this.menu[0].items = this.menu[0].items.filter(function (obj) {
-          return obj.to !== 'warddashboard';
         });
       }
       // end csr
