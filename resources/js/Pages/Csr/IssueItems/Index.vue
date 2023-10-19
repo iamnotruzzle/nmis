@@ -223,6 +223,10 @@
                 field="approved_qty"
                 header="APPROVED QTY"
               ></Column>
+              <Column
+                field="remarks"
+                header="REMARKS"
+              ></Column>
             </DataTable>
           </div>
         </template>
@@ -298,6 +302,18 @@
                   autofocus
                   type="number"
                   @keyup.enter="submit"
+                />
+              </template>
+            </Column>
+            <Column
+              field="remarks"
+              header="REMARKS"
+            >
+              <template #body="slotProps">
+                <Textarea
+                  v-model.trim="slotProps.data.remarks"
+                  rows="2"
+                  cols="30"
                 />
               </template>
             </Column>
@@ -410,6 +426,7 @@ import Avatar from 'primevue/avatar';
 import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
 import AutoComplete from 'primevue/autocomplete';
+import Textarea from 'primevue/textarea';
 import Tag from 'primevue/tag';
 import moment from 'moment';
 import Echo from 'laravel-echo';
@@ -431,6 +448,7 @@ export default {
     Dropdown,
     AutoComplete,
     Tag,
+    Textarea,
   },
   props: {
     authWardcode: Object,
@@ -472,6 +490,7 @@ export default {
       cl2desc: null,
       requested_qty: null,
       approved_qty: null,
+      remarks: null,
       itemNotSelected: false,
       itemNotSelectedMsg: null,
       // end stock list details
@@ -483,6 +502,7 @@ export default {
         location: null,
         requested_by: null,
         approved_by: null,
+        remarks: null,
         requestStockListDetails: [],
       }),
       selectedStatus: null,
@@ -547,6 +567,7 @@ export default {
               ? e.approved_by_details.firstname + ' ' + e.approved_by_details.lastname
               : null,
           approved_by_image: e.approved_by_details != null ? e.approved_by_details.user_account.image : null,
+          remarks: e.remarks,
           requested_at: e.requested_at_details.wardname,
           created_at: e.created_at,
           request_stocks_details: e.request_stocks_details,
@@ -622,6 +643,7 @@ export default {
           cl2desc: e.item_details.cl2desc,
           requested_qty: e.requested_qty,
           approved_qty: e.approved_qty,
+          remarks: e.remarks,
           stock_qty: e.stocks.reduce((accumulator, object) => {
             return Number(accumulator) + Number(object.quantity);
           }, 0),
@@ -640,6 +662,7 @@ export default {
         (this.cl2desc = null),
         (this.requested_qty = null),
         (this.approved_qty = null),
+        (this.remarks = null),
         (this.itemNotSelected = null),
         (this.itemNotSelectedMsg = null),
         (this.issuedItemList = []),
@@ -705,6 +728,7 @@ export default {
           stock_qty: e.stocks.reduce((accumulator, object) => {
             return Number(accumulator) + Number(object.quantity);
           }, 0),
+          remarks: e.remarks,
         });
       });
       //   console.log(this.requestStockListDetails);
@@ -722,6 +746,7 @@ export default {
 
           this.requestStockListDetails.forEach((e) => {
             e.approved_qty = e.approved_qty == '' || e.approved_qty == null ? 0 : e.approved_qty;
+            e.remarks = e.remarks == '' || e.remarks == null ? null : e.remarks;
           });
 
           let isQtyEnough = this.requestStockListDetails.every(function (e) {
@@ -757,6 +782,7 @@ export default {
         } else {
           this.requestStockListDetails.forEach((e) => {
             e.approved_qty = e.approved_qty == '' || e.approved_qty == null ? 0 : e.approved_qty;
+            e.remarks = e.remarks == '' || e.remarks == null ? null : e.remarks;
           });
 
           let isQtyEnough = this.requestStockListDetails.every(function (e) {

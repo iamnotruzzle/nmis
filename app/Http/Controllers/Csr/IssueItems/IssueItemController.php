@@ -109,7 +109,8 @@ class IssueItemController extends Controller
             // update the approved_qty in the RequestStocksDetails table
             $requestStockDetails = RequestStocksDetails::where('id', $rsc['request_stocks_details_id'])->first();
             $requestStockDetails->update([
-                'approved_qty' => $rsc['approved_qty']
+                'approved_qty' => $rsc['approved_qty'],
+                'remarks' => $rsc['remarks']
             ]);
 
             // check current stock of the item
@@ -254,7 +255,8 @@ class IssueItemController extends Controller
             // update the approved_qty in the RequestStocksDetails table
             $requestStockDetails = RequestStocksDetails::where('id', $rsc['request_stocks_details_id'])->first();
             $requestStockDetails->update([
-                'approved_qty' => $rsc['approved_qty']
+                'approved_qty' => $rsc['approved_qty'],
+                'remarks' => $rsc['remarks']
             ]);
 
             // check current stock of the item
