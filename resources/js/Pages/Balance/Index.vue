@@ -426,6 +426,8 @@ export default {
           //   this.totalRecords = this.users.total;
           this.balanceContainer = [];
           this.storeStockBalanceInContainer();
+          this.itemsList = [];
+          this.storeItemsInController();
           this.loading = false;
         },
       });
