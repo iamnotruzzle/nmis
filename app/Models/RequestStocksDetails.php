@@ -18,6 +18,7 @@ class RequestStocksDetails extends Model
         'cl2comb',
         'requested_qty',
         'approved_qty',
+        'remarks',
     ];
 
     public function request_stocks()

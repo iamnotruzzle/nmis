@@ -19,6 +19,7 @@ class CreateCsrwRequestStocksDetailsTable extends Migration
             $table->string('cl2comb');
             $table->integer('requested_qty');
             $table->integer('approved_qty')->nullable();
+            $table->string('remarks')->nullable();
             $table->timestamps();
         });
     }
