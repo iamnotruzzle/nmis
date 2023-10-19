@@ -70,34 +70,6 @@ export default {
               comp: 'Ward/Dashboard/Index',
             },
             {
-              label: 'Categories',
-              icon: 'co-border-all',
-              to: 'categories',
-              prefix: 'categories',
-              comp: 'Csr/Inventory/Categories/Index',
-            },
-            {
-              label: 'Items',
-              icon: 'la-capsules-solid',
-              to: 'items',
-              prefix: 'items',
-              comp: 'Csr/Inventory/Items/Index',
-            },
-            {
-              label: 'Stocks',
-              icon: 'la-boxes-solid',
-              to: 'csrstocks',
-              prefix: 'csrstocks',
-              comp: 'Csr/Inventory/Stocks/Index',
-            },
-            {
-              label: 'Stock balance',
-              icon: 'la-boxes-solid',
-              to: 'stockbal',
-              prefix: 'stockbal',
-              comp: 'Balance/Index',
-            },
-            {
               label: 'Reports',
               icon: 'si-microsoftexcel',
               to: 'csrreports',
@@ -105,18 +77,11 @@ export default {
               comp: 'Csr/Reports/Index',
             },
             {
-              label: 'Issue items',
+              label: 'IRS',
               icon: 'md-handshake-sharp',
               to: 'issueitems',
               prefix: 'issueitems',
               comp: 'Csr/IssueItems/Index',
-            },
-            {
-              label: 'Stocks',
-              icon: 'la-boxes-solid',
-              to: 'requeststocks',
-              prefix: 'requeststocks',
-              comp: 'Wards/Stocks/Index',
             },
             {
               label: 'Patients',
@@ -146,12 +111,45 @@ export default {
               prefix: 'users',
               comp: 'Users/Index',
             },
+          ],
+        },
+        {
+          label: 'Library',
+          items: [
             {
-              label: 'Sign out',
-              icon: 'md-logout-sharp',
-              command: () => {
-                this.$inertia.post(this.route('logout'));
-              },
+              label: 'Categories',
+              icon: 'co-border-all',
+              to: 'categories',
+              prefix: 'categories',
+              comp: 'Csr/Inventory/Categories/Index',
+            },
+            {
+              label: 'Items',
+              icon: 'la-capsules-solid',
+              to: 'items',
+              prefix: 'items',
+              comp: 'Csr/Inventory/Items/Index',
+            },
+            {
+              label: 'Stock balance',
+              icon: 'la-boxes-solid',
+              to: 'stockbal',
+              prefix: 'stockbal',
+              comp: 'Balance/Index',
+            },
+            {
+              label: 'Stocks',
+              icon: 'la-boxes-solid',
+              to: 'requeststocks',
+              prefix: 'requeststocks',
+              comp: 'Wards/Stocks/Index',
+            },
+            {
+              label: 'Stocks',
+              icon: 'la-boxes-solid',
+              to: 'csrstocks',
+              prefix: 'csrstocks',
+              comp: 'Csr/Inventory/Stocks/Index',
             },
           ],
         },
@@ -166,65 +164,61 @@ export default {
     },
   },
   mounted() {
-    // console.log(this.$page.props.user.designation);
+    this.removeRoutesIfNonAdmin();
+
     this.$nextTick(() => {
       this.onload();
     });
-
-    this.removeRoutesIfNonAdmin();
   },
   methods: {
     removeRoutesIfNonAdmin() {
       // admin
       if (this.$page.props.user.designation == 'admin') {
-        this.menu[0].items = this.menu[0].items.filter(function (obj) {
-          return obj.to !== 'csrstocks';
-        });
-      }
-      if (this.$page.props.user.designation == 'admin') {
-        this.menu[0].items = this.menu[0].items.filter(function (obj) {
-          return obj.to !== 'csrreports';
-        });
-      }
-      if (this.$page.props.user.designation == 'admin') {
-        this.menu[0].items = this.menu[0].items.filter(function (obj) {
-          return obj.to !== 'wardreports';
-        });
-      }
-      if (this.$page.props.user.designation == 'admin') {
-        this.menu[0].items = this.menu[0].items.filter(function (obj) {
-          return obj.to !== 'stockbal';
-        });
-      }
-      if (this.$page.props.user.designation == 'admin') {
-        this.menu[0].items = this.menu[0].items.filter(function (obj) {
-          return obj.to !== 'issueitems';
-        });
-      }
-      if (this.$page.props.user.designation == 'admin') {
-        this.menu[0].items = this.menu[0].items.filter(function (obj) {
-          return obj.to !== 'requeststocks';
-        });
-      }
-      if (this.$page.props.user.designation == 'admin') {
-        this.menu[0].items = this.menu[0].items.filter(function (obj) {
-          return obj.to !== 'wardspatients';
-        });
-      }
-      if (this.$page.props.user.designation == 'admin') {
-        this.menu[0].items = this.menu[0].items.filter(function (obj) {
-          return obj.to !== 'transferstock';
-        });
-      }
-      if (this.$page.props.user.designation == 'admin') {
-        this.menu[0].items = this.menu[0].items.filter(function (obj) {
-          return obj.to !== 'csrdashboard';
-        });
-      }
-      if (this.$page.props.user.designation == 'admin') {
-        this.menu[0].items = this.menu[0].items.filter(function (obj) {
-          return obj.to !== 'warddashboard';
-        });
+        if (this.$page.props.user.designation == 'admin') {
+          //   console.log(this.menu);
+
+          this.menu.splice(1, 1);
+
+          this.menu[0].items = [];
+
+          this.menu[0].items.push(
+            {
+              label: 'Dashboard',
+              icon: 'co-chart-line',
+              to: 'admindashboard',
+              prefix: 'admindashboard',
+              comp: 'Admin/Dashboard/Index',
+            },
+            {
+              label: 'Dashboard',
+              icon: 'co-chart-line',
+              to: 'csrdashboard',
+              prefix: 'csrdashboard',
+              comp: 'Csr/Dashboard/Index',
+            },
+            {
+              label: 'Categories',
+              icon: 'co-border-all',
+              to: 'categories',
+              prefix: 'categories',
+              comp: 'Csr/Inventory/Categories/Index',
+            },
+            {
+              label: 'Items',
+              icon: 'la-capsules-solid',
+              to: 'items',
+              prefix: 'items',
+              comp: 'Csr/Inventory/Items/Index',
+            },
+            {
+              label: 'Users',
+              icon: 'la-users-solid',
+              to: 'users',
+              prefix: 'users',
+              comp: 'Users/Index',
+            }
+          );
+        }
       }
       // end admin
 
@@ -236,7 +230,7 @@ export default {
         });
       }
       if (this.$page.props.user.designation == 'csr') {
-        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+        this.menu[1].items = this.menu[1].items.filter(function (obj) {
           return obj.to !== 'requeststocks';
         });
       }
@@ -260,11 +254,6 @@ export default {
           return obj.to !== 'wardreports';
         });
       }
-      //   if (this.$page.props.user.designation == 'csr') {
-      //     this.menu[0].items = this.menu[0].items.filter(function (obj) {
-      //       return obj.to !== 'stockbal';
-      //     });
-      //   }
       if (this.$page.props.user.designation == 'csr') {
         this.menu[0].items = this.menu[0].items.filter(function (obj) {
           return obj.to !== 'admindashboard';
@@ -279,18 +268,8 @@ export default {
 
       // ward
       if (this.$page.props.user.designation == 'ward') {
-        this.menu[0].items = this.menu[0].items.filter(function (obj) {
-          return obj.to !== 'categories';
-        });
-      }
-      if (this.$page.props.user.designation == 'ward') {
-        this.menu[0].items = this.menu[0].items.filter(function (obj) {
-          return obj.to !== 'items';
-        });
-      }
-      if (this.$page.props.user.designation == 'ward') {
-        this.menu[0].items = this.menu[0].items.filter(function (obj) {
-          return obj.to !== 'csrstocks';
+        this.menu[1].items = this.menu[1].items.filter(function (obj) {
+          return obj.to !== 'categories' && obj.to !== 'items' && obj.to !== 'csrstocks';
         });
       }
       if (this.$page.props.user.designation == 'ward') {
