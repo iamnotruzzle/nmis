@@ -11,7 +11,7 @@
                   <span class="block text-xl text-900 font-bold">Completed requests</span>
                 </div>
 
-                <Link href="issueitems">
+                <Link href="issueitems?page=1&status=RECEIVED">
                   <div
                     class="flex align-items-center justify-content-center bg-blue-100 border-round"
                     style="width: 3rem; height: 3rem"
@@ -35,7 +35,7 @@
                   <span class="block text-xl text-900 font-bold">Pending requests</span>
                 </div>
 
-                <Link href="issueitems">
+                <Link href="issueitems?page=1&status=REQUESTED">
                   <div
                     class="flex align-items-center justify-content-center bg-yellow-100 border-round"
                     style="width: 3rem; height: 3rem"
