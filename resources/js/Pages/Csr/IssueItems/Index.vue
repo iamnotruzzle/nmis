@@ -159,7 +159,20 @@
         <Column header="ACTION">
           <template #body="slotProps">
             <div
-              v-if="slotProps.data.status != 'RECEIVED'"
+              v-if="slotProps.data.status == 'REQUESTED'"
+              class="text-center"
+            >
+              <Button
+                icon="pi pi-check"
+                class="mr-1"
+                rounded
+                text
+                severity="success"
+                @click="editStatus(slotProps.data)"
+              />
+            </div>
+            <div
+              v-else
               class="text-center"
             >
               <Button
@@ -405,6 +418,40 @@
           </DataTable>
         </div>
       </Dialog>
+
+      <!-- edit status -->
+      <Dialog
+        v-model:visible="editStatusDialog"
+        :style="{ width: '450px' }"
+        header="Confirm"
+        :modal="true"
+        dismissableMask
+      >
+        <div class="flex align-items-center justify-content-center">
+          <i
+            class="pi pi-exclamation-triangle mr-3"
+            style="font-size: 2rem"
+          />
+          <span v-if="form">
+            Are you sure you want to <b>update</b> the status of this requested stocks to <b>ACKNOWLEDGED</b>?
+          </span>
+        </div>
+        <template #footer>
+          <Button
+            label="No"
+            icon="pi pi-times"
+            class="p-button-text"
+            @click="editStatusDialog = false"
+          />
+          <Button
+            label="Yes"
+            icon="pi pi-check"
+            severity="danger"
+            text
+            @click="updateStatus"
+          />
+        </template>
+      </Dialog>
     </div>
   </app-layout>
 </template>
@@ -468,6 +515,7 @@ export default {
       isUpdate: false,
       createRequestStocksDialog: false,
       issuedItemsDialog: false,
+      editStatusDialog: false,
       search: '',
       options: {},
       params: {},
@@ -504,6 +552,9 @@ export default {
         approved_by: null,
         remarks: null,
         requestStockListDetails: [],
+      }),
+      formUpdateStatus: this.$inertia.form({
+        request_stock_id: null,
       }),
       selectedStatus: null,
       status: [
@@ -597,6 +648,9 @@ export default {
       switch (status) {
         case 'REQUESTED':
           return 'primary';
+
+        case 'ACKNOWLEDGED':
+          return 'success';
 
         case 'FILLED':
           return 'info';
@@ -825,6 +879,26 @@ export default {
       this.createRequestStocksDialog = false;
       this.form.reset();
       this.form.clearErrors();
+    },
+    editStatus(item) {
+      //   console.log(item);
+      this.editStatusDialog = true;
+      this.formUpdateStatus.request_stock_id = item.id;
+      this.formUpdateStatus.status = 'RECEIVED';
+    },
+    updateStatus() {
+      //   console.log(item);
+      //   this.formUpdateStatus.status = item;
+
+      this.formUpdateStatus.put(route('issueitems.acknowledgedrequest', this.formUpdateStatus), {
+        preserveScroll: true,
+        onSuccess: () => {
+          this.requestStockId = null;
+          this.editStatusDialog = false;
+          this.cancel();
+          this.updateData();
+        },
+      });
     },
     createdMsg() {
       this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Issued item.', life: 3000 });

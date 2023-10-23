@@ -1034,6 +1034,9 @@ export default {
         case 'REQUESTED':
           return 'primary';
 
+        case 'ACKNOWLEDGED':
+          return 'success';
+
         case 'FILLED':
           return 'info';
 

@@ -395,6 +395,24 @@ class IssueItemController extends Controller
         return Redirect::route('issueitems.index');
     }
 
+    public function acknowledgedRequest(RequestStocks $requeststock, Request $request)
+    {
+        // update status
+        RequestStocks::where('id', $request->request_stock_id)
+            ->update([
+                'status' => 'ACKNOWLEDGED',
+            ]);
+
+        // pass this the parameter in the frontends mounted
+        event(new ItemIssued(
+            [
+                'Request acknowledged.'
+            ]
+        ));
+
+        return Redirect::route('issueitems.index');
+    }
+
     public function destroy(RequestStocks $requeststock, Request $request)
     {
 
