@@ -64,7 +64,6 @@ Route::resource('brands', BrandController::class)->middleware(['auth:sanctum', '
 Route::resource('csrstocks', CsrStocksController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('issueitems', IssueItemController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
 Route::put('issueitems', [IssueItemController::class, 'acknowledgedrequest'])->name('issueitems.acknowledgedrequest');
-Route::get('issueitems/export/', [ExportIssuedItemsController::class, 'index']);
 Route::resource('csrreports', ReportsController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index']);
 Route::get('csrstocks/export/', [CsrStocksReportController::class, 'export']);
 Route::resource('stockbal', LocationStockBalanceController::class)->middleware(['auth:sanctum', 'verified'])->only(['index', 'store', 'update', 'destroy']);

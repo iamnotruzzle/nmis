@@ -158,14 +158,6 @@
         </Column>
         <Column header="ACTION">
           <template #body="slotProps">
-            <Button
-              icon="pi pi-download"
-              class="mr-1"
-              rounded
-              text
-              severity="success"
-              @click="printIrs(slotProps.data)"
-            />
             <div
               v-if="slotProps.data.status == 'REQUESTED'"
               class="text-center"
@@ -930,20 +922,6 @@ export default {
         ':' +
         String(date.getMinutes()).padStart(2, '0')
       );
-    },
-    printIrs(e) {
-      console.log(e);
-      this.params.id = e.id; // SET request id
-      this.$inertia.get('issueitems/export', this.params, {
-        preserveState: true,
-        preserveScroll: true,
-        onFinish: (visit) => {
-          //   this.totalRecords = this.requestedStocks.total;
-          //   this.requestStockList = [];
-          //   this.storeRequestedStocksInContainer();
-          this.loading = false;
-        },
-      });
     },
   },
   watch: {
