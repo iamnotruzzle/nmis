@@ -32,9 +32,32 @@ class CsrStocksReport implements FromArray, WithHeadings, ShouldAutoSize, WithSt
 
     public function registerEvents(): array
     {
+        // dd(count($this->data));
+
+        // $count = count($this->data);
+
         return [
             AfterSheet::class => function (AfterSheet $event) {
+                $count = count($this->data) + 2;
+                // $sumOfCountAndHeaderRow = $count
+                // dd($count + 2);
                 // $event->sheet->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+
+                // $event->sheet->setAllBorders('thin');
+                // $event->sheet->getStyle('A1' . ':' . 'S' . $count)->applyFromArray([
+                //     'borders' => [
+                //         'allBorders' => [
+                //             'borderStyle' => Border::BORDER_THIN,
+                //         ],
+                //     ],
+                // ]);
+                // $event->sheet->getStyle('A1:A2')->applyFromArray([
+                //     'borders' => [
+                //         'bottom' => [
+                //             'borderStyle' => Border::BORDER_NONE,
+                //         ],
+                //     ],
+                // ]);
 
                 // all header
                 $event->sheet->getStyle('A1:S2')->applyFromArray([
@@ -42,13 +65,17 @@ class CsrStocksReport implements FromArray, WithHeadings, ShouldAutoSize, WithSt
                         'outline' => [
                             'borderStyle' => Border::BORDER_THIN,
                         ],
-                        // 'right' => [
-                        //     'borderStyle' => Border::BORDER_THIN,
-                        // ]
+                    ],
+                ]);
+                $event->sheet->getStyle('A1' . ':' . 'S' . $count)->applyFromArray([
+                    'borders' => [
+                        'bottom' => [
+                            'borderStyle' => Border::BORDER_THIN,
+                        ]
                     ],
                 ]);
                 // regular fund
-                $event->sheet->getStyle('A1:A2')->applyFromArray([
+                $event->sheet->getStyle('A1' . ':' . 'A' . $count)->applyFromArray([
                     'borders' => [
                         'right' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -56,7 +83,7 @@ class CsrStocksReport implements FromArray, WithHeadings, ShouldAutoSize, WithSt
                     ],
                 ]);
                 // unit
-                $event->sheet->getStyle('B1:B2')->applyFromArray([
+                $event->sheet->getStyle('B1' . ':' . 'B' . $count)->applyFromArray([
                     'borders' => [
                         'right' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -64,7 +91,7 @@ class CsrStocksReport implements FromArray, WithHeadings, ShouldAutoSize, WithSt
                     ],
                 ]);
                 // unit cost
-                $event->sheet->getStyle('C1:C2')->applyFromArray([
+                $event->sheet->getStyle('C1' . ':' . 'C' . $count)->applyFromArray([
                     'borders' => [
                         'right' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -72,7 +99,7 @@ class CsrStocksReport implements FromArray, WithHeadings, ShouldAutoSize, WithSt
                     ],
                 ]);
                 // csr
-                $event->sheet->getStyle('D1:E2')->applyFromArray([
+                $event->sheet->getStyle('D1' . ':' . 'E' . $count)->applyFromArray([
                     'borders' => [
                         'right' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -87,7 +114,7 @@ class CsrStocksReport implements FromArray, WithHeadings, ShouldAutoSize, WithSt
                     ],
                 ]);
                 // ward
-                $event->sheet->getStyle('F1:G2')->applyFromArray([
+                $event->sheet->getStyle('F1' . ':' . 'G' . $count)->applyFromArray([
                     'borders' => [
                         'right' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -102,7 +129,7 @@ class CsrStocksReport implements FromArray, WithHeadings, ShouldAutoSize, WithSt
                     ],
                 ]);
                 // total beginning balance
-                $event->sheet->getStyle('H1:I2')->applyFromArray([
+                $event->sheet->getStyle('H1' . ':' . 'I' . $count)->applyFromArray([
                     'borders' => [
                         'right' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -117,7 +144,7 @@ class CsrStocksReport implements FromArray, WithHeadings, ShouldAutoSize, WithSt
                     ],
                 ]);
                 // supplies issued to wards
-                $event->sheet->getStyle('J1:K2')->applyFromArray([
+                $event->sheet->getStyle('J1' . ':' . 'K' . $count)->applyFromArray([
                     'borders' => [
                         'right' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -132,7 +159,7 @@ class CsrStocksReport implements FromArray, WithHeadings, ShouldAutoSize, WithSt
                     ],
                 ]);
                 // consumption
-                $event->sheet->getStyle('L1:M2')->applyFromArray([
+                $event->sheet->getStyle('L1' . ':' . 'M' . $count)->applyFromArray([
                     'borders' => [
                         'right' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -147,7 +174,7 @@ class CsrStocksReport implements FromArray, WithHeadings, ShouldAutoSize, WithSt
                     ],
                 ]);
                 // csr ending bal
-                $event->sheet->getStyle('N1:O2')->applyFromArray([
+                $event->sheet->getStyle('N1' . ':' . 'O' . $count)->applyFromArray([
                     'borders' => [
                         'right' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -162,7 +189,7 @@ class CsrStocksReport implements FromArray, WithHeadings, ShouldAutoSize, WithSt
                     ],
                 ]);
                 // ward ending bal
-                $event->sheet->getStyle('P1:Q2')->applyFromArray([
+                $event->sheet->getStyle('P1' . ':' . 'Q' . $count)->applyFromArray([
                     'borders' => [
                         'right' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -177,7 +204,14 @@ class CsrStocksReport implements FromArray, WithHeadings, ShouldAutoSize, WithSt
                     ],
                 ]);
                 // total ending balance
-                $event->sheet->getStyle('R1:S1')->applyFromArray([
+                $event->sheet->getStyle('R1' . ':' . 'S' . $count)->applyFromArray([
+                    'borders' => [
+                        'right' => [
+                            'borderStyle' => Border::BORDER_THIN,
+                        ]
+                    ],
+                ]);
+                $event->sheet->getStyle('R1' . ':' . 'S' . $count)->applyFromArray([
                     'borders' => [
                         'bottom' => [
                             'borderStyle' => Border::BORDER_THIN,
