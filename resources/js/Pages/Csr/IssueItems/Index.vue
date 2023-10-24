@@ -301,7 +301,7 @@
             <Column
               v-else
               field="stock_qty"
-              header="Total stock"
+              header="TOTAL STOCK"
             ></Column>
             <Column
               field="approved_qty"
