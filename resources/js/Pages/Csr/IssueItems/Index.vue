@@ -158,11 +158,9 @@
         </Column>
         <Column header="ACTION">
           <template #body="slotProps">
-            <div
-              v-if="slotProps.data.status == 'REQUESTED'"
-              class="text-center"
-            >
+            <div class="text-center">
               <Button
+                v-if="slotProps.data.status == 'REQUESTED'"
                 icon="pi pi-check"
                 class="mr-1"
                 rounded
@@ -170,13 +168,8 @@
                 severity="success"
                 @click="editStatus(slotProps.data)"
               />
-            </div>
-            <div
-              v-else
-              class="text-center"
-            >
               <Button
-                v-if="slotProps.data.status != 'FILLED'"
+                v-if="slotProps.data.status == 'ACKNOWLEDGED'"
                 icon="pi pi-plus"
                 class="mr-1"
                 rounded
@@ -185,7 +178,7 @@
                 @click="openCreateRequestStocksDialog(slotProps.data)"
               />
               <Button
-                v-else
+                v-if="slotProps.data.status == 'FILLED'"
                 icon="pi pi-pencil"
                 class="mr-1"
                 rounded
