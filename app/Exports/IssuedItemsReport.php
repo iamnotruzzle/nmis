@@ -17,7 +17,7 @@ use PhpOffice\PhpSpreadsheet\Style\Style;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 
-class IssuedItemsReport implements FromArray, WithHeadings, WithEvents, WithStyles, ShouldAutoSize
+class IssuedItemsReport implements FromArray, WithHeadings, WithEvents, WithStyles, ShouldAutoSize, WithColumnWidths
 {
     protected $data;
 
@@ -31,10 +31,12 @@ class IssuedItemsReport implements FromArray, WithHeadings, WithEvents, WithStyl
         return [
             // Style the 1st
             1 => ['font' => ['bold' => true]],
-            // 'A' => ['alignment' => ['wrapText' => true]],
-            // 'B' => ['alignment' => ['wrapText' => true]],
-            // 'C' => ['alignment' => ['wrapText' => true]],
-            // 'D' => ['alignment' => ['wrapText' => true]],
+        ];
+    }
+    public function columnWidths(): array
+    {
+        return [
+            'D' => 11,
         ];
     }
 
@@ -53,17 +55,12 @@ class IssuedItemsReport implements FromArray, WithHeadings, WithEvents, WithStyl
 
                 // set the scale of the paper
                 $event->sheet->getPageSetup()->setScale(85);
-
-                // $event->sheet->getPageSetup()->setWrapText(true);
             },
 
             AfterSheet::class => function (AfterSheet $event) {
                 $alphabet       = $event->sheet->getHighestDataColumn();
                 $totalRow       = $event->sheet->getHighestDataRow();
                 $cellRange      = 'A1:' . $alphabet . $totalRow;
-
-
-
                 $event->sheet->styleCells(
                     $cellRange,
                     [
@@ -75,6 +72,9 @@ class IssuedItemsReport implements FromArray, WithHeadings, WithEvents, WithStyl
                         ]
                     ]
                 );
+                $event->sheet->getDelegate()
+                    ->getStyle($cellRange)
+                    ->applyFromArray(['alignment' => ['wrapText' => true]]);
 
                 $event->sheet->getStyle('A1:A1')->applyFromArray([
                     'fill' => [

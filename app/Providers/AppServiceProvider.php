@@ -32,12 +32,12 @@ class AppServiceProvider extends ServiceProvider
             $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
         });
 
-        Sheet::macro('fitToPage', function (Sheet $sheet, $scale) {
-            $sheet->getPageSetup()->setScale($scale);
-        });
+        // Sheet::macro('fitToPage', function (Sheet $sheet, $scale) {
+        //     $sheet->getPageSetup()->setScale($scale);
+        // });
 
-        // Sheet::macro('styleCells', function (Sheet $sheet, $wrap) {
-        //     $sheet->getDelegate()->getStyle()->setWrapText($wrap);
+        // Sheet::macro('setWrap', function (Sheet $sheet, $wrap) {
+        //     $sheet->getStyle('A')->getAlignment()->setWrapText($wrap);
         // });
     }
 }

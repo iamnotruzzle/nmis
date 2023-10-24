@@ -332,7 +332,7 @@
             </Column>
             <Column
               field="remarks"
-              header="REMARKS"
+              header="REMARKS (OPTIONAL)"
             >
               <template #body="slotProps">
                 <Textarea
