@@ -397,6 +397,9 @@ class IssueItemController extends Controller
 
     public function acknowledgedRequest(RequestStocks $requeststock, Request $request)
     {
+        // get location of the request
+        $location = RequestStocks::where('id', $request->request_stock_id)->first();
+
         // update status
         RequestStocks::where('id', $request->request_stock_id)
             ->update([
@@ -406,6 +409,7 @@ class IssueItemController extends Controller
         // pass this the parameter in the frontends mounted
         event(new ItemIssued(
             [
+                $location->location,
                 'Request acknowledged.'
             ]
         ));
