@@ -206,7 +206,19 @@
               <template #header>
                 <div class="flex flex-wrap align-items-center justify-content-between gap-2">
                   <span class="text-cyan-500 hover:text-cyan-700">REQUESTED ITEMS</span>
-                  <div>
+                  <div class="flex flex-row align-items-center">
+                    <a
+                      v-if="slotProps.data.status != 'REQUESTED'"
+                      :href="`issueitems/issued?from=${params.from}&to=${params.to}
+                      &id=${(params.id = slotProps.data.id)}`"
+                      target="_blank"
+                      class="mr-3"
+                    >
+                      <i
+                        class="pi pi-download"
+                        :style="{ color: 'green', 'font-size': '1.2rem' }"
+                      ></i>
+                    </a>
                     <Button
                       v-if="slotProps.data.status != 'REQUESTED'"
                       icon="pi pi-book"

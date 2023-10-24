@@ -15,6 +15,7 @@ use App\Http\Controllers\Csr\Reports\ReportsController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\LocationStockBalance\LocationStockBalanceController;
 use App\Http\Controllers\Reports\Csr\CsrStocksReportController;
+use App\Http\Controllers\Reports\Csr\IssuedItems\IssuedItemsReportController;
 use App\Http\Controllers\Reports\Ward\WardStocksReportController;
 use App\Http\Controllers\Users\User\ProfileController;
 use App\Http\Controllers\Users\UserController;
@@ -63,6 +64,7 @@ Route::resource('itemprices', ItemPriceController::class)->middleware(['auth:san
 Route::resource('brands', BrandController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('csrstocks', CsrStocksController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('issueitems', IssueItemController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
+Route::get('issueitems/issued/', [IssuedItemsReportController::class, 'export']);
 Route::put('issueitems', [IssueItemController::class, 'acknowledgedrequest'])->name('issueitems.acknowledgedrequest');
 Route::resource('csrreports', ReportsController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index']);
 Route::get('csrstocks/export/', [CsrStocksReportController::class, 'export']);
