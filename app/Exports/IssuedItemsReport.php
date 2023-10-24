@@ -10,12 +10,14 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Events\BeforeExport;
 use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Events\BeforeSheet;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Style;
 use PhpOffice\PhpSpreadsheet\Style\Color;
+use Maatwebsite\Excel\Concerns\WithColumnWidths;
 
-class IssuedItemsReport implements FromArray, WithHeadings, ShouldAutoSize, WithEvents, WithStyles
+class IssuedItemsReport implements FromArray, WithHeadings, WithEvents, WithStyles, ShouldAutoSize
 {
     protected $data;
 
@@ -27,24 +29,40 @@ class IssuedItemsReport implements FromArray, WithHeadings, ShouldAutoSize, With
     public function styles(Worksheet $sheet)
     {
         return [
-            // Style the 1st and 2nd row.
-            1    => ['font' => ['bold' => true, 'size' => 14]],
+            // Style the 1st
+            1 => ['font' => ['bold' => true]],
+            // 'A' => ['alignment' => ['wrapText' => true]],
+            // 'B' => ['alignment' => ['wrapText' => true]],
+            // 'C' => ['alignment' => ['wrapText' => true]],
+            // 'D' => ['alignment' => ['wrapText' => true]],
         ];
     }
 
     public function registerEvents(): array
     {
-        // dd(count($this->data));
-
-        // $count = count($this->data);
-
         return [
+            BeforeSheet::class => function (BeforeSheet $event) {
+                // page orientation
+                // $event->sheet->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+                $event->sheet->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_PORTRAIT);
+
+                // set default paper size
+                $event->sheet->getPageSetup()->setPaperSizeDefault(
+                    \PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A4
+                );
+
+                // set the scale of the paper
+                $event->sheet->getPageSetup()->setScale(85);
+
+                // $event->sheet->getPageSetup()->setWrapText(true);
+            },
+
             AfterSheet::class => function (AfterSheet $event) {
                 $alphabet       = $event->sheet->getHighestDataColumn();
                 $totalRow       = $event->sheet->getHighestDataRow();
                 $cellRange      = 'A1:' . $alphabet . $totalRow;
 
-                $event->sheet->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+
 
                 $event->sheet->styleCells(
                     $cellRange,
@@ -89,7 +107,7 @@ class IssuedItemsReport implements FromArray, WithHeadings, ShouldAutoSize, With
     public function headings(): array
     {
         return [
-            ['ITEM', 'REQUESTED QTY', 'APPROVED QTY', 'REMARKS'],
+            ['ITEM', 'REQUESTED', 'APPROVED', 'REMARKS'],
         ];
     }
 

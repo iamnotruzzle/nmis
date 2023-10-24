@@ -31,5 +31,13 @@ class AppServiceProvider extends ServiceProvider
         Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $style) {
             $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
         });
+
+        Sheet::macro('fitToPage', function (Sheet $sheet, $scale) {
+            $sheet->getPageSetup()->setScale($scale);
+        });
+
+        // Sheet::macro('styleCells', function (Sheet $sheet, $wrap) {
+        //     $sheet->getDelegate()->getStyle()->setWrapText($wrap);
+        // });
     }
 }
