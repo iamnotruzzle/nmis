@@ -831,7 +831,7 @@ export default {
                   this.createRequestStocksDialog = false;
                   this.cancel();
                   this.updateData();
-                  this.updatedMsg();
+                  //   this.updatedMsg();
                 }
               },
             });
@@ -856,7 +856,7 @@ export default {
                 this.createRequestStocksDialog = false;
                 this.cancel();
                 this.updateData();
-                this.createdMsg();
+                // this.createdMsg();
               },
               onError: (errors) => {
                 this.stockBalanceDeclared = true;
@@ -867,7 +867,7 @@ export default {
                   this.createRequestStocksDialog = false;
                   this.cancel();
                   this.updateData();
-                  this.updatedMsg();
+                  this.createdMsg();
                 }
               },
             });
