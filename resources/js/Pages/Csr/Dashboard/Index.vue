@@ -127,6 +127,9 @@
               :value="new_stocks_container"
               showGridlines
               class="p-datatable-sm"
+              scrollable
+              scrollHeight="230px"
+              tableStyle="min-height: h-full;"
             >
               <template #header>
                 <div class="flex justify-content-start">
@@ -172,7 +175,7 @@
               </div>
               <v-chart
                 class="ma-0 pa-0"
-                style="height: 520px; margin: 0; padding: 0"
+                style="height: 410px; margin: 0; padding: 0"
                 :option="ordersAndIssuedOptions()"
                 autoresize
               />
@@ -335,6 +338,12 @@ export default {
           textStyle: {
             color: 'white',
           },
+        },
+        // set height of the chart canvas
+        grid: {
+          bottom: 20,
+          left: 30,
+          right: 30,
         },
         xAxis: {
           data: ['MON', 'TUE', 'WED', 'THU', 'FRI'],
