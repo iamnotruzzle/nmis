@@ -171,8 +171,8 @@
                 </div>
               </div>
               <v-chart
-                class="h-full w-full ma-0 pa-0"
-                style="height: 520px"
+                class="ma-0 pa-0"
+                style="height: 520px; margin: 0; padding: 0"
                 :option="ordersAndIssuedOptions()"
                 autoresize
               />
@@ -290,6 +290,13 @@ export default {
             color: '#FFFFFF',
           },
         },
+        // legend: {
+        //   orient: 'vertical',
+        //   left: 'left',
+        //   textStyle: {
+        //     color: '#FFFFFF',
+        //   },
+        // },
         label: {
           color: '#fff',
         },
