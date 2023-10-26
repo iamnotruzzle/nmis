@@ -149,6 +149,37 @@
           </div>
         </div>
       </div>
+      <div class="my-2">
+        <div class="grid">
+          <div class="col-12 md:col-12 lg:col-12">
+            <div class="surface-card shadow-2 p-3 border-round">
+              <div class="mb-3">
+                <div class="flex justify-content-between">
+                  <div class="flex flex-column">
+                    <span class="text-xl text-pink-500 font-semibold">{{ currentMonth }}</span>
+                    <span class="block text-xl text-900 font-bold">Top 5 requested stocks</span>
+                  </div>
+
+                  <Link href="issueitems">
+                    <div
+                      class="flex align-items-center justify-content-center bg-pink-100 border-round"
+                      style="width: 2.5rem; height: 2.5rem"
+                    >
+                      <i class="pi pi-heart text-pink-500 text-xl"></i>
+                    </div>
+                  </Link>
+                </div>
+              </div>
+              <v-chart
+                class="h-full w-full ma-0 pa-0"
+                style="height: 520px"
+                :option="ordersAndIssuedOptions()"
+                autoresize
+              />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </app-layout>
 </template>
@@ -162,12 +193,12 @@ import Column from 'primevue/column';
 import moment, { now } from 'moment';
 import { use } from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
-import { PieChart } from 'echarts/charts';
+import { PieChart, BarChart } from 'echarts/charts';
 import { TitleComponent, TooltipComponent, LegendComponent, GridComponent } from 'echarts/components';
 import VChart, { THEME_KEY } from 'vue-echarts';
 import Echo from 'laravel-echo';
 
-use([CanvasRenderer, PieChart, TitleComponent, TooltipComponent, LegendComponent, GridComponent]);
+use([CanvasRenderer, PieChart, BarChart, TitleComponent, TooltipComponent, LegendComponent, GridComponent]);
 
 export default {
   components: {
@@ -281,6 +312,58 @@ export default {
           name: e.item,
         });
       });
+
+      return option;
+    },
+    ordersAndIssuedOptions() {
+      let option = {
+        tooltip: {
+          trigger: 'axis',
+          //   axisPointer: {
+          //     // Use axis to trigger tooltip
+          //     type: 'shadow', // 'shadow' as default; can also be 'line' or 'shadow'
+          //   },
+        },
+        legend: {
+          textStyle: {
+            color: 'white',
+          },
+        },
+        xAxis: {
+          data: ['MON', 'TUE', 'WED', 'THU', 'FRI'],
+        },
+        yAxis: {},
+        // color: ['#67B6FF', '#4F7AA5'], // bar colors
+        textStyle: {
+          fontSize: 12,
+        },
+        series: [
+          {
+            data: [10, 22, 28, 43, 49],
+            name: 'ORDERS',
+            type: 'bar',
+            stack: 'x',
+            label: {
+              show: true, // show value inside of the bars
+            },
+            emphasis: {
+              focus: 'series',
+            },
+          },
+          {
+            data: [5, 4, 3, 5, 10],
+            name: 'ISSUED',
+            type: 'bar',
+            stack: 'x',
+            label: {
+              show: true, // show value inside of the bars
+            },
+            emphasis: {
+              focus: 'series',
+            },
+          },
+        ],
+      };
 
       return option;
     },
