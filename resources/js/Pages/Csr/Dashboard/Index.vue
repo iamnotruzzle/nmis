@@ -341,12 +341,16 @@ export default {
         },
         // set height of the chart canvas
         grid: {
+          show: true,
           bottom: 20,
           left: 30,
           right: 30,
         },
         xAxis: {
           data: ['MON', 'TUE', 'WED', 'THU', 'FRI'],
+          splitLine: {
+            show: true,
+          },
         },
         yAxis: {},
         // color: ['#67B6FF', '#4F7AA5'], // bar colors
