@@ -227,7 +227,6 @@
         :modal="true"
         class="p-fluid"
         @hide="clickOutsideDialog"
-        dismissableMask
       >
         <div class="field">
           <label for="batch_no">Batch no.</label>
