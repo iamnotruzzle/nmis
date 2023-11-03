@@ -48,7 +48,7 @@ class DashboardController extends Controller
             "SELECT TOP 5 h2.cl2desc as item, csr.expiration_date as expiration_date
             FROM csrw_csr_stocks as csr
             JOIN hclass2 as h2 ON csr.cl2comb = h2.cl2comb
-            ORDER BY csr.created_at DESC;"
+            ORDER BY csr.expiration_date DESC;"
         );
 
 
