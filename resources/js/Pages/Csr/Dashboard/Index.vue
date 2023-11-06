@@ -152,7 +152,10 @@
           </div>
         </div>
       </div>
-      <div class="my-2">
+      <div
+        class="my-2"
+        v-show="false"
+      >
         <div class="grid">
           <div class="col-12 md:col-12 lg:col-12">
             <div class="surface-card shadow-2 p-3 border-round">
