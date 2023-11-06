@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Auth;
 
 class Designation_admin
@@ -19,8 +20,10 @@ class Designation_admin
     {
         if (Auth::user()->designation == 'admin') {
             return $next($request);
+        } else if (Auth::user()->designation == 'ward') {
+            return redirect(route('wardspatients.index'));
         } else {
-            abort(403);
+            return redirect(route('csrdashboard.index'));
         }
     }
 }

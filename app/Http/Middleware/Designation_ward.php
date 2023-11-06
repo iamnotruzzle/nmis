@@ -19,8 +19,10 @@ class Designation_ward
     {
         if (Auth::user()->designation == 'ward') {
             return $next($request);
+        } else if (Auth::user()->designation == 'csr') {
+            return redirect(route('csrdashboard.index'));
         } else {
-            abort(403);
+            return redirect(route('admindashboard.index'));
         }
     }
 }
