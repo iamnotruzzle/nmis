@@ -44,7 +44,7 @@ class WardPatientsController extends Controller
             ->where('wardcode', $authWardcode->wardcode)
             // order by patient
             ->join('hperson', 'hpatroom.hpercode', '=', 'hperson.hpercode')->orderBy('hperson.patlast', 'ASC')->select('hpatroom.*')
-            ->paginate(10);
+            ->paginate(8);
 
         // dd($patients);
 
