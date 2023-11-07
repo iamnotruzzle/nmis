@@ -85,9 +85,29 @@
           <template #body="{ data }">
             <div class="text-center">
               <Tag
-                :value="data.status"
-                :severity="getSeverity(data.status)"
-              />
+                v-if="data.status == 'REQUESTED'"
+                style="background: #f965fb; color: black"
+                value="REQUESTED"
+              >
+              </Tag>
+              <Tag
+                v-if="data.status == 'ACKNOWLEDGED'"
+                style="background: #fffa66; color: black"
+                value="ACKNOWLEDGED"
+              >
+              </Tag>
+              <Tag
+                v-if="data.status == 'FILLED'"
+                style="background: #3d87ff; color: black"
+                value="FILLED"
+              >
+              </Tag>
+              <Tag
+                v-if="data.status == 'RECEIVED'"
+                style="background: #25f850; color: black"
+                value="RECEIVED"
+              >
+              </Tag>
             </div>
           </template>
           <template #filter="{}">
@@ -565,6 +585,7 @@ export default {
       status: [
         { name: 'NO FILTER', code: '' },
         { name: 'REQUESTED', code: 'REQUESTED' },
+        { name: 'ACKNOWLEDGED', code: 'ACKNOWLEDGED' },
         { name: 'FILLED', code: 'FILLED' },
         { name: 'RECEIVED', code: 'RECEIVED' },
       ],
@@ -649,24 +670,24 @@ export default {
       //   console.log(this.issuedItemList);
       this.issuedItemsDialog = true;
     },
-    getSeverity(status) {
-      switch (status) {
-        case 'REQUESTED':
-          return 'primary';
+    // getSeverity(status) {
+    //   switch (status) {
+    //     case 'REQUESTED':
+    //       return 'primary';
 
-        case 'ACKNOWLEDGED':
-          return 'success';
+    //     case 'ACKNOWLEDGED':
+    //       return 'yellow';
 
-        case 'FILLED':
-          return 'info';
+    //     case 'FILLED':
+    //       return 'info';
 
-        case 'RECEIVED':
-          return 'success';
+    //     case 'RECEIVED':
+    //       return 'success';
 
-        default:
-          return null;
-      }
-    },
+    //     default:
+    //       return null;
+    //   }
+    // },
     onPage(event) {
       this.params.page = event.page + 1;
       this.updateData();
