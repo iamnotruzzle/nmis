@@ -1,6 +1,6 @@
 <template>
   <app-layout>
-    <Head title="InvenTrackr - Patients" />
+    <Head title="NMIS - Patients" />
 
     <div class="card">
       <!-- v-model:filters="filters" -->

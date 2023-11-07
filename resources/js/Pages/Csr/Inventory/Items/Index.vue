@@ -1,6 +1,6 @@
 <template>
   <app-layout>
-    <Head title="InvenTrackr - Items" />
+    <Head title="NMIS - Items" />
 
     <div class="card">
       <Toast />

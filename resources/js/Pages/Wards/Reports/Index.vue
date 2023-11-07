@@ -1,6 +1,6 @@
 <template>
   <app-layout>
-    <Head title="InvenTrackr - Reports" />
+    <Head title="NMIS - Reports" />
 
     <div
       class="card"

@@ -1,6 +1,6 @@
 <template>
   <app-layout>
-    <Head title="InvenTrackr - Bill Patient" />
+    <Head title="NMIS - Bill Patient" />
 
     <div class="card">
       <Toast />

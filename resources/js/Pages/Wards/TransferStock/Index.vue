@@ -1,6 +1,6 @@
 <template>
   <app-layout>
-    <Head title="InvenTrackr - Transfer stock" />
+    <Head title="NMIS - Transfer stock" />
 
     <div class="card">
       <Toast />
