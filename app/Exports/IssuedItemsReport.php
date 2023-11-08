@@ -16,8 +16,12 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Style;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
+use Maatwebsite\Excel\Concerns\WithDrawings;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+use Maatwebsite\Excel\Concerns\WithStartRow;
 
-class IssuedItemsReport implements FromArray, WithHeadings, WithEvents, WithStyles, ShouldAutoSize, WithColumnWidths
+// WithDrawings
+class IssuedItemsReport implements FromArray, WithHeadings, WithEvents, WithStyles, ShouldAutoSize, WithColumnWidths, WithStartRow
 {
     protected $data;
 
@@ -25,6 +29,24 @@ class IssuedItemsReport implements FromArray, WithHeadings, WithEvents, WithStyl
     {
         $this->data = $data;
     }
+
+    public function startRow(): int
+    {
+        return 2;
+    }
+
+    // add image
+    // public function drawings()
+    // {
+    //     $drawing = new Drawing();
+    //     $drawing->setName('Logo');
+    //     $drawing->setDescription('This is my logo');
+    //     $drawing->setPath(public_path('/images/hosp_logo.png'));
+    //     $drawing->setHeight(90);
+    //     $drawing->setCoordinates('A1');
+
+    //     return $drawing;
+    // }
 
     public function styles(Worksheet $sheet)
     {
