@@ -10,6 +10,7 @@ use App\Models\Patient;
 use App\Models\PatientAccount;
 use App\Models\PatientCharge;
 use App\Models\PatientChargeLogs;
+use App\Models\PatientChargeReturnLogs;
 use App\Models\TypeOfCharge;
 use App\Models\WardsStocks;
 use App\Rules\StockBalanceNotDeclaredYetRule;
@@ -123,6 +124,7 @@ class PatientChargeController extends Controller
         $enccode = $request->enccode;
         $hospitalNumber = $request->hospitalNumber;
         $itemsToBillList = $request->itemsToBillList;
+
 
         if ($request->isUpdate == false) {
             // create csrw_code
@@ -425,6 +427,8 @@ class PatientChargeController extends Controller
             }
         } else {
             // dd($request);
+
+            // dd($request);
             $previousCharge = null;
             $previousPatientChargeLogs = null;
             $previousWardStocks = null;
@@ -449,6 +453,15 @@ class PatientChargeController extends Controller
                 // update the ward stock
                 $wardStocks->update([
                     'quantity' => (int)$previousWardStocks->quantity + (int)$upd_QtyToReturn,
+                ]);
+
+                PatientChargeReturnLogs::create([
+                    'enccode' => $request->enccode,
+                    'location' => $authWard,
+                    'hpercode' => $request->hospitalNumber,
+                    'cl2comb' => $previousPatientChargeLogs->itemcode,
+                    'returned_qty' => (int)$upd_QtyToReturn,
+                    'entry_by' => Auth::user()->employeeid,
                 ]);
 
                 // delete the patient charge log

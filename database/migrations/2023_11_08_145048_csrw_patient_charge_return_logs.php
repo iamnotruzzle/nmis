@@ -15,12 +15,12 @@ class CsrwPatientChargeReturnLogs extends Migration
     {
         Schema::create('csrw_patient_charge_return_logs', function (Blueprint $table) {
             $table->id();
+            $table->string('enccode');
             $table->string('location');
             $table->string('hpercode');
             $table->string('cl2comb');
             $table->integer('returned_qty');
             $table->string('entry_by');
-            $table->string('entry_date');
             $table->timestamps();
         });
     }
