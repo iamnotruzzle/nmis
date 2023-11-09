@@ -66,8 +66,8 @@ class ItemController extends Controller
 
         $items = Item::create([
             'cl2comb' => $request->cl1comb . '' . $request->cl2code,
-            'cl1comb' => $request->cl1comb,
-            'cl2code' => $request->cl2code,
+            'cl1comb' => trim($request->cl1comb),
+            'cl2code' => trim($request->cl2code),
             'stkno' => '',
             'cl2desc' => $request->cl2desc,
             'cl2retprc' => 0.00,
@@ -118,8 +118,8 @@ class ItemController extends Controller
 
         $item->update([
             'cl2comb' => $request->cl1comb . '' . $request->cl2code,
-            'cl1comb' => $request->cl1comb,
-            'cl2code' => $request->cl2code,
+            'cl1comb' => trim($request->cl1comb),
+            'cl2code' => trim($request->cl2code),
             'stkno' => '',
             'cl2desc' => $request->cl2desc,
             'cl2retprc' => 0.00,
