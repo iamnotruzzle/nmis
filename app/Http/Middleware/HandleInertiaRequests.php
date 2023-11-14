@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Models\FundSource;
 use App\Models\Location;
 use App\Models\LoginHistory;
+use App\Models\Supplier;
 use App\Models\TypeOfCharge;
 use App\Models\UserDetail;
 use Illuminate\Http\Request;
@@ -63,6 +64,9 @@ class HandleInertiaRequests extends Middleware
             },
             'locations' => function () {
                 return Location::where('wardstat', 'A')->orderBy('wardname', 'ASC')->get();
+            },
+            'suppliers' => function () {
+                return Supplier::where('suppstat', 'A')->orderBy('suppname', 'ASC')->get(['suppcode', 'suppname', 'suppstat']);
             },
             'auth.user.permissions' => function () use ($request) {
                 return ($request->user() ? $request->user()->getAllPermissions()->pluck('name') : null);
