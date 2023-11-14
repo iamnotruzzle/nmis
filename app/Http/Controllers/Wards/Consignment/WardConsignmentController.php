@@ -27,6 +27,7 @@ class WardConsignmentController extends Controller
             'brand' => 'required',
             'cl2comb' => 'required',
             'quantity' => 'required',
+            'delivered_date' => 'required',
             'expiration_date' => 'required',
         ]);
 

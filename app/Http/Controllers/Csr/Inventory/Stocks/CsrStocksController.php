@@ -97,6 +97,7 @@ class CsrStocksController extends Controller
             'cl2comb' => 'required',
             'brand' => 'required',
             'quantity' => 'required|numeric|min:0',
+            'delivered_date' => 'required',
             'expiration_date' => 'required',
         ]);
 
@@ -144,6 +145,7 @@ class CsrStocksController extends Controller
             'cl2comb' => 'required',
             'brand' => 'required',
             'quantity' => 'required|numeric|min:0',
+            'delivered_date' => 'required',
             'expiration_date' => 'required',
             'remarks' => 'required'
         ]);
