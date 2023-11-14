@@ -77,7 +77,7 @@ export default {
               comp: 'Csr/Reports/Index',
             },
             {
-              label: 'IRS',
+              label: 'RIS',
               icon: 'md-handshake-sharp',
               to: 'issueitems',
               prefix: 'issueitems',
