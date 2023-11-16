@@ -897,7 +897,7 @@ export default {
     // server request such as POST, the data in the table
     // is updated
     storeStocksInContainer() {
-      console.log(this.stocks.data);
+      //   console.log(this.stocks.data);
       this.stocks.data.forEach((e) => {
         this.stocksList.push({
           id: e.id,
