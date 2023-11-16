@@ -51,6 +51,11 @@
         >
         </Column>
         <Column
+          field="suppname"
+          header="SUPPLIER"
+        >
+        </Column>
+        <Column
           field="chrgdesc"
           header="FUND SOURCE"
         >
@@ -244,6 +249,20 @@
           >
             {{ form.errors.ris_no }}
           </small>
+        </div>
+        <div class="field">
+          <label for="Item">Supplier</label>
+          <Dropdown
+            required="true"
+            v-model="form.suppcode"
+            :options="$page.props.suppliers"
+            filter
+            dataKey="suppcode"
+            optionLabel="suppname"
+            optionValue="suppcode"
+            class="w-full"
+            :class="{ 'p-invalid': form.suppcode == '' }"
+          />
         </div>
         <div class="field">
           <label for="fundSource">Fund source</label>
@@ -753,6 +772,7 @@ export default {
       selectedItemsUomDesc: null,
       form: this.$inertia.form({
         ris_no: null,
+        suppcode: null,
         fund_source: null,
         cl2comb: null,
         uomcode: null,
@@ -877,10 +897,13 @@ export default {
     // server request such as POST, the data in the table
     // is updated
     storeStocksInContainer() {
+      console.log(this.stocks.data);
       this.stocks.data.forEach((e) => {
         this.stocksList.push({
           id: e.id,
           ris_no: e.ris_no,
+          suppcode: e.suppcode,
+          suppname: e.supplier_detail.suppname,
           chrgcode: e.type_of_charge === null ? e.fund_source.fsid : e.type_of_charge.chrgcode,
           chrgdesc: e.type_of_charge === null ? e.fund_source.fsName : e.type_of_charge.chrgdesc,
           cl2comb: e.cl2comb,
@@ -946,6 +969,7 @@ export default {
       this.createStockDialog = true;
       this.stockId = item.id;
       this.form.ris_no = item.ris_no;
+      this.form.suppcode = item.suppcode;
       this.form.fund_source = item.chrgcode;
       this.form.cl2comb = item.cl2comb;
       this.form.uomcode = item.uomcode;
@@ -1015,13 +1039,13 @@ export default {
       this.storeStocksInContainer();
     },
     createdMsg() {
-      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Stock created', life: 3000 });
+      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Delivery created', life: 3000 });
     },
     updatedMsg() {
-      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Stock updated', life: 3000 });
+      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Delivery updated', life: 3000 });
     },
     deletedMsg() {
-      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Stock deleted', life: 3000 });
+      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Delivery deleted', life: 3000 });
     },
     // brand
     storeBrandsInContainer() {
