@@ -28,6 +28,7 @@ import {
   RiFileExcel2Line,
   SiMicrosoftexcel,
   MdNewreleasesOutlined,
+  LaTruckMovingSolid,
 } from 'oh-vue-icons/icons';
 addIcons(
   CoChartLine,
@@ -40,6 +41,7 @@ addIcons(
   MdLogoutSharp,
   RiFileExcel2Line,
   SiMicrosoftexcel,
+  LaTruckMovingSolid,
   MdNewreleasesOutlined
 );
 

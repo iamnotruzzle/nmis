@@ -145,8 +145,8 @@ export default {
               comp: 'Wards/Stocks/Index',
             },
             {
-              label: 'Stocks',
-              icon: 'la-boxes-solid',
+              label: 'Deliveries',
+              icon: 'la-truck-moving-solid',
               to: 'csrstocks',
               prefix: 'csrstocks',
               comp: 'Csr/Inventory/Stocks/Index',

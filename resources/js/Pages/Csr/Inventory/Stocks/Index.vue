@@ -1,6 +1,6 @@
 <template>
   <app-layout>
-    <Head title="NMIS - Stocks" />
+    <Head title="NMIS - Deliveries" />
 
     <div class="card">
       <Toast />
@@ -24,7 +24,7 @@
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700 mr-2">STOCKS</span>
+            <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700 mr-2">DELIVERIES</span>
 
             <div>
               <span class="p-input-icon-left mr-2">
@@ -35,7 +35,7 @@
                 />
               </span>
               <Button
-                label="Add stocks"
+                label="Add deliveries"
                 icon="pi pi-plus"
                 iconPos="right"
                 @click="openCreateItemDialog"
@@ -223,7 +223,7 @@
       <Dialog
         v-model:visible="createStockDialog"
         :style="{ width: '450px' }"
-        header="Stock Detail"
+        header="Delivery Detail"
         :modal="true"
         class="p-fluid"
         @hide="clickOutsideDialog"
