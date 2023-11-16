@@ -34,7 +34,7 @@ class CsrStocksController extends Controller
         $stocks = CsrStocks::with('unit:uomcode,uomdesc', 'itemDetail', 'brandDetail', 'typeOfCharge:chrgcode,chrgdesc', 'fundSource:id,fsid,fsName,cluster_code')
             ->whereHas('itemDetail', function ($q) use ($searchString) {
                 $q->where('cl2desc', 'LIKE', '%' . $searchString . '%')
-                    ->orWhere('batch_no', 'LIKE', '%' . $searchString . '%');
+                    ->orWhere('ris_no', 'LIKE', '%' . $searchString . '%');
             })
             ->when(
                 $request->from_md,
@@ -92,7 +92,7 @@ class CsrStocksController extends Controller
         $entry_by = Auth::user()->employeeid;
 
         $request->validate([
-            'batch_no' => 'required',
+            'ris_no' => 'required',
             'fund_source' => 'required',
             'cl2comb' => 'required',
             'brand' => 'required',
@@ -102,7 +102,7 @@ class CsrStocksController extends Controller
         ]);
 
         $stock = CsrStocks::create([
-            'batch_no' => $request->batch_no,
+            'ris_no' => $request->ris_no,
             'chrgcode' => $request->fund_source,
             'cl2comb' => $request->cl2comb,
             'uomcode' => $request->uomcode,
@@ -115,7 +115,7 @@ class CsrStocksController extends Controller
 
         $stockLogs = CsrStocksLogs::create([
             'stock_id' => $stock->id,
-            'batch_no' => $stock->batch_no,
+            'ris_no' => $stock->ris_no,
             'chrgcode' => $stock->chrgcode,
             'cl2comb' => $stock->cl2comb,
             'uomcode' => $stock->uomcode,
@@ -140,7 +140,7 @@ class CsrStocksController extends Controller
         $entry_by = Auth::user()->employeeid;
 
         $request->validate([
-            'batch_no' => 'required',
+            'ris_no' => 'required',
             'fund_source' => 'required',
             'cl2comb' => 'required',
             'brand' => 'required',
@@ -153,7 +153,7 @@ class CsrStocksController extends Controller
         $prevStockDetails = CsrStocks::where('id', $csrstock->id)->first();
 
         $updated = $csrstock->update([
-            'batch_no' => $request->batch_no,
+            'ris_no' => $request->ris_no,
             'chrgcode' => $request->fund_source,
             'cl2comb' => $request->cl2comb,
             'uomcode' => $request->uomcode,
@@ -166,7 +166,7 @@ class CsrStocksController extends Controller
 
         $stockLogs = CsrStocksLogs::create([
             'stock_id' => $prevStockDetails->id,
-            'batch_no' => $prevStockDetails->batch_no,
+            'ris_no' => $prevStockDetails->ris_no,
             'chrgcode' => $prevStockDetails->chrgcode,
             'cl2comb' => $prevStockDetails->cl2comb,
             'uomcode' => $prevStockDetails->uomcode,
@@ -199,7 +199,7 @@ class CsrStocksController extends Controller
 
         $stockLogs = CsrStocksLogs::create([
             'stock_id' => $prevStockDetails->id,
-            'batch_no' => $prevStockDetails->batch_no,
+            'ris_no' => $prevStockDetails->ris_no,
             'chrgcode' => $prevStockDetails->chrgcode,
             'cl2comb' => $prevStockDetails->cl2comb,
             'uomcode' => $prevStockDetails->uomcode,

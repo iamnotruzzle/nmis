@@ -18,9 +18,10 @@ class CsrStocks extends Model
 
     protected $fillable = [
         'id',
-        'batch_no',
+        'ris_no',
         'cl2comb',
         'uomcode',
+        'suppcode',
         'brand',
         'chrgcode',
         'quantity',
@@ -42,6 +43,11 @@ class CsrStocks extends Model
     public function brandDetail()
     {
         return $this->hasOne(Brand::class, 'id', 'brand');
+    }
+
+    public function supplierDetail()
+    {
+        return $this->hasOne(Supplier::class, 'suppcode', 'suppcode');
     }
 
     public function stockLogs()

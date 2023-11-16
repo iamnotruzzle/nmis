@@ -16,9 +16,10 @@ class CreateCsrwCsrStocksLogsTable extends Migration
         Schema::create('csrw_csr_stocks_logs', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('stock_id');
-            $table->string('batch_no');
+            $table->string('ris_no');
             $table->string('cl2comb');
             $table->string('uomcode')->nullable();
+            $table->string('suppcode')->nullable();
             $table->bigInteger('brand')->nullable();
             $table->string('chrgcode')->nullable();
             $table->integer('prev_qty');

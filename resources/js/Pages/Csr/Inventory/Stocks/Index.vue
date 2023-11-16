@@ -46,7 +46,7 @@
         <template #empty> No stock found. </template>
         <template #loading> Loading stock data. Please wait. </template>
         <Column
-          field="batch_no"
+          field="ris_no"
           header="BATCH NO."
         >
         </Column>
@@ -229,20 +229,20 @@
         @hide="clickOutsideDialog"
       >
         <div class="field">
-          <label for="batch_no">Batch no.</label>
+          <label for="ris_no">RIS no..</label>
           <InputText
-            id="batch_no"
-            v-model.trim="form.batch_no"
+            id="ris_no"
+            v-model.trim="form.ris_no"
             required="true"
             autofocus
-            :class="{ 'p-invalid': form.batch_no == '' }"
+            :class="{ 'p-invalid': form.ris_no == '' }"
             @keyup.enter="submit"
           />
           <small
             class="text-error"
-            v-if="form.errors.batch_no"
+            v-if="form.errors.ris_no"
           >
-            {{ form.errors.batch_no }}
+            {{ form.errors.ris_no }}
           </small>
         </div>
         <div class="field">
@@ -447,8 +447,7 @@
             style="font-size: 2rem"
           />
           <span v-if="form"
-            >Are you sure you want to delete <b>{{ form.cl2desc }}</b> with batch number
-            <b>{{ form.batch_no }}</b> ?</span
+            >Are you sure you want to delete <b>{{ form.cl2desc }}</b> with RIS number <b>{{ form.ris_no }}</b> ?</span
           >
         </div>
 
@@ -753,7 +752,7 @@ export default {
       ],
       selectedItemsUomDesc: null,
       form: this.$inertia.form({
-        batch_no: null,
+        ris_no: null,
         fund_source: null,
         cl2comb: null,
         uomcode: null,
@@ -881,7 +880,7 @@ export default {
       this.stocks.data.forEach((e) => {
         this.stocksList.push({
           id: e.id,
-          batch_no: e.batch_no,
+          ris_no: e.ris_no,
           chrgcode: e.type_of_charge === null ? e.fund_source.fsid : e.type_of_charge.chrgcode,
           chrgdesc: e.type_of_charge === null ? e.fund_source.fsName : e.type_of_charge.chrgdesc,
           cl2comb: e.cl2comb,
@@ -946,7 +945,7 @@ export default {
       this.isUpdate = true;
       this.createStockDialog = true;
       this.stockId = item.id;
-      this.form.batch_no = item.batch_no;
+      this.form.ris_no = item.ris_no;
       this.form.fund_source = item.chrgcode;
       this.form.cl2comb = item.cl2comb;
       this.form.uomcode = item.uomcode;
@@ -983,7 +982,7 @@ export default {
     },
     confirmDeleteItem(item) {
       this.stockId = item.id;
-      this.form.batch_no = item.batch_no;
+      this.form.ris_no = item.ris_no;
       this.form.cl2desc = item.cl2desc;
       this.deleteStockDialog = true;
     },
