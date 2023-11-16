@@ -229,7 +229,7 @@
         @hide="clickOutsideDialog"
       >
         <div class="field">
-          <label for="ris_no">RIS no..</label>
+          <label for="ris_no">RIS no.</label>
           <InputText
             id="ris_no"
             v-model.trim="form.ris_no"
