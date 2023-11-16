@@ -47,7 +47,7 @@
         <template #loading> Loading stock data. Please wait. </template>
         <Column
           field="ris_no"
-          header="BATCH NO."
+          header="RIS NO."
         >
         </Column>
         <Column
