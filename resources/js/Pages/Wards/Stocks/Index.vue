@@ -87,14 +87,33 @@
           <template #body="{ data }">
             <div class="flex justify-content-center align-content-center">
               <Tag
+                v-if="data.status == 'REQUESTED'"
                 :value="data.status"
-                :severity="getSeverity(data.status)"
-                class="mr-4"
+              />
+              <Tag
+                v-if="data.status == 'ACKNOWLEDGED'"
+                :value="data.status"
+                class="bg-yellow-400"
+              />
+              <Tag
+                v-if="data.status == 'FILLED'"
+                :value="data.status"
+                class="bg-blue-400"
+              />
+              <Tag
+                v-if="data.status == 'RECEIVED'"
+                :value="data.status"
+                class="bg-green-400"
+              />
+              <Tag
+                v-if="data.status == 'CANCELLED'"
+                :value="data.status"
+                style="background-color: rgb(239, 42, 42); color: rgb(253, 249, 249)"
               />
               <div>
                 <i
                   v-if="data.status == 'FILLED'"
-                  class="pi pi-check"
+                  class="pi pi-check ml-3"
                   style="color: skyblue"
                   @click="editStatus(data)"
                 ></i>
@@ -1034,24 +1053,24 @@ export default {
         return date_diff + ' days remaining.';
       }
     },
-    getSeverity(status) {
-      switch (status) {
-        case 'REQUESTED':
-          return 'primary';
+    // getSeverity(status) {
+    //   switch (status) {
+    //     case 'REQUESTED':
+    //       return 'primary';
 
-        case 'ACKNOWLEDGED':
-          return 'success';
+    //     case 'ACKNOWLEDGED':
+    //       return 'success';
 
-        case 'FILLED':
-          return 'info';
+    //     case 'FILLED':
+    //       return 'info';
 
-        case 'RECEIVED':
-          return 'success';
+    //     case 'RECEIVED':
+    //       return 'success';
 
-        default:
-          return null;
-      }
-    },
+    //     default:
+    //       return null;
+    //   }
+    // },
     onPage(event) {
       this.params.page = event.page + 1;
       this.updateData();
