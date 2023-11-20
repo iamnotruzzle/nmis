@@ -187,7 +187,7 @@
               @click="confirmCancelItem(slotProps.data)"
             /> -->
               <v-icon
-                v-if="slotProps.data.status == 'REQUESTED'"
+                v-if="slotProps.data.status == 'REQUESTED' || slotProps.data.status == 'ACKNOWLEDGED'"
                 name="fc-cancel"
                 class="text-red-500 text-xl"
                 @click="confirmCancelItem(slotProps.data)"

@@ -86,28 +86,28 @@
             <div class="text-center">
               <Tag
                 v-if="data.status == 'REQUESTED'"
-                style="background: #f965fb; color: black"
-                value="REQUESTED"
-              >
-              </Tag>
+                :value="data.status"
+              />
               <Tag
                 v-if="data.status == 'ACKNOWLEDGED'"
-                style="background: #fffa66; color: black"
-                value="ACKNOWLEDGED"
-              >
-              </Tag>
+                :value="data.status"
+                class="bg-yellow-400"
+              />
               <Tag
                 v-if="data.status == 'FILLED'"
-                style="background: #3d87ff; color: black"
-                value="FILLED"
-              >
-              </Tag>
+                :value="data.status"
+                class="bg-blue-400"
+              />
               <Tag
                 v-if="data.status == 'RECEIVED'"
-                style="background: #25f850; color: black"
-                value="RECEIVED"
-              >
-              </Tag>
+                :value="data.status"
+                class="bg-green-400"
+              />
+              <Tag
+                v-if="data.status == 'CANCELLED'"
+                :value="data.status"
+                style="background-color: rgb(239, 42, 42); color: rgb(253, 249, 249)"
+              />
             </div>
           </template>
           <template #filter="{}">
