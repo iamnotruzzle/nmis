@@ -151,24 +151,29 @@
         </Column>
         <Column header="ACTION">
           <template #body="slotProps">
-            <Button
-              v-if="slotProps.data.status == 'REQUESTED'"
-              icon="pi pi-pencil"
-              class="mr-1"
-              rounded
-              text
-              severity="warning"
-              @click="editRequestedStock(slotProps.data)"
-            />
+            <div class="flex justify-content-around align-content-center">
+              <v-icon
+                v-if="slotProps.data.status == 'REQUESTED'"
+                name="pr-pencil"
+                class="text-yellow-500 text-xl"
+                @click="editRequestedStock(slotProps.data)"
+              ></v-icon>
 
-            <Button
+              <!-- <Button
               v-if="slotProps.data.status == 'REQUESTED'"
-              icon="pi pi-trash"
+              icon="fc fc-cancel"
               rounded
               text
               severity="danger"
-              @click="confirmDeleteItem(slotProps.data)"
-            />
+              @click="confirmCancelItem(slotProps.data)"
+            /> -->
+              <v-icon
+                v-if="slotProps.data.status == 'REQUESTED'"
+                name="fc-cancel"
+                class="text-red-500 text-xl"
+                @click="confirmCancelItem(slotProps.data)"
+              ></v-icon>
+            </div>
           </template>
         </Column>
         <template #expansion="slotProps">
@@ -468,9 +473,9 @@
         </template>
       </Dialog>
 
-      <!-- Delete confirmation dialog -->
+      <!-- Cancel confirmation dialog -->
       <Dialog
-        v-model:visible="deleteItemDialog"
+        v-model:visible="cancelItemDialog"
         :style="{ width: '450px' }"
         header="Confirm"
         :modal="true"
@@ -481,21 +486,21 @@
             class="pi pi-exclamation-triangle mr-3"
             style="font-size: 2rem"
           />
-          <span v-if="form">Are you sure you want to delete this request?</span>
+          <span v-if="form">Are you sure you want to cancel this request?</span>
         </div>
         <template #footer>
           <Button
             label="No"
             icon="pi pi-times"
             class="p-button-text"
-            @click="deleteItemDialog = false"
+            @click="cancelItemDialog = false"
           />
           <Button
             label="Yes"
             icon="pi pi-check"
             severity="danger"
             text
-            @click="deleteItem"
+            @click="cancelItem"
           />
         </template>
       </Dialog>
@@ -811,7 +816,7 @@ export default {
       consignmentDialog: false,
       editWardStocksDialog: false,
       editStatusDialog: false,
-      deleteItemDialog: false,
+      cancelItemDialog: false,
       search: '',
       selectedItemsUomDesc: null,
       options: {},
@@ -1225,21 +1230,22 @@ export default {
         });
       }
     },
-    confirmDeleteItem(item) {
+    confirmCancelItem(item) {
+      console.log(item);
       this.requestStockId = item.id;
-      this.deleteItemDialog = true;
+      this.cancelItemDialog = true;
     },
-    deleteItem() {
+    cancelItem() {
       this.form.delete(route('requeststocks.destroy', this.requestStockId), {
         preserveScroll: true,
         onSuccess: () => {
           this.requestStockList = [];
-          this.deleteItemDialog = false;
+          this.cancelItemDialog = false;
           this.requestStockId = null;
           this.form.clearErrors();
           this.form.reset();
           this.updateData();
-          this.deletedMsg();
+          this.cancelledMsg();
         },
       });
     },
@@ -1263,8 +1269,8 @@ export default {
     updatedStatusMsg() {
       this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Changed requested stocks status', life: 3000 });
     },
-    deletedMsg() {
-      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Stock request deleted', life: 3000 });
+    cancelledMsg() {
+      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Stock request canceld', life: 3000 });
     },
     getLocalDateString(utcStr) {
       const date = new Date(utcStr);

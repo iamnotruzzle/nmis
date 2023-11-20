@@ -158,13 +158,20 @@ class RequestStocksController extends Controller
 
     public function destroy(RequestStocks $requeststock, Request $request)
     {
+
+        // dd($requeststock->id);
         $requestStocksID = $requeststock->id;
 
         // delete request stock
-        $requeststock->delete();
+        // $requeststock->delete();
 
-        // delete request stock details
-        RequestStocksDetails::where('request_stocks_id', $requestStocksID)->delete();
+        // // delete request stock details
+        // RequestStocksDetails::where('request_stocks_id', $requestStocksID)->delete();
+
+        RequestStocks::where('id', $requestStocksID)
+            ->update([
+                'status' => 'CANCELLED',
+            ]);
 
         // the parameters result will be send into the frontend
         event(new RequestStock('Item requested.'));

@@ -29,6 +29,8 @@ import {
   SiMicrosoftexcel,
   MdNewreleasesOutlined,
   LaTruckMovingSolid,
+  FcCancel,
+  PrPencil,
 } from 'oh-vue-icons/icons';
 addIcons(
   CoChartLine,
@@ -42,7 +44,9 @@ addIcons(
   RiFileExcel2Line,
   SiMicrosoftexcel,
   LaTruckMovingSolid,
-  MdNewreleasesOutlined
+  MdNewreleasesOutlined,
+  FcCancel,
+  PrPencil
 );
 
 moment.tz.setDefault('Asia/Manila');
