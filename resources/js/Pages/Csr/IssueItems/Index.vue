@@ -588,6 +588,7 @@ export default {
         { name: 'ACKNOWLEDGED', code: 'ACKNOWLEDGED' },
         { name: 'FILLED', code: 'FILLED' },
         { name: 'RECEIVED', code: 'RECEIVED' },
+        { name: 'CANCELLED', code: 'CANCELLED' },
       ],
     };
   },
