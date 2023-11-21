@@ -293,7 +293,6 @@
             required="true"
             v-model="form.item_type"
             :options="itemTypes"
-            filter
             showClear
             dataKey="code"
             optionLabel="name"
