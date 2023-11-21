@@ -81,7 +81,7 @@
   <Dialog
     v-model:visible="createItemDialog"
     :style="{ width: '450px' }"
-    header="Change Password"
+    header="Update profile"
     :modal="true"
     class="p-fluid"
     @hide="clickOutsideDialog"
