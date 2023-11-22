@@ -14,19 +14,19 @@
 
                 <Link href="issueitems?page=1&status=PENDING">
                   <div
-                    class="flex align-items-center justify-content-center bg-yellow-100 border-round"
+                    class="flex align-items-center justify-content-center bg-blue-100 border-round"
                     style="width: 3rem; height: 3rem"
                   >
                     <v-icon
-                      name="fc-cancel"
-                      class="pi pi-send text-yellow-500 text-xl"
+                      name="bi-cart"
+                      class="pi pi-send text-blue-500 text-xl"
                     ></v-icon>
                   </div>
                 </Link>
               </div>
             </div>
             <div class="flex justify-content-center">
-              <span class="text-5xl font-bold text-yellow-500">{{ 1 }}</span>
+              <span class="text-5xl font-bold text-blue-500">{{ pending_requests_container }}</span>
             </div>
           </div>
         </div>
@@ -34,23 +34,25 @@
           <div class="surface-card shadow-2 p-3 border-round">
             <div class="mb-3">
               <div class="flex justify-content-between">
-                <div class="flex flex-column">
-                  <span class="text-xl text-yellow-500 font-semibold">{{ currentMonth }}</span>
-                  <span class="block text-xl text-900 font-bold">Pending requests</span>
+                <div>
+                  <span class="block text-xl text-900 font-bold">CANCELLED</span>
                 </div>
 
-                <Link href="issueitems?page=1&status=PENDING">
+                <Link href="issueitems?page=1&status=CANCELLED">
                   <div
-                    class="flex align-items-center justify-content-center bg-yellow-100 border-round"
+                    class="flex align-items-center justify-content-center bg-orange-100 border-round"
                     style="width: 3rem; height: 3rem"
                   >
-                    <i class="pi pi-shopping-cart text-yellow-500 text-xl"></i>
+                    <v-icon
+                      name="fc-cancel"
+                      class="pi pi-send text-orange-500 text-xl"
+                    ></v-icon>
                   </div>
                 </Link>
               </div>
             </div>
             <div class="flex justify-content-center">
-              <span class="text-5xl font-bold text-yellow-500">{{ pending_requests_month_container }}</span>
+              <span class="text-5xl font-bold text-orange-500">{{ pending_requests_container }}</span>
             </div>
           </div>
         </div>
@@ -58,28 +60,29 @@
           <div class="surface-card shadow-2 p-3 border-round">
             <div class="mb-3">
               <div class="flex justify-content-between">
-                <div class="flex flex-column">
-                  <span class="text-xl text-green-500 font-semibold">{{ currentMonth }}</span>
-                  <span class="block text-xl text-900 font-bold">Total cost of issued stocks</span>
+                <div>
+                  <span class="block text-xl text-900 font-bold">COMPLETED</span>
                 </div>
 
-                <Link href="csrreports">
+                <Link href="issueitems?page=1&status=RECEIVED">
                   <div
                     class="flex align-items-center justify-content-center bg-green-100 border-round"
                     style="width: 3rem; height: 3rem"
                   >
-                    <i class="pi pi-money-bill text-green-500 text-xl"></i>
+                    <v-icon
+                      name="bi-check-lg"
+                      class="pi pi-send text-green-500 text-xl"
+                    ></v-icon>
                   </div>
                 </Link>
               </div>
             </div>
             <div class="flex justify-content-center">
-              <span class="text-5xl font-bold text-green-500">
-                ₱ {{ total_issued_cost_month_container.toFixed(2) }}
-              </span>
+              <span class="text-5xl font-bold text-green-500">{{ completed_requests_container }}</span>
             </div>
           </div>
         </div>
+        <!--  -->
       </div>
       <div class="my-2"></div>
       <div class="grid">
@@ -220,18 +223,16 @@ export default {
   },
   props: {
     pending_requests: Number,
-    completed_requests_month: Number,
-    pending_requests_month: Number,
-    total_issued_cost_month: Object,
+    cancelled_requests: Number,
+    completed_requests: Number,
     most_requested_month: Object,
     new_stocks: Object,
   },
   data() {
     return {
       pending_requests_container: null,
-      completed_requests_month_container: null,
-      pending_requests_month_container: null,
-      total_issued_cost_month_container: 0,
+      cancelled_requests_container: null,
+      completed_requests_container: null,
       most_requested_container: [],
       new_stocks_container: [],
       currentMonth: null,
@@ -241,25 +242,25 @@ export default {
     window.Echo.channel('request').listen('RequestStock', (args) => {
       router.reload({
         onSuccess: (e) => {
-          this.completed_requests_month_container = null;
-          this.pending_requests_month_container = null;
-          this.total_issued_cost_month_container = 0;
+          this.pending_requests_container = null;
+          this.cancelled_requests_container = null;
+          this.completed_requests_container = null;
           this.most_requested_container = [];
           this.new_stocks_container = [];
 
-          this.storeCompletedRequests();
           this.storePendingRequests();
-          this.storeTotalIssuedCost();
+          this.storeCancelledRequests();
+          this.storeCompletedRequests();
           this.storeValueInMostRequestedContainer();
           this.storeValueInNewStocksContainer();
           this.getCurrentMonth();
         },
       });
     });
-
+    // console.log(this.pending_requests);
     this.storePendingRequests();
+    this.storeCancelledRequests();
     this.storeCompletedRequests();
-    this.storeTotalIssuedCost();
     this.storeValueInMostRequestedContainer();
     this.storeValueInNewStocksContainer();
     this.getCurrentMonth();
@@ -268,19 +269,15 @@ export default {
     storePendingRequests() {
       this.pending_requests_container = this.pending_requests;
 
-      console.log(this.pending_requests_container);
+      //   console.log(this.pending_requests);
+    },
+    storeCancelledRequests() {
+      this.cancelled_requests_container = this.cancelled_requests;
     },
     storeCompletedRequests() {
-      this.completed_requests_month_container = this.completed_requests_month;
+      this.completed_requests_container = this.completed_requests;
     },
-    // storePendingRequests() {
-    //   this.pending_requests_month_container = this.pending_requests_month;
-    // },
-    storeTotalIssuedCost() {
-      this.total_issued_cost_month.forEach((e) => {
-        this.total_issued_cost_month_container = Number(this.total_issued_cost_month_container) + Number(e.total_cost);
-      });
-    },
+
     storeValueInMostRequestedContainer() {
       this.most_requested_month.forEach((e) => {
         this.most_requested_container.push({

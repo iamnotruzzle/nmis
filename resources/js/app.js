@@ -31,6 +31,8 @@ import {
   LaTruckMovingSolid,
   FcCancel,
   PrPencil,
+  BiCart,
+  BiCheckLg,
 } from 'oh-vue-icons/icons';
 addIcons(
   CoChartLine,
@@ -46,7 +48,9 @@ addIcons(
   LaTruckMovingSolid,
   MdNewreleasesOutlined,
   FcCancel,
-  PrPencil
+  PrPencil,
+  BiCart,
+  BiCheckLg
 );
 
 moment.tz.setDefault('Asia/Manila');

@@ -18,24 +18,10 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        // completed requests
         $pending_requests = RequestStocks::where('status', 'PENDING')->count();
-        // dd($pending_requests);
+        $cancelled_requests = RequestStocks::where('status', 'CANCELLED')->count();
+        $completed_requests = RequestStocks::where('status', 'RECEIVED')->count();
 
-        $completed_requests_month = RequestStocks::where('status', 'RECEIVED')
-            ->whereBetween('received_date', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->count();
-        // pending requests
-        $pending_requests_month = RequestStocks::where('status', 'PENDING')
-            ->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->count();
-
-        // total cost of issued items
-        $total_issued_cost_month = DB::select(
-            "SELECT (SUM(rsd.approved_qty) * (SELECT TOP 1 selling_price FROM csrw_item_prices WHERE cl2comb = rsd.cl2comb ORDER BY created_at DESC)) as total_cost
-            FROM csrw_request_stocks_details  as rsd
-            JOIN csrw_request_stocks as rs on rsd.request_stocks_id = rs.id
-            WHERE rs.received_date BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
-            GROUP BY rsd.cl2comb, rs.received_date;"
-        );
 
         // most requested items
         $most_requested_month = DB::select(
@@ -57,9 +43,8 @@ class DashboardController extends Controller
 
         return Inertia::render('Csr/Dashboard/Index', [
             'pending_requests' => $pending_requests,
-            'completed_requests_month' => $completed_requests_month,
-            'pending_requests_month' => $pending_requests_month,
-            'total_issued_cost_month' => $total_issued_cost_month,
+            'cancelled_requests' => $cancelled_requests,
+            'completed_requests' => $completed_requests,
             'most_requested_month' => $most_requested_month,
             'new_stocks' => $new_stocks,
         ]);
