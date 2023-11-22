@@ -6,24 +6,27 @@
           <div class="surface-card shadow-2 p-3 border-round">
             <div class="mb-3">
               <div class="flex justify-content-between">
-                <div class="flex flex-column">
-                  <span class="text-xl text-blue-500 font-semibold">{{ currentMonth }}</span>
-                  <span class="block text-xl text-900 font-bold">Completed requests</span>
+                <div>
+                  <span class="block text-xl text-900 font-bold">PENDING</span>
                 </div>
+
                 <!-- a -->
 
-                <Link href="issueitems?page=1&status=RECEIVED">
+                <Link href="issueitems?page=1&status=PENDING">
                   <div
-                    class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                    class="flex align-items-center justify-content-center bg-yellow-100 border-round"
                     style="width: 3rem; height: 3rem"
                   >
-                    <i class="pi pi-send text-blue-500 text-xl"></i>
+                    <v-icon
+                      name="fc-cancel"
+                      class="pi pi-send text-yellow-500 text-xl"
+                    ></v-icon>
                   </div>
                 </Link>
               </div>
             </div>
             <div class="flex justify-content-center">
-              <span class="text-5xl font-bold text-blue-500">{{ completed_requests_month_container }}</span>
+              <span class="text-5xl font-bold text-yellow-500">{{ 1 }}</span>
             </div>
           </div>
         </div>
@@ -254,8 +257,8 @@ export default {
       });
     });
 
-    this.storeCompletedRequests();
     this.storePendingRequests();
+    this.storeCompletedRequests();
     this.storeTotalIssuedCost();
     this.storeValueInMostRequestedContainer();
     this.storeValueInNewStocksContainer();
@@ -265,14 +268,14 @@ export default {
     storePendingRequests() {
       this.pending_requests_container = this.pending_requests;
 
-      console.log(thispending_requests_container);
+      console.log(this.pending_requests_container);
     },
     storeCompletedRequests() {
       this.completed_requests_month_container = this.completed_requests_month;
     },
-    storePendingRequests() {
-      this.pending_requests_month_container = this.pending_requests_month;
-    },
+    // storePendingRequests() {
+    //   this.pending_requests_month_container = this.pending_requests_month;
+    // },
     storeTotalIssuedCost() {
       this.total_issued_cost_month.forEach((e) => {
         this.total_issued_cost_month_container = Number(this.total_issued_cost_month_container) + Number(e.total_cost);

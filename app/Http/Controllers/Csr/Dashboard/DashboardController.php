@@ -20,6 +20,7 @@ class DashboardController extends Controller
     {
         // completed requests
         $pending_requests = RequestStocks::where('status', 'PENDING')->count();
+        // dd($pending_requests);
 
         $completed_requests_month = RequestStocks::where('status', 'RECEIVED')
             ->whereBetween('received_date', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->count();
