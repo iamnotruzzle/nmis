@@ -216,6 +216,7 @@ export default {
     VChart,
   },
   props: {
+    pending_requests: Number,
     completed_requests_month: Number,
     pending_requests_month: Number,
     total_issued_cost_month: Object,
@@ -224,6 +225,7 @@ export default {
   },
   data() {
     return {
+      pending_requests_container: null,
       completed_requests_month_container: null,
       pending_requests_month_container: null,
       total_issued_cost_month_container: 0,
@@ -260,6 +262,11 @@ export default {
     this.getCurrentMonth();
   },
   methods: {
+    storePendingRequests() {
+      this.pending_requests_container = this.pending_requests;
+
+      console.log(thispending_requests_container);
+    },
     storeCompletedRequests() {
       this.completed_requests_month_container = this.completed_requests_month;
     },

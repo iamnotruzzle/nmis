@@ -19,6 +19,8 @@ class DashboardController extends Controller
     public function index()
     {
         // completed requests
+        $pending_requests = RequestStocks::where('status', 'PENDING')->count();
+
         $completed_requests_month = RequestStocks::where('status', 'RECEIVED')
             ->whereBetween('received_date', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->count();
         // pending requests
@@ -53,6 +55,7 @@ class DashboardController extends Controller
 
 
         return Inertia::render('Csr/Dashboard/Index', [
+            'pending_requests' => $pending_requests,
             'completed_requests_month' => $completed_requests_month,
             'pending_requests_month' => $pending_requests_month,
             'total_issued_cost_month' => $total_issued_cost_month,
