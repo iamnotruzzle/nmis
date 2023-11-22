@@ -1,6 +1,6 @@
 <template>
   <app-layout>
-    <Head title="NMIS - Issue Items" />
+    <Head title="NMIS - RIS" />
 
     <div class="card">
       <Toast />
@@ -85,7 +85,7 @@
           <template #body="{ data }">
             <div class="text-center">
               <Tag
-                v-if="data.status == 'REQUESTED'"
+                v-if="data.status == 'PENDING'"
                 :value="data.status"
               />
               <Tag
@@ -123,7 +123,7 @@
         </Column>
         <Column
           field="requested_by"
-          header="REQUESTED BY"
+          header="PENDING BY"
         >
           <template #body="{ data }">
             <div class="flex flex-row align-items-center">
@@ -170,7 +170,7 @@
         </Column>
         <Column
           field="requested_at"
-          header="REQUESTED AT"
+          header="PENDING AT"
         >
           <template #body="{ data }">
             {{ data.requested_at }}
@@ -180,7 +180,7 @@
           <template #body="slotProps">
             <div class="text-center">
               <Button
-                v-if="slotProps.data.status == 'REQUESTED'"
+                v-if="slotProps.data.status == 'PENDING'"
                 icon="pi pi-check"
                 class="mr-1"
                 rounded
@@ -218,10 +218,10 @@
             >
               <template #header>
                 <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-                  <span class="text-cyan-500 hover:text-cyan-700">REQUESTED ITEMS</span>
+                  <span class="text-cyan-500 hover:text-cyan-700">PENDING ITEMS</span>
                   <div class="flex flex-row align-items-center">
                     <a
-                      v-if="slotProps.data.status != 'REQUESTED'"
+                      v-if="slotProps.data.status != 'PENDING'"
                       :href="`issueitems/issued?from=${params.from}&to=${params.to}
                       &id=${(params.id = slotProps.data.id)}`"
                       target="_blank"
@@ -233,7 +233,7 @@
                       ></i>
                     </a>
                     <Button
-                      v-if="slotProps.data.status != 'REQUESTED'"
+                      v-if="slotProps.data.status != 'PENDING'"
                       icon="pi pi-book"
                       severity="success"
                       text
@@ -255,7 +255,7 @@
               </Column>
               <Column
                 field="requested_qty"
-                header="REQUESTED QTY"
+                header="PENDING QTY"
               ></Column>
               <Column
                 field="approved_qty"
@@ -307,12 +307,12 @@
             </template>
             <Column
               field="cl2desc"
-              header="REQUESTED ITEM"
+              header="PENDING ITEM"
               sortable
             ></Column>
             <Column
               field="requested_qty"
-              header="REQUESTED QTY"
+              header="PENDING QTY"
             ></Column>
             <Column
               v-if="isUpdate"
@@ -584,7 +584,7 @@ export default {
       selectedStatus: null,
       status: [
         { name: 'NO FILTER', code: '' },
-        { name: 'REQUESTED', code: 'REQUESTED' },
+        { name: 'PENDING', code: 'PENDING' },
         { name: 'ACKNOWLEDGED', code: 'ACKNOWLEDGED' },
         { name: 'FILLED', code: 'FILLED' },
         { name: 'RECEIVED', code: 'RECEIVED' },
@@ -673,7 +673,7 @@ export default {
     },
     // getSeverity(status) {
     //   switch (status) {
-    //     case 'REQUESTED':
+    //     case 'PENDING':
     //       return 'primary';
 
     //     case 'ACKNOWLEDGED':

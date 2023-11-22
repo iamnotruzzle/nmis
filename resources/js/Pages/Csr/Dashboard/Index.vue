@@ -36,7 +36,7 @@
                   <span class="block text-xl text-900 font-bold">Pending requests</span>
                 </div>
 
-                <Link href="issueitems?page=1&status=REQUESTED">
+                <Link href="issueitems?page=1&status=PENDING">
                   <div
                     class="flex align-items-center justify-content-center bg-yellow-100 border-round"
                     style="width: 3rem; height: 3rem"

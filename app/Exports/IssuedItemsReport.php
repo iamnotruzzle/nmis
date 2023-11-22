@@ -129,7 +129,7 @@ class IssuedItemsReport implements FromArray, WithHeadings, WithEvents, WithStyl
     public function headings(): array
     {
         return [
-            ['ITEM', 'REQUESTED', 'APPROVED', 'REMARKS'],
+            ['ITEM', 'PENDING', 'APPROVED', 'REMARKS'],
         ];
     }
 

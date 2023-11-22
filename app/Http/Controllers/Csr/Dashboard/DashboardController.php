@@ -24,7 +24,7 @@ class DashboardController extends Controller
         $completed_requests_month = RequestStocks::where('status', 'RECEIVED')
             ->whereBetween('received_date', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->count();
         // pending requests
-        $pending_requests_month = RequestStocks::where('status', 'REQUESTED')
+        $pending_requests_month = RequestStocks::where('status', 'PENDING')
             ->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->count();
 
         // total cost of issued items

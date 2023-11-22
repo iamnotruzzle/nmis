@@ -28,7 +28,7 @@
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">REQUESTED STOCKS</span>
+            <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">PENDING STOCKS</span>
             <div>
               <span class="p-input-icon-left mr-2">
                 <i class="pi pi-search" />
@@ -87,7 +87,7 @@
           <template #body="{ data }">
             <div class="flex justify-content-center align-content-center">
               <Tag
-                v-if="data.status == 'REQUESTED'"
+                v-if="data.status == 'PENDING'"
                 :value="data.status"
               />
               <Tag
@@ -123,7 +123,7 @@
         </Column>
         <Column
           field="requested_by"
-          header="REQUESTED BY"
+          header="PENDING BY"
         >
           <template #body="{ data }">
             <div class="flex flex-row align-items-center">
@@ -172,14 +172,14 @@
           <template #body="slotProps">
             <div class="flex justify-content-around align-content-center">
               <v-icon
-                v-if="slotProps.data.status == 'REQUESTED'"
+                v-if="slotProps.data.status == 'PENDING'"
                 name="pr-pencil"
                 class="text-yellow-500 text-xl"
                 @click="editRequestedStock(slotProps.data)"
               ></v-icon>
 
               <!-- <Button
-              v-if="slotProps.data.status == 'REQUESTED'"
+              v-if="slotProps.data.status == 'PENDING'"
               icon="fc fc-cancel"
               rounded
               text
@@ -187,7 +187,7 @@
               @click="confirmCancelItem(slotProps.data)"
             /> -->
               <v-icon
-                v-if="slotProps.data.status == 'REQUESTED' || slotProps.data.status == 'ACKNOWLEDGED'"
+                v-if="slotProps.data.status == 'PENDING' || slotProps.data.status == 'ACKNOWLEDGED'"
                 name="fc-cancel"
                 class="text-red-500 text-xl"
                 @click="confirmCancelItem(slotProps.data)"
@@ -213,7 +213,7 @@
               </Column>
               <Column
                 field="requested_qty"
-                header="REQUESTED QTY"
+                header="PENDING QTY"
               ></Column>
               <Column
                 field="approved_qty"
@@ -406,12 +406,12 @@
             </template>
             <Column
               field="cl2desc"
-              header="REQUESTED ITEM"
+              header="PENDING ITEM"
               sortable
             ></Column>
             <Column
               field="requested_qty"
-              header="REQUESTED QTY"
+              header="PENDING QTY"
               sortable
             ></Column>
             <Column header="">
@@ -1055,7 +1055,7 @@ export default {
     },
     // getSeverity(status) {
     //   switch (status) {
-    //     case 'REQUESTED':
+    //     case 'PENDING':
     //       return 'primary';
 
     //     case 'ACKNOWLEDGED':

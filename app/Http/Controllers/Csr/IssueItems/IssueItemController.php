@@ -373,7 +373,7 @@ class IssueItemController extends Controller
         if (empty($tmp)) {
             RequestStocks::where('id', $requestStocksID)
                 ->update([
-                    'status' => 'REQUESTED',
+                    'status' => 'PENDING',
                     'approved_by' => $request->approved_by,
                 ]);
         } else {

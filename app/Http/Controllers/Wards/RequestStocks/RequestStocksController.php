@@ -94,7 +94,7 @@ class RequestStocksController extends Controller
     {
         $requestStocks = RequestStocks::create([
             'location' => $request->location,
-            'status' => 'REQUESTED',
+            'status' => 'PENDING',
             'requested_by' => $request->requested_by,
         ]);
         $requestStocksID = $requestStocks['id'];
