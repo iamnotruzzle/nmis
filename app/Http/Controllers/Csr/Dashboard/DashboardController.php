@@ -46,7 +46,7 @@ class DashboardController extends Controller
 
         $new_stocks = DB::select(
             "SELECT TOP 5 h2.cl2desc as item, csr.expiration_date as expiration_date
-            FROM csrw_csr_stocks as csr
+            FROM csrw_csr_stocks_med_supp as csr
             JOIN hclass2 as h2 ON csr.cl2comb = h2.cl2comb
             ORDER BY csr.expiration_date DESC;"
         );

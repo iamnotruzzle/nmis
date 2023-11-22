@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Csr\Inventory\Stocks;
 
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
-use App\Models\CsrStocks;
-use App\Models\CsrStocksLogs;
+use App\Models\CsrStocksMedicalSupplies;
+use App\Models\CsrStocksMedicalSuppliesLogs;
 use App\Models\Item;
 use App\Models\WardsStocks;
 use Carbon\Carbon;
@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
-class CsrStocksController extends Controller
+class CsrStocksMedicalSuppliesController extends Controller
 {
     public function index(Request $request)
     {
@@ -31,7 +31,7 @@ class CsrStocksController extends Controller
 
         // dd($items);
 
-        $stocks = CsrStocks::with('unit:uomcode,uomdesc', 'itemDetail', 'supplierDetail:suppcode,suppname', 'brandDetail', 'typeOfCharge:chrgcode,chrgdesc', 'fundSource:id,fsid,fsName,cluster_code')
+        $stocks = CsrStocksMedicalSupplies::with('unit:uomcode,uomdesc', 'itemDetail', 'supplierDetail:suppcode,suppname', 'brandDetail', 'typeOfCharge:chrgcode,chrgdesc', 'fundSource:id,fsid,fsName,cluster_code')
             ->whereHas('itemDetail', function ($q) use ($searchString) {
                 $q->where('cl2desc', 'LIKE', '%' . $searchString . '%')
                     ->orWhere('ris_no', 'LIKE', '%' . $searchString . '%');
@@ -101,7 +101,7 @@ class CsrStocksController extends Controller
             'expiration_date' => 'required',
         ]);
 
-        $stock = CsrStocks::create([
+        $stock = CsrStocksMedicalSupplies::create([
             'ris_no' => $request->ris_no,
             'suppcode' => $request->suppcode,
             'chrgcode' => $request->fund_source,
@@ -114,7 +114,7 @@ class CsrStocksController extends Controller
             'expiration_date' => $request->expiration_date == null ? null : Carbon::parse($request->expiration_date)->setTimezone('Asia/Manila'),
         ]);
 
-        $stockLogs = CsrStocksLogs::create([
+        $stockLogs = CsrStocksMedicalSuppliesLogs::create([
             'stock_id' => $stock->id,
             'ris_no' => $stock->ris_no,
             'suppcode' => $stock->suppcode,
@@ -135,7 +135,7 @@ class CsrStocksController extends Controller
         return Redirect::route('csrstocks.index');
     }
 
-    public function update(CsrStocks $csrstock, Request $request)
+    public function update(CsrStocksMedicalSupplies $csrstock, Request $request)
     {
         // dd($request);
 
@@ -152,7 +152,7 @@ class CsrStocksController extends Controller
             'remarks' => 'required'
         ]);
 
-        $prevStockDetails = CsrStocks::where('id', $csrstock->id)->first();
+        $prevStockDetails = CsrStocksMedicalSupplies::where('id', $csrstock->id)->first();
 
         $updated = $csrstock->update([
             'ris_no' => $request->ris_no,
@@ -167,7 +167,7 @@ class CsrStocksController extends Controller
             'expiration_date' => $request->expiration_date == null ? null : Carbon::parse($request->expiration_date)->setTimezone('Asia/Manila'),
         ]);
 
-        $stockLogs = CsrStocksLogs::create([
+        $stockLogs = CsrStocksMedicalSuppliesLogs::create([
             'stock_id' => $prevStockDetails->id,
             'ris_no' => $prevStockDetails->ris_no,
             'suppcode' => $prevStockDetails->suppcode,
@@ -189,7 +189,7 @@ class CsrStocksController extends Controller
         return Redirect::route('csrstocks.index');
     }
 
-    public function destroy(CsrStocks $csrstock, Request $request)
+    public function destroy(CsrStocksMedicalSupplies $csrstock, Request $request)
     {
         $request->validate([
             'remarks' => 'required'
@@ -197,11 +197,11 @@ class CsrStocksController extends Controller
 
         $entry_by = Auth::user()->employeeid;
 
-        $prevStockDetails = CsrStocks::where('id', $csrstock->id)->first();
+        $prevStockDetails = CsrStocksMedicalSupplies::where('id', $csrstock->id)->first();
 
         $csrstock->delete();
 
-        $stockLogs = CsrStocksLogs::create([
+        $stockLogs = CsrStocksMedicalSuppliesLogs::create([
             'stock_id' => $prevStockDetails->id,
             'ris_no' => $prevStockDetails->ris_no,
             'suppcode' => $prevStockDetails->suppcode,

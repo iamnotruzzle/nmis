@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CsrStocks extends Model
+class CsrStocksMedicalSupplies extends Model
 {
     use HasFactory;
 
-    protected $table = 'csrw_csr_stocks';
+    protected $table = 'csrw_csr_stocks_med_supp';
     // protected $primaryKey = 'cl1comb';
     // public $incrementing = false;
     // declare primary as string
@@ -52,7 +52,7 @@ class CsrStocks extends Model
 
     public function stockLogs()
     {
-        return $this->hasOne(CsrStocksLogs::class, 'id', 'csrw_stocks_id');
+        return $this->hasOne(CsrStocksMedicalSuppliesLogs::class, 'id', 'csrw_stocks_id');
     }
 
     public function ward_stocks()
