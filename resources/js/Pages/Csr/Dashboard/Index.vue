@@ -116,7 +116,7 @@
           <div class="surface-card shadow-2 p-3 border-round">
             <div class="mb-3">
               <div class="flex justify-content-between">
-                <span class="block text-xl text-900 font-bold">New stocks</span>
+                <span class="block text-xl text-900 font-bold">About to expire</span>
                 <Link href="csrstocks">
                   <div
                     class="flex align-items-center justify-content-center bg-purple-100 border-round"
@@ -131,7 +131,7 @@
               </div>
             </div>
             <DataTable
-              :value="new_stocks_container"
+              :value="about_to_expire_container"
               showGridlines
               class="p-datatable-sm"
               scrollable
@@ -226,7 +226,7 @@ export default {
     cancelled_requests: Number,
     completed_requests: Number,
     most_requested_month: Object,
-    new_stocks: Object,
+    about_to_expire: Object,
   },
   data() {
     return {
@@ -234,7 +234,7 @@ export default {
       cancelled_requests_container: null,
       completed_requests_container: null,
       most_requested_container: [],
-      new_stocks_container: [],
+      about_to_expire_container: [],
       currentMonth: null,
     };
   },
@@ -246,13 +246,13 @@ export default {
           this.cancelled_requests_container = null;
           this.completed_requests_container = null;
           this.most_requested_container = [];
-          this.new_stocks_container = [];
+          this.about_to_expire_container = [];
 
           this.storePendingRequests();
           this.storeCancelledRequests();
           this.storeCompletedRequests();
           this.storeValueInMostRequestedContainer();
-          this.storeValueInNewStocksContainer();
+          this.storeAboutToExpiredInContainer();
           this.getCurrentMonth();
         },
       });
@@ -262,7 +262,7 @@ export default {
     this.storeCancelledRequests();
     this.storeCompletedRequests();
     this.storeValueInMostRequestedContainer();
-    this.storeValueInNewStocksContainer();
+    this.storeAboutToExpiredInContainer();
     this.getCurrentMonth();
   },
   methods: {
@@ -286,10 +286,11 @@ export default {
         });
       });
     },
-    storeValueInNewStocksContainer() {
-      this.new_stocks.forEach((e) => {
-        this.new_stocks_container.push({
-          item: e.item,
+    storeAboutToExpiredInContainer() {
+      //   console.log(this.about_to_expire);
+      this.about_to_expire.forEach((e) => {
+        this.about_to_expire_container.push({
+          item: e.item_detail.cl2desc,
           expiration_date: e.expiration_date,
         });
       });

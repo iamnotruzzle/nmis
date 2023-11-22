@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Csr\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\CsrStocksMedicalSupplies;
 use App\Models\RequestStocks;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -33,12 +34,8 @@ class DashboardController extends Controller
             ORDER BY quantity DESC;"
         );
 
-        $new_stocks = DB::select(
-            "SELECT TOP 5 h2.cl2desc as item, csr.expiration_date as expiration_date
-            FROM csrw_csr_stocks_med_supp as csr
-            JOIN hclass2 as h2 ON csr.cl2comb = h2.cl2comb
-            ORDER BY csr.expiration_date DESC;"
-        );
+        $about_to_expire = CsrStocksMedicalSupplies::with('itemDetail:cl2comb,cl2desc')
+            ->orderBy('expiration_date', 'ASC')->limit(10)->get();
 
 
         return Inertia::render('Csr/Dashboard/Index', [
@@ -46,7 +43,7 @@ class DashboardController extends Controller
             'cancelled_requests' => $cancelled_requests,
             'completed_requests' => $completed_requests,
             'most_requested_month' => $most_requested_month,
-            'new_stocks' => $new_stocks,
+            'about_to_expire' => $about_to_expire,
         ]);
     }
 
