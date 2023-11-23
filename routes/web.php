@@ -9,6 +9,7 @@ use App\Http\Controllers\Csr\Inventory\Items\ItemController;
 use App\Http\Controllers\Csr\Inventory\Reports\CsrReportsController;
 use App\Http\Controllers\Csr\Inventory\Stocks\Brand\BrandController;
 use App\Http\Controllers\Csr\Inventory\Stocks\CsrStocksController;
+use App\Http\Controllers\Csr\Inventory\Stocks\CsrStocksMedicalSuppliesController;
 use App\Http\Controllers\Csr\IssueItems\ExportIssuedItems\ExportIssuedItemsController;
 use App\Http\Controllers\Csr\IssueItems\IssueItemController;
 use App\Http\Controllers\Csr\Reports\ReportsController;
@@ -64,7 +65,7 @@ Route::resource('subcategories', SubCategoryController::class)->middleware(['aut
 Route::resource('items', ItemController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('itemprices', ItemPriceController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('brands', BrandController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
-Route::resource('csrstocks', CsrStocksMedicalSupplies::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
+Route::resource('csrstocks', CsrStocksMedicalSuppliesController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('issueitems', IssueItemController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
 Route::get('issueitems/issued/', [IssuedItemsReportController::class, 'export']);
 Route::put('issueitems', [IssueItemController::class, 'acknowledgedrequest'])->name('issueitems.acknowledgedrequest');

@@ -144,88 +144,88 @@ class DashboardController extends Controller
         return Redirect::route('csrdashboard.index');
     }
 
-    public function update(CsrStocksMedicalSupplies $csrstock, Request $request)
-    {
-        dd($request);
-        $entry_by = Auth::user()->employeeid;
+    // public function update(CsrStocksMedicalSupplies $csrdashboard, Request $request)
+    // {
+    //     // dd($csrdashboard);
+    //     $entry_by = Auth::user()->employeeid;
 
-        $request->validate([
-            'ris_no' => 'required',
-            'fund_source' => 'required',
-            'cl2comb' => 'required',
-            'brand' => 'required',
-            'quantity' => 'required|numeric|min:0',
-            'delivered_date' => 'required',
-            'expiration_date' => 'required',
-            'remarks' => 'required'
-        ]);
+    //     $request->validate([
+    //         'ris_no' => 'required',
+    //         'fund_source' => 'required',
+    //         'cl2comb' => 'required',
+    //         'brand' => 'required',
+    //         'quantity' => 'required|numeric|min:0',
+    //         'delivered_date' => 'required',
+    //         'expiration_date' => 'required',
+    //         'remarks' => 'required'
+    //     ]);
 
-        $prevStockDetails = CsrStocksMedicalSupplies::where('id', $csrstock->id)->first();
+    //     $prevStockDetails = CsrStocksMedicalSupplies::where('id', $request->stockId)->first();
 
-        $updated = $csrstock->update([
-            'ris_no' => $request->ris_no,
-            'suppcode' => $request->suppcode,
-            'chrgcode' => $request->fund_source,
-            'cl2comb' => $request->cl2comb,
-            'uomcode' => $request->uomcode,
-            'brand' => $request->brand,
-            'quantity' => $request->quantity,
-            'manufactured_date' => $request->manufactured_date == null ? null : Carbon::parse($request->manufactured_date)->setTimezone('Asia/Manila'),
-            'delivered_date' => $request->delivered_date == null ? null : Carbon::parse($request->delivered_date)->setTimezone('Asia/Manila'),
-            'expiration_date' => $request->expiration_date == null ? null : Carbon::parse($request->expiration_date)->setTimezone('Asia/Manila'),
-        ]);
+    //     $updated = $csrstock->update([
+    //         'ris_no' => $request->ris_no,
+    //         'suppcode' => $request->suppcode,
+    //         'chrgcode' => $request->fund_source,
+    //         'cl2comb' => $request->cl2comb,
+    //         'uomcode' => $request->uomcode,
+    //         'brand' => $request->brand,
+    //         'quantity' => $request->quantity,
+    //         'manufactured_date' => $request->manufactured_date == null ? null : Carbon::parse($request->manufactured_date)->setTimezone('Asia/Manila'),
+    //         'delivered_date' => $request->delivered_date == null ? null : Carbon::parse($request->delivered_date)->setTimezone('Asia/Manila'),
+    //         'expiration_date' => $request->expiration_date == null ? null : Carbon::parse($request->expiration_date)->setTimezone('Asia/Manila'),
+    //     ]);
 
-        $stockLogs = CsrStocksMedicalSuppliesLogs::create([
-            'stock_id' => $prevStockDetails->id,
-            'ris_no' => $prevStockDetails->ris_no,
-            'suppcode' => $prevStockDetails->suppcode,
-            'chrgcode' => $prevStockDetails->chrgcode,
-            'cl2comb' => $prevStockDetails->cl2comb,
-            'uomcode' => $prevStockDetails->uomcode,
-            'brand' => $prevStockDetails->brand,
-            'prev_qty' => $prevStockDetails->quantity,
-            'new_qty' => $request->quantity,
-            'manufactured_date' => $prevStockDetails->manufactured_date,
-            'delivered_date' => $prevStockDetails->delivered_date,
-            'expiration_date' => $prevStockDetails->expiration_date,
-            'action' => 'UPDATE',
-            'remarks' => $request->remarks,
-            'entry_by' => $entry_by,
-        ]);
+    //     $stockLogs = CsrStocksMedicalSuppliesLogs::create([
+    //         'stock_id' => $prevStockDetails->id,
+    //         'ris_no' => $prevStockDetails->ris_no,
+    //         'suppcode' => $prevStockDetails->suppcode,
+    //         'chrgcode' => $prevStockDetails->chrgcode,
+    //         'cl2comb' => $prevStockDetails->cl2comb,
+    //         'uomcode' => $prevStockDetails->uomcode,
+    //         'brand' => $prevStockDetails->brand,
+    //         'prev_qty' => $prevStockDetails->quantity,
+    //         'new_qty' => $request->quantity,
+    //         'manufactured_date' => $prevStockDetails->manufactured_date,
+    //         'delivered_date' => $prevStockDetails->delivered_date,
+    //         'expiration_date' => $prevStockDetails->expiration_date,
+    //         'action' => 'UPDATE',
+    //         'remarks' => $request->remarks,
+    //         'entry_by' => $entry_by,
+    //     ]);
 
-        return Redirect::route('csrdashboard.index');
-    }
+    //     return Redirect::route('csrdashboard.index');
+    // }
 
-    public function destroy(CsrStocksMedicalSupplies $csrstock, Request $request)
-    {
-        $request->validate([
-            'remarks' => 'required'
-        ]);
+    // public function destroy(CsrStocksMedicalSupplies $csrdashboard, Request $request)
+    // {
+    //     $request->validate([
+    //         'remarks' => 'required'
+    //     ]);
 
-        $entry_by = Auth::user()->employeeid;
+    //     $entry_by = Auth::user()->employeeid;
 
-        $prevStockDetails = CsrStocksMedicalSupplies::where('id', $csrstock->id)->first();
+    //     $prevStockDetails = CsrStocksMedicalSupplies::where('id', $csrstock->id)->first();
 
-        $csrstock->delete();
+    //     $csrstock->delete();
 
-        $stockLogs = CsrStocksMedicalSuppliesLogs::create([
-            'stock_id' => $prevStockDetails->id,
-            'ris_no' => $prevStockDetails->ris_no,
-            'suppcode' => $prevStockDetails->suppcode,
-            'chrgcode' => $prevStockDetails->chrgcode,
-            'cl2comb' => $prevStockDetails->cl2comb,
-            'uomcode' => $prevStockDetails->uomcode,
-            'brand' => $prevStockDetails->brand,
-            'prev_qty' => $prevStockDetails->quantity,
-            'new_qty' => $prevStockDetails->quantity,
-            'manufactured_date' => $prevStockDetails->manufactured_date,
-            'delivered_date' => $prevStockDetails->delivered_date,
-            'expiration_date' => $prevStockDetails->expiration_date,
-            'action' => 'DELETE',
-            'remarks' => $request->remarks,
-            'entry_by' => $entry_by,
-        ]);
+    //     $stockLogs = CsrStocksMedicalSuppliesLogs::create([
+    //         'stock_id' => $prevStockDetails->id,
+    //         'ris_no' => $prevStockDetails->ris_no,
+    //         'suppcode' => $prevStockDetails->suppcode,
+    //         'chrgcode' => $prevStockDetails->chrgcode,
+    //         'cl2comb' => $prevStockDetails->cl2comb,
+    //         'uomcode' => $prevStockDetails->uomcode,
+    //         'brand' => $prevStockDetails->brand,
+    //         'prev_qty' => $prevStockDetails->quantity,
+    //         'new_qty' => $prevStockDetails->quantity,
+    //         'manufactured_date' => $prevStockDetails->manufactured_date,
+    //         'delivered_date' => $prevStockDetails->delivered_date,
+    //         'expiration_date' => $prevStockDetails->expiration_date,
+    //         'action' => 'DELETE',
+    //         'remarks' => $request->remarks,
+    //         'entry_by' => $entry_by,
+    //     ]);
 
-        return Redirect::route('csrdashboard.index');
-    }
+    //     return Redirect::route('csrdashboard.index');
+    // }
 }

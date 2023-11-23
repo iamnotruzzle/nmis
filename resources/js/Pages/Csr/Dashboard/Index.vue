@@ -781,6 +781,7 @@ export default {
       ],
       selectedItemsUomDesc: null,
       form: this.$inertia.form({
+        stockId: null,
         ris_no: null,
         suppcode: null,
         fund_source: null,
@@ -977,7 +978,7 @@ export default {
       );
     },
     editItem(item) {
-      // console.log(item);
+      //   console.log(item);
       this.isUpdate = true;
       this.createStockDialog = true;
       this.stockId = item.id;
@@ -994,7 +995,7 @@ export default {
     },
     submit() {
       if (this.isUpdate) {
-        this.form.put(route('csrdashboard.update', this.stockId), {
+        this.form.put(route('csrstocks.update', this.stockId), {
           preserveScroll: true,
           onSuccess: () => {
             this.stockId = null;
@@ -1005,7 +1006,7 @@ export default {
           },
         });
       } else {
-        this.form.post(route('csrdashboard.store'), {
+        this.form.post(route('csrstocks.store'), {
           preserveScroll: true,
           onSuccess: () => {
             this.stockId = null;
@@ -1024,7 +1025,7 @@ export default {
       this.deleteStockDialog = true;
     },
     deleteItem() {
-      this.form.delete(route('csrdashboard.destroy', this.stockId), {
+      this.form.delete(route('csrstocks.destroy', this.stockId), {
         preserveScroll: true,
         onSuccess: () => {
           this.stocksList = [];

@@ -132,7 +132,7 @@ class CsrStocksMedicalSuppliesController extends Controller
             'entry_by' => $entry_by,
         ]);
 
-        return Redirect::route('csrstocks.index');
+        return redirect()->back();
     }
 
     public function update(CsrStocksMedicalSupplies $csrstock, Request $request)
@@ -186,7 +186,7 @@ class CsrStocksMedicalSuppliesController extends Controller
         ]);
 
 
-        return Redirect::route('csrstocks.index');
+        return redirect()->back();
     }
 
     public function destroy(CsrStocksMedicalSupplies $csrstock, Request $request)
@@ -219,6 +219,6 @@ class CsrStocksMedicalSuppliesController extends Controller
             'entry_by' => $entry_by,
         ]);
 
-        return Redirect::route('csrstocks.index');
+        return redirect()->back();
     }
 }
