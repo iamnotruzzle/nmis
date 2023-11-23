@@ -24,7 +24,7 @@ class DashboardController extends Controller
      */
     public function index(Request $request)
     {
-        $searchString = '';
+        $searchString = $request->search;
 
         $pending_requests = RequestStocks::where('status', 'PENDING')->count();
         $cancelled_requests = RequestStocks::where('status', 'CANCELLED')->count();
@@ -80,7 +80,7 @@ class DashboardController extends Controller
                 }
             )
             ->orderBy('expiration_date', 'asc')
-            ->paginate(15);
+            ->paginate(10);
 
         // brands
         $brands = Brand::get();

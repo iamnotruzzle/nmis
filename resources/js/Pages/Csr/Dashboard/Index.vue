@@ -334,7 +334,7 @@
               showGridlines
               class="p-datatable-sm"
               scrollable
-              scrollHeight="230px"
+              scrollHeight="500px"
               tableStyle="min-height: h-full;"
             >
               <template #header>
