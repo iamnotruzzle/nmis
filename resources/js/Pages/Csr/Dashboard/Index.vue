@@ -88,28 +88,11 @@
       <div class="grid">
         <div class="col-12 md:col-12 lg:col-8">
           <div class="surface-card shadow-2 p-3 border-round">
-            <div class="mb-3">
-              <div class="flex justify-content-between">
-                <div class="flex flex-column">
-                  <span class="text-xl text-pink-500 font-semibold">{{ currentMonth }}</span>
-                  <span class="block text-xl text-900 font-bold">Top 5 requested stocks</span>
-                </div>
-
-                <Link href="issueitems">
-                  <div
-                    class="flex align-items-center justify-content-center bg-pink-100 border-round"
-                    style="width: 2.5rem; height: 2.5rem"
-                  >
-                    <i class="pi pi-heart text-pink-500 text-xl"></i>
-                  </div>
-                </Link>
-              </div>
-            </div>
-            <v-chart
+            <!-- <v-chart
               class="h-20rem w-full ma-0 pa-0"
               :option="mostRequestedItemsOptions()"
               autoresize
-            />
+            /> -->
           </div>
         </div>
         <div class="col-12 md:col-12 lg:col-4">
@@ -159,40 +142,6 @@
           </div>
         </div>
       </div>
-      <div
-        class="my-2"
-        v-show="false"
-      >
-        <div class="grid">
-          <div class="col-12 md:col-12 lg:col-12">
-            <div class="surface-card shadow-2 p-3 border-round">
-              <div class="mb-3">
-                <div class="flex justify-content-between">
-                  <div class="flex flex-column">
-                    <span class="text-xl text-pink-500 font-semibold">{{ currentMonth }}</span>
-                    <span class="block text-xl text-900 font-bold">Top 5 requested stocks</span>
-                  </div>
-
-                  <Link href="issueitems">
-                    <div
-                      class="flex align-items-center justify-content-center bg-pink-100 border-round"
-                      style="width: 2.5rem; height: 2.5rem"
-                    >
-                      <i class="pi pi-heart text-pink-500 text-xl"></i>
-                    </div>
-                  </Link>
-                </div>
-              </div>
-              <v-chart
-                class="ma-0 pa-0"
-                style="height: 410px; margin: 0; padding: 0"
-                :option="ordersAndIssuedOptions()"
-                autoresize
-              />
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </app-layout>
 </template>
@@ -225,7 +174,6 @@ export default {
     pending_requests: Number,
     cancelled_requests: Number,
     completed_requests: Number,
-    most_requested_month: Object,
     about_to_expire: Object,
   },
   data() {
@@ -233,7 +181,6 @@ export default {
       pending_requests_container: null,
       cancelled_requests_container: null,
       completed_requests_container: null,
-      most_requested_container: [],
       about_to_expire_container: [],
       currentMonth: null,
     };
@@ -245,13 +192,11 @@ export default {
           this.pending_requests_container = null;
           this.cancelled_requests_container = null;
           this.completed_requests_container = null;
-          this.most_requested_container = [];
           this.about_to_expire_container = [];
 
           this.storePendingRequests();
           this.storeCancelledRequests();
           this.storeCompletedRequests();
-          this.storeValueInMostRequestedContainer();
           this.storeAboutToExpiredInContainer();
           this.getCurrentMonth();
         },
@@ -261,7 +206,6 @@ export default {
     this.storePendingRequests();
     this.storeCancelledRequests();
     this.storeCompletedRequests();
-    this.storeValueInMostRequestedContainer();
     this.storeAboutToExpiredInContainer();
     this.getCurrentMonth();
   },
@@ -277,15 +221,6 @@ export default {
     storeCompletedRequests() {
       this.completed_requests_container = this.completed_requests;
     },
-
-    storeValueInMostRequestedContainer() {
-      this.most_requested_month.forEach((e) => {
-        this.most_requested_container.push({
-          item: e.item,
-          quantity: e.quantity,
-        });
-      });
-    },
     storeAboutToExpiredInContainer() {
       //   console.log(this.about_to_expire);
       this.about_to_expire.forEach((e) => {
@@ -294,110 +229,6 @@ export default {
           expiration_date: e.expiration_date,
         });
       });
-    },
-    mostRequestedItemsOptions() {
-      let option = {
-        title: {
-          left: 'center',
-          textStyle: {
-            fontSize: 18,
-            fontWeight: 'bold',
-            color: '#FFFFFF',
-          },
-        },
-        // legend: {
-        //   orient: 'vertical',
-        //   left: 'left',
-        //   textStyle: {
-        //     color: '#FFFFFF',
-        //   },
-        // },
-        label: {
-          color: '#fff',
-        },
-        tooltip: {
-          trigger: 'item',
-        },
-        series: [
-          {
-            name: 'ITEM',
-            type: 'pie',
-            radius: '85%', // chart size
-            data: [],
-          },
-        ],
-      };
-
-      this.most_requested_container.forEach((e) => {
-        option.series[0].data.push({
-          value: e.quantity,
-          name: e.item,
-        });
-      });
-
-      return option;
-    },
-    ordersAndIssuedOptions() {
-      let option = {
-        tooltip: {
-          trigger: 'axis',
-          //   axisPointer: {
-          //     // Use axis to trigger tooltip
-          //     type: 'shadow', // 'shadow' as default; can also be 'line' or 'shadow'
-          //   },
-        },
-        legend: {
-          textStyle: {
-            color: 'white',
-          },
-        },
-        // set height of the chart canvas
-        grid: {
-          show: true,
-          bottom: 20,
-          left: 30,
-          right: 30,
-        },
-        xAxis: {
-          data: ['MON', 'TUE', 'WED', 'THU', 'FRI'],
-          splitLine: {
-            show: true,
-          },
-        },
-        yAxis: {},
-        // color: ['#67B6FF', '#4F7AA5'], // bar colors
-        textStyle: {
-          fontSize: 12,
-        },
-        series: [
-          {
-            data: [10, 22, 28, 43, 49],
-            name: 'ORDERS',
-            type: 'bar',
-            stack: 'x',
-            label: {
-              show: true, // show value inside of the bars
-            },
-            emphasis: {
-              focus: 'series',
-            },
-          },
-          {
-            data: [5, 4, 3, 5, 10],
-            name: 'ISSUED',
-            type: 'bar',
-            stack: 'x',
-            label: {
-              show: true, // show value inside of the bars
-            },
-            emphasis: {
-              focus: 'series',
-            },
-          },
-        ],
-      };
-
-      return option;
     },
     getCurrentMonth() {
       this.currentMonth = moment().format('MMMM');

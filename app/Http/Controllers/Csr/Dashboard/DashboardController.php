@@ -23,17 +23,6 @@ class DashboardController extends Controller
         $cancelled_requests = RequestStocks::where('status', 'CANCELLED')->count();
         $completed_requests = RequestStocks::where('status', 'RECEIVED')->count();
 
-
-        // most requested items
-        $most_requested_month = DB::select(
-            "SELECT TOP 5 hc.cl2desc as item,  SUM(rsd.requested_qty) as quantity
-            FROM csrw_request_stocks_details as rsd
-            JOIN hclass2 as hc ON rsd.cl2comb = hc.cl2comb
-            WHERE rsd.created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
-            GROUP BY rsd.cl2comb, hc.cl2desc
-            ORDER BY quantity DESC;"
-        );
-
         $about_to_expire = CsrStocksMedicalSupplies::with('itemDetail:cl2comb,cl2desc')
             ->orderBy('expiration_date', 'ASC')->limit(10)->get();
 
@@ -42,7 +31,6 @@ class DashboardController extends Controller
             'pending_requests' => $pending_requests,
             'cancelled_requests' => $cancelled_requests,
             'completed_requests' => $completed_requests,
-            'most_requested_month' => $most_requested_month,
             'about_to_expire' => $about_to_expire,
         ]);
     }
