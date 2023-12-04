@@ -44,7 +44,7 @@ class ReportController extends Controller
                 (SELECT SUM(CASE WHEN tscode = 'ENT' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'ent',
                 -- (SELECT SUM(CASE WHEN tscode = 'neuro' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'neuro',
                 csrw_patient_charge_logs.charge_quantity as total_consumption
-                FROM csrw_wards_stocks as ward
+                FROM csrw_wards_stocks_med_supp as ward
                 JOIN hclass2 ON ward.cl2comb = hclass2.cl2comb
                 LEFT JOIN huom ON ward.uomcode = huom.uomcode
                 LEFT JOIN (
@@ -83,7 +83,7 @@ class ReportController extends Controller
                 (SELECT SUM(CASE WHEN tscode = 'ENT' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'ent',
                 -- (SELECT SUM(CASE WHEN tscode = 'neuro' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'neuro',
                 csrw_patient_charge_logs.charge_quantity as total_consumption
-                FROM csrw_wards_stocks as ward
+                FROM csrw_wards_stocks_med_supp as ward
                 JOIN hclass2 ON ward.cl2comb = hclass2.cl2comb
                 LEFT JOIN huom ON ward.uomcode = huom.uomcode
                 LEFT JOIN (

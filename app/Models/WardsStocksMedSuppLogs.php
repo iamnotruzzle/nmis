@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class WardsStocksLogs extends Model
+class WardsStocksMedSuppLogs extends Model
 {
     use HasFactory;
-    protected $table = 'csrw_wards_stocks_logs';
+    protected $table = 'csrw_wards_stocks_med_supp_logs';
 
     protected $fillable = [
         'id',

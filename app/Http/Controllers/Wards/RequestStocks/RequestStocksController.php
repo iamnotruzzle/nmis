@@ -8,7 +8,7 @@ use App\Models\Brand;
 use App\Models\Item;
 use App\Models\RequestStocks;
 use App\Models\RequestStocksDetails;
-use App\Models\WardsStocks;
+use App\Models\WardsStocksMedSupp;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -62,7 +62,7 @@ class RequestStocksController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        $currentWardStocks = WardsStocks::with(['item_details:cl2comb,cl2desc', 'brand_details:id,name', 'request_stocks', 'unit_of_measurement:uomcode,uomdesc'])
+        $currentWardStocks = WardsStocksMedSupp::with(['item_details:cl2comb,cl2desc', 'brand_details:id,name', 'request_stocks', 'unit_of_measurement:uomcode,uomdesc'])
             ->where('location', $authWardcode->wardcode)
             ->where('quantity', '!=', 0)
             ->whereHas(
@@ -72,7 +72,7 @@ class RequestStocksController extends Controller
                 }
             )
             ->get();
-        $currentWardStocks2 = WardsStocks::with(['item_details:cl2comb,cl2desc', 'brand_details:id,name', 'request_stocks', 'unit_of_measurement:uomcode,uomdesc'])
+        $currentWardStocks2 = WardsStocksMedSupp::with(['item_details:cl2comb,cl2desc', 'brand_details:id,name', 'request_stocks', 'unit_of_measurement:uomcode,uomdesc'])
             ->where('request_stocks_id', null)
             ->where('location', $authWardcode->wardcode)
             ->where('quantity', '!=', 0)

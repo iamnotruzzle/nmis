@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
-class WardsStocks extends Model
+class WardsStocksMedSupp extends Model
 {
     use HasFactory;
 
-    protected $table = 'csrw_wards_stocks';
+    protected $table = 'csrw_wards_stocks_med_supp';
 
     protected $fillable = [
         'id',
