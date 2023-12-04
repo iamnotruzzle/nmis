@@ -22,6 +22,7 @@ class WardsStocksMedSuppLogs extends Model
         'chrgcode',
         'prev_qty',
         'new_qty',
+        'converted',
         'manufactured_date',
         'delivered_date',
         'expiration_date',
