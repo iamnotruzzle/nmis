@@ -8,7 +8,7 @@ use App\Models\CsrStocksMedicalSupplies;
 use App\Models\Item;
 use App\Models\RequestStocks;
 use App\Models\RequestStocksDetails;
-use App\Models\WardsStocks;
+use App\Models\WardsStocksMedSupp;
 use App\Rules\CsrStockBalanceNotDeclaredYetRule;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -137,7 +137,7 @@ class IssueItemController extends Controller
                     $row = CsrStocksMedicalSupplies::where('id', $stock->id)->first();
                     $row_to_change_status = RequestStocksDetails::where('id', $rsc['request_stocks_details_id'])->first();
 
-                    $issueditem = WardsStocks::create([
+                    $issueditem = WardsStocksMedSupp::create([
                         'request_stocks_id' => $row_to_change_status->request_stocks_id,
                         'request_stocks_detail_id' => $row_to_change_status->id,
                         'stock_id' => $row->id,
@@ -173,7 +173,7 @@ class IssueItemController extends Controller
                     $row = CsrStocksMedicalSupplies::where('id', $stock->id)->first();
                     $row_to_change_status = RequestStocksDetails::where('id', $rsc['request_stocks_details_id'])->first();
 
-                    $issueditem = WardsStocks::create([
+                    $issueditem = WardsStocksMedSupp::create([
                         'request_stocks_id' => $row_to_change_status->request_stocks_id,
                         'request_stocks_detail_id' => $row_to_change_status->id,
                         'stock_id' => $row->id,
@@ -228,7 +228,7 @@ class IssueItemController extends Controller
             ]);
 
         // get the wards stocks where requestStocksId is true
-        $wardStocks = WardsStocks::where('request_stocks_id', $requestStocksID)->get();
+        $wardStocks = WardsStocksMedSupp::where('request_stocks_id', $requestStocksID)->get();
 
         // loop through the wards stocks
         foreach ($wardStocks as $ws) {
@@ -293,7 +293,7 @@ class IssueItemController extends Controller
                     $row = CsrStocksMedicalSupplies::where('id', $stock->id)->first();
                     $row_to_change_status = RequestStocksDetails::where('id', $rsc['request_stocks_details_id'])->first();
 
-                    $issueditem = WardsStocks::create([
+                    $issueditem = WardsStocksMedSupp::create([
                         'request_stocks_id' => $row_to_change_status->request_stocks_id,
                         'request_stocks_detail_id' => $row_to_change_status->id,
                         'stock_id' => $row->id,
@@ -329,7 +329,7 @@ class IssueItemController extends Controller
                     $row = CsrStocksMedicalSupplies::where('id', $stock->id)->first();
                     $row_to_change_status = RequestStocksDetails::where('id', $rsc['request_stocks_details_id'])->first();
 
-                    $issueditem = WardsStocks::create([
+                    $issueditem = WardsStocksMedSupp::create([
                         'request_stocks_id' => $row_to_change_status->request_stocks_id,
                         'request_stocks_detail_id' => $row_to_change_status->id,
                         'stock_id' => $row->id,
@@ -361,7 +361,7 @@ class IssueItemController extends Controller
         }
 
         // get the issued item
-        $rsd = WardsStocks::where('request_stocks_id', $requestStocksID)->get();
+        $rsd = WardsStocksMedSupp::where('request_stocks_id', $requestStocksID)->get();
         $rsd_container = [];
         foreach ($rsd as $value) {
             array_push($rsd_container, $value['quantity']);

@@ -12,7 +12,7 @@ use App\Models\PatientCharge;
 use App\Models\PatientChargeLogs;
 use App\Models\PatientChargeReturnLogs;
 use App\Models\TypeOfCharge;
-use App\Models\WardsStocks;
+use App\Models\WardsStocksMedSupp;
 use App\Rules\StockBalanceNotDeclaredYetRule;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -184,7 +184,7 @@ class PatientChargeController extends Controller
 
                     while ($remaining_qty_to_charge > 0) {
                         // check the current item that is going to expire and qty is 0
-                        $wardStock = WardsStocks::where('cl2comb', $item['itemCode'])
+                        $wardStock = WardsStocksMedSupp::where('cl2comb', $item['itemCode'])
                             ->where('quantity', '!=', 0)
                             ->where('location', $authWardcode->wardcode)
                             ->where('expiration_date', '>', Carbon::today())
@@ -447,7 +447,7 @@ class PatientChargeController extends Controller
                 $patientChargeLogs = PatientChargeLogs::where('id', $request->upd_id)->first();
                 $previousPatientChargeLogs = $patientChargeLogs;
 
-                $wardStocks = WardsStocks::where('id', $request->upd_ward_stocks_id)->first();
+                $wardStocks = WardsStocksMedSupp::where('id', $request->upd_ward_stocks_id)->first();
                 $previousWardStocks = $wardStocks;
 
                 // update the ward stock

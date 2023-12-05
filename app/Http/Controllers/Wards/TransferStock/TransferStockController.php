@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Wards\TransferStock;
 
 use App\Http\Controllers\Controller;
 use App\Models\UserDetail;
-use App\Models\WardsStocks;
 use App\Models\WardTransferStock;
 use Illuminate\Http\Request;
+use App\Models\WardsStocksMedSupp;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -25,7 +25,7 @@ class TransferStockController extends Controller
             ->orderBy('csrw_login_history.created_at', 'desc')
             ->first();
 
-        $wardStocks = WardsStocks::with(['item_details:cl2comb,cl2desc', 'brand_details:id,name', 'request_stocks'])
+        $wardStocks = WardsStocksMedSupp::with(['item_details:cl2comb,cl2desc', 'brand_details:id,name', 'request_stocks'])
             ->where('quantity', '!=', 0)
             ->where('location', '=', $authWardcode->wardcode)
             ->whereHas('request_stocks', function ($query) {
@@ -35,7 +35,7 @@ class TransferStockController extends Controller
             ->get();
         // dd($wardStocks);
 
-        $wardStocksConsignments = WardsStocks::with(['item_details:cl2comb,cl2desc', 'brand_details:id,name'])
+        $wardStocksConsignments = WardsStocksMedSupp::with(['item_details:cl2comb,cl2desc', 'brand_details:id,name'])
             ->where(
                 'quantity',
                 '!=',
@@ -97,7 +97,7 @@ class TransferStockController extends Controller
         ]);
 
         // get current stock data
-        $stockThatBeingTransferred = WardsStocks::where('id', $request->ward_stock_id)->first();
+        $stockThatBeingTransferred = WardsStocksMedSupp::where('id', $request->ward_stock_id)->first();
 
         // update new stock quantity
         $stockThatBeingTransferred->update([
@@ -135,11 +135,11 @@ class TransferStockController extends Controller
 
         // dd($transferredStock);
 
-        $wardStock = WardsStocks::where('id', $transferredStock->ward_stock_id)->first();
+        $wardStock = WardsStocksMedSupp::where('id', $transferredStock->ward_stock_id)->first();
         // dd($wardStock);
 
         // create the stock
-        WardsStocks::create([
+        WardsStocksMedSupp::create([
             'request_stocks_id' => $wardStock->request_stocks_id,
             'request_stocks_detail_id' => $wardStock->request_stocks_detail_id,
             'stock_id' => $wardStock->stock_id,
