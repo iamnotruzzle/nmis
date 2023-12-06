@@ -43,7 +43,6 @@ class StockBalanceNotDeclaredYetRule implements Rule
 
         $date = Carbon::now()->subDays(30); // get last 30 days
 
-
         $stockBalCount = LocationStockBalance::where('cl2comb', $this->cl2comb)
             ->where('created_at', '>=', $date)
             ->where('location', $authWardcode->wardcode)

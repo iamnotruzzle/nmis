@@ -100,13 +100,17 @@ class PatientChargeController extends Controller
     {
         $data = $request;
 
+        // dd($data->itemsToBillList);
+
         foreach ($data->itemsToBillList as $e) {
             // dd($e);
-            $data->validate(
-                [
-                    "itemsToBillList.*.itemCode" => ['required', new StockBalanceNotDeclaredYetRule($e['itemCode'])],
-                ],
-            );
+            if ($e['typeOfCharge'] == 'DRUMN') {
+                $data->validate(
+                    [
+                        "itemsToBillList.*.itemCode" => ['required', new StockBalanceNotDeclaredYetRule($e['itemCode'])],
+                    ],
+                );
+            }
         }
 
         $entryby = Auth::user()->employeeid;
