@@ -33,6 +33,7 @@ import {
   PrPencil,
   BiCart,
   BiCheckLg,
+  SiConvertio,
 } from 'oh-vue-icons/icons';
 addIcons(
   CoChartLine,
@@ -50,7 +51,8 @@ addIcons(
   FcCancel,
   PrPencil,
   BiCart,
-  BiCheckLg
+  BiCheckLg,
+  SiConvertio
 );
 
 moment.tz.setDefault('Asia/Manila');

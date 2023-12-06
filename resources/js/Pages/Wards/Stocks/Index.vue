@@ -328,14 +328,28 @@
         </Column>
         <Column header="ACTION">
           <template #body="slotProps">
-            <Button
-              icon="pi pi-pencil"
-              class=""
-              rounded
-              text
-              severity="warning"
-              @click="editWardStocks(slotProps.data)"
-            />
+            <div class="flex flex-row">
+              <Button
+                icon="pi pi-pencil"
+                rounded
+                text
+                severity="warning"
+                @click="editWardStocks(slotProps.data)"
+              />
+              <Button
+                rounded
+                text
+                severity="warning"
+              >
+                <template #default="">
+                  <v-icon
+                    name="si-convertio"
+                    class="text-blue-500"
+                    @click="editRequestedStock(slotProps.data)"
+                  ></v-icon>
+                </template>
+              </Button>
+            </div>
           </template>
         </Column>
       </DataTable>
