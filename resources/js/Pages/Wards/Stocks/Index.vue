@@ -1250,7 +1250,7 @@ export default {
       }
     },
     confirmCancelItem(item) {
-      console.log(item);
+      //   console.log(item);
       this.requestStockId = item.id;
       this.cancelItemDialog = true;
     },

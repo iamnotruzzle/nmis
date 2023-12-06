@@ -56,7 +56,7 @@
               </div>
             </div>
             <div class="flex justify-content-center">
-              <span class="text-5xl font-bold text-orange-500">{{ pending_requests_container }}</span>
+              <span class="text-5xl font-bold text-orange-500">{{ cancelled_requests_container }}</span>
             </div>
           </div>
         </div>

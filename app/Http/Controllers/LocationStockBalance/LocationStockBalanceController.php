@@ -5,7 +5,6 @@ namespace App\Http\Controllers\LocationStockBalance;
 use App\Http\Controllers\Controller;
 use App\Models\CsrStocksMedicalSupplies;
 use App\Models\LocationStockBalance;
-use App\Models\WardsStocks;
 use App\Rules\StockBalanceRule;
 use Carbon\Carbon;
 use Illuminate\Http\Request;

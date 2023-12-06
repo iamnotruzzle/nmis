@@ -7,7 +7,6 @@ use App\Models\Brand;
 use App\Models\CsrStocksMedicalSupplies;
 use App\Models\CsrStocksMedicalSuppliesLogs;
 use App\Models\Item;
-use App\Models\WardsStocks;
 use Carbon\Carbon;
 // use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Validation\Rule;

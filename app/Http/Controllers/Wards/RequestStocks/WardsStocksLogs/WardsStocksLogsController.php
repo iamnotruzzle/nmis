@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Wards\RequestStocks\WardsStocksLogs;
 
 use App\Http\Controllers\Controller;
-use App\Models\WardsStocks;
-use App\Models\WardsStocksLogs;
+use App\Models\WardsStocksMedSupp;
+use App\Models\WardsStocksMedSuppLogs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -25,14 +25,14 @@ class WardsStocksLogsController extends Controller
 
         $entry_by = Auth::user()->employeeid;
 
-        $prevStockDetails = WardsStocks::where('id', $request->ward_stock_id)->first();
+        $prevStockDetails = WardsStocksMedSupp::where('id', $request->ward_stock_id)->first();
 
-        $updatedWardStock = WardsStocks::where('id', $request->ward_stock_id)
+        $updatedWardStock = WardsStocksMedSupp::where('id', $request->ward_stock_id)
             ->update([
                 'quantity' => $request->quantity
             ]);
 
-        $wardStockLogs = WardsStocksLogs::create([
+        $wardStockLogs = WardsStocksMedSuppLogs::create([
             'request_stocks_id' => $prevStockDetails->request_stocks_id,
             'request_stocks_detail_id' => $prevStockDetails->request_stocks_detail_id,
             'stock_id' => $prevStockDetails->stock_id,
