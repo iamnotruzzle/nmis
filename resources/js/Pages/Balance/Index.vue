@@ -157,6 +157,7 @@
         <div class="field">
           <label>Item</label>
           <Dropdown
+            v-if="!isUpdate"
             required="true"
             v-model="form.cl2comb"
             :options="itemsList"
@@ -164,6 +165,11 @@
             optionLabel="cl2desc"
             optionValue="cl2comb"
             class="w-full"
+          />
+          <InputText
+            v-else
+            v-model.trim="cl2desc"
+            disabled=""
           />
           <small
             class="text-error"
@@ -324,6 +330,7 @@ export default {
       // end paginator
       itemId: null,
       isUpdate: false,
+      cl2desc: '',
       createItemDialog: false,
       deleteItemDialog: false,
       search: '',
@@ -453,6 +460,7 @@ export default {
         'hide',
         (this.itemId = null),
         (this.isUpdate = false),
+        (this.cl2desc = ''),
         this.form.clearErrors(),
         this.form.reset(),
         (this.form.location = this.$page.props.auth.user.location.location_name.wardcode),
@@ -465,6 +473,7 @@ export default {
       this.createItemDialog = true;
       this.form.id = item.id;
       this.form.cl2comb = item.cl2comb;
+      this.cl2desc = item.cl2desc;
       this.form.ending_balance = item.ending_balance;
       this.form.beginning_balance = item.beginning_balance;
     },
