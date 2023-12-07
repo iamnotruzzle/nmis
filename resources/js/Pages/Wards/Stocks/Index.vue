@@ -846,6 +846,7 @@ export default {
       requestStockId: null,
       isUpdate: false,
       createRequestStocksDialog: false,
+      convertItemDialog: false,
       consignmentDialog: false,
       editWardStocksDialog: false,
       editStatusDialog: false,
