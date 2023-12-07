@@ -695,6 +695,110 @@
         </template>
       </Dialog>
 
+      <!-- Convert item -->
+      <Dialog
+        v-model:visible="convertItemDialog"
+        header="CONVERT ITEM"
+        :modal="true"
+        @hide="whenDialogIsHidden"
+        :style="{ width: '50rem' }"
+      >
+        <div class="form-container">
+          <!-- Left Side: From Items -->
+          <div class="form-side border-1 p-3">
+            <h2>FROM</h2>
+            <div class="p-field flex flex-column">
+              <label for="targetItem">ITEM</label>
+              <InputText
+                id="targetItem"
+                v-model.trim="targetItemDesc"
+                readonly
+              />
+            </div>
+
+            <div class="p-field flex flex-column">
+              <label for="qty_to_convert">QTY TO CONVERT</label>
+              <InputText
+                id="qty_to_convert"
+                v-model.trim="formConvertItem.qty_to_convert"
+                required="true"
+                autofocus
+                type="number"
+                :class="{ 'p-invalid': formConvertItem.qty_to_convert == '' || formConvertItem.qty_to_convert == null }"
+              />
+            </div>
+            <!-- Add more fields as needed -->
+          </div>
+
+          <div class="mx-2">
+            <v-icon
+              name="co-arrow-thick-right"
+              scale="2"
+            ></v-icon>
+          </div>
+
+          <!-- Right Side: To Items -->
+          <div class="form-side border-1 p-3">
+            <h2>TO</h2>
+            <div class="p-field flex flex-column">
+              <label for="toItem">ITEM</label>
+              <Dropdown
+                id="toItem"
+                required="true"
+                v-model="formConvertItem.to"
+                :options="itemsList"
+                filter
+                optionValue="cl2comb"
+                optionLabel="cl2desc"
+              />
+            </div>
+
+            <div class="p-field flex flex-column">
+              <label for="qty_after">QTY AFTER CONVERSION</label>
+              <InputText
+                id="qty_after"
+                v-model.trim="formConvertItem.qty_after_conversion"
+                required="true"
+                autofocus
+                type="number"
+                :class="{
+                  'p-invalid':
+                    formConvertItem.qty_after_conversion == '' || formConvertItem.qty_after_conversion == null,
+                }"
+              />
+            </div>
+          </div>
+        </div>
+
+        <template #footer>
+          <Button
+            label="Cancel"
+            icon="pi pi-times"
+            severity="danger"
+            text
+            @click="cancel"
+          />
+          <Button
+            label="Save"
+            text
+            type="submit"
+            :disabled="
+              formConvertItem.ward_stock_id ||
+              formConvertItem.from == null ||
+              formConvertItem.to == null ||
+              formConvertItem.qty_to_convert == null ||
+              formConvertItem.qty_after_conversion == null
+            "
+            @click="submitConsignment"
+          >
+            <template #default="">
+              <v-icon name="si-convertio"></v-icon>
+              <label class="ml-2">Convert</label>
+            </template>
+          </Button>
+        </template>
+      </Dialog>
+
       <!-- update ward stock dialog -->
       <Dialog
         v-model:visible="editWardStocksDialog"
@@ -910,12 +1014,13 @@ export default {
         expiration_date: null,
         remarks: null,
       }),
-      targetItemWardStockId: null,
       targetItemDesc: null,
-      formWardStocks: this.$inertia.form({
+      formConvertItem: this.$inertia.form({
         ward_stock_id: null,
+        from: null,
+        to: null,
         qty_to_convert: null,
-        converted_qty: null,
+        qty_after_conversion: null,
       }),
     };
   },
@@ -1113,10 +1218,13 @@ export default {
       //   this.formConsignment.reset();
       //   this.consignmentDialog = true;
 
+      //   console.log('item', item);
+
       this.convertItemDialog = true;
-      this.targetItemWardStockId = item.ward_stock_id;
+      this.formConvertItem.ward_stock_id = item.ward_stock_id;
       this.targetItemDesc = item.item;
-      this.targetItem = console.log(item);
+
+      console.log(this.convertItemDialog);
     },
     // when dialog is hidden, do this function
     whenDialogIsHidden() {
@@ -1131,10 +1239,14 @@ export default {
         (this.approved_qty = null),
         (this.itemNotSelected = null),
         (this.itemNotSelectedMsg = null),
+        (this.targetItemDesc = null),
+        (this.convertItemDialog = false),
         this.form.clearErrors(),
         this.form.reset(),
         this.formWardStocks.clearErrors(),
         this.formWardStocks.reset(),
+        this.formConvertItem.clearErrors(),
+        this.formConvertItem.reset(),
         this.formUpdateStatus.reset()
       );
     },
@@ -1288,10 +1400,14 @@ export default {
       this.createRequestStocksDialog = false;
       this.editWardStocksDialog = false;
       this.consignmentDialog = false;
+      this.targetItemDesc = null;
+      this.convertItemDialog = false;
       this.form.reset();
       this.form.clearErrors();
       this.formWardStocks.reset();
       this.formWardStocks.clearErrors();
+      this.formConvertItem.reset();
+      this.formConvertItem.clearErrors();
     },
     createdMsg() {
       this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Stock request created', life: 3000 });
@@ -1397,4 +1513,34 @@ export default {
   /* min-height: 100px;
   min-width: 100px; */
 }
+
+.form-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  /* padding: 20px; */
+}
+
+.form-side {
+  flex: 1;
+  /* margin-right: 20px; */
+}
+
+.p-field {
+  margin-bottom: 20px;
+}
+
+/* Remove arrow for input type number */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+/* END Remove arrow for input type number */
 </style>

@@ -779,3 +779,19 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+/* Remove arrow for input type number */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+/* END Remove arrow for input type number */
+</style>
