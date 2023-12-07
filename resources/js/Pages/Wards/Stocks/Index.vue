@@ -345,7 +345,7 @@
                   <v-icon
                     name="si-convertio"
                     class="text-blue-500"
-                    @click="editRequestedStock(slotProps.data)"
+                    @click="openConvertDialog(slotProps.data)"
                   ></v-icon>
                 </template>
               </Button>
@@ -910,6 +910,13 @@ export default {
         expiration_date: null,
         remarks: null,
       }),
+      targetItemWardStockId: null,
+      targetItemDesc: null,
+      formWardStocks: this.$inertia.form({
+        ward_stock_id: null,
+        qty_to_convert: null,
+        converted_qty: null,
+      }),
     };
   },
   // created will be initialize before mounted
@@ -1067,25 +1074,7 @@ export default {
       } else {
         return date_diff + ' days remaining.';
       }
-    },
-    // getSeverity(status) {
-    //   switch (status) {
-    //     case 'PENDING':
-    //       return 'primary';
-
-    //     case 'ACKNOWLEDGED':
-    //       return 'success';
-
-    //     case 'FILLED':
-    //       return 'info';
-
-    //     case 'RECEIVED':
-    //       return 'success';
-
-    //     default:
-    //       return null;
-    //   }
-    // },
+    }, // },
     onPage(event) {
       this.params.page = event.page + 1;
       this.updateData();
@@ -1118,6 +1107,16 @@ export default {
       this.formConsignment.clearErrors();
       this.formConsignment.reset();
       this.consignmentDialog = true;
+    },
+    openConvertDialog(item) {
+      //   this.formConsignment.clearErrors();
+      //   this.formConsignment.reset();
+      //   this.consignmentDialog = true;
+
+      this.convertItemDialog = true;
+      this.targetItemWardStockId = item.ward_stock_id;
+      this.targetItemDesc = item.item;
+      this.targetItem = console.log(item);
     },
     // when dialog is hidden, do this function
     whenDialogIsHidden() {
