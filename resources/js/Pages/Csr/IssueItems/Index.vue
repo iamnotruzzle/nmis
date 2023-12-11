@@ -393,7 +393,7 @@
         v-model:visible="issuedItemsDialog"
         header="ISSUED ITEMS"
         :modal="true"
-        class="p-fluid"
+        class="p-fluid w-5"
         @hide="whenDialogIsHidden"
       >
         <div class="field">
@@ -401,8 +401,9 @@
             v-model:filters="issuedItemsFilter"
             :globalFilterFields="['brand', 'cl2desc']"
             :value="issuedItemList"
-            class="p-datatable-sm"
+            class="p-datatable-sm w-full"
             paginator
+            showGridlines
             :rows="7"
           >
             <template #header>

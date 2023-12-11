@@ -360,7 +360,7 @@
         v-model:visible="createRequestStocksDialog"
         header="Request stock"
         :modal="true"
-        class="p-fluid"
+        class="p-fluid w-5"
         @hide="whenDialogIsHidden"
       >
         <div class="field">
@@ -392,7 +392,7 @@
             {{ itemNotSelectedMsg }}
           </small>
         </div>
-        <div class="field mt-8">
+        <div class="field mt-4">
           <label class="mr-2">Requested stock list</label>
           <i
             class="pi pi-shopping-cart text-blue-500"
@@ -403,9 +403,10 @@
             :globalFilterFields="['cl2desc']"
             :value="requestStockListDetails"
             tableStyle="min-width: 50rem"
-            class="p-datatable-sm"
+            class="p-datatable-sm w-full"
             paginator
-            :rows="7"
+            showGridlines
+            :rows="5"
           >
             <template #header>
               <div class="flex justify-content-end">

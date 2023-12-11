@@ -252,7 +252,7 @@
           v-model:visible="createBillDialog"
           header="CHARGE PATIENT"
           :modal="true"
-          class="p-fluid"
+          class="p-fluid w-5"
           @hide="whenDialogIsHidden"
         >
           <div class="field mb-3">
@@ -301,8 +301,9 @@
               :globalFilterFields="['itemDesc']"
               :value="itemsToBillList"
               tableStyle="min-width: 50rem"
-              class="p-datatable-sm"
+              class="p-datatable-sm w-full"
               paginator
+              showGridlines
               :rows="7"
             >
               <template #header>
