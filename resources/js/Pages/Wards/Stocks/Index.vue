@@ -544,8 +544,7 @@
         v-model:visible="consignmentDialog"
         header="Consignment"
         :modal="true"
-        class="p-fluid"
-        :style="{ width: '20vw' }"
+        class="p-fluid w-4"
         @hide="whenDialogIsHidden"
       >
         <div class="field">
@@ -718,7 +717,7 @@
             </div>
 
             <div class="p-field flex flex-column">
-              <label for="qty_to_convert">QTY TO CONVERT</label>
+              <label for="qty_to_convert">QUANTITY</label>
               <InputText
                 id="qty_to_convert"
                 v-model.trim="formConvertItem.qty_to_convert"
@@ -755,7 +754,7 @@
             </div>
 
             <div class="p-field flex flex-column">
-              <label for="qty_after">QTY AFTER CONVERSION</label>
+              <label for="qty_after">QUANTITY</label>
               <InputText
                 id="qty_after"
                 v-model.trim="formConvertItem.qty_after_conversion"
