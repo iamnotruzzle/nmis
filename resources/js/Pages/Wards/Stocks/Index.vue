@@ -328,7 +328,7 @@
         </Column>
         <Column header="ACTION">
           <template #body="slotProps">
-            <div class="flex flex-row">
+            <div class="flex flex-row text-center">
               <Button
                 icon="pi pi-pencil"
                 rounded
@@ -340,12 +340,12 @@
                 rounded
                 text
                 severity="warning"
+                @click="openConvertDialog(slotProps.data)"
               >
                 <template #default="">
                   <v-icon
                     name="si-convertio"
                     class="text-blue-500"
-                    @click="openConvertDialog(slotProps.data)"
                   ></v-icon>
                 </template>
               </Button>
@@ -1240,7 +1240,6 @@ export default {
         (this.itemNotSelected = null),
         (this.itemNotSelectedMsg = null),
         (this.targetItemDesc = null),
-        (this.convertItemDialog = false),
         this.form.clearErrors(),
         this.form.reset(),
         this.formWardStocks.clearErrors(),
@@ -1543,4 +1542,12 @@ input[type='number'] {
   -moz-appearance: textfield;
 }
 /* END Remove arrow for input type number */
+
+#toItem {
+  width: 250px;
+  overflow: hidden;
+  white-space: pre;
+  text-overflow: ellipsis;
+  -webkit-appearance: none;
+}
 </style>
