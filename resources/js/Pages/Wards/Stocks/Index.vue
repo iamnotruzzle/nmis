@@ -328,18 +328,23 @@
         </Column>
         <Column header="ACTION">
           <template #body="slotProps">
-            <div class="flex flex-row text-center">
+            <div class="flex justify-content-center">
               <Button
-                icon="pi pi-pencil"
                 rounded
                 text
                 severity="warning"
                 @click="editWardStocks(slotProps.data)"
-              />
+              >
+                <template #default="">
+                  <v-icon
+                    name="pr-pencil"
+                    class="text-yellow-500"
+                  ></v-icon>
+                </template>
+              </Button>
               <Button
                 rounded
                 text
-                severity="warning"
                 @click="openConvertDialog(slotProps.data)"
               >
                 <template #default="">
