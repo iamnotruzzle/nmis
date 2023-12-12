@@ -784,17 +784,14 @@
             @click="cancel"
           />
           <Button
-            label="Save"
             text
             type="submit"
             :disabled="
-              formConvertItem.ward_stock_id ||
-              formConvertItem.from == null ||
               formConvertItem.to == null ||
               formConvertItem.qty_to_convert == null ||
               formConvertItem.qty_after_conversion == null
             "
-            @click="submitConsignment"
+            @click="submitConvertItem"
           >
             <template #default="">
               <v-icon name="si-convertio"></v-icon>
@@ -1227,9 +1224,8 @@ export default {
 
       this.convertItemDialog = true;
       this.formConvertItem.ward_stock_id = item.ward_stock_id;
+      this.formConvertItem.from = item.item;
       this.targetItemDesc = item.item;
-
-      console.log(this.convertItemDialog);
     },
     // when dialog is hidden, do this function
     whenDialogIsHidden() {
@@ -1378,6 +1374,17 @@ export default {
           },
         });
       }
+    },
+    submitConvertItem() {
+      this.formConvertItem.post(route('convertitem.store'), {
+        preserveScroll: true,
+        onSuccess: () => {
+          this.formConvertItem.reset();
+          this.cancel();
+          this.updateData();
+          this.createdMsg();
+        },
+      });
     },
     confirmCancelItem(item) {
       //   console.log(item);
