@@ -1224,7 +1224,6 @@ export default {
 
       this.convertItemDialog = true;
       this.formConvertItem.ward_stock_id = item.ward_stock_id;
-      this.formConvertItem.from = item.item;
       this.targetItemDesc = item.item;
     },
     // when dialog is hidden, do this function
