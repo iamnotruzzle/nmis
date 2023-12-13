@@ -798,6 +798,7 @@
             text
             type="submit"
             :disabled="
+              form.processing ||
               formConvertItem.to == null ||
               formConvertItem.qty_to_convert == null ||
               formConvertItem.qty_after_conversion == null ||
@@ -1395,7 +1396,7 @@ export default {
           this.formConvertItem.reset();
           this.cancel();
           this.updateData();
-          this.createdMsg();
+          this.convertedMsg();
         },
       });
     },
@@ -1433,6 +1434,9 @@ export default {
       this.formWardStocks.clearErrors();
       this.formConvertItem.reset();
       this.formConvertItem.clearErrors();
+    },
+    convertedMsg() {
+      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Item converted.', life: 3000 });
     },
     createdMsg() {
       this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Stock request created', life: 3000 });
