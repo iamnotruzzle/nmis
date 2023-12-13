@@ -54,6 +54,7 @@
               <Dropdown
                 v-model="form.wardcode"
                 :options="locationsList"
+                :virtualScrollerOptions="{ itemSize: 38 }"
                 optionLabel="wardname"
                 optionValue="wardcode"
                 filter

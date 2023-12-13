@@ -390,6 +390,7 @@
             required="true"
             v-model="form.suppcode"
             :options="$page.props.suppliers"
+            :virtualScrollerOptions="{ itemSize: 38 }"
             filter
             dataKey="suppcode"
             optionLabel="suppname"
@@ -405,6 +406,7 @@
             required="true"
             v-model="form.fund_source"
             :options="fundSourceList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
             filter
             showClear
             dataKey="chrgcode"
@@ -427,6 +429,7 @@
             required="true"
             v-model="form.item_type"
             :options="itemTypes"
+            :virtualScrollerOptions="{ itemSize: 38 }"
             dataKey="code"
             optionLabel="name"
             optionValue="code"
@@ -446,6 +449,7 @@
             required="true"
             v-model="form.cl2comb"
             :options="itemsList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
             filter
             dataKey="unit"
             optionLabel="cl2desc"
@@ -474,6 +478,7 @@
             required="true"
             v-model="form.brand"
             :options="brandDropDownList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
             filter
             showClear
             dataKey="id"

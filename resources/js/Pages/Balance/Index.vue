@@ -161,6 +161,7 @@
             required="true"
             v-model="form.cl2comb"
             :options="itemsList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
             filter
             optionLabel="cl2desc"
             optionValue="cl2comb"

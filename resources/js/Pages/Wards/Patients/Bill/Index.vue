@@ -261,6 +261,7 @@
               required="true"
               v-model="item"
               :options="itemList"
+              :virtualScrollerOptions="{ itemSize: 38 }"
               filter
               placeholder="Select a Item"
               optionLabel="itemDesc"

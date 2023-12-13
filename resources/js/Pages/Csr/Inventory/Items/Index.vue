@@ -260,6 +260,7 @@
             v-model.trim="form.cl1comb"
             required="true"
             :options="cl1combsList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
             filter
             optionLabel="cl1desc"
             optionValue="cl1comb"

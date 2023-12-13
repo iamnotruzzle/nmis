@@ -300,6 +300,7 @@
             v-model.trim="form.to"
             required="true"
             :options="locationsList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
             filter
             optionLabel="wardname"
             optionValue="wardcode"
@@ -320,6 +321,7 @@
             v-model.trim="form.requested_by"
             required="true"
             :options="$page.props.employees"
+            :virtualScrollerOptions="{ itemSize: 38 }"
             filter
             optionLabel="employeeid"
             optionValue="employeeid"

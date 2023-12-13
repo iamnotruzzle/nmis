@@ -374,6 +374,7 @@
             required="true"
             v-model="item"
             :options="itemsList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
             filter
             optionLabel="cl2desc"
             class="w-full mb-3"
@@ -580,6 +581,7 @@
             required="true"
             v-model="formConsignment.brand"
             :options="brandsList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
             filter
             showClear
             dataKey="id"
@@ -601,6 +603,7 @@
             required="true"
             v-model="formConsignment.cl2comb"
             :options="itemsList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
             filter
             optionValue="cl2comb"
             optionLabel="cl2desc"
@@ -763,6 +766,7 @@
                 required="true"
                 v-model="formConvertItem.to"
                 :options="itemsList"
+                :virtualScrollerOptions="{ itemSize: 38 }"
                 filter
                 optionValue="cl2comb"
                 optionLabel="cl2desc"
