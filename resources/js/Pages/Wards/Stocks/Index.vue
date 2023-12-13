@@ -729,8 +729,19 @@
                 required="true"
                 autofocus
                 type="number"
-                :class="{ 'p-invalid': formConvertItem.qty_to_convert == '' || formConvertItem.qty_to_convert == null }"
+                :class="{
+                  'p-invalid':
+                    formConvertItem.qty_to_convert == '' ||
+                    formConvertItem.qty_to_convert == null ||
+                    formConvertItem.qty_to_convert > oldQuantity,
+                }"
               />
+              <span
+                v-if="formConvertItem.qty_to_convert > oldQuantity"
+                class="text-error"
+              >
+                Current stock quantity is no enough.
+              </span>
             </div>
             <!-- Add more fields as needed -->
           </div>
@@ -789,7 +800,8 @@
             :disabled="
               formConvertItem.to == null ||
               formConvertItem.qty_to_convert == null ||
-              formConvertItem.qty_after_conversion == null
+              formConvertItem.qty_after_conversion == null ||
+              formConvertItem.qty_to_convert > oldQuantity
             "
             @click="submitConvertItem"
           >
@@ -959,6 +971,7 @@ export default {
       cancelItemDialog: false,
       search: '',
       selectedItemsUomDesc: null,
+      oldQuantity: 0,
       options: {},
       params: {},
       from: null,
@@ -1224,6 +1237,7 @@ export default {
 
       this.convertItemDialog = true;
       this.formConvertItem.ward_stock_id = item.ward_stock_id;
+      this.oldQuantity = item.quantity;
       this.targetItemDesc = item.item;
     },
     // when dialog is hidden, do this function
@@ -1240,6 +1254,7 @@ export default {
         (this.itemNotSelected = null),
         (this.itemNotSelectedMsg = null),
         (this.targetItemDesc = null),
+        (this.oldQuantity = 0),
         this.form.clearErrors(),
         this.form.reset(),
         this.formWardStocks.clearErrors(),
@@ -1412,6 +1427,7 @@ export default {
       this.consignmentDialog = false;
       this.targetItemDesc = null;
       this.convertItemDialog = false;
+      this.oldQuantity = 0;
       this.form.reset();
       this.form.clearErrors();
       this.formWardStocks.reset();
