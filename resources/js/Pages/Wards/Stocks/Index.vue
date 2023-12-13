@@ -1032,7 +1032,6 @@ export default {
       targetItemDesc: null,
       formConvertItem: this.$inertia.form({
         ward_stock_id: null,
-        from: null,
         to: null,
         qty_to_convert: null,
         qty_after_conversion: null,
