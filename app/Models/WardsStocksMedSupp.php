@@ -24,7 +24,7 @@ class WardsStocksMedSupp extends Model
         'brand',
         'chrgcode',
         'quantity',
-        'converted',
+        'converted_from_ward_stock_id',
         'from',
         'manufactured_date',
         'delivered_date',

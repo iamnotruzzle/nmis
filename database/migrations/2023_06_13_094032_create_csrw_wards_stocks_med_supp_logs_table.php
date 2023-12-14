@@ -25,7 +25,7 @@ class CreateCsrwWardsStocksMedSuppLogsTable extends Migration
             $table->string('chrgcode')->nullable();
             $table->integer('prev_qty');
             $table->integer('new_qty');
-            $table->string('converted')->nullable();
+            $table->bigInteger('converted_from_ward_stock_id')->nullable();
             $table->dateTime('manufactured_date')->nullable();
             $table->dateTime('delivered_date')->nullable();
             $table->dateTime('expiration_date');

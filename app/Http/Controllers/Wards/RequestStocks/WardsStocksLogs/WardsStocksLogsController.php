@@ -43,7 +43,7 @@ class WardsStocksLogsController extends Controller
             'chrgcode' => $prevStockDetails->chrgcode,
             'prev_qty' => $request->current_quantity,
             'new_qty' => $request->quantity,
-            'converted' => $prevStockDetails->converted,
+            'converted_from_ward_stock_id' => $prevStockDetails->id,
             'manufactured_date' => $prevStockDetails->manufactured_date,
             'delivered_date' => $prevStockDetails->delivered_date,
             'expiration_date' => $prevStockDetails->expiration_date,

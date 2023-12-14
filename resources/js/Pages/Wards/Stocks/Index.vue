@@ -802,7 +802,7 @@
             text
             type="submit"
             :disabled="
-              form.processing ||
+              formConvertItem.processing ||
               formConvertItem.to == null ||
               formConvertItem.qty_to_convert == null ||
               formConvertItem.qty_after_conversion == null ||
