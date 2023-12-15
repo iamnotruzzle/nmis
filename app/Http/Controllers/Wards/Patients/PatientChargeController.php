@@ -28,6 +28,7 @@ class PatientChargeController extends Controller
     public function index(Request $request)
     {
         $enccode = $request->enccode;
+        $medicalSupplies = array();
 
         // get auth wardcode
         $authWardcode = DB::table('csrw_users')
@@ -38,7 +39,7 @@ class PatientChargeController extends Controller
             ->first();
 
         // get wards current stocks / MEDICAL SUPPLIES
-        $medicalSupplies = DB::table('hclass2')
+        $stocksFromCsr = DB::table('hclass2')
             ->join('csrw_wards_stocks_med_supp', 'csrw_wards_stocks_med_supp.cl2comb', '=', 'hclass2.cl2comb')
             ->join('csrw_request_stocks', 'csrw_request_stocks.id', '=', 'csrw_wards_stocks_med_supp.request_stocks_id')
             ->select(DB::raw("hclass2.cl2comb, hclass2.cl2desc, hclass2.uomcode, SUM(csrw_wards_stocks_med_supp.quantity) as quantity, (SELECT TOP 1 selling_price FROM csrw_item_prices WHERE cl2comb = csrw_wards_stocks_med_supp.cl2comb ORDER BY created_at DESC) as 'price'"))
@@ -47,6 +48,45 @@ class PatientChargeController extends Controller
             ->where('csrw_request_stocks.status', 'RECEIVED')
             ->groupBy('hclass2.cl2comb', 'hclass2.cl2desc', 'hclass2.uomcode', 'csrw_wards_stocks_med_supp.cl2comb')
             ->get();
+
+        $stocksConvertedAndConsignment = DB::table('hclass2')
+            ->join('csrw_wards_stocks_med_supp', 'csrw_wards_stocks_med_supp.cl2comb', '=', 'hclass2.cl2comb')
+            // ->join('csrw_request_stocks', 'csrw_request_stocks.id', '=', 'csrw_wards_stocks_med_supp.request_stocks_id')
+            ->select(DB::raw("hclass2.cl2comb, hclass2.cl2desc, hclass2.uomcode, SUM(csrw_wards_stocks_med_supp.quantity) as quantity, (SELECT TOP 1 selling_price FROM csrw_item_prices WHERE cl2comb = csrw_wards_stocks_med_supp.cl2comb ORDER BY created_at DESC) as 'price'"))
+            ->where('csrw_wards_stocks_med_supp.location', $authWardcode->wardcode)
+            ->where('csrw_wards_stocks_med_supp.expiration_date', '>', Carbon::today())
+            // ->where('csrw_wards_stocks_med_supp.from', 'CSR')
+            // ->where('csrw_wards_stocks_med_supp.is_converted', 'y')
+            ->where(function ($query) {
+                $query->where('csrw_wards_stocks_med_supp.from', 'CSR')
+                    ->where('csrw_wards_stocks_med_supp.is_converted', 'y');
+            })
+            ->orWhere('csrw_wards_stocks_med_supp.from', 'CONSIGNMENT')
+            ->groupBy('hclass2.cl2comb', 'hclass2.cl2desc', 'hclass2.uomcode', 'csrw_wards_stocks_med_supp.cl2comb')
+            ->get();
+
+        // dd($stocksFromCsr);
+        // dd($stocksConvertedAndConsignment);
+
+        foreach ($stocksFromCsr as $s) {
+            $medicalSupplies[] = (object) [
+                'cl2comb' => $s->cl2comb,
+                'cl2desc' => $s->cl2desc,
+                'uomcode' => $s->uomcode,
+                'quantity' => $s->quantity,
+                'price' => $s->price,
+            ];
+        }
+
+        foreach ($stocksConvertedAndConsignment as $s) {
+            $medicalSupplies[] = (object) [
+                'cl2comb' => $s->cl2comb,
+                'cl2desc' => $s->cl2desc,
+                'uomcode' => $s->uomcode,
+                'quantity' => $s->quantity,
+                'price' => $s->price,
+            ];
+        }
 
         // get miscellaneous / miscellaneous
         $misc = Miscellaneous::with('unit')

@@ -26,6 +26,7 @@ class WardsStocksMedSupp extends Model
         'quantity',
         'converted_from_ward_stock_id',
         'from',
+        'is_converted',
         'manufactured_date',
         'delivered_date',
         'expiration_date',

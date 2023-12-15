@@ -23,6 +23,7 @@ class WardsStocksMedSuppLogs extends Model
         'prev_qty',
         'new_qty',
         'converted_from_ward_stock_id',
+        'is_converted',
         'manufactured_date',
         'delivered_date',
         'expiration_date',

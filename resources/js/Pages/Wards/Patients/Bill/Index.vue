@@ -658,7 +658,6 @@ export default {
           price: med.price,
         });
       });
-      //   console.log('medicalSupplies list container', this.medicalSuppliesList);
     },
     storeMiscInContainer() {
       this.misc.forEach((misc) => {
@@ -708,6 +707,19 @@ export default {
           quantity: 99999,
           price: tank.price,
         });
+      });
+
+      this.itemList.sort((a, b) => {
+        let cl2descA = a.itemDesc;
+        let cl2descB = b.itemDesc;
+
+        if (cl2descA < cl2descB) {
+          return -1;
+        }
+        if (cl2descA > cl2descB) {
+          return 1;
+        }
+        return 0;
       });
     },
     // when dialog is hidden, do this function
