@@ -879,6 +879,10 @@ export default {
       this.form.cl2stat = item.cl2stat;
     },
     submit() {
+      if (this.form.processing) {
+        return false;
+      }
+
       if (this.isUpdate) {
         this.form.put(route('items.update', this.itemId), {
           preserveScroll: true,
@@ -968,6 +972,10 @@ export default {
       this.formPrice.selling_price = item.selling_price;
     },
     submitPrice() {
+      if (this.formPrice.processing) {
+        return false;
+      }
+
       if (this.isPriceUpdate) {
         this.formPrice.put(route('itemprices.update', this.priceId), {
           preserveScroll: true,

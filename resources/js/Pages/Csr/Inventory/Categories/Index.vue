@@ -620,6 +620,10 @@ export default {
       this.form.ptstat = item.ptstat;
     },
     submit() {
+      if (this.form.processing) {
+        return false;
+      }
+
       if (this.isUpdate) {
         this.form.put(route('categories.update', this.itemId), {
           preserveScroll: true,
@@ -707,6 +711,10 @@ export default {
       this.formSubCategory.cl1stat = e.cl1stat;
     },
     submitSubCategory() {
+      if (this.formSubCategory.processing) {
+        return false;
+      }
+
       if (this.isSubCategoryUpdate) {
         this.formSubCategory.put(route('subcategories.update', this.formSubCategory.cl1comb), {
           preserveScroll: true,

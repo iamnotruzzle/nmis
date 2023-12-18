@@ -727,7 +727,7 @@
             </div>
 
             <div class="p-field flex flex-column">
-              <label for="qty_to_convert">QUANTITY</label>
+              <label for="qty_to_convert">QUANTITY TO CONVERT</label>
               <InputText
                 id="qty_to_convert"
                 v-model.trim="formConvertItem.qty_to_convert"
@@ -776,7 +776,7 @@
             </div>
 
             <div class="p-field flex flex-column">
-              <label for="qty_after">QUANTITY</label>
+              <label for="qty_after">EQUIVALENT QUANTITY</label>
               <InputText
                 id="qty_after"
                 v-model.trim="formConvertItem.qty_after_conversion"
@@ -1342,6 +1342,10 @@ export default {
       });
     },
     submit() {
+      if (this.form.processing) {
+        return false;
+      }
+
       // setup location, requested by and requestStockListDetails before submitting
       this.form.location = this.authWardcode.wardcode;
       this.form.requested_by = this.user.userDetail.employeeid;

@@ -25,6 +25,7 @@ class CsrStocksMedicalSupplies extends Model
         'brand',
         'chrgcode',
         'quantity',
+        'converted_quantity',
         'manufactured_date',
         'delivered_date',
         'expiration_date',

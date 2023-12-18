@@ -27,6 +27,7 @@ class CreateCsrwWardsStocksMedSuppTable extends Migration
             $table->bigInteger('converted_from_ward_stock_id')->nullable();
             $table->string('from');
             $table->string('is_converted')->nullable();
+            $table->integer('converted_quantity')->nullable();
             $table->dateTime('manufactured_date')->nullable();
             $table->dateTime('delivered_date')->nullable();
             $table->dateTime('expiration_date');

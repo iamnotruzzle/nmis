@@ -665,6 +665,10 @@ export default {
       this.form.expiration_date = item.expiration_date;
     },
     submit() {
+      if (this.form.processing) {
+        return false;
+      }
+
       // the form is submitted only if the conditions is met
       if (
         Number(this.form.quantity) <= Number(this.form.prevQuantity) &&

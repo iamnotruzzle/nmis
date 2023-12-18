@@ -480,6 +480,10 @@ export default {
       this.form.beginning_balance = item.beginning_balance;
     },
     submit() {
+      if (this.form.processing) {
+        return false;
+      }
+
       let id = this.form.id;
       if (this.isUpdate) {
         this.form.put(route('stockbal.update', id), {

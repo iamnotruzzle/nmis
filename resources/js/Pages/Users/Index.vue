@@ -541,6 +541,10 @@ export default {
       this.form.password = item.password;
     },
     submit() {
+      if (this.form.processing) {
+        return false;
+      }
+
       if (this.isUpdate) {
         router.post(
           `users/${this.itemId}`,

@@ -817,6 +817,10 @@ export default {
       //   console.log(this.requestStockListDetails);
     },
     submit() {
+      if (this.form.processing) {
+        return false;
+      }
+
       // setup approved by and requestStockListDetails before submitting
       this.form.approved_by = this.user.userDetail.employeeid;
       this.form.requestStockListDetails = this.requestStockListDetails;

@@ -43,6 +43,7 @@ class ConvertItemController extends Controller
             'chrgcode' => $wardStock->chrgcode,
             'quantity' => $request->qty_after_conversion,
             'converted_from_ward_stock_id' => $wardStock->id,
+            'converted_quantity' => $request->qty_after_conversion,
             'from' => 'CSR',
             'is_converted' => 'y',
             'manufactured_date' => $wardStock->manufactured_date,

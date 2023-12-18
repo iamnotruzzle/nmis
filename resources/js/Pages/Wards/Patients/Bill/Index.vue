@@ -806,6 +806,10 @@ export default {
       this.$emit('hide', this.form.clearErrors(), this.form.reset());
     },
     submit() {
+      if (this.form.processing) {
+        return false;
+      }
+
       // set form data
       this.form.enccode = this.enccode;
       this.form.hospitalNumber = this.hospitalNumber;

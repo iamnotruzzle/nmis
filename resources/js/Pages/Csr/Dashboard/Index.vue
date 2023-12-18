@@ -999,6 +999,10 @@ export default {
       this.form.expiration_date = item.expiration_date;
     },
     submit() {
+      if (this.form.processing) {
+        return false;
+      }
+
       if (this.isUpdate) {
         this.form.put(route('csrstocks.update', this.stockId), {
           preserveScroll: true,
