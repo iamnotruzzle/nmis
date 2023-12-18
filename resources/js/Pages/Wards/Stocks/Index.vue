@@ -779,13 +779,12 @@
               <label for="qty_after">EQUIVALENT QUANTITY</label>
               <InputText
                 id="qty_after"
-                v-model.trim="formConvertItem.qty_after_conversion"
+                v-model.trim="formConvertItem.equivalent_quantity"
                 required="true"
                 autofocus
                 type="number"
                 :class="{
-                  'p-invalid':
-                    formConvertItem.qty_after_conversion == '' || formConvertItem.qty_after_conversion == null,
+                  'p-invalid': formConvertItem.equivalent_quantity == '' || formConvertItem.equivalent_quantity == null,
                 }"
               />
             </div>
@@ -807,7 +806,7 @@
               formConvertItem.processing ||
               formConvertItem.to == null ||
               formConvertItem.qty_to_convert == null ||
-              formConvertItem.qty_after_conversion == null ||
+              formConvertItem.equivalent_quantity == null ||
               formConvertItem.qty_to_convert > oldQuantity
             "
             @click="submitConvertItem"
@@ -1041,7 +1040,7 @@ export default {
         ward_stock_id: null,
         to: null,
         qty_to_convert: null,
-        qty_after_conversion: null,
+        equivalent_quantity: null,
       }),
     };
   },
