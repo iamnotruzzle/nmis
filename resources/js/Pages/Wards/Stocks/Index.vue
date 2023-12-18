@@ -508,6 +508,7 @@
             icon="pi pi-check"
             severity="danger"
             text
+            :disabled="formUpdateStatus.processing"
             @click="updateStatus"
           />
         </template>
@@ -540,6 +541,7 @@
             icon="pi pi-check"
             severity="danger"
             text
+            :disabled="form.processing"
             @click="cancelItem"
           />
         </template>

@@ -522,7 +522,7 @@
             icon="pi pi-check"
             severity="danger"
             text
-            :disabled="form.remarks == '' || form.remarks == null"
+            :disabled="form.remarks == '' || form.remarks == null || form.processing"
             @click="deleteItem"
           />
         </template>

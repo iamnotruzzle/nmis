@@ -333,6 +333,7 @@
             icon="pi pi-check"
             severity="danger"
             text
+            :disabled="form.processing"
             @click="deleteItem"
           />
         </template>

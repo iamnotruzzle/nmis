@@ -303,6 +303,7 @@
             icon="pi pi-check"
             severity="danger"
             text
+            :disabled="form.processing"
             @click="deleteItem"
           />
         </template>
@@ -443,6 +444,7 @@
             icon="pi pi-check"
             severity="danger"
             text
+            :disabled="formSubCategory.processing"
             @click="deleteSubCategory"
           />
         </template>

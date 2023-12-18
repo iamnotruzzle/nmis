@@ -474,6 +474,7 @@
             icon="pi pi-check"
             severity="danger"
             text
+            :disabled="formUpdateStatus.processing"
             @click="updateStatus"
           />
         </template>

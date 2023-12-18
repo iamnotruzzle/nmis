@@ -414,6 +414,7 @@
             icon="pi pi-check"
             severity="danger"
             text
+            :disabled="formReceiveStock.processing"
             @click="updateReceivedStockStatus"
           />
         </template>
