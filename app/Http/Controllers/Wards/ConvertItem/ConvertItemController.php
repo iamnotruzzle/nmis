@@ -26,6 +26,7 @@ class ConvertItemController extends Controller
         $wardStock = WardsStocksMedSupp::where('id', $request->ward_stock_id)->first();
         $wardStock->update([
             'quantity' => $wardStock->quantity - (int)$request->qty_to_convert,
+            'converted_quantity' => $wardStock->converted_quantity + (int)$request->qty_to_convert,
         ]);
 
         $stockUomcode = Item::where('cl2comb', $request->to)->first('uomcode');
@@ -43,7 +44,6 @@ class ConvertItemController extends Controller
             'chrgcode' => $wardStock->chrgcode,
             'quantity' => $request->equivalent_quantity,
             'converted_from_ward_stock_id' => $wardStock->id,
-            'converted_quantity' => $request->equivalent_quantity,
             'from' => 'CSR',
             'is_converted' => 'y',
             'manufactured_date' => $wardStock->manufactured_date,
