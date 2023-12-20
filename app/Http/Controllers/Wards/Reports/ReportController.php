@@ -104,15 +104,17 @@ class ReportController extends Controller
             );
         }
 
+        // dd($ward_report);
 
         foreach ($ward_report as $e) {
+            // dd($e);
             $reports[] = (object) [
                 'cl2comb' => $e->cl2comb,
                 'item_description' => $e->cl2desc,
                 'unit' => $e->uomdesc,
                 'unit_cost' => $e->unit_cost,
                 'beginning_balance' => $e->beginning_balance,
-                'from_csr' => $e->from_csr,
+                'from_csr' => $e->from_csr + $e->total_consumption,
                 'total_stock' => $e->total_stock,
                 'surgery' => $e->surgery,
                 'obgyne' => $e->obgyne,
@@ -126,7 +128,7 @@ class ReportController extends Controller
                 'total_consumption' => $e->total_consumption,
                 'total_cons_estimated_cost' => $e->total_consumption * $e->unit_cost,
                 'ending_balance' => $e->ending_balance,
-                'actual_inventory' => $e->total_stock - $e->total_consumption <= 0 ? 0 : $e->total_stock - $e->total_consumption,
+                'actual_inventory' => ($e->from_csr + $e->total_consumption) - $e->total_consumption,
             ];
         }
         // dd($reports);
