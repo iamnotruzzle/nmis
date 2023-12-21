@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Item;
 use App\Models\WardsStocksMedSupp;
 use App\Models\WardsStocksMedSuppLogs;
+use App\Rules\CsrStockBalanceNotDeclaredYetRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -21,9 +22,18 @@ class ConvertItemController extends Controller
     {
         // dd($request);
 
+
         $entry_by = Auth::user()->employeeid;
 
         $wardStock = WardsStocksMedSupp::where('id', $request->ward_stock_id)->first();
+
+        // dd($e[0]);
+        $request->validate(
+            [
+                "cl2comb" => ['required', new CsrStockBalanceNotDeclaredYetRule($request->cl2comb)],
+            ],
+        );
+
         $wardStock->update([
             'quantity' => $wardStock->quantity - (int)$request->qty_to_convert,
             'converted_quantity' => $wardStock->converted_quantity + (int)$request->qty_to_convert,

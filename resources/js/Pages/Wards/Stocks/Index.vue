@@ -713,6 +713,13 @@
         @hide="whenDialogIsHidden"
         :style="{ width: '50rem' }"
       >
+        <p
+          class="text-error text-xl font-semibold my-1"
+          v-if="stockBalanceDeclared != false"
+        >
+          <!-- {{ $page.props.errors['requestStockListDetails.0.cl2comb'].toUpperCase() }} -->
+          {{ $page.props.errors.cl2comb }}
+        </p>
         <div class="form-container">
           <!-- Left Side: From Items -->
           <div class="form-side border-1 p-3">
@@ -982,6 +989,7 @@ export default {
       params: {},
       from: null,
       to: null,
+      stockBalanceDeclared: false,
       itemsList: [],
       requestStockList: [],
       currentWardStocksList: [],
@@ -1037,6 +1045,7 @@ export default {
       }),
       targetItemDesc: null,
       formConvertItem: this.$inertia.form({
+        cl2comb: null,
         ward_stock_id: null,
         to: null,
         qty_to_convert: null,
@@ -1151,6 +1160,7 @@ export default {
           from: e.from,
           ward_stock_id: e.id,
           brand: e.brand_details.name,
+          cl2comb: e.item_details.cl2comb,
           item: e.item_details.cl2desc,
           unit: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomdesc,
           quantity: e.quantity,
@@ -1165,6 +1175,7 @@ export default {
           from: e.from,
           ward_stock_id: e.id,
           brand: e.brand_details.name,
+          cl2comb: e.item_details.cl2comb,
           item: e.item_details.cl2desc,
           unit: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomdesc,
           quantity: e.quantity,
@@ -1241,6 +1252,7 @@ export default {
       //   console.log('item', item);
 
       this.convertItemDialog = true;
+      this.formConvertItem.cl2comb = item.cl2comb;
       this.formConvertItem.ward_stock_id = item.ward_stock_id;
       this.oldQuantity = item.quantity;
       this.targetItemDesc = item.item;
@@ -1406,6 +1418,17 @@ export default {
           this.cancel();
           this.updateData();
           this.convertedMsg();
+        },
+        onError: (errors) => {
+          this.stockBalanceDeclared = true;
+        },
+        onFinish: (visit) => {
+          if (this.stockBalanceDeclared != true) {
+            this.convertItemDialog = false;
+            this.cancel();
+            this.updateData();
+            //   this.updatedMsg();
+          }
         },
       });
     },
