@@ -12,8 +12,23 @@ class ManualReportController extends Controller
     {
         $reports = array();
 
-        return Inertia::render('Csr/Reports/Index', [
+        return Inertia::render('Csr/ManualReport/Index', [
             'reports' => $reports
         ]);
+    }
+
+    public function store(Request $request)
+    {
+        //
+    }
+
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    public function destroy($id)
+    {
+        //
     }
 }
