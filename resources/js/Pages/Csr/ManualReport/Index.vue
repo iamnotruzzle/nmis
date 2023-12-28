@@ -53,25 +53,160 @@
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.cl2desc }}
+            <!-- {{ data.cl2desc }} -->
           </template>
         </Column>
         <Column
-          field="ending_balance"
-          header="ENDING BALANCE"
+          field="unit_cost"
+          header="UNIT COST"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.ending_balance }}
+            {{ data.unit_cost }}
           </template>
         </Column>
         <Column
-          field="beginning_balance"
-          header="STARTING BALANCE"
+          field="csr_beg_bal_quantity"
+          header="CSR BEG BAL QTY"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.beginning_balance }}
+            {{ data.csr_beg_bal_quantity }}
+          </template>
+        </Column>
+        <Column
+          field="csr_beg_bal_total_cost"
+          header="CSR BEG BAL COST"
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.csr_beg_bal_total_cost }}
+          </template>
+        </Column>
+        <Column
+          field="wards_beg_bal_quantity"
+          header="WARD BEG BAL QTY"
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.wards_beg_bal_quantity }}
+          </template>
+        </Column>
+        <Column
+          field="wards_beg_bal_total_cost"
+          header="WARD BEG BAL COST"
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.wards_beg_bal_total_cost }}
+          </template>
+        </Column>
+        <Column
+          field="total_beg_bal_total_quantity"
+          header="TOTAL BEG BAL QTY"
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.total_beg_bal_total_quantity }}
+          </template>
+        </Column>
+        <Column
+          field="total_beg_bal_total_cost"
+          header="TOTAL BEG BAL COST"
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.total_beg_bal_total_cost }}
+          </template>
+        </Column>
+        <Column
+          field="supp_issued_to_wards_total_quantity"
+          header="SUPP ISSUED QTY"
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.supp_issued_to_wards_total_quantity }}
+          </template>
+        </Column>
+        <Column
+          field="supp_issued_to_wards_total_cost"
+          header="SUPP ISSUED COST"
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.supp_issued_to_wards_total_cost }}
+          </template>
+        </Column>
+        <Column
+          field="consumption_quantity"
+          header="CONSUMP. QTY"
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.consumption_quantity }}
+          </template>
+        </Column>
+        <Column
+          field="consumption_total_cost"
+          header="CONSUMP. COST"
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.consumption_total_cost }}
+          </template>
+        </Column>
+        <Column
+          field="csr_end_bal_quantity"
+          header="CSR END BAL QTY"
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.csr_end_bal_quantity }}
+          </template>
+        </Column>
+        <Column
+          field="csr_end_bal_total_cost"
+          header="CSR END BAL COST"
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.csr_end_bal_total_cost }}
+          </template>
+        </Column>
+        <Column
+          field="wards_end_bal_quantity"
+          header="WARD END BAL QTY"
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.wards_end_bal_quantity }}
+          </template>
+        </Column>
+        <Column
+          field="wards_end_bal_total_cost"
+          header="WARD END BAL COST"
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.wards_end_bal_total_cost }}
+          </template>
+        </Column>
+        <Column
+          field="total_end_bal_total_quantity"
+          header="TOTAL END BAL QTY"
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.total_end_bal_total_quantity }}
+          </template>
+        </Column>
+        <Column
+          field="total_end_bal_total_cost"
+          header="TOTAL END BAL COST"
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.total_end_bal_total_cost }}
           </template>
         </Column>
         <Column
@@ -81,15 +216,6 @@
         >
           <template #body="{ data }">
             {{ data.entry_by }}
-          </template>
-        </Column>
-        <Column
-          field="updated_by"
-          header="UPDATED BY"
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ data.updated_by }}
           </template>
         </Column>
         <Column
@@ -180,25 +306,9 @@
           </small>
         </div>
         <div class="field">
-          <label>Ending balance</label>
-          <InputText
-            v-model.trim="form.ending_balance"
-            required="true"
-            autofocus
-            type="number"
-            @keyup.enter="submit"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.ending_balance"
-          >
-            {{ form.errors.ending_balance }}
-          </small>
-        </div>
-        <div class="field">
           <label>Starting balance</label>
           <InputText
-            v-model.trim="form.beginning_balance"
+            v-model.trim="form.unit_cost"
             required="true"
             autofocus
             type="number"
@@ -206,9 +316,9 @@
           />
           <small
             class="text-error"
-            v-if="form.errors.beginning_balance"
+            v-if="form.errors.unit_cost"
           >
-            {{ form.errors.beginning_balance }}
+            {{ form.errors.unit_cost }}
           </small>
         </div>
 
@@ -320,7 +430,7 @@ export default {
     Link,
   },
   props: {
-    currentStocks: Object,
+    manual_reports: Object,
   },
   data() {
     return {
@@ -339,50 +449,85 @@ export default {
       params: {},
       from: null,
       to: null,
+      manual_reportsList: [],
       itemsList: [],
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       form: this.$inertia.form({
         id: null,
-        location: null,
         cl2comb: null,
-        ending_balance: null,
-        beginning_balance: null,
+        unit_cost: null,
+        csr_beg_bal_quantity: null,
+        csr_beg_bal_total_cost: null,
+        wards_beg_bal_quantity: null,
+        wards_beg_bal_total_cost: null,
+        total_beg_bal_total_quantity: null,
+        total_beg_bal_total_cost: null,
+        supp_issued_to_wards_total_quantity: null,
+        supp_issued_to_wards_total_cost: null,
+        consumption_quantity: null,
+        consumption_total_cost: null,
+        csr_end_bal_quantity: null,
+        csr_end_bal_total_cost: null,
+        wards_end_bal_quantity: null,
+        wards_end_bal_total_cost: null,
+        total_end_bal_total_quantity: null,
+        total_end_bal_total_cost: null,
         entry_by: null,
       }),
     };
   },
   // created will be initialize before mounted
   created() {
-    // this.totalRecords = this.locationStockBalance.total;
-    this.totalRecords = 0;
-    // this.params.page = this.locationStockBalance.current_page;
-    this.params.page = 1;
-    // this.rows = this.locationStockBalance.per_page;
-    this.rows = 1;
+    this.totalRecords = this.manual_reports.total;
+    this.params.page = this.manual_reports.current_page;
+    this.rows = this.manual_reports.per_page;
   },
   mounted() {
     // console.log('stock bal', this.locationStockBalance);
 
     // console.log(this.$page.props.items);
 
-    this.storeItemsInController();
+    this.storeManualReportsInContainer();
+    this.storeItemsInContainer();
 
     this.loading = false;
 
-    this.form.location = this.$page.props.auth.user.location.location_name.wardcode;
     this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid;
   },
   methods: {
-    storeItemsInController() {
+    storeManualReportsInContainer() {
+      this.manual_reportsList = []; // reset
+
+      this.manual_reports.forEach((e) => {
+        this.manual_reportsList.push({
+          cl2comb: e.cl2comb,
+          unit_cost: e.unit_cost,
+          csr_beg_bal_quantity: e.csr_beg_bal_quantity,
+          csr_beg_bal_total_cost: e.csr_beg_bal_total_cost,
+          wards_beg_bal_quantity: e.wards_beg_bal_quantity,
+          wards_beg_bal_total_cost: e.wards_beg_bal_total_cost,
+          total_beg_bal_total_quantity: e.total_beg_bal_total_quantity,
+          total_beg_bal_total_cost: e.total_beg_bal_total_cost,
+          supp_issued_to_wards_total_quantity: e.supp_issued_to_wards_total_quantity,
+          supp_issued_to_wards_total_cost: e.supp_issued_to_wards_total_cost,
+          consumption_quantity: e.consumption_quantity,
+          consumption_total_cost: e.consumption_total_cost,
+          csr_end_bal_quantity: e.csr_end_bal_quantity,
+          csr_end_bal_total_cost: e.csr_end_bal_total_cost,
+          wards_end_bal_quantity: e.wards_end_bal_quantity,
+          wards_end_bal_total_cost: e.wards_end_bal_total_cost,
+          total_end_bal_total_quantity: e.total_end_bal_total_quantity,
+          total_end_bal_total_cost: e.total_end_bal_total_cost,
+          entry_by: e.entry_by,
+        });
+      });
+
+      this.sortItemsList(this.itemsList, 'cl2desc');
+    },
+    storeItemsInContainer() {
       this.itemsList = []; // reset
-      //   this.currentStocks.forEach((e) => {
-      //     this.itemsList.push({
-      //       cl2comb: e.item_details.cl2comb,
-      //       cl2desc: e.item_details.cl2desc,
-      //     });
-      //   });
 
       this.$page.props.items.forEach((e) => {
         this.itemsList.push({
@@ -392,8 +537,6 @@ export default {
       });
 
       this.sortItemsList(this.itemsList, 'cl2desc');
-
-      console.log(this.itemsList);
     },
     sortItemsList(arr, propertyName, order = 'ascending') {
       const sortedArr = this.itemsList.sort((a, b) => {
@@ -421,7 +564,7 @@ export default {
         onFinish: (visit) => {
           //   this.totalRecords = this.users.total;
           this.itemsList = [];
-          this.storeItemsInController();
+          this.storeItemsInContainer();
           this.loading = false;
         },
       });
@@ -439,7 +582,6 @@ export default {
       this.form.reset();
       this.itemId = null;
       this.createItemDialog = true;
-      this.form.location = this.$page.props.auth.user.location.location_name.wardcode;
       this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid;
     },
     clickOutsideDialog() {
@@ -450,7 +592,6 @@ export default {
         (this.cl2desc = ''),
         this.form.clearErrors(),
         this.form.reset(),
-        (this.form.location = this.$page.props.auth.user.location.location_name.wardcode),
         (this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid)
       );
     },
@@ -461,8 +602,7 @@ export default {
       this.form.id = item.id;
       this.form.cl2comb = item.cl2comb;
       this.cl2desc = item.cl2desc;
-      this.form.ending_balance = item.ending_balance;
-      this.form.beginning_balance = item.beginning_balance;
+      this.form.unit_cost = item.unit_cost;
     },
     submit() {
       if (this.form.processing) {
@@ -498,7 +638,6 @@ export default {
         (this.isUpdate = false),
         this.form.clearErrors(),
         this.form.reset(),
-        (this.form.location = this.$page.props.auth.user.location.location_name.wardcode),
         (this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid)
       );
     },
@@ -521,7 +660,6 @@ export default {
           this.form.reset();
           this.updateData();
           this.deletedMsg();
-          this.form.location = this.$page.props.auth.user.location.location_name.wardcode;
           this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid;
         },
       });
@@ -532,7 +670,6 @@ export default {
       this.createItemDialog = false;
       this.form.reset();
       this.form.clearErrors();
-      this.form.location = this.$page.props.auth.user.location.location_name.wardcode;
       this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid;
     },
     createdMsg() {
