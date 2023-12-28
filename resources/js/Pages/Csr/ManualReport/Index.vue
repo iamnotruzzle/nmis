@@ -1,18 +1,17 @@
 <template>
   <app-layout>
-    <Head title="NMIS - Users" />
+    <Head title="NMIS - Reports" />
 
-    <div class="card">
+    <div
+      class="card"
+      style="width: 100%"
+    >
       <Toast />
-      <!--
-            data table sort order
-            asc = 1
-            desc =-1
-        -->
+
       <DataTable
         class="p-datatable-sm"
         v-model:filters="filters"
-        :value="usersList"
+        :value="balanceContainer"
         selectionMode="single"
         lazy
         paginator
@@ -27,17 +26,18 @@
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">USERS</span>
+            <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">STOCK BALANCE</span>
             <div>
               <span class="p-input-icon-left mr-2">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="search"
-                  placeholder="Search Employee ID"
+                  placeholder="Search item"
                 />
               </span>
+
               <Button
-                label="Add user"
+                label="Balance"
                 icon="pi pi-user-plus"
                 iconPos="right"
                 @click="openCreateItemDialog"
@@ -45,85 +45,51 @@
             </div>
           </div>
         </template>
-        <template #empty> No user found. </template>
-        <template #loading> Loading user data. Please wait. </template>
+        <template #empty> No stock found. </template>
+        <template #loading> Loading stock data. Please wait. </template>
         <Column
-          field="employeeid"
-          header="EMPLOYEE ID"
+          field="item"
+          header="ITEM"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.employeeid }}
-          </template>
-        </Column>
-        <Column header="Avatar">
-          <template #body="{ data }">
-            <Avatar
-              v-if="data.image != null"
-              :image="`storage/${data.image}`"
-              shape="circle"
-              size="large"
-            />
-            <Avatar
-              v-else
-              image="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
-              shape="circle"
-              size="large"
-            />
+            {{ data.cl2desc }}
           </template>
         </Column>
         <Column
-          field="lastname"
-          header="LAST NAME"
+          field="ending_balance"
+          header="ENDING BALANCE"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.lastname }}
+            {{ data.ending_balance }}
           </template>
         </Column>
         <Column
-          field="firstname"
-          header="FIRST NAME"
+          field="beginning_balance"
+          header="STARTING BALANCE"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.firstname }}
+            {{ data.beginning_balance }}
           </template>
         </Column>
         <Column
-          field="middlename"
-          header="MIDDLE NAME"
+          field="entry_by"
+          header="ENTRY BY"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.middlename }}
+            {{ data.entry_by }}
           </template>
         </Column>
         <Column
-          field="empsuffix"
-          header="SUFFIX"
+          field="updated_by"
+          header="UPDATED BY"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.empsuffix }}
-          </template>
-        </Column>
-        <Column
-          field="role"
-          header="ROLE"
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ data.role }}
-          </template>
-        </Column>
-        <Column
-          field="designation"
-          header="DESIGNATION"
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ data.designation }}
+            {{ data.updated_by }}
           </template>
         </Column>
         <Column
@@ -180,99 +146,72 @@
         </Column>
       </DataTable>
 
-      <!-- create & edit dialog -->
       <Dialog
         v-model:visible="createItemDialog"
-        :style="{ width: '450px' }"
-        header="User Detail"
+        header="Balance"
         :modal="true"
         class="p-fluid"
-        @hide="clickOutsideDialog"
+        @hide="whenDialogIsHidden"
         dismissableMask
       >
         <div class="field">
-          <label for="employeeid">Employee ID</label>
-          <AutoComplete
-            id="employeeid"
-            v-model="form.employeeid"
+          <label>Item</label>
+          <Dropdown
+            v-if="!isUpdate"
             required="true"
-            optionLabel="employeeid"
-            :suggestions="employeeIdList"
-            @complete="autoCompleteEmployeeID"
-            @item-select="selectedEmployeeID"
-            :class="{ 'p-invalid': form.employeeid == '' }"
+            v-model="form.cl2comb"
+            :options="itemsList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
+            filter
+            optionLabel="cl2desc"
+            optionValue="cl2comb"
+            class="w-full"
+          />
+          <InputText
+            v-else
+            v-model.trim="cl2desc"
+            disabled=""
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.cl2comb"
+          >
+            {{ form.errors.cl2comb }}
+          </small>
+        </div>
+        <div class="field">
+          <label>Ending balance</label>
+          <InputText
+            v-model.trim="form.ending_balance"
+            required="true"
+            autofocus
+            type="number"
             @keyup.enter="submit"
           />
           <small
             class="text-error"
-            v-if="form.errors.employeeid"
+            v-if="form.errors.ending_balance"
           >
-            {{ form.errors.employeeid }}
+            {{ form.errors.ending_balance }}
           </small>
         </div>
         <div class="field">
-          <label for="password">Password</label>
-          <Password
-            id="password"
-            type="password"
-            toggleMask
-            v-model.trim="form.password"
-            :required="true"
-            :class="{ 'p-invalid': form.password == '' }"
+          <label>Starting balance</label>
+          <InputText
+            v-model.trim="form.beginning_balance"
+            required="true"
+            autofocus
+            type="number"
             @keyup.enter="submit"
           />
           <small
             class="text-error"
-            v-if="form.errors.password"
+            v-if="form.errors.beginning_balance"
           >
-            {{ form.errors.password }}
-          </small>
-        </div>
-        <div class="field">
-          <label for="role">Role</label>
-          <Dropdown
-            v-model="form.role"
-            :options="roles"
-            optionLabel="name"
-            optionValue="value"
-            placeholder="Role"
-            class="w-full md:w-14rem"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.role"
-          >
-            {{ form.errors.role }}
+            {{ form.errors.beginning_balance }}
           </small>
         </div>
 
-        <div class="field">
-          <label for="designation">Designation</label>
-          <Dropdown
-            v-model="form.designation"
-            :options="designation"
-            placeholder="Designation"
-            class="w-full md:w-14rem"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.designation"
-          >
-            {{ form.errors.designation }}
-          </small>
-        </div>
-
-        <div class="field">
-          <label for="image">Upload image</label>
-          <FileUpload
-            id="image"
-            mode="basic"
-            @input="onUpload"
-            accept="image/*"
-            :maxFileSize="7000000"
-          >
-          </FileUpload>
-        </div>
         <template #footer>
           <Button
             label="Cancel"
@@ -285,9 +224,9 @@
             v-if="isUpdate == true"
             label="Update"
             icon="pi pi-check"
-            severity="warning"
             text
             type="submit"
+            severity="warning"
             :disabled="form.processing"
             @click="submit"
           />
@@ -303,7 +242,6 @@
         </template>
       </Dialog>
 
-      <!-- Delete confirmation dialog -->
       <Dialog
         v-model:visible="deleteItemDialog"
         :style="{ width: '450px' }"
@@ -317,8 +255,7 @@
             style="font-size: 2rem"
           />
           <span v-if="form"
-            >Are you sure you want to delete
-            <b>{{ form.firstName }} {{ form.middleName }} {{ form.lastName }} </b> ?</span
+            >Are you sure you want to delete <b>{{ form.cl2desc }} </b> ?</span
           >
         </div>
         <template #footer>
@@ -361,6 +298,7 @@ import Dropdown from 'primevue/dropdown';
 import AutoComplete from 'primevue/autocomplete';
 import Tag from 'primevue/tag';
 import moment from 'moment';
+import { Link } from '@inertiajs/vue3';
 
 export default {
   components: {
@@ -379,10 +317,11 @@ export default {
     Dropdown,
     AutoComplete,
     Tag,
+    Link,
   },
   props: {
-    users: Object,
-    employeeids: Object,
+    currentStocks: Object,
+    locationStockBalance: Object,
   },
   data() {
     return {
@@ -393,6 +332,7 @@ export default {
       // end paginator
       itemId: null,
       isUpdate: false,
+      cl2desc: '',
       createItemDialog: false,
       deleteItemDialog: false,
       search: '',
@@ -400,97 +340,106 @@ export default {
       params: {},
       from: null,
       to: null,
-      usersList: [],
-      employeeIdList: [],
+      itemsList: [],
+      balanceContainer: [],
       filters: {
-        firstname: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        middlename: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        lastname: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        empsuffix: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        role: { value: null, matchMode: FilterMatchMode.EQUALS },
-        employeeid: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        email: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
-      designation: ['admin', 'csr', 'ward'],
-      roles: [
-        {
-          name: 'super-admin',
-          value: 'super-admin',
-        },
-        {
-          name: 'admin',
-          value: 'admin',
-        },
-        {
-          name: 'user',
-          value: 'user',
-        },
-      ],
       form: this.$inertia.form({
-        image: null,
-        role: null,
-        employeeid: null,
-        password: null,
-        designation: null,
+        id: null,
+        location: null,
+        cl2comb: null,
+        ending_balance: null,
+        beginning_balance: null,
+        entry_by: null,
       }),
     };
   },
   // created will be initialize before mounted
   created() {
-    this.totalRecords = this.users.total;
-    this.params.page = this.users.current_page;
-    this.rows = this.users.per_page;
+    this.totalRecords = this.locationStockBalance.total;
+    this.params.page = this.locationStockBalance.current_page;
+    this.rows = this.locationStockBalance.per_page;
   },
   mounted() {
-    this.storeUserInContainer();
+    // console.log('stock bal', this.locationStockBalance);
+
+    this.storeStockBalanceInContainer();
+    this.storeItemsInController();
 
     this.loading = false;
+
+    this.form.location = this.$page.props.auth.user.location.location_name.wardcode;
+    this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid;
   },
   methods: {
-    // use storeUserInContainer() function so that every time you make
-    // server request such as POST, the data in the table
-    // is updated
-    storeUserInContainer() {
-      this.users.data.forEach((e) => {
-        if (e.user_detail != null || e.user_detail == '') {
-          this.usersList.push({
-            id: e.id,
-            image: e.image,
-            employeeid: e.employeeid,
-            designation: e.designation,
-            role: e.roles[0].name,
-            lastname: e.user_detail.lastname,
-            firstname: e.user_detail.firstname,
-            middlename: e.user_detail.middlename == null ? null : e.user_detail.middlename,
-            empsuffix: e.user_detail.empsuffix,
-            created_at: e.created_at,
-          });
-        } else {
-          this.usersList.push({
-            id: e.id,
-            image: e.image,
-            employeeid: e.employeeid,
-            designation: e.designation,
-            role: e.roles[0].name,
-            created_at: e.created_at,
+    storeStockBalanceInContainer() {
+      this.locationStockBalance.data.forEach((e) => {
+        this.balanceContainer.push({
+          id: e.id,
+          cl2comb: e.item.cl2comb,
+          cl2desc: e.item.cl2desc,
+          ending_balance: e.ending_balance,
+          beginning_balance: e.beginning_balance,
+          entry_by: e.entry_by.firstname + ' ' + e.entry_by.lastname,
+          updated_by: e.updated_by == null ? null : e.updated_by.firstname + ' ' + e.updated_by.lastname,
+        });
+      });
+      //   console.log('container', this.reportsContainer);
+    },
+    storeItemsInController() {
+      this.itemsList = []; // reset
+      //   this.currentStocks.forEach((e) => {
+      //     this.itemsList.push({
+      //       cl2comb: e.item_details.cl2comb,
+      //       cl2desc: e.item_details.cl2desc,
+      //     });
+      //   });
+
+      this.currentStocks.forEach((e) => {
+        if (e.clsb_cl2comb == null) {
+          this.itemsList.push({
+            cl2comb: e.hc_cl2comb,
+            cl2desc: e.cl2desc,
           });
         }
       });
+
+      this.sortItemsList(this.itemsList, 'cl2desc');
     },
-    autoCompleteEmployeeID(event) {
-      setTimeout(() => {
-        if (!event.query.trim().length) {
-          this.employeeIdList = [...this.employeeids.employeeid];
-        } else {
-          this.employeeIdList = this.employeeids.filter((e) => {
-            // contains whatever the value
-            return e.employeeid.includes(event.query);
-          });
+    sortItemsList(arr, propertyName, order = 'ascending') {
+      const sortedArr = this.itemsList.sort((a, b) => {
+        if (a[propertyName] < b[propertyName]) {
+          return -1;
         }
-      }, 200);
+        if (a[propertyName] > b[propertyName]) {
+          return 1;
+        }
+        return 0;
+      });
+
+      if (order === 'descending') {
+        return sortedArr.reverse();
+      }
+
+      this.itemsList = sortedArr;
     },
-    selectedEmployeeID(e) {
-      this.form.employeeid = e.value.employeeid;
+    updateData() {
+      this.balanceContainer = [];
+      this.loading = true;
+
+      this.$inertia.get('stockbal', this.params, {
+        preserveState: true,
+        preserveScroll: true,
+        onFinish: (visit) => {
+          //   this.totalRecords = this.users.total;
+          this.balanceContainer = [];
+          this.storeStockBalanceInContainer();
+          this.itemsList = [];
+          this.storeItemsInController();
+          this.loading = false;
+        },
+      });
     },
     tzone(date) {
       return moment.tz(date, 'Asia/Manila').format('L');
@@ -499,79 +448,57 @@ export default {
       this.params.page = event.page + 1;
       this.updateData();
     },
-    updateData() {
-      this.usersList = [];
-      this.loading = true;
-
-      this.$inertia.get('users', this.params, {
-        preserveState: true,
-        preserveScroll: true,
-        onFinish: (visit) => {
-          this.totalRecords = this.users.total;
-          this.usersList = [];
-          this.storeUserInContainer();
-          this.loading = false;
-        },
-      });
-    },
-    // assign image name to form.image
-    onUpload(event) {
-      this.form.image = event.target.files[0];
-    },
     openCreateItemDialog() {
       this.isUpdate = false;
       this.form.clearErrors();
       this.form.reset();
       this.itemId = null;
       this.createItemDialog = true;
+      this.form.location = this.$page.props.auth.user.location.location_name.wardcode;
+      this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid;
     },
-    // emit close dialog
     clickOutsideDialog() {
-      this.$emit('hide', (this.itemId = null), (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
+      this.$emit(
+        'hide',
+        (this.itemId = null),
+        (this.isUpdate = false),
+        (this.cl2desc = ''),
+        this.form.clearErrors(),
+        this.form.reset(),
+        (this.form.location = this.$page.props.auth.user.location.location_name.wardcode),
+        (this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid)
+      );
     },
     editItem(item) {
       //   console.log(item);
-
       this.isUpdate = true;
       this.createItemDialog = true;
-      this.itemId = item.id;
-      this.form.role = item.role;
-      this.form.designation = item.designation;
-      this.form.employeeid = item.employeeid;
-      this.form.password = item.password;
+      this.form.id = item.id;
+      this.form.cl2comb = item.cl2comb;
+      this.cl2desc = item.cl2desc;
+      this.form.ending_balance = item.ending_balance;
+      this.form.beginning_balance = item.beginning_balance;
     },
     submit() {
       if (this.form.processing) {
         return false;
       }
 
+      let id = this.form.id;
       if (this.isUpdate) {
-        router.post(
-          `users/${this.itemId}`,
-          {
-            _method: 'put',
-            preserveScroll: true,
-            role: this.form.role,
-            employeeid: this.form.employeeid,
-            designation: this.form.designation,
-            password: this.form.password,
-            image: this.form.image,
-          },
-          {
-            onSuccess: () => {
-              this.itemId = null;
-              this.createItemDialog = false;
-              this.cancel();
-              this.updateData();
-              this.updatedMsg();
-            },
-          }
-        );
-      } else {
-        this.form.post(route('users.store'), {
+        this.form.put(route('stockbal.update', id), {
           preserveScroll: true,
           onSuccess: () => {
-            this.itemId = null;
+            this.createItemDialog = false;
+            this.cancel();
+            this.updateData();
+            this.updatedMsg();
+          },
+        });
+      } else {
+        this.form.post(route('stockbal.store'), {
+          preserveScroll: true,
+          onSuccess: () => {
             this.createItemDialog = false;
             this.cancel();
             this.updateData();
@@ -580,25 +507,37 @@ export default {
         });
       }
     },
+    whenDialogIsHidden() {
+      this.$emit(
+        'hide',
+        (this.isUpdate = false),
+        this.form.clearErrors(),
+        this.form.reset(),
+        (this.form.location = this.$page.props.auth.user.location.location_name.wardcode),
+        (this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid)
+      );
+    },
     confirmDeleteItem(item) {
       this.itemId = item.id;
-      this.form.role = item.role;
-      this.form.employeeid = item.employeeid;
-      this.form.password = item.password;
+      this.deleteItemDialog = true;
+    },
+    confirmDeleteItem(item) {
+      this.form.id = item.id;
+      this.form.cl2desc = item.cl2desc;
       this.deleteItemDialog = true;
     },
     deleteItem() {
-      this.form.delete(route('users.destroy', this.itemId), {
+      this.form.delete(route('stockbal.destroy', this.form.id), {
         preserveScroll: true,
         onSuccess: () => {
-          this.usersList = [];
+          this.balanceContainer = [];
           this.deleteItemDialog = false;
-          this.itemId = null;
           this.form.clearErrors();
           this.form.reset();
           this.updateData();
           this.deletedMsg();
-          this.storeUserInContainer();
+          this.form.location = this.$page.props.auth.user.location.location_name.wardcode;
+          this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid;
         },
       });
     },
@@ -608,17 +547,32 @@ export default {
       this.createItemDialog = false;
       this.form.reset();
       this.form.clearErrors();
-      this.usersList = [];
-      this.storeUserInContainer();
+      this.form.location = this.$page.props.auth.user.location.location_name.wardcode;
+      this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid;
     },
     createdMsg() {
-      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Account created', life: 3000 });
+      this.$toast.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Starting and ending balance declared',
+        life: 3000,
+      });
     },
     updatedMsg() {
-      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Account updated', life: 3000 });
+      this.$toast.add({
+        severity: 'warn',
+        summary: 'Success',
+        detail: 'Starting and ending balance updated',
+        life: 3000,
+      });
     },
     deletedMsg() {
-      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Account deleted', life: 3000 });
+      this.$toast.add({
+        severity: 'error',
+        summary: 'Success',
+        detail: 'Starting and ending balance deleted',
+        life: 3000,
+      });
     },
     getLocalDateString(utcStr) {
       const date = new Date(utcStr);
@@ -642,7 +596,8 @@ export default {
     },
     from: function (val) {
       if (val != null) {
-        let from = this.getLocalDateString(val);
+        let from = moment(val).format('LL');
+        // console.log('from', from);
         this.params.from = from;
       } else {
         this.params.from = null;
@@ -652,7 +607,8 @@ export default {
     },
     to: function (val) {
       if (val != null) {
-        let to = this.getLocalDateString(val);
+        let to = moment(val).add(1, 'd').format('LL');
+        // console.log('to', to);
         this.params.to = to;
       } else {
         this.params.to = null;
@@ -663,3 +619,18 @@ export default {
   },
 };
 </script>
+<style scoped>
+/* Remove arrow for input type number */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+/* END Remove arrow for input type number */
+</style>
