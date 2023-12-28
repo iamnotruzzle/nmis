@@ -276,9 +276,9 @@
         v-model:visible="createDataDialog"
         header="Balance"
         :modal="true"
+        :style="{ width: '450px' }"
         class="p-fluid"
         @hide="whenDialogIsHidden"
-        dismissableMask
       >
         <div class="field">
           <label>Item</label>
@@ -300,7 +300,7 @@
           </small>
         </div>
         <div class="field">
-          <label>UNIT COST</label>
+          <label>Unit cost</label>
           <InputText
             v-model.trim="form.unit_cost"
             required="true"
