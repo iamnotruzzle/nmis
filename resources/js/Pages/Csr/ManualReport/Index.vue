@@ -26,7 +26,7 @@
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">STOCK BALANCE</span>
+            <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">REPORT</span>
             <div>
               <span class="p-input-icon-left mr-2">
                 <i class="pi pi-search" />
@@ -37,10 +37,10 @@
               </span>
 
               <Button
-                label="Balance"
-                icon="pi pi-user-plus"
+                label="Add"
+                icon="pi pi-plus"
                 iconPos="right"
-                @click="openCreateItemDialog"
+                @click="openCreateDataDialog"
               />
             </div>
           </div>
@@ -273,7 +273,7 @@
       </DataTable>
 
       <Dialog
-        v-model:visible="createItemDialog"
+        v-model:visible="createDataDialog"
         header="Balance"
         :modal="true"
         class="p-fluid"
@@ -283,7 +283,6 @@
         <div class="field">
           <label>Item</label>
           <Dropdown
-            v-if="!isUpdate"
             required="true"
             v-model="form.cl2comb"
             :options="itemsList"
@@ -293,11 +292,6 @@
             optionValue="cl2comb"
             class="w-full"
           />
-          <InputText
-            v-else
-            v-model.trim="cl2desc"
-            disabled=""
-          />
           <small
             class="text-error"
             v-if="form.errors.cl2comb"
@@ -306,13 +300,12 @@
           </small>
         </div>
         <div class="field">
-          <label>Starting balance</label>
+          <label>UNIT COST</label>
           <InputText
             v-model.trim="form.unit_cost"
             required="true"
             autofocus
             type="number"
-            @keyup.enter="submit"
           />
           <small
             class="text-error"
@@ -442,7 +435,7 @@ export default {
       itemId: null,
       isUpdate: false,
       cl2desc: '',
-      createItemDialog: false,
+      createDataDialog: false,
       deleteItemDialog: false,
       search: '',
       options: {},
@@ -487,7 +480,7 @@ export default {
   mounted() {
     // console.log('stock bal', this.locationStockBalance);
 
-    // console.log(this.$page.props.items);
+    console.log('manual', this.manual_reports);
 
     this.storeManualReportsInContainer();
     this.storeItemsInContainer();
@@ -500,7 +493,7 @@ export default {
     storeManualReportsInContainer() {
       this.manual_reportsList = []; // reset
 
-      this.manual_reports.forEach((e) => {
+      this.manual_reports.data.forEach((e) => {
         this.manual_reportsList.push({
           cl2comb: e.cl2comb,
           unit_cost: e.unit_cost,
@@ -576,12 +569,12 @@ export default {
       this.params.page = event.page + 1;
       this.updateData();
     },
-    openCreateItemDialog() {
+    openCreateDataDialog() {
       this.isUpdate = false;
       this.form.clearErrors();
       this.form.reset();
       this.itemId = null;
-      this.createItemDialog = true;
+      this.createDataDialog = true;
       this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid;
     },
     clickOutsideDialog() {
@@ -598,7 +591,7 @@ export default {
     editItem(item) {
       //   console.log(item);
       this.isUpdate = true;
-      this.createItemDialog = true;
+      this.createDataDialog = true;
       this.form.id = item.id;
       this.form.cl2comb = item.cl2comb;
       this.cl2desc = item.cl2desc;
@@ -614,7 +607,7 @@ export default {
         this.form.put(route('stockbal.update', id), {
           preserveScroll: true,
           onSuccess: () => {
-            this.createItemDialog = false;
+            this.createDataDialog = false;
             this.cancel();
             this.updateData();
             this.updatedMsg();
@@ -624,7 +617,7 @@ export default {
         this.form.post(route('stockbal.store'), {
           preserveScroll: true,
           onSuccess: () => {
-            this.createItemDialog = false;
+            this.createDataDialog = false;
             this.cancel();
             this.updateData();
             this.createdMsg();
@@ -667,7 +660,7 @@ export default {
     cancel() {
       this.itemId = null;
       this.isUpdate = false;
-      this.createItemDialog = false;
+      this.createDataDialog = false;
       this.form.reset();
       this.form.clearErrors();
       this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid;
