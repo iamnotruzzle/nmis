@@ -11,10 +11,10 @@ class ManualReportController extends Controller
 {
     public function index()
     {
-        $reports = CsrManualReport::paginate(15);
+        $manual_reports = CsrManualReport::paginate(15);
 
         return Inertia::render('Csr/ManualReport/Index', [
-            'reports' => $reports
+            'manual_reports' => $manual_reports
         ]);
     }
 

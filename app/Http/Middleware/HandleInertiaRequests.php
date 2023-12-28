@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\FundSource;
+use App\Models\Item;
 use App\Models\Location;
 use App\Models\LoginHistory;
 use App\Models\Supplier;
@@ -58,6 +59,9 @@ class HandleInertiaRequests extends Middleware
             'auth.user.location' => function () use ($request) {
                 return ($request->user() ? LoginHistory::with('locationName')->where('employeeid', Auth::user()->employeeid)->orderBy('created_at', 'DESC')->first() : null);
                 // return LoginHistory::with('locationName')->where('employeeid', Auth::user()->employeeid)->orderBy('created_at', 'DESC')->first();
+            },
+            'items' => function () {
+                return Item::where('cl2stat', 'A')->orderBy('cl2desc', 'ASC')->get(['cl2comb', 'cl2desc']);
             },
             'employees' => function () {
                 return UserDetail::where('empstat', 'A')->orderBy('employeeid', 'ASC')->get();

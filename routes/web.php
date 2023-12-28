@@ -73,7 +73,7 @@ Route::get('issueitems/issued/', [IssuedItemsReportController::class, 'export'])
 Route::put('issueitems', [IssueItemController::class, 'acknowledgedrequest'])->name('issueitems.acknowledgedrequest');
 
 Route::resource('csrreports', ReportsController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index']);
-Route::resource('manualreports', ManualReportController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
+Route::resource('csrmanualreports', ManualReportController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
 Route::get('csrstocks/export/', [CsrStocksMedicalSuppliesReportController::class, 'export']);
 Route::resource('stockbal', LocationStockBalanceController::class)->middleware(['auth:sanctum', 'verified'])->only(['index', 'store', 'update', 'destroy']);
 // Route::resource('csrstocks/export/', [CsrStocksReportController::class, 'export'])->only(['index']);

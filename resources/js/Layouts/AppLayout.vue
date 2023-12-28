@@ -153,6 +153,18 @@ export default {
             },
           ],
         },
+        {
+          label: 'Tools',
+          items: [
+            {
+              label: 'Manual report',
+              icon: 'si-microsoftexcel',
+              to: 'csrmanualreports',
+              prefix: 'csrmanualreports',
+              comp: 'Csr/ManualReport/Index',
+            },
+          ],
+        },
       ],
       menuForNonAdmin: null,
     };

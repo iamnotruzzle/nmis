@@ -8,10 +8,10 @@
     >
       <Toast />
 
+      <!-- :value="balanceContainer" -->
       <DataTable
         class="p-datatable-sm"
         v-model:filters="filters"
-        :value="balanceContainer"
         selectionMode="single"
         lazy
         paginator
@@ -321,7 +321,6 @@ export default {
   },
   props: {
     currentStocks: Object,
-    locationStockBalance: Object,
   },
   data() {
     return {
@@ -341,7 +340,6 @@ export default {
       from: null,
       to: null,
       itemsList: [],
-      balanceContainer: [],
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
@@ -357,14 +355,18 @@ export default {
   },
   // created will be initialize before mounted
   created() {
-    this.totalRecords = this.locationStockBalance.total;
-    this.params.page = this.locationStockBalance.current_page;
-    this.rows = this.locationStockBalance.per_page;
+    // this.totalRecords = this.locationStockBalance.total;
+    this.totalRecords = 0;
+    // this.params.page = this.locationStockBalance.current_page;
+    this.params.page = 1;
+    // this.rows = this.locationStockBalance.per_page;
+    this.rows = 1;
   },
   mounted() {
     // console.log('stock bal', this.locationStockBalance);
 
-    this.storeStockBalanceInContainer();
+    // console.log(this.$page.props.items);
+
     this.storeItemsInController();
 
     this.loading = false;
@@ -373,20 +375,6 @@ export default {
     this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid;
   },
   methods: {
-    storeStockBalanceInContainer() {
-      this.locationStockBalance.data.forEach((e) => {
-        this.balanceContainer.push({
-          id: e.id,
-          cl2comb: e.item.cl2comb,
-          cl2desc: e.item.cl2desc,
-          ending_balance: e.ending_balance,
-          beginning_balance: e.beginning_balance,
-          entry_by: e.entry_by.firstname + ' ' + e.entry_by.lastname,
-          updated_by: e.updated_by == null ? null : e.updated_by.firstname + ' ' + e.updated_by.lastname,
-        });
-      });
-      //   console.log('container', this.reportsContainer);
-    },
     storeItemsInController() {
       this.itemsList = []; // reset
       //   this.currentStocks.forEach((e) => {
@@ -396,16 +384,16 @@ export default {
       //     });
       //   });
 
-      this.currentStocks.forEach((e) => {
-        if (e.clsb_cl2comb == null) {
-          this.itemsList.push({
-            cl2comb: e.hc_cl2comb,
-            cl2desc: e.cl2desc,
-          });
-        }
+      this.$page.props.items.forEach((e) => {
+        this.itemsList.push({
+          cl2comb: e.cl2comb,
+          cl2desc: e.cl2desc.trim(),
+        });
       });
 
       this.sortItemsList(this.itemsList, 'cl2desc');
+
+      console.log(this.itemsList);
     },
     sortItemsList(arr, propertyName, order = 'ascending') {
       const sortedArr = this.itemsList.sort((a, b) => {
@@ -425,16 +413,13 @@ export default {
       this.itemsList = sortedArr;
     },
     updateData() {
-      this.balanceContainer = [];
       this.loading = true;
 
-      this.$inertia.get('stockbal', this.params, {
+      this.$inertia.get('csrmanualreports', this.params, {
         preserveState: true,
         preserveScroll: true,
         onFinish: (visit) => {
           //   this.totalRecords = this.users.total;
-          this.balanceContainer = [];
-          this.storeStockBalanceInContainer();
           this.itemsList = [];
           this.storeItemsInController();
           this.loading = false;
