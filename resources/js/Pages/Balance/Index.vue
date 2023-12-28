@@ -150,6 +150,7 @@
         v-model:visible="createItemDialog"
         header="Balance"
         :modal="true"
+        :style="{ width: '350px' }"
         class="p-fluid"
         @hide="whenDialogIsHidden"
         dismissableMask
