@@ -314,6 +314,246 @@
             {{ form.errors.unit_cost }}
           </small>
         </div>
+        <div class="field">
+          <label>CSR beg bal qty</label>
+          <InputText
+            v-model.trim="form.csr_beg_bal_quantity"
+            required="true"
+            autofocus
+            type="number"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.csr_beg_bal_quantity"
+          >
+            {{ form.errors.csr_beg_bal_quantity }}
+          </small>
+        </div>
+        <div class="field">
+          <label>CSR beg bal cost</label>
+          <InputText
+            v-model.trim="form.csr_beg_bal_total_cost"
+            required="true"
+            autofocus
+            type="number"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.csr_beg_bal_total_cost"
+          >
+            {{ form.errors.csr_beg_bal_total_cost }}
+          </small>
+        </div>
+        <div class="field">
+          <label>WARD beg bal qty</label>
+          <InputText
+            v-model.trim="form.wards_beg_bal_quantity"
+            required="true"
+            autofocus
+            type="number"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.wards_beg_bal_quantity"
+          >
+            {{ form.errors.wards_beg_bal_quantity }}
+          </small>
+        </div>
+        <div class="field">
+          <label>WARD beg bal cost</label>
+          <InputText
+            v-model.trim="form.wards_beg_bal_total_cost"
+            required="true"
+            autofocus
+            type="number"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.wards_beg_bal_total_cost"
+          >
+            {{ form.errors.wards_beg_bal_total_cost }}
+          </small>
+        </div>
+        <div class="field">
+          <label>TOTAL beg bal qty</label>
+          <InputText
+            v-model.trim="form.total_beg_bal_total_quantity"
+            required="true"
+            autofocus
+            type="number"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.total_beg_bal_total_quantity"
+          >
+            {{ form.errors.total_beg_bal_total_quantity }}
+          </small>
+        </div>
+        <div class="field">
+          <label>TOTAL beg bal cost</label>
+          <InputText
+            v-model.trim="form.total_beg_bal_total_cost"
+            required="true"
+            autofocus
+            type="number"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.total_beg_bal_total_cost"
+          >
+            {{ form.errors.total_beg_bal_total_cost }}
+          </small>
+        </div>
+        <div class="field">
+          <label>Supp issued qty</label>
+          <InputText
+            v-model.trim="form.supp_issued_to_wards_total_quantity"
+            required="true"
+            autofocus
+            type="number"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.supp_issued_to_wards_total_quantity"
+          >
+            {{ form.errors.supp_issued_to_wards_total_quantity }}
+          </small>
+        </div>
+        <div class="field">
+          <label>Supp issued cost</label>
+          <InputText
+            v-model.trim="form.supp_issued_to_wards_total_cost"
+            required="true"
+            autofocus
+            type="number"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.supp_issued_to_wards_total_cost"
+          >
+            {{ form.errors.supp_issued_to_wards_total_cost }}
+          </small>
+        </div>
+        <div class="field">
+          <label>Consumption qty</label>
+          <InputText
+            v-model.trim="form.consumption_quantity"
+            required="true"
+            autofocus
+            type="number"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.consumption_quantity"
+          >
+            {{ form.errors.consumption_quantity }}
+          </small>
+        </div>
+        <div class="field">
+          <label>Consumption cost</label>
+          <InputText
+            v-model.trim="form.consumption_total_cost"
+            required="true"
+            autofocus
+            type="number"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.consumption_total_cost"
+          >
+            {{ form.errors.consumption_total_cost }}
+          </small>
+        </div>
+        <div class="field">
+          <label>CSR end bal qty</label>
+          <InputText
+            v-model.trim="form.csr_end_bal_quantity"
+            required="true"
+            autofocus
+            type="number"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.csr_end_bal_quantity"
+          >
+            {{ form.errors.csr_end_bal_quantity }}
+          </small>
+        </div>
+        <div class="field">
+          <label>CSR end bal cost</label>
+          <InputText
+            v-model.trim="form.csr_end_bal_total_cost"
+            required="true"
+            autofocus
+            type="number"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.csr_end_bal_total_cost"
+          >
+            {{ form.errors.csr_end_bal_total_cost }}
+          </small>
+        </div>
+        <div class="field">
+          <label>WARD end bal qty</label>
+          <InputText
+            v-model.trim="form.wards_end_bal_quantity"
+            required="true"
+            autofocus
+            type="number"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.wards_end_bal_quantity"
+          >
+            {{ form.errors.wards_end_bal_quantity }}
+          </small>
+        </div>
+        <div class="field">
+          <label>WARD end bal cost</label>
+          <InputText
+            v-model.trim="form.wards_end_bal_total_cost"
+            required="true"
+            autofocus
+            type="number"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.wards_end_bal_total_cost"
+          >
+            {{ form.errors.wards_end_bal_total_cost }}
+          </small>
+        </div>
+        <div class="field">
+          <label>TOTAL end bal qty</label>
+          <InputText
+            v-model.trim="form.total_end_bal_total_quantity"
+            required="true"
+            autofocus
+            type="number"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.total_end_bal_total_quantity"
+          >
+            {{ form.errors.total_end_bal_total_quantity }}
+          </small>
+        </div>
+        <div class="field">
+          <label>TOTAL end bal cost</label>
+          <InputText
+            v-model.trim="form.total_end_bal_total_cost"
+            required="true"
+            autofocus
+            type="number"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.total_end_bal_total_cost"
+          >
+            {{ form.errors.total_end_bal_total_cost }}
+          </small>
+        </div>
 
         <template #footer>
           <Button
