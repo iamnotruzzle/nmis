@@ -276,7 +276,7 @@
         v-model:visible="createDataDialog"
         header="Balance"
         :modal="true"
-        :style="{ width: '450px' }"
+        :style="{ width: '850px' }"
         class="p-fluid"
         @hide="whenDialogIsHidden"
       >
@@ -314,66 +314,87 @@
             {{ form.errors.unit_cost }}
           </small>
         </div>
-        <div class="field">
-          <label>CSR beg bal qty</label>
-          <InputText
-            v-model.trim="form.csr_beg_bal_quantity"
-            required="true"
-            autofocus
-            type="number"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.csr_beg_bal_quantity"
-          >
-            {{ form.errors.csr_beg_bal_quantity }}
-          </small>
+        <div class="flex flex-column border-1 border-round">
+          <h3 class="text-center border-bottom-1 p-0 m-0">BEGINNING BALANCE</h3>
+          <div class="flex justify-content-between px-2">
+            <!-- csr beg bal -->
+            <div class="flex w-full">
+              <div class="w-full">
+                <h4 class="mt-1">CSR</h4>
+
+                <div class="field">
+                  <label>Total quantity</label>
+                  <InputText
+                    v-model.trim="form.csr_beg_bal_quantity"
+                    required="true"
+                    autofocus
+                    type="number"
+                  />
+                  <small
+                    class="text-error"
+                    v-if="form.errors.csr_beg_bal_quantity"
+                  >
+                    {{ form.errors.csr_beg_bal_quantity }}
+                  </small>
+                </div>
+                <div class="field">
+                  <label>Total cost</label>
+                  <InputText
+                    v-model.trim="form.csr_beg_bal_total_cost"
+                    required="true"
+                    autofocus
+                    type="number"
+                  />
+                  <small
+                    class="text-error"
+                    v-if="form.errors.csr_beg_bal_total_cost"
+                  >
+                    {{ form.errors.csr_beg_bal_total_cost }}
+                  </small>
+                </div>
+              </div>
+            </div>
+            <div class="border-1 mx-2"></div>
+            <!-- ward beg bal -->
+            <div class="flex w-full">
+              <div class="w-full">
+                <h4 class="mt-1">WARD</h4>
+
+                <div class="field">
+                  <label>Total quantity</label>
+                  <InputText
+                    v-model.trim="form.wards_beg_bal_quantity"
+                    required="true"
+                    autofocus
+                    type="number"
+                  />
+                  <small
+                    class="text-error"
+                    v-if="form.errors.wards_beg_bal_quantity"
+                  >
+                    {{ form.errors.wards_beg_bal_quantity }}
+                  </small>
+                </div>
+                <div class="field">
+                  <label>Total cost</label>
+                  <InputText
+                    v-model.trim="form.wards_beg_bal_total_cost"
+                    required="true"
+                    autofocus
+                    type="number"
+                  />
+                  <small
+                    class="text-error"
+                    v-if="form.errors.wards_beg_bal_total_cost"
+                  >
+                    {{ form.errors.wards_beg_bal_total_cost }}
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="field">
-          <label>CSR beg bal cost</label>
-          <InputText
-            v-model.trim="form.csr_beg_bal_total_cost"
-            required="true"
-            autofocus
-            type="number"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.csr_beg_bal_total_cost"
-          >
-            {{ form.errors.csr_beg_bal_total_cost }}
-          </small>
-        </div>
-        <div class="field">
-          <label>WARD beg bal qty</label>
-          <InputText
-            v-model.trim="form.wards_beg_bal_quantity"
-            required="true"
-            autofocus
-            type="number"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.wards_beg_bal_quantity"
-          >
-            {{ form.errors.wards_beg_bal_quantity }}
-          </small>
-        </div>
-        <div class="field">
-          <label>WARD beg bal cost</label>
-          <InputText
-            v-model.trim="form.wards_beg_bal_total_cost"
-            required="true"
-            autofocus
-            type="number"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.wards_beg_bal_total_cost"
-          >
-            {{ form.errors.wards_beg_bal_total_cost }}
-          </small>
-        </div>
+
         <div class="field">
           <label>TOTAL beg bal qty</label>
           <InputText
@@ -404,6 +425,7 @@
             {{ form.errors.total_beg_bal_total_cost }}
           </small>
         </div>
+
         <div class="field">
           <label>Supp issued qty</label>
           <InputText
@@ -844,7 +866,7 @@ export default {
 
       let id = this.form.id;
       if (this.isUpdate) {
-        this.form.put(route('stockbal.update', id), {
+        this.form.put(route('csrmanualreports.update', id), {
           preserveScroll: true,
           onSuccess: () => {
             this.createDataDialog = false;
@@ -854,7 +876,7 @@ export default {
           },
         });
       } else {
-        this.form.post(route('stockbal.store'), {
+        this.form.post(route('csrmanualreports.store'), {
           preserveScroll: true,
           onSuccess: () => {
             this.createDataDialog = false;
