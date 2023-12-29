@@ -280,6 +280,7 @@
         class="p-fluid"
         @hide="whenDialogIsHidden"
       >
+        <!-- ITEM -->
         <div class="field">
           <label>Item</label>
           <Dropdown
@@ -299,6 +300,7 @@
             {{ form.errors.cl2comb }}
           </small>
         </div>
+        <!-- UNIT COST -->
         <div class="field">
           <label>Unit cost</label>
           <InputText
@@ -314,6 +316,7 @@
             {{ form.errors.unit_cost }}
           </small>
         </div>
+        <!-- BEGINNING BALANCE -->
         <div class="flex flex-column border-1 border-round">
           <h3 class="text-center border-bottom-1 p-0 m-0">BEGINNING BALANCE</h3>
           <div class="flex justify-content-between px-2">
@@ -323,7 +326,7 @@
                 <h4 class="mt-1">CSR</h4>
 
                 <div class="field">
-                  <label>Total quantity</label>
+                  <label>Quantity</label>
                   <InputText
                     v-model.trim="form.csr_beg_bal_quantity"
                     required="true"
@@ -338,7 +341,7 @@
                   </small>
                 </div>
                 <div class="field">
-                  <label>Total cost</label>
+                  <label>Cost</label>
                   <InputText
                     v-model.trim="form.csr_beg_bal_total_cost"
                     required="true"
@@ -361,7 +364,7 @@
                 <h4 class="mt-1">WARD</h4>
 
                 <div class="field">
-                  <label>Total quantity</label>
+                  <label>Quantity</label>
                   <InputText
                     v-model.trim="form.wards_beg_bal_quantity"
                     required="true"
@@ -376,7 +379,7 @@
                   </small>
                 </div>
                 <div class="field">
-                  <label>Total cost</label>
+                  <label>Cost</label>
                   <InputText
                     v-model.trim="form.wards_beg_bal_total_cost"
                     required="true"
@@ -393,37 +396,51 @@
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="field">
-          <label>TOTAL beg bal qty</label>
-          <InputText
-            v-model.trim="form.total_beg_bal_total_quantity"
-            required="true"
-            autofocus
-            type="number"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.total_beg_bal_total_quantity"
-          >
-            {{ form.errors.total_beg_bal_total_quantity }}
-          </small>
-        </div>
-        <div class="field">
-          <label>TOTAL beg bal cost</label>
-          <InputText
-            v-model.trim="form.total_beg_bal_total_cost"
-            required="true"
-            autofocus
-            type="number"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.total_beg_bal_total_cost"
-          >
-            {{ form.errors.total_beg_bal_total_cost }}
-          </small>
+          <h3 class="text-center border-y-1 p-0 m-0">TOTAL</h3>
+          <div class="flex justify-content-between px-2">
+            <!-- csr beg bal -->
+            <div class="flex w-full">
+              <div class="w-full mt-1">
+                <div class="field">
+                  <label>Total quantity</label>
+                  <InputText
+                    v-model.trim="form.total_beg_bal_total_quantity"
+                    required="true"
+                    autofocus
+                    type="number"
+                  />
+                  <small
+                    class="text-error"
+                    v-if="form.errors.total_beg_bal_total_quantity"
+                  >
+                    {{ form.errors.total_beg_bal_total_quantity }}
+                  </small>
+                </div>
+              </div>
+            </div>
+            <div class="border-1 mx-2"></div>
+            <!-- ward beg bal -->
+            <div class="flex w-full">
+              <div class="w-full mt-1">
+                <div class="field">
+                  <label>Total cost</label>
+                  <InputText
+                    v-model.trim="form.total_beg_bal_total_cost"
+                    required="true"
+                    autofocus
+                    type="number"
+                  />
+                  <small
+                    class="text-error"
+                    v-if="form.errors.total_beg_bal_total_cost"
+                  >
+                    {{ form.errors.total_beg_bal_total_cost }}
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="field">
