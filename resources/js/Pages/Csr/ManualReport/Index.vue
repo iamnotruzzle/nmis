@@ -274,7 +274,7 @@
 
       <Dialog
         v-model:visible="createDataDialog"
-        header="Balance"
+        header="REPORT"
         :modal="true"
         :style="{ width: '850px' }"
         class="p-fluid"
