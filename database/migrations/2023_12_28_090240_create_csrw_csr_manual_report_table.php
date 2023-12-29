@@ -28,12 +28,12 @@ class CreateCsrwCsrManualReportTable extends Migration
             $table->integer('supp_issued_to_wards_total_cost')->nullable();
             $table->integer('consumption_quantity')->nullable();
             $table->integer('consumption_total_cost')->nullable();
-            $table->integer('csr_end_bal_quantity)')->nullable();
-            $table->integer('csr_end_bal_total_cost)')->nullable();
-            $table->integer('wards_end_bal_quantity)')->nullable();
-            $table->integer('wards_end_bal_total_cost)')->nullable();
-            $table->integer('total_end_bal_total_quantity)')->nullable();
-            $table->integer('total_end_bal_total_cost)')->nullable();
+            $table->integer('csr_end_bal_quantity')->nullable();
+            $table->integer('csr_end_bal_total_cost')->nullable();
+            $table->integer('wards_end_bal_quantity')->nullable();
+            $table->integer('wards_end_bal_total_cost')->nullable();
+            $table->integer('total_end_bal_total_quantity')->nullable();
+            $table->integer('total_end_bal_total_cost')->nullable();
             $table->string('entry_by');
             $table->string('updated_by')->nullable();
             $table->timestamps();

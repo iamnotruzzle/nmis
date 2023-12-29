@@ -12,6 +12,7 @@
       <DataTable
         class="p-datatable-sm"
         v-model:filters="filters"
+        :value="manual_reportsList"
         selectionMode="single"
         lazy
         paginator
@@ -53,7 +54,7 @@
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            <!-- {{ data.cl2desc }} -->
+            {{ data.cl2desc }}
           </template>
         </Column>
         <Column
@@ -831,7 +832,7 @@ export default {
   mounted() {
     // console.log('stock bal', this.locationStockBalance);
 
-    console.log('manual', this.manual_reports);
+    console.log('manual', this.manual_reports.data);
 
     this.storeManualReportsInContainer();
     this.storeItemsInContainer();
@@ -847,6 +848,7 @@ export default {
       this.manual_reports.data.forEach((e) => {
         this.manual_reportsList.push({
           cl2comb: e.cl2comb,
+          cl2desc: e.item_description.cl2desc.trim(),
           unit_cost: e.unit_cost,
           csr_beg_bal_quantity: e.csr_beg_bal_quantity,
           csr_beg_bal_total_cost: e.csr_beg_bal_total_cost,
