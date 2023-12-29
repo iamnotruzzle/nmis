@@ -120,8 +120,10 @@ class ManualReportController extends Controller
         return Redirect::route('csrmanualreports.index');
     }
 
-    public function destroy($id)
+    public function destroy(CsrManualReport $csrmanualreport)
     {
-        //
+        $csrmanualreport->delete();
+
+        return Redirect::route('csrmanualreports.index');
     }
 }

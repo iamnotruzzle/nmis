@@ -832,7 +832,7 @@ export default {
   mounted() {
     // console.log('stock bal', this.locationStockBalance);
 
-    console.log('manual', this.manual_reports.data);
+    // console.log('manual', this.manual_reports.data);
 
     this.storeManualReportsInContainer();
     this.storeItemsInContainer();
@@ -944,7 +944,7 @@ export default {
       );
     },
     editItem(item) {
-      console.log(item);
+      //   console.log(item);
       this.isUpdate = true;
       this.createDataDialog = true;
       this.form.id = item.id;
@@ -1013,7 +1013,7 @@ export default {
       this.deleteItemDialog = true;
     },
     deleteItem() {
-      this.form.delete(route('stockbal.destroy', this.form.id), {
+      this.form.delete(route('csrmanualreports.destroy', this.form.id), {
         preserveScroll: true,
         onSuccess: () => {
           this.balanceContainer = [];
@@ -1022,7 +1022,6 @@ export default {
           this.form.reset();
           this.updateData();
           this.deletedMsg();
-          this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid;
         },
       });
     },
@@ -1038,7 +1037,7 @@ export default {
       this.$toast.add({
         severity: 'success',
         summary: 'Success',
-        detail: 'Starting and ending balance declared',
+        detail: 'Report created',
         life: 3000,
       });
     },
@@ -1046,7 +1045,7 @@ export default {
       this.$toast.add({
         severity: 'warn',
         summary: 'Success',
-        detail: 'Starting and ending balance updated',
+        detail: 'Report updated',
         life: 3000,
       });
     },
@@ -1054,7 +1053,7 @@ export default {
       this.$toast.add({
         severity: 'error',
         summary: 'Success',
-        detail: 'Starting and ending balance deleted',
+        detail: 'Report deleted',
         life: 3000,
       });
     },
