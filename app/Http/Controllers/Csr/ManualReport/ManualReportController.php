@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Csr\ManualReport;
 
 use App\Http\Controllers\Controller;
 use App\Models\CsrManualReport;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -11,9 +12,27 @@ use Inertia\Inertia;
 
 class ManualReportController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $manual_reports = CsrManualReport::with('item_description:cl2comb,cl2desc')->paginate(15);
+        $searchString = $request->search;
+
+        $manual_reports = CsrManualReport::with('item_description:cl2comb,cl2desc')
+            ->whereHas('item_description', function ($q) use ($searchString) {
+                $q->where('cl2desc', 'LIKE', '%' . $searchString . '%');
+            })
+            ->when(
+                $request->from,
+                function ($query, $value) {
+                    $query->whereDate('created_at', '>=', Carbon::parse($value)->setTimezone('Asia/Manila'));
+                }
+            )
+            ->when(
+                $request->to,
+                function ($query, $value) {
+                    $query->whereDate('created_at', '<=', Carbon::parse($value)->setTimezone('Asia/Manila'));
+                }
+            )
+            ->paginate(15);
 
         return Inertia::render('Csr/ManualReport/Index', [
             'manual_reports' => $manual_reports
