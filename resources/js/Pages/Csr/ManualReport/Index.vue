@@ -847,6 +847,7 @@ export default {
 
       this.manual_reports.data.forEach((e) => {
         this.manual_reportsList.push({
+          id: e.id,
           cl2comb: e.cl2comb,
           cl2desc: e.item_description.cl2desc.trim(),
           unit_cost: e.unit_cost,
@@ -910,6 +911,7 @@ export default {
         onFinish: (visit) => {
           //   this.totalRecords = this.users.total;
           this.itemsList = [];
+          this.storeManualReportsInContainer();
           this.storeItemsInContainer();
           this.loading = false;
         },
@@ -942,22 +944,36 @@ export default {
       );
     },
     editItem(item) {
-      //   console.log(item);
+      console.log(item);
       this.isUpdate = true;
       this.createDataDialog = true;
       this.form.id = item.id;
       this.form.cl2comb = item.cl2comb;
-      this.cl2desc = item.cl2desc;
       this.form.unit_cost = item.unit_cost;
+      this.form.csr_beg_bal_quantity = item.csr_beg_bal_quantity;
+      this.form.csr_beg_bal_total_cost = item.csr_beg_bal_total_cost;
+      this.form.wards_beg_bal_quantity = item.wards_beg_bal_quantity;
+      this.form.wards_beg_bal_total_cost = item.wards_beg_bal_total_cost;
+      this.form.total_beg_bal_total_quantity = item.total_beg_bal_total_quantity;
+      this.form.total_beg_bal_total_cost = item.total_beg_bal_total_cost;
+      this.form.supp_issued_to_wards_total_quantity = item.supp_issued_to_wards_total_quantity;
+      this.form.supp_issued_to_wards_total_cost = item.supp_issued_to_wards_total_cost;
+      this.form.consumption_quantity = item.consumption_quantity;
+      this.form.consumption_total_cost = item.consumption_total_cost;
+      this.form.csr_end_bal_quantity = item.csr_end_bal_quantity;
+      this.form.csr_end_bal_total_cost = item.csr_end_bal_total_cost;
+      this.form.wards_end_bal_quantity = item.wards_end_bal_quantity;
+      this.form.wards_end_bal_total_cost = item.wards_end_bal_total_cost;
+      this.form.total_end_bal_total_quantity = item.total_end_bal_total_quantity;
+      this.form.total_end_bal_total_cost = item.total_end_bal_total_cost;
     },
     submit() {
       if (this.form.processing) {
         return false;
       }
 
-      let id = this.form.id;
       if (this.isUpdate) {
-        this.form.put(route('csrmanualreports.update', id), {
+        this.form.put(route('csrmanualreports.update', this.form.id), {
           preserveScroll: true,
           onSuccess: () => {
             this.createDataDialog = false;

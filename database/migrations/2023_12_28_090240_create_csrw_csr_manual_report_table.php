@@ -34,7 +34,7 @@ class CreateCsrwCsrManualReportTable extends Migration
             $table->integer('wards_end_bal_total_cost')->nullable();
             $table->integer('total_end_bal_total_quantity')->nullable();
             $table->integer('total_end_bal_total_cost')->nullable();
-            $table->string('entry_by');
+            $table->string('entry_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->timestamps();
         });
