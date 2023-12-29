@@ -317,8 +317,8 @@
           </small>
         </div>
         <!-- BEGINNING BALANCE -->
-        <div class="flex flex-column border-1 border-round">
-          <h3 class="text-center border-bottom-1 p-0 m-0">BEGINNING BALANCE</h3>
+        <div class="flex flex-column border-1 border-round border-yellow-400">
+          <h3 class="text-center border-bottom-1 p-0 m-0 bg-yellow-400 text-blue-900">BEGINNING BALANCE</h3>
           <div class="flex justify-content-between px-2">
             <!-- csr beg bal -->
             <div class="flex w-full">
@@ -397,7 +397,7 @@
             </div>
           </div>
 
-          <h3 class="text-center border-y-1 p-0 m-0">TOTAL BEGINNING BALANCE</h3>
+          <h3 class="text-center border-y-1 p-0 m-0 bg-yellow-400 text-blue-900">TOTAL BEGINNING BALANCE</h3>
           <div class="flex justify-content-between px-2">
             <!-- csr beg bal -->
             <div class="flex w-full">
@@ -444,8 +444,8 @@
         </div>
 
         <!-- supplies issued -->
-        <div class="border-1 border-round mt-3">
-          <h3 class="text-center border-y-1 p-0 m-0">SUPPLIES ISSUED TO WARDS</h3>
+        <div class="border-1 border-round mt-3 border-green-400">
+          <h3 class="text-center border-y-1 p-0 m-0 bg-green-400 text-blue-900">SUPPLIES ISSUED TO WARDS</h3>
           <div class="flex justify-content-between px-2">
             <!-- csr beg bal -->
             <div class="flex w-full">
@@ -492,8 +492,8 @@
         </div>
 
         <!-- consumption -->
-        <div class="border-1 border-round mt-3">
-          <h3 class="text-center border-y-1 p-0 m-0">CONSUMPTION</h3>
+        <div class="border-1 border-round mt-3 border-yellow-600">
+          <h3 class="text-center border-y-1 p-0 m-0 bg-yellow-600 text-blue-900">CONSUMPTION</h3>
           <div class="flex justify-content-between px-2">
             <!-- csr beg bal -->
             <div class="flex w-full">
@@ -540,8 +540,8 @@
         </div>
 
         <!-- ending balance -->
-        <div class="flex flex-column border-1 border-round mt-3">
-          <h3 class="text-center border-bottom-1 p-0 m-0">ENDING BALANCE</h3>
+        <div class="flex flex-column border-1 border-round mt-3 border-cyan-400">
+          <h3 class="text-center border-bottom-1 p-0 m-0 bg-cyan-400 text-blue-900">ENDING BALANCE</h3>
           <div class="flex justify-content-between px-2">
             <!-- csr beg bal -->
             <div class="flex w-full">
@@ -620,7 +620,7 @@
             </div>
           </div>
 
-          <h3 class="text-center border-y-1 p-0 m-0">TOTAL ENDING BALANCE</h3>
+          <h3 class="text-center border-y-1 p-0 m-0 bg-cyan-400 text-blue-900">TOTAL ENDING BALANCE</h3>
           <div class="flex justify-content-between px-2">
             <!-- csr beg bal -->
             <div class="flex w-full">
