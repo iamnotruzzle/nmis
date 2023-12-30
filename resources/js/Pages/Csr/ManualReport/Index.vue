@@ -902,7 +902,7 @@ export default {
           wards_end_bal_total_cost: e.wards_end_bal_total_cost,
           total_end_bal_total_quantity: e.total_end_bal_total_quantity,
           total_end_bal_total_cost: e.total_end_bal_total_cost,
-          entry_by: e.entry_by,
+          entry_by: e.entry_by.firstname + ' ' + e.entry_by.lastname,
         });
       });
 

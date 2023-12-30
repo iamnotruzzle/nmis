@@ -16,7 +16,7 @@ class CsrManualReportController extends Controller
     {
         $searchString = $request->search;
 
-        $manual_reports = CsrManualReport::with('item_description:cl2comb,cl2desc', 'unit:uomcode,uomdesc')
+        $manual_reports = CsrManualReport::with('item_description:cl2comb,cl2desc', 'unit:uomcode,uomdesc', 'entryBy:employeeid,firstname,lastname', 'updatedBy:employeeid,firstname,lastname')
             ->whereHas('item_description', function ($q) use ($searchString) {
                 $q->where('cl2desc', 'LIKE', '%' . $searchString . '%');
             })

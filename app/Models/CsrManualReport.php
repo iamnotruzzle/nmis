@@ -50,4 +50,14 @@ class CsrManualReport extends Model
     {
         return $this->hasOne(UnitOfMeasurement::class, 'uomcode', 'uomcode');
     }
+
+    public function entryBy()
+    {
+        return $this->hasOne(UserDetail::class, 'employeeid', 'entry_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->hasOne(UserDetail::class, 'employeeid', 'entry_by');
+    }
 }
