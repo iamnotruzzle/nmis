@@ -43,6 +43,22 @@
                 iconPos="right"
                 @click="openCreateDataDialog"
               />
+
+              <i
+                v-if="from == null || to == null"
+                class="pi pi-file-excel"
+                :style="{ color: 'gray', 'font-size': '2rem' }"
+              ></i>
+              <a
+                v-else
+                :href="`csrmanualreports/export?from=${params.from}&to=${params.to}`"
+                target="_blank"
+              >
+                <i
+                  class="pi pi-file-excel"
+                  :style="{ color: 'green', 'font-size': '2rem' }"
+                ></i>
+              </a>
             </div>
           </div>
         </template>
