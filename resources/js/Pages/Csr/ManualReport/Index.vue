@@ -58,6 +58,10 @@
           </template>
         </Column>
         <Column
+          field="uomdesc"
+          header="Unit"
+        ></Column>
+        <Column
           field="unit_cost"
           header="UNIT COST"
           style="min-width: 12rem"

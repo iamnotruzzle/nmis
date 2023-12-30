@@ -66,6 +66,7 @@ class ManualReportController extends Controller
 
         $csrManualReport = CsrManualReport::create([
             'cl2comb' => $request->cl2comb,
+            'uomcode' => $request->uomcode,
             'unit_cost' => $request->unit_cost,
             'csr_beg_bal_quantity' => $request->csr_beg_bal_quantity,
             'csr_beg_bal_total_cost' => $request->csr_beg_bal_total_cost,
@@ -116,6 +117,7 @@ class ManualReportController extends Controller
 
         $csrmanualreport->update([
             'cl2comb' => $request->cl2comb,
+            'uomcode' => $request->uomcode,
             'unit_cost' => $request->unit_cost,
             'csr_beg_bal_quantity' => $request->csr_beg_bal_quantity,
             'csr_beg_bal_total_cost' => $request->csr_beg_bal_total_cost,
