@@ -12,7 +12,7 @@ use App\Http\Controllers\Csr\Inventory\Stocks\CsrStocksController;
 use App\Http\Controllers\Csr\Inventory\Stocks\CsrStocksMedicalSuppliesController;
 use App\Http\Controllers\Csr\IssueItems\ExportIssuedItems\ExportIssuedItemsController;
 use App\Http\Controllers\Csr\IssueItems\IssueItemController;
-use App\Http\Controllers\Csr\ManualReport\ManualReportController;
+use App\Http\Controllers\Csr\CsrManualReport\CsrManualReportController;
 use App\Http\Controllers\Csr\Reports\ReportsController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\LocationStockBalance\LocationStockBalanceController;
@@ -73,7 +73,7 @@ Route::get('issueitems/issued/', [IssuedItemsReportController::class, 'export'])
 Route::put('issueitems', [IssueItemController::class, 'acknowledgedrequest'])->name('issueitems.acknowledgedrequest');
 
 Route::resource('csrreports', ReportsController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index']);
-Route::resource('csrmanualreports', ManualReportController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
+Route::resource('csrmanualreports', CsrManualReportController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
 Route::get('csrstocks/export/', [CsrStocksMedicalSuppliesReportController::class, 'export']);
 Route::resource('stockbal', LocationStockBalanceController::class)->middleware(['auth:sanctum', 'verified'])->only(['index', 'store', 'update', 'destroy']);
 // Route::resource('csrstocks/export/', [CsrStocksReportController::class, 'export'])->only(['index']);

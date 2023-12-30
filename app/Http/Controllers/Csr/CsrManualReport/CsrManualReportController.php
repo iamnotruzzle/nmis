@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Csr\ManualReport;
+namespace App\Http\Controllers\Csr\CsrManualReport;
 
 use App\Http\Controllers\Controller;
 use App\Models\CsrManualReport;
@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
-class ManualReportController extends Controller
+class CsrManualReportController extends Controller
 {
     public function index(Request $request)
     {
