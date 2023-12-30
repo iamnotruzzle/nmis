@@ -61,7 +61,7 @@ class HandleInertiaRequests extends Middleware
                 // return LoginHistory::with('locationName')->where('employeeid', Auth::user()->employeeid)->orderBy('created_at', 'DESC')->first();
             },
             'items' => function () {
-                return Item::where('cl2stat', 'A')->orderBy('cl2desc', 'ASC')->get(['cl2comb', 'cl2desc']);
+                return Item::with('unit:uomcode,uomdesc')->where('cl2stat', 'A')->orderBy('cl2desc', 'ASC')->get();
             },
             'employees' => function () {
                 return UserDetail::where('empstat', 'A')->orderBy('employeeid', 'ASC')->get();

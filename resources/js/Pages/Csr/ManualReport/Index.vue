@@ -301,6 +301,17 @@
             {{ form.errors.cl2comb }}
           </small>
         </div>
+
+        <!-- unit -->
+        <div class="field">
+          <label for="unit">Unit</label>
+          <InputText
+            id="unit"
+            v-model.trim="selectedItemsUomDesc"
+            readonly
+          />
+        </div>
+
         <!-- UNIT COST -->
         <div class="field">
           <label>Unit cost</label>
@@ -799,9 +810,11 @@ export default {
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
+      selectedItemsUomDesc: null,
       form: this.$inertia.form({
         id: null,
         cl2comb: null,
+        uomcode: null,
         unit_cost: null,
         csr_beg_bal_quantity: null,
         csr_beg_bal_total_cost: null,
@@ -850,6 +863,8 @@ export default {
           id: e.id,
           cl2comb: e.cl2comb,
           cl2desc: e.item_description.cl2desc.trim(),
+          uomcode: e.unit == null ? null : e.unit.uomcode,
+          uomdesc: e.unit == null ? null : e.unit.uomdesc,
           unit_cost: e.unit_cost,
           csr_beg_bal_quantity: e.csr_beg_bal_quantity,
           csr_beg_bal_total_cost: e.csr_beg_bal_total_cost,
@@ -880,6 +895,8 @@ export default {
         this.itemsList.push({
           cl2comb: e.cl2comb,
           cl2desc: e.cl2desc.trim(),
+          uomcode: e.unit == null ? null : e.unit.uomcode,
+          uomdesc: e.unit == null ? null : e.unit.uomdesc,
         });
       });
 
@@ -949,6 +966,7 @@ export default {
       this.createDataDialog = true;
       this.form.id = item.id;
       this.form.cl2comb = item.cl2comb;
+      this.form.uomcode = item.uomcode;
       this.form.unit_cost = item.unit_cost;
       this.form.csr_beg_bal_quantity = item.csr_beg_bal_quantity;
       this.form.csr_beg_bal_total_cost = item.csr_beg_bal_total_cost;
@@ -1098,6 +1116,20 @@ export default {
         this.to = null;
       }
       this.updateData();
+    },
+    'form.cl2comb': function (val) {
+      this.selectedItemsUomDesc = null;
+
+      this.itemsList.forEach((e) => {
+        if (e.cl2comb == val) {
+          if (e.uomdesc != null) {
+            this.selectedItemsUomDesc = e.uomdesc;
+            this.form.uomcode = e.uomcode;
+          } else {
+            this.selectedItemsUomDesc = null;
+          }
+        }
+      });
     },
   },
 };
