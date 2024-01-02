@@ -835,23 +835,21 @@ export default {
         id: null,
         cl2comb: null,
         uomcode: null,
-        unit_cost: null,
-        csr_beg_bal_quantity: null,
-        csr_beg_bal_total_cost: null,
-        wards_beg_bal_quantity: null,
-        wards_beg_bal_total_cost: null,
-        total_beg_bal_total_quantity: null,
-        total_beg_bal_total_cost: null,
-        supp_issued_to_wards_total_quantity: null,
-        supp_issued_to_wards_total_cost: null,
-        consumption_quantity: null,
-        consumption_total_cost: null,
-        csr_end_bal_quantity: null,
-        csr_end_bal_total_cost: null,
-        wards_end_bal_quantity: null,
-        wards_end_bal_total_cost: null,
-        total_end_bal_total_quantity: null,
-        total_end_bal_total_cost: null,
+        esti_budg_unit_cost: null,
+        beginning_balance: null,
+        received_from_csr: null,
+        total_stock: null,
+        consumption_surgery: null,
+        consumption_ob_gyne: null,
+        consumption_ortho: null,
+        consumption_pedia: null,
+        consumption_optha: null,
+        consumption_ent: null,
+        total_consumption_quantity: null,
+        total_consumption_cost: null,
+        ending_balance: null,
+        actual_inventory: null,
+        wardcode: null,
         entry_by: null,
       }),
     };
@@ -967,6 +965,7 @@ export default {
       this.form.reset();
       this.itemId = null;
       this.createDataDialog = true;
+      this.form.wardcode = this.$page.props.auth.user.location.wardcode;
       this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid;
     },
     clickOutsideDialog() {
