@@ -44,7 +44,7 @@
                 @click="openCreateDataDialog"
               />
 
-              <!-- <i
+              <i
                 v-if="from == null || to == null"
                 class="pi pi-file-excel"
                 :style="{ color: 'gray', 'font-size': '2rem' }"
@@ -58,7 +58,7 @@
                   class="pi pi-file-excel"
                   :style="{ color: 'green', 'font-size': '2rem' }"
                 ></i>
-              </a> -->
+              </a>
             </div>
           </div>
         </template>
