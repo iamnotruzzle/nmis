@@ -304,6 +304,11 @@ export default {
           return obj.to !== 'csrdashboard';
         });
       }
+      if (this.$page.props.user.designation == 'ward') {
+        this.menu[2].items = this.menu[2].items.filter(function (obj) {
+          return obj.to !== 'csrmanualreports';
+        });
+      }
       // end ward
     },
     onload() {
