@@ -321,43 +321,56 @@
             {{ form.errors.unit_cost }}
           </small>
         </div>
-        <!-- BEGINNING BALANCE -->
-        <div class="flex flex-column border-1 border-round border-yellow-400">
-          <h3 class="text-center border-bottom-1 p-0 m-0 bg-yellow-400 text-blue-900">BEGINNING BALANCE</h3>
+        <!-- CONSUMPTION -->
+        <div class="flex flex-column border-1 border-round">
+          <h3 class="text-center border-bottom-1 p-0 m-0">CONSUMPTION</h3>
           <div class="flex justify-content-between px-2">
             <!-- csr beg bal -->
             <div class="flex w-full">
-              <div class="w-full">
-                <h4 class="mt-1">CSR</h4>
-
+              <div class="w-full mt-3">
                 <div class="field">
-                  <label>Quantity</label>
+                  <label>Surgery</label>
                   <InputText
-                    v-model.trim="form.csr_beg_bal_quantity"
+                    v-model.trim="form.consumption_surgery"
                     required="true"
                     autofocus
                     type="number"
                   />
                   <small
                     class="text-error"
-                    v-if="form.errors.csr_beg_bal_quantity"
+                    v-if="form.errors.consumption_surgery"
                   >
-                    {{ form.errors.csr_beg_bal_quantity }}
+                    {{ form.errors.consumption_surgery }}
                   </small>
                 </div>
                 <div class="field">
-                  <label>Cost</label>
+                  <label>OB-GYNE</label>
                   <InputText
-                    v-model.trim="form.csr_beg_bal_total_cost"
+                    v-model.trim="form.consumption_ob_gyne"
                     required="true"
                     autofocus
                     type="number"
                   />
                   <small
                     class="text-error"
-                    v-if="form.errors.csr_beg_bal_total_cost"
+                    v-if="form.errors.consumption_ob_gyne"
                   >
-                    {{ form.errors.csr_beg_bal_total_cost }}
+                    {{ form.errors.consumption_ob_gyne }}
+                  </small>
+                </div>
+                <div class="field">
+                  <label>Ortho</label>
+                  <InputText
+                    v-model.trim="form.consumption_ortho"
+                    required="true"
+                    autofocus
+                    type="number"
+                  />
+                  <small
+                    class="text-error"
+                    v-if="form.errors.consumption_ortho"
+                  >
+                    {{ form.errors.consumption_ortho }}
                   </small>
                 </div>
               </div>
@@ -365,305 +378,50 @@
             <div class="border-1 mx-2"></div>
             <!-- ward beg bal -->
             <div class="flex w-full">
-              <div class="w-full">
-                <h4 class="mt-1">WARD</h4>
-
+              <div class="w-full mt-3">
                 <div class="field">
-                  <label>Quantity</label>
+                  <label>Pedia</label>
                   <InputText
-                    v-model.trim="form.wards_beg_bal_quantity"
+                    v-model.trim="form.consumption_pedia"
                     required="true"
                     autofocus
                     type="number"
                   />
                   <small
                     class="text-error"
-                    v-if="form.errors.wards_beg_bal_quantity"
+                    v-if="form.errors.consumption_pedia"
                   >
-                    {{ form.errors.wards_beg_bal_quantity }}
+                    {{ form.errors.consumption_pedia }}
                   </small>
                 </div>
                 <div class="field">
-                  <label>Cost</label>
+                  <label>Optha</label>
                   <InputText
-                    v-model.trim="form.wards_beg_bal_total_cost"
+                    v-model.trim="form.consumption_optha"
                     required="true"
                     autofocus
                     type="number"
                   />
                   <small
                     class="text-error"
-                    v-if="form.errors.wards_beg_bal_total_cost"
+                    v-if="form.errors.consumption_optha"
                   >
-                    {{ form.errors.wards_beg_bal_total_cost }}
-                  </small>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <h3 class="text-center border-y-1 p-0 m-0 bg-yellow-400 text-blue-900">TOTAL BEGINNING BALANCE</h3>
-          <div class="flex justify-content-between px-2">
-            <!-- csr beg bal -->
-            <div class="flex w-full">
-              <div class="w-full mt-1">
-                <div class="field">
-                  <label>Total quantity</label>
-                  <InputText
-                    v-model.trim="form.total_beg_bal_total_quantity"
-                    required="true"
-                    autofocus
-                    type="number"
-                  />
-                  <small
-                    class="text-error"
-                    v-if="form.errors.total_beg_bal_total_quantity"
-                  >
-                    {{ form.errors.total_beg_bal_total_quantity }}
-                  </small>
-                </div>
-              </div>
-            </div>
-            <div class="border-1 mx-2"></div>
-            <!-- ward beg bal -->
-            <div class="flex w-full">
-              <div class="w-full mt-1">
-                <div class="field">
-                  <label>Total cost</label>
-                  <InputText
-                    v-model.trim="form.total_beg_bal_total_cost"
-                    required="true"
-                    autofocus
-                    type="number"
-                  />
-                  <small
-                    class="text-error"
-                    v-if="form.errors.total_beg_bal_total_cost"
-                  >
-                    {{ form.errors.total_beg_bal_total_cost }}
-                  </small>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- supplies issued -->
-        <div class="border-1 border-round mt-3 border-green-400">
-          <h3 class="text-center border-y-1 p-0 m-0 bg-green-400 text-blue-900">SUPPLIES ISSUED TO WARDS</h3>
-          <div class="flex justify-content-between px-2">
-            <!-- csr beg bal -->
-            <div class="flex w-full">
-              <div class="w-full mt-1">
-                <div class="field">
-                  <label>Total quantity</label>
-                  <InputText
-                    v-model.trim="form.supp_issued_to_wards_total_quantity"
-                    required="true"
-                    autofocus
-                    type="number"
-                  />
-                  <small
-                    class="text-error"
-                    v-if="form.errors.supp_issued_to_wards_total_quantity"
-                  >
-                    {{ form.errors.supp_issued_to_wards_total_quantity }}
-                  </small>
-                </div>
-              </div>
-            </div>
-            <div class="border-1 mx-2"></div>
-            <!-- ward beg bal -->
-            <div class="flex w-full">
-              <div class="w-full mt-1">
-                <div class="field">
-                  <label>Total cost</label>
-                  <InputText
-                    v-model.trim="form.supp_issued_to_wards_total_cost"
-                    required="true"
-                    autofocus
-                    type="number"
-                  />
-                  <small
-                    class="text-error"
-                    v-if="form.errors.supp_issued_to_wards_total_cost"
-                  >
-                    {{ form.errors.supp_issued_to_wards_total_cost }}
-                  </small>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- consumption -->
-        <div class="border-1 border-round mt-3 border-yellow-600">
-          <h3 class="text-center border-y-1 p-0 m-0 bg-yellow-600 text-blue-900">CONSUMPTION</h3>
-          <div class="flex justify-content-between px-2">
-            <!-- csr beg bal -->
-            <div class="flex w-full">
-              <div class="w-full mt-1">
-                <div class="field">
-                  <label>Total quantity</label>
-                  <InputText
-                    v-model.trim="form.consumption_quantity"
-                    required="true"
-                    autofocus
-                    type="number"
-                  />
-                  <small
-                    class="text-error"
-                    v-if="form.errors.consumption_quantity"
-                  >
-                    {{ form.errors.consumption_quantity }}
-                  </small>
-                </div>
-              </div>
-            </div>
-            <div class="border-1 mx-2"></div>
-            <!-- ward beg bal -->
-            <div class="flex w-full">
-              <div class="w-full mt-1">
-                <div class="field">
-                  <label>Total cost</label>
-                  <InputText
-                    v-model.trim="form.consumption_total_cost"
-                    required="true"
-                    autofocus
-                    type="number"
-                  />
-                  <small
-                    class="text-error"
-                    v-if="form.errors.consumption_total_cost"
-                  >
-                    {{ form.errors.consumption_total_cost }}
-                  </small>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ending balance -->
-        <div class="flex flex-column border-1 border-round mt-3 border-cyan-400">
-          <h3 class="text-center border-bottom-1 p-0 m-0 bg-cyan-400 text-blue-900">ENDING BALANCE</h3>
-          <div class="flex justify-content-between px-2">
-            <!-- csr beg bal -->
-            <div class="flex w-full">
-              <div class="w-full">
-                <h4 class="mt-1">CSR</h4>
-
-                <div class="field">
-                  <label>Quantity</label>
-                  <InputText
-                    v-model.trim="form.csr_end_bal_quantity"
-                    required="true"
-                    autofocus
-                    type="number"
-                  />
-                  <small
-                    class="text-error"
-                    v-if="form.errors.csr_end_bal_quantity"
-                  >
-                    {{ form.errors.csr_end_bal_quantity }}
+                    {{ form.errors.consumption_optha }}
                   </small>
                 </div>
                 <div class="field">
-                  <label>Cost</label>
+                  <label>ENT</label>
                   <InputText
-                    v-model.trim="form.csr_end_bal_total_cost"
+                    v-model.trim="form.consumption_ent"
                     required="true"
                     autofocus
                     type="number"
                   />
                   <small
                     class="text-error"
-                    v-if="form.errors.csr_end_bal_total_cost"
+                    v-if="form.errors.consumption_ent"
                   >
-                    {{ form.errors.csr_end_bal_total_cost }}
-                  </small>
-                </div>
-              </div>
-            </div>
-            <div class="border-1 mx-2"></div>
-            <!-- ward beg bal -->
-            <div class="flex w-full">
-              <div class="w-full">
-                <h4 class="mt-1">WARD</h4>
-
-                <div class="field">
-                  <label>Quantity</label>
-                  <InputText
-                    v-model.trim="form.wards_end_bal_quantity"
-                    required="true"
-                    autofocus
-                    type="number"
-                  />
-                  <small
-                    class="text-error"
-                    v-if="form.errors.wards_end_bal_quantity"
-                  >
-                    {{ form.errors.wards_end_bal_quantity }}
-                  </small>
-                </div>
-                <div class="field">
-                  <label>Cost</label>
-                  <InputText
-                    v-model.trim="form.wards_end_bal_total_cost"
-                    required="true"
-                    autofocus
-                    type="number"
-                  />
-                  <small
-                    class="text-error"
-                    v-if="form.errors.wards_end_bal_total_cost"
-                  >
-                    {{ form.errors.wards_end_bal_total_cost }}
-                  </small>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <h3 class="text-center border-y-1 p-0 m-0 bg-cyan-400 text-blue-900">TOTAL ENDING BALANCE</h3>
-          <div class="flex justify-content-between px-2">
-            <!-- csr beg bal -->
-            <div class="flex w-full">
-              <div class="w-full mt-1">
-                <div class="field">
-                  <label>Total quantity</label>
-                  <InputText
-                    v-model.trim="form.total_end_bal_total_quantity"
-                    required="true"
-                    autofocus
-                    type="number"
-                  />
-                  <small
-                    class="text-error"
-                    v-if="form.errors.total_end_bal_total_quantity"
-                  >
-                    {{ form.errors.total_end_bal_total_quantity }}
-                  </small>
-                </div>
-              </div>
-            </div>
-            <div class="border-1 mx-2"></div>
-            <!-- ward beg bal -->
-            <div class="flex w-full">
-              <div class="w-full mt-1">
-                <div class="field">
-                  <label>Total cost</label>
-                  <InputText
-                    v-model.trim="form.total_end_bal_total_cost"
-                    required="true"
-                    autofocus
-                    type="number"
-                  />
-                  <small
-                    class="text-error"
-                    v-if="form.errors.total_end_bal_total_cost"
-                  >
-                    {{ form.errors.total_end_bal_total_cost }}
+                    {{ form.errors.consumption_ent }}
                   </small>
                 </div>
               </div>
