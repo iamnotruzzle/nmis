@@ -330,6 +330,9 @@
             required="true"
             autofocus
             type="number"
+            min="1"
+            step="1"
+            onkeypress="return !(event.charCode == 46)"
           />
           <small
             class="text-error"
@@ -347,6 +350,9 @@
             required="true"
             autofocus
             type="number"
+            min="1"
+            step="1"
+            onkeypress="return !(event.charCode == 46)"
           />
           <small
             class="text-error"
@@ -364,6 +370,9 @@
             required="true"
             autofocus
             type="number"
+            min="1"
+            step="1"
+            onkeypress="return !(event.charCode == 46)"
           />
           <small
             class="text-error"
@@ -489,6 +498,9 @@
             required="true"
             autofocus
             type="number"
+            min="1"
+            step="1"
+            onkeypress="return !(event.charCode == 46)"
           />
           <small
             class="text-error"
@@ -523,6 +535,9 @@
             required="true"
             autofocus
             type="number"
+            min="1"
+            step="1"
+            onkeypress="return !(event.charCode == 46)"
           />
           <small
             class="text-error"
@@ -540,6 +555,9 @@
             required="true"
             autofocus
             type="number"
+            min="1"
+            step="1"
+            onkeypress="return !(event.charCode == 46)"
           />
           <small
             class="text-error"

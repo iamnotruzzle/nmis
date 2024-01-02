@@ -111,8 +111,6 @@ class CsrManualReportController extends Controller
             'total_end_bal_total_cost' => 'nullable|numeric|min:0',
         ]);
 
-        $updated_by = Auth::user()->employeeid;
-
         $csrmanualreport->update([
             'cl2comb' => $request->cl2comb,
             'uomcode' => $request->uomcode,
