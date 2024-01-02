@@ -78,156 +78,129 @@
           header="Unit"
         ></Column>
         <Column
-          field="unit_cost"
+          field="esti_budg_unit_cost"
           header="UNIT COST"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.unit_cost }}
+            {{ data.esti_budg_unit_cost }}
           </template>
         </Column>
         <Column
-          field="csr_beg_bal_quantity"
-          header="CSR BEG BAL QTY"
+          field="beginning_balance"
+          header="BEGINNING BALANCE"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.csr_beg_bal_quantity }}
+            {{ data.beginning_balance }}
           </template>
         </Column>
         <Column
-          field="csr_beg_bal_total_cost"
-          header="CSR BEG BAL COST"
+          field="received_from_csr"
+          header="REC. FROM CSR"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.csr_beg_bal_total_cost }}
+            {{ data.received_from_csr }}
           </template>
         </Column>
         <Column
-          field="wards_beg_bal_quantity"
-          header="WARD BEG BAL QTY"
+          field="total_stock"
+          header="TOTAL STOCK"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.wards_beg_bal_quantity }}
+            {{ data.total_stock }}
           </template>
         </Column>
         <Column
-          field="wards_beg_bal_total_cost"
-          header="WARD BEG BAL COST"
+          field="consumption_surgery"
+          header="SURGERY"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.wards_beg_bal_total_cost }}
+            {{ data.consumption_surgery }}
           </template>
         </Column>
         <Column
-          field="total_beg_bal_total_quantity"
-          header="TOTAL BEG BAL QTY"
+          field="consumption_ob_gyne"
+          header="OB-GYNE"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.total_beg_bal_total_quantity }}
+            {{ data.consumption_ob_gyne }}
           </template>
         </Column>
         <Column
-          field="total_beg_bal_total_cost"
-          header="TOTAL BEG BAL COST"
+          field="consumption_ortho"
+          header="ORTHO"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.total_beg_bal_total_cost }}
+            {{ data.consumption_ortho }}
           </template>
         </Column>
         <Column
-          field="supp_issued_to_wards_total_quantity"
-          header="SUPP ISSUED QTY"
+          field="consumption_pedia"
+          header="PEDIA"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.supp_issued_to_wards_total_quantity }}
+            {{ data.consumption_pedia }}
           </template>
         </Column>
         <Column
-          field="supp_issued_to_wards_total_cost"
-          header="SUPP ISSUED COST"
+          field="consumption_optha"
+          header="OPTHA"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.supp_issued_to_wards_total_cost }}
+            {{ data.consumption_optha }}
           </template>
         </Column>
         <Column
-          field="consumption_quantity"
-          header="CONSUMP. QTY"
+          field="consumption_ent"
+          header="ENT"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.consumption_quantity }}
+            {{ data.consumption_ent }}
           </template>
         </Column>
         <Column
-          field="consumption_total_cost"
-          header="CONSUMP. COST"
+          field="total_consumption_quantity"
+          header="TOTAL CONSUMPTION QTY"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.consumption_total_cost }}
+            {{ data.total_consumption_quantity }}
           </template>
         </Column>
         <Column
-          field="csr_end_bal_quantity"
-          header="CSR END BAL QTY"
+          field="total_consumption_cost"
+          header="TOTAL CONSUMPTION COST"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.csr_end_bal_quantity }}
+            {{ data.total_consumption_cost }}
           </template>
         </Column>
         <Column
-          field="csr_end_bal_total_cost"
-          header="CSR END BAL COST"
+          field="ending_balance"
+          header="END. BAL"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.csr_end_bal_total_cost }}
+            {{ data.ending_balance }}
           </template>
         </Column>
         <Column
-          field="wards_end_bal_quantity"
-          header="WARD END BAL QTY"
+          field="actual_inventory"
+          header="ACTUAL INVENTORY"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.wards_end_bal_quantity }}
-          </template>
-        </Column>
-        <Column
-          field="wards_end_bal_total_cost"
-          header="WARD END BAL COST"
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ data.wards_end_bal_total_cost }}
-          </template>
-        </Column>
-        <Column
-          field="total_end_bal_total_quantity"
-          header="TOTAL END BAL QTY"
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ data.total_end_bal_total_quantity }}
-          </template>
-        </Column>
-        <Column
-          field="total_end_bal_total_cost"
-          header="TOTAL END BAL COST"
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ data.total_end_bal_total_cost }}
+            {{ data.actual_inventory }}
           </template>
         </Column>
         <Column
@@ -883,24 +856,22 @@ export default {
           cl2desc: e.item_description.cl2desc.trim(),
           uomcode: e.unit == null ? null : e.unit.uomcode,
           uomdesc: e.unit == null ? null : e.unit.uomdesc,
-          unit_cost: e.unit_cost,
-          csr_beg_bal_quantity: e.csr_beg_bal_quantity,
-          csr_beg_bal_total_cost: e.csr_beg_bal_total_cost,
-          wards_beg_bal_quantity: e.wards_beg_bal_quantity,
-          wards_beg_bal_total_cost: e.wards_beg_bal_total_cost,
-          total_beg_bal_total_quantity: e.total_beg_bal_total_quantity,
-          total_beg_bal_total_cost: e.total_beg_bal_total_cost,
-          supp_issued_to_wards_total_quantity: e.supp_issued_to_wards_total_quantity,
-          supp_issued_to_wards_total_cost: e.supp_issued_to_wards_total_cost,
-          consumption_quantity: e.consumption_quantity,
-          consumption_total_cost: e.consumption_total_cost,
-          csr_end_bal_quantity: e.csr_end_bal_quantity,
-          csr_end_bal_total_cost: e.csr_end_bal_total_cost,
-          wards_end_bal_quantity: e.wards_end_bal_quantity,
-          wards_end_bal_total_cost: e.wards_end_bal_total_cost,
-          total_end_bal_total_quantity: e.total_end_bal_total_quantity,
-          total_end_bal_total_cost: e.total_end_bal_total_cost,
+          esti_budg_unit_cost: e.esti_budg_unit_cost,
+          beginning_balance: e.beginning_balance,
+          received_from_csr: e.received_from_csr,
+          total_stock: e.total_stock,
+          consumption_surgery: e.consumption_surgery,
+          consumption_ob_gyne: e.consumption_ob_gyne,
+          consumption_ortho: e.consumption_ortho,
+          consumption_pedia: e.consumption_pedia,
+          consumption_optha: e.consumption_optha,
+          consumption_ent: e.consumption_ent,
+          total_consumption_quantity: e.total_consumption_quantity,
+          total_consumption_cost: e.total_consumption_cost,
+          ending_balance: e.ending_balance,
+          actual_inventory: e.actual_inventory,
           entry_by: e.entry_by.firstname + ' ' + e.entry_by.lastname,
+          created_by: e.created_by,
         });
       });
 
@@ -986,23 +957,20 @@ export default {
       this.form.id = item.id;
       this.form.cl2comb = item.cl2comb;
       this.form.uomcode = item.uomcode;
-      this.form.unit_cost = item.unit_cost;
-      this.form.csr_beg_bal_quantity = item.csr_beg_bal_quantity;
-      this.form.csr_beg_bal_total_cost = item.csr_beg_bal_total_cost;
-      this.form.wards_beg_bal_quantity = item.wards_beg_bal_quantity;
-      this.form.wards_beg_bal_total_cost = item.wards_beg_bal_total_cost;
-      this.form.total_beg_bal_total_quantity = item.total_beg_bal_total_quantity;
-      this.form.total_beg_bal_total_cost = item.total_beg_bal_total_cost;
-      this.form.supp_issued_to_wards_total_quantity = item.supp_issued_to_wards_total_quantity;
-      this.form.supp_issued_to_wards_total_cost = item.supp_issued_to_wards_total_cost;
-      this.form.consumption_quantity = item.consumption_quantity;
-      this.form.consumption_total_cost = item.consumption_total_cost;
-      this.form.csr_end_bal_quantity = item.csr_end_bal_quantity;
-      this.form.csr_end_bal_total_cost = item.csr_end_bal_total_cost;
-      this.form.wards_end_bal_quantity = item.wards_end_bal_quantity;
-      this.form.wards_end_bal_total_cost = item.wards_end_bal_total_cost;
-      this.form.total_end_bal_total_quantity = item.total_end_bal_total_quantity;
-      this.form.total_end_bal_total_cost = item.total_end_bal_total_cost;
+      this.form.esti_budg_unit_cost = item.esti_budg_unit_cost;
+      this.form.beginning_balance = item.beginning_balance;
+      this.form.received_from_csr = item.received_from_csr;
+      this.form.total_stock = item.total_stock;
+      this.form.consumption_surgery = item.consumption_surgery;
+      this.form.consumption_ob_gyne = item.consumption_ob_gyne;
+      this.form.consumption_ortho = item.consumption_ortho;
+      this.form.consumption_pedia = item.consumption_pedia;
+      this.form.consumption_optha = item.consumption_optha;
+      this.form.consumption_ent = item.consumption_ent;
+      this.form.total_consumption_quantity = item.total_consumption_quantity;
+      this.form.total_consumption_cost = item.total_consumption_cost;
+      this.form.ending_balance = item.ending_balance;
+      this.form.actual_inventory = item.actual_inventory;
     },
     submit() {
       if (this.form.processing) {
