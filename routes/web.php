@@ -32,6 +32,7 @@ use App\Http\Controllers\Wards\Reports\ReportController;
 use App\Http\Controllers\Wards\RequestStocks\RequestStocksController;
 use App\Http\Controllers\Wards\RequestStocks\WardsStocksLogs\WardsStocksLogsController;
 use App\Http\Controllers\Wards\TransferStock\TransferStockController;
+use App\Http\Controllers\Wards\WardsManualReport\WardsManualReportController;
 use App\Models\CsrStocksMedicalSupplies;
 use App\Models\Location;
 use App\Models\LocationStockBalance;
@@ -90,6 +91,7 @@ Route::resource('convertitem', ConvertItemController::class)->middleware(['auth:
 Route::resource('consignment', WardConsignmentController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('wardreports', ReportController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index']);
 Route::get('wardstocks/export/', [WardStocksReportController::class, 'export']);
+Route::resource('wardsmanualreports', WardsManualReportController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
 
 Route::resource('wardspatients', WardPatientsController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('patientcharge', PatientChargeController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);

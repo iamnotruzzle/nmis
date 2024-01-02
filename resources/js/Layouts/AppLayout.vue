@@ -163,6 +163,13 @@ export default {
               prefix: 'csrmanualreports',
               comp: 'Csr/ManualReport/Index',
             },
+            {
+              label: 'Manual report',
+              icon: 'si-microsoftexcel',
+              to: 'wardsmanualreports',
+              prefix: 'wardsmanualreports',
+              comp: 'Wards/ManualReport/Index',
+            },
           ],
         },
       ],
@@ -269,6 +276,11 @@ export default {
       if (this.$page.props.user.designation == 'csr') {
         this.menu[0].items = this.menu[0].items.filter(function (obj) {
           return obj.to !== 'admindashboard';
+        });
+      }
+      if (this.$page.props.user.designation == 'csr') {
+        this.menu[2].items = this.menu[2].items.filter(function (obj) {
+          return obj.to !== 'wardsmanualreports';
         });
       }
       // end csr
