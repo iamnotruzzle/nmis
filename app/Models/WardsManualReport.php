@@ -11,7 +11,7 @@ class WardsManualReport extends Model
 
     protected $table = 'csrw_wards_manual_report';
 
-    protected $fillalbe = [
+    protected $fillable = [
         'id',
         'cl2comb',
         'uomcode',

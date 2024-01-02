@@ -309,18 +309,70 @@
         <div class="field">
           <label>Unit cost</label>
           <InputText
-            v-model.trim="form.unit_cost"
+            v-model.trim="form.esti_budg_unit_cost"
             required="true"
             autofocus
             type="number"
           />
           <small
             class="text-error"
-            v-if="form.errors.unit_cost"
+            v-if="form.errors.esti_budg_unit_cost"
           >
-            {{ form.errors.unit_cost }}
+            {{ form.errors.esti_budg_unit_cost }}
           </small>
         </div>
+
+        <!-- Beginning balance -->
+        <div class="field">
+          <label>Beginning balance</label>
+          <InputText
+            v-model.trim="form.beginning_balance"
+            required="true"
+            autofocus
+            type="number"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.beginning_balance"
+          >
+            {{ form.errors.beginning_balance }}
+          </small>
+        </div>
+
+        <!-- RECEIVED FROM CSR -->
+        <div class="field">
+          <label>RECEIVED FROM CSR</label>
+          <InputText
+            v-model.trim="form.received_from_csr"
+            required="true"
+            autofocus
+            type="number"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.received_from_csr"
+          >
+            {{ form.errors.received_from_csr }}
+          </small>
+        </div>
+
+        <!-- TOTAL STOCK -->
+        <div class="field">
+          <label>TOTAL STOCK</label>
+          <InputText
+            v-model.trim="form.total_stock"
+            required="true"
+            autofocus
+            type="number"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.total_stock"
+          >
+            {{ form.errors.total_stock }}
+          </small>
+        </div>
+
         <!-- CONSUMPTION -->
         <div class="flex flex-column border-1 border-round">
           <h3 class="text-center border-bottom-1 p-0 m-0">CONSUMPTION</h3>
@@ -427,6 +479,74 @@
               </div>
             </div>
           </div>
+        </div>
+
+        <!-- Total Consumption quantity -->
+        <div class="field">
+          <label>Total Consumption quantity</label>
+          <InputText
+            v-model.trim="form.total_consumption_quantity"
+            required="true"
+            autofocus
+            type="number"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.total_consumption_quantity"
+          >
+            {{ form.errors.total_consumption_quantity }}
+          </small>
+        </div>
+
+        <!-- Total Consumption cost -->
+        <div class="field">
+          <label>Total Consumption cost</label>
+          <InputText
+            v-model.trim="form.total_consumption_cost"
+            required="true"
+            autofocus
+            type="number"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.total_consumption_cost"
+          >
+            {{ form.errors.total_consumption_cost }}
+          </small>
+        </div>
+
+        <!-- Ending balance -->
+        <div class="field">
+          <label>Ending balance</label>
+          <InputText
+            v-model.trim="form.ending_balance"
+            required="true"
+            autofocus
+            type="number"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.ending_balance"
+          >
+            {{ form.errors.ending_balance }}
+          </small>
+        </div>
+
+        <!-- Actual inventory -->
+        <div class="field">
+          <label>Actual inventory</label>
+          <InputText
+            v-model.trim="form.actual_inventory"
+            required="true"
+            autofocus
+            type="number"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.actual_inventory"
+          >
+            {{ form.errors.actual_inventory }}
+          </small>
         </div>
 
         <template #footer>

@@ -62,8 +62,6 @@ class CsrManualReportController extends Controller
             'total_end_bal_total_cost' => 'nullable|numeric|min:0',
         ]);
 
-        $entry_by = Auth::user()->employeeid;
-
         $csrManualReport = CsrManualReport::create([
             'cl2comb' => $request->cl2comb,
             'uomcode' => $request->uomcode,

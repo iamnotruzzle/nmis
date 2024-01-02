@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class WardsManualReportController extends Controller
@@ -50,7 +51,48 @@ class WardsManualReportController extends Controller
 
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'cl2comb' => 'required',
+            'unit_cost' => 'nullable|numeric|min:0',
+            'esti_budg_unit_cost' => 'nullable|numeric|min:0',
+            'beginning_balance' => 'nullable|numeric|min:0',
+            'received_from_csr' => 'nullable|numeric|min:0',
+            'total_stock' => 'nullable|numeric|min:0',
+            'consumption_surgery' => 'nullable|numeric|min:0',
+            'consumption_ob_gyne' => 'nullable|numeric|min:0',
+            'consumption_ortho' => 'nullable|numeric|min:0',
+            'consumption_pedia' => 'nullable|numeric|min:0',
+            'consumption_optha' => 'nullable|numeric|min:0',
+            'consumption_ent' => 'nullable|numeric|min:0',
+            'total_consumption_quantity' => 'nullable|numeric|min:0',
+            'total_consumption_cost' => 'nullable|numeric|min:0',
+            'ending_balance' => 'nullable|numeric|min:0',
+            'actual_inventory' => 'nullable|numeric|min:0',
+        ]);
+
+        $csrManualReport = WardsManualReport::create([
+            'cl2comb' => $request->cl2comb,
+            'uomcode' => $request->uomcode,
+            'unit_cost' => $request->unit_cost,
+            'esti_budg_unit_cost' => $request->esti_budg_unit_cost,
+            'beginning_balance' => $request->beginning_balance,
+            'received_from_csr' => $request->received_from_csr,
+            'total_stock' => $request->total_stock,
+            'consumption_surgery' => $request->consumption_surgery,
+            'consumption_ob_gyne' => $request->consumption_ob_gyne,
+            'consumption_ortho' => $request->consumption_ortho,
+            'consumption_pedia' => $request->consumption_pedia,
+            'consumption_optha' => $request->consumption_optha,
+            'consumption_ent' => $request->consumption_ent,
+            'total_consumption_quantity' => $request->total_consumption_quantity,
+            'total_consumption_cost' => $request->total_consumption_cost,
+            'ending_balance' => $request->ending_balance,
+            'actual_inventory' => $request->actual_inventory,
+            'wardcode' => $request->wardcode,
+            'entry_by' => $request->entry_by,
+        ]);
+
+        return Redirect::route('wardsmanualreports.index');
     }
 
     public function update(Request $request, $id)
