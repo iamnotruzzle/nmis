@@ -31,6 +31,9 @@ class CreateCsrwWardsManualReportTable extends Migration
             $table->decimal('total_consumption_cost', $precision = 8, $scale = 2)->nullable();
             $table->integer('ending_balance')->nullable();
             $table->integer('actual_inventory')->nullable();
+            $table->string('wardcode')->nullable();
+            $table->string('entry_by')->nullable();
+            $table->string('updated_by')->nullable();
             $table->timestamps();
         });
     }
