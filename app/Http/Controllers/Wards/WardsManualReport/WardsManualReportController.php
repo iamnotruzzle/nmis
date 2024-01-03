@@ -17,6 +17,8 @@ class WardsManualReportController extends Controller
     {
         $searchString = $request->search;
 
+        // dd($request->from);
+
         // get auth wardcode
         $authWardcode = DB::table('csrw_users')
             ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')

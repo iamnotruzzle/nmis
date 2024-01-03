@@ -991,7 +991,7 @@ export default {
     },
     to: function (val) {
       if (val != null) {
-        let to = moment(val).add(1, 'd').format('LL');
+        let to = moment(val).format('LL');
         // console.log('to', to);
         this.params.to = to;
       } else {
