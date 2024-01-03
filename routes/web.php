@@ -20,6 +20,7 @@ use App\Http\Controllers\Reports\Csr\CsrManualReportExportController;
 use App\Http\Controllers\Reports\Csr\CsrStocksMedicalSuppliesReportController;
 use App\Http\Controllers\Reports\Csr\CsrStocksReportController;
 use App\Http\Controllers\Reports\Csr\IssuedItems\IssuedItemsReportController;
+use App\Http\Controllers\Reports\Ward\WardsManualReportExportController;
 use App\Http\Controllers\Reports\Ward\WardStocksReportController;
 use App\Http\Controllers\Users\User\ProfileController;
 use App\Http\Controllers\Users\UserController;
@@ -92,6 +93,7 @@ Route::resource('consignment', WardConsignmentController::class)->middleware(['a
 Route::resource('wardreports', ReportController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index']);
 Route::get('wardstocks/export/', [WardStocksReportController::class, 'export']);
 Route::resource('wardsmanualreports', WardsManualReportController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
+Route::get('wardsmanualreports/export/', [WardsManualReportExportController::class, 'export']);
 
 Route::resource('wardspatients', WardPatientsController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('patientcharge', PatientChargeController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);

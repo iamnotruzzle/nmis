@@ -51,7 +51,7 @@
               ></i>
               <a
                 v-else
-                :href="`csrmanualreports/export?from=${params.from}&to=${params.to}`"
+                :href="`wardsmanualreports/export?from=${params.from}&to=${params.to}`"
                 target="_blank"
               >
                 <i
