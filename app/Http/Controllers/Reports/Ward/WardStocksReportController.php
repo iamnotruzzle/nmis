@@ -109,7 +109,7 @@ class WardStocksReportController extends Controller
 
         foreach ($ward_report as $e) {
             $reports[] = (object) [
-                'cl2comb' => $e->cl2comb,
+                // 'cl2comb' => $e->cl2comb,
                 'item_description' => $e->cl2desc,
                 'unit' => $e->uomdesc,
                 'unit_cost' => $e->unit_cost,

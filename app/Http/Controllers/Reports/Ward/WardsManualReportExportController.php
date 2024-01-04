@@ -45,7 +45,7 @@ class WardsManualReportExportController extends Controller
 
         foreach ($manual_reports as $e) {
             $export[] = (object) [
-                'cl2comb' => $e->cl2comb,
+                // 'cl2comb' => $e->cl2comb,
                 'item_description' => $e->item_description->cl2desc,
                 'unit' => $e->unit == null ? null : $e->unit->uomdesc,
                 'unit_cost' => $e->esti_budg_unit_cost,
