@@ -127,7 +127,7 @@
             sortable
           >
             <template #body="{ data }">
-              {{ data.price }}
+              {{ convertToPHCurrency(data.price) }}
             </template>
           </Column>
           <Column
@@ -136,11 +136,12 @@
             sortable
           >
             <template #body="{ data }">
-              {{ data.amount }}
+              {{ convertToPHCurrency(data.amount) }}
             </template>
           </Column>
           <template #footer>
-            <div class="text-right text-lg text-green-600">Total: ₱ {{ totalAmount.toFixed(2) }}</div>
+            <!-- <div class="text-right text-lg text-green-600">Total: ₱ {{ totalAmount.toFixed(2) }}</div> -->
+            <div class="text-right text-lg text-green-600">Total: {{ convertToPHCurrency(totalAmount) }}</div>
           </template>
           <template #expansion="slotProps">
             <!-- Charge for medical supplies -->
@@ -590,6 +591,14 @@ export default {
     this.hospitalNumber = this.bills.hpercode;
   },
   methods: {
+    convertToPHCurrency(e) {
+      const formatted = e.toLocaleString('en-PH', {
+        style: 'currency',
+        currency: 'PHP',
+      });
+
+      return formatted;
+    },
     tzone(date) {
       if (date == null) {
         return 'NA';
@@ -619,7 +628,8 @@ export default {
                 item: t.itemDesc,
                 itemcode: e.itemcode,
                 quantity: Math.trunc(e.pchrgqty),
-                price: e.pchrgup,
+                // price: e.pchrgup,
+                price: Math.round(e.pchrgup * 100) / 100,
                 amount: (Math.trunc(e.pchrgqty) * Math.round(e.pchrgup * 100)) / 100,
                 charge_date: e.pcchrgdte,
                 patient_charge_logs: e.patient_charge_logs.length == 0 ? null : e.patient_charge_logs,
@@ -637,7 +647,8 @@ export default {
             item: e.misc != null ? e.misc.hmdesc : e.item.category.cl1desc + ' ' + e.item.cl2desc,
             itemcode: e.itemcode,
             quantity: Math.trunc(e.pchrgqty),
-            price: e.pchrgup,
+            // price: e.pchrgup,
+            price: Math.round(e.pchrgup * 100) / 100,
             amount: (Math.trunc(e.pchrgqty) * Math.round(e.pchrgup * 100)) / 100,
             charge_date: e.pcchrgdte,
             patient_charge_logs: e.patient_charge_logs.length == 0 ? null : e.patient_charge_logs,
