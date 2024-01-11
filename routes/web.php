@@ -32,6 +32,7 @@ use App\Http\Controllers\Wards\Patients\WardPatientsController;
 use App\Http\Controllers\Wards\Reports\ReportController;
 use App\Http\Controllers\Wards\RequestStocks\RequestStocksController;
 use App\Http\Controllers\Wards\RequestStocks\WardsStocksLogs\WardsStocksLogsController;
+use App\Http\Controllers\Wards\RequestTankStocks\RequestTankStocksController;
 use App\Http\Controllers\Wards\TransferStock\TransferStockController;
 use App\Http\Controllers\Wards\WardsManualReport\WardsManualReportController;
 use App\Models\CsrStocksMedicalSupplies;
@@ -86,8 +87,16 @@ Route::resource('stockbal', LocationStockBalanceController::class)->middleware([
 
 // ward routes
 Route::resource('warddashboard', WardDashboardController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
+// medical supplies
 Route::resource('requeststocks', RequestStocksController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
 Route::put('requeststocks', [RequestStocksController::class, 'updatedeliverystatus'])->name('requeststocks.updatedeliverystatus');
+// end medical supplies
+
+// tanks
+Route::resource('requesttankstocks', RequestTankStocksController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
+Route::put('requesttankstocks', [RequestTankStocksController::class, 'updatedeliverystatus'])->name('requeststocks.updatedeliverystatus');
+// end tanks
+
 Route::resource('convertitem', ConvertItemController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('consignment', WardConsignmentController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('wardreports', ReportController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index']);
