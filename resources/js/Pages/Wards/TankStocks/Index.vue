@@ -791,7 +791,7 @@ export default {
     // server request such as POST, the data in the table
     // is updated
     storeRequestedStocksInContainer() {
-      console.log(this.requestedStocks.data);
+      //   console.log(this.requestedStocks.data);
       this.requestStockList = []; // reset
 
       this.requestedStocks.data.forEach((e) => {

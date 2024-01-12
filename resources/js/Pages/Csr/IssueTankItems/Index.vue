@@ -234,7 +234,7 @@
                   <div class="flex flex-row align-items-center">
                     <a
                       v-if="slotProps.data.status != 'PENDING'"
-                      :href="`issueitems/issued?from=${params.from}&to=${params.to}
+                      :href="`issuetankitems/issued?from=${params.from}&to=${params.to}
                       &id=${(params.id = slotProps.data.id)}`"
                       target="_blank"
                       class="mr-3"
@@ -262,7 +262,7 @@
                 header="ITEM"
               >
                 <template #body="{ data }">
-                  {{ data.item_details.cl2desc }}
+                  {{ getTankDesc(data) }}
                 </template>
               </Column>
               <Column
@@ -310,12 +310,6 @@
                   />
                 </span>
               </div>
-              <p
-                class="text-error text-xl font-semibold my-1"
-                v-if="stockBalanceDeclared != false"
-              >
-                {{ $page.props.errors['requestStockListDetails.0.cl2comb'].toUpperCase() }}
-              </p>
             </template>
             <Column
               field="cl2desc"
@@ -545,7 +539,6 @@ export default {
   },
   data() {
     return {
-      stockBalanceDeclared: false,
       expandedRows: null,
       // paginator
       loading: false,
@@ -615,7 +608,9 @@ export default {
     this.rows = this.requestedStocks.per_page;
   },
   mounted() {
-    window.Echo.channel('request').listen('RequestStock', (args) => {
+    console.log(this.requestedStocks);
+
+    window.Echo.channel('requesttank').listen('RequestTankStock', (args) => {
       router.reload({
         onSuccess: (e) => {
           this.requestStockList = [];
@@ -650,6 +645,7 @@ export default {
     // server request such as POST, the data in the table
     // is updated
     storeRequestedStocksInContainer() {
+      console.log(this.requestedStocks);
       this.requestedStocks.data.forEach((e) => {
         this.requestStockList.push({
           id: e.id,
@@ -661,7 +657,6 @@ export default {
               ? e.approved_by_details.firstname + ' ' + e.approved_by_details.lastname
               : null,
           approved_by_image: e.approved_by_details != null ? e.approved_by_details.user_account.image : null,
-          remarks: e.remarks,
           requested_at: e.requested_at_details.wardname,
           created_at: e.created_at,
           request_stocks_details: e.request_stocks_details,
@@ -686,6 +681,11 @@ export default {
 
       //   console.log(this.issuedItemList);
       this.issuedItemsDialog = true;
+    },
+    getTankDesc(item) {
+      const matchingTank = this.$page.props.tanksList.find((x) => item.itemcode === x.itemcode);
+
+      return matchingTank.itemDesc;
     },
     // getSeverity(status) {
     //   switch (status) {
@@ -751,7 +751,6 @@ export default {
     whenDialogIsHidden() {
       this.$emit(
         'hide',
-        (this.stockBalanceDeclared = false),
         (this.requestStockId = null),
         (this.isUpdate = false),
         (this.requestStockListDetails = []),
@@ -864,18 +863,6 @@ export default {
                 this.updateData();
                 this.updatedMsg();
               },
-              onError: (errors) => {
-                this.stockBalanceDeclared = true;
-              },
-              onFinish: (visit) => {
-                if (this.stockBalanceDeclared != true) {
-                  this.requestStockId = null;
-                  this.createRequestStocksDialog = false;
-                  this.cancel();
-                  this.updateData();
-                  //   this.updatedMsg();
-                }
-              },
             });
           } else {
             this.qtyIsNotEnough();
@@ -900,18 +887,6 @@ export default {
                 this.updateData();
                 // this.createdMsg();
               },
-              onError: (errors) => {
-                this.stockBalanceDeclared = true;
-              },
-              onFinish: (visit) => {
-                if (this.stockBalanceDeclared != true) {
-                  this.requestStockId = null;
-                  this.createRequestStocksDialog = false;
-                  this.cancel();
-                  this.updateData();
-                  this.createdMsg();
-                }
-              },
             });
           } else {
             this.qtyIsNotEnough();
@@ -920,7 +895,6 @@ export default {
       }
     },
     cancel() {
-      this.stockBalanceDeclared = false;
       this.requestStockId = null;
       this.isUpdate = false;
       this.createRequestStocksDialog = false;

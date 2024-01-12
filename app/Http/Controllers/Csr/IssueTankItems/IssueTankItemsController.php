@@ -33,33 +33,45 @@ class IssueTankItemsController extends Controller
         //     ->orderBy('cl2desc', 'ASC')
         //     ->get(['cl2comb', 'cl2desc']);
 
-        $requestedStocks = RequestTankStocks::with(['requested_at_details', 'requested_by_details', 'approved_by_details', 'request_stocks_details'])
-            // ->where('location', '=', $authWardcode->wardcode)
-            // ->whereHas('requested_by_details', function ($q) use ($searchString) {
+        $requestedStocks = RequestTankStocks::with([
+            'requested_at_details:wardcode,wardname',
+            'requested_by_details:employeeid,firstname,middlename,lastname',
+            'approved_by_details',
+            'request_stocks_details'
+        ])
+            ->whereHas('requested_at_details', function ($q) use ($searchString) {
+                $q->where('wardname', 'LIKE', '%' . $searchString . '%');
+            })
+            // ->orWhereHas('requested_by_details', function ($q) use ($searchString) {
             //     $q->where('firstname', 'LIKE', '%' . $searchString . '%')
             //         ->orWhere('middlename', 'LIKE', '%' . $searchString . '%')
             //         ->orWhere('lastname', 'LIKE', '%' . $searchString . '%');
             // })
+            // ->orWhereHas('request_stocks_details.item_details', function ($q) use ($searchString) {
+            //     $q->where('cl2desc', 'LIKE', '%' . $searchString . '%');
+            // })
             ->when(
                 $request->from,
                 function ($query, $value) {
-                    $query->whereDate(
-                        'created_at',
-                        '>=',
-                        $value
-                    );
+                    $query->whereDate('created_at', '>=', Carbon::parse($value)->setTimezone('Asia/Manila'));
                 }
             )
             ->when(
                 $request->to,
                 function ($query, $value) {
-                    $query->whereDate('created_at', '<=', $value);
+                    $query->whereDate('created_at', '<=', Carbon::parse($value)->setTimezone('Asia/Manila'));
                 }
             )
-            ->where('location', '=', $authWardcode->wardcode)
+            ->when(
+                $request->status,
+                function ($query, $value) {
+                    $query->where('status', $value);
+                }
+            )
             ->orderBy('created_at', 'desc')
-            ->paginate(15);
+            ->paginate(10);
 
+        // dd($requestedStocks);
 
         return Inertia::render('Csr/IssueTankItems/Index', [
             // 'items' => $items,
