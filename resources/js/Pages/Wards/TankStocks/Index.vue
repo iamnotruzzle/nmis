@@ -13,14 +13,14 @@
       <div class="mb-2">
         <Link
           href="requeststocks"
-          class="text-2xl my-link"
+          class="text-2xl mr-3 my-link"
         >
           DRUG AND MEDS
         </Link>
 
         <Link
           href="requesttankstocks"
-          class="text-2xl border-bottom-2 mr-3 font-semibold"
+          class="text-2xl border-bottom-2 font-semibold"
         >
           TANKS
         </Link>
