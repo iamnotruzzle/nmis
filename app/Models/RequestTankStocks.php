@@ -35,6 +35,6 @@ class RequestTankStocks extends Model
 
     public function request_stocks_details()
     {
-        return $this->hasMany(RequestTankStocksDetails::class, 'request_stocks_id', 'id')->with(['stocks']);
+        return $this->hasMany(RequestTankStocksDetails::class, 'request_stocks_id', 'id');
     }
 }

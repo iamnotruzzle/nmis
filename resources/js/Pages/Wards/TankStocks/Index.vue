@@ -225,7 +225,7 @@
                 header="ITEM"
               >
                 <template #body="{ data }">
-                  {{ data.item_details.itemDesc }}
+                  {{ getTankDesc(data) }}
                 </template>
               </Column>
               <Column
@@ -765,7 +765,7 @@ export default {
   },
   methods: {
     storeItemsInController() {
-      console.log(this.$page.props.tanksList);
+      //   console.log(this.$page.props.tanksList);
 
       this.itemsList = []; // reset
       this.$page.props.tanksList.forEach((e) => {
@@ -791,6 +791,7 @@ export default {
     // server request such as POST, the data in the table
     // is updated
     storeRequestedStocksInContainer() {
+      console.log(this.requestedStocks.data);
       this.requestStockList = []; // reset
 
       this.requestedStocks.data.forEach((e) => {
@@ -808,6 +809,11 @@ export default {
           request_stocks_details: e.request_stocks_details,
         });
       });
+    },
+    getTankDesc(item) {
+      const matchingTank = this.$page.props.tanksList.find((x) => item.itemcode === x.itemcode);
+
+      return matchingTank.itemDesc;
     },
     // store current stocks
     storeCurrentWardStocksInContainer() {

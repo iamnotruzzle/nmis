@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Wards\RequestTankStocks;
 
 use App\Http\Controllers\Controller;
 use App\Models\RequestTankStocks;
+use App\Models\RequestTankStocksDetails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class RequestTankStocksController extends Controller
@@ -28,7 +30,7 @@ class RequestTankStocksController extends Controller
         //     ->orderBy('cl2desc', 'ASC')
         //     ->get();
 
-        $requestedStocks = RequestTankStocks::with(['requested_at_details', 'requested_by_details', 'approved_by_details', 'request_stocks_details.item_details'])
+        $requestedStocks = RequestTankStocks::with(['requested_at_details', 'requested_by_details', 'approved_by_details', 'request_stocks_details'])
             // ->where('location', '=', $authWardcode->wardcode)
             // ->whereHas('requested_by_details', function ($q) use ($searchString) {
             //     $q->where('firstname', 'LIKE', '%' . $searchString . '%')
@@ -81,29 +83,29 @@ class RequestTankStocksController extends Controller
 
     public function store(Request $request)
     {
-        dd($request);
+        // dd($request);
 
-        // $requestStocks = RequestStocks::create([
-        //     'location' => $request->location,
-        //     'status' => 'PENDING',
-        //     'requested_by' => $request->requested_by,
-        // ]);
-        // $requestStocksID = $requestStocks['id'];
+        $requestStocks = RequestTankStocks::create([
+            'location' => $request->location,
+            'status' => 'PENDING',
+            'requested_by' => $request->requested_by,
+        ]);
+        $requestStocksID = $requestStocks['id'];
 
-        // $requestStockListDetails = $request->requestStockListDetails;
+        $requestStockListDetails = $request->requestStockListDetails;
 
-        // foreach ($requestStockListDetails as $item) {
-        //     RequestStocksDetails::create([
-        //         'request_stocks_id' => $requestStocksID,
-        //         'cl2comb' => $item['cl2comb'],
-        //         'requested_qty' => $item['requested_qty'],
-        //     ]);
-        // }
+        foreach ($requestStockListDetails as $item) {
+            RequestTankStocksDetails::create([
+                'request_stocks_id' => $requestStocksID,
+                'itemcode' => $item['itemcode'],
+                'requested_qty' => $item['requested_qty'],
+            ]);
+        }
 
-        // // the parameters result will be send into the frontend
+        // the parameters result will be send into the frontend
         // event(new RequestStock('Item requested.'));
 
-        // return Redirect::route('requeststocks.index');
+        return Redirect::route('requesttankstocks.index');
     }
 
     public function update(RequestTankStocks $requesttankstock, Request $request)
