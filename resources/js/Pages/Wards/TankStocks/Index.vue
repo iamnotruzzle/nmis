@@ -9,6 +9,23 @@
             asc = 1
             desc =-1
         -->
+
+      <div class="mb-2">
+        <Link
+          href="requeststocks"
+          class="text-2xl my-link"
+        >
+          DRUG AND MEDS
+        </Link>
+
+        <Link
+          href="requesttankstocks"
+          class="text-2xl border-bottom-2 mr-3 font-semibold"
+        >
+          TANKS
+        </Link>
+      </div>
+
       <DataTable
         class="p-datatable-sm"
         v-model:expandedRows="expandedRows"
@@ -1613,5 +1630,16 @@ input[type='number'] {
   white-space: pre;
   text-overflow: ellipsis;
   -webkit-appearance: none;
+}
+
+.my-link {
+  opacity: 0.7;
+  transition: opacity 0.2s ease-in-out; /* Optional: Add a smooth transition effect */
+}
+
+/* Change the opacity on hover */
+.my-link:hover {
+  opacity: 1; /* Adjust the opacity value as needed */
+  border-bottom-style: solid;
 }
 </style>
