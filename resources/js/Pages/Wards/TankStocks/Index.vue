@@ -1043,7 +1043,7 @@ export default {
       this.cancelItemDialog = true;
     },
     cancelItem() {
-      this.form.delete(route('requeststocks.destroy', this.requestStockId), {
+      this.form.delete(route('requesttankstocks.destroy', this.requestStockId), {
         preserveScroll: true,
         onSuccess: () => {
           this.requestStockList = [];
