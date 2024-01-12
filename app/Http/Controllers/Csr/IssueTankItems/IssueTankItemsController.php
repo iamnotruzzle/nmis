@@ -379,27 +379,27 @@ class IssueTankItemsController extends Controller
     //     return Redirect::route('issueitems.index');
     // }
 
-    // public function acknowledgedRequest(RequestTankStocks $requesttankstock, Request $request)
-    // {
-    //     // get location of the request
-    //     $location = RequestTankStocks::where('id', $request->request_stock_id)->first();
+    public function acknowledgedRequest(RequestTankStocks $requesttankstock, Request $request)
+    {
+        // get location of the request
+        $location = RequestTankStocks::where('id', $request->request_stock_id)->first();
+        // dd($location);
+        // update status
+        RequestTankStocks::where('id', $request->request_stock_id)
+            ->update([
+                'status' => 'ACKNOWLEDGED',
+            ]);
 
-    //     // update status
-    //     RequestTankStocks::where('id', $request->request_stock_id)
-    //         ->update([
-    //             'status' => 'ACKNOWLEDGED',
-    //         ]);
+        // pass this the parameter in the frontends mounted
+        event(new ItemTankIssued(
+            [
+                $location->location,
+                'Request acknowledged.'
+            ]
+        ));
 
-    //     // pass this the parameter in the frontends mounted
-    //     event(new ItemTankIssued(
-    //         [
-    //             $location->location,
-    //             'Request acknowledged.'
-    //         ]
-    //     ));
-
-    //     return Redirect::route('issueitems.index');
-    // }
+        return Redirect::route('issueitems.index');
+    }
 
     // public function destroy(RequestTankStock $requesttankstock, Request $request)
     // {

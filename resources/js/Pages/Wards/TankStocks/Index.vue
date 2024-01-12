@@ -992,7 +992,7 @@ export default {
       //   console.log(item);
       //   this.formUpdateStatus.status = item;
 
-      this.formUpdateStatus.put(route('requeststocks.updatedeliverystatus', this.formUpdateStatus), {
+      this.formUpdateStatus.put(route('requesttankstocks.updatedeliverystatus', this.formUpdateStatus), {
         preserveScroll: true,
         onSuccess: () => {
           this.requestStockId = null;

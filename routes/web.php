@@ -78,8 +78,8 @@ Route::get('issueitems/issued/', [IssuedItemsReportController::class, 'export'])
 Route::put('issueitems', [IssueItemController::class, 'acknowledgedrequest'])->name('issueitems.acknowledgedrequest');
 // Issue tank items
 Route::resource('issuetankitems', IssueTankItemsController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
-Route::get('issuetankitems/issued/', [IssuedItemsReportController::class, 'export']);
-Route::put('issuetankitems', [IssueItemController::class, 'acknowledgedrequest'])->name('issuetankitems.acknowledgedrequest');
+Route::get('issuetankitems/issued/', [IssueTankItemsController::class, 'export']);
+Route::put('issuetankitems', [IssueTankItemsController::class, 'acknowledgedrequest'])->name('issuetankitems.acknowledgedrequest');
 
 Route::resource('csrreports', ReportsController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index']);
 Route::resource('csrmanualreports', CsrManualReportController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);

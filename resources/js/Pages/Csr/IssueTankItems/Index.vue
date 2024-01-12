@@ -911,7 +911,7 @@ export default {
       //   console.log(item);
       //   this.formUpdateStatus.status = item;
 
-      this.formUpdateStatus.put(route('issueitems.acknowledgedrequest', this.formUpdateStatus), {
+      this.formUpdateStatus.put(route('issuetankitems.acknowledgedrequest', this.formUpdateStatus), {
         preserveScroll: true,
         onSuccess: () => {
           this.requestStockId = null;
