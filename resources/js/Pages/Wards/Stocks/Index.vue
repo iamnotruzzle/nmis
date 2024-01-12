@@ -12,7 +12,7 @@
       <div class="mb-2">
         <Link
           href="requeststocks"
-          class="text-2xl border-bottom-2 mr-3 font-semibold"
+          class="text-2xl border-bottom-2 mr-2 font-semibold"
         >
           DRUG AND MEDS
         </Link>
