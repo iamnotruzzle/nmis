@@ -938,6 +938,7 @@ import Tag from 'primevue/tag';
 import moment from 'moment';
 import NProgress from 'nprogress';
 import Echo from 'laravel-echo';
+import { Link } from '@inertiajs/vue3';
 
 export default {
   components: {
@@ -957,6 +958,7 @@ export default {
     AutoComplete,
     Tag,
     TextArea,
+    Link,
   },
   props: {
     authWardcode: Object,
