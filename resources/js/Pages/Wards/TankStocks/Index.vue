@@ -225,7 +225,7 @@
                 header="ITEM"
               >
                 <template #body="{ data }">
-                  {{ data.item_details.cl2desc }}
+                  {{ data.item_details.itemDesc }}
                 </template>
               </Column>
               <Column
@@ -344,18 +344,6 @@
                   ></v-icon>
                 </template>
               </Button>
-              <Button
-                rounded
-                text
-                @click="openConvertDialog(slotProps.data)"
-              >
-                <template #default="">
-                  <v-icon
-                    name="si-convertio"
-                    class="text-blue-500"
-                  ></v-icon>
-                </template>
-              </Button>
             </div>
           </template>
         </Column>
@@ -378,7 +366,6 @@
             :options="itemsList"
             :virtualScrollerOptions="{ itemSize: 38 }"
             filter
-            optionValue="itemcode"
             optionLabel="itemDesc"
             class="w-full mb-3"
           />
@@ -409,7 +396,7 @@
           />
           <DataTable
             v-model:filters="requestStockListDetailsFilter"
-            :globalFilterFields="['cl2desc']"
+            :globalFilterFields="['itemDesc']"
             :value="requestStockListDetails"
             tableStyle="min-width: 50rem"
             class="p-datatable-sm w-full"
@@ -429,7 +416,7 @@
               </div>
             </template>
             <Column
-              field="cl2desc"
+              field="itemDesc"
               header="PENDING ITEM"
               sortable
             ></Column>
@@ -547,127 +534,6 @@
             :disabled="form.processing"
             @click="cancelItem"
           />
-        </template>
-      </Dialog>
-
-      <!-- Convert item -->
-      <Dialog
-        v-model:visible="convertItemDialog"
-        header="CONVERT ITEM"
-        :modal="true"
-        @hide="whenDialogIsHidden"
-        :style="{ width: '50rem' }"
-      >
-        <p
-          class="text-error text-xl font-semibold my-1"
-          v-if="stockBalanceDeclared != false"
-        >
-          <!-- {{ $page.props.errors['requestStockListDetails.0.cl2comb'].toUpperCase() }} -->
-          {{ $page.props.errors.cl2comb }}
-        </p>
-        <div class="form-container">
-          <!-- Left Side: From Items -->
-          <div class="form-side border-1 p-3">
-            <h2>FROM</h2>
-            <div class="p-field flex flex-column">
-              <label for="targetItem">ITEM</label>
-              <InputText
-                id="targetItem"
-                v-model.trim="targetItemDesc"
-                readonly
-              />
-            </div>
-
-            <div class="p-field flex flex-column">
-              <label for="qty_to_convert">QUANTITY TO CONVERT</label>
-              <InputText
-                id="qty_to_convert"
-                v-model.trim="formConvertItem.qty_to_convert"
-                required="true"
-                autofocus
-                type="number"
-                :class="{
-                  'p-invalid':
-                    formConvertItem.qty_to_convert == '' ||
-                    formConvertItem.qty_to_convert == null ||
-                    formConvertItem.qty_to_convert > oldQuantity,
-                }"
-              />
-              <span
-                v-if="formConvertItem.qty_to_convert > oldQuantity"
-                class="text-error"
-              >
-                Current stock quantity is no enough.
-              </span>
-            </div>
-            <!-- Add more fields as needed -->
-          </div>
-
-          <div class="mx-2">
-            <v-icon
-              name="co-arrow-thick-right"
-              scale="2"
-            ></v-icon>
-          </div>
-
-          <!-- Right Side: To Items -->
-          <div class="form-side border-1 p-3">
-            <h2>TO</h2>
-            <div class="p-field flex flex-column">
-              <label for="toItem">ITEM</label>
-              <Dropdown
-                id="toItem"
-                required="true"
-                v-model="formConvertItem.to"
-                :options="itemsList"
-                :virtualScrollerOptions="{ itemSize: 38 }"
-                filter
-                optionValue="cl2comb"
-                optionLabel="cl2desc"
-              />
-            </div>
-
-            <div class="p-field flex flex-column">
-              <label for="qty_after">EQUIVALENT QUANTITY</label>
-              <InputText
-                id="qty_after"
-                v-model.trim="formConvertItem.equivalent_quantity"
-                required="true"
-                autofocus
-                type="number"
-                :class="{
-                  'p-invalid': formConvertItem.equivalent_quantity == '' || formConvertItem.equivalent_quantity == null,
-                }"
-              />
-            </div>
-          </div>
-        </div>
-
-        <template #footer>
-          <Button
-            label="Cancel"
-            icon="pi pi-times"
-            severity="danger"
-            text
-            @click="cancel"
-          />
-          <Button
-            text
-            type="submit"
-            :disabled="
-              formConvertItem.processing ||
-              formConvertItem.to == null ||
-              formConvertItem.qty_to_convert == null ||
-              formConvertItem.equivalent_quantity == null ||
-              formConvertItem.qty_to_convert > oldQuantity
-            "
-            @click="submitConvertItem"
-          >
-            <template #default="">
-              <v-icon name="si-convertio"></v-icon>
-              <label class="ml-2">Convert</label>
-            </template>
-          </Button>
         </template>
       </Dialog>
 
@@ -814,7 +680,6 @@ export default {
       requestStockId: null,
       isUpdate: false,
       createRequestStocksDialog: false,
-      convertItemDialog: false,
       editWardStocksDialog: false,
       editStatusDialog: false,
       cancelItemDialog: false,
@@ -838,7 +703,7 @@ export default {
       },
       requestStockListDetails: [],
       item: null,
-      cl2desc: null,
+      itemDesc: null,
       requested_qty: null,
       approved_qty: null,
       itemNotSelected: false,
@@ -866,13 +731,6 @@ export default {
         remarks: null,
       }),
       targetItemDesc: null,
-      formConvertItem: this.$inertia.form({
-        cl2comb: null,
-        ward_stock_id: null,
-        to: null,
-        qty_to_convert: null,
-        equivalent_quantity: null,
-      }),
     };
   },
   // created will be initialize before mounted
@@ -963,8 +821,8 @@ export default {
       //     this.currentWardStocksList.push({
       //       from: e.from,
       //       ward_stock_id: e.id,
-      //       cl2comb: e.item_details.cl2comb,
-      //       item: e.item_details.cl2desc,
+      //       itemcode: e.item_details.itemcode,
+      //       item: e.item_details.itemDesc,
       //       unit: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomdesc,
       //       quantity: e.quantity,
       //       expiration_date: expiration_date.toString(),
@@ -977,8 +835,8 @@ export default {
       //     this.currentWardStocksList.push({
       //       from: e.from,
       //       ward_stock_id: e.id,
-      //       cl2comb: e.item_details.cl2comb,
-      //       item: e.item_details.cl2desc,
+      //       itemcode: e.item_details.itemcode,
+      //       item: e.item_details.itemDesc,
       //       unit: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomdesc,
       //       quantity: e.quantity,
       //       expiration_date: expiration_date.toString(),
@@ -1041,13 +899,6 @@ export default {
       this.requestStockId = null;
       this.createRequestStocksDialog = true;
     },
-    openConvertDialog(item) {
-      this.convertItemDialog = true;
-      this.formConvertItem.cl2comb = item.cl2comb;
-      this.formConvertItem.ward_stock_id = item.ward_stock_id;
-      this.oldQuantity = item.quantity;
-      this.targetItemDesc = item.item;
-    },
     // when dialog is hidden, do this function
     whenDialogIsHidden() {
       this.$emit(
@@ -1056,7 +907,7 @@ export default {
         (this.isUpdate = false),
         (this.requestStockListDetails = []),
         (this.item = null),
-        (this.cl2desc = null),
+        (this.itemDesc = null),
         (this.requested_qty = null),
         (this.approved_qty = null),
         (this.itemNotSelected = null),
@@ -1067,12 +918,12 @@ export default {
         this.form.reset(),
         this.formWardStocks.clearErrors(),
         this.formWardStocks.reset(),
-        this.formConvertItem.clearErrors(),
-        this.formConvertItem.reset(),
         this.formUpdateStatus.reset()
       );
     },
     fillRequestContainer() {
+      console.log(this.requestStockListDetails);
+
       // check if no selected item
       if (this.item == null || this.item == '') {
         this.itemNotSelected = true;
@@ -1084,15 +935,15 @@ export default {
           this.itemNotSelectedMsg = 'Please provide quantity.';
         } else {
           // check if item selected is already on the list
-          if (this.requestStockListDetails.some((e) => e.cl2comb === this.item['cl2comb'])) {
+          if (this.requestStockListDetails.some((e) => e.itemcode === this.item['itemcode'])) {
             this.itemNotSelected = true;
             this.itemNotSelectedMsg = 'Item is already on the list.';
           } else {
             this.itemNotSelected = false;
             this.itemNotSelectedMsg = null;
             this.requestStockListDetails.push({
-              cl2comb: this.item['cl2comb'],
-              cl2desc: this.item['cl2desc'],
+              itemcode: this.item['itemcode'],
+              itemDesc: this.item['itemDesc'],
               requested_qty: this.requested_qty,
             });
           }
@@ -1102,7 +953,7 @@ export default {
     },
     removeFromRequestContainer(item) {
       this.requestStockListDetails.splice(
-        this.requestStockListDetails.findIndex((e) => e.cl2comb === item.cl2comb),
+        this.requestStockListDetails.findIndex((e) => e.itemcode === item.itemcode),
         1
       );
     },
@@ -1116,8 +967,8 @@ export default {
       item.request_stocks_details.forEach((e) => {
         this.requestStockListDetails.push({
           request_stocks_details_id: e.id,
-          cl2comb: e.cl2comb,
-          cl2desc: e.item_details.cl2desc,
+          itemcode: e.itemcode,
+          itemDesc: e.item_details.itemDesc,
           requested_qty: e.requested_qty,
         });
       });
@@ -1177,28 +1028,6 @@ export default {
         });
       }
     },
-    submitConvertItem() {
-      this.formConvertItem.post(route('convertitem.store'), {
-        preserveScroll: true,
-        onSuccess: () => {
-          this.formConvertItem.reset();
-          this.cancel();
-          this.updateData();
-          this.convertedMsg();
-        },
-        onError: (errors) => {
-          this.stockBalanceDeclared = true;
-        },
-        onFinish: (visit) => {
-          if (this.stockBalanceDeclared != true) {
-            this.convertItemDialog = false;
-            this.cancel();
-            this.updateData();
-            //   this.updatedMsg();
-          }
-        },
-      });
-    },
     confirmCancelItem(item) {
       //   console.log(item);
       this.requestStockId = item.id;
@@ -1224,17 +1053,11 @@ export default {
       this.createRequestStocksDialog = false;
       this.editWardStocksDialog = false;
       this.targetItemDesc = null;
-      this.convertItemDialog = false;
       this.oldQuantity = 0;
       this.form.reset();
       this.form.clearErrors();
       this.formWardStocks.reset();
       this.formWardStocks.clearErrors();
-      this.formConvertItem.reset();
-      this.formConvertItem.clearErrors();
-    },
-    convertedMsg() {
-      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Item converted.', life: 3000 });
     },
     createdMsg() {
       this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Stock request created', life: 3000 });
