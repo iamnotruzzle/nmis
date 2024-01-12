@@ -8,14 +8,14 @@
       <div class="mb-2">
         <Link
           href="issueitems"
-          class="text-2xl mr-2 my-link border-bottom-2 font-semibold"
+          class="text-2xl mr-2 my-link"
         >
           DRUG AND MEDS
         </Link>
 
         <Link
           href="issuetankitems"
-          class="text-2xl"
+          class="text-2xl border-bottom-2 font-semibold"
         >
           TANKS
         </Link>
@@ -855,7 +855,7 @@ export default {
           });
 
           if (isQtyEnough) {
-            this.form.put(route('issueitems.update', this.requestStockId), {
+            this.form.put(route('issuetankitems.update', this.requestStockId), {
               preserveScroll: true,
               onSuccess: () => {
                 this.requestStockId = null;
@@ -891,7 +891,7 @@ export default {
           });
 
           if (isQtyEnough) {
-            this.form.post(route('issueitems.store'), {
+            this.form.post(route('issuetankitems.store'), {
               preserveScroll: true,
               onSuccess: () => {
                 this.requestStockId = null;
