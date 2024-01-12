@@ -110,28 +110,28 @@ class RequestTankStocksController extends Controller
 
     public function update(RequestTankStocks $requesttankstock, Request $request)
     {
-        // $requestStocksID = $request->request_stocks_id;
+        $requestStocksID = $request->request_stocks_id;
 
-        // // if the total count of the container is 0,
-        // // delete both RequestStocks and RequestStocksDetails
-        // if (count($request->requestStockListDetails) == 0) {
-        //     RequestStocks::where('id', $requestStocksID)->delete();
-        //     RequestStocksDetails::where('request_stocks_id', $requestStocksID)->delete();
-        // } else {
-        //     RequestStocksDetails::where('request_stocks_id', $requestStocksID)->delete();
-        //     foreach ($request->requestStockListDetails as $item) {
-        //         RequestStocksDetails::create([
-        //             'request_stocks_id' => $requestStocksID,
-        //             'cl2comb' => $item['cl2comb'],
-        //             'requested_qty' => $item['requested_qty'],
-        //         ]);
-        //     }
-        // }
+        // if the total count of the container is 0,
+        // delete both RequestStocks and RequestStocksDetails
+        if (count($request->requestStockListDetails) == 0) {
+            RequestTankStocks::where('id', $requestStocksID)->delete();
+            RequestTankStocksDetails::where('request_stocks_id', $requestStocksID)->delete();
+        } else {
+            RequestTankStocksDetails::where('request_stocks_id', $requestStocksID)->delete();
+            foreach ($request->requestStockListDetails as $item) {
+                RequestTankStocksDetails::create([
+                    'request_stocks_id' => $requestStocksID,
+                    'itemcode' => $item['itemcode'],
+                    'requested_qty' => $item['requested_qty'],
+                ]);
+            }
+        }
 
-        // // the parameters result will be send into the frontend
+        // the parameters result will be send into the frontend
         // event(new RequestStock('Item requested.'));
 
-        // return Redirect::route('requeststocks.index');
+        return Redirect::route('requesttankstocks.index');
     }
 
     public function updatedeliverystatus(RequestTankStocks $requesttankstock, Request $request)
@@ -149,18 +149,18 @@ class RequestTankStocksController extends Controller
         // return Redirect::route('requeststocks.index');
     }
 
-    public function destroy(RequestStocks $requeststock, Request $request)
+    public function destroy(RequestTankStocks $requesttankstock, Request $request)
     {
-        // $requestStocksID = $requeststock->id;
+        $requestStocksID = $requesttankstock->id;
 
-        // RequestStocks::where('id', $requestStocksID)
-        //     ->update([
-        //         'status' => 'CANCELLED',
-        //     ]);
+        RequestTankStocks::where('id', $requestStocksID)
+            ->update([
+                'status' => 'CANCELLED',
+            ]);
 
-        // // the parameters result will be send into the frontend
+        // the parameters result will be send into the frontend
         // event(new RequestStock('Item requested.'));
 
-        // return Redirect::route('requeststocks.index');
+        return Redirect::route('requesttankstocks.index');
     }
 }
