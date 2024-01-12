@@ -94,7 +94,7 @@ Route::put('requeststocks', [RequestStocksController::class, 'updatedeliverystat
 
 // tanks
 Route::resource('requesttankstocks', RequestTankStocksController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
-Route::put('requesttankstocks', [RequestTankStocksController::class, 'updatedeliverystatus'])->name('requeststocks.updatedeliverystatus');
+Route::put('requesttankstocks', [RequestTankStocksController::class, 'updatedeliverystatus'])->name('requesttankstocks.updatedeliverystatus');
 // end tanks
 
 Route::resource('convertitem', ConvertItemController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
