@@ -1005,7 +1005,7 @@ export default {
       this.form.requestStockListDetails = this.requestStockListDetails;
 
       if (this.isUpdate) {
-        this.form.put(route('requeststocks.update', this.requestStockId), {
+        this.form.put(route('requesttankstocks.update', this.requestStockId), {
           preserveScroll: true,
           onSuccess: () => {
             this.requestStockId = null;
@@ -1016,7 +1016,7 @@ export default {
           },
         });
       } else {
-        this.form.post(route('requeststocks.store'), {
+        this.form.post(route('requesttankstocks.store'), {
           preserveScroll: true,
           onSuccess: () => {
             this.requestStockId = null;

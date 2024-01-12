@@ -72,7 +72,7 @@ class RequestTankStocksController extends Controller
         return Inertia::render('Wards/TankStocks/Index', [
             // 'items' => $items,
             'requestedStocks' => $requestedStocks,
-            // 'authWardcode' => $authWardcode,
+            'authWardcode' => $authWardcode,
             // 'currentWardStocks' => $currentWardStocks,
             // 'currentWardStocks2' => $currentWardStocks2,
             // 'brands' => $brands,
@@ -81,6 +81,8 @@ class RequestTankStocksController extends Controller
 
     public function store(Request $request)
     {
+        dd($request);
+
         // $requestStocks = RequestStocks::create([
         //     'location' => $request->location,
         //     'status' => 'PENDING',
