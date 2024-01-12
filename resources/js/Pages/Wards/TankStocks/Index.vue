@@ -971,10 +971,13 @@ export default {
       this.requestStockId = item.id;
 
       item.request_stocks_details.forEach((e) => {
+        // console.log(e);
+        const matchingTank = this.$page.props.tanksList.find((x) => e.itemcode === x.itemcode);
+
         this.requestStockListDetails.push({
           request_stocks_details_id: e.id,
           itemcode: e.itemcode,
-          itemDesc: e.item_details.itemDesc,
+          itemDesc: matchingTank ? matchingTank.itemDesc : null,
           requested_qty: e.requested_qty,
         });
       });
