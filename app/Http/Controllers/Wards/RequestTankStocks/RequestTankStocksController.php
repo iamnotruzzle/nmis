@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Wards\RequestTankStocks;
 
+use App\Events\RequestTankStock;
 use App\Http\Controllers\Controller;
 use App\Models\RequestTankStocks;
 use App\Models\RequestTankStocksDetails;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -103,7 +105,7 @@ class RequestTankStocksController extends Controller
         }
 
         // the parameters result will be send into the frontend
-        // event(new RequestStock('Item requested.'));
+        event(new RequestTankStock('Item requested.'));
 
         return Redirect::route('requesttankstocks.index');
     }
@@ -129,24 +131,24 @@ class RequestTankStocksController extends Controller
         }
 
         // the parameters result will be send into the frontend
-        // event(new RequestStock('Item requested.'));
+        event(new RequestTankStock('Item requested.'));
 
         return Redirect::route('requesttankstocks.index');
     }
 
     public function updatedeliverystatus(RequestTankStocks $requesttankstock, Request $request)
     {
-        // // update status
-        // RequestStocks::where('id', $request->request_stock_id)
-        //     ->update([
-        //         'status' => $request->status,
-        //         'received_date' => Carbon::now(),
-        //     ]);
+        // update status
+        RequestTankStocks::where('id', $request->request_stock_id)
+            ->update([
+                'status' => $request->status,
+                'received_date' => Carbon::now(),
+            ]);
 
-        // // the parameters result will be send into the frontend
+        // the parameters result will be send into the frontend
         // event(new RequestStock('Item requested.'));
 
-        // return Redirect::route('requeststocks.index');
+        return Redirect::route('requeststocks.index');
     }
 
     public function destroy(RequestTankStocks $requesttankstock, Request $request)
@@ -159,7 +161,7 @@ class RequestTankStocksController extends Controller
             ]);
 
         // the parameters result will be send into the frontend
-        // event(new RequestStock('Item requested.'));
+        event(new RequestTankStock('Item requested.'));
 
         return Redirect::route('requesttankstocks.index');
     }

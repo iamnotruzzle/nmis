@@ -740,7 +740,7 @@ export default {
     this.rows = this.requestedStocks.per_page;
   },
   mounted() {
-    window.Echo.channel('issued').listen('ItemIssued', (args) => {
+    window.Echo.channel('tankissued').listen('ItemTankIssued', (args) => {
       if (args.message[0] == this.$page.props.authWardcode.wardcode) {
         router.reload({
           onSuccess: (e) => {
