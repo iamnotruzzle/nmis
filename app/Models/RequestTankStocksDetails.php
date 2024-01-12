@@ -10,7 +10,7 @@ class RequestTankStocksDetails extends Model
 {
     use HasFactory;
 
-    protected $table = 'csrw_request_stocks_details';
+    protected $table = 'csrw_request_tank_stocks_details';
 
     protected $fillable = [
         'id',

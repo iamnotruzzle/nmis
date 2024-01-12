@@ -28,31 +28,28 @@ class RequestTankStocksController extends Controller
         //     ->orderBy('cl2desc', 'ASC')
         //     ->get();
 
-        // $requestedStocks = RequestStocks::with(['requested_at_details', 'requested_by_details', 'approved_by_details', 'request_stocks_details.item_details'])
-        //     ->where('location', '=', $authWardcode->wardcode)
-        //     ->whereHas('requested_by_details', function ($q) use ($searchString) {
-        //         $q->where('firstname', 'LIKE', '%' . $searchString . '%')
-        //             ->orWhere('middlename', 'LIKE', '%' . $searchString . '%')
-        //             ->orWhere('lastname', 'LIKE', '%' . $searchString . '%');
-        //     })
-        //     // ->orWhereHas('request_stocks_details.item_details', function ($q) use ($searchString) {
-        //     //     $q->where('cl2desc', 'LIKE', '%' . $searchString . '%');
-        //     // })
-        //     ->when(
-        //         $request->from,
-        //         function ($query, $value) {
-        //             $query->whereDate('created_at', '>=', $value);
-        //         }
-        //     )
-        //     ->when(
-        //         $request->to,
-        //         function ($query, $value) {
-        //             $query->whereDate('created_at', '<=', $value);
-        //         }
-        //     )
-        //     ->where('location', '=', $authWardcode->wardcode)
-        //     ->orderBy('created_at', 'desc')
-        //     ->paginate(15);
+        $requestedStocks = RequestTankStocks::with(['requested_at_details', 'requested_by_details', 'approved_by_details', 'request_stocks_details.item_details'])
+            // ->where('location', '=', $authWardcode->wardcode)
+            // ->whereHas('requested_by_details', function ($q) use ($searchString) {
+            //     $q->where('firstname', 'LIKE', '%' . $searchString . '%')
+            //         ->orWhere('middlename', 'LIKE', '%' . $searchString . '%')
+            //         ->orWhere('lastname', 'LIKE', '%' . $searchString . '%');
+            // })
+            ->when(
+                $request->from,
+                function ($query, $value) {
+                    $query->whereDate('created_at', '>=', $value);
+                }
+            )
+            ->when(
+                $request->to,
+                function ($query, $value) {
+                    $query->whereDate('created_at', '<=', $value);
+                }
+            )
+            ->where('location', '=', $authWardcode->wardcode)
+            ->orderBy('created_at', 'desc')
+            ->paginate(15);
 
         // $currentWardStocks = WardsStocksMedSupp::with(['item_details:cl2comb,cl2desc', 'brand_details:id,name', 'request_stocks', 'unit_of_measurement:uomcode,uomdesc'])
         //     ->where('location', $authWardcode->wardcode)
@@ -74,7 +71,7 @@ class RequestTankStocksController extends Controller
 
         return Inertia::render('Wards/TankStocks/Index', [
             // 'items' => $items,
-            // 'requestedStocks' => $requestedStocks,
+            'requestedStocks' => $requestedStocks,
             // 'authWardcode' => $authWardcode,
             // 'currentWardStocks' => $currentWardStocks,
             // 'currentWardStocks2' => $currentWardStocks2,

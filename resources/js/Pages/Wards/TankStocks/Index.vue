@@ -268,12 +268,6 @@
                   placeholder="Search item"
                 />
               </span>
-              <Button
-                label="Consignment"
-                icon="pi pi-plus"
-                iconPos="right"
-                @click="openConsignmentDialog"
-              />
             </div>
           </div>
         </template>
@@ -284,15 +278,6 @@
           header="FROM"
           sortable
         >
-        </Column>
-        <Column
-          field="brand"
-          header="BRAND"
-          sortable
-        >
-          <template #body="{ data }">
-            {{ data.brand }}
-          </template>
         </Column>
         <Column
           field="item"
@@ -393,7 +378,8 @@
             :options="itemsList"
             :virtualScrollerOptions="{ itemSize: 38 }"
             filter
-            optionLabel="cl2desc"
+            optionValue="itemcode"
+            optionLabel="itemDesc"
             class="w-full mb-3"
           />
         </div>
@@ -564,164 +550,6 @@
         </template>
       </Dialog>
 
-      <!-- Consignment -->
-      <Dialog
-        v-model:visible="consignmentDialog"
-        header="Consignment"
-        :modal="true"
-        class="p-fluid w-4"
-        @hide="whenDialogIsHidden"
-      >
-        <div class="field">
-          <label for="fundSource">Fund source</label>
-          <Dropdown
-            id="fundSource"
-            required="true"
-            v-model="formConsignment.fund_source"
-            :options="fundSourceList"
-            filter
-            showClear
-            dataKey="chrgcode"
-            optionLabel="chrgdesc"
-            optionValue="chrgcode"
-            class="w-full"
-            :class="{ 'p-invalid': formConsignment.fund_source == '' }"
-          />
-          <small
-            class="text-error"
-            v-if="formConsignment.errors.fund_source"
-          >
-            {{ formConsignment.errors.fund_source }}
-          </small>
-        </div>
-        <div class="field">
-          <label for="brand">Brand</label>
-          <Dropdown
-            required="true"
-            v-model="formConsignment.brand"
-            :options="brandsList"
-            :virtualScrollerOptions="{ itemSize: 38 }"
-            filter
-            showClear
-            dataKey="id"
-            optionLabel="name"
-            optionValue="id"
-            class="w-full mb-3"
-            :class="{ 'p-invalid': formConsignment.brand == '' }"
-          />
-          <small
-            class="text-error"
-            v-if="formConsignment.errors.brand"
-          >
-            {{ formConsignment.errors.brand }}
-          </small>
-        </div>
-        <div class="field">
-          <label>Item</label>
-          <Dropdown
-            required="true"
-            v-model="formConsignment.cl2comb"
-            :options="itemsList"
-            :virtualScrollerOptions="{ itemSize: 38 }"
-            filter
-            optionValue="cl2comb"
-            optionLabel="cl2desc"
-            class="w-full mb-3"
-          />
-          <small
-            class="text-error"
-            v-if="formConsignment.errors.cl2comb"
-          >
-            {{ formConsignment.errors.cl2comb }}
-          </small>
-        </div>
-        <div class="field">
-          <label for="unit">Unit</label>
-          <InputText
-            id="unit"
-            v-model.trim="selectedItemsUomDesc"
-            readonly
-          />
-        </div>
-        <div class="field">
-          <label>Quantity</label>
-          <InputText
-            id="quantity"
-            v-model.trim="formConsignment.quantity"
-            required="true"
-            autofocus
-            type="number"
-            :class="{ 'p-invalid': formConsignment.quantity == '' || formConsignment.quantity == null }"
-          />
-          <small
-            class="text-error"
-            v-if="formConsignment.errors.quantity"
-          >
-            {{ formConsignment.errors.quantity }}
-          </small>
-        </div>
-        <div class="field">
-          <label for="manufactured_date">Manufactured date</label>
-          <Calendar
-            v-model="formConsignment.manufactured_date"
-            dateFormat="mm-dd-yy"
-            showIcon
-            showButtonBar
-            :hideOnDateTimeSelect="true"
-          />
-        </div>
-        <div class="field">
-          <label for="delivered_date">Delivered date</label>
-          <Calendar
-            v-model="formConsignment.delivered_date"
-            dateFormat="mm-dd-yy"
-            showIcon
-            showButtonBar
-            :hideOnDateTimeSelect="true"
-          />
-        </div>
-        <div class="field">
-          <label for="expiration_date">Expiration date</label>
-          <Calendar
-            v-model="formConsignment.expiration_date"
-            dateFormat="mm-dd-yy"
-            showIcon
-            showButtonBar
-            :hideOnDateTimeSelect="true"
-          />
-          <small
-            class="text-error"
-            v-if="formConsignment.errors.expiration_date"
-          >
-            {{ formConsignment.errors.expiration_date }}
-          </small>
-        </div>
-
-        <template #footer>
-          <Button
-            label="Cancel"
-            icon="pi pi-times"
-            severity="danger"
-            text
-            @click="cancel"
-          />
-          <Button
-            label="Save"
-            icon="pi pi-check"
-            text
-            type="submit"
-            :disabled="
-              formConsignment.processing ||
-              formConsignment.fund_source == null ||
-              formConsignment.cl2comb == null ||
-              formConsignment.quantity == null ||
-              formConsignment.expiration_date == null
-            "
-            @click="submitConsignment"
-          />
-        </template>
-      </Dialog>
-
       <!-- Convert item -->
       <Dialog
         v-model:visible="convertItemDialog"
@@ -853,15 +681,6 @@
         dismissableMask
       >
         <div class="field">
-          <label for="brand">Brand</label>
-          <InputText
-            id="brand"
-            v-model.trim="formWardStocks.brand"
-            readonly
-            class="w-full"
-          />
-        </div>
-        <div class="field">
           <label for="item">Item</label>
           <InputText
             id="item"
@@ -983,7 +802,6 @@ export default {
     requestedStocks: Object,
     currentWardStocks: Object,
     currentWardStocks2: Object,
-    brands: Object,
   },
   data() {
     return {
@@ -997,7 +815,6 @@ export default {
       isUpdate: false,
       createRequestStocksDialog: false,
       convertItemDialog: false,
-      consignmentDialog: false,
       editWardStocksDialog: false,
       editStatusDialog: false,
       cancelItemDialog: false,
@@ -1012,7 +829,6 @@ export default {
       itemsList: [],
       requestStockList: [],
       currentWardStocksList: [],
-      brandsList: [],
       // stock list details
       requestStockListDetailsFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -1021,7 +837,6 @@ export default {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       requestStockListDetails: [],
-      fundSourceList: [],
       item: null,
       cl2desc: null,
       requested_qty: null,
@@ -1042,20 +857,8 @@ export default {
         request_stock_id: null,
         status: null,
       }),
-      formConsignment: this.$inertia.form({
-        authLocation: null,
-        fund_source: null,
-        brand: null,
-        cl2comb: null,
-        uomcode: null,
-        quantity: null,
-        manufactured_date: null,
-        delivered_date: null,
-        expiration_date: null,
-      }),
       formWardStocks: this.$inertia.form({
         ward_stock_id: null,
-        brand: null,
         item: null,
         current_quantity: null,
         quantity: null,
@@ -1079,8 +882,6 @@ export default {
     this.rows = this.requestedStocks.per_page;
   },
   mounted() {
-    this.storeBrandsInContainer();
-
     window.Echo.channel('issued').listen('ItemIssued', (args) => {
       if (args.message[0] == this.$page.props.authWardcode.wardcode) {
         router.reload({
@@ -1093,7 +894,6 @@ export default {
       }
     });
 
-    this.storeFundSourceInContainer();
     this.storeItemsInController();
     this.storeRequestedStocksInContainer();
     this.storeCurrentWardStocksInContainer();
@@ -1106,42 +906,27 @@ export default {
     },
   },
   methods: {
-    storeFundSourceInContainer() {
-      this.$page.props.typeOfCharge.forEach((e) => {
-        this.fundSourceList.push({
-          chrgcode: e.chrgcode,
-          chrgdesc: e.chrgdesc,
-          bentypcod: e.bentypcod,
-          chrgtable: e.chrgtable,
+    storeItemsInController() {
+      console.log(this.$page.props.tanksList);
+
+      this.itemsList = []; // reset
+      this.$page.props.tanksList.forEach((e) => {
+        const matchingTank = this.$page.props.tanksList.find((x) => e.itemcode === x.itemcode);
+
+        this.itemsList.push({
+          itemcode: e.itemcode,
+          itemDesc: matchingTank ? matchingTank.itemDesc : null,
+          unitcode: e.unit == null ? null : e.unit.unitcode,
+          //   uomdesc: e.unit == null ? null : e.unit.uomdesc,
         });
       });
 
-      this.$page.props.fundSource.forEach((e) => {
-        this.fundSourceList.push({
-          chrgcode: e.fsid,
-          chrgdesc: e.fsName,
-          bentypcod: null,
-          chrgtable: null,
-        });
-      });
-    },
-    storeBrandsInContainer() {
-      this.brands.forEach((e) => {
-        this.brandsList.push({
-          id: e.id,
-          name: e.name,
-        });
-      });
-    },
-    storeItemsInController() {
-      this.itemsList = []; // reset
-      this.items.forEach((e) => {
-        this.itemsList.push({
-          cl2comb: e.cl2comb,
-          cl2desc: e.cl2desc,
-          uomcode: e.unit == null ? null : e.unit.uomcode,
-          uomdesc: e.unit == null ? null : e.unit.uomdesc,
-        });
+      this.itemsList.sort((a, b) => {
+        const itemDescA = a.itemDesc || ''; // Handle cases where itemDesc might be null
+        const itemDescB = b.itemDesc || '';
+
+        // Use localeCompare for case-insensitive string comparison
+        return itemDescA.localeCompare(itemDescB);
       });
     },
     // use storeRequestedStocksInContainer() function so that every time you make
@@ -1172,35 +957,33 @@ export default {
 
       moment.suppressDeprecationWarnings = true;
 
-      this.currentWardStocks.forEach((e) => {
-        let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
+      //   this.currentWardStocks.forEach((e) => {
+      //     let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
 
-        this.currentWardStocksList.push({
-          from: e.from,
-          ward_stock_id: e.id,
-          brand: e.brand_details.name,
-          cl2comb: e.item_details.cl2comb,
-          item: e.item_details.cl2desc,
-          unit: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomdesc,
-          quantity: e.quantity,
-          expiration_date: expiration_date.toString(),
-        });
-      });
+      //     this.currentWardStocksList.push({
+      //       from: e.from,
+      //       ward_stock_id: e.id,
+      //       cl2comb: e.item_details.cl2comb,
+      //       item: e.item_details.cl2desc,
+      //       unit: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomdesc,
+      //       quantity: e.quantity,
+      //       expiration_date: expiration_date.toString(),
+      //     });
+      //   });
 
-      this.currentWardStocks2.forEach((e) => {
-        let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
+      //   this.currentWardStocks2.forEach((e) => {
+      //     let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
 
-        this.currentWardStocksList.push({
-          from: e.from,
-          ward_stock_id: e.id,
-          brand: e.brand_details.name,
-          cl2comb: e.item_details.cl2comb,
-          item: e.item_details.cl2desc,
-          unit: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomdesc,
-          quantity: e.quantity,
-          expiration_date: expiration_date.toString(),
-        });
-      });
+      //     this.currentWardStocksList.push({
+      //       from: e.from,
+      //       ward_stock_id: e.id,
+      //       cl2comb: e.item_details.cl2comb,
+      //       item: e.item_details.cl2desc,
+      //       unit: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomdesc,
+      //       quantity: e.quantity,
+      //       expiration_date: expiration_date.toString(),
+      //     });
+      //   });
     },
     tzone(date) {
       if (date == null || date == '') {
@@ -1258,18 +1041,7 @@ export default {
       this.requestStockId = null;
       this.createRequestStocksDialog = true;
     },
-    openConsignmentDialog() {
-      this.formConsignment.clearErrors();
-      this.formConsignment.reset();
-      this.consignmentDialog = true;
-    },
     openConvertDialog(item) {
-      //   this.formConsignment.clearErrors();
-      //   this.formConsignment.reset();
-      //   this.consignmentDialog = true;
-
-      //   console.log('item', item);
-
       this.convertItemDialog = true;
       this.formConvertItem.cl2comb = item.cl2comb;
       this.formConvertItem.ward_stock_id = item.ward_stock_id;
@@ -1405,30 +1177,6 @@ export default {
         });
       }
     },
-    submitConsignment() {
-      this.formConsignment.authLocation = this.$page.props.authWardcode.wardcode;
-      if (
-        this.formConsignment.fund_source != null ||
-        this.formConsignment.fund_source != '' ||
-        this.formConsignment.cl2comb != null ||
-        this.formConsignment.cl2comb != '' ||
-        this.formConsignment.quantity != null ||
-        this.formConsignment.quantity != '' ||
-        this.formConsignment.quantity != 0 ||
-        this.formConsignment.expiration_date != null ||
-        this.formConsignment.expiration_date != ''
-      ) {
-        this.formConsignment.post(route('consignment.store'), {
-          preserveScroll: true,
-          onSuccess: () => {
-            this.formConsignment.reset();
-            this.cancel();
-            this.updateData();
-            this.createdMsg();
-          },
-        });
-      }
-    },
     submitConvertItem() {
       this.formConvertItem.post(route('convertitem.store'), {
         preserveScroll: true,
@@ -1475,7 +1223,6 @@ export default {
       this.isUpdate = false;
       this.createRequestStocksDialog = false;
       this.editWardStocksDialog = false;
-      this.consignmentDialog = false;
       this.targetItemDesc = null;
       this.convertItemDialog = false;
       this.oldQuantity = 0;
@@ -1521,7 +1268,6 @@ export default {
       this.editWardStocksDialog = true;
 
       this.formWardStocks.ward_stock_id = data.ward_stock_id;
-      this.formWardStocks.brand = data.brand;
       this.formWardStocks.item = data.item;
       this.formWardStocks.current_quantity = data.quantity;
       this.formWardStocks.quantity = data.quantity;
@@ -1567,21 +1313,6 @@ export default {
         this.to = null;
       }
       this.updateData();
-    },
-    'formConsignment.cl2comb': function (val) {
-      this.selectedItemsUomDesc = null;
-
-      this.itemsList.forEach((e) => {
-        if (e.cl2comb == val) {
-          if (e.uomdesc != null) {
-            // console.log(e.uomdesc);
-            this.selectedItemsUomDesc = e.uomdesc;
-            this.formConsignment.uomcode = e.uomcode;
-          } else {
-            this.selectedItemsUomDesc = null;
-          }
-        }
-      });
     },
   },
 };
