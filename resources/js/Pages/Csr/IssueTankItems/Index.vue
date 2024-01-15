@@ -642,7 +642,7 @@ export default {
     // server request such as POST, the data in the table
     // is updated
     storeRequestedStocksInContainer() {
-      console.log(this.requestedStocks);
+      //   console.log(this.requestedStocks);
       this.requestedStocks.data.forEach((e) => {
         this.requestStockList.push({
           id: e.id,
@@ -731,18 +731,22 @@ export default {
       this.requestStockId = item.id;
 
       item.request_stocks_details.forEach((e) => {
+        const matchingTank = this.$page.props.tanksList.find((x) => e.itemcode === x.itemcode);
+
         this.requestStockListDetails.push({
           request_stocks_details_id: e.id,
-          cl2comb: e.cl2comb,
-          cl2desc: e.item_details.cl2desc,
+          itemcode: e.itemcode,
+          cl2desc: matchingTank.itemDesc,
           requested_qty: e.requested_qty,
           approved_qty: e.approved_qty,
           remarks: e.remarks,
-          stock_qty: e.stocks.reduce((accumulator, object) => {
-            return Number(accumulator) + Number(object.quantity);
-          }, 0),
+          //   stock_qty: e.stocks.reduce((accumulator, object) => {
+          //     return Number(accumulator) + Number(object.quantity);
+          //   }, 0),
         });
       });
+
+      console.log(this.requestStockListDetails);
     },
     // when dialog is hidden, do this function
     whenDialogIsHidden() {
