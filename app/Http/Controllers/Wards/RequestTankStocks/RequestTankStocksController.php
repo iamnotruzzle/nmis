@@ -6,6 +6,7 @@ use App\Events\RequestTankStock;
 use App\Http\Controllers\Controller;
 use App\Models\RequestTankStocks;
 use App\Models\RequestTankStocksDetails;
+use App\Models\WardStocksTanks;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -138,17 +139,37 @@ class RequestTankStocksController extends Controller
 
     public function updatedeliverystatus(RequestTankStocks $requesttankstock, Request $request)
     {
+        // dd($request);
+
         // update status
+        $request_tank_stocks = RequestTankStocks::where('id', $request->request_stock_id)->first();
         RequestTankStocks::where('id', $request->request_stock_id)
             ->update([
                 'status' => $request->status,
                 'received_date' => Carbon::now(),
             ]);
+        // dd($request_tank_stocks);
+
+        $request_tank_stocks_details = RequestTankStocksDetails::where('request_stocks_id', $request_tank_stocks->id)->get();
+
+        // dd($request_tank_stocks->id);
+        // dd($request_tank_stocks_details);
+
+        foreach ($request_tank_stocks_details as $item) {
+            WardStocksTanks::create([
+                'request_stocks_id' => $request_tank_stocks->id,
+                'request_stocks_detail_id' => $item['id'],
+                'itemcode' => $item['itemcode'],
+                'uomcode' => $item['uomcode'],
+                'quantity' => $item['approved_qty'],
+                'location' => $request_tank_stocks->location,
+            ]);
+        }
 
         // the parameters result will be send into the frontend
-        // event(new RequestStock('Item requested.'));
+        event(new RequestTankStock('Item requested.'));
 
-        return Redirect::route('requeststocks.index');
+        return Redirect::route('requesttankstocks.index');
     }
 
     public function destroy(RequestTankStocks $requesttankstock, Request $request)

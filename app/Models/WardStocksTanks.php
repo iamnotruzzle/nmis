@@ -16,7 +16,7 @@ class WardStocksTanks extends Model
         'request_stocks_id',
         'request_stocks_detail_id',
         'itemcode',
-        'uomcode',
+        // 'uomcode',
         'quantity',
         'location',
     ];

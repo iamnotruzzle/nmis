@@ -18,7 +18,7 @@ class CreateCsrwWardsStocksTanksTable extends Migration
             $table->bigInteger('request_stocks_id')->nullable();
             $table->bigInteger('request_stocks_detail_id')->nullable();
             $table->string('itemcode');
-            $table->string('uomcode')->nullable();
+            // $table->string('uomcode')->nullable();
             $table->integer('quantity');
             $table->string('location');
             $table->timestamps();
