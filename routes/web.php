@@ -21,6 +21,7 @@ use App\Http\Controllers\Reports\Csr\CsrManualReportExportController;
 use App\Http\Controllers\Reports\Csr\CsrStocksMedicalSuppliesReportController;
 use App\Http\Controllers\Reports\Csr\CsrStocksReportController;
 use App\Http\Controllers\Reports\Csr\IssuedItems\IssuedItemsReportController;
+use App\Http\Controllers\Reports\Csr\IssuedTankItems\IssuedTankItemsReportController;
 use App\Http\Controllers\Reports\Ward\WardsManualReportExportController;
 use App\Http\Controllers\Reports\Ward\WardStocksReportController;
 use App\Http\Controllers\Users\User\ProfileController;
@@ -78,7 +79,7 @@ Route::get('issueitems/issued/', [IssuedItemsReportController::class, 'export'])
 Route::put('issueitems', [IssueItemController::class, 'acknowledgedrequest'])->name('issueitems.acknowledgedrequest');
 // Issue tank items
 Route::resource('issuetankitems', IssueTankItemsController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
-Route::get('issuetankitems/issued/', [IssueTankItemsController::class, 'export']);
+Route::get('issuetankitems/issued/', [IssuedTankItemsReportController::class, 'export']);
 Route::put('issuetankitems', [IssueTankItemsController::class, 'acknowledgedrequest'])->name('issuetankitems.acknowledgedrequest');
 
 Route::resource('csrreports', ReportsController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index']);
