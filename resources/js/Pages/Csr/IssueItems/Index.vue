@@ -142,12 +142,12 @@
               <img
                 v-if="data.requested_by_image != null"
                 :src="`storage/${data.requested_by_image}`"
-                class="w-4rem h-4rem rounded-card"
+                class="w-3rem h-3rem rounded-card"
               />
               <img
                 v-else
                 src="images/no_profile.png"
-                class="w-4rem h-4rem rounded-card"
+                class="w-3rem h-3rem rounded-card"
               />
 
               <span class="font-semibold text-xl pl-3">
@@ -165,13 +165,13 @@
               <img
                 v-if="data.approved_by_image != null"
                 :src="`storage/${data.approved_by_image}`"
-                class="w-4rem h-4rem rounded-card"
+                class="w-3rem h-3rem rounded-card"
               />
 
               <img
                 v-if="data.approved_by != null && data.approved_by_image == null"
                 src="images/no_profile.png"
-                class="w-4rem h-4rem rounded-card"
+                class="w-3rem h-3rem rounded-card"
               />
 
               <span class="font-semibold text-xl pl-3">
