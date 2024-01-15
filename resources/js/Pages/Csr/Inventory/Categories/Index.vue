@@ -44,10 +44,7 @@
         </template>
         <template #empty> No item found. </template>
         <template #loading> Loading item data. Please wait. </template>
-        <Column
-          expander
-          style="width: 5rem"
-        />
+        <Column expander />
         <Column
           field="ptcode"
           header="PTCODE"

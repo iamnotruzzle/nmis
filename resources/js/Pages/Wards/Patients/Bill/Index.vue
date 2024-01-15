@@ -45,10 +45,7 @@
               </div>
             </div>
           </template>
-          <Column
-            expander
-            style="width: 5rem"
-          />
+          <Column expander />
           <Column
             field="charge_slip_no"
             header="CHARGE SLIP #"

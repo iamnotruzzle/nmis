@@ -61,10 +61,7 @@
             </div>
           </div>
         </template>
-        <Column
-          expander
-          style="width: 5rem"
-        />
+        <Column expander />
         <template #empty> No requested stock found. </template>
         <template #loading> Loading requested stock data. Please wait. </template>
         <Column
