@@ -633,7 +633,11 @@ export default {
   },
   methods: {
     tzone(date) {
-      return moment.tz(date, 'Asia/Manila').format('L');
+      if (date == null || date == '') {
+        return null;
+      } else {
+        return moment.tz(date, 'Asia/Manila').format('LL');
+      }
     },
     storeItemsInController() {
       this.items.forEach((e) => {
