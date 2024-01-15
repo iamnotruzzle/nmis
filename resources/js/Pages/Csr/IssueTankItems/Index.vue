@@ -291,7 +291,7 @@
         <div class="field">
           <DataTable
             v-model:filters="requestStockListDetailsFilter"
-            :globalFilterFields="['cl2desc']"
+            :globalFilterFields="['itemDesc']"
             :value="requestStockListDetails"
             class="p-datatable-sm"
             paginator
@@ -309,27 +309,13 @@
               </div>
             </template>
             <Column
-              field="cl2desc"
+              field="itemDesc"
               header="PENDING ITEM"
               sortable
             ></Column>
             <Column
               field="requested_qty"
               header="PENDING QTY"
-            ></Column>
-            <Column
-              v-if="isUpdate"
-              field="stock_qty"
-              header="Current stock including approved qty"
-            >
-              <template #body="{ data }">
-                {{ data.stock_w_approved }}
-              </template>
-            </Column>
-            <Column
-              v-else
-              field="stock_qty"
-              header="TOTAL STOCK"
             ></Column>
             <Column
               field="approved_qty"
@@ -402,7 +388,7 @@
         <div class="field">
           <DataTable
             v-model:filters="issuedItemsFilter"
-            :globalFilterFields="['brand', 'cl2desc']"
+            :globalFilterFields="['brand', 'itemDesc']"
             :value="issuedItemList"
             class="p-datatable-sm w-full"
             paginator
@@ -426,7 +412,7 @@
               sortable
             ></Column>
             <Column
-              field="cl2desc"
+              field="itemDesc"
               header="ITEM"
               sortable
             ></Column>
@@ -566,7 +552,7 @@ export default {
       app_qty_checker: null,
       requestStockListDetails: [],
       item: null,
-      cl2desc: null,
+      itemDesc: null,
       requested_qty: null,
       approved_qty: null,
       remarks: null,
@@ -628,13 +614,17 @@ export default {
   },
   methods: {
     tzone(date) {
-      return moment.tz(date, 'Asia/Manila').format('L');
+      if (date == null || date == '') {
+        return null;
+      } else {
+        return moment.tz(date, 'Asia/Manila').format('LL');
+      }
     },
     storeItemsInController() {
       this.items.forEach((e) => {
         this.itemsList.push({
           cl2comb: e.cl2comb,
-          cl2desc: e.cl2desc,
+          itemDesc: e.itemDesc,
         });
       });
     },
@@ -668,7 +658,7 @@ export default {
           if (e.ward_stocks != null) {
             this.issuedItemList.push({
               brand: e.brand_detail.name,
-              cl2desc: item.item_details.cl2desc,
+              itemDesc: item.item_details.itemDesc,
               quantity: e.ward_stocks.quantity,
               expiration_date: e.ward_stocks.expiration_date,
             });
@@ -736,7 +726,7 @@ export default {
         this.requestStockListDetails.push({
           request_stocks_details_id: e.id,
           itemcode: e.itemcode,
-          cl2desc: matchingTank.itemDesc,
+          itemDesc: matchingTank.itemDesc,
           requested_qty: e.requested_qty,
           approved_qty: e.approved_qty,
           remarks: e.remarks,
@@ -756,7 +746,7 @@ export default {
         (this.isUpdate = false),
         (this.requestStockListDetails = []),
         (this.item = null),
-        (this.cl2desc = null),
+        (this.itemDesc = null),
         (this.requested_qty = null),
         (this.approved_qty = null),
         (this.remarks = null),
@@ -788,7 +778,7 @@ export default {
             this.itemNotSelectedMsg = null;
             this.requestStockListDetails.push({
               cl2comb: this.item['cl2comb'],
-              cl2desc: this.item['cl2desc'],
+              itemDesc: this.item['itemDesc'],
               requested_qty: this.requested_qty,
             });
           }
@@ -813,7 +803,7 @@ export default {
         this.requestStockListDetails.push({
           request_stocks_details_id: e.id,
           cl2comb: e.cl2comb,
-          cl2desc: e.item_details.cl2desc,
+          itemDesc: e.item_details.itemDesc,
           requested_qty: e.requested_qty,
           approved_qty: e.approved_qty,
           staticApproved_qty: e.approved_qty,
@@ -843,55 +833,27 @@ export default {
       // approved qty <= total stock
       if (this.disabled != true) {
         if (this.isUpdate) {
-          //   console.log(this.requestStockListDetails);
-
-          this.requestStockListDetails.forEach((e) => {
-            e.approved_qty = e.approved_qty == '' || e.approved_qty == null ? 0 : e.approved_qty;
-            e.remarks = e.remarks == '' || e.remarks == null ? null : e.remarks;
+          this.form.put(route('issuetankitems.update', this.requestStockId), {
+            preserveScroll: true,
+            onSuccess: () => {
+              this.requestStockId = null;
+              this.createRequestStocksDialog = false;
+              this.cancel();
+              this.updateData();
+              this.updatedMsg();
+            },
           });
-
-          let isQtyEnough = this.requestStockListDetails.every(function (e) {
-            return Number(e.approved_qty) <= Number(e.stock_w_approved);
-          });
-
-          if (isQtyEnough) {
-            this.form.put(route('issuetankitems.update', this.requestStockId), {
-              preserveScroll: true,
-              onSuccess: () => {
-                this.requestStockId = null;
-                this.createRequestStocksDialog = false;
-                this.cancel();
-                this.updateData();
-                this.updatedMsg();
-              },
-            });
-          } else {
-            this.qtyIsNotEnough();
-          }
         } else {
-          this.requestStockListDetails.forEach((e) => {
-            e.approved_qty = e.approved_qty == '' || e.approved_qty == null ? 0 : e.approved_qty;
-            e.remarks = e.remarks == '' || e.remarks == null ? null : e.remarks;
+          this.form.post(route('issuetankitems.store'), {
+            preserveScroll: true,
+            onSuccess: () => {
+              this.requestStockId = null;
+              this.createRequestStocksDialog = false;
+              this.cancel();
+              this.updateData();
+              // this.createdMsg();
+            },
           });
-
-          let isQtyEnough = this.requestStockListDetails.every(function (e) {
-            return Number(e.approved_qty) <= Number(e.stock_qty);
-          });
-
-          if (isQtyEnough) {
-            this.form.post(route('issuetankitems.store'), {
-              preserveScroll: true,
-              onSuccess: () => {
-                this.requestStockId = null;
-                this.createRequestStocksDialog = false;
-                this.cancel();
-                this.updateData();
-                // this.createdMsg();
-              },
-            });
-          } else {
-            this.qtyIsNotEnough();
-          }
         }
       }
     },

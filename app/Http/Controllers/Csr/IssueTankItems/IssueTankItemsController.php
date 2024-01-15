@@ -82,7 +82,7 @@ class IssueTankItemsController extends Controller
 
     public function store(Request $request)
     {
-        dd($request);
+        // dd($request);
 
         $requestStocksID = $request->request_stocks_id;
 
