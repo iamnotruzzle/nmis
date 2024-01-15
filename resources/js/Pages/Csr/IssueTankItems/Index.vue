@@ -736,7 +736,7 @@ export default {
         });
       });
 
-      console.log(this.requestStockListDetails);
+      //   console.log(this.requestStockListDetails);
     },
     // when dialog is hidden, do this function
     whenDialogIsHidden() {
@@ -795,30 +795,30 @@ export default {
     editRequestedStock(item) {
       this.form.request_stocks_id = item.id;
 
+      //   console.log(item);
+      this.form.clearErrors();
+      this.form.reset();
+      this.form.request_stocks_id = item.id;
+
       this.isUpdate = true;
       this.createRequestStocksDialog = true;
       this.requestStockId = item.id;
 
       item.request_stocks_details.forEach((e) => {
+        const matchingTank = this.$page.props.tanksList.find((x) => e.itemcode === x.itemcode);
+
         this.requestStockListDetails.push({
           request_stocks_details_id: e.id,
-          cl2comb: e.cl2comb,
-          itemDesc: e.item_details.itemDesc,
+          itemcode: e.itemcode,
+          itemDesc: matchingTank.itemDesc,
           requested_qty: e.requested_qty,
           approved_qty: e.approved_qty,
-          staticApproved_qty: e.approved_qty,
-          stock_w_approved:
-            Number(e.approved_qty) +
-            e.stocks.reduce((accumulator, object) => {
-              return Number(accumulator) + Number(object.quantity);
-            }, 0),
-          stock_qty: e.stocks.reduce((accumulator, object) => {
-            return Number(accumulator) + Number(object.quantity);
-          }, 0),
           remarks: e.remarks,
+          //   stock_qty: e.stocks.reduce((accumulator, object) => {
+          //     return Number(accumulator) + Number(object.quantity);
+          //   }, 0),
         });
       });
-      //   console.log(this.requestStockListDetails);
     },
     submit() {
       if (this.form.processing) {
