@@ -6,6 +6,7 @@ use App\Events\ItemTankIssued;
 use App\Events\RequestTankStock;
 use App\Http\Controllers\Controller;
 use App\Models\RequestTankStocks;
+use App\Models\RequestTankStocksDetails;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -86,123 +87,29 @@ class IssueTankItemsController extends Controller
 
         $requestStocksID = $request->request_stocks_id;
 
-        // $requestStocksContainer = $request->requestStockListDetails;
+        $requestStocksContainer = $request->requestStockListDetails;
 
         // // get location of the request
         $location = RequestTankStocks::where('id', $requestStocksID)->first();
 
-        // $data = $request;
-        // foreach ($data->requestStockListDetails as $e) {
-        //     // dd($e);
-        //     $data->validate(
-        //         [
-        //             "requestStockListDetails.*.cl2comb" => ['required', new CsrStockBalanceNotDeclaredYetRule($e['cl2comb'])],
-        //         ],
-        //     );
-        // }
-
         // // dd('bef');
 
-        // foreach ($requestStocksContainer as $rsc) {
-        //     // update the approved_qty in the RequestStocksDetails table
-        //     $requestStockDetails = RequestStocksDetails::where('id', $rsc['request_stocks_details_id'])->first();
-        //     $requestStockDetails->update([
-        //         'approved_qty' => $rsc['approved_qty'],
-        //         'remarks' => $rsc['remarks']
-        //     ]);
+        foreach ($requestStocksContainer as $rsc) {
+            // update the approved_qty in the RequestStocksDetails table
+            $requestStockDetails = RequestTankStocksDetails::where('id', $rsc['request_stocks_details_id'])->first();
+            $requestStockDetails->update([
+                'approved_qty' => $rsc['approved_qty'],
+                'remarks' => $rsc['remarks']
+            ]);
 
-        //     // check current stock of the item
-        //     $current_stock = CsrStocksMedicalSupplies::where('cl2comb', $rsc['cl2comb'])
-        //         ->whereDate('expiration_date', '>', Carbon::today())
-        //         ->sum('quantity');
+            RequestTankStocks::where('id', $requestStocksID)
+                ->update([
+                    'status' => 'FILLED',
+                    'approved_by' => $request->approved_by,
+                ]);
+        }
 
-        //     // check the current value of issued_qty after the loop
-        //     $remaining_qty_to_be_issued = $rsc['approved_qty'];
-        //     $newStockQty = 0;
-
-        //     // check if remaining_qty_to_be_issued still has a value > than 0
-        //     while ($remaining_qty_to_be_issued > 0) {
-
-        //         // get the the specific item that is first to expire and quantity != 0
-        //         $stock = CsrStocksMedicalSupplies::where('cl2comb', $rsc['cl2comb'])
-        //             ->where('quantity', '!=', 0)
-        //             ->whereDate('expiration_date', '>', Carbon::today())
-        //             ->orderBy('expiration_date')
-        //             ->first();
-
-        //         // execute if block when condition is met then do the while loop again
-        //         if ($stock->quantity >= $remaining_qty_to_be_issued) {
-        //             $row = CsrStocksMedicalSupplies::where('id', $stock->id)->first();
-        //             $row_to_change_status = RequestStocksDetails::where('id', $rsc['request_stocks_details_id'])->first();
-
-        //             $issueditem = WardsStocksMedSupp::create([
-        //                 'request_stocks_id' => $row_to_change_status->request_stocks_id,
-        //                 'request_stocks_detail_id' => $row_to_change_status->id,
-        //                 'stock_id' => $row->id,
-        //                 'location' => $location->location,
-        //                 'chrgcode' => $row->chrgcode,
-        //                 'cl2comb' => $row_to_change_status->cl2comb,
-        //                 'uomcode' => $row->uomcode,
-        //                 'brand' => $row->brand,
-        //                 'ris_no' => $row->ris_no,
-        //                 'quantity' => $remaining_qty_to_be_issued,
-        //                 'from' => 'CSR',
-        //                 'manufactured_date' => $row->manufactured_date,
-        //                 'delivered_date' => $row->delivered_date,
-        //                 'expiration_date' => $row->expiration_date,
-        //             ]);
-
-        //             $newStockQty = $row->quantity - $remaining_qty_to_be_issued;
-        //             $remaining_qty_to_be_issued = 0;
-
-        //             $row::where('id', $stock->id)
-        //                 ->update([
-        //                     'quantity' => $newStockQty,
-        //                 ]);
-
-        //             RequestStocks::where('id', $requestStocksID)
-        //                 ->update([
-        //                     'status' => 'FILLED',
-        //                     'approved_by' => $request->approved_by,
-        //                 ]);
-        //         } else {
-        //             $remaining_qty_to_be_issued = $remaining_qty_to_be_issued - $stock->quantity;
-
-        //             $row = CsrStocksMedicalSupplies::where('id', $stock->id)->first();
-        //             $row_to_change_status = RequestStocksDetails::where('id', $rsc['request_stocks_details_id'])->first();
-
-        //             $issueditem = WardsStocksMedSupp::create([
-        //                 'request_stocks_id' => $row_to_change_status->request_stocks_id,
-        //                 'request_stocks_detail_id' => $row_to_change_status->id,
-        //                 'stock_id' => $row->id,
-        //                 'location' => $location->location,
-        //                 'chrgcode' => $row->chrgcode,
-        //                 'cl2comb' => $row_to_change_status->cl2comb,
-        //                 'uomcode' => $row->uomcode,
-        //                 'brand' => $row->brand,
-        //                 'ris_no' => $row->ris_no,
-        //                 'quantity' => $row->quantity,
-        //                 'from' => 'CSR',
-        //                 'manufactured_date' => $row->manufactured_date,
-        //                 'delivered_date' => $row->delivered_date,
-        //                 'expiration_date' => $row->expiration_date,
-        //             ]);
-
-        //             $row::where('id', $stock->id)
-        //                 ->update([
-        //                     'quantity' => 0,
-        //                 ]);
-
-        //             RequestStocks::where('id', $requestStocksID)
-        //                 ->update([
-        //                     'status' => 'FILLED',
-        //                     'approved_by' => $request->approved_by,
-        //                 ]);
-        //         }
-        //     }
-        // }
-
-        // pass this the parameter in the frontends mounted
+        // // pass this the parameter in the frontends mounted
         event(new ItemTankIssued(
             [
                 $location->location,
