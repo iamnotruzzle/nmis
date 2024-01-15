@@ -398,7 +398,7 @@ class IssueTankItemsController extends Controller
             ]
         ));
 
-        return Redirect::route('issueitems.index');
+        return Redirect::route('issuetankitems.index');
     }
 
     // public function destroy(RequestTankStock $requesttankstock, Request $request)

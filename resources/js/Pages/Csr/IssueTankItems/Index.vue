@@ -712,7 +712,7 @@ export default {
     updateData() {
       this.loading = true;
 
-      this.$inertia.get('issueitems', this.params, {
+      this.$inertia.get('issuetankitems', this.params, {
         preserveState: true,
         preserveScroll: true,
         onFinish: (visit) => {
