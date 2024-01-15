@@ -241,16 +241,6 @@
                         :style="{ color: 'green', 'font-size': '1.2rem' }"
                       ></i>
                     </a>
-                    <Button
-                      v-if="slotProps.data.status != 'PENDING'"
-                      icon="pi pi-book"
-                      severity="success"
-                      text
-                      rounded
-                      aria-label="export"
-                      @click="viewIssuedItem(slotProps.data)"
-                      size="large"
-                    />
                   </div>
                 </div>
               </template>
@@ -377,63 +367,6 @@
         </template>
       </Dialog>
 
-      <!-- view issued items -->
-      <Dialog
-        v-model:visible="issuedItemsDialog"
-        header="ISSUED ITEMS"
-        :modal="true"
-        class="p-fluid w-5"
-        @hide="whenDialogIsHidden"
-      >
-        <div class="field">
-          <DataTable
-            v-model:filters="issuedItemsFilter"
-            :globalFilterFields="['brand', 'itemDesc']"
-            :value="issuedItemList"
-            class="p-datatable-sm w-full"
-            paginator
-            showGridlines
-            :rows="7"
-          >
-            <template #header>
-              <div class="flex mb-2">
-                <span class="p-input-icon-left">
-                  <i class="pi pi-search" />
-                  <InputText
-                    v-model="issuedItemsFilter['global'].value"
-                    placeholder="Search issued item"
-                  />
-                </span>
-              </div>
-            </template>
-            <Column
-              field="brand"
-              header="BRAND"
-              sortable
-            ></Column>
-            <Column
-              field="itemDesc"
-              header="ITEM"
-              sortable
-            ></Column>
-            <Column
-              field="quantity"
-              header="QTY"
-              sortable
-            ></Column>
-            <Column
-              field="expiration_date"
-              header="EXP. DATE"
-              sortable
-            >
-              <template #body="{ data }">
-                {{ tzone(data.expiration_date) }}
-              </template>
-            </Column>
-          </DataTable>
-        </div>
-      </Dialog>
-
       <!-- edit status -->
       <Dialog
         v-model:visible="editStatusDialog"
@@ -531,7 +464,6 @@ export default {
       requestStockId: null,
       isUpdate: false,
       createRequestStocksDialog: false,
-      issuedItemsDialog: false,
       editStatusDialog: false,
       search: '',
       options: {},
@@ -651,24 +583,6 @@ export default {
       });
       //   console.log(this.requestStockList);
     },
-    viewIssuedItem(data) {
-      //   console.log(data);
-      data.request_stocks_details.forEach((item) => {
-        item.stocks.forEach((e) => {
-          if (e.ward_stocks != null) {
-            this.issuedItemList.push({
-              brand: e.brand_detail.name,
-              itemDesc: item.item_details.itemDesc,
-              quantity: e.ward_stocks.quantity,
-              expiration_date: e.ward_stocks.expiration_date,
-            });
-          }
-        });
-      });
-
-      //   console.log(this.issuedItemList);
-      this.issuedItemsDialog = true;
-    },
     getTankDesc(item) {
       const matchingTank = this.$page.props.tanksList.find((x) => item.itemcode === x.itemcode);
 
@@ -753,7 +667,6 @@ export default {
         (this.itemNotSelected = null),
         (this.itemNotSelectedMsg = null),
         (this.issuedItemList = []),
-        (this.issuedItemsDialog = false),
         this.form.clearErrors(),
         this.form.reset()
       );
