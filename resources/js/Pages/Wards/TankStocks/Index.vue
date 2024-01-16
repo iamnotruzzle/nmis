@@ -297,7 +297,7 @@
             {{ data.uomdesc }}
           </template>
         </Column>
-        <Column header="ACTION">
+        <!-- <Column header="ACTION">
           <template #body="slotProps">
             <div class="flex justify-content-center">
               <Button
@@ -315,7 +315,7 @@
               </Button>
             </div>
           </template>
-        </Column>
+        </Column> -->
       </DataTable>
 
       <!-- @hide="clickOutsideDialog" -->
