@@ -248,7 +248,7 @@
         :rows="10"
         :rowsPerPageOptions="[10, 30, 50]"
         removableSort
-        sortField="expiration_date"
+        sortField="itemDesc"
         :sortOrder="1"
         filterDisplay="row"
         showGridlines
@@ -271,25 +271,13 @@
         <template #empty> No item found. </template>
         <template #loading> Loading item data. Please wait. </template>
         <Column
-          field="from"
-          header="FROM"
-          sortable
-        >
-        </Column>
-        <Column
-          field="item"
+          field="itemDesc"
           header="ITEM"
           sortable
         >
           <template #body="{ data }">
-            {{ data.item }}
+            {{ data.itemDesc }}
           </template>
-        </Column>
-        <Column
-          field="unit"
-          header="UNIT"
-          sortable
-        >
         </Column>
         <Column
           field="quantity"
@@ -298,31 +286,6 @@
         >
           <template #body="{ data }">
             {{ data.quantity }}
-          </template>
-        </Column>
-        <Column
-          field="expiration_date"
-          header="EXPIRATION DATE"
-          sortable
-        >
-          <template #body="{ data }">
-            <div class="flex flex-column">
-              <div>
-                {{ tzone(data.expiration_date) }}
-              </div>
-
-              <div class="mays-2">
-                <span
-                  :class="
-                    checkIfAboutToExpire(data.expiration_date) != 'Item has expired.'
-                      ? 'text-lg text-green-500'
-                      : 'text-lg text-error'
-                  "
-                >
-                  {{ checkIfAboutToExpire(data.expiration_date) }}
-                </span>
-              </div>
-            </div>
           </template>
         </Column>
         <Column header="ACTION">
@@ -717,14 +680,6 @@ export default {
         request_stock_id: null,
         status: null,
       }),
-      formWardStocks: this.$inertia.form({
-        ward_stock_id: null,
-        item: null,
-        current_quantity: null,
-        quantity: null,
-        expiration_date: null,
-        remarks: null,
-      }),
       targetItemDesc: null,
     };
   },
@@ -816,19 +771,15 @@ export default {
 
       moment.suppressDeprecationWarnings = true;
 
-      //   this.currentWardStocks.forEach((e) => {
-      //     let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
+      this.currentWardStocks.forEach((e) => {
+        const matchingTank = this.$page.props.tanksList.find((x) => e.itemcode === x.itemcode);
 
-      //     this.currentWardStocksList.push({
-      //       from: e.from,
-      //       ward_stock_id: e.id,
-      //       itemcode: e.item_details.itemcode,
-      //       item: e.item_details.itemDesc,
-      //       unit: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomdesc,
-      //       quantity: e.quantity,
-      //       expiration_date: expiration_date.toString(),
-      //     });
-      //   });
+        this.currentWardStocksList.push({
+          itemcode: e.itemcode,
+          itemDesc: matchingTank ? matchingTank.itemDesc : null,
+          quantity: e.quantity,
+        });
+      });
     },
     tzone(date) {
       if (date == null || date == '') {

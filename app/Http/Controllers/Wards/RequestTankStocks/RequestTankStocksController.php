@@ -62,7 +62,10 @@ class RequestTankStocksController extends Controller
         //     )
         //     ->get();
 
-        $currentWardStocks = WardStocksTanks::where('location', $authWardcode->wardcode)
+        $currentWardStocks = DB::table('csrw_wards_stocks_tanks')
+            ->select('itemcode', DB::raw('SUM(quantity) AS quantity'))
+            ->where('location', $authWardcode->wardcode)
+            ->groupBy('itemcode')
             ->get();
         // dd($currentWardStocks);
 
