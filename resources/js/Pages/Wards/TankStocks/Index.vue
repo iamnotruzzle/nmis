@@ -801,27 +801,6 @@ export default {
         return moment.tz(date, 'Asia/Manila').format('LL');
       }
     },
-    checkIfAboutToExpire(date) {
-      let current_date = moment.tz(moment(), 'Asia/Manila');
-      let exp_date = moment.tz(date, 'Asia/Manila');
-
-      // adding +1 to include the starting date
-      let date_diff = exp_date.diff(current_date, 'days') + 1;
-
-      //   console.log(current_date.format('MM-DD-YY') == exp_date.format('MM-DD-YY'));
-
-      //    exp_date.format('MM-DD-YY') < current_date.format('MM-DD-YY')
-      if (
-        current_date.format('MM-DD-YY') == exp_date.format('MM-DD-YY') ||
-        Date.parse(exp_date) < Date.parse(current_date)
-      ) {
-        return 'Item has expired.';
-      } else if (date_diff == 1) {
-        return date_diff + ' day remaining.';
-      } else {
-        return date_diff + ' days remaining.';
-      }
-    }, // },
     onPage(event) {
       this.params.page = event.page + 1;
       this.updateData();
