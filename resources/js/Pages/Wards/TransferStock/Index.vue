@@ -232,12 +232,20 @@
             </Column>
             <Column header="ACTION">
               <template #body="slotProps">
-                <i
+                <!-- <i
                   v-if="slotProps.data.status != 'RECEIVED'"
                   class="pi pi-check"
                   style="color: skyblue"
+
+                ></i> -->
+
+                <Button
+                  v-if="slotProps.data.status != 'RECEIVED'"
+                  icon="pi pi-check"
+                  text
+                  style="color: skyblue"
                   @click="receivedStock(slotProps)"
-                ></i>
+                />
               </template>
             </Column>
           </DataTable>
