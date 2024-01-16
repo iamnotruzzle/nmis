@@ -507,7 +507,7 @@
       </Dialog>
 
       <!-- update ward stock dialog -->
-      <Dialog
+      <!-- <Dialog
         v-model:visible="editWardStocksDialog"
         header="Update stock"
         :modal="true"
@@ -582,7 +582,7 @@
             @click="submitEditWardStocks"
           />
         </template>
-      </Dialog>
+      </Dialog> -->
     </div>
   </app-layout>
 </template>
@@ -729,12 +729,13 @@ export default {
       this.itemsList = []; // reset
       this.$page.props.tanksList.forEach((e) => {
         const matchingTank = this.$page.props.tanksList.find((x) => e.itemcode === x.itemcode);
+        // const unit = this.$page.props.unitOfMeasurement.find((x) => matchingTank.unitcode === x.uomcode);
 
         this.itemsList.push({
           itemcode: e.itemcode,
           itemDesc: matchingTank ? matchingTank.itemDesc : null,
-          unitcode: e.unit == null ? null : e.unit.unitcode,
-          //   uomdesc: e.unit == null ? null : e.unit.uomdesc,
+          //   uomcode: unit ? unit.uomcode : null,
+          //   uomdesc: unit ? unit.uomdesc : null,
         });
       });
 
@@ -866,13 +867,11 @@ export default {
         (this.oldQuantity = 0),
         this.form.clearErrors(),
         this.form.reset(),
-        this.formWardStocks.clearErrors(),
-        this.formWardStocks.reset(),
         this.formUpdateStatus.reset()
       );
     },
     fillRequestContainer() {
-      console.log(this.requestStockListDetails);
+      //   console.log(this.requestStockListDetails);
 
       // check if no selected item
       if (this.item == null || this.item == '') {
@@ -1009,8 +1008,6 @@ export default {
       this.oldQuantity = 0;
       this.form.reset();
       this.form.clearErrors();
-      this.formWardStocks.reset();
-      this.formWardStocks.clearErrors();
     },
     createdMsg() {
       this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Stock request created', life: 3000 });
@@ -1037,28 +1034,6 @@ export default {
         ':' +
         String(date.getMinutes()).padStart(2, '0')
       );
-    },
-    // ward stocks logs
-    editWardStocks(data) {
-      //   console.log(data);
-      this.editWardStocksDialog = true;
-
-      this.formWardStocks.ward_stock_id = data.ward_stock_id;
-      this.formWardStocks.item = data.item;
-      this.formWardStocks.current_quantity = data.quantity;
-      this.formWardStocks.quantity = data.quantity;
-      this.formWardStocks.expiration_date = data.expiration_date;
-    },
-    submitEditWardStocks() {
-      this.formWardStocks.post(route('wardsstockslogs.store'), {
-        preserveScroll: true,
-        onSuccess: () => {
-          this.editWardStocksDialog = false;
-          this.cancel();
-          this.updateData();
-          this.updatedStockMsg();
-        },
-      });
     },
     updatedStockMsg() {
       this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Stock updated', life: 3000 });
