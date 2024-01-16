@@ -8,6 +8,7 @@ use App\Models\Location;
 use App\Models\LoginHistory;
 use App\Models\Supplier;
 use App\Models\TypeOfCharge;
+use App\Models\UnitOfMeasurement;
 use App\Models\UserDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -108,6 +109,9 @@ class HandleInertiaRequests extends Middleware
             },
             'fundSource' => function () {
                 return FundSource::get(['id', 'fsid', 'fsName', 'cluster_code']);
+            },
+            'unitOfMeasurement' => function () {
+                return UnitOfMeasurement::get(['uomcode', 'uomdesc', 'uomstat']);
             }
         ]);
     }

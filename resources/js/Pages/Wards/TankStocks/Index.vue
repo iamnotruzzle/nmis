@@ -288,6 +288,15 @@
             {{ data.quantity }}
           </template>
         </Column>
+        <Column
+          field="uomdesc"
+          header="UNIT"
+          sortable
+        >
+          <template #body="{ data }">
+            {{ data.uomdesc }}
+          </template>
+        </Column>
         <Column header="ACTION">
           <template #body="slotProps">
             <div class="flex justify-content-center">
@@ -773,10 +782,13 @@ export default {
 
       this.currentWardStocks.forEach((e) => {
         const matchingTank = this.$page.props.tanksList.find((x) => e.itemcode === x.itemcode);
+        const unit = this.$page.props.unitOfMeasurement.find((x) => matchingTank.unitcode === x.uomcode);
 
         this.currentWardStocksList.push({
           itemcode: e.itemcode,
           itemDesc: matchingTank ? matchingTank.itemDesc : null,
+          uomcode: unit ? unit.uomcode : null,
+          uomdesc: unit ? unit.uomdesc : null,
           quantity: e.quantity,
         });
       });
