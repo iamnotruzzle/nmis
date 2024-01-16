@@ -661,10 +661,8 @@ export default {
   },
   props: {
     authWardcode: Object,
-    items: Object,
     requestedStocks: Object,
     currentWardStocks: Object,
-    currentWardStocks2: Object,
   },
   data() {
     return {
@@ -819,20 +817,6 @@ export default {
       moment.suppressDeprecationWarnings = true;
 
       //   this.currentWardStocks.forEach((e) => {
-      //     let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
-
-      //     this.currentWardStocksList.push({
-      //       from: e.from,
-      //       ward_stock_id: e.id,
-      //       itemcode: e.item_details.itemcode,
-      //       item: e.item_details.itemDesc,
-      //       unit: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomdesc,
-      //       quantity: e.quantity,
-      //       expiration_date: expiration_date.toString(),
-      //     });
-      //   });
-
-      //   this.currentWardStocks2.forEach((e) => {
       //     let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
 
       //     this.currentWardStocksList.push({

@@ -28,11 +28,6 @@ class RequestTankStocksController extends Controller
             ->orderBy('csrw_login_history.created_at', 'desc')
             ->first();
 
-        // $items = Item::with('unit')
-        //     ->where('cl2stat', 'A')
-        //     ->orderBy('cl2desc', 'ASC')
-        //     ->get();
-
         $requestedStocks = RequestTankStocks::with(['requested_at_details', 'requested_by_details', 'approved_by_details', 'request_stocks_details'])
             // ->where('location', '=', $authWardcode->wardcode)
             // ->whereHas('requested_by_details', function ($q) use ($searchString) {
@@ -66,21 +61,15 @@ class RequestTankStocksController extends Controller
         //         }
         //     )
         //     ->get();
-        // $currentWardStocks2 = WardsStocksMedSupp::with(['item_details:cl2comb,cl2desc', 'brand_details:id,name', 'request_stocks', 'unit_of_measurement:uomcode,uomdesc'])
-        //     ->where('request_stocks_id', null)
-        //     ->where('location', $authWardcode->wardcode)
-        //     ->where('quantity', '!=', 0)
-        //     ->get();
 
-        // $brands = Brand::get();
+        $currentWardStocks = WardStocksTanks::where('location', $authWardcode->wardcode)
+            ->get();
+        // dd($currentWardStocks);
 
         return Inertia::render('Wards/TankStocks/Index', [
-            // 'items' => $items,
             'requestedStocks' => $requestedStocks,
             'authWardcode' => $authWardcode,
-            // 'currentWardStocks' => $currentWardStocks,
-            // 'currentWardStocks2' => $currentWardStocks2,
-            // 'brands' => $brands,
+            'currentWardStocks' => $currentWardStocks,
         ]);
     }
 

@@ -162,6 +162,29 @@ class IssueTankItemsController extends Controller
         return Redirect::route('issuetankitems.index');
     }
 
+    public function acknowledgedrequest(RequestTankStocks $requesttankstock, Request $request)
+    {
+        // dd($request);
+
+        // get location of the request
+        $location = RequestTankStocks::where('id', $request->request_stock_id)->first();
+
+        RequestTankStocks::where('id', $request->request_stock_id)
+            ->update(['status' => 'ACKNOWLEDGED']);
+
+        // update status
+
+        // the parameters result will be send into the frontend
+        event(new ItemTankIssued(
+            [
+                $location->location,
+                'Item/s issued.'
+            ]
+        ));
+
+        return Redirect::route('issuetankitems.index');
+    }
+
     // public function destroy(RequestTankStock $requesttankstock, Request $request)
     // {
 
