@@ -983,7 +983,7 @@ export default {
         });
       });
 
-      console.log(this.totalStocksList);
+      //   console.log(this.totalStocksList);
     },
     // use storeStocksInContainer() function so that every time you make
     // server request such as POST, the data in the table
