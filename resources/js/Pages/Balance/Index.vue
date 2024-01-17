@@ -397,12 +397,29 @@ export default {
       //     });
       //   });
 
+      //   this.currentStocks.forEach((e) => {
+      //     if (e.clsb_cl2comb == null) {
+      //       this.itemsList.push({
+      //         cl2comb: e.hc_cl2comb,
+      //         cl2desc: e.cl2desc,
+      //       });
+      //     }
+      //   });
+
       this.currentStocks.forEach((e) => {
         if (e.clsb_cl2comb == null) {
-          this.itemsList.push({
-            cl2comb: e.hc_cl2comb,
-            cl2desc: e.cl2desc,
-          });
+          const cl2combValue = e.hc_cl2comb;
+
+          // Check if the cl2comb value is not already in the itemsList
+          const isDuplicate = this.itemsList.some((item) => item.cl2comb === cl2combValue);
+
+          // If it's not a duplicate, add it to the itemsList
+          if (!isDuplicate) {
+            this.itemsList.push({
+              cl2comb: cl2combValue,
+              cl2desc: e.cl2desc,
+            });
+          }
         }
       });
 
