@@ -165,6 +165,18 @@
                 field="quantity"
                 header="QTY"
               >
+                <template #body="{ data }">
+                  <span
+                    v-if="data.quantity > 30"
+                    class="text-green-500"
+                    >{{ data.quantity }}</span
+                  >
+                  <span
+                    v-else
+                    class="text-yellow-500"
+                    >{{ data.quantity }}</span
+                  >
+                </template>
               </Column>
               <Column
                 field="manufactured_date"
@@ -925,6 +937,7 @@ export default {
           this.brandDropDownList = [];
           this.storeStocksInContainer();
           this.storeActiveBrandsInContainer();
+          this.storeAboutToExpiredInContainer();
           this.loading = false;
         },
       });
@@ -1047,7 +1060,8 @@ export default {
       this.completed_requests_container = this.completed_requests;
     },
     storeAboutToExpiredInContainer() {
-      //   console.log(this.about_to_expire);
+      this.about_to_expire_container = [];
+
       this.about_to_expire.forEach((e) => {
         this.about_to_expire_container.push({
           item: e.item_detail.cl2desc,

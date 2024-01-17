@@ -79,6 +79,18 @@
           field="quantity"
           header="QTY"
         >
+          <template #body="{ data }">
+            <span
+              v-if="data.quantity > 30"
+              class="text-green-500"
+              >{{ data.quantity }}</span
+            >
+            <span
+              v-else
+              class="text-yellow-500"
+              >{{ data.quantity }}</span
+            >
+          </template>
         </Column>
         <Column
           field="manufactured_date"
