@@ -519,100 +519,159 @@
         </template>
       </Dialog>
 
-      <!-- brand -->
-      <DataTable
-        class="p-datatable-sm mt-8"
-        dataKey="id"
-        v-model:filters="brandFilters"
-        :value="brandsList"
-        paginator
-        :rows="10"
-        :rowsPerPageOptions="[10, 20, 30]"
-        removableSort
-        sortField="name"
-        :sortOrder="1"
-        filterDisplay="row"
-        showGridlines
-      >
-        <template #header>
-          <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">BRANDS</span>
-            <div>
-              <span class="p-input-icon-left mr-2">
-                <i class="pi pi-search" />
-                <span class="p-input-icon-left">
-                  <i class="pi pi-search" />
-                  <InputText
-                    v-model="brandFilters['global'].value"
-                    placeholder="Search brand"
-                  />
-                </span>
-              </span>
-              <Button
-                label="Add brand"
-                icon="pi pi-plus"
-                iconPos="right"
-                @click="openCreateBrandDialog"
-              />
-            </div>
-          </div>
-        </template>
-        <template #empty> No brand found. </template>
-        <template #loading> Loading brand data. Please wait. </template>
-        <Column
-          field="name"
-          header="NAME"
-          sortable
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ data.name }}
-          </template>
-        </Column>
-        <Column
-          field="status"
-          header="STATUS"
-          sortable
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            <Tag
-              v-if="data.status == 'A'"
-              value="ACTIVE"
-              severity="success"
-            />
-            <Tag
-              v-else
-              value="INACTIVE"
-              severity="danger"
-            />
-          </template>
-        </Column>
-        <Column
-          header="ACTION"
-          style="min-width: 12rem"
-        >
-          <template #body="slotProps">
-            <Button
-              v-if="slotProps.data.name != 'NO BRAND'"
-              icon="pi pi-pencil"
-              class="mr-1"
-              rounded
-              text
-              severity="warning"
-              @click="editBrand(slotProps.data)"
-            />
+      <div class="grid mt-8">
+        <!-- brand -->
 
-            <!-- <Button
+        <DataTable
+          class="p-datatable-sm sm:col-12 md:col-6"
+          dataKey="id"
+          v-model:filters="brandFilters"
+          :value="brandsList"
+          paginator
+          :rows="10"
+          :rowsPerPageOptions="[10, 20, 30]"
+          removableSort
+          sortField="name"
+          :sortOrder="1"
+          filterDisplay="row"
+          showGridlines
+        >
+          <template #header>
+            <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+              <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">BRANDS</span>
+              <div>
+                <span class="p-input-icon-left mr-2">
+                  <i class="pi pi-search" />
+                  <span class="p-input-icon-left">
+                    <i class="pi pi-search" />
+                    <InputText
+                      v-model="brandFilters['global'].value"
+                      placeholder="Search brand"
+                    />
+                  </span>
+                </span>
+                <Button
+                  label="Add brand"
+                  icon="pi pi-plus"
+                  iconPos="right"
+                  @click="openCreateBrandDialog"
+                />
+              </div>
+            </div>
+          </template>
+          <template #empty> No brand found. </template>
+          <template #loading> Loading brand data. Please wait. </template>
+          <Column
+            field="name"
+            header="NAME"
+            sortable
+            style="min-width: 12rem"
+          >
+            <template #body="{ data }">
+              {{ data.name }}
+            </template>
+          </Column>
+          <Column
+            field="status"
+            header="STATUS"
+            sortable
+            style="min-width: 12rem"
+          >
+            <template #body="{ data }">
+              <Tag
+                v-if="data.status == 'A'"
+                value="ACTIVE"
+                severity="success"
+              />
+              <Tag
+                v-else
+                value="INACTIVE"
+                severity="danger"
+              />
+            </template>
+          </Column>
+          <Column
+            header="ACTION"
+            style="min-width: 12rem"
+          >
+            <template #body="slotProps">
+              <Button
+                v-if="slotProps.data.name != 'NO BRAND'"
+                icon="pi pi-pencil"
+                class="mr-1"
+                rounded
+                text
+                severity="warning"
+                @click="editBrand(slotProps.data)"
+              />
+
+              <!-- <Button
               icon="pi pi-trash"
               rounded
               text
               severity="danger"
               @click="confirmDeleteItem(slotProps.data)"
             /> -->
+            </template>
+          </Column>
+        </DataTable>
+
+        <!-- total stocks -->
+        <DataTable
+          class="p-datatable-sm sm:col-12 md:col-6"
+          dataKey="id"
+          v-model:filters="totalStocksFilters"
+          :value="totalStocksList"
+          paginator
+          :rows="10"
+          :rowsPerPageOptions="[10, 20, 30]"
+          removableSort
+          sortField="name"
+          :sortOrder="1"
+          filterDisplay="row"
+          showGridlines
+        >
+          <template #header>
+            <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+              <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">TOTAL STOCKS</span>
+              <div>
+                <span class="p-input-icon-left mr-2">
+                  <i class="pi pi-search" />
+                  <span class="p-input-icon-left">
+                    <i class="pi pi-search" />
+                    <InputText
+                      v-model="totalStocksFilters['global'].value"
+                      placeholder="Search item"
+                    />
+                  </span>
+                </span>
+              </div>
+            </div>
           </template>
-        </Column>
-      </DataTable>
+          <template #empty> No item found. </template>
+          <template #loading> Loading item data. Please wait. </template>
+          <Column
+            field="cl2desc"
+            header="ITEM"
+            sortable
+            style="min-width: 12rem"
+          >
+            <template #body="{ data }">
+              {{ data.cl2desc }}
+            </template>
+          </Column>
+          <Column
+            field="total_quantity"
+            header="TOTAL QUANTITY"
+            sortable
+            style="min-width: 12rem"
+          >
+            <template #body="{ data }">
+              {{ data.total_quantity }}
+            </template>
+          </Column>
+        </DataTable>
+      </div>
 
       <!-- create & edit dialog -->
       <Dialog
@@ -736,6 +795,7 @@ export default {
     items: Object,
     stocks: Object,
     brands: Object,
+    totalStocks: Object,
   },
   data() {
     return {
@@ -769,10 +829,14 @@ export default {
       brandsList: [],
       brandDropDownList: [],
       stocksList: [],
+      totalStocksList: [],
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       brandFilters: {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      },
+      totalStocksFilters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       cl1stats: [
@@ -824,7 +888,7 @@ export default {
     this.rows = this.stocks.per_page;
   },
   mounted() {
-    // console.log(this.items);
+    // console.log('total stocks', this.totalStocks);
 
     this.setMinimumDate();
     this.storeFundSourceInContainer();
@@ -832,6 +896,7 @@ export default {
     this.storeStocksInContainer();
     this.storeBrandsInContainer();
     this.storeActiveBrandsInContainer();
+    this.storeTotalStocksInContainer();
 
     this.loading = false;
   },
@@ -909,6 +974,17 @@ export default {
         });
       });
     },
+    storeTotalStocksInContainer() {
+      this.totalStocks.forEach((e) => {
+        this.totalStocksList.push({
+          cl2comb: e.cl2comb,
+          cl2desc: e.item_detail.cl2desc.trim(),
+          total_quantity: e.total_quantity,
+        });
+      });
+
+      console.log(this.totalStocksList);
+    },
     // use storeStocksInContainer() function so that every time you make
     // server request such as POST, the data in the table
     // is updated
@@ -955,6 +1031,7 @@ export default {
           this.storeStocksInContainer();
           this.storeBrandsInContainer();
           this.storeActiveBrandsInContainer();
+          this.storeTotalStocksInContainer();
           this.loading = false;
         },
       });
