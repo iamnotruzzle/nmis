@@ -289,27 +289,6 @@
           </small>
         </div>
         <div class="field">
-          <label for="itemType">Item type</label>
-          <Dropdown
-            id="itemType"
-            required="true"
-            v-model="form.item_type"
-            :options="itemTypes"
-            :virtualScrollerOptions="{ itemSize: 38 }"
-            dataKey="code"
-            optionLabel="name"
-            optionValue="code"
-            class="w-full"
-            :class="{ 'p-invalid': form.item_type == '' }"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.item_type"
-          >
-            {{ form.errors.item_type }}
-          </small>
-        </div>
-        <div class="field">
           <label for="Item">Item</label>
           <Dropdown
             required="true"
@@ -774,13 +753,7 @@ export default {
       from_ed: null,
       to_ed: null,
       fundSourceList: [],
-      itemTypes: [
-        { name: 'Medical supplies', code: 'DRUMN' },
-        { name: 'Tanks', code: 'DRUMD' },
-      ],
-      selectedItemType: null,
       itemsList: [],
-      tanksList: [],
       brandsList: [],
       brandDropDownList: [],
       stocksList: [],
@@ -921,15 +894,6 @@ export default {
           cl2desc: e.cl2desc,
           uomcode: e.unit == null ? null : e.unit.uomcode,
           uomdesc: e.unit == null ? null : e.unit.uomdesc,
-        });
-      });
-
-      this.$page.props.tanksList.forEach((tank) => {
-        this.tanksList.push({
-          cl2comb: tank.itemcode,
-          cl2desc: tank.itemDesc,
-          unit: tank.unitcode,
-          // price: tank.price, // add price if needed
         });
       });
     },
