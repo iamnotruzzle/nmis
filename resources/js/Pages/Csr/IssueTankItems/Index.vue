@@ -630,6 +630,7 @@ export default {
         onFinish: (visit) => {
           this.totalRecords = this.requestedStocks.total;
           this.requestStockList = [];
+          this.expandedRow = [];
           this.storeRequestedStocksInContainer();
           this.loading = false;
         },
