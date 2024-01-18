@@ -99,7 +99,7 @@ class ItemController extends Controller
 
     public function update(Item $item, Request $request)
     {
-        dd($request);
+        // dd($request);
 
         $request->validate([
             'cl1comb' => 'required|max:20',

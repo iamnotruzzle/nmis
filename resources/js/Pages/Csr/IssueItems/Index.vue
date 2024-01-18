@@ -225,7 +225,6 @@
               paginator
               :rows="7"
               :value="expandedRow[0].request_stocks_details"
-              dataKey="id"
             >
               <template #header>
                 <div class="flex flex-wrap align-items-center justify-content-between gap-2">

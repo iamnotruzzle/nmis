@@ -163,10 +163,10 @@
             </div>
 
             <DataTable
-              :value="expandedRow[0].prices"
               paginator
               :rows="5"
               class="w-full"
+              :value="expandedRow[0].prices"
             >
               <Column
                 field="selling_price"
@@ -676,9 +676,9 @@ export default {
     },
     setExpandedRow($event) {
       // Check if row expanded before click or not
-      const isExpanded = this.expandedRow.find((p) => p.id === $event.data.id);
+      const isExpanded = this.expandedRow.find((p) => p.cl2comb === $event.data.cl2comb);
 
-      if (isExpanded?.id) this.expandedRow = [];
+      if (isExpanded?.cl2comb) this.expandedRow = [];
       else this.expandedRow = [$event.data];
       //   console.log(this.expandedRow);
     },

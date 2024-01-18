@@ -576,8 +576,8 @@ export default {
     },
     setExpandedRow($event) {
       // Check if row expanded before click or not
-      const isExpanded = this.expandedRow.find((p) => p.id === $event.data.id);
-      if (isExpanded?.id) this.expandedRow = [];
+      const isExpanded = this.expandedRow.find((p) => p.ptcode === $event.data.ptcode);
+      if (isExpanded?.ptcode) this.expandedRow = [];
       else this.expandedRow = [$event.data];
       //   console.log(this.expandedRow);
     },
