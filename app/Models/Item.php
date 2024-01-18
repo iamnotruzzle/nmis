@@ -10,7 +10,7 @@ class Item extends Model
     use HasFactory;
 
     protected $table = 'hclass2';
-    // protected $primaryKey = 'cl2comb';
+    protected $primaryKey = 'cl2comb';
     public $incrementing = false;
     // declare primary as string
     protected $keyType = 'string';

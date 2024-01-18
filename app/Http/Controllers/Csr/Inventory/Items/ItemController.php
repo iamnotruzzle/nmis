@@ -48,7 +48,7 @@ class ItemController extends Controller
 
     public function store(Request $request)
     {
-        dd($request);
+        // dd($request);
 
         $request->validate([
             'cl1comb' => 'required|max:20',
@@ -56,7 +56,6 @@ class ItemController extends Controller
             'cl2desc' => 'max:200',
             'unit' => 'required',
             'cl2stat' => 'required|max:1',
-            'cl2upsw' => 'required|max:1',
         ]);
 
         // get uomcode of the unit selected
@@ -64,7 +63,7 @@ class ItemController extends Controller
             ->where('uomdesc', $request->unit)
             ->get(['uomcode']);
 
-        $items = Item::create([
+        $item = Item::create([
             'cl2comb' => $request->cl1comb . '' . $request->cl2code,
             'cl1comb' => trim($request->cl1comb),
             'cl2code' => trim($request->cl2code),
@@ -93,11 +92,15 @@ class ItemController extends Controller
             'rpoint' => NULL,
         ]);
 
+        // dd($item);
+
         return Redirect::route('items.index');
     }
 
     public function update(Item $item, Request $request)
     {
+        dd($request);
+
         $request->validate([
             'cl1comb' => 'required|max:20',
             'cl2code' => [
@@ -108,7 +111,6 @@ class ItemController extends Controller
             'cl2desc' => 'max:200',
             'unit' => 'required',
             'cl2stat' => 'required|max:1',
-            'cl2upsw' => 'required|max:1',
         ]);
 
         // get uomcode of the unit selected

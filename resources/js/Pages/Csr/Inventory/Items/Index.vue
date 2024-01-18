@@ -7,20 +7,20 @@
 
       <DataTable
         class="p-datatable-sm"
-        dataKey="cl2comb"
-        v-model:filters="filters"
         v-model:expandedRows="expandedRow"
-        @row-click="setExpandedRow"
+        v-model:filters="filters"
         :value="itemsList"
         selectionMode="single"
         lazy
         paginator
         :rows="rows"
         ref="dt"
-        showGridlines
         :totalRecords="totalRecords"
         @page="onPage($event)"
+        @row-click="setExpandedRow"
+        dataKey="cl2comb"
         filterDisplay="row"
+        showGridlines
         :loading="loading"
       >
         <template #header>
@@ -163,7 +163,6 @@
             </div>
 
             <DataTable
-              :dataKey="slotProps.cl2comb"
               :value="expandedRow[0].prices"
               paginator
               :rows="5"
@@ -678,6 +677,7 @@ export default {
     setExpandedRow($event) {
       // Check if row expanded before click or not
       const isExpanded = this.expandedRow.find((p) => p.id === $event.data.id);
+
       if (isExpanded?.id) this.expandedRow = [];
       else this.expandedRow = [$event.data];
       //   console.log(this.expandedRow);
@@ -870,6 +870,7 @@ export default {
       this.$emit('hide', (this.itemId = null), (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
     },
     editItem(item) {
+      //   console.log(item.cl2comb);
       this.isUpdate = true;
       this.createItemDialog = true;
       this.itemId = item.cl2comb;
@@ -908,6 +909,7 @@ export default {
           },
         });
       }
+      //   console.log(this.$page.props.errors);
     },
     confirmDeleteItem(item) {
       this.itemId = item.cl2comb;
