@@ -9,7 +9,8 @@
         class="p-datatable-sm"
         dataKey="cl2comb"
         v-model:filters="filters"
-        v-model:expandedRows="expandedRows"
+        v-model:expandedRows="expandedRow"
+        @row-click="setExpandedRow"
         :value="itemsList"
         selectionMode="single"
         lazy
@@ -163,21 +164,17 @@
 
             <DataTable
               :dataKey="slotProps.cl2comb"
-              :value="slotProps.data.prices"
+              :value="expandedRow[0].prices"
               paginator
               :rows="5"
               class="w-full"
             >
               <Column
-                field="Selling price"
+                field="selling_price"
                 header="SELLING PRICE"
               >
-                <template #body="{ data }"> ₱ {{ data.selling_price }} </template>
               </Column>
-              <Column
-                field="Entry by"
-                header="ENTRY BY"
-              >
+              <Column header="ENTRY BY">
                 <template #body="{ data }">
                   <span v-if="data.user_detail === null"></span>
                   <span v-else>
@@ -560,7 +557,7 @@ export default {
   data() {
     return {
       // data table expand
-      expandedRows: [],
+      expandedRow: [],
       // end data table expand
       // paginator
       loading: false,
@@ -677,6 +674,13 @@ export default {
           cl1desc: e.cl1desc,
         });
       });
+    },
+    setExpandedRow($event) {
+      // Check if row expanded before click or not
+      const isExpanded = this.expandedRow.find((p) => p.id === $event.data.id);
+      if (isExpanded?.id) this.expandedRow = [];
+      else this.expandedRow = [$event.data];
+      //   console.log(this.expandedRow);
     },
     storeUnitsInContainer() {
       this.units.forEach((e) => {
@@ -848,6 +852,7 @@ export default {
         onFinish: (visit) => {
           this.totalRecords = this.items.total;
           this.itemsList = [];
+          this.expandedRow = [];
           this.storeItemInContainer();
           this.loading = false;
         },
