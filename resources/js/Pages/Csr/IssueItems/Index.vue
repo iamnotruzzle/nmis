@@ -23,7 +23,7 @@
 
       <DataTable
         class="p-datatable-sm"
-        v-model:expandedRows="expandedRows"
+        v-model:expandedRows="expandedRow"
         v-model:filters="filters"
         :value="requestStockList"
         selectionMode="single"
@@ -33,6 +33,7 @@
         ref="dt"
         :totalRecords="totalRecords"
         @page="onPage($event)"
+        @row-click="setExpandedRow"
         dataKey="id"
         filterDisplay="row"
         showGridlines
@@ -223,9 +224,11 @@
             <DataTable
               paginator
               :rows="7"
-              :value="slotProps.data.request_stocks_details"
+              :value="expandedRow[0].request_stocks_details"
+              dataKey="id"
             >
-              <template #header>
+              <!-- :value="slotProps.data.request_stocks_details" -->
+              <!-- <template #header>
                 <div class="flex flex-wrap align-items-center justify-content-between gap-2">
                   <span class="text-cyan-500 hover:text-cyan-700">PENDING ITEMS</span>
                   <div class="flex flex-row align-items-center">
@@ -253,11 +256,8 @@
                     />
                   </div>
                 </div>
-              </template>
-              <Column
-                field="item"
-                header="ITEM"
-              >
+              </template> -->
+              <Column header="ITEM">
                 <template #body="{ data }">
                   {{ data.item_details.cl2desc }}
                 </template>
@@ -265,7 +265,8 @@
               <Column
                 field="requested_qty"
                 header="PENDING QTY"
-              ></Column>
+              >
+              </Column>
               <Column
                 field="approved_qty"
                 header="APPROVED QTY"
@@ -543,7 +544,8 @@ export default {
   data() {
     return {
       stockBalanceDeclared: false,
-      expandedRows: null,
+      //   expandedRow: null,
+      expandedRow: [],
       // paginator
       loading: false,
       totalRecords: null,
@@ -638,6 +640,15 @@ export default {
       } else {
         return moment.tz(date, 'Asia/Manila').format('LL');
       }
+    },
+    setExpandedRow($event) {
+      // Check if row expanded before click or not
+      const isExpanded = this.expandedRow.find((p) => p.id === $event.data.id);
+
+      if (isExpanded?.id) this.expandedRow = [];
+      else this.expandedRow = [$event.data];
+
+      console.log(this.expandedRow);
     },
     storeItemsInController() {
       this.items.forEach((e) => {
