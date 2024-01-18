@@ -23,7 +23,8 @@
 
       <DataTable
         class="p-datatable-sm"
-        v-model:expandedRows="expandedRows"
+        v-model:expandedRows="expandedRow"
+        @row-click="setExpandedRow"
         v-model:filters="filters"
         :value="requestStockList"
         selectionMode="single"
@@ -223,7 +224,7 @@
             <DataTable
               paginator
               :rows="7"
-              :value="slotProps.data.request_stocks_details"
+              :value="expandedRow[0].request_stocks_details"
             >
               <template #header>
                 <div class="flex flex-wrap align-items-center justify-content-between gap-2">
@@ -250,6 +251,7 @@
               >
                 <template #body="{ data }">
                   {{ getTankDesc(data) }}
+                  <!-- {{ data.itemcode }} -->
                 </template>
               </Column>
               <Column
@@ -455,7 +457,7 @@ export default {
   },
   data() {
     return {
-      expandedRows: null,
+      expandedRow: [],
       // paginator
       loading: false,
       totalRecords: null,
@@ -523,7 +525,7 @@ export default {
     this.rows = this.requestedStocks.per_page;
   },
   mounted() {
-    console.log(this.requestedStocks);
+    // console.log(this.requestedStocks);
 
     window.Echo.channel('requesttank').listen('RequestTankStock', (args) => {
       router.reload({
@@ -551,6 +553,14 @@ export default {
       } else {
         return moment.tz(date, 'Asia/Manila').format('LL');
       }
+    },
+    setExpandedRow($event) {
+      //   console.log($event);
+      // Check if row expanded before click or not
+      const isExpanded = this.expandedRow.find((p) => p.id === $event.data.id);
+      if (isExpanded?.id) this.expandedRow = [];
+      else this.expandedRow = [$event.data];
+      //   console.log(this.expandedRow);
     },
     storeItemsInController() {
       this.items.forEach((e) => {
@@ -584,6 +594,7 @@ export default {
       //   console.log(this.requestStockList);
     },
     getTankDesc(item) {
+      //   console.log(item);
       const matchingTank = this.$page.props.tanksList.find((x) => item.itemcode === x.itemcode);
 
       return matchingTank.itemDesc;
