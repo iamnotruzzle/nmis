@@ -9,7 +9,8 @@
         class="p-datatable-sm"
         dataKey="ptcode"
         v-model:filters="filters"
-        v-model:expandedRows="expandedRows"
+        v-model:expandedRows="expandedRow"
+        @row-click="setExpandedRow"
         :value="mainCategoriesList"
         selectionMode="single"
         lazy
@@ -132,23 +133,31 @@
             </div>
 
             <DataTable
-              :dataKey="slotProps.ptcode"
-              :value="slotProps.data.subCategory"
+              :value="expandedRow[0].subCategory"
               paginator
               :rows="5"
               class="w-full"
             >
-              <Column header="PTCODE">
-                <template #body="{ data }"> {{ data.ptcode }} </template>
+              <Column
+                field="ptcode"
+                header="PTCODE"
+              >
+                <!-- <template #body="{ data }"> {{ data }} </template> -->
               </Column>
-              <Column header="CL1CODE">
-                <template #body="{ data }"> {{ data.cl1code }} </template>
+              <Column
+                field="cl1code"
+                header="CL1CODE"
+              >
               </Column>
-              <Column header="CL1COMB">
-                <template #body="{ data }"> {{ data.cl1comb }} </template>
+              <Column
+                field="cl1comb"
+                header="CL1COMB"
+              >
               </Column>
-              <Column header="NAME">
-                <template #body="{ data }"> {{ data.cl1desc }} </template>
+              <Column
+                field="cl1desc"
+                header="NAME"
+              >
               </Column>
               <Column
                 header="ACTION"
@@ -497,7 +506,7 @@ export default {
   data() {
     return {
       // data table expand
-      expandedRows: [],
+      expandedRow: [],
       // end data table expand
       // paginator
       loading: false,
@@ -565,6 +574,13 @@ export default {
     tzone(date) {
       return moment.tz(date, 'Asia/Manila').format('LLL');
     },
+    setExpandedRow($event) {
+      // Check if row expanded before click or not
+      const isExpanded = this.expandedRow.find((p) => p.id === $event.data.id);
+      if (isExpanded?.id) this.expandedRow = [];
+      else this.expandedRow = [$event.data];
+      //   console.log(this.expandedRow);
+    },
 
     storeCategoriesInContainer() {
       this.mainCategory.data.forEach((e) => {
@@ -592,6 +608,7 @@ export default {
         onFinish: (visit) => {
           this.totalRecords = this.mainCategory.total;
           this.mainCategoriesList = [];
+          this.expandedRow = [];
           this.storeCategoriesInContainer();
           this.loading = false;
         },

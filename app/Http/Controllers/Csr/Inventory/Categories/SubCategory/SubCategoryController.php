@@ -18,7 +18,7 @@ class SubCategoryController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->ptcode . $request->cl1code);
+        // dd($request);
 
         $request->validate([
             'ptcode' => 'required',
