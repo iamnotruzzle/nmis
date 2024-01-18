@@ -28,7 +28,8 @@
 
       <DataTable
         class="p-datatable-sm"
-        v-model:expandedRows="expandedRows"
+        v-model:expandedRows="expandedRow"
+        @row-click="setExpandedRow"
         v-model:filters="filters"
         :value="requestStockList"
         selectionMode="single"
@@ -638,7 +639,7 @@ export default {
   },
   data() {
     return {
-      expandedRows: null,
+      expandedRow: [],
       // paginator
       loading: false,
       totalRecords: null,
@@ -723,6 +724,13 @@ export default {
     },
   },
   methods: {
+    setExpandedRow($event) {
+      // Check if row expanded before click or not
+      const isExpanded = this.expandedRow.find((p) => p.id === $event.data.id);
+      if (isExpanded?.id) this.expandedRow = [];
+      else this.expandedRow = [$event.data];
+      //   console.log(this.expandedRow);
+    },
     storeItemsInController() {
       //   console.log(this.$page.props.tanksList);
 
@@ -815,6 +823,7 @@ export default {
           this.totalRecords = this.requestedStocks.total;
           this.requestStockList = [];
           this.currentWardStocksList = [];
+          this.expandedRow = [];
           this.storeRequestedStocksInContainer();
           this.storeCurrentWardStocksInContainer();
           this.loading = false;
