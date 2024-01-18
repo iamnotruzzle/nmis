@@ -227,8 +227,7 @@
               :value="expandedRow[0].request_stocks_details"
               dataKey="id"
             >
-              <!-- :value="slotProps.data.request_stocks_details" -->
-              <!-- <template #header>
+              <template #header>
                 <div class="flex flex-wrap align-items-center justify-content-between gap-2">
                   <span class="text-cyan-500 hover:text-cyan-700">PENDING ITEMS</span>
                   <div class="flex flex-row align-items-center">
@@ -256,11 +255,9 @@
                     />
                   </div>
                 </div>
-              </template> -->
+              </template>
               <Column header="ITEM">
-                <template #body="{ data }">
-                  {{ data.item_details.cl2desc }}
-                </template>
+                <template #body="{ data }"> {{ data.item_details.cl2desc }} </template>
               </Column>
               <Column
                 field="requested_qty"
@@ -648,7 +645,7 @@ export default {
       if (isExpanded?.id) this.expandedRow = [];
       else this.expandedRow = [$event.data];
 
-      console.log(this.expandedRow);
+      //   console.log(this.expandedRow);
     },
     storeItemsInController() {
       this.items.forEach((e) => {
