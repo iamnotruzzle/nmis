@@ -13,7 +13,7 @@ class CreateCsrwWardsStocksTanksTable extends Migration
      */
     public function up()
     {
-        Schema::create('csrw_wards_stocks_tanks', function (Blueprint $table) {
+        Schema::create('csrw_wards_stocks_tanks_supp', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('request_stocks_id')->nullable();
             $table->bigInteger('request_stocks_detail_id')->nullable();
@@ -21,6 +21,7 @@ class CreateCsrwWardsStocksTanksTable extends Migration
             // $table->string('uomcode')->nullable();
             $table->integer('quantity');
             $table->string('location');
+            $table->string('from');
             $table->timestamps();
         });
     }
@@ -32,6 +33,6 @@ class CreateCsrwWardsStocksTanksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('csrw_wards_stocks_tanks');
+        Schema::dropIfExists('csrw_wards_stocks_tanks_supp');
     }
 }
