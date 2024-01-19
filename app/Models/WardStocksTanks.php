@@ -19,6 +19,7 @@ class WardStocksTanks extends Model
         // 'uomcode',
         'quantity',
         'location',
+        'from'
     ];
 
     public function request_stocks()
