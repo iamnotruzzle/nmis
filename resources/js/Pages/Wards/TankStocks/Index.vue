@@ -265,6 +265,12 @@
                   v-model="currentWardStocksFilter['global'].value"
                   placeholder="Search item"
                 />
+                <Button
+                  label="Consignment"
+                  icon="pi pi-plus"
+                  iconPos="right"
+                  @click="openConsignmentDialog"
+                />
               </span>
             </div>
           </div>
@@ -584,6 +590,75 @@
           />
         </template>
       </Dialog> -->
+
+      <Dialog
+        v-model:visible="consignmentDialog"
+        header="Consignment"
+        :modal="true"
+        class="p-fluid w-5"
+        @hide="whenDialogIsHidden"
+      >
+        <div class="field">
+          <label>Item</label>
+          <Dropdown
+            required="true"
+            v-model="formConsignment.itemcode"
+            :options="itemsList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
+            filter
+            optionValue="itemcode"
+            optionLabel="itemDesc"
+            class="w-full mb-3"
+          />
+        </div>
+        <div class="field">
+          <label for="Item">Quantity</label>
+          <InputText
+            id="quantity"
+            v-model.trim="formConsignment.quantity"
+            required="true"
+            autofocus
+            type="number"
+            :class="{ 'p-invalid': formConsignment.quantity == '' || item == null }"
+            @keyup.enter="submitConsignment"
+          />
+          <small
+            class="text-error"
+            v-if="formConsignment.errors.quantity"
+          >
+            {{ formConsignment.errors.quantity }}
+          </small>
+        </div>
+
+        <template #footer>
+          <Button
+            label="Cancel"
+            icon="pi pi-times"
+            severity="danger"
+            text
+            @click="cancel"
+          />
+          <Button
+            v-if="isUpdate == true"
+            label="Update"
+            icon="pi pi-check"
+            severity="warning"
+            text
+            type="submit"
+            :disabled="formConsignment.processing || formConsignment.quantity == null"
+            @click="submitConsignment"
+          />
+          <Button
+            v-else
+            label="Save"
+            icon="pi pi-check"
+            text
+            type="submit"
+            :disabled="formConsignment.processing || formConsignment.quantity == null"
+            @click="submitConsignment"
+          />
+        </template>
+      </Dialog>
     </div>
   </app-layout>
 </template>
@@ -648,6 +723,7 @@ export default {
       requestStockId: null,
       isUpdate: false,
       createRequestStocksDialog: false,
+      consignmentDialog: false,
       editWardStocksDialog: false,
       editStatusDialog: false,
       cancelItemDialog: false,
@@ -689,6 +765,11 @@ export default {
       formUpdateStatus: this.$inertia.form({
         request_stock_id: null,
         status: null,
+      }),
+      formConsignment: this.$inertia.form({
+        authLocation: null,
+        itemcode: null,
+        quantity: null,
       }),
       targetItemDesc: null,
     };
@@ -838,6 +919,11 @@ export default {
       this.requestStockId = null;
       this.createRequestStocksDialog = true;
     },
+    openConsignmentDialog() {
+      this.formConsignment.clearErrors();
+      this.formConsignment.reset();
+      this.consignmentDialog = true;
+    },
     // when dialog is hidden, do this function
     whenDialogIsHidden() {
       this.$emit(
@@ -855,6 +941,8 @@ export default {
         (this.oldQuantity = 0),
         this.form.clearErrors(),
         this.form.reset(),
+        this.formConsignment.clearErrors(),
+        this.formConsignment.reset(),
         this.formUpdateStatus.reset()
       );
     },
@@ -968,6 +1056,30 @@ export default {
         });
       }
     },
+    submitConsignment() {
+      if (this.formConsignment.processing) {
+        return false;
+      }
+
+      this.formConsignment.authLocation = this.$page.props.authWardcode.wardcode;
+      if (
+        this.formConsignment.itemcode != null ||
+        this.formConsignment.itemcode != '' ||
+        this.formConsignment.quantity != null ||
+        this.formConsignment.quantity != '' ||
+        this.formConsignment.quantity != 0
+      ) {
+        this.formConsignment.post(route('consignmenttank.store'), {
+          preserveScroll: true,
+          onSuccess: () => {
+            this.formConsignment.reset();
+            this.cancel();
+            this.updateData();
+            this.createdMsg();
+          },
+        });
+      }
+    },
     confirmCancelItem(item) {
       //   console.log(item);
       this.requestStockId = item.id;
@@ -991,11 +1103,14 @@ export default {
       this.requestStockId = null;
       this.isUpdate = false;
       this.createRequestStocksDialog = false;
+      this.consignmentDialog = false;
       this.editWardStocksDialog = false;
       this.targetItemDesc = null;
       this.oldQuantity = 0;
       this.form.reset();
       this.form.clearErrors();
+      this.formConsignment.reset();
+      this.formConsignment.clearErrors();
     },
     createdMsg() {
       this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Stock request created', life: 3000 });

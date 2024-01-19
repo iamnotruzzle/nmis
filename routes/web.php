@@ -27,6 +27,7 @@ use App\Http\Controllers\Reports\Ward\WardStocksReportController;
 use App\Http\Controllers\Users\User\ProfileController;
 use App\Http\Controllers\Users\UserController;
 use App\Http\Controllers\Wards\Consignment\WardConsignmentController;
+use App\Http\Controllers\Wards\ConsignmentTank\WardConsignmentTankController;
 use App\Http\Controllers\Wards\ConvertItem\ConvertItemController;
 use App\Http\Controllers\Wards\Dashboard\DashboardController as WardDashboardController;
 use App\Http\Controllers\Wards\Patients\PatientChargeController;
@@ -105,6 +106,7 @@ Route::put('requesttankstocks', [RequestTankStocksController::class, 'updatedeli
 
 Route::resource('convertitem', ConvertItemController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('consignment', WardConsignmentController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
+Route::resource('consignmenttank', WardConsignmentTankController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
 Route::resource('wardreports', ReportController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index']);
 Route::get('wardstocks/export/', [WardStocksReportController::class, 'export']);
 Route::resource('wardsmanualreports', WardsManualReportController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);

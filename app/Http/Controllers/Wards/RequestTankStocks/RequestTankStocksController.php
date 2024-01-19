@@ -29,12 +29,12 @@ class RequestTankStocksController extends Controller
             ->first();
 
         $requestedStocks = RequestTankStocks::with(['requested_at_details', 'requested_by_details', 'approved_by_details', 'request_stocks_details'])
-            // ->where('location', '=', $authWardcode->wardcode)
-            // ->whereHas('requested_by_details', function ($q) use ($searchString) {
-            //     $q->where('firstname', 'LIKE', '%' . $searchString . '%')
-            //         ->orWhere('middlename', 'LIKE', '%' . $searchString . '%')
-            //         ->orWhere('lastname', 'LIKE', '%' . $searchString . '%');
-            // })
+            ->where('location', '=', $authWardcode->wardcode)
+            ->whereHas('requested_by_details', function ($q) use ($searchString) {
+                $q->where('firstname', 'LIKE', '%' . $searchString . '%')
+                    ->orWhere('middlename', 'LIKE', '%' . $searchString . '%')
+                    ->orWhere('lastname', 'LIKE', '%' . $searchString . '%');
+            })
             ->when(
                 $request->from,
                 function ($query, $value) {

@@ -1411,6 +1411,10 @@ export default {
       }
     },
     submitConsignment() {
+      if (this.formConsignment.processing) {
+        return false;
+      }
+
       this.formConsignment.authLocation = this.$page.props.authWardcode.wardcode;
       if (
         this.formConsignment.fund_source != null ||
