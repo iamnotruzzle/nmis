@@ -155,6 +155,7 @@ class RequestTankStocksController extends Controller
                 'uomcode' => $item['uomcode'],
                 'quantity' => $item['approved_qty'],
                 'location' => $request_tank_stocks->location,
+                'from' => 'CSR',
             ]);
         }
 
