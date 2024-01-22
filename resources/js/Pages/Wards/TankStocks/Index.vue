@@ -506,7 +506,7 @@
       </Dialog>
 
       <!-- update ward stock dialog -->
-      <!-- <Dialog
+      <Dialog
         v-model:visible="editWardStocksDialog"
         header="Update stock"
         :modal="true"
@@ -518,7 +518,7 @@
           <label for="item">Item</label>
           <InputText
             id="item"
-            v-model.trim="formWardStocks.item"
+            v-model.trim="formWardStocks.itemDesc"
             readonly
             class="w-full"
           />
@@ -529,15 +529,6 @@
             id="quantity"
             v-model.trim="formWardStocks.quantity"
             autofocus
-            class="w-full"
-          />
-        </div>
-        <div class="field">
-          <label for="expiration_date">Expiration date</label>
-          <InputText
-            id="expiration_date"
-            v-model.trim="formWardStocks.expiration_date"
-            readonly
             class="w-full"
           />
         </div>
@@ -576,12 +567,13 @@
               formWardStocks.processing ||
               formWardStocks.quantity == null ||
               formWardStocks.quantity == '' ||
-              Number(formWardStocks.current_quantity) < Number(formWardStocks.quantity)
+              formWardStocks.remarks == null ||
+              formWardStocks.remarks == ''
             "
             @click="submitEditWardStocks"
           />
         </template>
-      </Dialog> -->
+      </Dialog>
 
       <Dialog
         v-model:visible="consignmentDialog"
@@ -763,6 +755,13 @@ export default {
         itemcode: null,
         quantity: null,
       }),
+      formWardStocks: this.$inertia.form({
+        itemcode: null,
+        itemDesc: null,
+        quantity: null,
+        remarks: null,
+        location: null,
+      }),
       targetItemDesc: null,
     };
   },
@@ -935,6 +934,8 @@ export default {
         this.form.reset(),
         this.formConsignment.clearErrors(),
         this.formConsignment.reset(),
+        this.formWardStocks.clearErrors(),
+        this.formWardStocks.reset(),
         this.formUpdateStatus.reset()
       );
     },
@@ -1072,6 +1073,23 @@ export default {
         });
       }
     },
+    editWardStocks(data) {
+      this.formWardStocks.itemcode = data.itemcode;
+      this.formWardStocks.itemDesc = data.itemDesc;
+      this.formWardStocks.quantity = data.quantity;
+      this.editWardStocksDialog = true;
+    },
+    submitEditWardStocks() {
+      this.formWardStocks.location = this.$page.props.authWardcode.wardcode;
+      this.formWardStocks.post(route('wardtankstocks.store'), {
+        preserveScroll: true,
+        onSuccess: () => {
+          this.cancel();
+          this.updateData();
+          this.updatedMsg();
+        },
+      });
+    },
     confirmCancelItem(item) {
       //   console.log(item);
       this.requestStockId = item.id;
@@ -1103,6 +1121,9 @@ export default {
       this.form.clearErrors();
       this.formConsignment.reset();
       this.formConsignment.clearErrors();
+      this.form.clearErrors();
+      this.formWardStocks.reset();
+      this.formWardStocks.clearErrors();
     },
     createdMsg() {
       this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Stock request created', life: 3000 });
