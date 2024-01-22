@@ -323,7 +323,7 @@
         v-model:visible="createRequestStocksDialog"
         header="Request stock"
         :modal="true"
-        class="p-fluid w-5"
+        class="p-fluid w-3"
         @hide="whenDialogIsHidden"
       >
         <div class="field">
@@ -366,7 +366,7 @@
             v-model:filters="requestStockListDetailsFilter"
             :globalFilterFields="['itemDesc']"
             :value="requestStockListDetails"
-            tableStyle="min-width: 50rem"
+            tableStyle="min-width: 30rem"
             class="p-datatable-sm w-full"
             paginator
             showGridlines
@@ -390,7 +390,7 @@
             ></Column>
             <Column
               field="requested_qty"
-              header="PENDING QTY"
+              header="QTY"
               sortable
             ></Column>
             <Column header="">
