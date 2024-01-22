@@ -304,25 +304,17 @@
             {{ data.uomdesc }}
           </template>
         </Column>
-        <!-- <Column header="ACTION">
+        <Column header="ACTION">
           <template #body="slotProps">
             <div class="flex justify-content-center">
-              <Button
-                rounded
-                text
-                severity="warning"
+              <v-icon
+                name="pr-pencil"
+                class="text-yellow-500 cursor-pointer"
                 @click="editWardStocks(slotProps.data)"
-              >
-                <template #default="">
-                  <v-icon
-                    name="pr-pencil"
-                    class="text-yellow-500"
-                  ></v-icon>
-                </template>
-              </Button>
+              ></v-icon>
             </div>
           </template>
-        </Column> -->
+        </Column>
       </DataTable>
 
       <!-- @hide="clickOutsideDialog" -->

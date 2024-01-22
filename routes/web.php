@@ -36,6 +36,7 @@ use App\Http\Controllers\Wards\Reports\ReportController;
 use App\Http\Controllers\Wards\RequestStocks\RequestStocksController;
 use App\Http\Controllers\Wards\RequestStocks\WardsStocksLogs\WardsStocksLogsController;
 use App\Http\Controllers\Wards\RequestTankStocks\RequestTankStocksController;
+use App\Http\Controllers\Wards\Tanks\TankStocks\WardTankStocksController;
 use App\Http\Controllers\Wards\TransferStock\TransferStockController;
 use App\Http\Controllers\Wards\WardsManualReport\WardsManualReportController;
 use App\Models\CsrStocksMedicalSupplies;
@@ -102,6 +103,7 @@ Route::put('requeststocks', [RequestStocksController::class, 'updatedeliverystat
 // tanks
 Route::resource('requesttankstocks', RequestTankStocksController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
 Route::put('requesttankstocks', [RequestTankStocksController::class, 'updatedeliverystatus'])->name('requesttankstocks.updatedeliverystatus');
+Route::resource('wardtankstocks', WardTankStocksController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
 // end tanks
 
 Route::resource('convertitem', ConvertItemController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
