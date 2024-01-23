@@ -22,6 +22,8 @@ class WardStocksTanksLogs extends Model
         'new_qty',
         'action',
         'remarks',
+        'converted_from_ward_stock_id',
+        'is_converted',
         'entry_by',
     ];
 }

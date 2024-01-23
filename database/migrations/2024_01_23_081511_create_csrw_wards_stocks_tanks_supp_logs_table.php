@@ -24,6 +24,8 @@ class CreateCsrwWardsStocksTanksSuppLogsTable extends Migration
             $table->integer('new_qty');
             $table->string('action');
             $table->string('remarks', 500)->nullable();
+            $table->bigInteger('converted_from_ward_stock_id')->nullable();
+            $table->string('is_converted')->nullable();
             $table->string('entry_by');
             $table->timestamps();
         });

@@ -21,7 +21,10 @@ class CreateCsrwWardsStocksTanksSuppTable extends Migration
             // $table->string('uomcode')->nullable();
             $table->integer('quantity');
             $table->string('location');
+            $table->bigInteger('converted_from_ward_stock_id')->nullable();
             $table->string('from');
+            $table->string('is_converted')->nullable();
+            $table->integer('converted_quantity')->nullable();
             $table->timestamps();
         });
     }
