@@ -17,7 +17,7 @@ class CreateCsrwWardsStocksTanksSuppLogsTable extends Migration
             $table->id();
             $table->bigInteger('request_stocks_id')->nullable();
             $table->bigInteger('request_stocks_detail_id')->nullable();
-            $table->bigInteger('stock_id');
+            $table->bigInteger('stock_id')->nullable();
             $table->string('itemcode');
             $table->string('location');
             $table->integer('prev_qty');

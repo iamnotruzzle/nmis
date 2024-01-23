@@ -302,6 +302,15 @@
           </template>
         </Column>
         <Column
+          field="received_date"
+          header="RECEIVED DATE"
+          sortable
+        >
+          <template #body="{ data }">
+            {{ tzone2(data.received_date) }}
+          </template>
+        </Column>
+        <Column
           field="uomdesc"
           header="UNIT"
           sortable
@@ -313,21 +322,32 @@
         <Column header="ACTION">
           <template #body="slotProps">
             <div class="flex justify-content-center">
-              <v-icon
-                name="pr-pencil"
-                class="text-yellow-500 cursor-pointer"
+              <Button
+                rounded
+                text
+                severity="warning"
                 @click="editWardStocks(slotProps.data)"
-              ></v-icon>
+              >
+                <template #default="">
+                  <v-icon
+                    name="pr-pencil"
+                    class="text-yellow-500"
+                  ></v-icon>
+                </template>
+              </Button>
+              <Button
+                rounded
+                text
+                @click="openConvertDialog(slotProps.data)"
+              >
+                <template #default="">
+                  <v-icon
+                    name="si-convertio"
+                    class="text-blue-500"
+                  ></v-icon>
+                </template>
+              </Button>
             </div>
-          </template>
-        </Column>
-        <Column
-          field="received_date"
-          header="RECEIVED DATE"
-          sortable
-        >
-          <template #body="{ data }">
-            {{ tzone2(data.received_date) }}
           </template>
         </Column>
       </DataTable>
@@ -666,6 +686,128 @@
           />
         </template>
       </Dialog>
+
+      <!-- convert item -->
+      <!-- Convert item -->
+      <Dialog
+        v-model:visible="convertItemDialog"
+        header="CONVERT ITEM"
+        :modal="true"
+        @hide="whenDialogIsHidden"
+        :style="{ width: '50rem' }"
+      >
+        <p
+          class="text-error text-xl font-semibold my-1"
+          v-if="stockBalanceDeclared != false"
+        >
+          <!-- {{ $page.props.errors['requestStockListDetails.0.itemcode'].toUpperCase() }} -->
+          {{ $page.props.errors.itemcode }}
+        </p>
+        <div class="form-container">
+          <!-- Left Side: From Items -->
+          <div class="form-side border-1 p-3">
+            <h2>FROM</h2>
+            <div class="p-field flex flex-column">
+              <label for="targetItem">ITEM</label>
+              <InputText
+                id="targetItem"
+                v-model.trim="targetItemDesc"
+                readonly
+              />
+            </div>
+
+            <div class="p-field flex flex-column">
+              <label for="qty_to_convert">QUANTITY TO CONVERT</label>
+              <InputText
+                id="qty_to_convert"
+                v-model.trim="formConvertItem.qty_to_convert"
+                required="true"
+                autofocus
+                type="number"
+                :class="{
+                  'p-invalid':
+                    formConvertItem.qty_to_convert == '' ||
+                    formConvertItem.qty_to_convert == null ||
+                    formConvertItem.qty_to_convert > oldQuantity,
+                }"
+              />
+              <span
+                v-if="formConvertItem.qty_to_convert > oldQuantity"
+                class="text-error"
+              >
+                Current stock quantity is no enough.
+              </span>
+            </div>
+            <!-- Add more fields as needed -->
+          </div>
+
+          <div class="mx-2">
+            <v-icon
+              name="co-arrow-thick-right"
+              scale="2"
+            ></v-icon>
+          </div>
+
+          <!-- Right Side: To Items -->
+          <div class="form-side border-1 p-3">
+            <h2>TO</h2>
+            <div class="p-field flex flex-column">
+              <label for="toItem">ITEM</label>
+              <Dropdown
+                id="toItem"
+                required="true"
+                v-model="formConvertItem.to"
+                :options="itemsList"
+                :virtualScrollerOptions="{ itemSize: 38 }"
+                filter
+                optionValue="itemcode"
+                optionLabel="itemDesc"
+              />
+            </div>
+
+            <div class="p-field flex flex-column">
+              <label for="qty_after">EQUIVALENT QUANTITY</label>
+              <InputText
+                id="qty_after"
+                v-model.trim="formConvertItem.equivalent_quantity"
+                required="true"
+                autofocus
+                type="number"
+                :class="{
+                  'p-invalid': formConvertItem.equivalent_quantity == '' || formConvertItem.equivalent_quantity == null,
+                }"
+              />
+            </div>
+          </div>
+        </div>
+
+        <template #footer>
+          <Button
+            label="Cancel"
+            icon="pi pi-times"
+            severity="danger"
+            text
+            @click="cancel"
+          />
+          <Button
+            text
+            type="submit"
+            :disabled="
+              formConvertItem.processing ||
+              formConvertItem.to == null ||
+              formConvertItem.qty_to_convert == null ||
+              formConvertItem.equivalent_quantity == null ||
+              formConvertItem.qty_to_convert > oldQuantity
+            "
+            @click="submitConvertItem"
+          >
+            <template #default="">
+              <v-icon name="si-convertio"></v-icon>
+              <label class="ml-2">Convert</label>
+            </template>
+          </Button>
+        </template>
+      </Dialog>
     </div>
   </app-layout>
 </template>
@@ -731,6 +873,7 @@ export default {
       isUpdate: false,
       createRequestStocksDialog: false,
       consignmentDialog: false,
+      convertItemDialog: false,
       editWardStocksDialog: false,
       editStatusDialog: false,
       cancelItemDialog: false,
@@ -789,6 +932,13 @@ export default {
         entry_by: null,
       }),
       targetItemDesc: null,
+      formConvertItem: this.$inertia.form({
+        itemcode: null,
+        ward_stock_id: null,
+        to: null,
+        qty_to_convert: null,
+        equivalent_quantity: null,
+      }),
     };
   },
   // created will be initialize before mounted
@@ -883,7 +1033,7 @@ export default {
     },
     // store current stocks
     storeCurrentWardStocksInContainer() {
-      console.log(this.currentWardStocks);
+      //   console.log(this.currentWardStocks);
 
       this.currentWardStocksList = []; // reset
 
@@ -1141,6 +1291,41 @@ export default {
       this.requestStockId = item.id;
       this.cancelItemDialog = true;
     },
+    openConvertDialog(item) {
+      //   this.formConsignment.clearErrors();
+      //   this.formConsignment.reset();
+      //   this.consignmentDialog = true;
+
+      console.log('item', item);
+
+      this.convertItemDialog = true;
+      this.formConvertItem.itemcode = item.itemcode;
+      this.formConvertItem.ward_stock_id = item.id;
+      this.oldQuantity = item.quantity;
+      this.targetItemDesc = item.itemDesc;
+    },
+    submitConvertItem() {
+      this.formConvertItem.post(route('converttank.store'), {
+        preserveScroll: true,
+        onSuccess: () => {
+          this.formConvertItem.reset();
+          this.cancel();
+          this.updateData();
+          this.convertedMsg();
+        },
+        // onError: (errors) => {
+        //   this.stockBalanceDeclared = true;
+        // },
+        // onFinish: (visit) => {
+        //   if (this.stockBalanceDeclared != true) {
+        //     this.convertItemDialog = false;
+        //     this.cancel();
+        //     this.updateData();
+        //     //   this.updatedMsg();
+        //   }
+        // },
+      });
+    },
     cancelItem() {
       this.form.delete(route('requesttankstocks.destroy', this.requestStockId), {
         preserveScroll: true,
@@ -1160,6 +1345,7 @@ export default {
       this.isUpdate = false;
       this.createRequestStocksDialog = false;
       this.consignmentDialog = false;
+      this.convertItemDialog = false;
       this.editWardStocksDialog = false;
       this.targetItemDesc = null;
       this.oldQuantity = 0;
@@ -1170,6 +1356,9 @@ export default {
       this.form.clearErrors();
       this.formWardStocks.reset();
       this.formWardStocks.clearErrors();
+    },
+    convertedMsg() {
+      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Item converted.', life: 3000 });
     },
     createdMsg() {
       this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Stock request created', life: 3000 });
