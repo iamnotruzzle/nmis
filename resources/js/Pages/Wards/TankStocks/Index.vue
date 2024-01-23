@@ -524,13 +524,19 @@
           />
         </div>
         <div class="field">
-          <label for="quantity">Quantity</label>
+          <label for="quantity">Deduct from Stock:</label>
           <InputText
             id="quantity"
             v-model.trim="formWardStocks.quantity"
             autofocus
             class="w-full"
           />
+          <small
+            class="text-error"
+            v-if="formWardStocks.currentQty < formWardStocks.quantity"
+          >
+            Input must be less than the current stock quantity.
+          </small>
         </div>
         <div class="field">
           <label for="remarks">Remarks <span class="text-error">(Required)</span></label>
@@ -568,7 +574,8 @@
               formWardStocks.quantity == null ||
               formWardStocks.quantity == '' ||
               formWardStocks.remarks == null ||
-              formWardStocks.remarks == ''
+              formWardStocks.remarks == '' ||
+              formWardStocks.currentQty < formWardStocks.quantity
             "
             @click="submitEditWardStocks"
           />
@@ -759,6 +766,7 @@ export default {
         itemcode: null,
         itemDesc: null,
         quantity: null,
+        currentQty: null,
         remarks: null,
         location: null,
       }),
@@ -1077,16 +1085,21 @@ export default {
       this.formWardStocks.itemcode = data.itemcode;
       this.formWardStocks.itemDesc = data.itemDesc;
       this.formWardStocks.quantity = data.quantity;
+      this.formWardStocks.currentQty = data.quantity;
       this.editWardStocksDialog = true;
     },
     submitEditWardStocks() {
+      if (this.formWardStocks.processing) {
+        return false;
+      }
+
       this.formWardStocks.location = this.$page.props.authWardcode.wardcode;
       this.formWardStocks.post(route('wardtankstocks.store'), {
         preserveScroll: true,
         onSuccess: () => {
           this.cancel();
           this.updateData();
-          this.updatedMsg();
+          this.updatedWardStockMsg();
         },
       });
     },
@@ -1130,6 +1143,9 @@ export default {
     },
     updatedMsg() {
       this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Stock request updated', life: 3000 });
+    },
+    updatedWardStockMsg() {
+      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Stock updated', life: 3000 });
     },
     updatedStatusMsg() {
       this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Changed requested stocks status', life: 3000 });
