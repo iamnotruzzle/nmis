@@ -25,7 +25,7 @@
       </div>
     </div>
 
-    <div class="my-4 border-solid border-1"></div>
+    <div class="my-4"></div>
 
     <AppSubmenu
       :items="model"
