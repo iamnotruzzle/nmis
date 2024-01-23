@@ -1296,7 +1296,7 @@ export default {
       //   this.formConsignment.reset();
       //   this.consignmentDialog = true;
 
-      console.log('item', item);
+      //   console.log('item', item);
 
       this.convertItemDialog = true;
       this.formConvertItem.itemcode = item.itemcode;
