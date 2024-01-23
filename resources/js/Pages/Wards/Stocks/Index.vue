@@ -867,13 +867,19 @@
           />
         </div>
         <div class="field">
-          <label for="quantity">Quantity</label>
+          <label for="quantity">Deduct from Stock</label>
           <InputText
             id="quantity"
             v-model.trim="formWardStocks.quantity"
             autofocus
             class="w-full"
           />
+          <small
+            class="text-error"
+            v-if="Number(formWardStocks.current_quantity) < Number(formWardStocks.quantity)"
+          >
+            Input must be less than the current stock quantity.
+          </small>
         </div>
         <div class="field">
           <label for="expiration_date">Expiration date</label>
@@ -919,6 +925,7 @@
               formWardStocks.processing ||
               formWardStocks.quantity == null ||
               formWardStocks.quantity == '' ||
+              formWardStocks.quantity == 0 ||
               Number(formWardStocks.current_quantity) < Number(formWardStocks.quantity)
             "
             @click="submitEditWardStocks"

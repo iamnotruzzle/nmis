@@ -62,12 +62,16 @@ class RequestTankStocksController extends Controller
         //     )
         //     ->get();
 
-        $currentWardStocks = DB::table('csrw_wards_stocks_tanks_supp')
-            ->select('itemcode', DB::raw('SUM(quantity) AS quantity'))
-            ->where('location', $authWardcode->wardcode)
-            ->groupBy('itemcode')
-            ->get();
+        // $currentWardStocks = DB::table('csrw_wards_stocks_tanks_supp')
+        //     ->select('itemcode', DB::raw('SUM(quantity) AS quantity'))
+        //     ->where('location', $authWardcode->wardcode)
+        //     ->groupBy('itemcode')
+        //     ->get();
         // dd($currentWardStocks);
+
+        $currentWardStocks = WardStocksTanks::with('request_stocks:id,received_date')
+            ->where('location', $authWardcode->wardcode)
+            ->get();
 
         return Inertia::render('Wards/TankStocks/Index', [
             'requestedStocks' => $requestedStocks,

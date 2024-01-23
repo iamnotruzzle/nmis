@@ -61,7 +61,7 @@ class WardConsignmentController extends Controller
             'manufactured_date' => $request->manufactured_date,
             'delivered_date' => $request->delivered_date,
             'expiration_date' => $request->expiration_date,
-            'action' => 'create',
+            'action' => 'CREATE',
             'remarks' => null,
             'entry_by' => $entry_by,
         ]);

@@ -278,6 +278,12 @@
         <template #empty> No item found. </template>
         <template #loading> Loading item data. Please wait. </template>
         <Column
+          field="from"
+          header="FROM"
+          sortable
+        >
+        </Column>
+        <Column
           field="itemDesc"
           header="ITEM"
           sortable
@@ -313,6 +319,15 @@
                 @click="editWardStocks(slotProps.data)"
               ></v-icon>
             </div>
+          </template>
+        </Column>
+        <Column
+          field="received_date"
+          header="RECEIVED DATE"
+          sortable
+        >
+          <template #body="{ data }">
+            {{ tzone2(data.received_date) }}
           </template>
         </Column>
       </DataTable>
@@ -524,7 +539,7 @@
           />
         </div>
         <div class="field">
-          <label for="quantity">Deduct from Stock:</label>
+          <label for="quantity">Deduct from Stock</label>
           <InputText
             id="quantity"
             v-model.trim="formWardStocks.quantity"
@@ -533,7 +548,7 @@
           />
           <small
             class="text-error"
-            v-if="formWardStocks.currentQty < formWardStocks.quantity"
+            v-if="Number(formWardStocks.currentQty) < Number(formWardStocks.quantity)"
           >
             Input must be less than the current stock quantity.
           </small>
@@ -573,9 +588,10 @@
               formWardStocks.processing ||
               formWardStocks.quantity == null ||
               formWardStocks.quantity == '' ||
+              formWardStocks.quantity == 0 ||
               formWardStocks.remarks == null ||
               formWardStocks.remarks == '' ||
-              formWardStocks.currentQty < formWardStocks.quantity
+              Number(formWardStocks.currentQty) < Number(formWardStocks.quantity)
             "
             @click="submitEditWardStocks"
           />
@@ -769,6 +785,7 @@ export default {
         currentQty: null,
         remarks: null,
         location: null,
+        entry_by: null,
       }),
       targetItemDesc: null,
     };
@@ -865,6 +882,8 @@ export default {
     },
     // store current stocks
     storeCurrentWardStocksInContainer() {
+      console.log(this.currentWardStocks);
+
       this.currentWardStocksList = []; // reset
 
       moment.suppressDeprecationWarnings = true;
@@ -874,11 +893,14 @@ export default {
         const unit = this.$page.props.unitOfMeasurement.find((x) => matchingTank.unitcode === x.uomcode);
 
         this.currentWardStocksList.push({
+          id: e.id,
+          from: e.from,
           itemcode: e.itemcode,
           itemDesc: matchingTank ? matchingTank.itemDesc : null,
           uomcode: unit ? unit.uomcode : null,
           uomdesc: unit ? unit.uomdesc : null,
           quantity: e.quantity,
+          received_date: e.request_stocks == null ? null : e.request_stocks,
         });
       });
     },
@@ -887,6 +909,13 @@ export default {
         return null;
       } else {
         return moment.tz(date, 'Asia/Manila').format('LL');
+      }
+    },
+    tzone2(date) {
+      if (date == null || date == '') {
+        return null;
+      } else {
+        return moment.tz(date.received_date, 'Asia/Manila').format('LL');
       }
     },
     onPage(event) {
@@ -1086,6 +1115,8 @@ export default {
       this.formWardStocks.itemDesc = data.itemDesc;
       this.formWardStocks.quantity = data.quantity;
       this.formWardStocks.currentQty = data.quantity;
+      this.formWardStocks.location = this.$page.props.auth.user.location.wardcode;
+      this.formWardStocks.entry_by = this.$page.props.auth.user.userDetail.employeeid;
       this.editWardStocksDialog = true;
     },
     submitEditWardStocks() {

@@ -76,7 +76,7 @@ class ConvertItemController extends Controller
             'converted_from_ward_stock_id' => $wardStock->id,
             'from' => $wardStock->from,
             'is_converted' => 'y',
-            'action' => 'converted item',
+            'action' => 'CONVERT ITEM',
             'manufactured_date' => $wardStock->manufactured_date,
             'delivered_date' => $wardStock->delivered_date,
             'expiration_date' => $wardStock->expiration_date,
