@@ -20,19 +20,15 @@ class WardTankStocksController extends Controller
         // dd($request);
 
         $tank = WardStocksTanks::where('location', $request->location)
-            ->where('itemcode', $request->itemcode)
+            ->where('id', $request->id)
             ->where('quantity', '!=', 0)
             ->orderBy('created_at', 'ASC')
             ->first();
 
-        $tank = WardStocksTanks::where('location', $request->location)
-            ->where('itemcode', $request->itemcode)
-            ->where('quantity', '!=', 0)
-            ->orderBy('created_at', 'ASC')
-            ->first();
+        $new_qty =  $tank->quantity - $request->quantity;
 
         $tank->update([
-            'quantity' => $tank->quantity - $request->quantity,
+            'quantity' => $new_qty,
         ]);
 
         $log = WardStocksTanksLogs::create([
@@ -42,7 +38,7 @@ class WardTankStocksController extends Controller
             'itemcode' => $request->itemcode,
             'location' => $request->location,
             'prev_qty' => $request->currentQty,
-            'new_qty' => $tank->quantity - $request->quantity,
+            'new_qty' => $new_qty,
             'action' => "UPDATE",
             'remarks' => $request->remarks,
             'entry_by' => $request->entry_by,

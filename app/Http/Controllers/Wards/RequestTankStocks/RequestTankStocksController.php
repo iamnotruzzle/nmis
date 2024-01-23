@@ -51,17 +51,6 @@ class RequestTankStocksController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        // $currentWardStocks = WardsStocksMedSupp::with(['item_details:cl2comb,cl2desc', 'brand_details:id,name', 'request_stocks', 'unit_of_measurement:uomcode,uomdesc'])
-        //     ->where('location', $authWardcode->wardcode)
-        //     ->where('quantity', '!=', 0)
-        //     ->whereHas(
-        //         'request_stocks',
-        //         function ($query) {
-        //             return $query->where('status', 'RECEIVED');
-        //         }
-        //     )
-        //     ->get();
-
         // $currentWardStocks = DB::table('csrw_wards_stocks_tanks_supp')
         //     ->select('itemcode', DB::raw('SUM(quantity) AS quantity'))
         //     ->where('location', $authWardcode->wardcode)
@@ -70,6 +59,7 @@ class RequestTankStocksController extends Controller
         // dd($currentWardStocks);
 
         $currentWardStocks = WardStocksTanks::with('request_stocks:id,received_date')
+            ->where('quantity', '!=', 0)
             ->where('location', $authWardcode->wardcode)
             ->get();
 

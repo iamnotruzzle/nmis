@@ -779,6 +779,7 @@ export default {
         quantity: null,
       }),
       formWardStocks: this.$inertia.form({
+        id: null,
         itemcode: null,
         itemDesc: null,
         quantity: null,
@@ -1111,6 +1112,7 @@ export default {
       }
     },
     editWardStocks(data) {
+      this.formWardStocks.id = data.id;
       this.formWardStocks.itemcode = data.itemcode;
       this.formWardStocks.itemDesc = data.itemDesc;
       this.formWardStocks.quantity = data.quantity;
