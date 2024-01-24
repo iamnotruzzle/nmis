@@ -123,6 +123,7 @@
             field="price"
             header="PRICE"
             sortable
+            style="text-align: right"
           >
             <template #body="{ data }">
               {{ convertToPHCurrency(data.price) }}
@@ -132,6 +133,7 @@
             field="amount"
             header="AMOUNT"
             sortable
+            style="text-align: right"
           >
             <template #body="{ data }">
               {{ convertToPHCurrency(data.amount) }}
@@ -241,6 +243,7 @@
           <Column
             field="price"
             header="PRICE"
+            style="text-align: right"
           >
             <template #body="{ data }"> ₱ {{ data.price }} </template>
           </Column>
