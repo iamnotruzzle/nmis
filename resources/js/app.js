@@ -36,6 +36,7 @@ import {
   SiConvertio,
   CoArrowThickRight,
   SiOxygen,
+  BiJournalCheck,
 } from 'oh-vue-icons/icons';
 addIcons(
   CoChartLine,
@@ -56,7 +57,8 @@ addIcons(
   BiCheckLg,
   SiConvertio,
   CoArrowThickRight,
-  SiOxygen
+  SiOxygen,
+  BiJournalCheck
 );
 
 moment.tz.setDefault('Asia/Manila');

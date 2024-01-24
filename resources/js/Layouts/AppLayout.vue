@@ -138,8 +138,8 @@ export default {
               comp: 'Balance/Index',
             },
             {
-              label: 'Stocks',
-              icon: 'la-boxes-solid',
+              label: 'Requests',
+              icon: 'bi-journal-check',
               to: 'requeststocks',
               prefix: 'requeststocks',
               comp: 'Wards/Stocks/Index',
