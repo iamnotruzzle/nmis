@@ -44,13 +44,13 @@
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
             <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">STOCK BALANCE</span>
             <div>
-              <span class="p-input-icon-left mr-2">
+              <!-- <span class="p-input-icon-left mr-2">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="search"
                   placeholder="Search item"
                 />
-              </span>
+              </span> -->
 
               <Button
                 label="Balance"

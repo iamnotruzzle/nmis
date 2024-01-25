@@ -28,7 +28,6 @@ class LocationTankStockBalanceController extends Controller
 
         // dd($authWardcode);
 
-
         $currentStocks =  DB::select(
             "SELECT clsb_ward.itemcode as clsb_itemcode, hc.itemcode as hc_itemcode, hc.itemDesc
             FROM csrw_wards_stocks_tanks_supp as ward
@@ -78,6 +77,9 @@ class LocationTankStockBalanceController extends Controller
                     $query->whereDate('created_at', '<=', $value);
                 }
             )
+            // ->whereHas('item', function ($q) use ($searchString) {
+            //     $q->where('cl2desc', 'LIKE', '%' . $searchString . '%');
+            // })
             ->orderBy('created_at', 'DESC')
             ->paginate(10);
 
