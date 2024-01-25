@@ -83,21 +83,6 @@ class LocationStockBalanceController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->cl2comb);
-        // $date = Carbon::now()->subDays(30); // get last 30 days
-
-        // $s = LocationStockBalance::where('cl2comb', $request->cl2comb)
-        //     ->where('created_at', '>=', $date)
-        //     ->count();
-        // // dd($s);
-
-        // // if the item is listed in the last 30 days.
-        // // then error a message will pop out saying the item is listed
-        // // in the last 30days
-        // if ($s != 0) {
-        //     $isExist = true;
-        // }
-
         $request->validate(
             [
                 'cl2comb' => ['required', new StockBalanceRule($request->cl2comb)],

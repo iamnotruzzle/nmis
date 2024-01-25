@@ -5,6 +5,7 @@ namespace App\Http\Controllers\LocationTankStockBalance;
 use App\Http\Controllers\Controller;
 use App\Models\LocationStockBalance;
 use App\Models\LocationTankStockBalance as ModelsLocationTankStockBalance;
+use App\Rules\TankStockBalanceRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -69,35 +70,20 @@ class LocationTankStockBalance extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->cl2comb);
-        // $date = Carbon::now()->subDays(30); // get last 30 days
-
-        // $s = LocationStockBalance::where('cl2comb', $request->cl2comb)
-        //     ->where('created_at', '>=', $date)
-        //     ->count();
-        // // dd($s);
-
-        // // if the item is listed in the last 30 days.
-        // // then error a message will pop out saying the item is listed
-        // // in the last 30days
-        // if ($s != 0) {
-        //     $isExist = true;
-        // }
-
         $request->validate(
             [
-                'cl2comb' => ['required', new StockBalanceRule($request->cl2comb)],
+                'itemcode' => ['required', new TankStockBalanceRule($request->itemcode)],
                 'ending_balance' => 'required',
                 'beginning_balance' => 'required',
             ],
             [
-                'cl2comb.required' => 'Item field is required.',
+                'itemcode.required' => 'Item field is required.',
             ]
         );
 
         LocationStockBalance::create([
             'location' => $request->location,
-            'cl2comb' => $request->cl2comb,
+            'itemcode' => $request->itemcode,
             'ending_balance' => $request->ending_balance,
             'beginning_balance' => $request->beginning_balance,
             'entry_by' => $request->entry_by,
@@ -109,14 +95,14 @@ class LocationTankStockBalance extends Controller
     public function update(LocationStockBalance $stockbal, Request $request)
     {
         $request->validate([
-            'cl2comb' => 'required',
+            'itemcode' => 'required',
             'ending_balance' => 'required',
             'beginning_balance' => 'required',
         ]);
 
         $stockbal->update([
             'location' => $request->location,
-            'cl2comb' => $request->cl2comb,
+            'itemcode' => $request->itemcode,
             'ending_balance' => $request->ending_balance,
             'beginning_balance' => $request->beginning_balance,
             'updated_by' => $request->entry_by,
