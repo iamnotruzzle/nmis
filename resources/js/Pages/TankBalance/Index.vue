@@ -11,14 +11,14 @@
       <div class="mb-2">
         <Link
           href="stockbal"
-          class="text-2xl border-bottom-2 mr-2 font-semibold"
+          class="text-2xl mr-2 my-link"
         >
           DRUG AND MEDS
         </Link>
 
         <Link
           href="tankstockbal"
-          class="text-2xl my-link"
+          class="text-2xl border-bottom-2 font-semibold"
         >
           TANKS
         </Link>
@@ -69,7 +69,7 @@
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.cl2desc }}
+            {{ data.itemDesc }}
           </template>
         </Column>
         <Column
@@ -176,24 +176,24 @@
           <Dropdown
             v-if="!isUpdate"
             required="true"
-            v-model="form.cl2comb"
+            v-model="form.itemcode"
             :options="itemsList"
             :virtualScrollerOptions="{ itemSize: 38 }"
             filter
-            optionLabel="cl2desc"
-            optionValue="cl2comb"
+            optionValue="itemcode"
+            optionLabel="itemDesc"
             class="w-full"
           />
           <InputText
             v-else
-            v-model.trim="cl2desc"
+            v-model.trim="itemDesc"
             disabled=""
           />
           <small
             class="text-error"
-            v-if="form.errors.cl2comb"
+            v-if="form.errors.itemcode"
           >
-            {{ form.errors.cl2comb }}
+            {{ form.errors.itemcode }}
           </small>
         </div>
         <div class="field">
@@ -272,7 +272,7 @@
             style="font-size: 2rem"
           />
           <span v-if="form"
-            >Are you sure you want to delete <b>{{ form.cl2desc }} </b> ?</span
+            >Are you sure you want to delete <b>{{ form.itemDesc }} </b> ?</span
           >
         </div>
         <template #footer>
@@ -349,7 +349,7 @@ export default {
       // end paginator
       itemId: null,
       isUpdate: false,
-      cl2desc: '',
+      itemDesc: '',
       createItemDialog: false,
       deleteItemDialog: false,
       search: '',
@@ -365,7 +365,7 @@ export default {
       form: this.$inertia.form({
         id: null,
         location: null,
-        cl2comb: null,
+        itemcode: null,
         ending_balance: null,
         beginning_balance: null,
         entry_by: null,
@@ -379,7 +379,7 @@ export default {
     this.rows = this.locationStockBalance.per_page;
   },
   mounted() {
-    // console.log('stock bal', this.locationStockBalance);
+    // console.log(this.$page.props.auth.user.location.location_name.wardcode);
 
     this.storeStockBalanceInContainer();
     this.storeItemsInController();
@@ -391,11 +391,14 @@ export default {
   },
   methods: {
     storeStockBalanceInContainer() {
+      //   console.log(this.locationStockBalance.data);
       this.locationStockBalance.data.forEach((e) => {
+        const matchingTank = this.$page.props.tanksList.find((x) => e.itemcode === x.itemcode);
+
         this.balanceContainer.push({
           id: e.id,
-          cl2comb: e.item.cl2comb,
-          cl2desc: e.item.cl2desc,
+          itemcode: e.itemcode,
+          itemDesc: matchingTank.itemDesc,
           ending_balance: e.ending_balance,
           beginning_balance: e.beginning_balance,
           entry_by: e.entry_by.firstname + ' ' + e.entry_by.lastname,
@@ -406,40 +409,32 @@ export default {
     },
     storeItemsInController() {
       this.itemsList = []; // reset
-      //   this.currentStocks.forEach((e) => {
-      //     this.itemsList.push({
-      //       cl2comb: e.item_details.cl2comb,
-      //       cl2desc: e.item_details.cl2desc,
-      //     });
-      //   });
 
-      //   this.currentStocks.forEach((e) => {
-      //     if (e.clsb_cl2comb == null) {
-      //       this.itemsList.push({
-      //         cl2comb: e.hc_cl2comb,
-      //         cl2desc: e.cl2desc,
-      //       });
-      //     }
-      //   });
+      //   console.log(this.currentStocks);
 
       this.currentStocks.forEach((e) => {
-        if (e.clsb_cl2comb == null) {
-          const cl2combValue = e.hc_cl2comb;
+        if (e.clsb_itemcode == null) {
+          const itemcodeValue = e.hc_itemcode;
 
-          // Check if the cl2comb value is not already in the itemsList
-          const isDuplicate = this.itemsList.some((item) => item.cl2comb === cl2combValue);
+          // Check if the itemcode value is not already in the itemsList
+          //   const isDuplicate = this.itemsList.some((item) => item.itemcode === itemcodeValue);
 
-          // If it's not a duplicate, add it to the itemsList
-          if (!isDuplicate) {
-            this.itemsList.push({
-              cl2comb: cl2combValue,
-              cl2desc: e.cl2desc,
-            });
-          }
+          //   // If it's not a duplicate, add it to the itemsList
+          //   if (!isDuplicate) {
+          //     this.itemsList.push({
+          //       itemcode: itemcodeValue,
+          //       itemDesc: e.itemDesc,
+          //     });
+          //   }
+
+          this.itemsList.push({
+            itemcode: itemcodeValue,
+            itemDesc: e.itemDesc,
+          });
         }
       });
 
-      this.sortItemsList(this.itemsList, 'cl2desc');
+      this.sortItemsList(this.itemsList, 'itemDesc');
     },
     sortItemsList(arr, propertyName, order = 'ascending') {
       const sortedArr = this.itemsList.sort((a, b) => {
@@ -457,12 +452,14 @@ export default {
       }
 
       this.itemsList = sortedArr;
+
+      //   console.log(this.itemsList);
     },
     updateData() {
       this.balanceContainer = [];
       this.loading = true;
 
-      this.$inertia.get('stockbal', this.params, {
+      this.$inertia.get('tankstockbal', this.params, {
         preserveState: true,
         preserveScroll: true,
         onFinish: (visit) => {
@@ -496,7 +493,7 @@ export default {
         'hide',
         (this.itemId = null),
         (this.isUpdate = false),
-        (this.cl2desc = ''),
+        (this.itemDesc = ''),
         this.form.clearErrors(),
         this.form.reset(),
         (this.form.location = this.$page.props.auth.user.location.location_name.wardcode),
@@ -508,8 +505,8 @@ export default {
       this.isUpdate = true;
       this.createItemDialog = true;
       this.form.id = item.id;
-      this.form.cl2comb = item.cl2comb;
-      this.cl2desc = item.cl2desc;
+      this.form.itemcode = item.itemcode;
+      this.itemDesc = item.itemDesc;
       this.form.ending_balance = item.ending_balance;
       this.form.beginning_balance = item.beginning_balance;
     },
@@ -520,7 +517,7 @@ export default {
 
       let id = this.form.id;
       if (this.isUpdate) {
-        this.form.put(route('stockbal.update', id), {
+        this.form.put(route('tankstockbal.update', id), {
           preserveScroll: true,
           onSuccess: () => {
             this.createItemDialog = false;
@@ -530,7 +527,7 @@ export default {
           },
         });
       } else {
-        this.form.post(route('stockbal.store'), {
+        this.form.post(route('tankstockbal.store'), {
           preserveScroll: true,
           onSuccess: () => {
             this.createItemDialog = false;
@@ -557,11 +554,11 @@ export default {
     },
     confirmDeleteItem(item) {
       this.form.id = item.id;
-      this.form.cl2desc = item.cl2desc;
+      this.form.itemDesc = item.itemDesc;
       this.deleteItemDialog = true;
     },
     deleteItem() {
-      this.form.delete(route('stockbal.destroy', this.form.id), {
+      this.form.delete(route('tankstockbal.destroy', this.form.id), {
         preserveScroll: true,
         onSuccess: () => {
           this.balanceContainer = [];
