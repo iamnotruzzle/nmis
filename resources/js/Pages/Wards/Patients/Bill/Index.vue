@@ -296,8 +296,15 @@
               class="text-error text-xl font-semibold"
               v-if="stockBalanceDeclared != false"
             >
-              {{ $page.props.errors['itemsToBillList.0.itemCode'].toUpperCase() }}
+              {{ getTankDesc($page.props.errors['itemsToBillList.0.itemCode']) }} stock balance has not yet been
+              declared.
             </p>
+            <!-- <p
+              class="text-error text-xl font-semibold"
+              v-if="stockBalanceDeclared != false"
+            >
+              {{ $page.props.errors['itemsToBillList.0.itemCode'].toUpperCase() }}
+            </p> -->
 
             <DataTable
               v-model:filters="itemsToBillFilter"
@@ -862,6 +869,21 @@ export default {
           }
         },
       });
+      //   console.log(this.$page.props.errors);
+    },
+    getTankDesc(item) {
+      //   console.log(item);
+      const matchingMedSupply = this.$page.props.medSupplies.find((x) => item === x.cl2comb);
+      const matchingTank = this.$page.props.tanksList.find((x) => item === x.itemcode);
+      //   console.log(matchingMedSupply);
+
+      if (matchingMedSupply != null) {
+        return matchingMedSupply.cl2desc;
+      } else if (matchingTank != null) {
+        return matchingTank.itemDesc;
+      } else {
+        return null;
+      }
     },
     editItem(charge, chargeLogs) {
       //   console.log('charge', charge.data.item);

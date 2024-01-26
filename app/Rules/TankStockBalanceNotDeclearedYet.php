@@ -2,14 +2,13 @@
 
 namespace App\Rules;
 
-use App\Models\Item;
-use App\Models\LocationStockBalance;
+use App\Models\LocationTankStockBalance;
 use Carbon\Carbon;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class StockBalanceNotDeclaredYetRule implements Rule
+class TankStockBalanceNotDeclearedYet implements Rule
 {
     public function __construct($params)
     {
@@ -29,7 +28,7 @@ class StockBalanceNotDeclaredYetRule implements Rule
 
         $date = Carbon::now()->subDays(30); // get last 30 days
 
-        $stockBalCount = LocationStockBalance::where('cl2comb', $this->itemcode)
+        $stockBalCount = LocationTankStockBalance::where('itemcode', $this->itemcode)
             ->where('created_at', '>=', $date)
             ->where('location', $authWardcode->wardcode)
             ->count();

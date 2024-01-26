@@ -79,6 +79,10 @@ class HandleInertiaRequests extends Middleware
             'auth.user.roles' => function () use ($request) {
                 return ($request->user() ? $request->user()->roles()->pluck('name') : null);
             },
+            // med supplies
+            'medSupplies' => function () {
+                return Item::where('cl2stat', 'A')->orderBy('cl2desc', 'ASC')->get(['cl2comb', 'cl2desc']);
+            },
             // TANKS = drugs and med (oxygen), compressed air, carbon dioxide
             'tanksList' => function () {
                 return DB::select("SELECT CONCAT(hdmhdr.dmdcomb, hdmhdr.dmdctr) as itemcode,

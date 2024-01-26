@@ -14,6 +14,7 @@ use App\Models\PatientChargeReturnLogs;
 use App\Models\TypeOfCharge;
 use App\Models\WardsStocksMedSupp;
 use App\Rules\StockBalanceNotDeclaredYetRule;
+use App\Rules\TankStockBalanceNotDeclearedYet;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -148,6 +149,14 @@ class PatientChargeController extends Controller
                 $data->validate(
                     [
                         "itemsToBillList.*.itemCode" => ['required', new StockBalanceNotDeclaredYetRule($e['itemCode'])],
+                    ],
+                );
+            }
+
+            if ($e['typeOfCharge'] == 'DRUMD') {
+                $data->validate(
+                    [
+                        "itemsToBillList.*.itemCode" => ['required', new TankStockBalanceNotDeclearedYet($e['itemCode'])],
                     ],
                 );
             }
