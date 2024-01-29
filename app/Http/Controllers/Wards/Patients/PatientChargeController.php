@@ -144,7 +144,7 @@ class PatientChargeController extends Controller
         // dd($data->itemsToBillList);
 
         foreach ($data->itemsToBillList as $e) {
-            // dd($e);
+            // DRUGS AND MEDS
             if ($e['typeOfCharge'] == 'DRUMN') {
                 $data->validate(
                     [
@@ -153,6 +153,7 @@ class PatientChargeController extends Controller
                 );
             }
 
+            // TANKS
             if ($e['typeOfCharge'] == 'DRUMD') {
                 $data->validate(
                     [
