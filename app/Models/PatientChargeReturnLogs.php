@@ -15,7 +15,7 @@ class PatientChargeReturnLogs extends Model
         'enccode',
         'location',
         'hpercode',
-        'cl2comb',
+        'itemcode',
         'returned_qty',
         'entry_by',
     ];

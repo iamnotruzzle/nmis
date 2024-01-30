@@ -18,7 +18,7 @@ class CsrwPatientChargeReturnLogs extends Migration
             $table->string('enccode');
             $table->string('location');
             $table->string('hpercode');
-            $table->string('cl2comb');
+            $table->string('itemcode');
             $table->integer('returned_qty');
             $table->string('entry_by');
             $table->timestamps();

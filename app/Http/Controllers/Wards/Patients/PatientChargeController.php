@@ -666,7 +666,7 @@ class PatientChargeController extends Controller
                     'enccode' => $request->enccode,
                     'location' => $authWard,
                     'hpercode' => $request->hospitalNumber,
-                    'cl2comb' => $previousPatientChargeLogs->itemcode,
+                    'itemcode' => $previousPatientChargeLogs->itemcode,
                     'returned_qty' => (int)$upd_QtyToReturn,
                     'entry_by' => Auth::user()->employeeid,
                 ]);
@@ -852,7 +852,7 @@ class PatientChargeController extends Controller
                     'enccode' => $request->enccode,
                     'location' => $authWard,
                     'hpercode' => $request->hospitalNumber,
-                    'cl2comb' => $previousPatientChargeLogs->itemcode,
+                    'itemcode' => $previousPatientChargeLogs->itemcode,
                     'returned_qty' => (int)$upd_QtyToReturn,
                     'entry_by' => Auth::user()->employeeid,
                 ]);
@@ -957,7 +957,7 @@ class PatientChargeController extends Controller
                     'enccode' => $request->enccode,
                     'location' => $authWard,
                     'hpercode' => $request->hospitalNumber,
-                    'cl2comb' => $previousPatientChargeLogs->itemcode,
+                    'itemcode' => $previousPatientChargeLogs->itemcode,
                     'returned_qty' => (int)$upd_QtyToReturn,
                     'entry_by' => Auth::user()->employeeid,
                 ]);
