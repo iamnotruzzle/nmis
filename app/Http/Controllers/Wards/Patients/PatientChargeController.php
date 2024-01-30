@@ -501,7 +501,7 @@ class PatientChargeController extends Controller
 
                 // /Compressed Air
                 if ($item['typeOfCharge'] == 'DRUMF') {
-                    $patientDrumFChargeDate = PatientCharge::create([
+                    $patientDrumDChargeDate = PatientCharge::create([
                         'enccode' => $enccode,
                         'hpercode' => $hospitalNumber,
                         'upicode' => null,
@@ -555,7 +555,7 @@ class PatientChargeController extends Controller
                                 'acctno' => $acctno->paacctno,
                                 'ward_stocks_id' => $wardStock->id,
                                 'brand' => $wardStock->brand,
-                                'itemcode' => $wardStock->cl2comb,
+                                'itemcode' => $wardStock->itemcode,
                                 'from' => $wardStock->from,
                                 'manufactured_date' => $wardStock->manufactured_date == null ? null : $wardStock->manufactured_date,
                                 'delivery_date' => $wardStock->delivery_date == null ? null : $wardStock->delivery_date,
@@ -589,7 +589,7 @@ class PatientChargeController extends Controller
                                 'acctno' => $acctno->paacctno,
                                 'ward_stocks_id' => $wardStock->id,
                                 'brand' => $wardStock->brand,
-                                'itemcode' => $wardStock->cl2comb,
+                                'itemcode' => $wardStock->itemcode,
                                 'from' => $wardStock->from,
                                 'manufactured_date' => $wardStock->manufactured_date == null ? null : $wardStock->manufactured_date,
                                 'delivery_date' => $wardStock->delivery_date == null ? null : $wardStock->delivery_date,
@@ -614,22 +614,22 @@ class PatientChargeController extends Controller
                     }
 
                     // dd($item);
-                    PatientChargeLogs::create([
-                        'enccode' => $enccode,
-                        'acctno' => $acctno->paacctno,
-                        'ward_stocks_id' => null,
-                        'itemcode' => $item['itemCode'],
-                        'manufactured_date' =>  null,
-                        'delivery_date' => null,
-                        'expiration_date' => null,
-                        'quantity' => (int)$item['qtyToCharge'],
-                        'price_per_piece' => (float)$item['price'],
-                        'price_total' => (float)$item['qtyToCharge'] * (float)$item['price'],
-                        'pcchrgdte' => $patientDrumFChargeDate->pcchrgdte,
-                        'tscode' => $request->tscode,
-                        'entry_at' => $authWardcode->wardcode,
-                        'entry_by' => $entryby,
-                    ]);
+                    // PatientChargeLogs::create([
+                    //     'enccode' => $enccode,
+                    //     'acctno' => $acctno->paacctno,
+                    //     'ward_stocks_id' => null,
+                    //     'itemcode' => $item['itemCode'],
+                    //     'manufactured_date' =>  null,
+                    //     'delivery_date' => null,
+                    //     'expiration_date' => null,
+                    //     'quantity' => (int)$item['qtyToCharge'],
+                    //     'price_per_piece' => (float)$item['price'],
+                    //     'price_total' => (float)$item['qtyToCharge'] * (float)$item['price'],
+                    //     'pcchrgdte' => $patientDrumDChargeDate->pcchrgdte,
+                    //     'tscode' => $request->tscode,
+                    //     'entry_at' => $authWardcode->wardcode,
+                    //     'entry_by' => $entryby,
+                    // ]);
                 }
             }
         } else {
