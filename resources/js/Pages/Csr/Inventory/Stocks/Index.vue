@@ -1017,7 +1017,6 @@ export default {
       this.updateData();
     },
     updateData() {
-      this.stocksList = [];
       this.loading = true;
 
       this.$inertia.get('csrstocks', this.params, {
@@ -1027,6 +1026,7 @@ export default {
           this.totalRecords = this.stocks.total;
           this.stocksList = [];
           this.brandsList = [];
+          this.totalStocksList = [];
           this.brandDropDownList = [];
           this.storeStocksInContainer();
           this.storeBrandsInContainer();
