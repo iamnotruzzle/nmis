@@ -180,7 +180,7 @@
         </Column>
         <Column
           field="requested_at"
-          header="PENDING AT"
+          header="REQUESTED AT"
         >
           <template #body="{ data }">
             {{ data.requested_at }}
