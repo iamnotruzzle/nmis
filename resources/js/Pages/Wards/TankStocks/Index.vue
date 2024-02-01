@@ -1059,7 +1059,7 @@ export default {
       if (date == null || date == '') {
         return null;
       } else {
-        return moment.tz(date, 'Asia/Manila').format('LL');
+        return moment.tz(date, 'Asia/Manila').format('L');
       }
     },
     tzone2(date) {

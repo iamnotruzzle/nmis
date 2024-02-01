@@ -664,7 +664,7 @@ export default {
   },
   methods: {
     tzone(date) {
-      return moment.tz(date, 'Asia/Manila').format('LLL');
+      return moment.tz(date, 'Asia/Manila').format('L');
     },
     storeCl1combsInContainer() {
       this.cl1combs.forEach((e) => {

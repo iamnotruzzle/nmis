@@ -556,7 +556,7 @@ export default {
   },
   methods: {
     tzone(date) {
-      return moment.tz(date, 'Asia/Manila').format('MM/DD/YYYY');
+      return moment.tz(date, 'Asia/Manila').format('L');
     },
     storeLocationsInContainer() {
       this.$page.props.locations.forEach((e) => {

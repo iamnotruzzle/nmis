@@ -572,7 +572,7 @@ export default {
   },
   methods: {
     tzone(date) {
-      return moment.tz(date, 'Asia/Manila').format('LLL');
+      return moment.tz(date, 'Asia/Manila').format('L');
     },
     setExpandedRow($event) {
       // Check if row expanded before click or not

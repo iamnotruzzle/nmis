@@ -1072,13 +1072,6 @@ export default {
     getCurrentMonth() {
       this.currentMonth = moment().format('MMMM');
     },
-    tzone(date) {
-      if (date == null || date == '') {
-        return null;
-      } else {
-        return moment.tz(date, 'Asia/Manila').format('LL');
-      }
-    },
   },
   watch: {
     search: function (val, oldVal) {
