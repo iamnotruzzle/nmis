@@ -193,51 +193,55 @@ export default {
     removeRoutesIfNonAdmin() {
       // admin
       if (this.$page.props.user.designation == 'admin') {
-        if (this.$page.props.user.designation == 'admin') {
-          //   console.log(this.menu);
-
-          this.menu.splice(1, 1);
-
-          this.menu[0].items = [];
-
-          this.menu[0].items.push(
-            {
-              label: 'Dashboard',
-              icon: 'co-chart-line',
-              to: 'admindashboard',
-              prefix: 'admindashboard',
-              comp: 'Admin/Dashboard/Index',
-            },
-            {
-              label: 'Dashboard',
-              icon: 'co-chart-line',
-              to: 'csrdashboard',
-              prefix: 'csrdashboard',
-              comp: 'Csr/Dashboard/Index',
-            },
-            {
-              label: 'Categories',
-              icon: 'co-border-all',
-              to: 'categories',
-              prefix: 'categories',
-              comp: 'Csr/Inventory/Categories/Index',
-            },
-            {
-              label: 'Items',
-              icon: 'la-capsules-solid',
-              to: 'items',
-              prefix: 'items',
-              comp: 'Csr/Inventory/Items/Index',
-            },
-            {
-              label: 'Users',
-              icon: 'la-users-solid',
-              to: 'users',
-              prefix: 'users',
-              comp: 'Users/Index',
-            }
-          );
-        }
+        this.menu.splice(1, 1);
+        this.menu[0].items = [];
+        this.menu[0].items.push(
+          {
+            label: 'Dashboard',
+            icon: 'co-chart-line',
+            to: 'admindashboard',
+            prefix: 'admindashboard',
+            comp: 'Admin/Dashboard/Index',
+          },
+          {
+            label: 'Dashboard',
+            icon: 'co-chart-line',
+            to: 'csrdashboard',
+            prefix: 'csrdashboard',
+            comp: 'Csr/Dashboard/Index',
+          },
+          {
+            label: 'Categories',
+            icon: 'co-border-all',
+            to: 'categories',
+            prefix: 'categories',
+            comp: 'Csr/Inventory/Categories/Index',
+          },
+          {
+            label: 'Items',
+            icon: 'la-capsules-solid',
+            to: 'items',
+            prefix: 'items',
+            comp: 'Csr/Inventory/Items/Index',
+          },
+          {
+            label: 'Users',
+            icon: 'la-users-solid',
+            to: 'users',
+            prefix: 'users',
+            comp: 'Users/Index',
+          }
+        );
+      }
+      if (this.$page.props.user.designation == 'admin') {
+        this.menu[1].items = this.menu[1].items.filter(function (obj) {
+          return obj.to !== 'csrmanualreports';
+        });
+      }
+      if (this.$page.props.user.designation == 'admin') {
+        this.menu[1].items = this.menu[1].items.filter(function (obj) {
+          return obj.to !== 'wardsmanualreports';
+        });
       }
       // end admin
 
