@@ -5,6 +5,7 @@ namespace App\Http\Controllers\LocationTankStockBalance;
 use App\Http\Controllers\Controller;
 use App\Models\LocationTankStockBalance;
 use App\Rules\TankStockBalanceRule;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +16,9 @@ class LocationTankStockBalanceController extends Controller
     public function index(Request $request)
     {
         $searchString = $request->search;
+
+        $from = Carbon::parse($request->from)->startOfDay();
+        $to = Carbon::parse($request->to)->endOfDay();
 
         $currentStocks = null;
 
@@ -67,14 +71,14 @@ class LocationTankStockBalanceController extends Controller
             ->where('location', $authWardcode->wardcode)
             ->when(
                 $request->from,
-                function ($query, $value) {
-                    $query->whereDate('created_at', '>=', $value);
+                function ($query, $value) use ($from) {
+                    $query->whereDate('created_at', '>=', $from);
                 }
             )
             ->when(
                 $request->to,
-                function ($query, $value) {
-                    $query->whereDate('created_at', '<=', $value);
+                function ($query, $value) use ($to) {
+                    $query->whereDate('created_at', '<=', $to);
                 }
             )
             // ->whereHas('item', function ($q) use ($searchString) {

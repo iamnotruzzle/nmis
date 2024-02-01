@@ -31,20 +31,23 @@ class UserController extends Controller
 
         $employeeids = UserDetail::where('empstat', 'A')->get('employeeid');
 
+        $from = Carbon::parse($request->from)->startOfDay();
+        $to = Carbon::parse($request->to)->endOfDay();
+
         $users = User::with(['roles', 'permissions', 'userDetail'])
             ->when($request->search, function ($query, $value) {
                 $query->where('employeeid', 'LIKE', '%' . $value . '%');
             })
             ->when(
                 $request->from,
-                function ($query, $value) {
-                    $query->whereDate('created_at', '>=', $value);
+                function ($query, $value) use ($from) {
+                    $query->whereDate('created_at', '>=', $from);
                 }
             )
             ->when(
                 $request->to,
-                function ($query, $value) {
-                    $query->whereDate('created_at', '<=', $value);
+                function ($query, $value) use ($to) {
+                    $query->whereDate('created_at', '<=', $to);
                 }
             )
             ->orderBy('employeeid', 'asc')

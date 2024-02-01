@@ -22,8 +22,10 @@ class IssueItemController extends Controller
     public function index(Request $request)
     {
         $searchString = $request->search;
-        $from = $request->from;
-        $to = $request->to;
+        $from = Carbon::parse($request->from)->startOfDay();
+        $to = Carbon::parse($request->to)->endOfDay();
+
+        // dd(Carbon::today());
 
         // get auth wardcode
         $authWardcode = DB::table('csrw_users')
@@ -57,14 +59,14 @@ class IssueItemController extends Controller
             // })
             ->when(
                 $request->from,
-                function ($query, $value) {
-                    $query->whereDate('created_at', '>=', Carbon::parse($value)->setTimezone('Asia/Manila'));
+                function ($query, $value) use ($from) {
+                    $query->whereDate('created_at', '>=', $from);
                 }
             )
             ->when(
                 $request->to,
-                function ($query, $value) {
-                    $query->whereDate('created_at', '<=', Carbon::parse($value)->setTimezone('Asia/Manila'));
+                function ($query, $value) use ($to) {
+                    $query->whereDate('created_at', '<=', $to);
                 }
             )
             ->when(

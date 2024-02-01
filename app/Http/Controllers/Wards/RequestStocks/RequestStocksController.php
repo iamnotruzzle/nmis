@@ -23,6 +23,9 @@ class RequestStocksController extends Controller
     {
         $searchString = $request->search;
 
+        $from = Carbon::parse($request->from)->startOfDay();
+        $to = Carbon::parse($request->to)->endOfDay();
+
         // get auth wardcode
         $authWardcode = DB::table('csrw_users')
             ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
@@ -48,14 +51,14 @@ class RequestStocksController extends Controller
             // })
             ->when(
                 $request->from,
-                function ($query, $value) {
-                    $query->whereDate('created_at', '>=', $value);
+                function ($query, $value) use ($from) {
+                    $query->whereDate('created_at', '>=', $from);
                 }
             )
             ->when(
                 $request->to,
-                function ($query, $value) {
-                    $query->whereDate('created_at', '<=', $value);
+                function ($query, $value) use ($to) {
+                    $query->whereDate('created_at', '<=', $to);
                 }
             )
             ->where('location', '=', $authWardcode->wardcode)

@@ -15,17 +15,20 @@ class CsrManualReportExportController extends Controller
     {
         $export = array();
 
+        $from = Carbon::parse($request->from)->startOfDay();
+        $to = Carbon::parse($request->to)->endOfDay();
+
         $res = ModelsCsrManualReport::with('item_description:cl2comb,cl2desc', 'unit:uomcode,uomdesc')
             ->when(
                 $request->from,
-                function ($query, $value) {
-                    $query->whereDate('created_at', '>=', Carbon::parse($value)->setTimezone('Asia/Manila'));
+                function ($query, $value) use ($from) {
+                    $query->whereDate('created_at', '>=', $from);
                 }
             )
             ->when(
                 $request->to,
-                function ($query, $value) {
-                    $query->whereDate('created_at', '<=', Carbon::parse($value)->setTimezone('Asia/Manila'));
+                function ($query, $value) use ($to) {
+                    $query->whereDate('created_at', '<=', $to);
                 }
             )
             ->get();

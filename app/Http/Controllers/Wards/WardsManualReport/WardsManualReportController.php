@@ -17,7 +17,8 @@ class WardsManualReportController extends Controller
     {
         $searchString = $request->search;
 
-        // dd($request->from);
+        $from = Carbon::parse($request->from)->startOfDay();
+        $to = Carbon::parse($request->to)->endOfDay();
 
         // get auth wardcode
         $authWardcode = DB::table('csrw_users')
@@ -33,14 +34,14 @@ class WardsManualReportController extends Controller
             })
             ->when(
                 $request->from,
-                function ($query, $value) {
-                    $query->whereDate('created_at', '>=', Carbon::parse($value)->setTimezone('Asia/Manila'));
+                function ($query, $value) use ($from) {
+                    $query->whereDate('created_at', '>=', $from);
                 }
             )
             ->when(
                 $request->to,
-                function ($query, $value) {
-                    $query->whereDate('created_at', '<=', Carbon::parse($value)->setTimezone('Asia/Manila'));
+                function ($query, $value) use ($to) {
+                    $query->whereDate('created_at', '<=', $to);
                 }
             )
             ->where('wardcode', '=', $authWardcode->wardcode)

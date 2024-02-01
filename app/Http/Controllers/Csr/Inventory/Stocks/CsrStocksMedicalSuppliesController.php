@@ -28,7 +28,12 @@ class CsrStocksMedicalSuppliesController extends Controller
             ->orderBy('cl2desc', 'ASC')
             ->get();
 
-        // dd($items);
+        $from_md = Carbon::parse($request->from_md)->startOfDay();
+        $to_md = Carbon::parse($request->to_md)->endOfDay();
+        $from_dd = Carbon::parse($request->from_dd)->startOfDay();
+        $to_dd = Carbon::parse($request->to_dd)->endOfDay();
+        $from_ed = Carbon::parse($request->from_ed)->startOfDay();
+        $to_ed = Carbon::parse($request->to_ed)->endOfDay();
 
         $stocks = CsrStocksMedicalSupplies::with('unit:uomcode,uomdesc', 'itemDetail', 'supplierDetail:suppcode,suppname', 'brandDetail', 'typeOfCharge:chrgcode,chrgdesc', 'fundSource:id,fsid,fsName,cluster_code')
             ->whereHas('itemDetail', function ($q) use ($searchString) {
@@ -37,38 +42,38 @@ class CsrStocksMedicalSuppliesController extends Controller
             })
             ->when(
                 $request->from_md,
-                function ($query, $value) {
-                    $query->whereDate('manufactured_date', '>=', Carbon::parse($value)->setTimezone('Asia/Manila'));
+                function ($query, $value) use ($from_md) {
+                    $query->whereDate('manufactured_date', '>=', $from_md);
                 }
             )
             ->when(
                 $request->to_md,
-                function ($query, $value) {
-                    $query->whereDate('manufactured_date', '<=', Carbon::parse($value)->setTimezone('Asia/Manila'));
+                function ($query, $value) use ($to_md) {
+                    $query->whereDate('manufactured_date', '<=', $to_md);
                 }
             )
             ->when(
                 $request->from_dd,
-                function ($query, $value) {
-                    $query->whereDate('delivered_date', '>=', Carbon::parse($value)->setTimezone('Asia/Manila'));
+                function ($query, $value) use ($from_dd) {
+                    $query->whereDate('delivered_date', '>=', $from_dd);
                 }
             )
             ->when(
                 $request->to_dd,
-                function ($query, $value) {
-                    $query->whereDate('delivered_date', '<=', Carbon::parse($value)->setTimezone('Asia/Manila'));
+                function ($query, $value) use ($to_dd) {
+                    $query->whereDate('delivered_date', '<=', $to_dd);
                 }
             )
             ->when(
                 $request->from_ed,
-                function ($query, $value) {
-                    $query->whereDate('expiration_date', '>=', Carbon::parse($value)->setTimezone('Asia/Manila'));
+                function ($query, $value) use ($from_ed) {
+                    $query->whereDate('expiration_date', '>=', $from_ed);
                 }
             )
             ->when(
                 $request->to_ed,
-                function ($query, $value) {
-                    $query->whereDate('expiration_date', '<=', Carbon::parse($value)->setTimezone('Asia/Manila'));
+                function ($query, $value) use ($to_ed) {
+                    $query->whereDate('expiration_date', '<=', $to_ed);
                 }
             )
             ->orderBy('expiration_date', 'asc')

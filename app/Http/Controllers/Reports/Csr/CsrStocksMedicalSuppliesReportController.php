@@ -16,6 +16,9 @@ class CsrStocksMedicalSuppliesReportController extends Controller
     {
         $reports = array();
 
+        $from = Carbon::parse($request->from)->startOfDay();
+        $to = Carbon::parse($request->to)->endOfDay();
+
         if (is_null($request->from) || is_null($request->to)) {
             // WHERE created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
             // the where above means between the first day and last day of this month
@@ -103,7 +106,7 @@ class CsrStocksMedicalSuppliesReportController extends Controller
                     WHERE location != 'CSR'
                     GROUP BY cl2comb
                 ) AS clsb_ward ON hclass2.cl2comb = clsb_ward.cl2comb
-                WHERE created_at BETWEEN '$request->from' AND '$request->to'
+                WHERE created_at BETWEEN '$from' AND '$to'
                 GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc, csrw_wards_stocks_med_supp.wards_quantity, csrw_patient_charge_logs.charge_quantity, csrw_patient_charge_logs.charge_total,
                 clsb_csr.beginning_balance, clsb_csr.ending_balance, clsb_ward.beginning_balance, clsb_ward.ending_balance
                 ORDER BY hclass2.cl2desc ASC;"

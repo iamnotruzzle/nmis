@@ -18,6 +18,8 @@ class LocationStockBalanceController extends Controller
     public function index(Request $request)
     {
         $searchString = $request->search;
+        $from = Carbon::parse($request->from)->startOfDay();
+        $to = Carbon::parse($request->to)->endOfDay();
 
         $currentStocks = null;
 
@@ -59,14 +61,14 @@ class LocationStockBalanceController extends Controller
             ->where('location', $authWardcode->wardcode)
             ->when(
                 $request->from,
-                function ($query, $value) {
-                    $query->whereDate('created_at', '>=', $value);
+                function ($query, $value) use ($from) {
+                    $query->whereDate('created_at', '>=', $from);
                 }
             )
             ->when(
                 $request->to,
-                function ($query, $value) {
-                    $query->whereDate('created_at', '<=', $value);
+                function ($query, $value) use ($to) {
+                    $query->whereDate('created_at', '<=', $to);
                 }
             )
             ->whereHas('item', function ($q) use ($searchString) {

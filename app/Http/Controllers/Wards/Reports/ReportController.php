@@ -16,6 +16,9 @@ class ReportController extends Controller
     {
         $reports = array();
 
+        $from = Carbon::parse($request->from)->startOfDay();
+        $to = Carbon::parse($request->to)->endOfDay();
+
         $authWardcode = DB::table('csrw_users')
             ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
             ->select('csrw_login_history.wardcode')
@@ -98,13 +101,13 @@ class ReportController extends Controller
                     WHERE stockbal.location LIKE '$authWardcode->wardcode'
                     GROUP BY stockbal.cl2comb
                 ) csrw_location_stock_balance ON ward.cl2comb = csrw_location_stock_balance.cl2comb
-                  WHERE ward.location LIKE '$authWardcode->wardcode' AND ward.created_at BETWEEN '$request->from' AND '$request->to'
+                  WHERE ward.location LIKE '$authWardcode->wardcode' AND ward.created_at BETWEEN '$from' AND '$to'
                 GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc, csrw_patient_charge_logs.charge_quantity, csrw_location_stock_balance.ending_balance, csrw_location_stock_balance.beginning_balance
                 ORDER BY hclass2.cl2desc ASC;"
             );
         }
 
-        // dd($ward_report);
+        // dd($request->from);
 
         foreach ($ward_report as $e) {
             // dd($e);
