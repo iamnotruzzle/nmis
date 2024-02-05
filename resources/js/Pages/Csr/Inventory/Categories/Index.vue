@@ -122,6 +122,12 @@
                 Sub-categories of <span class="text-cyan-500 hover:text-cyan-700">[ {{ slotProps.data.ptdesc }} ]</span>
               </div>
 
+              <InputText
+                v-model="subCategoryFilters['global'].value"
+                placeholder="Search sub-category"
+                class="ml-2 mr-1"
+              />
+
               <Button
                 label="Add sub-category"
                 icon="pi pi-plus"
@@ -134,8 +140,10 @@
 
             <DataTable
               :value="expandedRow[0].subCategory"
+              v-model:filters="subCategoryFilters"
               paginator
-              :rows="5"
+              :rows="10"
+              dataKey="cl1comb"
               class="w-full"
             >
               <Column
@@ -522,11 +530,15 @@ export default {
       createSubCategoryDialog: false,
       deleteSubCategoryDialog: false,
       search: '',
+      searchSubcategory: '',
       selectedStatus: null,
       options: {},
       params: {},
       mainCategoriesList: [],
       filters: {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      },
+      subCategoryFilters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       status: [
@@ -605,7 +617,7 @@ export default {
       this.$inertia.get('categories', this.params, {
         preserveState: true,
         preserveScroll: true,
-        onFinish: (visit) => {
+        onSuccess: (visit) => {
           this.totalRecords = this.mainCategory.total;
           this.mainCategoriesList = [];
           this.expandedRow = [];

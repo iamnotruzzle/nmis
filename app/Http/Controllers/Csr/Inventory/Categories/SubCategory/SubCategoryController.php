@@ -39,6 +39,8 @@ class SubCategoryController extends Controller
             'compense' => NULL,
         ]);
 
+        // dd($categories);
+
         return Redirect::route('categories.index');
     }
 
