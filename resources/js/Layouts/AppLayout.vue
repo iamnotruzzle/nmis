@@ -92,7 +92,7 @@ export default {
             },
             {
               label: 'Transfer stocks',
-              icon: 'md-handshake-sharp',
+              icon: 'oi-arrow-switch',
               to: 'transferstock',
               prefix: 'transferstock',
               comp: 'Wards/TransferStock/Index',
