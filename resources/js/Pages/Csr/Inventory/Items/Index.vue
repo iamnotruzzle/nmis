@@ -649,7 +649,7 @@ export default {
     this.rows = this.items.per_page;
   },
   mounted() {
-    console.log(this.$page.props.auth.user.roles);
+    // console.log(this.$page.props.auth.user.roles);
 
     this.storeCl1combsInContainer();
     this.storeItemInContainer();
