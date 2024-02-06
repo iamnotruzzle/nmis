@@ -1,15 +1,116 @@
-/node_modules
+# Laravel
+.env
+Homestead.yaml
+Homestead.json
+.env.*
+.phpunit.result.cache
+.phpstorm.meta.php
+._ide_helper.php
+_ide_helper.php
+_ide_helper_models.php
+artisan
+composer.lock
+composer.phar
+composer.json
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn.lock
+yarn.lock
+.env
+.env.backup
+.env.example
+.env.homestead
+.env.homestead.backup
+.env.local
+.env.local.backup
+.env.production
+.env.testing
+/storage/*.key
+/vendor/
 /public/hot
 /public/storage
 /storage/*.key
-/vendor
-.env
-.env.backup
-.phpunit.result.cache
-docker-compose.override.yml
-Homestead.json
+/storage/logs/*
+/storage/app/*.log
+/storage/framework/
+/storage/medialibrary/
+/storage/debugbar/
+/public/hot
+/public/storage
+/storage/*.key
+/public/hot
+/public/storage
+/node_modules/
+/public/css/*
+/public/js/*
+/public/mix-manifest.json
+/public/web.config
+
+# Vue.js
+/node_modules/
+/dist/
+/public/js/chunks/
+/public/css/chunks/
+
+# Inertia.js
+/node_modules/
+/public/vendor/
+/storage/app/public/inertia/
+/resources/js/Pages/Component.sfc.d.ts
+
+# Logs
+/logs/
+*.log
+
+# Database
+/database/*.sqlite
+/database/*.sqlite3
+/database/*.db
+/database/*.sql
+*.sql
+
+# Editor directories and files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw*
+*.user
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw*
+*.user
+.DS_Store
+
+# Testing
+/phpunit.xml
+/vendor/bin/
+/phpunit
+/tests/
+/tests/*.log
+
+# Laravel Passport
+/storage/oauth-private.key
+/storage/oauth-public.key
+
+# Laravel Mix
+/mix-manifest.json
+/public/mix-manifest.json
+/public/css/*.css
+/public/js/*.js
+/public/mix.js
+
+# Homestead
 Homestead.yaml
-npm-debug.log
-yarn-error.log
-/.idea
-/.vscode
+Homestead.json
+
+# Docker
+/.docker/
+
+# Forge
+/.forge/
