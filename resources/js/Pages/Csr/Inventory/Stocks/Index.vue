@@ -67,7 +67,7 @@
         </Column>
         <Column
           field="uomdesc"
-          header="Unit"
+          header="UNIT"
         >
         </Column>
         <Column
