@@ -112,7 +112,7 @@ class PatientChargeController extends Controller
                             cast(hgen.gendesc as varchar) + ' ' + cast(dmdnost as varchar) + ' ' + cast(hdmhdr.dmdnnostp as varchar) + ' ' + cast(hstre.stredesc as varchar) + ' ' + cast(hform.formdesc as varchar) + ' ' + cast(hroute.rtedesc as varchar) AS itemDesc,
                             (SELECT TOP 1 dmselprice FROM hdmhdrprice WHERE dmdcomb = hdmhdrsub.dmdcomb ORDER BY dmdprdte DESC) as 'price'
                             FROM hdmhdr
-                            JOIN hpatchrg ON CONCAT(hdmhdr.dmdcomb, hdmhdr.dmdctr) = hpatchrg.itemcode
+                            JOIN hpatchrg ON cast(hdmhdr.dmdcomb as varchar) + '' + cast(hdmhdr.dmdctr as varchar) = hpatchrg.itemcode
                             JOIN hdmhdrsub ON hdmhdr.dmdcomb = hdmhdrsub.dmdcomb
                             JOIN hdmhdrprice ON hdmhdrsub.dmdcomb = hdmhdrprice.dmdcomb
                             JOIN hdruggrp ON hdmhdr.grpcode = hdruggrp.grpcode
