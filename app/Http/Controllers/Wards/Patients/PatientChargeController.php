@@ -107,9 +107,9 @@ class PatientChargeController extends Controller
             ->first();
 
         // TANKS = drugs and med (oxygen), compressed air, carbon dioxide
-        $tanks = DB::select("SELECT CONCAT(hdmhdr.dmdcomb, hdmhdr.dmdctr) as itemcode,
+        $tanks = DB::select("SELECT cast(hdmhdr.dmdcomb as varchar) + '' + cast(hdmhdr.dmdctr as varchar) as itemcode,
                             hdmhdrsub.dmhdrsub, hdmhdrprice.unitcode,
-                            CONCAT(hgen.gendesc, ' ', dmdnost, ' ', hdmhdr.dmdnnostp, ' ', hstre.stredesc, ' ', hform.formdesc, ' ', hroute.rtedesc) AS itemDesc,
+                            cast(hgen.gendesc as varchar) + ' ' + cast(dmdnost as varchar) + ' ' + cast(hdmhdr.dmdnnostp as varchar) + ' ' + cast(hstre.stredesc as varchar) + ' ' + cast(hform.formdesc as varchar) + ' ' + cast(hroute.rtedesc as varchar) AS itemDesc,
                             (SELECT TOP 1 dmselprice FROM hdmhdrprice WHERE dmdcomb = hdmhdrsub.dmdcomb ORDER BY dmdprdte DESC) as 'price'
                             FROM hdmhdr
                             JOIN hpatchrg ON CONCAT(hdmhdr.dmdcomb, hdmhdr.dmdctr) = hpatchrg.itemcode

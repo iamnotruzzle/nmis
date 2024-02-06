@@ -36,11 +36,11 @@ class LocationTankStockBalanceController extends Controller
             "SELECT clsb_ward.itemcode as clsb_itemcode, hc.itemcode as hc_itemcode, hc.itemDesc
             FROM csrw_wards_stocks_tanks_supp as ward
             JOIN (
-                SELECT CONCAT(hdmhdr.dmdcomb, hdmhdr.dmdctr) as itemcode,
-                    hdmhdrsub.dmhdrsub,
-                    (SELECT TOP 1 unitcode FROM hdmhdrprice WHERE dmdcomb = hdmhdrsub.dmdcomb ORDER BY dmdprdte DESC) as 'unitcode',
-                    CONCAT(hgen.gendesc, ' ', dmdnost, ' ', hdmhdr.dmdnnostp, ' ', hstre.stredesc, ' ', hform.formdesc, ' ', hroute.rtedesc) AS itemDesc,
-                    (SELECT TOP 1 dmselprice FROM hdmhdrprice WHERE dmdcomb = hdmhdrsub.dmdcomb ORDER BY dmdprdte DESC) as 'price'
+                SELECT cast(hdmhdr.dmdcomb as varchar) + '' + cast(hdmhdr.dmdctr as varchar) as itemcode,
+                        hdmhdrsub.dmhdrsub,
+                        (SELECT TOP 1 unitcode FROM hdmhdrprice WHERE dmdcomb = hdmhdrsub.dmdcomb ORDER BY dmdprdte DESC) as 'unitcode',
+                        cast(hgen.gendesc as varchar) + ' ' + cast(dmdnost as varchar) + ' ' + cast(hdmhdr.dmdnnostp as varchar) + ' ' + cast(hstre.stredesc as varchar) + ' ' + cast(hform.formdesc as varchar) + ' ' + cast(hroute.rtedesc as varchar) AS itemDesc,
+                        (SELECT TOP 1 dmselprice FROM hdmhdrprice WHERE dmdcomb = hdmhdrsub.dmdcomb ORDER BY dmdprdte DESC) as 'price'
                 FROM hdmhdr
                 JOIN hdmhdrsub ON hdmhdr.dmdcomb = hdmhdrsub.dmdcomb
                 JOIN hdmhdrprice ON hdmhdrsub.dmdcomb = hdmhdrprice.dmdcomb
