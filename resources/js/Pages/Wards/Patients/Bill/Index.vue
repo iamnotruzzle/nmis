@@ -583,6 +583,7 @@ export default {
     };
   },
   mounted() {
+    // s
     // console.log('bills', this.bills.admission_date_bill.tscode);
     this.storeBillsInContainer();
     this.getTotalAmount();
