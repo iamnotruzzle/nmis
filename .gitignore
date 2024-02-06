@@ -9,9 +9,9 @@ Homestead.json
 _ide_helper.php
 _ide_helper_models.php
 artisan
-# composer.lock
-# composer.phar
-composer.json
+composer.lock
+composer.phar
+# composer.json
 node_modules/
 npm-debug.log
 yarn-error.log
