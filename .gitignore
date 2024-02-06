@@ -19,7 +19,6 @@ yarn.lock
 yarn.lock
 .env
 .env.backup
-.env.example
 .env.homestead
 .env.homestead.backup
 .env.local
