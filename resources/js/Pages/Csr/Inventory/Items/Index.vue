@@ -48,7 +48,7 @@
         <Column expander />
         <Column
           field="cl2comb"
-          header="CL2COMB"
+          header="CL2 COMBINATION"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
@@ -57,7 +57,7 @@
         </Column>
         <Column
           field="cl1comb"
-          header="CL1COMB"
+          header="CL1 COMBINATION"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
@@ -66,7 +66,7 @@
         </Column>
         <Column
           field="cl2code"
-          header="CL2CODE"
+          header="CL2 CODE"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
@@ -75,7 +75,7 @@
         </Column>
         <Column
           field="cl2desc"
-          header="CL2DESC"
+          header="CL2 DESCRIPTION"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
@@ -268,7 +268,7 @@
           </small>
         </div>
         <div class="field">
-          <label for="cl2code">Cl2code</label>
+          <label for="cl2code">Cl2 code</label>
           <InputText
             id="cl2code"
             v-model.trim="form.cl2code"
@@ -285,7 +285,7 @@
           </small>
         </div>
         <div class="field">
-          <label for="cl2desc">Cl2desc</label>
+          <label for="cl2desc">Cl2 description</label>
           <Textarea
             id="cl1code"
             v-model.trim="form.cl2desc"
@@ -303,7 +303,7 @@
           </small>
         </div>
         <div class="field">
-          <label for="unit">UNIT</label>
+          <label for="unit">Unit</label>
           <Dropdown
             required="true"
             v-model="form.unit"
@@ -322,7 +322,7 @@
           </small>
         </div>
         <div class="field">
-          <label for="cl2stat">Cl2stat</label>
+          <label for="cl2stat">Status</label>
           <Dropdown
             v-model="form.cl2stat"
             :options="cl2stats"

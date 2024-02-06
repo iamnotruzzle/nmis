@@ -35,8 +35,13 @@ import AppTopBar from '../Components/AppTopbar.vue';
 import AppMenu from '../Components/AppMenu.vue';
 import AppFooter from '../Components/AppFooter.vue';
 import AppConfig from '../Components/AppConfig.vue';
+import { router } from '@inertiajs/vue3';
+import { clearConfigCache } from 'prettier';
 
 export default {
+  components: {
+    // Echo,
+  },
   data() {
     return {
       layoutMode: 'static',
@@ -82,6 +87,7 @@ export default {
               to: 'issueitems',
               prefix: 'issueitems',
               comp: 'Csr/IssueItems/Index',
+              badge: null,
             },
             {
               label: 'Patients',
@@ -183,6 +189,20 @@ export default {
     },
   },
   mounted() {
+    window.Echo.channel('request').listen('RequestStock', (args) => {
+      //   console.log(args);
+
+      //   use foreach instead of filter
+      if (this.$page.props.user.designation == 'csr') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          console.log(obj);
+          if (obj.to == 'issueitems') {
+            obj.badge = args;
+          }
+        });
+      }
+    });
+
     this.removeRoutesIfNonAdmin();
 
     this.$nextTick(() => {

@@ -48,7 +48,7 @@
         <Column expander />
         <Column
           field="ptcode"
-          header="PTCODE"
+          header="PT CODE"
           style="min-width: 12rem"
         >
           <!-- <template #body="{ data }">
@@ -57,13 +57,13 @@
         </Column>
         <Column
           field="ptdesc"
-          header="PTDESC"
+          header="PT DESCRIPTION"
           style="min-width: 12rem"
         >
         </Column>
         <Column
           field="ptstat"
-          header="PTSTAT"
+          header="STATUS"
           style="min-width: 12rem"
           :showFilterMenu="false"
         >
@@ -123,7 +123,7 @@
               </div>
 
               <InputText
-                v-model="subCategoryFilters['global'].value"
+                v-model="search"
                 placeholder="Search sub-category"
                 class="ml-2 mr-1"
               />
@@ -148,23 +148,23 @@
             >
               <Column
                 field="ptcode"
-                header="PTCODE"
+                header="PT CODE"
               >
                 <!-- <template #body="{ data }"> {{ data }} </template> -->
               </Column>
               <Column
                 field="cl1code"
-                header="CL1CODE"
+                header="CL1 CODE"
               >
               </Column>
               <Column
                 field="cl1comb"
-                header="CL1COMB"
+                header="CL1 COMBINATION"
               >
               </Column>
               <Column
                 field="cl1desc"
-                header="NAME"
+                header="CL1 DESCRIPTION"
               >
               </Column>
               <Column
@@ -199,14 +199,14 @@
       <Dialog
         v-model:visible="createCategoryDialog"
         :style="{ width: '450px' }"
-        header="Item Detail"
+        header="Item detail"
         :modal="true"
         class="p-fluid"
         @hide="clickOutsideDialog"
         dismissableMask
       >
         <div class="field">
-          <label for="ptcode">Ptcode</label>
+          <label for="ptcode">Pt code</label>
           <InputText
             id="ptcode"
             v-model.trim="form.ptcode"
@@ -223,7 +223,7 @@
           </small>
         </div>
         <div class="field">
-          <label for="ptdesc">Ptdesc</label>
+          <label for="ptdesc">Pt description</label>
           <InputText
             id="ptdesc"
             v-model.trim="form.ptdesc"
@@ -240,7 +240,7 @@
           </small>
         </div>
         <div class="field">
-          <label for="ptstat">Ptstat</label>
+          <label for="ptstat">Status</label>
           <Dropdown
             v-model="form.ptstat"
             :options="status"
@@ -334,7 +334,7 @@
         dismissableMask
       >
         <div class="field">
-          <label for="ptcode">Ptcode</label>
+          <label for="ptcode">Pt code</label>
           <InputText
             id="ptcode"
             v-model.trim="formSubCategory.ptcode"
@@ -350,7 +350,7 @@
           </small>
         </div>
         <div class="field">
-          <label for="cl1code">Cl1code</label>
+          <label for="cl1code">Cl1 code</label>
           <InputText
             id="cl1code"
             v-model.trim="formSubCategory.cl1code"
@@ -366,7 +366,7 @@
           </small>
         </div>
         <div class="field">
-          <label for="cl1desc">Cl1desc</label>
+          <label for="cl1desc">Cl1 description</label>
           <InputText
             id="cl1desc"
             v-model.trim="formSubCategory.cl1desc"
@@ -382,7 +382,7 @@
           </small>
         </div>
         <div class="field">
-          <label for="cl1stat">cl1stat</label>
+          <label for="cl1stat">Status</label>
           <Dropdown
             v-model="formSubCategory.cl1stat"
             :options="status"
@@ -803,6 +803,10 @@ export default {
       this.params.search = val;
       this.updateData();
     },
+    // search: function (val, oldVal) {
+    //   this.params.search = val;
+    //   this.updateData();
+    // },
     selectedStatus: function (val) {
       //   console.log(val['code']);
       this.params.status = this.selectedStatus;

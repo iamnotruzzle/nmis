@@ -47,11 +47,17 @@
               v-if="item.items"
               class="pi pi-fw pi-angle-down menuitem-toggle-icon"
             ></i>
-            <span
+            <!-- <span
               v-if="item.badge"
               class="menuitem-badge"
-              >{{ item.badge }}</span
             >
+              {{ item.badge }}
+            </span> -->
+            <Badge
+              v-if="item.badge"
+              :value="item.badge"
+              severity="warning"
+            ></Badge>
           </Link>
           <a
             v-if="!item.to"
@@ -95,11 +101,13 @@
 </template>
 <script>
 import { Link } from '@inertiajs/vue3';
+import Badge from 'primevue/badge';
 
 export default {
   name: 'appsubmenu',
   components: {
     Link,
+    Badge,
   },
   props: {
     items: Array,

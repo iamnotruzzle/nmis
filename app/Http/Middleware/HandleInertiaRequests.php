@@ -6,6 +6,7 @@ use App\Models\FundSource;
 use App\Models\Item;
 use App\Models\Location;
 use App\Models\LoginHistory;
+use App\Models\RequestStocks;
 use App\Models\Supplier;
 use App\Models\TypeOfCharge;
 use App\Models\UnitOfMeasurement;
@@ -116,7 +117,10 @@ class HandleInertiaRequests extends Middleware
             },
             'unitOfMeasurement' => function () {
                 return UnitOfMeasurement::get(['uomcode', 'uomdesc', 'uomstat']);
-            }
+            },
+            // 'csrPendingCount' => function () {
+            //     return RequestStocks::where('status', 'PENDING')->count();
+            // }
         ]);
     }
 }
