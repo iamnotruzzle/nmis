@@ -65,7 +65,7 @@ class RoleAndPermissionSeeder extends Seeder
             // 'middleName' => null,
             // 'lastName' => 'admin',
             // 'suffix' => null,
-            'employeeid' => '000209',
+            'employeeid' => '2011-136',
             // 'email' => 'sa@sa.com',
             'image' => null,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
