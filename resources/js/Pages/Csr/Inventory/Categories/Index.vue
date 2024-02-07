@@ -122,11 +122,11 @@
                 Sub-categories of <span class="text-cyan-500 hover:text-cyan-700">[ {{ slotProps.data.ptdesc }} ]</span>
               </div>
 
-              <InputText
+              <!-- <InputText
                 v-model="search"
                 placeholder="Search sub-category"
                 class="ml-2 mr-1"
-              />
+              /> -->
 
               <Button
                 label="Add sub-category"
