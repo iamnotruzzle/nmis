@@ -32,32 +32,32 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'edit-users']);
         Permission::create(['name' => 'delete-users']);
 
-        // create default user
-        // $superAdminUser = User::factory()->create([
-        //     // 'firstName' => 'super',
-        //     // 'middleName' => null,
-        //     // 'lastName' => 'admin',
-        //     // 'suffix' => null,
-        //     'employeeid' => 'sa',
-        //     // 'email' => 'sa@sa.com',
-        //     'image' => null,
-        //     'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-        //     'designation' => 'admin',
-        //     'remember_token' => Str::random(10),
-        // ]);
-
-        $admin = User::factory()->create([
+        // create sa user
+        $superAdminUser = User::factory()->create([
             // 'firstName' => 'super',
             // 'middleName' => null,
             // 'lastName' => 'admin',
             // 'suffix' => null,
-            'employeeid' => '000037',
+            'employeeid' => '002038',
             // 'email' => 'sa@sa.com',
             'image' => null,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'designation' => 'admin',
             'remember_token' => Str::random(10),
         ]);
+
+        // $admin = User::factory()->create([
+        //     // 'firstName' => 'super',
+        //     // 'middleName' => null,
+        //     // 'lastName' => 'admin',
+        //     // 'suffix' => null,
+        //     'employeeid' => '000037',
+        //     // 'email' => 'sa@sa.com',
+        //     'image' => null,
+        //     'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        //     'designation' => 'admin',
+        //     'remember_token' => Str::random(10),
+        // ]);
 
         // sir edu/edward
         $csr = User::factory()->create([
@@ -140,7 +140,7 @@ class RoleAndPermissionSeeder extends Seeder
         //     'remember_token' => Str::random(10),
         // ]);
 
-        $admin->assignRole($superAdminRole);
+        $superAdminUser->assignRole($superAdminRole);
         $csr->assignRole($adminRole);
         $wards1->assignRole($adminRole);
         $wards2->assignRole($adminRole);

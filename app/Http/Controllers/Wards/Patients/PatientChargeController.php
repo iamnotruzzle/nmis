@@ -97,14 +97,24 @@ class PatientChargeController extends Controller
         // dd($misc);
 
         // get patients bills
-        $bills = Patient::with([
-            'admissionDateBill',
-        ])
-            // this will filter patients that hasn't been discharge
-            ->whereHas('admissionDateBill', function ($q) use ($enccode) {
-                $q->where('enccode', $enccode);
-            })
-            ->first();
+        // $bills = Patient::with([
+        //     'admissionDateBill',
+        // ])
+        //     // this will filter patients that hasn't been discharge
+        //     ->whereHas('admissionDateBill', function ($q) use ($enccode) {
+        //         $q->where('enccode', $enccode);
+        //     })
+        //     ->first();
+
+        // test *************
+        $patientCharges = PatientCharge::with(['typeOfCharge', 'item', 'misc', 'patientChargeLogs'])
+            ->where('enccode', $enccode)
+            ->get();
+
+        dd($patientCharges);
+        // end test *************
+
+
 
         // TANKS = drugs and med (oxygen), compressed air, carbon dioxide
         $tanks = DB::select("SELECT cast(hdmhdr.dmdcomb as varchar) + '' + cast(hdmhdr.dmdctr as varchar) as itemcode,
