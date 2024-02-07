@@ -15,13 +15,14 @@
           :value="billList"
           selectionMode="single"
           removableSort
-          paginator
-          :rows="rows"
-          ref="dt"
-          :totalRecords="totalRecords"
-          @page="onPage($event)"
           filterDisplay="row"
           showGridlines
+          ref="dt"
+          lazy
+          paginator
+          :rows="rows"
+          :totalRecords="totalRecords"
+          @page="onPage($event)"
         >
           <template #header>
             <span class="text-2xl text-cyan-500 font-bold">{{ patientName }} ( {{ hospitalNumber }} )</span>
@@ -514,6 +515,7 @@ export default {
     Link,
   },
   props: {
+    pat_enccode: String,
     bills: Object,
     medicalSupplies: Object,
     misc: Object,
@@ -595,7 +597,7 @@ export default {
     this.rows = this.bills.per_page;
   },
   mounted() {
-    console.log('bills', this.bills.data);
+    console.log('bills', this.bills);
 
     this.storeBillsInContainer();
     this.getTotalAmount();
@@ -605,13 +607,17 @@ export default {
     // console.log('tanks', this.$page.props.tanks);
 
     // set patient enccode
-    this.enccode = this.bills.admission_date_bill.enccode;
+    this.enccode = this.pat_enccode;
     // set patient name
     this.patientName = this.bills.patlast + ', ' + this.bills.patfirst + ' ' + this.bills.patmiddle;
     // set hospital number
     this.hospitalNumber = this.bills.hpercode;
   },
   methods: {
+    onPage(event) {
+      this.params.page = event.page + 1;
+      this.updateData();
+    },
     convertToPHCurrency(e) {
       const formatted = e.toLocaleString('en-PH', {
         style: 'currency',

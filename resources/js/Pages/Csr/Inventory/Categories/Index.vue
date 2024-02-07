@@ -104,13 +104,13 @@
               @click="editItem(slotProps.data)"
             />
 
-            <Button
+            <!-- <Button
               icon="pi pi-trash"
               rounded
               text
               severity="danger"
               @click="confirmDeleteCategory(slotProps.data)"
-            />
+            /> -->
           </template>
         </Column>
         <template #expansion="slotProps">
@@ -205,7 +205,10 @@
         @hide="clickOutsideDialog"
         dismissableMask
       >
-        <div class="field">
+        <div
+          v-if="isUpdate == false"
+          class="field"
+        >
           <label for="ptcode">Pt code</label>
           <InputText
             id="ptcode"

@@ -29,7 +29,7 @@ class PatientChargeController extends Controller
 {
     public function index(Request $request)
     {
-        $enccode = $request->enccode;
+        $pat_enccode = $request->enccode;
         $medicalSupplies = array();
 
         // get auth wardcode
@@ -116,7 +116,7 @@ class PatientChargeController extends Controller
         // dd($enccode);
 
         $bills = PatientCharge::with(['typeOfCharge', 'item', 'misc', 'patientChargeLogs'])
-            ->where('enccode', $enccode)
+            ->where('enccode', $pat_enccode)
             ->orderBy('pcchrgdte', 'DESC')
             ->paginate(10);
 
@@ -150,6 +150,7 @@ class PatientChargeController extends Controller
 
 
         return Inertia::render('Wards/Patients/Bill/Index', [
+            'pat_enccode' => $pat_enccode,
             'bills' => $bills,
             'medicalSupplies' => $medicalSupplies,
             'misc' => $misc,

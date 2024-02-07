@@ -64,11 +64,11 @@ class CategoryController extends Controller
         $cat = ProcTypeForHclass::where('ptcode', $request->ptcode)->first();
 
         $request->validate([
-            'ptcode' => [
-                'required',
-                'max:5',
-                Rule::unique('hproctyp')->ignore($request->ptcode, 'ptcode')
-            ],
+            // 'ptcode' => [
+            //     'required',
+            //     'max:5',
+            //     Rule::unique('hproctyp')->ignore($request->ptcode, 'ptcode')
+            // ],
             'ptdesc' => [
                 'required',
                 'max:30',
