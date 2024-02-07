@@ -106,13 +106,23 @@ class PatientChargeController extends Controller
         //     })
         //     ->first();
 
-        // test *************
-        $patientCharges = PatientCharge::with(['typeOfCharge', 'item', 'misc', 'patientChargeLogs'])
-            ->where('enccode', $enccode)
-            ->get();
+        // $bills = PatientCharge::with(['typeOfCharge', 'item', 'misc', 'patientChargeLogs'])
+        //     ->where('enccode', $enccode)
+        //     ->orderBy('pcchrgdte', 'DESC')
+        //     ->get();
 
-        dd($patientCharges);
-        // end test *************
+
+        // test *****************************************************************
+        // dd($enccode);
+
+        $bills = PatientCharge::with(['typeOfCharge', 'item', 'misc', 'patientChargeLogs'])
+            ->where('enccode', $enccode)
+            ->orderBy('pcchrgdte', 'DESC')
+            ->paginate(10);
+
+        // dd($bills);
+
+        // end test *****************************************************************
 
 
 
