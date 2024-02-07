@@ -15,10 +15,11 @@
           :value="billList"
           selectionMode="single"
           removableSort
-          sortField="charge_date"
-          :sortOrder="-1"
           paginator
-          :rows="15"
+          :rows="rows"
+          ref="dt"
+          :totalRecords="totalRecords"
+          @page="onPage($event)"
           filterDisplay="row"
           showGridlines
         >
@@ -520,6 +521,11 @@ export default {
   },
   data() {
     return {
+      // paginator
+      loading: false,
+      totalRecords: null,
+      rows: null,
+      // end paginator
       stockBalanceDeclared: false,
       expandedRow: [],
       search: '',
@@ -582,9 +588,15 @@ export default {
       }),
     };
   },
+  // created will be initialize before mounted
+  created() {
+    this.totalRecords = this.bills.total;
+    this.params.page = this.bills.current_page;
+    this.rows = this.bills.per_page;
+  },
   mounted() {
-    // s
-    // console.log('bills', this.bills.admission_date_bill.tscode);
+    console.log('bills', this.bills.data);
+
     this.storeBillsInContainer();
     this.getTotalAmount();
     this.storeMedicalSuppliesInContainer();
@@ -630,7 +642,7 @@ export default {
     },
     storeBillsInContainer() {
       let uid = 0;
-      this.bills.admission_date_bill.patient_charge.forEach((e) => {
+      this.bills.data.forEach((e) => {
         // only push item when chargcode are drug and meds oxygen, compressed air and carbon dioxide
         if (e.chargcode == 'DRUMD') {
           this.tanks.forEach((t) => {
@@ -673,7 +685,7 @@ export default {
           return null;
         }
       });
-      //   console.log(this.billList);
+      console.log('bill list', this.billList);
     },
     storeMedicalSuppliesInContainer() {
       this.medicalSupplies.forEach((med) => {
