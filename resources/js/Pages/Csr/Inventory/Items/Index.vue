@@ -267,10 +267,7 @@
             {{ form.errors.cl1comb }}
           </small>
         </div>
-        <div
-          v-if="isUpdate == false"
-          class="field"
-        >
+        <div class="field">
           <label for="cl2code">Cl2 code</label>
           <InputText
             id="cl2code"
@@ -278,6 +275,7 @@
             required="true"
             autofocus
             :class="{ 'p-invalid': form.cl2code == '' }"
+            :disabled="isUpdate"
             @keyup.enter="submit"
           />
           <small

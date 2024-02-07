@@ -205,10 +205,7 @@
         @hide="clickOutsideDialog"
         dismissableMask
       >
-        <div
-          v-if="isUpdate == false"
-          class="field"
-        >
+        <div class="field">
           <label for="ptcode">Pt code</label>
           <InputText
             id="ptcode"
@@ -216,6 +213,7 @@
             required="true"
             autofocus
             :class="{ 'p-invalid': form.ptcode == '' }"
+            :disabled="isUpdate"
             @keyup.enter="submit"
           />
           <small
