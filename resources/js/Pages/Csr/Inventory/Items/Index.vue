@@ -134,13 +134,13 @@
               @click="editItem(slotProps.data)"
             />
 
-            <Button
+            <!-- <Button
               icon="pi pi-trash"
               rounded
               text
               severity="danger"
               @click="confirmDeleteItem(slotProps.data)"
-            />
+            /> -->
           </template>
         </Column>
         <template #expansion="slotProps">
@@ -267,7 +267,10 @@
             {{ form.errors.cl1comb }}
           </small>
         </div>
-        <div class="field">
+        <div
+          v-if="isUpdate == false"
+          class="field"
+        >
           <label for="cl2code">Cl2 code</label>
           <InputText
             id="cl2code"
