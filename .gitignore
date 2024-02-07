@@ -23,7 +23,7 @@ yarn.lock
 .env.local.backup
 .env.production
 .env.testing
-/vendor/
+# /vendor/
 /public/storage
 /public/hot
 /node_modules/
