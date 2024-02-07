@@ -359,6 +359,7 @@
             v-model.trim="formSubCategory.cl1code"
             required="true"
             autofocus
+            :disabled="isSubCategoryUpdate"
             @keyup.enter="submitSubCategory"
           />
           <small
