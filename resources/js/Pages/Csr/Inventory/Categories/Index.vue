@@ -169,6 +169,20 @@
                 header="DESCRIPTION"
               >
               </Column>
+              <Column header="STATUS">
+                <template #body="{ data }">
+                  <Tag
+                    v-if="data.cl1stat == 'A'"
+                    value="ACTIVE"
+                    severity="success"
+                  />
+                  <Tag
+                    v-else
+                    value="INACTIVE"
+                    severity="danger"
+                  />
+                </template>
+              </Column>
               <Column
                 header="ACTION"
                 style="min-width: 12rem"
