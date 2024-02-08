@@ -259,7 +259,7 @@
           </small>
         </div>
         <div class="field">
-          <label for="cl2code">Cl2 code</label>
+          <label for="cl2code">PRE CODE</label>
           <InputText
             id="cl2code"
             v-model.trim="form.cl2code"
