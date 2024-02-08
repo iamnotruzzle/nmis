@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Inertia\Inertia;
 use \Maatwebsite\Excel\Sheet;
 
 class AppServiceProvider extends ServiceProvider
@@ -30,6 +31,10 @@ class AppServiceProvider extends ServiceProvider
 
         Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $style) {
             $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
+        });
+
+        Inertia::version(function () {
+            return md5_file(public_path('mix-manifest.json'));
         });
 
         // Sheet::macro('fitToPage', function (Sheet $sheet, $scale) {
