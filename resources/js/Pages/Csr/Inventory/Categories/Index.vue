@@ -197,13 +197,13 @@
                     @click="editSubCategory(slotProps.data)"
                   />
 
-                  <Button
+                  <!-- <Button
                     icon="pi pi-trash"
                     rounded
                     text
                     severity="danger"
                     @click="confirmDeleteSubCategory(slotProps.data)"
-                  />
+                  /> -->
                 </template>
               </Column>
             </DataTable>
