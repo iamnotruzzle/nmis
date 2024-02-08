@@ -597,7 +597,7 @@ export default {
     this.rows = this.bills.per_page;
   },
   mounted() {
-    console.log('bills', this.bills);
+    // console.log('bills', this.bills);
 
     this.storeBillsInContainer();
     this.getTotalAmount();
@@ -654,7 +654,7 @@ export default {
           this.tanks.forEach((t) => {
             if (e.itemcode == t.itemcode && e.uomcode == t.unitcode) {
               this.billList.push({
-                uid: Number(uid) + 1,
+                // uid: Number(uid) + 1,
                 charge_slip_no: e.pcchrgcod,
                 type_of_charge_code: e.type_of_charge.chrgcode,
                 type_of_charge_description: e.type_of_charge.chrgdesc,
@@ -674,7 +674,7 @@ export default {
         // only push item when chargcode are medical supplies or misc
         else if (e.chargcode == 'MISC' || e.chargcode == 'DRUMN') {
           this.billList.push({
-            uid: Number(uid) + 1,
+            // uid: Number(uid) + 1,
             charge_slip_no: e.pcchrgcod,
             type_of_charge_code: e.type_of_charge.chrgcode,
             type_of_charge_description: e.type_of_charge.chrgdesc,
@@ -691,7 +691,7 @@ export default {
           return null;
         }
       });
-      console.log('bill list', this.billList);
+      //   console.log('bill list', this.billList);
     },
     storeMedicalSuppliesInContainer() {
       this.medicalSupplies.forEach((med) => {
@@ -836,9 +836,17 @@ export default {
     },
     updateData() {
       this.params.enccode = this.enccode;
+      this.billList = [];
       this.$inertia.get('patientcharge', this.params, {
         preserveState: true,
         preserveScroll: true,
+        onSuccess: (visit) => {
+          this.totalRecords = this.bills.total;
+          this.billList = [];
+          //   this.expandedRow = [];
+          this.storeBillsInContainer();
+          this.loading = false;
+        },
       });
     },
     // emit close dialog
@@ -880,7 +888,7 @@ export default {
             this.miscList = [];
             this.itemList = [];
             this.itemsToBillList = [];
-            this.storeBillsInContainer();
+            // this.storeBillsInContainer();
             this.getTotalAmount();
             this.storeMedicalSuppliesInContainer();
             this.storeMiscInContainer();

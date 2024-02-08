@@ -148,6 +148,7 @@ class PatientChargeController extends Controller
                             GROUP BY hdmhdr.dmdcomb, hdmhdr.dmdctr, hdmhdrsub.dmhdrsub, hdmhdrprice.unitcode, hdmhdrsub.dmdcomb, hgen.gendesc, hdmhdr.dmdnost, hdmhdr.dmdnnostp, hstre.stredesc, hform.formdesc, hroute.rtedesc;
                         ", [$request->enccode]);
 
+        // dd($bills);
 
         return Inertia::render('Wards/Patients/Bill/Index', [
             'pat_enccode' => $pat_enccode,
