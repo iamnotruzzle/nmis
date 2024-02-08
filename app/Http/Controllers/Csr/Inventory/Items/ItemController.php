@@ -17,6 +17,7 @@ class ItemController extends Controller
     public function index(Request $request)
     {
         $cl1combs = Category::where('cl1stat', 'A')
+            ->where('ptcode', '1000')
             ->orderBy('cl1comb', 'ASC')
             ->get(['cl1comb', 'cl1desc']);
 

@@ -47,26 +47,8 @@
         <template #loading> Loading item data. Please wait. </template>
         <Column expander />
         <Column
-          field="cl2comb"
-          header="CL2 COMBINATION"
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ data.cl2comb }}
-          </template>
-        </Column>
-        <Column
-          field="cl1comb"
-          header="CL1 COMBINATION"
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ data.cl1comb }}
-          </template>
-        </Column>
-        <Column
           field="cl2code"
-          header="CL2 CODE"
+          header="PRE CODE"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
@@ -74,8 +56,17 @@
           </template>
         </Column>
         <Column
+          field="cl2comb"
+          header="MAIN + SUB-CATEGORY CODE + PRE CODE"
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.cl2comb }}
+          </template>
+        </Column>
+        <Column
           field="cl2desc"
-          header="CL2 DESCRIPTION"
+          header="DESCRIPTION"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
@@ -286,12 +277,11 @@
           </small>
         </div>
         <div class="field">
-          <label for="cl2desc">Cl2 description</label>
-          <Textarea
-            id="cl1code"
+          <label>Description</label>
+          <InputText
+            id="Description"
             v-model.trim="form.cl2desc"
             required="true"
-            rows="5"
             autofocus
             :class="{ 'p-invalid': form.cl2desc == '' }"
             @keyup.enter="submit"

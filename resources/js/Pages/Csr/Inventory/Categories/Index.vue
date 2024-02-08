@@ -161,7 +161,7 @@
               </Column>
               <Column
                 field="cl1comb"
-                header="CODE COMBINATION"
+                header="MAIN & SUB CATEGORY CODE COMBINATION"
               >
               </Column>
               <Column
