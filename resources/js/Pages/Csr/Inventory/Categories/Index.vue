@@ -34,12 +34,12 @@
                   placeholder="Search category"
                 />
               </span>
-              <Button
+              <!-- <Button
                 label="Add Category"
                 icon="pi pi-plus"
                 iconPos="right"
                 @click="openCreateCategoryDialog"
-              />
+              /> -->
             </div>
           </div>
         </template>
@@ -130,6 +130,7 @@
               /> -->
 
               <Button
+                v-if="slotProps.data.ptcode == '1000'"
                 label="Add sub-category"
                 icon="pi pi-plus"
                 iconPos="right"
@@ -160,12 +161,12 @@
               </Column>
               <Column
                 field="cl1comb"
-                header="CL1 COMBINATION"
+                header="CODE COMBINATION"
               >
               </Column>
               <Column
                 field="cl1desc"
-                header="CL1 DESCRIPTION"
+                header="DESCRIPTION"
               >
               </Column>
               <Column
@@ -337,7 +338,10 @@
         @hide="clickOutsideSubCategoryDialog"
         dismissableMask
       >
-        <div class="field">
+        <div
+          v-if="false"
+          class="field"
+        >
           <label for="ptcode">Pt code</label>
           <InputText
             id="ptcode"
@@ -353,14 +357,17 @@
             {{ formSubCategory.errors.ptcode }}
           </small>
         </div>
-        <div class="field">
+        <div
+          v-if="false"
+          class="field"
+        >
           <label for="cl1code">Cl1 code</label>
           <InputText
             id="cl1code"
             v-model.trim="formSubCategory.cl1code"
             required="true"
             autofocus
-            :disabled="isSubCategoryUpdate"
+            disabled="true"
             @keyup.enter="submitSubCategory"
           />
           <small
@@ -371,7 +378,7 @@
           </small>
         </div>
         <div class="field">
-          <label for="cl1desc">Cl1 description</label>
+          <label for="cl1desc">Description</label>
           <InputText
             id="cl1desc"
             v-model.trim="formSubCategory.cl1desc"
@@ -536,6 +543,7 @@ export default {
       deleteSubCategoryDialog: false,
       search: '',
       searchSubcategory: '',
+      totalSubCategory: null,
       selectedStatus: null,
       options: {},
       params: {},
@@ -616,6 +624,7 @@ export default {
       this.updateData();
     },
     updateData() {
+      this.totalSubCategory = null;
       this.mainCategoriesList = [];
       this.loading = true;
 
@@ -718,6 +727,16 @@ export default {
     },
     // ********** sub category
     openCreateSubCategoryDialog(e) {
+      //   console.log(e);
+      //   console.log(this.expandedRow[0].subCategory.length);
+      if (this.expandedRow[0].subCategory === null || this.expandedRow[0].subCategory === undefined) {
+        this.formSubCategory.cl1code = '1';
+      } else {
+        this.totalSubCategory = this.expandedRow[0].subCategory.length + 1;
+        console.log(this.totalSubCategory);
+        this.formSubCategory.cl1code = this.totalSubCategory.toString();
+      }
+
       this.formSubCategory.ptcode = e.ptcode;
       //   this.formSubCategory.cl1code =
       this.isSubCategoryUpdate = false;
@@ -729,7 +748,8 @@ export default {
         'hide',
         (this.isSubCategoryUpdate = false),
         this.formSubCategory.clearErrors(),
-        this.formSubCategory.reset()
+        this.formSubCategory.reset(),
+        (this.totalSubCategory = null)
       );
     },
     editSubCategory(e) {
