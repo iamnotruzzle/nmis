@@ -69,7 +69,7 @@ class HandleInertiaRequests extends Middleware
             'medSupplies' => function () {
                 return Item::where('cl2stat', 'A')->orderBy('cl2desc', 'ASC')->get(['cl2comb', 'cl2desc']);
             },
-            // TANKS = drugs and med (oxygen), compressed air, carbon dioxide
+            //TANKS = drugs and med (oxygen), compressed air, carbon dioxide
             'tanksList' => function () {
                 return DB::select("SELECT cast(hdmhdr.dmdcomb as varchar) + '' + cast(hdmhdr.dmdctr as varchar) as itemcode,
                                     hdmhdrsub.dmhdrsub,
@@ -103,6 +103,9 @@ class HandleInertiaRequests extends Middleware
             'unitOfMeasurement' => function () {
                 return UnitOfMeasurement::get(['uomcode', 'uomdesc', 'uomstat']);
             },
+
+
+
             // 'csrPendingCount' => function () {
             //     return RequestStocks::where('status', 'PENDING')->count();
             // }

@@ -96,6 +96,7 @@
         >
           <template #body="slotProps">
             <Button
+              v-if="slotProps.data.ptcode !== '1000'"
               icon="pi pi-pencil"
               class="mr-1"
               rounded
@@ -231,6 +232,7 @@
             required="true"
             autofocus
             :class="{ 'p-invalid': form.ptdesc == '' }"
+            :disabled="form.ptcode == 1000"
             @keyup.enter="submit"
           />
           <small
@@ -249,6 +251,7 @@
             optionValue="code"
             placeholder="Select status"
             class="w-full"
+            :disabled="form.ptcode == 1000"
           />
           <small
             class="text-error"
@@ -716,6 +719,7 @@ export default {
     // ********** sub category
     openCreateSubCategoryDialog(e) {
       this.formSubCategory.ptcode = e.ptcode;
+      //   this.formSubCategory.cl1code =
       this.isSubCategoryUpdate = false;
       this.createSubCategoryDialog = true;
     },
