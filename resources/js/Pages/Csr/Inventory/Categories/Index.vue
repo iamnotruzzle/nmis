@@ -48,7 +48,7 @@
         <Column expander />
         <Column
           field="ptcode"
-          header="PT CODE"
+          header="MAIN CODE"
           style="min-width: 12rem"
         >
           <!-- <template #body="{ data }">
@@ -57,7 +57,7 @@
         </Column>
         <Column
           field="ptdesc"
-          header="PT DESCRIPTION"
+          header="DESCRIPTION"
           style="min-width: 12rem"
         >
         </Column>
@@ -150,18 +150,18 @@
             >
               <Column
                 field="ptcode"
-                header="PT CODE"
+                header="MAIN CODE"
               >
                 <!-- <template #body="{ data }"> {{ data }} </template> -->
               </Column>
               <Column
                 field="cl1code"
-                header="CL1 CODE"
+                header="SUB CODE"
               >
               </Column>
               <Column
                 field="cl1comb"
-                header="MAIN & SUB CATEGORY CODE COMBINATION"
+                header="MAIN + SUB CATEGORY CODE"
               >
               </Column>
               <Column
