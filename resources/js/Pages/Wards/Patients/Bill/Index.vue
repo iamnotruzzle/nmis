@@ -57,15 +57,6 @@
             <template #body="{ data }">
               {{ data.charge_slip_no }}
             </template>
-            <template #filter="{ filterModel, filterCallback }">
-              <InputText
-                v-model="filterModel.value"
-                type="text"
-                @input="filterCallback()"
-                class="p-column-filter"
-                placeholder="Search by #"
-              />
-            </template>
           </Column>
           <Column
             field="type_of_charge_description"
@@ -75,15 +66,6 @@
             <template #body="{ data }">
               {{ data.type_of_charge_description }}
             </template>
-            <template #filter="{ filterModel, filterCallback }">
-              <InputText
-                v-model="filterModel.value"
-                type="text"
-                @input="filterCallback()"
-                class="p-column-filter"
-                placeholder="Search by type"
-              />
-            </template>
           </Column>
           <Column
             field="item"
@@ -92,15 +74,6 @@
           >
             <template #body="{ data }">
               {{ data.item }}
-            </template>
-            <template #filter="{ filterModel, filterCallback }">
-              <InputText
-                v-model="filterModel.value"
-                type="text"
-                @input="filterCallback()"
-                class="p-column-filter"
-                placeholder="Search by item"
-              />
             </template>
           </Column>
           <Column
