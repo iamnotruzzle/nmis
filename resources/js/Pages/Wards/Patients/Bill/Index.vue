@@ -5,7 +5,7 @@
     <div class="card">
       <Toast />
 
-      <div class="lg:flex">
+      <div>
         <DataTable
           class="p-datatable-sm"
           dataKey="charge_slip_no"
@@ -208,7 +208,7 @@
           scrollable
           scrollHeight="h-full"
           showGridlines
-          class="mdmt-4"
+          class="p-datatable-sm mt-4"
         >
           <template #header>
             <div class="text-2xl text-cyan-500 font-bold">INSTOCK</div>
@@ -227,7 +227,7 @@
           ></Column>
           <Column
             field="quantity"
-            header="Qty"
+            header="QUANTITY"
           >
             <template #body="{ data }">
               <span
