@@ -521,7 +521,7 @@ export default {
     bills: Object,
     medicalSupplies: Object,
     misc: Object,
-    tanks: Object,
+    // tanks: Object,
   },
   data() {
     return {
@@ -606,7 +606,6 @@ export default {
     this.storeMedicalSuppliesInContainer();
     this.storeMiscInContainer();
     this.storeItemsInContainer();
-    // console.log('tanks', this.$page.props.tanks);
 
     // set patient enccode
     this.enccode = this.pat_enccode;
@@ -653,25 +652,34 @@ export default {
       this.bills.data.forEach((e) => {
         // only push item when chargcode are drug and meds oxygen, compressed air and carbon dioxide
         if (e.chargcode == 'DRUMD') {
-          this.tanks.forEach((t) => {
-            if (e.itemcode == t.itemcode && e.uomcode == t.unitcode) {
-              this.billList.push({
-                // uid: Number(uid) + 1,
-                charge_slip_no: e.pcchrgcod,
-                type_of_charge_code: e.type_of_charge.chrgcode,
-                type_of_charge_description: e.type_of_charge.chrgdesc,
-                // item: e.type_of_charge.chrgdesc,
-                item: t.itemDesc,
-                itemcode: e.itemcode,
-                quantity: Math.trunc(e.pchrgqty),
-                // price: e.pchrgup,
-                price: Math.round(e.pchrgup * 100) / 100,
-                amount: (Math.trunc(e.pchrgqty) * Math.round(e.pchrgup * 100)) / 100,
-                charge_date: e.pcchrgdte,
-                patient_charge_logs: e.patient_charge_logs.length == 0 ? null : e.patient_charge_logs,
-              });
-            }
-          });
+          const matchingTank = this.$page.props.tanksList.find((x) => e.itemcode === x.itemcode);
+
+          if (e.itemcode == matchingTank.itemcode && e.uomcode == matchingTank.unitcode) {
+            this.billList.push({
+              // uid: Number(uid) + 1,
+              charge_slip_no: e.pcchrgcod,
+              type_of_charge_code: e.type_of_charge.chrgcode,
+              type_of_charge_description: e.type_of_charge.chrgdesc,
+              // item: e.type_of_charge.chrgdesc,
+              item:
+                matchingTank.gendesc +
+                ' ' +
+                matchingTank.dmdnost +
+                ' ' +
+                matchingTank.stredesc +
+                ' ' +
+                matchingTank.formdesc +
+                ' ' +
+                matchingTank.rtedesc,
+              itemcode: e.itemcode,
+              quantity: Math.trunc(e.pchrgqty),
+              // price: e.pchrgup,
+              price: Math.round(e.pchrgup * 100) / 100,
+              amount: (Math.trunc(e.pchrgqty) * Math.round(e.pchrgup * 100)) / 100,
+              charge_date: e.pcchrgdte,
+              patient_charge_logs: e.patient_charge_logs.length == 0 ? null : e.patient_charge_logs,
+            });
+          }
         }
         // only push item when chargcode are medical supplies or misc
         else if (e.chargcode == 'MISC' || e.chargcode == 'DRUMN') {
@@ -749,7 +757,18 @@ export default {
         this.itemList.push({
           typeOfCharge: 'DRUMD',
           itemCode: tank.itemcode,
-          itemDesc: tank.itemDesc,
+          itemDesc:
+            tank.gendesc +
+            ' ' +
+            tank.dmdnost +
+            // ' ' +
+            // tank.dmdnnostp +
+            ' ' +
+            tank.stredesc +
+            ' ' +
+            tank.formdesc +
+            ' ' +
+            tank.rtedesc,
           unit: tank.unitcode,
           quantity: 99999,
           price: tank.price,
@@ -909,7 +928,19 @@ export default {
       if (matchingMedSupply != null) {
         return matchingMedSupply.cl2desc;
       } else if (matchingTank != null) {
-        return matchingTank.itemDesc;
+        return (
+          matchingTank.gendesc +
+          ' ' +
+          matchingTank.dmdnost +
+          //   ' ' +
+          //   matchingTank.dmdnnostp +
+          ' ' +
+          matchingTank.stredesc +
+          ' ' +
+          matchingTank.formdesc +
+          ' ' +
+          matchingTank.rtedesc
+        );
       } else {
         return null;
       }

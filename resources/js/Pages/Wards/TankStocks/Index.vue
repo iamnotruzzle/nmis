@@ -980,8 +980,6 @@ export default {
       //   console.log(this.expandedRow);
     },
     storeItemsInController() {
-      //   console.log(this.$page.props.tanksList);
-
       this.itemsList = []; // reset
       this.$page.props.tanksList.forEach((e) => {
         const matchingTank = this.$page.props.tanksList.find((x) => e.itemcode === x.itemcode);
@@ -989,7 +987,19 @@ export default {
 
         this.itemsList.push({
           itemcode: e.itemcode,
-          itemDesc: matchingTank ? matchingTank.itemDesc : null,
+          itemDesc: matchingTank
+            ? matchingTank.gendesc +
+              ' ' +
+              matchingTank.dmdnost +
+              //   ' ' +
+              //   matchingTank.dmdnnostp +
+              ' ' +
+              matchingTank.stredesc +
+              ' ' +
+              matchingTank.formdesc +
+              ' ' +
+              matchingTank.rtedesc
+            : null,
           //   uomcode: unit ? unit.uomcode : null,
           //   uomdesc: unit ? unit.uomdesc : null,
         });
@@ -1029,7 +1039,19 @@ export default {
     getTankDesc(item) {
       const matchingTank = this.$page.props.tanksList.find((x) => item.itemcode === x.itemcode);
 
-      return matchingTank.itemDesc;
+      return (
+        matchingTank.gendesc +
+        ' ' +
+        matchingTank.dmdnost +
+        // ' ' +
+        // matchingTank.dmdnnostp +
+        ' ' +
+        matchingTank.stredesc +
+        ' ' +
+        matchingTank.formdesc +
+        ' ' +
+        matchingTank.rtedesc
+      );
     },
     // store current stocks
     storeCurrentWardStocksInContainer() {
@@ -1047,7 +1069,19 @@ export default {
           id: e.id,
           from: e.from,
           itemcode: e.itemcode,
-          itemDesc: matchingTank ? matchingTank.itemDesc : null,
+          itemDesc: matchingTank
+            ? matchingTank.gendesc +
+              ' ' +
+              matchingTank.dmdnost +
+              //   ' ' +
+              //   matchingTank.dmdnnostp +
+              ' ' +
+              matchingTank.stredesc +
+              ' ' +
+              matchingTank.formdesc +
+              ' ' +
+              matchingTank.rtedesc
+            : null,
           uomcode: unit ? unit.uomcode : null,
           uomdesc: unit ? unit.uomdesc : null,
           quantity: e.quantity,
@@ -1177,7 +1211,19 @@ export default {
         this.requestStockListDetails.push({
           request_stocks_details_id: e.id,
           itemcode: e.itemcode,
-          itemDesc: matchingTank ? matchingTank.itemDesc : null,
+          itemDesc: matchingTank
+            ? matchingTank.gendesc +
+              ' ' +
+              matchingTank.dmdnost +
+              //   ' ' +
+              //   matchingTank.dmdnnostp +
+              ' ' +
+              matchingTank.stredesc +
+              ' ' +
+              matchingTank.formdesc +
+              ' ' +
+              matchingTank.rtedesc
+            : null,
           requested_qty: e.requested_qty,
         });
       });

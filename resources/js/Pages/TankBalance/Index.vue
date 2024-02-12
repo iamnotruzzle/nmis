@@ -398,7 +398,18 @@ export default {
         this.balanceContainer.push({
           id: e.id,
           itemcode: e.itemcode,
-          itemDesc: matchingTank.itemDesc,
+          itemDesc:
+            matchingTank.gendesc +
+            ' ' +
+            matchingTank.dmdnost +
+            // ' ' +
+            // matchingTank.dmdnnostp +
+            ' ' +
+            matchingTank.stredesc +
+            ' ' +
+            matchingTank.formdesc +
+            ' ' +
+            matchingTank.rtedesc,
           ending_balance: e.ending_balance,
           beginning_balance: e.beginning_balance,
           entry_by: e.entry_by.firstname + ' ' + e.entry_by.lastname,

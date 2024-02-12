@@ -597,7 +597,19 @@ export default {
       //   console.log(item);
       const matchingTank = this.$page.props.tanksList.find((x) => item.itemcode === x.itemcode);
 
-      return matchingTank.itemDesc;
+      return (
+        matchingTank.gendesc +
+        ' ' +
+        matchingTank.dmdnost +
+        // ' ' +
+        // matchingTank.dmdnnostp +
+        ' ' +
+        matchingTank.stredesc +
+        ' ' +
+        matchingTank.formdesc +
+        ' ' +
+        matchingTank.rtedesc
+      );
     },
     // getSeverity(status) {
     //   switch (status) {
@@ -652,7 +664,18 @@ export default {
         this.requestStockListDetails.push({
           request_stocks_details_id: e.id,
           itemcode: e.itemcode,
-          itemDesc: matchingTank.itemDesc,
+          itemDesc:
+            matchingTank.gendesc +
+            ' ' +
+            matchingTank.dmdnost +
+            // ' ' +
+            // matchingTank.dmdnnostp +
+            ' ' +
+            matchingTank.stredesc +
+            ' ' +
+            matchingTank.formdesc +
+            ' ' +
+            matchingTank.rtedesc,
           requested_qty: e.requested_qty,
           approved_qty: e.approved_qty,
           remarks: e.remarks,
@@ -735,7 +758,18 @@ export default {
         this.requestStockListDetails.push({
           request_stocks_details_id: e.id,
           itemcode: e.itemcode,
-          itemDesc: matchingTank.itemDesc,
+          itemDesc:
+            matchingTank.gendesc +
+            ' ' +
+            matchingTank.dmdnost +
+            // ' ' +
+            // matchingTank.dmdnnostp +
+            ' ' +
+            matchingTank.stredesc +
+            ' ' +
+            matchingTank.formdesc +
+            ' ' +
+            matchingTank.rtedesc,
           requested_qty: e.requested_qty,
           approved_qty: e.approved_qty,
           remarks: e.remarks,
