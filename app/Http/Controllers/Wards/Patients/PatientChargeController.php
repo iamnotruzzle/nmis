@@ -112,17 +112,10 @@ class PatientChargeController extends Controller
         //     ->get();
 
 
-        // test *****************************************************************
-        // dd($enccode);
-
         $bills = PatientCharge::with(['typeOfCharge', 'item', 'misc', 'patientChargeLogs'])
             ->where('enccode', $pat_enccode)
             ->orderBy('pcchrgdte', 'DESC')
             ->paginate(10);
-
-        // dd($bills);
-
-        // end test *****************************************************************
 
         // TANKS = drugs and med (oxygen), compressed air, carbon dioxide
         // $tanks = DB::select("SELECT cast(hdmhdr.dmdcomb as varchar) + '' + cast(hdmhdr.dmdctr as varchar) as itemcode,
