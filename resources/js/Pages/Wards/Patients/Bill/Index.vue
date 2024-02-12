@@ -224,10 +224,12 @@
           <Column
             field="cl2desc"
             header="ITEM"
+            style="width: 60%"
           ></Column>
           <Column
             field="quantity"
             header="QUANTITY"
+            style="width: 20%"
           >
             <template #body="{ data }">
               <span
@@ -245,7 +247,7 @@
           <Column
             field="price"
             header="PRICE"
-            style="text-align: right"
+            style="text-align: right; width: 20%"
           >
             <template #body="{ data }"> ₱ {{ data.price }} </template>
           </Column>
