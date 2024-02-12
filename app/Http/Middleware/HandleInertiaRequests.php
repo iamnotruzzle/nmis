@@ -72,8 +72,7 @@ class HandleInertiaRequests extends Middleware
             //TANKS = drugs and med (oxygen), compressed air, carbon dioxide
             'tanksList' => function () {
                 return DB::select("SELECT cast(hdmhdr.dmdcomb as varchar) + '' + cast(hdmhdr.dmdctr as varchar) as itemcode,
-                                    hdmhdrsub.dmhdrsub,
-                                    (SELECT TOP 1 unitcode FROM hdmhdrprice WHERE dmdcomb = hdmhdrsub.dmdcomb ORDER BY dmdprdte DESC) as 'unitcode',
+                                    hdmhdrsub.dmhdrsub, hdmhdrprice.unitcode,
                                     hgen.gendesc, dmdnost, hdmhdr.dmdnnostp, hstre.stredesc, hform.formdesc, hroute.rtedesc,
                                     (SELECT TOP 1 dmselprice FROM hdmhdrprice WHERE dmdcomb = hdmhdrsub.dmdcomb ORDER BY dmdprdte DESC) as 'price'
                                 FROM hdmhdr
@@ -88,8 +87,7 @@ class HandleInertiaRequests extends Middleware
                                 OR (hdmhdr.grpcode = '0000000764'
                                 AND hdmhdrsub.dmhdrsub = 'DRUMD' )
                                 OR (hdmhdr.dmdcomb = '000000002098'))
-                                AND hdmhdrsub.stockbal != 0
-                                GROUP BY hdmhdr.dmdcomb, hdmhdr.dmdctr, hdmhdrsub.dmhdrsub, hgen.gendesc, dmdnost, hdmhdr.dmdnnostp, hstre.stredesc, hform.formdesc, hroute.rtedesc, hdmhdrsub.dmdcomb;
+                                GROUP BY hdmhdr.dmdcomb, hdmhdr.dmdctr, hdmhdrsub.dmhdrsub, hdmhdrprice.unitcode, hdmhdrsub.dmdcomb, hgen.gendesc, hdmhdr.dmdnost, hdmhdr.dmdnnostp, hstre.stredesc, hform.formdesc, hroute.rtedesc;
                         ");
             },
             'typeOfCharge' => function () {

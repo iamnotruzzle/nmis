@@ -650,6 +650,7 @@ export default {
     storeBillsInContainer() {
       let uid = 0;
       this.bills.data.forEach((e) => {
+        // console.log(e);
         // only push item when chargcode are drug and meds oxygen, compressed air and carbon dioxide
         if (e.chargcode == 'DRUMD') {
           const matchingTank = this.$page.props.tanksList.find((x) => e.itemcode === x.itemcode);

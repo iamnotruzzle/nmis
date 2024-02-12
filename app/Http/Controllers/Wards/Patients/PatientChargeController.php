@@ -115,7 +115,7 @@ class PatientChargeController extends Controller
         $bills = PatientCharge::with(['typeOfCharge', 'item', 'misc', 'patientChargeLogs'])
             ->where('enccode', $pat_enccode)
             ->orderBy('pcchrgdte', 'DESC')
-            ->paginate(10);
+            ->paginate(7);
 
         // TANKS = drugs and med (oxygen), compressed air, carbon dioxide
         // $tanks = DB::select("SELECT cast(hdmhdr.dmdcomb as varchar) + '' + cast(hdmhdr.dmdctr as varchar) as itemcode,
@@ -138,6 +138,8 @@ class PatientChargeController extends Controller
         //                     AND hpatchrg.enccode = ?
         //                     GROUP BY hdmhdr.dmdcomb, hdmhdr.dmdctr, hdmhdrsub.dmhdrsub, hdmhdrprice.unitcode, hdmhdrsub.dmdcomb, hgen.gendesc, hdmhdr.dmdnost, hdmhdr.dmdnnostp, hstre.stredesc, hform.formdesc, hroute.rtedesc;
         //                 ", [$request->enccode]);
+
+        // dd($tanks);
 
         return Inertia::render('Wards/Patients/Bill/Index', [
             'pat_enccode' => $pat_enccode,
