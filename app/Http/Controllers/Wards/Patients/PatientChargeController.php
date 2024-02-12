@@ -112,7 +112,7 @@ class PatientChargeController extends Controller
         //     ->get();
 
 
-        $bills = PatientCharge::with(['typeOfCharge', 'item', 'misc', 'patientChargeLogs'])
+        $bills = PatientCharge::with(['typeOfCharge:chrgcode,chrgdesc', 'item', 'misc', 'patientChargeLogs'])
             ->where('enccode', $pat_enccode)
             ->orderBy('pcchrgdte', 'DESC')
             ->paginate(7);

@@ -29,7 +29,7 @@
             <div class="flex flex-wrap align-items-center justify-content-between gap-2">
               <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">BILLS</span>
               <div>
-                <span class="p-input-icon-left mr-2">
+                <!-- <span class="p-input-icon-left mr-2">
                   <i class="pi pi-search" />
                   <span class="p-input-icon-left">
                     <i class="pi pi-search" />
@@ -38,7 +38,7 @@
                       placeholder="Keyword Search"
                     />
                   </span>
-                </span>
+                </span> -->
                 <Button
                   label="Bill patient"
                   icon="pi pi-money-bill"

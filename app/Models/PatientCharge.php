@@ -68,12 +68,13 @@ class PatientCharge extends Model
     public function item()
     {
         // ORIG code
-        return $this->hasOne(Item::class, 'cl2comb', 'itemcode')->with(['category', 'unit']);
+        return $this->hasOne(Item::class, 'cl2comb', 'itemcode')->with(['category:cl1comb,cl1desc,cl1stat', 'unit:uomcode,uomdesc,uomstat']);
     }
 
     public function misc()
     {
-        return $this->hasOne(Miscellaneous::class, 'hmcode', 'itemcode')->with(['unit']);
+        // return $this->hasOne(Miscellaneous::class, 'hmcode', 'itemcode')->with(['unit']);
+        return $this->hasOne(Miscellaneous::class, 'hmcode', 'itemcode');
     }
 
     public function tank()
