@@ -328,7 +328,7 @@
             id="requested_by"
             v-model.trim="form.requested_by"
             required="true"
-            :options="$page.props.employees"
+            :options="employeesList"
             :virtualScrollerOptions="{ itemSize: 38 }"
             filter
             optionLabel="employeeid"
@@ -479,6 +479,7 @@ export default {
     wardStocks: Object,
     wardStocksConsignments: Object,
     transferredStock: Object,
+    employees: Object,
   },
   data() {
     return {
@@ -497,6 +498,7 @@ export default {
       params: {},
       locationsList: [],
       wardStocksList: [],
+      employeesList: [],
       transferredStocksList: [],
       toReceiveList: [],
       transferredStocksFilter: {
@@ -551,6 +553,7 @@ export default {
     this.storeLocationsInContainer();
     this.storeTransferredStockInContainer();
     this.storeWardStockInContainer();
+    this.storeEmployeesInContainer();
 
     this.loading = false;
   },
@@ -568,6 +571,13 @@ export default {
             wardname: e.wardname,
           });
         }
+      });
+    },
+    storeEmployeesInContainer() {
+      this.employees.forEach((e) => {
+        this.employeesList.push({
+          employeeid: e.employeeid,
+        });
       });
     },
     storeTransferredStockInContainer() {

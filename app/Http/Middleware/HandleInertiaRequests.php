@@ -50,9 +50,9 @@ class HandleInertiaRequests extends Middleware
             // 'items' => function () {
             //     return Item::with('unit:uomcode,uomdesc')->where('cl2stat', 'A')->orderBy('cl2desc', 'ASC')->get();
             // },
-            'employees' => function () {
-                return UserDetail::where('empstat', 'A')->orderBy('employeeid', 'ASC')->get();
-            },
+            // 'employees' => function () {
+            //     return UserDetail::where('empstat', 'A')->orderBy('employeeid', 'ASC')->get(['employeeid', 'empstat']);
+            // },
             'locations' => function () {
                 return Location::where('wardstat', 'A')->orderBy('wardname', 'ASC')->get();
             },
