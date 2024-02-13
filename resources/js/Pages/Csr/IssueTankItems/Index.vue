@@ -453,7 +453,7 @@ export default {
   props: {
     authWardcode: Object,
     tanksList: Object,
-    items: Object,
+    // items: Object,
     requestedStocks: Object,
   },
   data() {
@@ -537,7 +537,7 @@ export default {
       });
     });
 
-    this.storeItemsInController();
+    // this.storeItemsInController();
     this.storeRequestedStocksInContainer();
 
     this.loading = false;
@@ -563,14 +563,14 @@ export default {
       else this.expandedRow = [$event.data];
       //   console.log(this.expandedRow);
     },
-    storeItemsInController() {
-      this.items.forEach((e) => {
-        this.itemsList.push({
-          cl2comb: e.cl2comb,
-          itemDesc: e.itemDesc,
-        });
-      });
-    },
+    // storeItemsInController() {
+    //   this.items.forEach((e) => {
+    //     this.itemsList.push({
+    //       cl2comb: e.cl2comb,
+    //       itemDesc: e.itemDesc,
+    //     });
+    //   });
+    // },
     // use storeRequestedStocksInContainer() function so that every time you make
     // server request such as POST, the data in the table
     // is updated
