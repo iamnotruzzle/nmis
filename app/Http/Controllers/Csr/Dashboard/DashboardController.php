@@ -9,6 +9,7 @@ use App\Models\CsrStocksMedicalSuppliesLogs;
 use App\Models\FundSource;
 use App\Models\Item;
 use App\Models\RequestStocks;
+use App\Models\Supplier;
 use App\Models\TypeOfCharge;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -100,6 +101,8 @@ class DashboardController extends Controller
 
         $fundSource = FundSource::get(['id', 'fsid', 'fsName', 'cluster_code']);
 
+        $suppliers = Supplier::where('suppstat', 'A')->orderBy('suppname', 'ASC')->get(['suppcode', 'suppname', 'suppstat']);
+
         return Inertia::render('Csr/Dashboard/Index', [
             'pending_requests' => $pending_requests,
             'cancelled_requests' => $cancelled_requests,
@@ -110,6 +113,7 @@ class DashboardController extends Controller
             'brands' => $brands,
             'typeOfCharge' => $typeOfCharge,
             'fundSource' => $fundSource,
+            'suppliers' => $suppliers,
         ]);
     }
 

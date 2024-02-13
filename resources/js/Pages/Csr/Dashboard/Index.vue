@@ -401,7 +401,7 @@
           <Dropdown
             required="true"
             v-model="form.suppcode"
-            :options="$page.props.suppliers"
+            :options="suppliersList"
             :virtualScrollerOptions="{ itemSize: 38 }"
             filter
             dataKey="suppcode"
@@ -711,6 +711,7 @@ export default {
     brands: Object,
     typeOfCharge: Object,
     fundSource: Object,
+    suppliers: Object,
   },
   data() {
     return {
@@ -736,6 +737,7 @@ export default {
       deleteStockDialog: false,
       itemsList: [],
       fundSourceList: [],
+      suppliersList: [],
       brandsList: [],
       brandDropDownList: [],
       stocksList: [],
@@ -817,6 +819,7 @@ export default {
     this.storeItemsInContainer();
     this.storeStocksInContainer();
     this.storeActiveBrandsInContainer();
+    this.storeSuppliersInContainer();
 
     this.storePendingRequests();
     this.storeCancelledRequests();
@@ -868,6 +871,14 @@ export default {
         this.minimumDate.setMonth(dateToday.getMonth() + 1, 1);
       } else {
       }
+    },
+    storeSuppliersInContainer() {
+      this.suppliers.forEach((e) => {
+        this.suppliersList.push({
+          suppcode: e.suppcode,
+          suppname: e.suppname,
+        });
+      });
     },
     storeFundSourceInContainer() {
       this.typeOfCharge.forEach((e) => {

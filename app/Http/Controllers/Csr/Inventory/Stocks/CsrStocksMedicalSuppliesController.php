@@ -8,6 +8,7 @@ use App\Models\CsrStocksMedicalSupplies;
 use App\Models\CsrStocksMedicalSuppliesLogs;
 use App\Models\FundSource;
 use App\Models\Item;
+use App\Models\Supplier;
 use App\Models\TypeOfCharge;
 use Carbon\Carbon;
 // use Illuminate\Contracts\Validation\Rule;
@@ -96,6 +97,8 @@ class CsrStocksMedicalSuppliesController extends Controller
             ->where('chrgtable', 'NONDR')
             ->get(['chrgcode', 'chrgdesc', 'bentypcod', 'chrgtable']);
 
+        $suppliers = Supplier::where('suppstat', 'A')->orderBy('suppname', 'ASC')->get(['suppcode', 'suppname', 'suppstat']);
+
         return Inertia::render('Csr/Inventory/Stocks/Index', [
             'items' => $items,
             'stocks' => $stocks,
@@ -103,6 +106,7 @@ class CsrStocksMedicalSuppliesController extends Controller
             'totalStocks' => $totalStocks,
             'typeOfCharge' => $typeOfCharge,
             'fundSource' => $fundSource,
+            'suppliers' => $suppliers,
         ]);
     }
 
