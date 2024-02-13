@@ -494,7 +494,7 @@ export default {
     bills: Object,
     medicalSupplies: Object,
     misc: Object,
-    // tanks: Object,
+    tankList: Object,
   },
   data() {
     return {
@@ -626,7 +626,7 @@ export default {
         // console.log(e);
         // only push item when chargcode are drug and meds oxygen, compressed air and carbon dioxide
         if (e.chargcode == 'DRUMD') {
-          const matchingTank = this.$page.props.tanksList.find((x) => e.itemcode === x.itemcode);
+          const matchingTank = this.tankList.find((x) => e.itemcode === x.itemcode);
 
           if (e.itemcode == matchingTank.itemcode && e.uomcode == matchingTank.unitcode) {
             this.billList.push({
@@ -727,7 +727,7 @@ export default {
       });
 
       // oxygen, compressed air, carbon dioxide
-      this.$page.props.tanksList.forEach((tank) => {
+      this.tankList.forEach((tank) => {
         this.itemList.push({
           typeOfCharge: 'DRUMD',
           itemCode: tank.itemcode,
@@ -895,8 +895,8 @@ export default {
     },
     getTankDesc(item) {
       //   console.log(item);
-      const matchingMedSupply = this.$page.props.medSupplies.find((x) => item === x.cl2comb);
-      const matchingTank = this.$page.props.tanksList.find((x) => item === x.itemcode);
+      const matchingMedSupply = this.$page.pplies.find((x) => item === x.cl2comb);
+      const matchingTank = this.tankList.find((x) => item === x.itemcode);
       //   console.log(matchingMedSupply);
 
       if (matchingMedSupply != null) {

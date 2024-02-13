@@ -452,6 +452,7 @@ export default {
   },
   props: {
     authWardcode: Object,
+    tanksList: Object,
     items: Object,
     requestedStocks: Object,
   },
@@ -595,7 +596,7 @@ export default {
     },
     getTankDesc(item) {
       //   console.log(item);
-      const matchingTank = this.$page.props.tanksList.find((x) => item.itemcode === x.itemcode);
+      const matchingTank = this.tanksList.find((x) => item.itemcode === x.itemcode);
 
       return (
         matchingTank.gendesc +
@@ -659,7 +660,7 @@ export default {
       this.requestStockId = item.id;
 
       item.request_stocks_details.forEach((e) => {
-        const matchingTank = this.$page.props.tanksList.find((x) => e.itemcode === x.itemcode);
+        const matchingTank = this.tanksList.find((x) => e.itemcode === x.itemcode);
 
         this.requestStockListDetails.push({
           request_stocks_details_id: e.id,
@@ -753,7 +754,7 @@ export default {
       this.requestStockId = item.id;
 
       item.request_stocks_details.forEach((e) => {
-        const matchingTank = this.$page.props.tanksList.find((x) => e.itemcode === x.itemcode);
+        const matchingTank = this.tanksList.find((x) => e.itemcode === x.itemcode);
 
         this.requestStockListDetails.push({
           request_stocks_details_id: e.id,

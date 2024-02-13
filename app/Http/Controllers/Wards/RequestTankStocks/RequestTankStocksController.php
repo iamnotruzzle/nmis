@@ -66,10 +66,30 @@ class RequestTankStocksController extends Controller
             ->where('location', $authWardcode->wardcode)
             ->get();
 
+        $tankList = DB::select("SELECT cast(hdmhdr.dmdcomb as varchar) + '' + cast(hdmhdr.dmdctr as varchar) as itemcode,
+            -- //                         hdmhdrsub.dmhdrsub, hdmhdrprice.unitcode,
+            -- //                         hgen.gendesc, dmdnost, hdmhdr.dmdnnostp, hstre.stredesc, hform.formdesc, hroute.rtedesc,
+            -- //                         (SELECT TOP 1 dmselprice FROM hdmhdrprice WHERE dmdcomb = hdmhdrsub.dmdcomb ORDER BY dmdprdte DESC) as 'price'
+            -- //                     FROM hdmhdr
+            -- //                     JOIN hdmhdrsub ON hdmhdr.dmdcomb = hdmhdrsub.dmdcomb
+            -- //                     JOIN hdmhdrprice ON hdmhdrsub.dmdcomb = hdmhdrprice.dmdcomb
+            -- //                     JOIN hdruggrp ON hdmhdr.grpcode = hdruggrp.grpcode
+            -- //                     JOIN hgen ON hgen.gencode = hdruggrp.gencode
+            -- //                     JOIN hstre ON hdmhdr.strecode = hstre.strecode
+            -- //                     JOIN hform ON hdmhdr.formcode = hform.formcode
+            -- //                     JOIN hroute ON hdmhdr.rtecode = hroute.rtecode
+            -- //                     WHERE ((hdmhdr.grpcode = '0000000671' )
+            -- //                     OR (hdmhdr.grpcode = '0000000764'
+            -- //                     AND hdmhdrsub.dmhdrsub = 'DRUMD' )
+            -- //                     OR (hdmhdr.dmdcomb = '000000002098'))
+            -- //                     GROUP BY hdmhdr.dmdcomb, hdmhdr.dmdctr, hdmhdrsub.dmhdrsub, hdmhdrprice.unitcode, hdmhdrsub.dmdcomb, hgen.gendesc, hdmhdr.dmdnost, hdmhdr.dmdnnostp, hstre.stredesc, hform.formdesc, hroute.rtedesc;
+            -- //             ");
+
         return Inertia::render('Wards/TankStocks/Index', [
             'requestedStocks' => $requestedStocks,
             'authWardcode' => $authWardcode,
             'currentWardStocks' => $currentWardStocks,
+            'tankList' => $tankList,
         ]);
     }
 

@@ -860,6 +860,7 @@ export default {
     authWardcode: Object,
     requestedStocks: Object,
     currentWardStocks: Object,
+    tankList: Object,
   },
   data() {
     return {
@@ -981,8 +982,8 @@ export default {
     },
     storeItemsInController() {
       this.itemsList = []; // reset
-      this.$page.props.tanksList.forEach((e) => {
-        const matchingTank = this.$page.props.tanksList.find((x) => e.itemcode === x.itemcode);
+      this.tankList.forEach((e) => {
+        const matchingTank = this.tankList.find((x) => e.itemcode === x.itemcode);
         // const unit = this.$page.props.unitOfMeasurement.find((x) => matchingTank.unitcode === x.uomcode);
 
         this.itemsList.push({
@@ -1037,7 +1038,7 @@ export default {
       });
     },
     getTankDesc(item) {
-      const matchingTank = this.$page.props.tanksList.find((x) => item.itemcode === x.itemcode);
+      const matchingTank = this.tankList.find((x) => item.itemcode === x.itemcode);
 
       return (
         matchingTank.gendesc +
@@ -1062,7 +1063,7 @@ export default {
       moment.suppressDeprecationWarnings = true;
 
       this.currentWardStocks.forEach((e) => {
-        const matchingTank = this.$page.props.tanksList.find((x) => e.itemcode === x.itemcode);
+        const matchingTank = this.tankList.find((x) => e.itemcode === x.itemcode);
         const unit = this.$page.props.unitOfMeasurement.find((x) => matchingTank.unitcode === x.uomcode);
 
         this.currentWardStocksList.push({
@@ -1206,7 +1207,7 @@ export default {
 
       item.request_stocks_details.forEach((e) => {
         // console.log(e);
-        const matchingTank = this.$page.props.tanksList.find((x) => e.itemcode === x.itemcode);
+        const matchingTank = this.tankList.find((x) => e.itemcode === x.itemcode);
 
         this.requestStockListDetails.push({
           request_stocks_details_id: e.id,

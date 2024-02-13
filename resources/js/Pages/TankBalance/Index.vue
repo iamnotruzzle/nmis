@@ -338,6 +338,7 @@ export default {
   },
   props: {
     currentStocks: Object,
+    tankList: Object,
     locationStockBalance: Object,
   },
   data() {
@@ -393,7 +394,7 @@ export default {
     storeStockBalanceInContainer() {
       //   console.log(this.locationStockBalance.data);
       this.locationStockBalance.data.forEach((e) => {
-        const matchingTank = this.$page.props.tanksList.find((x) => e.itemcode === x.itemcode);
+        const matchingTank = this.tankList.find((x) => e.itemcode === x.itemcode);
 
         this.balanceContainer.push({
           id: e.id,
