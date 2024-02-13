@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Csr\CsrManualReport;
 
 use App\Http\Controllers\Controller;
 use App\Models\CsrManualReport;
+use App\Models\Item;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -37,8 +38,11 @@ class CsrManualReportController extends Controller
             )
             ->paginate(15);
 
+        $items = Item::with('unit:uomcode,uomdesc')->where('cl2stat', 'A')->orderBy('cl2desc', 'ASC')->get();
+
         return Inertia::render('Csr/ManualReport/Index', [
-            'manual_reports' => $manual_reports
+            'manual_reports' => $manual_reports,
+            'items' => $items
         ]);
     }
 

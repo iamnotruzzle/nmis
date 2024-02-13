@@ -807,6 +807,7 @@ export default {
   },
   props: {
     manual_reports: Object,
+    items: Object,
   },
   data() {
     return {
@@ -911,7 +912,7 @@ export default {
     storeItemsInContainer() {
       this.itemsList = []; // reset
 
-      this.$page.props.items.forEach((e) => {
+      this.items.forEach((e) => {
         this.itemsList.push({
           cl2comb: e.cl2comb,
           cl2desc: e.cl2desc.trim(),
