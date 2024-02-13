@@ -95,9 +95,9 @@ class HandleInertiaRequests extends Middleware
             //         ->where('chrgtable', 'NONDR')
             //         ->get(['chrgcode', 'chrgdesc', 'bentypcod', 'chrgtable']);
             // },
-            'fundSource' => function () {
-                return FundSource::get(['id', 'fsid', 'fsName', 'cluster_code']);
-            },
+            // 'fundSource' => function () {
+            //     return FundSource::get(['id', 'fsid', 'fsName', 'cluster_code']);
+            // },
             'unitOfMeasurement' => function () {
                 return UnitOfMeasurement::get(['uomcode', 'uomdesc', 'uomstat']);
             },
