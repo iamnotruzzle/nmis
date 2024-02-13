@@ -98,9 +98,9 @@ class HandleInertiaRequests extends Middleware
             // 'fundSource' => function () {
             //     return FundSource::get(['id', 'fsid', 'fsName', 'cluster_code']);
             // },
-            'unitOfMeasurement' => function () {
-                return UnitOfMeasurement::get(['uomcode', 'uomdesc', 'uomstat']);
-            },
+            // 'unitOfMeasurement' => function () {
+            //     return UnitOfMeasurement::get(['uomcode', 'uomdesc', 'uomstat']);
+            // },
 
 
 

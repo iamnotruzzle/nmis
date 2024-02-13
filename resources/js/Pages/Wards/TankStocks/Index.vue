@@ -861,6 +861,7 @@ export default {
     requestedStocks: Object,
     currentWardStocks: Object,
     tankList: Object,
+    unitOfMeasurement: Object,
   },
   data() {
     return {
@@ -1064,7 +1065,7 @@ export default {
 
       this.currentWardStocks.forEach((e) => {
         const matchingTank = this.tankList.find((x) => e.itemcode === x.itemcode);
-        const unit = this.$page.props.unitOfMeasurement.find((x) => matchingTank.unitcode === x.uomcode);
+        const unit = this.unitOfMeasurement.find((x) => matchingTank.unitcode === x.uomcode);
 
         this.currentWardStocksList.push({
           id: e.id,
