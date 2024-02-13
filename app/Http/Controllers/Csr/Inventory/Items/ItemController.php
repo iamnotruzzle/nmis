@@ -38,7 +38,7 @@ class ItemController extends Controller
             )
             // ->where('cl2stat', 'A')
             ->orderBy('cl2desc', 'ASC')
-            ->paginate(15);
+            ->paginate(10);
 
         return Inertia::render('Csr/Inventory/Items/Index', [
             'cl1combs' => $cl1combs,

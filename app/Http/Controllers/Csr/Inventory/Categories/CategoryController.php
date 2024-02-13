@@ -29,7 +29,7 @@ class CategoryController extends Controller
                 }
             )
             ->orderBy('dateasof', 'DESC')
-            ->paginate(15);
+            ->paginate(5);
 
         return Inertia::render('Csr/Inventory/Categories/Index', [
             'mainCategory' => $mainCategory,
