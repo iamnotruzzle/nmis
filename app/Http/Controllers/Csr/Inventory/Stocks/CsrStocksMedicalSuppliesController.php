@@ -7,6 +7,7 @@ use App\Models\Brand;
 use App\Models\CsrStocksMedicalSupplies;
 use App\Models\CsrStocksMedicalSuppliesLogs;
 use App\Models\Item;
+use App\Models\TypeOfCharge;
 use Carbon\Carbon;
 // use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Validation\Rule;
@@ -88,11 +89,16 @@ class CsrStocksMedicalSuppliesController extends Controller
         // brands
         $brands = Brand::get();
 
+        $typeOfCharge = TypeOfCharge::where('chrgstat', 'A')
+            ->where('chrgtable', 'NONDR')
+            ->get(['chrgcode', 'chrgdesc', 'bentypcod', 'chrgtable']);
+
         return Inertia::render('Csr/Inventory/Stocks/Index', [
             'items' => $items,
             'stocks' => $stocks,
             'brands' => $brands,
             'totalStocks' => $totalStocks,
+            'typeOfCharge' => $typeOfCharge,
         ]);
     }
 

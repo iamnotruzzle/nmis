@@ -8,6 +8,7 @@ use App\Models\CsrStocksMedicalSupplies;
 use App\Models\CsrStocksMedicalSuppliesLogs;
 use App\Models\Item;
 use App\Models\RequestStocks;
+use App\Models\TypeOfCharge;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -89,6 +90,10 @@ class DashboardController extends Controller
             ->orderBy('expiration_date', 'asc')
             ->paginate(10);
 
+        $typeOfCharge = TypeOfCharge::where('chrgstat', 'A')
+            ->where('chrgtable', 'NONDR')
+            ->get(['chrgcode', 'chrgdesc', 'bentypcod', 'chrgtable']);
+
         // brands
         $brands = Brand::get();
 
@@ -100,6 +105,7 @@ class DashboardController extends Controller
             'items' => $items,
             'stocks' => $stocks,
             'brands' => $brands,
+            'typeOfCharge' => $typeOfCharge,
         ]);
     }
 

@@ -8,6 +8,7 @@ use App\Models\Brand;
 use App\Models\Item;
 use App\Models\RequestStocks;
 use App\Models\RequestStocksDetails;
+use App\Models\TypeOfCharge;
 use App\Models\WardsStocksMedSupp;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -83,6 +84,10 @@ class RequestStocksController extends Controller
 
         $brands = Brand::get();
 
+        $typeOfCharge = TypeOfCharge::where('chrgstat', 'A')
+            ->where('chrgtable', 'NONDR')
+            ->get(['chrgcode', 'chrgdesc', 'bentypcod', 'chrgtable']);
+
         return Inertia::render('Wards/Stocks/Index', [
             'items' => $items,
             'requestedStocks' => $requestedStocks,
@@ -90,6 +95,7 @@ class RequestStocksController extends Controller
             'currentWardStocks' => $currentWardStocks,
             'currentWardStocks2' => $currentWardStocks2,
             'brands' => $brands,
+            'typeOfCharge' => $typeOfCharge,
         ]);
     }
 

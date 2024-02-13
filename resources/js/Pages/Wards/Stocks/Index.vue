@@ -987,6 +987,7 @@ export default {
     currentWardStocks: Object,
     currentWardStocks2: Object,
     brands: Object,
+    typeOfCharge: Object,
   },
   data() {
     return {
@@ -1118,7 +1119,7 @@ export default {
       //   console.log(this.expandedRow);
     },
     storeFundSourceInContainer() {
-      this.$page.props.typeOfCharge.forEach((e) => {
+      this.typeOfCharge.forEach((e) => {
         this.fundSourceList.push({
           chrgcode: e.chrgcode,
           chrgdesc: e.chrgdesc,

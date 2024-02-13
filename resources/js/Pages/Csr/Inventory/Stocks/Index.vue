@@ -796,6 +796,7 @@ export default {
     stocks: Object,
     brands: Object,
     totalStocks: Object,
+    typeOfCharge: Object,
   },
   data() {
     return {
@@ -946,7 +947,7 @@ export default {
       }
     },
     storeFundSourceInContainer() {
-      this.$page.props.typeOfCharge.forEach((e) => {
+      this.typeOfCharge.forEach((e) => {
         this.fundSourceList.push({
           chrgcode: e.chrgcode,
           chrgdesc: e.chrgdesc,
