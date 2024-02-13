@@ -90,11 +90,11 @@ class HandleInertiaRequests extends Middleware
             //                     GROUP BY hdmhdr.dmdcomb, hdmhdr.dmdctr, hdmhdrsub.dmhdrsub, hdmhdrprice.unitcode, hdmhdrsub.dmdcomb, hgen.gendesc, hdmhdr.dmdnost, hdmhdr.dmdnnostp, hstre.stredesc, hform.formdesc, hroute.rtedesc;
             //             ");
             // },
-            'typeOfCharge' => function () {
-                return TypeOfCharge::where('chrgstat', 'A')
-                    ->where('chrgtable', 'NONDR')
-                    ->get(['chrgcode', 'chrgdesc', 'bentypcod', 'chrgtable']);
-            },
+            // 'typeOfCharge' => function () {
+            //     return TypeOfCharge::where('chrgstat', 'A')
+            //         ->where('chrgtable', 'NONDR')
+            //         ->get(['chrgcode', 'chrgdesc', 'bentypcod', 'chrgtable']);
+            // },
             'fundSource' => function () {
                 return FundSource::get(['id', 'fsid', 'fsName', 'cluster_code']);
             },
