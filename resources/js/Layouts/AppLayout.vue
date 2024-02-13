@@ -195,7 +195,7 @@ export default {
       //   use foreach instead of filter
       if (this.$page.props.user.designation == 'csr') {
         this.menu[0].items = this.menu[0].items.filter(function (obj) {
-          console.log(obj);
+          //   console.log(obj);
           if (obj.to == 'issueitems') {
             obj.badge = args;
           }

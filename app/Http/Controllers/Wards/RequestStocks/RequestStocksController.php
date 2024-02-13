@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Wards\RequestStocks;
 use App\Events\RequestStock;
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
+use App\Models\FundSource;
 use App\Models\Item;
 use App\Models\RequestStocks;
 use App\Models\RequestStocksDetails;
@@ -84,6 +85,8 @@ class RequestStocksController extends Controller
 
         $brands = Brand::get();
 
+        $fundSource = FundSource::get(['id', 'fsid', 'fsName', 'cluster_code']);
+
         $typeOfCharge = TypeOfCharge::where('chrgstat', 'A')
             ->where('chrgtable', 'NONDR')
             ->get(['chrgcode', 'chrgdesc', 'bentypcod', 'chrgtable']);
@@ -96,6 +99,7 @@ class RequestStocksController extends Controller
             'currentWardStocks2' => $currentWardStocks2,
             'brands' => $brands,
             'typeOfCharge' => $typeOfCharge,
+            'fundSource' => $fundSource,
         ]);
     }
 

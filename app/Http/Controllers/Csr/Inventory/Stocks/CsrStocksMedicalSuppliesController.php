@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use App\Models\CsrStocksMedicalSupplies;
 use App\Models\CsrStocksMedicalSuppliesLogs;
+use App\Models\FundSource;
 use App\Models\Item;
 use App\Models\TypeOfCharge;
 use Carbon\Carbon;
@@ -89,6 +90,8 @@ class CsrStocksMedicalSuppliesController extends Controller
         // brands
         $brands = Brand::get();
 
+        $fundSource = FundSource::get(['id', 'fsid', 'fsName', 'cluster_code']);
+
         $typeOfCharge = TypeOfCharge::where('chrgstat', 'A')
             ->where('chrgtable', 'NONDR')
             ->get(['chrgcode', 'chrgdesc', 'bentypcod', 'chrgtable']);
@@ -99,6 +102,7 @@ class CsrStocksMedicalSuppliesController extends Controller
             'brands' => $brands,
             'totalStocks' => $totalStocks,
             'typeOfCharge' => $typeOfCharge,
+            'fundSource' => $fundSource,
         ]);
     }
 

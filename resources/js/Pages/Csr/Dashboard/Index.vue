@@ -710,6 +710,7 @@ export default {
     stocks: Object,
     brands: Object,
     typeOfCharge: Object,
+    fundSource: Object,
   },
   data() {
     return {
@@ -878,7 +879,7 @@ export default {
         });
       });
 
-      this.$page.props.fundSource.forEach((e) => {
+      this.fundSource.forEach((e) => {
         this.fundSourceList.push({
           chrgcode: e.fsid,
           chrgdesc: e.fsName,
