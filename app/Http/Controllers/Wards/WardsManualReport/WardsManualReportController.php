@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Wards\WardsManualReport;
 
 use App\Http\Controllers\Controller;
+use App\Models\Item;
 use App\Models\WardsManualReport;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -47,8 +48,11 @@ class WardsManualReportController extends Controller
             ->where('wardcode', '=', $authWardcode->wardcode)
             ->paginate(15);
 
+        $items = Item::with('unit:uomcode,uomdesc')->where('cl2stat', 'A')->orderBy('cl2desc', 'ASC')->get();
+
         return Inertia::render('Wards/ManualReport/Index', [
-            'manual_reports' => $manual_reports
+            'manual_reports' => $manual_reports,
+            'items' => $items
         ]);
     }
 
