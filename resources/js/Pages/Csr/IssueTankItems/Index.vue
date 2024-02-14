@@ -230,6 +230,7 @@
           <div class="p-3">
             <DataTable
               paginator
+              showGridlines
               :rows="7"
               :value="expandedRow[0].request_stocks_details"
             >
@@ -299,6 +300,7 @@
             :value="requestStockListDetails"
             class="p-datatable-sm"
             paginator
+            showGridlines
             :rows="7"
           >
             <template #header>
