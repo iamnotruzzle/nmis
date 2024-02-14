@@ -60,7 +60,7 @@
         <Column
           header="CREATED AT"
           filterField="created_at"
-          style="min-width: 10rem"
+          style="width: 20%"
           :showFilterMenu="false"
         >
           <template #body="{ data }">
@@ -90,6 +90,7 @@
           field="status"
           header="STATUS"
           filterField="status"
+          style="width: 10%"
           :showFilterMenu="false"
         >
           <template #body="{ data }">
@@ -134,6 +135,7 @@
         <Column
           field="requested_by"
           header="PENDING BY"
+          style="width: 20%"
         >
           <template #body="{ data }">
             <div class="flex flex-row align-items-center">
@@ -157,6 +159,7 @@
         <Column
           field="approved_by"
           header="APPROVED BY"
+          style="width: 20%"
         >
           <template #body="{ data }">
             <div class="flex flex-row align-items-center">
@@ -181,12 +184,16 @@
         <Column
           field="requested_at"
           header="PENDING AT"
+          style="width: 20%"
         >
           <template #body="{ data }">
             {{ data.requested_at }}
           </template>
         </Column>
-        <Column header="ACTION">
+        <Column
+          header="ACTION"
+          style="width: 10%"
+        >
           <template #body="slotProps">
             <div class="text-center">
               <Button
@@ -248,6 +255,7 @@
               <Column
                 field="item"
                 header="ITEM"
+                style="width: 50%"
               >
                 <template #body="{ data }">
                   {{ getTankDesc(data) }}
@@ -257,14 +265,17 @@
               <Column
                 field="requested_qty"
                 header="PENDING QTY"
+                style="width: 20%"
               ></Column>
               <Column
                 field="approved_qty"
                 header="APPROVED QTY"
+                style="width: 20%"
               ></Column>
               <Column
                 field="remarks"
                 header="REMARKS"
+                style="width: 10%"
               ></Column>
             </DataTable>
           </div>
@@ -278,6 +289,7 @@
         header="Requested stock"
         :modal="true"
         class="p-fluid"
+        showGridlines
         @hide="whenDialogIsHidden"
       >
         <div class="field">
@@ -303,15 +315,18 @@
             <Column
               field="itemDesc"
               header="PENDING ITEM"
+              style="width: 50%"
               sortable
             ></Column>
             <Column
               field="requested_qty"
               header="PENDING QTY"
+              style="width: 15%"
             ></Column>
             <Column
               field="approved_qty"
               header="APPROVED QTY"
+              style="width: 15%"
             >
               <template #body="slotProps">
                 <InputText
@@ -327,6 +342,7 @@
             <Column
               field="remarks"
               header="REMARKS (OPTIONAL)"
+              style="width: 20%"
             >
               <template #body="slotProps">
                 <Textarea

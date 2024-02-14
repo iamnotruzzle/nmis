@@ -60,7 +60,7 @@
         <Column
           header="CREATED AT"
           filterField="created_at"
-          style="min-width: 10rem"
+          style="width: 20%"
           :showFilterMenu="false"
         >
           <template #body="{ data }">
@@ -91,6 +91,7 @@
           header="STATUS"
           filterField="status"
           :showFilterMenu="false"
+          style="width: 10%"
         >
           <template #body="{ data }">
             <div class="text-center">
@@ -134,6 +135,7 @@
         <Column
           field="requested_by"
           header="PENDING BY"
+          style="width: 20%"
         >
           <template #body="{ data }">
             <div class="flex flex-row align-items-center">
@@ -157,6 +159,7 @@
         <Column
           field="approved_by"
           header="APPROVED BY"
+          style="width: 20%"
         >
           <template #body="{ data }">
             <div class="flex flex-row align-items-center">
@@ -181,12 +184,16 @@
         <Column
           field="requested_at"
           header="REQUESTED AT"
+          style="width: 20%"
         >
           <template #body="{ data }">
             {{ data.requested_at }}
           </template>
         </Column>
-        <Column header="ACTION">
+        <Column
+          header="ACTION"
+          style="width: 10%"
+        >
           <template #body="slotProps">
             <div class="text-center">
               <Button
@@ -255,21 +262,27 @@
                   </div>
                 </div>
               </template>
-              <Column header="ITEM">
+              <Column
+                header="ITEM"
+                style="width: 50%"
+              >
                 <template #body="{ data }"> {{ data.item_details.cl2desc }} </template>
               </Column>
               <Column
                 field="requested_qty"
                 header="PENDING QTY"
+                style="width: 20%"
               >
               </Column>
               <Column
                 field="approved_qty"
                 header="APPROVED QTY"
+                style="width: 20%"
               ></Column>
               <Column
                 field="remarks"
                 header="REMARKS"
+                style="width: 10%"
               ></Column>
             </DataTable>
           </div>
@@ -292,6 +305,7 @@
             :value="requestStockListDetails"
             class="p-datatable-sm"
             paginator
+            showGridlines
             :rows="7"
           >
             <template #header>
@@ -314,16 +328,19 @@
             <Column
               field="cl2desc"
               header="PENDING ITEM"
+              style="width: 50%"
               sortable
             ></Column>
             <Column
               field="requested_qty"
               header="PENDING QTY"
+              style="width: 10%"
             ></Column>
             <Column
               v-if="isUpdate"
               field="stock_qty"
               header="Current stock including approved qty"
+              style="width: 10%"
             >
               <template #body="{ data }">
                 {{ data.stock_w_approved }}
@@ -333,10 +350,12 @@
               v-else
               field="stock_qty"
               header="TOTAL STOCK"
+              style="width: 10%"
             ></Column>
             <Column
               field="approved_qty"
               header="APPROVED QTY"
+              style="width: 10%"
             >
               <template #body="slotProps">
                 <InputText
@@ -352,6 +371,7 @@
             <Column
               field="remarks"
               header="REMARKS (OPTIONAL)"
+              style="width: 20%"
             >
               <template #body="slotProps">
                 <Textarea
