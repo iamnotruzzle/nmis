@@ -640,7 +640,7 @@
         v-model:visible="consignmentDialog"
         header="Consignment"
         :modal="true"
-        class="p-fluid w-5"
+        class="p-fluid w-3"
         @hide="whenDialogIsHidden"
       >
         <div class="field">
