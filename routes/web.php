@@ -62,66 +62,70 @@ use Maatwebsite\Excel\Facades\Excel;
 
 Route::redirect('/', 'login');
 
-Route::resource('dashboard', DashboardController::class)->middleware(['auth:sanctum', 'verified'])->only(['index']);
+Route::middleware(['auth:sanctum'])->group(
+    function () {
+        Route::resource('dashboard', DashboardController::class)->middleware(['verified'])->only(['index']);
 
-// admin routes
-Route::resource('admindashboard', AdminDashboardController::class)->middleware(['auth:sanctum', 'verified', 'designation_admin'])->only(['index', 'store', 'update', 'destroy']);
-Route::resource('users', UserController::class)->middleware(['auth:sanctum', 'verified', 'designation_admin'])->only(['index', 'store', 'update', 'destroy']);
-Route::resource('profile', ProfileController::class)->middleware(['auth:sanctum', 'verified'])->only(['store']);
-// end admin routes
+        // admin routes
+        Route::resource('admindashboard', AdminDashboardController::class)->middleware(['verified', 'designation_admin'])->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('users', UserController::class)->middleware(['verified', 'designation_admin'])->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('profile', ProfileController::class)->middleware(['verified'])->only(['store']);
+        // end admin routes
 
-// csr routes
-Route::resource('csrdashboard', CsrDashboardController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
-Route::resource('categories', CategoryController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
-Route::resource('subcategories', SubCategoryController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
-Route::resource('items', ItemController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
-Route::resource('itemprices', ItemPriceController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
-Route::resource('brands', BrandController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
-Route::resource('csrstocks', CsrStocksMedicalSuppliesController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
-Route::resource('issueitems', IssueItemController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
-Route::get('issueitems/issued/', [IssuedItemsReportController::class, 'export']);
-Route::put('issueitems', [IssueItemController::class, 'acknowledgedrequest'])->name('issueitems.acknowledgedrequest');
-// Issue tank items
-Route::resource('issuetankitems', IssueTankItemsController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
-Route::get('issuetankitems/issued/', [IssuedTankItemsReportController::class, 'export']);
-Route::put('issuetankitems', [IssueTankItemsController::class, 'acknowledgedrequest'])->name('issuetankitems.acknowledgedrequest');
+        // csr routes
+        Route::resource('csrdashboard', CsrDashboardController::class)->middleware(['verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('categories', CategoryController::class)->middleware(['verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('subcategories', SubCategoryController::class)->middleware(['verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('items', ItemController::class)->middleware(['verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('itemprices', ItemPriceController::class)->middleware(['verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('brands', BrandController::class)->middleware(['verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('csrstocks', CsrStocksMedicalSuppliesController::class)->middleware(['verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('issueitems', IssueItemController::class)->middleware(['verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
+        Route::get('issueitems/issued/', [IssuedItemsReportController::class, 'export']);
+        Route::put('issueitems', [IssueItemController::class, 'acknowledgedrequest'])->name('issueitems.acknowledgedrequest');
+        // Issue tank items
+        Route::resource('issuetankitems', IssueTankItemsController::class)->middleware(['verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
+        Route::get('issuetankitems/issued/', [IssuedTankItemsReportController::class, 'export']);
+        Route::put('issuetankitems', [IssueTankItemsController::class, 'acknowledgedrequest'])->name('issuetankitems.acknowledgedrequest');
 
-Route::resource('csrreports', ReportsController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index']);
-Route::resource('csrmanualreports', CsrManualReportController::class)->middleware(['auth:sanctum', 'verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
-Route::get('csrstocks/export/', [CsrStocksMedicalSuppliesReportController::class, 'export']);
-Route::get('csrmanualreports/export/', [CsrManualReportExportController::class, 'export']);
-Route::resource('stockbal', LocationStockBalanceController::class)->middleware(['auth:sanctum', 'verified'])->only(['index', 'store', 'update', 'destroy']);
-Route::resource('tankstockbal', LocationTankStockBalanceController::class)->middleware(['auth:sanctum', 'verified'])->only(['index', 'store', 'update', 'destroy']);
-// Route::resource('csrstocks/export/', [CsrStocksReportController::class, 'export'])->only(['index']);
-// end csr routes
+        Route::resource('csrreports', ReportsController::class)->middleware(['verified', 'designation_csr'])->only(['index']);
+        Route::resource('csrmanualreports', CsrManualReportController::class)->middleware(['verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
+        Route::get('csrstocks/export/', [CsrStocksMedicalSuppliesReportController::class, 'export']);
+        Route::get('csrmanualreports/export/', [CsrManualReportExportController::class, 'export']);
+        Route::resource('stockbal', LocationStockBalanceController::class)->middleware(['verified'])->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('tankstockbal', LocationTankStockBalanceController::class)->middleware(['verified'])->only(['index', 'store', 'update', 'destroy']);
+        // Route::resource('csrstocks/export/', [CsrStocksReportController::class, 'export'])->only(['index']);
+        // end csr routes
 
 
-// ward routes
-Route::resource('warddashboard', WardDashboardController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
-// medical supplies
-Route::resource('requeststocks', RequestStocksController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
-Route::put('requeststocks', [RequestStocksController::class, 'updatedeliverystatus'])->name('requeststocks.updatedeliverystatus');
-// end medical supplies
+        // ward routes
+        Route::resource('warddashboard', WardDashboardController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
+        // medical supplies
+        Route::resource('requeststocks', RequestStocksController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
+        Route::put('requeststocks', [RequestStocksController::class, 'updatedeliverystatus'])->name('requeststocks.updatedeliverystatus');
+        // end medical supplies
 
-// tanks
-Route::resource('requesttankstocks', RequestTankStocksController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
-Route::put('requesttankstocks', [RequestTankStocksController::class, 'updatedeliverystatus'])->name('requesttankstocks.updatedeliverystatus');
-Route::resource('wardtankstocks', WardTankStocksController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
-// end tanks
+        // tanks
+        Route::resource('requesttankstocks', RequestTankStocksController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
+        Route::put('requesttankstocks', [RequestTankStocksController::class, 'updatedeliverystatus'])->name('requesttankstocks.updatedeliverystatus');
+        Route::resource('wardtankstocks', WardTankStocksController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
+        // end tanks
 
-Route::resource('convertitem', ConvertItemController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
-Route::resource('converttank', ConvertTankController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
-Route::resource('consignment', WardConsignmentController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
-Route::resource('consignmenttank', WardConsignmentTankController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
-Route::resource('wardreports', ReportController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index']);
-Route::get('wardstocks/export/', [WardStocksReportController::class, 'export']);
-Route::resource('wardsmanualreports', WardsManualReportController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
-Route::get('wardsmanualreports/export/', [WardsManualReportExportController::class, 'export']);
+        Route::resource('convertitem', ConvertItemController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('converttank', ConvertTankController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('consignment', WardConsignmentController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('consignmenttank', WardConsignmentTankController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('wardreports', ReportController::class)->middleware(['verified', 'designation_ward'])->only(['index']);
+        Route::get('wardstocks/export/', [WardStocksReportController::class, 'export']);
+        Route::resource('wardsmanualreports', WardsManualReportController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
+        Route::get('wardsmanualreports/export/', [WardsManualReportExportController::class, 'export']);
 
-Route::resource('wardspatients', WardPatientsController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
-Route::resource('patientcharge', PatientChargeController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
-Route::resource('wardsstockslogs', WardsStocksLogsController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('wardspatients', WardPatientsController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('patientcharge', PatientChargeController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('wardsstockslogs', WardsStocksLogsController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
 
-Route::resource('transferstock', TransferStockController::class)->middleware(['auth:sanctum', 'verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
-Route::put('transferstock', [TransferStockController::class, 'updatetransferstatus', 'designation_ward'])->name('transferstock.updatetransferstatus');
-// end ward routes
+        Route::resource('transferstock', TransferStockController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
+        Route::put('transferstock', [TransferStockController::class, 'updatetransferstatus', 'designation_ward'])->name('transferstock.updatetransferstatus');
+        // end ward routes
+    }
+);
