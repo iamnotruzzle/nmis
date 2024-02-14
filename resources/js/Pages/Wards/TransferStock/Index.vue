@@ -43,32 +43,32 @@
         <Column
           field="from"
           header="FROM"
-          style="min-width: 12rem"
-        >
-        </Column>
-        <Column
-          field="brand_name"
-          header="BRAND"
-          style="min-width: 12rem"
+          style="width: 20%"
         >
         </Column>
         <Column
           field="cl2desc"
           header="ITEM"
-          style="min-width: 12rem"
+          style="width: 30%"
+        >
+        </Column>
+        <Column
+          field="brand_name"
+          header="BRAND"
+          style="width: 20%"
         >
         </Column>
         <Column
           field="quantity"
           header="QUANTITY"
           sortable
-          style="min-width: 12rem"
+          style="width: 5%"
         >
         </Column>
         <Column
           header="EXP. DATE"
           sortable
-          style="min-width: 12rem"
+          style="width: 15%"
         >
           <template #body="{ data }">
             {{ tzone(data.expiration_date) }}
@@ -76,7 +76,7 @@
         </Column>
         <Column
           header="ACTION"
-          style="min-width: 12rem"
+          style="width: 10%"
         >
           <template #body="slotProps">
             <Button
@@ -127,33 +127,39 @@
             <template #empty> No data found. </template>
             <template #loading> Loading data. Please wait. </template>
             <Column
-              field="brand"
-              header="BRAND"
+              field="item"
+              header="ITEM"
+              style="width: 30%"
             >
             </Column>
             <Column
-              field="item"
-              header="ITEM"
+              field="brand"
+              header="BRAND"
+              style="width: 20%"
             >
             </Column>
             <Column
               field="quantity"
               header="QUANTITY"
+              style="width: 10%"
             >
             </Column>
             <Column
               field="expiration_date"
               header="EXP. DATE"
+              style="width: 10%"
             >
             </Column>
             <Column
               field="to"
               header="TO"
+              style="width: 20%"
             >
             </Column>
             <Column
               field="status"
               header="STATUS"
+              style="width: 10%"
             >
               <template #body="slotProps">
                 <Tag
@@ -206,31 +212,39 @@
             <template #empty> No data found. </template>
             <template #loading> Loading data. Please wait. </template>
             <Column
-              field="brand"
-              header="BRAND"
+              field="item"
+              header="ITEM"
+              style="width: 30%"
             >
             </Column>
             <Column
-              field="item"
-              header="ITEM"
+              field="brand"
+              header="BRAND"
+              style="width: 20%"
             >
             </Column>
             <Column
               field="quantity"
               header="QUANTITY"
+              style="width: 10%"
             >
             </Column>
             <Column
               field="expiration_date"
               header="EXP. DATE"
+              style="width: 10%"
             >
             </Column>
             <Column
               field="from"
               header="FROM"
+              style="width: 20%"
             >
             </Column>
-            <Column header="ACTION">
+            <Column
+              header="ACTION"
+              style="width: 10%"
+            >
               <template #body="slotProps">
                 <!-- <i
                   v-if="slotProps.data.status != 'RECEIVED'"
