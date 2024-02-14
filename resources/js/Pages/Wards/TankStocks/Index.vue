@@ -64,12 +64,16 @@
             </div>
           </div>
         </template>
-        <Column expander />
+        <Column
+          expander
+          style="width: 5%"
+        />
         <template #empty> No requested stock found. </template>
         <template #loading> Loading requested stock data. Please wait. </template>
         <Column
           header="CREATED AT"
           filterField="created_at"
+          style="width: 20%"
           :showFilterMenu="false"
         >
           <template #body="{ data }">
@@ -98,6 +102,7 @@
         <Column
           field="status"
           header="STATUS"
+          style="width: 10%"
         >
           <template #body="{ data }">
             <div class="flex justify-content-center align-content-center">
@@ -139,6 +144,7 @@
         <Column
           field="requested_by"
           header="PENDING BY"
+          style="width: 30%"
         >
           <template #body="{ data }">
             <div class="flex flex-row align-items-center">
@@ -162,6 +168,7 @@
         <Column
           field="approved_by"
           header="APPROVED BY"
+          style="width: 30%"
         >
           <template #body="{ data }">
             <div class="flex flex-row align-items-center">
@@ -183,7 +190,10 @@
             </div>
           </template>
         </Column>
-        <Column header="ACTION">
+        <Column
+          header="ACTION"
+          style="width: 5%"
+        >
           <template #body="slotProps">
             <div class="flex justify-content-around align-content-center">
               <v-icon
@@ -221,6 +231,7 @@
               <Column
                 field="item"
                 header="ITEM"
+                style="width: 60%"
               >
                 <template #body="{ data }">
                   {{ getTankDesc(data) }}
@@ -229,10 +240,12 @@
               <Column
                 field="requested_qty"
                 header="PENDING QTY"
+                style="width: 10%"
               ></Column>
               <Column
                 field="approved_qty"
                 header="APPROVED QTY"
+                style="width: 30%"
               ></Column>
             </DataTable>
           </div>
@@ -421,14 +434,19 @@
             <Column
               field="itemDesc"
               header="PENDING ITEM"
+              style="width: 70%"
               sortable
             ></Column>
             <Column
               field="requested_qty"
               header="QTY"
+              style="width: 20%"
               sortable
             ></Column>
-            <Column header="">
+            <Column
+              header=""
+              style="width: 10%"
+            >
               <template #body="slotProps">
                 <Button
                   icon="pi pi-times"
