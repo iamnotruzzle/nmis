@@ -68,16 +68,18 @@
           :showFilterMenu="false"
         >
           <template #body="{ data }">
-            <Tag
-              v-if="data.ptstat == 'A'"
-              value="ACTIVE"
-              severity="success"
-            />
-            <Tag
-              v-else
-              value="INACTIVE"
-              severity="danger"
-            />
+            <div class="text-center">
+              <Tag
+                v-if="data.ptstat == 'A'"
+                value="ACTIVE"
+                severity="success"
+              />
+              <Tag
+                v-else
+                value="INACTIVE"
+                severity="danger"
+              />
+            </div>
           </template>
           <template #filter="{}">
             <Dropdown

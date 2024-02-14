@@ -49,7 +49,7 @@
         <Column
           field="cl2code"
           header="PRE CODE"
-          style="min-width: 12rem"
+          style="width: 10%"
         >
           <template #body="{ data }">
             {{ data.cl2code }}
@@ -58,7 +58,7 @@
         <Column
           field="cl2comb"
           header="MAIN + SUB-CATEGORY CODE + PRE CODE"
-          style="min-width: 12rem"
+          style="width: 15%"
         >
           <template #body="{ data }">
             {{ data.cl2comb }}
@@ -67,7 +67,7 @@
         <Column
           field="cl2desc"
           header="DESCRIPTION"
-          style="min-width: 12rem"
+          style="width: 50%"
         >
           <template #body="{ data }">
             {{ data.cl2desc }}
@@ -76,7 +76,7 @@
         <Column
           field="unit"
           header="UNIT"
-          style="min-width: 12rem"
+          style="width: 5%"
         >
           <template #body="{ data }">
             {{ data.uomcode }}
@@ -85,20 +85,22 @@
         <Column
           field="cl2stat"
           header="STATUS"
-          style="min-width: 12rem"
+          style="width: 10%"
           :showFilterMenu="false"
         >
           <template #body="{ data }">
-            <Tag
-              v-if="data.cl2stat == 'A'"
-              value="ACTIVE"
-              severity="success"
-            />
-            <Tag
-              v-else
-              value="INACTIVE"
-              severity="danger"
-            />
+            <div class="text-center">
+              <Tag
+                v-if="data.cl2stat == 'A'"
+                value="ACTIVE"
+                severity="success"
+              />
+              <Tag
+                v-else
+                value="INACTIVE"
+                severity="danger"
+              />
+            </div>
           </template>
           <template #filter="{}">
             <Dropdown
@@ -113,7 +115,7 @@
         </Column>
         <Column
           header="ACTION"
-          style="min-width: 12rem"
+          style="width: 10%"
         >
           <template #body="slotProps">
             <Button
@@ -135,94 +137,104 @@
           </template>
         </Column>
         <template #expansion="slotProps">
-          <div class="max-w-full flex flex-column align-items-center">
-            <!-- {{ slotProps.data }} -->
+          <div class="max-w-full flex justify-content-center">
+            <div class="w-11 flex flex-column align-items-center">
+              <!-- {{ slotProps.data }} -->
 
-            <div class="flex align-items-center w-full">
-              <div class="text-2xl font-bold my-3">
-                Prices for <span class="text-cyan-500 hover:text-cyan-700">[ {{ slotProps.data.cl2desc }} ]</span>
-              </div>
-
-              <Button
-                label="Add price"
-                icon="pi pi-plus"
-                iconPos="right"
+              <DataTable
+                paginator
+                :rows="5"
+                class="w-9"
+                showGridlines
+                :value="expandedRow[0].prices"
                 size="small"
-                class="ml-2 my-0"
-                @click="openCreateItemPriceDialog(slotProps.data)"
-              />
-            </div>
+              >
+                <template #header>
+                  <div class="flex justify-content-between w-full">
+                    <div class="text-xl font-bold my-3">
+                      Prices for <span class="text-cyan-500 hover:text-cyan-700">[ {{ slotProps.data.cl2desc }} ]</span>
+                    </div>
 
-            <DataTable
-              paginator
-              :rows="5"
-              class="w-full"
-              :value="expandedRow[0].prices"
-            >
-              <Column
-                field="selling_price"
-                header="SELLING PRICE"
-              >
-              </Column>
-              <Column header="ENTRY BY">
-                <template #body="{ data }">
-                  <span v-if="data.user_detail === null"></span>
-                  <span v-else>
-                    {{ data.user_detail.firstname }} {{ data.user_detail.middlename }} {{ data.user_detail.lastname }}
-                    {{ data.user_detail.empsuffix }}
-                  </span>
+                    <Button
+                      label="Add price"
+                      icon="pi pi-plus"
+                      iconPos="right"
+                      size="small"
+                      class="ml-2 my-0"
+                      @click="openCreateItemPriceDialog(slotProps.data)"
+                    />
+                  </div>
                 </template>
-              </Column>
-              <Column
-                field="created_at"
-                header="CREATED AT"
-              >
-                <template #body="{ data }">
-                  {{ tzone(data.created_at) }}
-                </template>
-              </Column>
-              <Column
-                header="ACTION"
-                style="min-width: 12rem"
-              >
-                <template #body="slotProps">
-                  <Button
-                    icon="pi pi-pencil"
-                    class="mr-1"
-                    rounded
-                    text
-                    severity="warning"
-                    @click="editPrice(slotProps.data)"
+                <Column
+                  field="selling_price"
+                  header="SELLING PRICE"
+                  style="width: 20%"
+                >
+                </Column>
+                <Column
+                  header="ENTRY BY"
+                  style="width: 50%"
+                >
+                  <template #body="{ data }">
+                    <span v-if="data.user_detail === null"></span>
+                    <span v-else>
+                      {{ data.user_detail.firstname }} {{ data.user_detail.middlename }} {{ data.user_detail.lastname }}
+                      {{ data.user_detail.empsuffix }}
+                    </span>
+                  </template>
+                </Column>
+                <Column
+                  field="created_at"
+                  header="CREATED AT"
+                  style="width: 20%"
+                >
+                  <template #body="{ data }">
+                    {{ tzone(data.created_at) }}
+                  </template>
+                </Column>
+                <Column
+                  header="ACTION"
+                  style="width: 10%"
+                >
+                  <template #body="slotProps">
+                    <Button
+                      icon="pi pi-pencil"
+                      class="mr-1"
+                      rounded
+                      text
+                      severity="warning"
+                      @click="editPrice(slotProps.data)"
+                    />
+
+                    <Button
+                      icon="pi pi-trash"
+                      rounded
+                      text
+                      severity="danger"
+                      @click="confirmDeletePrice(slotProps.data)"
+                    />
+                  </template>
+                </Column>
+              </DataTable>
+
+              <div class="w-11 flex flex-column">
+                <div class="text-2xl font-bold mt-4 flex justify-content-around align-items-center w-full">
+                  <span>Price changes</span>
+                  <Dropdown
+                    v-model="dateFilter"
+                    :options="dateFilterList"
+                    optionLabel="name"
+                    optionValue="value"
+                    class="w-full md:w-14rem"
                   />
+                </div>
 
-                  <Button
-                    icon="pi pi-trash"
-                    rounded
-                    text
-                    severity="danger"
-                    @click="confirmDeletePrice(slotProps.data)"
-                  />
-                </template>
-              </Column>
-            </DataTable>
-
-            <div class="w-11 flex flex-column">
-              <div class="text-2xl font-bold mt-4 flex justify-content-around align-items-center">
-                <span>Price changes</span>
-                <Dropdown
-                  v-model="dateFilter"
-                  :options="dateFilterList"
-                  optionLabel="name"
-                  optionValue="value"
-                  class="w-full md:w-14rem"
+                <v-chart
+                  class="h-30rem w-full ma-0 pa-0"
+                  :option="priceChangesOptions(slotProps.data)"
+                  autoresize
                 />
               </div>
-
-              <v-chart
-                class="h-30rem w-full ma-0 pa-0"
-                :option="priceChangesOptions(slotProps.data)"
-                autoresize
-              />
             </div>
           </div>
         </template>
