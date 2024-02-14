@@ -66,7 +66,7 @@
         <Column
           field="item"
           header="ITEM"
-          style="min-width: 12rem"
+          style="width: 30%"
         >
           <template #body="{ data }">
             {{ data.itemDesc }}
@@ -75,7 +75,7 @@
         <Column
           field="ending_balance"
           header="ENDING BALANCE"
-          style="min-width: 12rem"
+          style="width: 5%"
         >
           <template #body="{ data }">
             {{ data.ending_balance }}
@@ -84,7 +84,7 @@
         <Column
           field="beginning_balance"
           header="STARTING BALANCE"
-          style="min-width: 12rem"
+          style="width: 5%"
         >
           <template #body="{ data }">
             {{ data.beginning_balance }}
@@ -93,7 +93,7 @@
         <Column
           field="entry_by"
           header="ENTRY BY"
-          style="min-width: 12rem"
+          style="width: 15%"
         >
           <template #body="{ data }">
             {{ data.entry_by }}
@@ -102,7 +102,7 @@
         <Column
           field="updated_by"
           header="UPDATED BY"
-          style="min-width: 12rem"
+          style="width: 15%"
         >
           <template #body="{ data }">
             {{ data.updated_by }}
@@ -111,7 +111,7 @@
         <Column
           header="CREATED AT"
           filterField="created_at"
-          style="min-width: 10rem"
+          style="width: 20%"
           :showFilterMenu="false"
         >
           <template #body="{ data }">
@@ -139,7 +139,7 @@
         </Column>
         <Column
           header="ACTION"
-          style="min-width: 12rem"
+          style="width: 10%"
         >
           <template #body="slotProps">
             <Button
