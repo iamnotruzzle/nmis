@@ -357,10 +357,12 @@
               <Column
                 field="item"
                 header="ITEM"
+                style="width: 80%"
               ></Column>
               <Column
                 field="expiration_date"
                 header="EXP. DATE"
+                style="width: 20%"
               >
                 <template #body="{ data }">
                   {{ tzone(data.expiration_date) }}
