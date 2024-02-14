@@ -62,12 +62,16 @@
             </div>
           </div>
         </template>
-        <Column expander />
+        <Column
+          expander
+          style="width: 5%"
+        />
         <template #empty> No requested stock found. </template>
         <template #loading> Loading requested stock data. Please wait. </template>
         <Column
           header="CREATED AT"
           filterField="created_at"
+          style="width: 20%"
           :showFilterMenu="false"
         >
           <template #body="{ data }">
@@ -96,6 +100,7 @@
         <Column
           field="status"
           header="STATUS"
+          style="width: 10%"
         >
           <template #body="{ data }">
             <div class="flex justify-content-center align-content-center">
@@ -136,7 +141,8 @@
         </Column>
         <Column
           field="requested_by"
-          header="PENDING BY"
+          header="REQUESTED BY"
+          style="width: 30%"
         >
           <template #body="{ data }">
             <div class="flex flex-row align-items-center">
@@ -160,6 +166,7 @@
         <Column
           field="approved_by"
           header="APPROVED BY"
+          style="width: 30%"
         >
           <template #body="{ data }">
             <div class="flex flex-row align-items-center">
@@ -181,7 +188,10 @@
             </div>
           </template>
         </Column>
-        <Column header="ACTION">
+        <Column
+          header="ACTION"
+          style="width: 5%"
+        >
           <template #body="slotProps">
             <div class="flex justify-content-around align-content-center">
               <v-icon
@@ -219,6 +229,7 @@
               <Column
                 field="item"
                 header="ITEM"
+                style="width: 60%"
               >
                 <template #body="{ data }">
                   {{ data.item_details.cl2desc }}
@@ -227,10 +238,12 @@
               <Column
                 field="requested_qty"
                 header="PENDING QTY"
+                style="width: 10%"
               ></Column>
               <Column
                 field="approved_qty"
                 header="APPROVED QTY"
+                style="width: 30%"
               ></Column>
             </DataTable>
           </div>
@@ -249,7 +262,6 @@
         removableSort
         sortField="expiration_date"
         :sortOrder="1"
-        filterDisplay="row"
         showGridlines
         :loading="loading"
       >
@@ -278,21 +290,14 @@
         <Column
           field="from"
           header="FROM"
+          style="width: 20%"
           sortable
         >
-        </Column>
-        <Column
-          field="brand"
-          header="BRAND"
-          sortable
-        >
-          <template #body="{ data }">
-            {{ data.brand }}
-          </template>
         </Column>
         <Column
           field="item"
           header="ITEM"
+          style="width: 30%"
           sortable
         >
           <template #body="{ data }">
@@ -300,14 +305,26 @@
           </template>
         </Column>
         <Column
+          field="brand"
+          header="BRAND"
+          style="width: 10%"
+          sortable
+        >
+          <template #body="{ data }">
+            {{ data.brand }}
+          </template>
+        </Column>
+        <Column
           field="unit"
           header="UNIT"
+          style="width: 10%"
           sortable
         >
         </Column>
         <Column
           field="quantity"
           header="QUANTITY"
+          style="width: 5%"
           sortable
         >
           <template #body="{ data }">
@@ -317,6 +334,7 @@
         <Column
           field="expiration_date"
           header="EXPIRATION DATE"
+          style="width: 15%"
           sortable
         >
           <template #body="{ data }">
@@ -339,7 +357,10 @@
             </div>
           </template>
         </Column>
-        <Column header="ACTION">
+        <Column
+          header="ACTION"
+          style="width: 10%"
+        >
           <template #body="slotProps">
             <div class="flex justify-content-center">
               <Button
@@ -441,14 +462,19 @@
             <Column
               field="cl2desc"
               header="PENDING ITEM"
+              style="width: 70%"
               sortable
             ></Column>
             <Column
               field="requested_qty"
               header="PENDING QTY"
+              style="width: 20%"
               sortable
             ></Column>
-            <Column header="">
+            <Column
+              header=""
+              style="width: 10%"
+            >
               <template #body="slotProps">
                 <Button
                   icon="pi pi-times"
