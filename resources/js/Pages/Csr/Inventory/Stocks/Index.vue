@@ -48,36 +48,43 @@
         <Column
           field="ris_no"
           header="RIS NO."
+          style="width: 5%"
         >
         </Column>
         <Column
           field="suppname"
           header="SUPPLIER"
+          style="width: 10%"
         >
         </Column>
         <Column
           field="chrgdesc"
           header="FUND SOURCE"
+          style="width: 10%"
         >
         </Column>
         <Column
           field="cl2desc"
           header="ITEM"
+          style="width: 20%"
         >
         </Column>
         <Column
           field="uomdesc"
           header="UNIT"
+          style="width: 5%"
         >
         </Column>
         <Column
           field="brand_name"
           header="BRAND"
+          style="width: 5%"
         >
         </Column>
         <Column
           field="quantity"
           header="QTY"
+          style="width: 5%"
         >
           <template #body="{ data }">
             <span
@@ -95,6 +102,7 @@
         <Column
           field="manufactured_date"
           header="MFD. DATE"
+          style="width: 10%"
           :showFilterMenu="false"
         >
           <template #body="{ data }">
@@ -123,6 +131,7 @@
         <Column
           field="delivered_date"
           header="DD. DATE"
+          style="width: 10%"
           :showFilterMenu="false"
         >
           <template #body="{ data }">
@@ -150,6 +159,7 @@
         <Column
           field="expiration_date"
           header="EXP. DATE"
+          style="width: 10%"
           :showFilterMenu="false"
         >
           <template #body="{ data }">
@@ -189,7 +199,10 @@
             />
           </template>
         </Column>
-        <Column header="STATUS">
+        <Column
+          header="STATUS"
+          style="width: 5%"
+        >
           <template #body="slotProps">
             <div class="flex flex-column">
               <div>
@@ -212,7 +225,10 @@
             </div>
           </template>
         </Column>
-        <Column header="ACTION">
+        <Column
+          header="ACTION"
+          style="width: 5%"
+        >
           <template #body="slotProps">
             <div class="flex flex-row m-0 p-0">
               <Button
