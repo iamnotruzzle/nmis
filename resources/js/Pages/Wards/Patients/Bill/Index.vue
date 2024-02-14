@@ -48,10 +48,14 @@
               </div>
             </div>
           </template>
-          <Column expander />
+          <Column
+            expander
+            style="width: 5%"
+          />
           <Column
             field="charge_slip_no"
             header="CHARGE SLIP #"
+            style="width: 10%"
             sortable
           >
             <template #body="{ data }">
@@ -61,6 +65,7 @@
           <Column
             field="type_of_charge_description"
             header="TYPE OF CHARGE"
+            style="width: 10%"
             sortable
           >
             <template #body="{ data }">
@@ -70,6 +75,7 @@
           <Column
             field="item"
             header="ITEM"
+            style="width: 30%"
             sortable
           >
             <template #body="{ data }">
@@ -79,6 +85,7 @@
           <Column
             field="charge_date"
             header="CHARGE DATE"
+            style="width: 10%"
             sortable
           >
             <template #body="{ data }">
@@ -88,6 +95,7 @@
           <Column
             field="quantity"
             header="QUANTITY"
+            style="text-align: right; width: 5%"
             sortable
           >
             <template #body="{ data }">
@@ -98,7 +106,7 @@
             field="price"
             header="PRICE"
             sortable
-            style="text-align: right"
+            style="text-align: right; width: 15%"
           >
             <template #body="{ data }">
               {{ convertToPHCurrency(data.price) }}
@@ -108,7 +116,7 @@
             field="amount"
             header="AMOUNT"
             sortable
-            style="text-align: right"
+            style="text-align: right; width: 15%"
           >
             <template #body="{ data }">
               {{ convertToPHCurrency(data.amount) }}
@@ -307,21 +315,25 @@
               <Column
                 field="itemDesc"
                 header="ITEM/SERVICE"
+                style="width: 30%"
                 sortable
               ></Column>
               <Column
                 field="currentStock"
                 header="CURRENT STOCK"
+                style="width: 17.5%"
                 sortable
               ></Column>
               <Column
                 field="qtyToCharge"
                 header="QTY TO CHARGE"
+                style="width: 17.5%"
                 sortable
               ></Column>
               <Column
                 field="price"
                 header="PRICE PER PC."
+                style="width: 17.5%"
                 sortable
               >
                 <template #body="{ data }"> ₱ {{ data.price }} </template>
@@ -329,6 +341,7 @@
               <Column
                 filed="total"
                 header="TOTAL"
+                style="width: 17.5%"
                 sortable
               >
                 <template #body="{ data }"> ₱ {{ data.total }} </template>
