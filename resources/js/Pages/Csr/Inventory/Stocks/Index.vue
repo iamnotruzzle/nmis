@@ -581,7 +581,7 @@
             field="name"
             header="NAME"
             sortable
-            style="min-width: 12rem"
+            style="width: 70%"
           >
             <template #body="{ data }">
               {{ data.name }}
@@ -591,7 +591,7 @@
             field="status"
             header="STATUS"
             sortable
-            style="min-width: 12rem"
+            style="width: 15%"
           >
             <template #body="{ data }">
               <Tag
@@ -608,7 +608,7 @@
           </Column>
           <Column
             header="ACTION"
-            style="min-width: 12rem"
+            style="width: 15%"
           >
             <template #body="slotProps">
               <Button
@@ -670,7 +670,7 @@
             field="cl2desc"
             header="ITEM"
             sortable
-            style="min-width: 12rem"
+            style="width: 90%"
           >
             <template #body="{ data }">
               {{ data.cl2desc }}
@@ -678,9 +678,9 @@
           </Column>
           <Column
             field="total_quantity"
-            header="TOTAL QUANTITY"
+            header="QTY"
             sortable
-            style="min-width: 12rem"
+            style="width: 10%"
           >
             <template #body="{ data }">
               {{ data.total_quantity }}
