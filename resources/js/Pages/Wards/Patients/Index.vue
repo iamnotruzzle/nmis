@@ -16,7 +16,6 @@
         :totalRecords="totalRecords"
         @page="onPage($event)"
         dataKey="hpercode"
-        filterDisplay="row"
         showGridlines
         :loading="loading"
       >
@@ -38,20 +37,20 @@
         <template #loading> Loading patients data. Please wait. </template>
         <Column
           field="hpercode"
-          header="HEALTH RECORD #"
-          style="max-width: 5rem"
+          header="HOSP. #"
+          style="width: 5%"
         >
         </Column>
         <Column
           field="patient"
           header="PATIENT"
-          style="min-width: 12rem"
+          style="width: 20%"
         >
         </Column>
         <Column
           field="bill_stat"
           header="STATUS"
-          style="min-width: 8rem"
+          style="width: 10%"
         >
           <template #body="{ data }">
             <div class="flex justify-content-center">
@@ -73,7 +72,7 @@
         <Column
           field="admission_date"
           header="ADMISSION DATE"
-          style="min-width: 12rem"
+          style="width: 10%"
         >
           <template #body="{ data }">
             {{ tzone(data.admission_date) }}
@@ -82,37 +81,37 @@
         <Column
           field="kg"
           header="WEIGHT"
-          style="min-width: 4rem"
+          style="width: 5%"
         >
         </Column>
         <Column
           field="cm"
           header="HEIGHT"
-          style="min-width: 4rem"
+          style="width: 5%"
         >
         </Column>
         <Column
           field="bmi"
           header="BMI"
-          style="min-width: 4rem"
+          style="width: 5%"
         >
         </Column>
         <Column
           field="room_bed"
           header="ROOM | BED"
-          style="min-width: 12rem"
+          style="width: 10%"
         >
         </Column>
         <Column
           field="physician"
           header="PHYSICIAN"
-          style="min-width: 12rem"
+          style="width: 20%"
         >
         </Column>
 
         <Column
           header="ACTION"
-          style="min-width: 2rem"
+          style="width: 10%"
         >
           <template #body="{ data }">
             <Button
