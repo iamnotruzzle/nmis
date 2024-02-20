@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             RoleAndPermissionSeeder::class,
             BrandSeeder::class,
             FundSourceSeeder::class,
+            PimsCategorySeeder::class
         ]);
     }
 }
