@@ -14,8 +14,8 @@ class CreateCsrwPimsCategoryTable extends Migration
     public function up()
     {
         Schema::create('csrw_pims_category', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
+            $table->primary('catID');
+            $table->string('categoryname');
             $table->string('status')->default('N');
             $table->timestamps();
         });

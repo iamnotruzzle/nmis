@@ -12,8 +12,8 @@ class PimsCategory extends Model
     protected $table = 'csrw_pims_category'; // list of proc type for hclass tables
 
     protected $fillable = [
-        'id',
-        'name',
+        'catID',
+        'categoryname',
         'status',
     ];
 }
