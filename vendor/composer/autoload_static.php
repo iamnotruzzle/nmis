@@ -1056,6 +1056,7 @@ class ComposerStaticInita35f14ec21fb126801fb4364978bffb6
         'Database\\Seeders\\DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeders/DatabaseSeeder.php',
         'Database\\Seeders\\FundSourceSeeder' => __DIR__ . '/../..' . '/database/seeders/FundSourceSeeder.php',
         'Database\\Seeders\\ItemsForCsrSuppliesSeeder' => __DIR__ . '/../..' . '/database/seeders/ItemsForCsrSuppliesSeeder.php',
+        'Database\\Seeders\\PimsCategorySeeder' => __DIR__ . '/../..' . '/database/seeders/PimsCategorySeeder.php',
         'Database\\Seeders\\RoleAndPermissionSeeder' => __DIR__ . '/../..' . '/database/seeders/RoleAndPermissionSeeder.php',
         'DebugBar\\Bridge\\CacheCacheCollector' => __DIR__ . '/..' . '/maximebf/debugbar/src/DebugBar/Bridge/CacheCacheCollector.php',
         'DebugBar\\Bridge\\DoctrineCollector' => __DIR__ . '/..' . '/maximebf/debugbar/src/DebugBar/Bridge/DoctrineCollector.php',

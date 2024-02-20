@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCsrwPimsCategoryTable extends Migration
+class CreateCsrwPimsCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class CreateCsrwPimsCategoryTable extends Migration
      */
     public function up()
     {
-        Schema::create('csrw_pims_category', function (Blueprint $table) {
-            $table->primary('catID');
+        Schema::create('csrw_pims_categories', function (Blueprint $table) {
+            $table->id();
+            $table->smallInteger('catID');
             $table->string('categoryname');
             $table->string('status')->default('N');
             $table->timestamps();
@@ -28,6 +29,6 @@ class CreateCsrwPimsCategoryTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('csrw_pims_category');
+        Schema::dropIfExists('csrw_pims_categories');
     }
 }

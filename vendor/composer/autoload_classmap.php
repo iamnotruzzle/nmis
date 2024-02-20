@@ -402,6 +402,7 @@ return array(
     'Database\\Seeders\\DatabaseSeeder' => $baseDir . '/database/seeders/DatabaseSeeder.php',
     'Database\\Seeders\\FundSourceSeeder' => $baseDir . '/database/seeders/FundSourceSeeder.php',
     'Database\\Seeders\\ItemsForCsrSuppliesSeeder' => $baseDir . '/database/seeders/ItemsForCsrSuppliesSeeder.php',
+    'Database\\Seeders\\PimsCategorySeeder' => $baseDir . '/database/seeders/PimsCategorySeeder.php',
     'Database\\Seeders\\RoleAndPermissionSeeder' => $baseDir . '/database/seeders/RoleAndPermissionSeeder.php',
     'DebugBar\\Bridge\\CacheCacheCollector' => $vendorDir . '/maximebf/debugbar/src/DebugBar/Bridge/CacheCacheCollector.php',
     'DebugBar\\Bridge\\DoctrineCollector' => $vendorDir . '/maximebf/debugbar/src/DebugBar/Bridge/DoctrineCollector.php',
