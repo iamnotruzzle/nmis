@@ -1052,7 +1052,6 @@ class ComposerStaticInita35f14ec21fb126801fb4364978bffb6
         'DASPRiD\\Enum\\NullValue' => __DIR__ . '/..' . '/dasprid/enum/src/NullValue.php',
         'Database\\Factories\\UserFactory' => __DIR__ . '/../..' . '/database/factories/UserFactory.php',
         'Database\\Seeders\\BrandSeeder' => __DIR__ . '/../..' . '/database/seeders/BrandSeeder.php',
-        'Database\\Seeders\\CsrSuppliesSubCategoriesSeeder' => __DIR__ . '/../..' . '/database/seeders/CsrSuppliesSubCategoriesSeeder.php',
         'Database\\Seeders\\DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeders/DatabaseSeeder.php',
         'Database\\Seeders\\FundSourceSeeder' => __DIR__ . '/../..' . '/database/seeders/FundSourceSeeder.php',
         'Database\\Seeders\\ItemsForCsrSuppliesSeeder' => __DIR__ . '/../..' . '/database/seeders/ItemsForCsrSuppliesSeeder.php',

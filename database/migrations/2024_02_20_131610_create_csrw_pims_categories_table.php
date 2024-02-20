@@ -17,7 +17,7 @@ class CreateCsrwPimsCategoriesTable extends Migration
             $table->id();
             $table->smallInteger('catID');
             $table->string('categoryname');
-            $table->string('status')->default('N');
+            $table->string('status');
             $table->timestamps();
         });
     }

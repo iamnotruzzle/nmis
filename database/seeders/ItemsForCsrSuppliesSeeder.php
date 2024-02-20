@@ -9,14 +9,14 @@ use Illuminate\Database\Seeder;
 
 class ItemsForCsrSuppliesSeeder extends Seeder
 {
-    // public function run()
-    // {
+    public function run()
+    {
 
-    //     // $csrSuppliesSubCategory = Category::where('ptcode', '1000')
-    //     //     // ->where('cl1code', '100')
-    //     //     ->first();
+        // $csrSuppliesSubCategory = Category::where('ptcode', '1000')
+        //     // ->where('cl1code', '100')
+        //     ->first();
 
-    //     // dd($csrSuppliesSubCategory);
+        // dd($csrSuppliesSubCategory);
 
     //     $items = [
     //         ['cl1code' => 90, 'cl2desc' => 'Acid Concentrate without Potassium 5 Liters Note: should be compatible with powdered mixed and with the existing machine   Preparation: (Composition g/L):   Glucose 0-49.5g; Sodium Chloride 216.19-270.8g'],

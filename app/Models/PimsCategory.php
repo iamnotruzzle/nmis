@@ -9,10 +9,11 @@ class PimsCategory extends Model
 {
     use HasFactory;
 
-    protected $table = 'csrw_pims_categories'; // list of proc type for hclass tables
+    protected $table = 'csrw_pims_categories';
 
     protected $fillable = [
         'id',
+        'catID',
         'categoryname',
         'status',
     ];

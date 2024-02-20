@@ -27,5 +27,6 @@ class Category extends Model
         'cl1upsw',
         'cl1dtmd',
         'compense',
+        'catID',
     ];
 }

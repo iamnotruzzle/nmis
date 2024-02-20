@@ -42,6 +42,7 @@ class Item extends Model
         'lot_no',
         'barcode',
         'rpoint',
+        'catID',
     ];
 
     public function category()

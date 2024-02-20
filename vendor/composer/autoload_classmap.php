@@ -398,7 +398,6 @@ return array(
     'DASPRiD\\Enum\\NullValue' => $vendorDir . '/dasprid/enum/src/NullValue.php',
     'Database\\Factories\\UserFactory' => $baseDir . '/database/factories/UserFactory.php',
     'Database\\Seeders\\BrandSeeder' => $baseDir . '/database/seeders/BrandSeeder.php',
-    'Database\\Seeders\\CsrSuppliesSubCategoriesSeeder' => $baseDir . '/database/seeders/CsrSuppliesSubCategoriesSeeder.php',
     'Database\\Seeders\\DatabaseSeeder' => $baseDir . '/database/seeders/DatabaseSeeder.php',
     'Database\\Seeders\\FundSourceSeeder' => $baseDir . '/database/seeders/FundSourceSeeder.php',
     'Database\\Seeders\\ItemsForCsrSuppliesSeeder' => $baseDir . '/database/seeders/ItemsForCsrSuppliesSeeder.php',
