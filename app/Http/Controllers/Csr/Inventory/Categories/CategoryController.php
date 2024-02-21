@@ -15,24 +15,22 @@ class CategoryController extends Controller
 {
     public function index(Request $request)
     {
-        $procTypes = ProcTypeForHclass::orderBy('ptdesc', 'ASC')
-            ->get();
-
-        $mainCategory = ProcTypeForHclass::with('subCategory')
-            ->when($request->search, function ($query, $value) {
-                $query->where('ptdesc', 'LIKE', '%' . $value . '%');
-            })
+        $csrSuppliesSubCategory = Category::when($request->search, function ($query, $value) {
+            $query->where('cl1desc', 'LIKE', '%' . $value . '%');
+        })
             ->when(
                 $request->status,
                 function ($query, $value) {
-                    $query->where('ptstat', $value);
+                    $query->where('cl1stat', $value);
                 }
             )
-            ->orderBy('dateasof', 'DESC')
-            ->paginate(5);
+            ->where('ptcode', '1000')
+            ->orderBy('cl1desc', 'ASC')
+            ->paginate(15, ['cl1comb', 'cl1desc', 'cl1stat']);
+        // dd($csrSuppliesSubCategory);
 
         return Inertia::render('Csr/Inventory/Categories/Index', [
-            'mainCategory' => $mainCategory,
+            'csrSuppliesSubCategory' => $csrSuppliesSubCategory,
         ]);
     }
 

@@ -1,76 +1,83 @@
 <template>
   <app-layout>
-    <Head title="NMIS - Categories" />
+    <Head title="NMIS - Reports" />
 
-    <div class="card">
+    <div
+      class="card"
+      style="width: 100%"
+    >
       <Toast />
 
+      <!-- :value="balanceContainer" -->
       <DataTable
         class="p-datatable-sm"
-        dataKey="ptcode"
         v-model:filters="filters"
-        v-model:expandedRows="expandedRow"
-        @row-click="setExpandedRow"
-        :value="mainCategoriesList"
+        :value="csrSuppliesSubCategoryList"
         selectionMode="single"
         lazy
         paginator
         :rows="rows"
         ref="dt"
         :totalRecords="totalRecords"
-        showGridlines
         @page="onPage($event)"
+        dataKey="cl1comb"
         filterDisplay="row"
+        showGridlines
         :loading="loading"
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">CATEGORIES</span>
+            <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700"
+              >CSR SUPPLIES SUB-CATEGORIES</span
+            >
             <div>
               <span class="p-input-icon-left mr-2">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="search"
-                  placeholder="Search category"
+                  placeholder="Search sub-category"
                 />
               </span>
-              <!-- <Button
-                label="Add Category"
+
+              <Button
+                label="Add sub-category"
                 icon="pi pi-plus"
                 iconPos="right"
-                @click="openCreateCategoryDialog"
-              /> -->
+                @click="openCreateDataDialog"
+              />
             </div>
           </div>
         </template>
-        <template #empty> No item found. </template>
-        <template #loading> Loading item data. Please wait. </template>
-        <Column expander />
+        <template #empty> No data found. </template>
+        <template #loading> Loading data. Please wait. </template>
         <Column
-          field="ptcode"
-          header="MAIN CODE"
-          style="min-width: 12rem"
+          field="cl1comb"
+          header="ID"
+          style="width: 20%"
         >
-          <!-- <template #body="{ data }">
-            {{ data.cl2comb }}
-          </template> -->
+          <template #body="{ data }">
+            {{ data.cl1comb }}
+          </template>
         </Column>
         <Column
-          field="ptdesc"
+          field="cl1desc"
           header="DESCRIPTION"
-          style="min-width: 12rem"
+          style="width: 50%"
         >
+          <template #body="{ data }">
+            {{ data.cl1desc }}
+          </template>
         </Column>
         <Column
-          field="ptstat"
+          field="cl1stat"
           header="STATUS"
-          style="min-width: 12rem"
           :showFilterMenu="false"
+          style="width: 20%"
         >
           <template #body="{ data }">
             <div class="text-center">
               <Tag
-                v-if="data.ptstat == 'A'"
+                v-if="data.cl1stat == 'A'"
                 value="ACTIVE"
                 severity="success"
               />
@@ -94,188 +101,56 @@
         </Column>
         <Column
           header="ACTION"
-          style="min-width: 12rem"
+          style="width: 30%"
         >
           <template #body="slotProps">
             <Button
-              v-if="slotProps.data.ptcode !== '1000'"
               icon="pi pi-pencil"
               class="mr-1"
               rounded
               text
               severity="warning"
-              @click="editItem(slotProps.data)"
+              @click="editSubCategory(slotProps.data)"
             />
 
-            <!-- <Button
+            <Button
               icon="pi pi-trash"
               rounded
               text
               severity="danger"
               @click="confirmDeleteCategory(slotProps.data)"
-            /> -->
+            />
           </template>
         </Column>
-        <template #expansion="slotProps">
-          <div class="max-w-full flex flex-column align-items-center">
-            <!-- {{ slotProps.data }} -->
-
-            <div class="flex align-items-center w-full">
-              <div class="text-2xl font-bold my-3">
-                Sub-categories of <span class="text-cyan-500 hover:text-cyan-700">[ {{ slotProps.data.ptdesc }} ]</span>
-              </div>
-
-              <!-- <InputText
-                v-model="search"
-                placeholder="Search sub-category"
-                class="ml-2 mr-1"
-              /> -->
-
-              <Button
-                v-if="slotProps.data.ptcode == '1000'"
-                label="Add sub-category"
-                icon="pi pi-plus"
-                iconPos="right"
-                size="small"
-                class="ml-2 my-0"
-                @click="openCreateSubCategoryDialog(slotProps.data)"
-              />
-            </div>
-
-            <DataTable
-              :value="expandedRow[0].subCategory"
-              v-model:filters="subCategoryFilters"
-              paginator
-              :rows="10"
-              dataKey="cl1comb"
-              class="w-full"
-            >
-              <Column
-                field="ptcode"
-                header="MAIN CODE"
-              >
-                <!-- <template #body="{ data }"> {{ data }} </template> -->
-              </Column>
-              <Column
-                field="cl1code"
-                header="SUB CODE"
-              >
-              </Column>
-              <Column
-                field="cl1comb"
-                header="MAIN + SUB CATEGORY CODE"
-              >
-              </Column>
-              <Column
-                field="cl1desc"
-                header="DESCRIPTION"
-              >
-              </Column>
-              <Column header="STATUS">
-                <template #body="{ data }">
-                  <Tag
-                    v-if="data.cl1stat == 'A'"
-                    value="ACTIVE"
-                    severity="success"
-                  />
-                  <Tag
-                    v-else
-                    value="INACTIVE"
-                    severity="danger"
-                  />
-                </template>
-              </Column>
-              <Column
-                header="ACTION"
-                style="min-width: 12rem"
-              >
-                <template #body="slotProps">
-                  <Button
-                    icon="pi pi-pencil"
-                    class="mr-1"
-                    rounded
-                    text
-                    severity="warning"
-                    @click="editSubCategory(slotProps.data)"
-                  />
-
-                  <!-- <Button
-                    icon="pi pi-trash"
-                    rounded
-                    text
-                    severity="danger"
-                    @click="confirmDeleteSubCategory(slotProps.data)"
-                  /> -->
-                </template>
-              </Column>
-            </DataTable>
-          </div>
-        </template>
       </DataTable>
 
-      <!-- create & edit dialog -->
       <Dialog
-        v-model:visible="createCategoryDialog"
-        :style="{ width: '450px' }"
-        header="Item detail"
+        v-model:visible="createDataDialog"
+        header="SUB-CATEGORY"
         :modal="true"
+        :style="{ width: '850px' }"
         class="p-fluid"
-        @hide="clickOutsideDialog"
-        dismissableMask
+        @hide="whenDialogIsHidden"
       >
+        <!-- ITEM -->
         <div class="field">
-          <label for="ptcode">Pt code</label>
-          <InputText
-            id="ptcode"
-            v-model.trim="form.ptcode"
+          <label>Item</label>
+          <!-- <Dropdown
             required="true"
-            autofocus
-            :class="{ 'p-invalid': form.ptcode == '' }"
-            :disabled="isUpdate"
-            @keyup.enter="submit"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.ptcode"
-          >
-            {{ form.errors.ptcode }}
-          </small>
-        </div>
-        <div class="field">
-          <label for="ptdesc">Pt description</label>
-          <InputText
-            id="ptdesc"
-            v-model.trim="form.ptdesc"
-            required="true"
-            autofocus
-            :class="{ 'p-invalid': form.ptdesc == '' }"
-            :disabled="form.ptcode == 1000"
-            @keyup.enter="submit"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.ptdesc"
-          >
-            {{ form.errors.ptdesc }}
-          </small>
-        </div>
-        <div class="field">
-          <label for="ptstat">Status</label>
-          <Dropdown
-            v-model="form.ptstat"
-            :options="status"
-            optionLabel="name"
-            optionValue="code"
-            placeholder="Select status"
+            v-model="form.cl2comb"
+            :options="itemsList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
+            filter
+            optionLabel="cl2desc"
+            optionValue="cl2comb"
             class="w-full"
-            :disabled="form.ptcode == 1000"
           />
           <small
             class="text-error"
-            v-if="form.errors.ptstat"
+            v-if="form.errors.cl2comb"
           >
-            {{ form.errors.ptstat }}
-          </small>
+            {{ form.errors.cl2comb }}
+          </small> -->
         </div>
 
         <template #footer>
@@ -290,9 +165,9 @@
             v-if="isUpdate == true"
             label="Update"
             icon="pi pi-check"
-            severity="warning"
             text
             type="submit"
+            severity="warning"
             :disabled="form.processing"
             @click="submit"
           />
@@ -308,7 +183,6 @@
         </template>
       </Dialog>
 
-      <!-- Delete confirmation dialog -->
       <Dialog
         v-model:visible="deleteCategoryDialog"
         :style="{ width: '450px' }"
@@ -322,10 +196,9 @@
             style="font-size: 2rem"
           />
           <span v-if="form"
-            >Are you sure you want to delete <b>{{ form.ptdesc }}</b> ?</span
+            >Are you sure you want to delete <b>{{ form.cl1desc }} </b> ?</span
           >
         </div>
-
         <template #footer>
           <Button
             label="No"
@@ -339,155 +212,7 @@
             severity="danger"
             text
             :disabled="form.processing"
-            @click="deleteItem"
-          />
-        </template>
-      </Dialog>
-
-      <!-- create & edit sub category dialog -->
-      <Dialog
-        v-model:visible="createSubCategoryDialog"
-        :style="{ width: '450px' }"
-        header="Sub-category"
-        :modal="true"
-        class="p-fluid"
-        @hide="clickOutsideSubCategoryDialog"
-        dismissableMask
-      >
-        <div
-          v-if="false"
-          class="field"
-        >
-          <label for="ptcode">Pt code</label>
-          <InputText
-            id="ptcode"
-            v-model.trim="formSubCategory.ptcode"
-            required="true"
-            autofocus
-            disabled
-          />
-          <small
-            class="text-error"
-            v-if="formSubCategory.errors.ptcode"
-          >
-            {{ formSubCategory.errors.ptcode }}
-          </small>
-        </div>
-        <div
-          v-if="false"
-          class="field"
-        >
-          <label for="cl1code">Cl1 code</label>
-          <InputText
-            id="cl1code"
-            v-model.trim="formSubCategory.cl1code"
-            required="true"
-            autofocus
-            disabled="true"
-            @keyup.enter="submitSubCategory"
-          />
-          <small
-            class="text-error"
-            v-if="formSubCategory.errors.cl1code"
-          >
-            {{ formSubCategory.errors.cl1code }}
-          </small>
-        </div>
-        <div class="field">
-          <label for="cl1desc">Description</label>
-          <InputText
-            id="cl1desc"
-            v-model.trim="formSubCategory.cl1desc"
-            required="true"
-            autofocus
-            @keyup.enter="submitSubCategory"
-          />
-          <small
-            class="text-error"
-            v-if="formSubCategory.errors.cl1desc"
-          >
-            {{ formSubCategory.errors.cl1desc }}
-          </small>
-        </div>
-        <div class="field">
-          <label for="cl1stat">Status</label>
-          <Dropdown
-            v-model="formSubCategory.cl1stat"
-            :options="status"
-            optionLabel="name"
-            optionValue="code"
-            placeholder="Select status"
-            class="w-full"
-          />
-          <small
-            class="text-error"
-            v-if="formSubCategory.errors.cl1stat"
-          >
-            {{ formSubCategory.errors.cl1stat }}
-          </small>
-        </div>
-
-        <template #footer>
-          <Button
-            label="Cancel"
-            icon="pi pi-times"
-            severity="danger"
-            text
-            @click="cancelSubCategory"
-          />
-          <Button
-            v-if="isSubCategoryUpdate == true"
-            label="Update"
-            icon="pi pi-check"
-            severity="warning"
-            text
-            type="submit"
-            :disabled="formSubCategory.processing"
-            @click="submitSubCategory"
-          />
-          <Button
-            v-else
-            label="Save"
-            icon="pi pi-check"
-            text
-            type="submit"
-            :disabled="formSubCategory.processing"
-            @click="submitSubCategory"
-          />
-        </template>
-      </Dialog>
-
-      <!-- Delete category confirmation dialog -->
-      <Dialog
-        v-model:visible="deleteSubCategoryDialog"
-        :style="{ width: '450px' }"
-        header="Confirm"
-        :modal="true"
-        dismissableMask
-      >
-        <div class="flex align-items-center justify-content-center">
-          <i
-            class="pi pi-exclamation-triangle mr-3"
-            style="font-size: 2rem"
-          />
-          <span v-if="form">
-            Are you sure you want to delete <b>{{ formSubCategory.cl1desc }}</b> ?
-          </span>
-        </div>
-        <template #footer>
-          <Button
-            label="No"
-            icon="pi pi-times"
-            class="p-button-text"
-            @click="deleteSubCategoryDialog = false"
-          />
-          <Button
-            label="Yes"
-            icon="pi pi-check"
-            severity="danger"
-            text
-            :disabled="formSubCategory.processing"
-            @click="deleteSubCategory"
+            @click="deleteCategory"
           />
         </template>
       </Dialog>
@@ -497,6 +222,7 @@
 
 <script>
 import { FilterMatchMode } from 'primevue/api';
+import { router } from '@inertiajs/vue3';
 import { Head } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import InputText from 'primevue/inputtext';
@@ -511,10 +237,9 @@ import Avatar from 'primevue/avatar';
 import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
 import AutoComplete from 'primevue/autocomplete';
-import Textarea from 'primevue/textarea';
-import InputNumber from 'primevue/inputnumber';
 import Tag from 'primevue/tag';
 import moment from 'moment';
+import { Link } from '@inertiajs/vue3';
 
 export default {
   components: {
@@ -532,63 +257,39 @@ export default {
     Calendar,
     Dropdown,
     AutoComplete,
-    Textarea,
-    InputNumber,
     Tag,
+    Link,
   },
   props: {
-    mainCategory: Object,
+    csrSuppliesSubCategory: Object,
   },
   data() {
     return {
-      // data table expand
-      expandedRow: [],
-      // end data table expand
       // paginator
       loading: false,
       totalRecords: null,
       rows: null,
       // end paginator
-      itemId: null,
       isUpdate: false,
-      createCategoryDialog: false,
+      createDataDialog: false,
       deleteCategoryDialog: false,
-      // categories
-      isSubCategoryUpdate: false,
-      createSubCategoryDialog: false,
-      deleteSubCategoryDialog: false,
-      search: '',
-      searchSubcategory: '',
-      totalSubCategory: null,
       selectedStatus: null,
+      search: '',
       options: {},
       params: {},
-      mainCategoriesList: [],
-      filters: {
-        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      },
-      subCategoryFilters: {
-        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      },
-      status: [
-        { name: 'Active', code: 'A' },
-        { name: 'Inactive', code: 'I' },
-      ],
+      from: null,
+      to: null,
       statusFilter: [
         { name: 'NO FILTER', code: null },
         { name: 'Active', code: 'A' },
         { name: 'Inactive', code: 'I' },
       ],
+      csrSuppliesSubCategoryList: [],
+      filters: {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      },
       form: this.$inertia.form({
-        ptcode: null,
-        ptdesc: null,
-        ptstat: null,
-        ptstat: null,
-      }),
-      formSubCategory: this.$inertia.form({
         cl1comb: null,
-        ptcode: null,
-        cl1code: null,
         cl1desc: null,
         cl1stat: null,
       }),
@@ -596,84 +297,59 @@ export default {
   },
   // created will be initialize before mounted
   created() {
-    this.totalRecords = this.mainCategory.total;
-    this.params.page = this.mainCategory.current_page;
-    this.rows = this.mainCategory.per_page;
+    this.totalRecords = this.csrSuppliesSubCategory.total;
+    this.params.page = this.csrSuppliesSubCategory.current_page;
+    this.rows = this.csrSuppliesSubCategory.per_page;
   },
   mounted() {
-    // console.log(this.mainCategory);
-    this.storeCategoriesInContainer();
+    console.log(this.csrSuppliesSubCategory);
+    this.storeSubCategoryInContainer();
 
     this.loading = false;
   },
-  computed: {
-    user() {
-      return this.$page.props.auth.user;
-    },
-  },
   methods: {
-    tzone(date) {
-      return moment.tz(date, 'Asia/Manila').format('L');
-    },
-    setExpandedRow($event) {
-      // Check if row expanded before click or not
-      const isExpanded = this.expandedRow.find((p) => p.ptcode === $event.data.ptcode);
-      if (isExpanded?.ptcode) this.expandedRow = [];
-      else this.expandedRow = [$event.data];
-      //   console.log(this.expandedRow);
-    },
+    storeSubCategoryInContainer() {
+      this.csrSuppliesSubCategoryList = []; // reset
 
-    storeCategoriesInContainer() {
-      this.mainCategory.data.forEach((e) => {
-        this.mainCategoriesList.push({
-          ptcode: e.ptcode,
-          ptdesc: e.ptdesc,
-          ptstat: e.ptstat,
-          ptlock: e.ptlock,
-          subCategory: e.sub_category.length == 0 ? null : e.sub_category,
+      this.csrSuppliesSubCategory.data.forEach((e) => {
+        this.csrSuppliesSubCategoryList.push({
+          cl1comb: e.cl1comb,
+          cl1desc: e.cl1desc,
+          cl1stat: e.cl1stat,
         });
       });
-      //   console.log(this.mainCategoriesList);
-    },
-    onPage(event) {
-      this.params.page = event.page + 1;
-      this.updateData();
     },
     updateData() {
-      this.totalSubCategory = null;
-      this.mainCategoriesList = [];
       this.loading = true;
 
       this.$inertia.get('categories', this.params, {
         preserveState: true,
         preserveScroll: true,
-        onSuccess: (visit) => {
-          this.totalRecords = this.mainCategory.total;
-          this.mainCategoriesList = [];
-          this.expandedRow = [];
-          this.storeCategoriesInContainer();
+        onFinish: (visit) => {
+          this.totalRecords = this.csrSuppliesSubCategory.total;
+          this.storeSubCategoryInContainer();
           this.loading = false;
         },
       });
     },
-    openCreateCategoryDialog() {
+    onPage(event) {
+      this.params.page = event.page + 1;
+      this.updateData();
+    },
+    openCreateDataDialog() {
       this.isUpdate = false;
       this.form.clearErrors();
       this.form.reset();
-      this.itemId = null;
-      this.createCategoryDialog = true;
+      this.createDataDialog = true;
     },
-    // emit close dialog
     clickOutsideDialog() {
-      this.$emit('hide', (this.itemId = null), (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
+      this.$emit('hide', (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
     },
-    editItem(item) {
+    editSubCategory(item) {
+      //   console.log(item);
       this.isUpdate = true;
-      this.createCategoryDialog = true;
-      this.itemId = item.ptcode;
-      this.form.ptcode = item.ptcode;
-      this.form.ptdesc = item.ptdesc;
-      this.form.ptstat = item.ptstat;
+      this.createDataDialog = true;
+      this.form.id = item.id;
     },
     submit() {
       if (this.form.processing) {
@@ -681,11 +357,11 @@ export default {
       }
 
       if (this.isUpdate) {
-        this.form.put(route('categories.update', this.itemId), {
+        this.form.put(route('categories.update', this.form.cl1comb), {
           preserveScroll: true,
           onSuccess: () => {
-            this.itemId = null;
-            this.createCategoryDialog = false;
+            this.createDataDialog = false;
+            this.storeSubCategoryInContainer();
             this.cancel();
             this.updateData();
             this.updatedMsg();
@@ -695,7 +371,8 @@ export default {
         this.form.post(route('categories.store'), {
           preserveScroll: true,
           onSuccess: () => {
-            this.createCategoryDialog = false;
+            this.createDataDialog = false;
+            this.storeSubCategoryInContainer();
             this.cancel();
             this.updateData();
             this.createdMsg();
@@ -703,152 +380,61 @@ export default {
         });
       }
     },
-    confirmDeleteCategory(category) {
-      this.itemId = category.ptcode;
-      this.form.ptdesc = category.ptdesc;
+    whenDialogIsHidden() {
+      this.$emit('hide', (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
+    },
+    confirmDeleteCategory(item) {
       this.deleteCategoryDialog = true;
     },
-    deleteItem() {
-      this.form.delete(route('categories.destroy', this.itemId), {
+    deleteCategory() {
+      this.form.delete(route('categories.destroy', this.form.cl1comb), {
         preserveScroll: true,
         onSuccess: () => {
-          this.mainCategoriesList = [];
+          this.balanceContainer = [];
           this.deleteCategoryDialog = false;
-          this.itemId = null;
           this.form.clearErrors();
           this.form.reset();
           this.updateData();
           this.deletedMsg();
-          this.storeCategoriesInContainer();
         },
       });
     },
     cancel() {
-      this.itemId = null;
       this.isUpdate = false;
-      this.createCategoryDialog = false;
+      this.createDataDialog = false;
       this.form.reset();
       this.form.clearErrors();
-      this.mainCategoriesList = [];
-      this.storeCategoriesInContainer();
     },
     createdMsg() {
-      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Category created', life: 3000 });
-    },
-    updatedMsg() {
-      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Category updated', life: 3000 });
-    },
-    deletedMsg() {
-      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Category deleted', life: 3000 });
-    },
-    // ********** sub category
-    openCreateSubCategoryDialog(e) {
-      //   console.log(e);
-      //   console.log(this.expandedRow[0].subCategory.length);
-      if (this.expandedRow[0].subCategory === null || this.expandedRow[0].subCategory === undefined) {
-        this.formSubCategory.cl1code = '1';
-      } else {
-        this.totalSubCategory = this.expandedRow[0].subCategory.length + 1;
-        console.log(this.totalSubCategory);
-        this.formSubCategory.cl1code = this.totalSubCategory.toString();
-      }
-
-      this.formSubCategory.ptcode = e.ptcode;
-      //   this.formSubCategory.cl1code =
-      this.isSubCategoryUpdate = false;
-      this.createSubCategoryDialog = true;
-    },
-    // emit category close dialog
-    clickOutsideSubCategoryDialog() {
-      this.$emit(
-        'hide',
-        (this.isSubCategoryUpdate = false),
-        this.formSubCategory.clearErrors(),
-        this.formSubCategory.reset(),
-        (this.totalSubCategory = null)
-      );
-    },
-    editSubCategory(e) {
-      //   console.log(e);
-      this.isSubCategoryUpdate = true;
-      this.createSubCategoryDialog = true;
-      this.formSubCategory.cl1comb = e.cl1comb;
-      this.formSubCategory.ptcode = e.ptcode;
-      this.formSubCategory.cl1code = e.cl1code;
-      this.formSubCategory.cl1desc = e.cl1desc;
-      this.formSubCategory.cl1stat = e.cl1stat;
-    },
-    submitSubCategory() {
-      if (this.formSubCategory.processing) {
-        return false;
-      }
-
-      if (this.isSubCategoryUpdate) {
-        this.formSubCategory.put(route('subcategories.update', this.formSubCategory.cl1comb), {
-          preserveScroll: true,
-          onSuccess: () => {
-            this.createSubCategoryDialog = false;
-            this.cancelSubCategory();
-            this.updateData();
-            this.updatedSubCategory();
-          },
-        });
-      } else {
-        this.formSubCategory.post(route('subcategories.store'), {
-          preserveScroll: true,
-          onSuccess: () => {
-            this.createCategoryDialog = false;
-            this.cancelSubCategory();
-            this.updateData();
-            this.createdSubCategory();
-          },
-        });
-      }
-    },
-    confirmDeleteSubCategory(e) {
-      this.formSubCategory.cl1comb = e.cl1comb;
-      this.formSubCategory.cl1desc = e.cl1desc;
-      this.deleteSubCategoryDialog = true;
-    },
-    deleteSubCategory() {
-      this.formSubCategory.delete(route('subcategories.destroy', this.formSubCategory.cl1comb), {
-        preserveScroll: true,
-        onSuccess: () => {
-          this.deleteSubCategoryDialog = false;
-          this.formSubCategory.clearErrors();
-          this.formSubCategory.reset();
-          this.updateData();
-          this.deletedSubCategory();
-          //   this.storeCategoriesInContainer();
-        },
+      this.$toast.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'SubCategory created',
+        life: 3000,
       });
     },
-    cancelSubCategory() {
-      this.isSubCategoryUpdate = false;
-      this.createSubCategoryDialog = false;
-      this.formSubCategory.reset();
-      this.formSubCategory.clearErrors();
+    updatedMsg() {
+      this.$toast.add({
+        severity: 'warn',
+        summary: 'Success',
+        detail: 'SubCategory updated',
+        life: 3000,
+      });
     },
-    createdSubCategory() {
-      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Sub-category created', life: 3000 });
+    deletedMsg() {
+      this.$toast.add({
+        severity: 'error',
+        summary: 'Success',
+        detail: 'SubCategory deleted',
+        life: 3000,
+      });
     },
-    updatedSubCategory() {
-      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Sub-category updated', life: 3000 });
-    },
-    deletedSubCategory() {
-      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Sub-category deleted', life: 3000 });
-    },
-    // ********** end sub category
   },
   watch: {
     search: function (val, oldVal) {
       this.params.search = val;
       this.updateData();
     },
-    // search: function (val, oldVal) {
-    //   this.params.search = val;
-    //   this.updateData();
-    // },
     selectedStatus: function (val) {
       //   console.log(val['code']);
       this.params.status = this.selectedStatus;
@@ -858,7 +444,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 /* Remove arrow for input type number */
 /* Chrome, Safari, Edge, Opera */
