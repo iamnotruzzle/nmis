@@ -1,6 +1,6 @@
 <template>
   <app-layout>
-    <Head title="NMIS - Reports" />
+    <Head title="NMIS - Sub-categories" />
 
     <div
       class="card"
