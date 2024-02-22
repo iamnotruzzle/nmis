@@ -16,7 +16,8 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $csrSuppliesSubCategory = Category::when($request->search, function ($query, $value) {
-            $query->where('cl1desc', 'LIKE', '%' . $value . '%');
+            $query->where('cl1desc', 'LIKE', '%' . $value . '%')
+                ->orWhere('cl1comb', 'LIKE', '%' . $value . '%');
         })
             ->when(
                 $request->status,
