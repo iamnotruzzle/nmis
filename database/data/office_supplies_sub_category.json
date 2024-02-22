@@ -1,0 +1,1202 @@
+[
+ {
+  "itemid": 7547,
+  "item": "Acetate",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7548,
+  "item": "Acetate",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7550,
+  "item": "Battery",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7551,
+  "item": "Battery",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7553,
+  "item": "Carbon film",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7555,
+  "item": "Clip",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7557,
+  "item": "Clip",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7558,
+  "item": "Copy Paper",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7559,
+  "item": "Copy Paper",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7560,
+  "item": "Correction Tape",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7561,
+  "item": "Cutter",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7562,
+  "item": "Envelope,documentary",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7564,
+  "item": "File Folder",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7565,
+  "item": "File Folder ",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7566,
+  "item": "File organizer",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7567,
+  "item": "Paper clip",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7568,
+  "item": "Paper fastener",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7570,
+  "item": "Paste",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7573,
+  "item": "Record book",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7574,
+  "item": "Record book",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7576,
+  "item": "Sharpener",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7577,
+  "item": "Stamp pad",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7578,
+  "item": "Staple wire remover",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7579,
+  "item": "Staple wire",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7580,
+  "item": "Staple wire",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7581,
+  "item": "Stapler",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7583,
+  "item": "Typewritter Ribbon",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7590,
+  "item": "Envelope",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7600,
+  "item": "Battery",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7601,
+  "item": "Battery",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7603,
+  "item": "Clear books",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7604,
+  "item": "Clip",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7605,
+  "item": "Clip",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7607,
+  "item": "Columnar notebook",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7608,
+  "item": "Columnar notebook",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7609,
+  "item": "Columnar notebook",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7610,
+  "item": "Columnar notebook",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7611,
+  "item": "Columnar notebook",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7614,
+  "item": "Data file box",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7615,
+  "item": "Tape",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7616,
+  "item": "Envelope, documentary",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7619,
+  "item": "Glue",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7620,
+  "item": "Looseleaf cover",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7621,
+  "item": "Manila paper",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7623,
+  "item": "Packaging tape",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7627,
+  "item": "Push pin",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7628,
+  "item": "Rubber band",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7630,
+  "item": "Stamp pad ink",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7631,
+  "item": "Stamp pad ink",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7632,
+  "item": "Stamp pad ink",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7633,
+  "item": "Stamp pad ink",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7634,
+  "item": "Stapler",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7635,
+  "item": "Tape dispenser",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7637,
+  "item": "Thumb tacks",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7645,
+  "item": "Scissors",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7653,
+  "item": "Tape",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7656,
+  "item": "Tape",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7658,
+  "item": "Index Card",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7659,
+  "item": "Paper clip",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7661,
+  "item": "Battery",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7665,
+  "item": "Ballpoint pen, fine point, green",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7678,
+  "item": "Stamp",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7679,
+  "item": "Frames ",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7680,
+  "item": "Stamp pad",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7684,
+  "item": "Tape",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7685,
+  "item": "Copy paper",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7687,
+  "item": "Ink (Duplicating Machine) for DX2430",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7689,
+  "item": "Marker pen",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7690,
+  "item": "Marker pen",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7691,
+  "item": "Marker pen",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7692,
+  "item": "File Folder",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7693,
+  "item": "Sticky note",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7698,
+  "item": "Clipboard",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7707,
+  "item": "Tape",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7720,
+  "item": "Pen",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7721,
+  "item": "Marker pen",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7722,
+  "item": "Pen",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7723,
+  "item": "Cartolina",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7724,
+  "item": "Cartolina",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7725,
+  "item": "Cartolina",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7726,
+  "item": "Cartolina",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7727,
+  "item": "Cartolina",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7728,
+  "item": "Cartolina",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7729,
+  "item": "Cartolina",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7732,
+  "item": "Photo Paper",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7735,
+  "item": "Sticky note",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7736,
+  "item": "Sign pen",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7738,
+  "item": "Clearbook",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7742,
+  "item": "Stamp",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7752,
+  "item": "Toner",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7756,
+  "item": "Sign Pen",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7761,
+  "item": "Envelope",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7765,
+  "item": "Copy Paper",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7766,
+  "item": "Copy Paper, A4 size light blue",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7771,
+  "item": "Ruler",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7778,
+  "item": "Sign Pen",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7786,
+  "item": "Document holder, legal size",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7787,
+  "item": "Ruler",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7864,
+  "item": "Marker",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7865,
+  "item": "Marker",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7914,
+  "item": "Certificate Holder",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7918,
+  "item": "Colored Paper",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7919,
+  "item": "Colored Paper",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7920,
+  "item": "Colored Paper",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7922,
+  "item": "Colored Paper",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 7983,
+  "item": "Toner",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 8239,
+  "item": "Toner Cartridge",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 8402,
+  "item": "File folder",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 8403,
+  "item": "Marker",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 8404,
+  "item": "Folder",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 8406,
+  "item": "Envelope",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 8407,
+  "item": "Tape",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 8481,
+  "item": "Staple wire",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 8851,
+  "item": "Specialty paper",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 8852,
+  "item": "Stamp pad ink",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 8854,
+  "item": "Sticky note",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 8855,
+  "item": "Tape",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 9146,
+  "item": "Identification Card Plastic (ID)",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 9272,
+  "item": "Marker pen",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 9816,
+  "item": "Sticky note",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 9817,
+  "item": "Clip",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 9819,
+  "item": "Staple wire",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 9820,
+  "item": "Record book",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 10032,
+  "item": "Sign pen",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 10033,
+  "item": "Sign pen",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 10282,
+  "item": "Columnar notebook 20 columns",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 10455,
+  "item": "Copy Paper",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 11208,
+  "item": "Colored paper",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 11211,
+  "item": "Acetate",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 11212,
+  "item": "Clearbook",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 11213,
+  "item": "Clearbook",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 11214,
+  "item": "Clearbook",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 11215,
+  "item": "Clearbook ",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 11216,
+  "item": "ID jacket",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 11252,
+  "item": "Sticker paper",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 11253,
+  "item": "Sign pen",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 11273,
+  "item": "Marker pen",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 11292,
+  "item": "Clear book fillers",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 11937,
+  "item": "Cartolina",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 11939,
+  "item": "Marker",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 11944,
+  "item": "Toner",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 12378,
+  "item": "Carbon film",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 12436,
+  "item": "Laminating Film",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 12439,
+  "item": "Battery",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 12440,
+  "item": "Battery",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 12442,
+  "item": "Cartolina",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 12443,
+  "item": "Cartolina",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 12444,
+  "item": "Tape",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 12451,
+  "item": "File folder",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 12452,
+  "item": "Paper fastener",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 12453,
+  "item": "Paper fastener",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 12455,
+  "item": "Protector sheets",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 12457,
+  "item": "Record book",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 12460,
+  "item": "Stapler",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 12466,
+  "item": "Sticky note",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 12561,
+  "item": "Master (Duplicating Machine)",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 12562,
+  "item": "Toner",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 12703,
+  "item": "Clearbook",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 12711,
+  "item": "Glue gun",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 12713,
+  "item": "Marker pen",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 12720,
+  "item": "Marker pen",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 12721,
+  "item": "Marker pen",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 12726,
+  "item": "Rubber stamp",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 13772,
+  "item": "File folder",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 15760,
+  "item": "Clearbook",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 15761,
+  "item": "Clearbook",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 15762,
+  "item": "Book stand",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 17147,
+  "item": "Calculator",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 17148,
+  "item": "Calculator",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 17180,
+  "item": "Paper cutter",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 17181,
+  "item": "Paper file tray",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 17182,
+  "item": "Paper file tray",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 17185,
+  "item": "Puncher",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 17329,
+  "item": "Tape",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 17823,
+  "item": "Battery,1.5V LR 44, A 76, heavy duty",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 17845,
+  "item": "Sticker Paper",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 18045,
+  "item": "Ink",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 18046,
+  "item": "Master (S-8132AG) RISO",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 18378,
+  "item": "Staple wire remover",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 18748,
+  "item": "Glue, padding, 500 grams",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 18749,
+  "item": "Sticky note, size 2 x 2\"  100 sheets",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 18750,
+  "item": "Sticky note, size 2 x 3\"  100 sheets",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 18751,
+  "item": "Sticky note, size 3 x 2\"  100 sheets",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 18768,
+  "item": "Sticky note",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 18769,
+  "item": "Copy Paper",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 18771,
+  "item": "Stapler",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 18800,
+  "item": "envelope",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 18823,
+  "item": "Certificate Holder",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 18851,
+  "item": "Battery C, size 1.5V +C alkaline manganese",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 18852,
+  "item": "Cutter, heavy duty, snap-off knife, 18mm blade",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 18853,
+  "item": "Envelope, manila, legal size, brown, kraft catalog",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 18854,
+  "item": "Envelope, manila, letter size, brown, kraft catalog",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 18855,
+  "item": "Eraser, for whiteboard, 19mm, thick felt",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 18856,
+  "item": "File folder, binder, 2 rings, D type, legal size, side binding, color black",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 18857,
+  "item": "Marker pen, permanent, fine point, non-toxic, fine point 0.2-0.5 can write on glass, color blue",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 18858,
+  "item": "Marker pen, permanent, fine point, non-toxic, fine point 0.2-0.5 can write on glass, color red",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 18860,
+  "item": "Marker pen, permanent, fine point, non-toxic, fine point 0.5-0.7 marks on plastic surfaces, color black",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 18861,
+  "item": "Rubber band, transparent, evenly cut, durable, no. 18, 350gms\/box",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 18867,
+  "item": "(2UNITS) 6.5 & 7.5MM CANNULATED CANCELLOUS SCREW (1 UNIT) RECON PLATE (1 UNIT) FELVIC REDUCTION CLAMPS",
+  "catID": 2,
+  "status": "A"
+ },
+ {
+  "itemid": 18911,
+  "item": "Oslo Paper 10pcs\/pack",
+  "catID": 2,
+  "status": "A"
+ }
+]

@@ -1,0 +1,1196 @@
+[
+ {
+  "itemid": 7230,
+  "item": "High level disinfectant",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 10063,
+  "item": "Ovum Forcep",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 10066,
+  "item": "Mosquito curve",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 10067,
+  "item": "Mosquito straight",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 10076,
+  "item": "Instrument tray with cover",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 10625,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 10626,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11296,
+  "item": "Propanol ",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11297,
+  "item": "Propanol",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11298,
+  "item": "Wash Lotion",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11299,
+  "item": "Medical Device Disinfectant",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11301,
+  "item": "WIPES",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11302,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11304,
+  "item": "Absorbable Hemostat",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11305,
+  "item": "Absorbable Hemostat",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11306,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11307,
+  "item": "Air Cushion",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11308,
+  "item": "Air Cushion Mask",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11309,
+  "item": "Air Cushion",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11310,
+  "item": "Air Cushion",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11311,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11312,
+  "item": "Arterial Venous Blood",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11313,
+  "item": "Arterial blood sampler",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11314,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11315,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11316,
+  "item": "Autoclave Sterile Indicator",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11317,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11318,
+  "item": " ",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11319,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11320,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11321,
+  "item": "Bandage",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11322,
+  "item": "Bandage",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11323,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11324,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11325,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11326,
+  "item": "Bed pan",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11327,
+  "item": "RT",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11328,
+  "item": "RT",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11329,
+  "item": "RT",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11330,
+  "item": "RT",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11331,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11332,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11333,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11334,
+  "item": "Blade",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11335,
+  "item": " Blade",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11336,
+  "item": "Blade",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11337,
+  "item": "Blade",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11338,
+  "item": "Blade",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11339,
+  "item": "Blood Pump",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11340,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11341,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11342,
+  "item": "Needle",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11343,
+  "item": "Bone Wax",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11344,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11345,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11346,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11347,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11348,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11349,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11350,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11351,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11352,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11353,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11354,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11355,
+  "item": "Breathing Circuit",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11356,
+  "item": "Breathing Circuit",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11357,
+  "item": "Butterfly or Winged Infusion Set",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11358,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11359,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11360,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11361,
+  "item": "Cap",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11362,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11363,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11364,
+  "item": " ",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11365,
+  "item": "  ",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11366,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11367,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11368,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11369,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11370,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11371,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11372,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11373,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11374,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11375,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11376,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11377,
+  "item": "Catheter",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11378,
+  "item": "Catheter",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11379,
+  "item": "Catheter",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11380,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11381,
+  "item": "Catheter",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11382,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11383,
+  "item": "Catheter",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11384,
+  "item": "Catheter",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11385,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11386,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11387,
+  "item": "Catheter",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11388,
+  "item": "Catheter",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11389,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11390,
+  "item": "Catheter",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11391,
+  "item": "Catheter",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11392,
+  "item": "Catheter",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11393,
+  "item": "Catheter",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11394,
+  "item": "Catheter",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11395,
+  "item": "Catheter",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11396,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11397,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11398,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11399,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11400,
+  "item": "Catheter",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11401,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11402,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11403,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11404,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11405,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11406,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11407,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11408,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11409,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11410,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11411,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11412,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11413,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11414,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11415,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11416,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11417,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11418,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11419,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11421,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11422,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11423,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11424,
+  "item": "Cling Wrap",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11425,
+  "item": "Closed Suction Bottles",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11426,
+  "item": "Closed Suction Bottles",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11427,
+  "item": "Closed Suction Drainage Bag",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11428,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11429,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11430,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11431,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11432,
+  "item": "Ostomy Pediatric",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11433,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11434,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11435,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11436,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11437,
+  "item": "Decontamination Mat",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11438,
+  "item": "Dermatome",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11439,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11440,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11442,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11443,
+  "item": "Disinfectant Solution (citric acid) for heat disinfectant, compatible with the existing machine",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11444,
+  "item": "Disinfectant Tablet",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11445,
+  "item": "Disposable adult humidifier chamber",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11446,
+  "item": "Sp02 Sensor",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11447,
+  "item": "Sp02 Sensor",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11448,
+  "item": "RT",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11449,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11450,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11451,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11452,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11453,
+  "item": ".",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11454,
+  "item": "ECG Electrode",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11455,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11456,
+  "item": "ECG Electrode",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11457,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11458,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11459,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11460,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11461,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11462,
+  "item": "Endotracheal tube, size 2.0 uncuffed, plain, sterile",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11463,
+  "item": "Endotracheal tube, size 2.5 uncuffed, plain, sterile",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11464,
+  "item": "Endotracheal tube, size 3.0 uncuffed, plain, sterile",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11465,
+  "item": "Endotracheal tube, size 3.5 uncuffed, plain, sterile",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11466,
+  "item": "Endotracheal tube, size 4.0 uncuffed, plain, sterile",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11467,
+  "item": "Endotracheal tube, size 4.5 cuffed, plain, sterile",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11468,
+  "item": "Endotracheal tube, size 4.5 uncuffed, plain, sterile",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11469,
+  "item": "Endotracheal tube, size 5.0 cuffed, plain, sterile",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11470,
+  "item": "Endotracheal tube, size 5.5 cuffed, plain, sterile",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11471,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11472,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11473,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11474,
+  "item": "Endotracheal tube",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11475,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11476,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11477,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11478,
+  "item": "Endotracheal tube, size 3.0 uncuffed, armored reinforced, sterile",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11479,
+  "item": "Endotracheal tube, size 3.5 uncuffed, armored reinforced, sterile",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11480,
+  "item": "Endotracheal tube, size 4.0 uncuffed, armored reinforced, sterile",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11481,
+  "item": "Endotracheal tube, size 4.5 cuffed, armored reinforced, sterile",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11482,
+  "item": "Endotracheal tube, size 4.5 uncuffed, armored reinforced, sterile",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11483,
+  "item": "Endotracheal tube, size 5.0 cuffed, armored reinforced, sterile",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11484,
+  "item": "Endotracheal tube, size 5.5 cuffed, armored reinforced, sterile",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11485,
+  "item": "Endotracheal tube, size 6.0 cuffed, armored reinforced, sterile",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11486,
+  "item": "Endotracheal tube, size 6.5 cuffed, armored reinforced, sterile",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11487,
+  "item": "Endotracheal tube, size 7.0 cuffed, armored reinforced, sterile",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11488,
+  "item": "Endotracheal tube",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11489,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11490,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ },
+ {
+  "itemid": 11491,
+  "item": "NULL",
+  "catID": 1,
+  "status": "A"
+ }
+]

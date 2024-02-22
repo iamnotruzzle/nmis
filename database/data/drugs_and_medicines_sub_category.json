@@ -1,0 +1,5432 @@
+[
+ {
+  "itemid": 90,
+  "item": "Acid Concentrate without Potassium",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 91,
+  "item": "Hemodialysis Bicarbonate (Powdered Mixed) Concentrated with sodium chloride ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 93,
+  "item": "POVIDONE IODINE",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 100,
+  "item": "tablet",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 101,
+  "item": "Clarithromycin ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 104,
+  "item": "TABLET",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 105,
+  "item": "vial",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 106,
+  "item": "ADENOSINE ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 108,
+  "item": "vial",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 112,
+  "item": "Allopurinol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 113,
+  "item": "Allopurinol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 114,
+  "item": "Alprazolam",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 115,
+  "item": "Alprazolam",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 117,
+  "item": "Amikacin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 119,
+  "item": "All-in-one Admixture",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 121,
+  "item": "Amiodarone",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 667,
+  "item": "Compressed Air",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 669,
+  "item": "Oxygen ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 670,
+  "item": "All-in-one Admixture",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 671,
+  "item": "Activated Charcoal powder",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 672,
+  "item": "Acetylcysteine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 673,
+  "item": "Acetylcysteine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 674,
+  "item": "tablet",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 675,
+  "item": "Acetylcysteine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 676,
+  "item": "Albumin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 679,
+  "item": "Alfuzosin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 680,
+  "item": "Hydrocortisone ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 681,
+  "item": "Hydrocortisone",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 684,
+  "item": "Aluminum Hydroxide",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 688,
+  "item": "All-in-one Admixtures",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 689,
+  "item": "Amino Acid",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 690,
+  "item": "Aminophylline",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 691,
+  "item": "Amiodarone",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 693,
+  "item": "Amlodipine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 694,
+  "item": "Amlodipine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 695,
+  "item": "Amoxicillin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 696,
+  "item": "Amoxicillin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 697,
+  "item": "Amoxicillin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 698,
+  "item": "Amoxicillin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 699,
+  "item": "Amoxicillin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 700,
+  "item": "Ampicillin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 701,
+  "item": "Ampicillin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 702,
+  "item": "Ampicillin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 703,
+  "item": "Ampicillin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 704,
+  "item": "ANTI-RABIES",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 706,
+  "item": "vial",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 708,
+  "item": "ASCORBIC ACID ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 709,
+  "item": "ASCORBIC ACID ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 710,
+  "item": "Ascorbic Acid",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 711,
+  "item": "Aspirin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 712,
+  "item": "ATRACURIUM ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 713,
+  "item": "ATROPINE",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 714,
+  "item": "ATROPINE EYE DROPS SOLUTION",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 715,
+  "item": "Azithromycin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 719,
+  "item": "Beractant",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 720,
+  "item": "Betahistine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 721,
+  "item": "Betahistine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 722,
+  "item": "Betaxolol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 723,
+  "item": "Biperiden",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 724,
+  "item": "Biperiden",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 725,
+  "item": "Bisacodyl",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 726,
+  "item": "Bisacodyl",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 727,
+  "item": "Bisacodyl",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 728,
+  "item": "Bisoprolol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 730,
+  "item": "Budesodine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 732,
+  "item": "Bumetanide",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 733,
+  "item": "BUPIVACAINE",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 734,
+  "item": "polyamp",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 736,
+  "item": "Butorphanol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 738,
+  "item": "Calcium",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 739,
+  "item": "Calcium",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 742,
+  "item": "Carbamazepine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 743,
+  "item": "Carvedilol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 744,
+  "item": "Oil",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 746,
+  "item": "Cefalexin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 748,
+  "item": "Cefalexin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 749,
+  "item": "Cefazolin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 750,
+  "item": "Cefazolin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 751,
+  "item": "Cefipime",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 752,
+  "item": "Cefixime",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 753,
+  "item": "Cefixime",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 754,
+  "item": "Cefixime",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 756,
+  "item": "Cefoxitin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 757,
+  "item": "Ceftazidime",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 758,
+  "item": "Ceftazidime",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 761,
+  "item": "Ceftriaxone",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 762,
+  "item": "Cefuroxime",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 763,
+  "item": "Cefuroxime",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 764,
+  "item": "Cefuroxime",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 765,
+  "item": "Cefuroxime",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 766,
+  "item": "Celecoxib",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 767,
+  "item": "Celecoxib",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 768,
+  "item": "Cetirizine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 769,
+  "item": "Cetirizine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 770,
+  "item": "Chloramphenicol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 771,
+  "item": "Chloramphenicol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 772,
+  "item": "Chloramphenicol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 773,
+  "item": "Chloroquine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 775,
+  "item": "tablet",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 776,
+  "item": "Cilostazol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 777,
+  "item": "Cilostazol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 778,
+  "item": "Cinnarazine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 779,
+  "item": "Ciprofloxacin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 780,
+  "item": "Ciprofloxacin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 782,
+  "item": "Ciprofloxacin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 783,
+  "item": "Clarithromycin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 784,
+  "item": "Clarithromycin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 787,
+  "item": "CLINDAMYCIN",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 788,
+  "item": "Clindamycin ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 789,
+  "item": "CLINDAMYCIN ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 790,
+  "item": "tablet",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 791,
+  "item": "Clonidine ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 792,
+  "item": "Clopidogrel",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 793,
+  "item": "Cloxacillin ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 796,
+  "item": "Colchicine ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 797,
+  "item": "tablet",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 798,
+  "item": "tablet",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 800,
+  "item": "vial",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 801,
+  "item": "tablet",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 802,
+  "item": "DEXAMETHASONE",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 804,
+  "item": "Diazepam",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 805,
+  "item": "DIAZEPAM ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 806,
+  "item": "Diclofenac",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 807,
+  "item": "Diclofenac ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 808,
+  "item": "Diclofenac ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 809,
+  "item": "DICLOFENAC ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 810,
+  "item": "DICYCLOVERINE ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 811,
+  "item": "DIGOXIN",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 812,
+  "item": "DIGOXIN ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 813,
+  "item": "diphenhydramine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 814,
+  "item": "Diphenhydramine ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 815,
+  "item": "Diphenhydramine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 816,
+  "item": "distilled water",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 818,
+  "item": "Domperidone",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 819,
+  "item": "Dopamine ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 821,
+  "item": "Doxycycline",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 823,
+  "item": "Enalapril",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 824,
+  "item": "Enalapril ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 825,
+  "item": "Enoxaparin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 826,
+  "item": "Enoxaparin ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 827,
+  "item": "Ephedrine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 828,
+  "item": "Epinephrine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 829,
+  "item": "epoeitin alfa",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 830,
+  "item": "epoeitin beta",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 831,
+  "item": "epoeitin ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 833,
+  "item": "erythromycin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 834,
+  "item": "erythromycine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 836,
+  "item": "fentanyl",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 838,
+  "item": "Ferrous Salt ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 839,
+  "item": "Ferrous Salt ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 840,
+  "item": "Ferrous Sulfate + Folic Acid ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 841,
+  "item": "finasteride",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 842,
+  "item": "fluconazole",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 843,
+  "item": "fluconazole",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 844,
+  "item": "floucinolone",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 847,
+  "item": "folic acid",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 848,
+  "item": "fondaparinux",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 849,
+  "item": "fusidate",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 850,
+  "item": "furosemide",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 852,
+  "item": "furosemide",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 853,
+  "item": "gentamycin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 854,
+  "item": "gentamycin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 857,
+  "item": "haloperidol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 859,
+  "item": "haloperidol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 861,
+  "item": "Hepatitis B Vaccine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 862,
+  "item": "Hepatitis B Vaccine ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 864,
+  "item": "hydralazine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 865,
+  "item": "hydralazine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 866,
+  "item": "hydrochlorothiazide",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 869,
+  "item": "hydrogen",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 870,
+  "item": "hydroxyethyl",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 873,
+  "item": "hyoscine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 874,
+  "item": "hyoscine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 875,
+  "item": "hypromellose",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 876,
+  "item": "ibuprofen",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 877,
+  "item": "ibuprofen",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 878,
+  "item": "ibuprofen",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 879,
+  "item": "Influenza Polyvalent Vaccine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 880,
+  "item": "Intraoccular Irrigating Solution",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 882,
+  "item": "isophane",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 883,
+  "item": "insulin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 884,
+  "item": "Ipratropium ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 885,
+  "item": " Ipratropium ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 886,
+  "item": "Irbesartan ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 887,
+  "item": "Isoflurane",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 888,
+  "item": "Isoniazid ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 889,
+  "item": "Isosorbide dinitrate ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 891,
+  "item": "Isosorbide dinitrate",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 892,
+  "item": "Isosorbide dinitrate",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 893,
+  "item": "Isosorbide",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 894,
+  "item": "Isoxsuprine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 895,
+  "item": "Isoxsuprine ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 896,
+  "item": "Ketamine ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 900,
+  "item": "Lactulose ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 901,
+  "item": "Lagundi",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 902,
+  "item": "Lansoprazole",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 903,
+  "item": "Levofloxacin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 904,
+  "item": "Levofloxacin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 905,
+  "item": "Levofloxacin ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 906,
+  "item": "Levothyroxine ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 907,
+  "item": "Lidocaine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 908,
+  "item": "Lidocaine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 909,
+  "item": "Lidocaine ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 910,
+  "item": "Lidocaine ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 912,
+  "item": "Lithium Carbonate ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 913,
+  "item": "capsule",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 914,
+  "item": "Loratadine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 915,
+  "item": "Loratadine ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 916,
+  "item": "Losartan ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 917,
+  "item": "vial",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 918,
+  "item": "Mannitol ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 919,
+  "item": "Mebendazole ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 920,
+  "item": "tablet",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 921,
+  "item": "tab\/cap",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 922,
+  "item": "Mefenamic Acid",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 923,
+  "item": "Meropenem ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 924,
+  "item": "Meropenem ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 925,
+  "item": "Metformin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 927,
+  "item": "Methylergometrine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 928,
+  "item": "Methyldopa",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 929,
+  "item": "Methylprednisolone ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 931,
+  "item": "Methylprednisolone ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 933,
+  "item": "Methylprednisolone ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 934,
+  "item": "Metoclopramide",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 935,
+  "item": "Metoclopramide",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 936,
+  "item": "Metoclopramide ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 937,
+  "item": "Metoprolol ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 938,
+  "item": "Metoprolol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 940,
+  "item": "Metronidazole",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 941,
+  "item": "Metronidazole ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 942,
+  "item": "Metronidazole ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 943,
+  "item": "Midazolam ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 944,
+  "item": "Monobasic\/Dibasic Sodium Phosphate",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 945,
+  "item": "Monobasic\/Dibasic Sodium Phosphate",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 946,
+  "item": "Montelukast ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 947,
+  "item": "Montelukast ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 948,
+  "item": "Morphine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 949,
+  "item": "Multivitamins",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 950,
+  "item": "Multivitamins ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 951,
+  "item": "Multivitamins ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 953,
+  "item": "Nalbuphine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 954,
+  "item": "Naloxone ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 955,
+  "item": "tablet",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 958,
+  "item": "Nicardipine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 961,
+  "item": "tablet",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 965,
+  "item": "Nystatin ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 969,
+  "item": "Omeprazole ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 970,
+  "item": "Omeprazole ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 971,
+  "item": "Omeprazole ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 972,
+  "item": "Ondansetron ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 973,
+  "item": "Oral Rehydration Salt ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 975,
+  "item": "Oxacillin ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 978,
+  "item": "Oxycodone ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 979,
+  "item": "Oxymetazoline Nasal Spray",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 980,
+  "item": "Oxytocin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 983,
+  "item": "Paracetamol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 984,
+  "item": "Paracetamol ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 985,
+  "item": "Paracetamol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 986,
+  "item": "Paracetamol ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 987,
+  "item": "Paracetamol ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 988,
+  "item": "Paracetamol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 989,
+  "item": "Penicillin ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 990,
+  "item": "Penicillin ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 991,
+  "item": "Penicillin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 992,
+  "item": "Pethidine ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 993,
+  "item": "Phenobarbital",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 994,
+  "item": "Phenobarbital",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 995,
+  "item": "Phenobarbital",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 996,
+  "item": "tab\/cap",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 997,
+  "item": "tab\/cap",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 998,
+  "item": "Phenoxymethy Penicillin ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 999,
+  "item": "Phenylephrine eye drops solution ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1000,
+  "item": "Phenytoin ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1001,
+  "item": "Phenytoin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1002,
+  "item": "Pilocarpine Eye Drops Solution",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1003,
+  "item": "Piperacillin Tazobactam ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1004,
+  "item": "pre-filled syringe",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1005,
+  "item": "Potassium ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1006,
+  "item": "Potassium ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1007,
+  "item": "Potassium ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1009,
+  "item": "Prednisolone eye drops suspension",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1010,
+  "item": "Prednisone ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1011,
+  "item": "Prednisone ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1014,
+  "item": "Propofol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1015,
+  "item": "Propranolol ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1016,
+  "item": "Propranolol ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1017,
+  "item": "tablet",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1019,
+  "item": "Ranitidine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1020,
+  "item": "Ranitidine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1022,
+  "item": "Rocuronium ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1024,
+  "item": "Rosuvastatin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1025,
+  "item": "Rosuvastatin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1027,
+  "item": "Salbutamol ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1028,
+  "item": "nebule",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1029,
+  "item": "MDI",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1033,
+  "item": "Sevoflurane Inhalation",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1034,
+  "item": "Sertraline",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1035,
+  "item": "Silver Sulfadiazine Cream",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1036,
+  "item": "Silver Sulfadiazine Cream",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1037,
+  "item": "Simvastatin ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1038,
+  "item": "Simvastatin ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1039,
+  "item": "Sodium Bicarbonate ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1040,
+  "item": "vial",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1041,
+  "item": "vial",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1042,
+  "item": "tablet",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1044,
+  "item": "tablet",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1045,
+  "item": "vial",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1046,
+  "item": "Streptomycin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1049,
+  "item": "Sucralfate ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1051,
+  "item": "Terbutaline ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1052,
+  "item": "Tetanus Toxoid",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1053,
+  "item": "Tetanus Immunoglobulin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1057,
+  "item": "vial",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1058,
+  "item": "Timolol Eye Drops Solution",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1060,
+  "item": "Tobramycin Eye Drops Solution",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1061,
+  "item": "Tobramycin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1062,
+  "item": "Tobramycin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1063,
+  "item": "Tramadol ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1064,
+  "item": "Tramadol ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1066,
+  "item": "Tranexamic Acid ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1067,
+  "item": "Tranexamic Acid ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1068,
+  "item": "Trimetazidine ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1069,
+  "item": "Tropicamide Eye Drops Solution",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1070,
+  "item": "Ursodeoxycholic Acid ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1073,
+  "item": "Valsartan ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1074,
+  "item": "Valsartan ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1075,
+  "item": "Valsartan ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1076,
+  "item": "Vancomycin ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1079,
+  "item": "Verapamil ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1081,
+  "item": "Vitamin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1082,
+  "item": "Vitamin ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1083,
+  "item": "Warfarin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1085,
+  "item": "Zinc ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1086,
+  "item": "Zinc",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1087,
+  "item": "tablet",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1090,
+  "item": "Capecitabine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1091,
+  "item": "Carboplatin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1092,
+  "item": "Carboplatin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1093,
+  "item": "Cisplatin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1094,
+  "item": "Cisplatin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1095,
+  "item": "Cyclophosphamide ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1096,
+  "item": "Cyclophosphamide ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1098,
+  "item": "Dacarbazine ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1101,
+  "item": "Epirubicin ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1102,
+  "item": "Epirubicin ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1105,
+  "item": "tablet",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1106,
+  "item": "Fluorouracil",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1108,
+  "item": "Gemcitabine ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1109,
+  "item": "capsule",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1110,
+  "item": "Ifosfamide",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1111,
+  "item": "Ifosfamide",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1112,
+  "item": "Irinotecan ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1113,
+  "item": "Irinotecan ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1117,
+  "item": "Methotrexate ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1125,
+  "item": "Tamoxifen",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1126,
+  "item": "Trastuzumab",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1127,
+  "item": "vial",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1128,
+  "item": "vial",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1129,
+  "item": "Balanced Multiple Replacement Solution ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1130,
+  "item": "Balanced Multiple Replacement Solution",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1131,
+  "item": "Balanced Multiple Maintenance Pediatric Solution",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1132,
+  "item": "Dextrose ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1133,
+  "item": "Dextrose ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1134,
+  "item": "Dextrose",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1135,
+  "item": "Dextrose ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1136,
+  "item": "Dextrose ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1137,
+  "item": "Dextrose ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1139,
+  "item": "Dextrose ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1140,
+  "item": "Dextrose ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1141,
+  "item": "Dextrose ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1142,
+  "item": "Sodium Chloride",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1143,
+  "item": "Dextrose ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1144,
+  "item": "Lactated Ringer's Solution",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1145,
+  "item": "Peritoneal Dialysis Solution",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1146,
+  "item": "Peritoneal Dialysis Solution",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1147,
+  "item": "Sodium Chloride",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1148,
+  "item": "Sodium Chloride",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1363,
+  "item": "Ampicillin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1364,
+  "item": "rabies vaccine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1365,
+  "item": "ATENOLOL ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1366,
+  "item": "Budesodine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1367,
+  "item": "Bumetanide",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1368,
+  "item": "Cetirizine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1371,
+  "item": "co-amoxiclav",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1372,
+  "item": "Co-Amoxiclav",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1374,
+  "item": "digoxin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1376,
+  "item": "Ertapenem",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1377,
+  "item": "Escitalopram",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1378,
+  "item": "fenofibrate",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 1379,
+  "item": "Fenofibrate",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2904,
+  "item": "Paracetamol ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2936,
+  "item": "Albendazole 400 mg chewable",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2937,
+  "item": "Alcohol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2938,
+  "item": "Alendronate + Cholecalciferol (Vit D3) 70mg (as sodium salt) + 2800IU",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2941,
+  "item": "Anti D immunoglobulin (human anti-D immunoglobulin) 200mcg\/ml, 1.5mL (IM)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2942,
+  "item": "Baclofen",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2943,
+  "item": "BCG vaccine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2945,
+  "item": "Bisoprolol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2946,
+  "item": "Brimonidine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2947,
+  "item": "Calcitriol 0.25mcg",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2951,
+  "item": "Cefotaxime",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2952,
+  "item": "Chlorhexedine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2953,
+  "item": "Chlorphenamine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2954,
+  "item": "Cinnarazine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2956,
+  "item": "Clonidine ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2957,
+  "item": "Cloxacillin ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2958,
+  "item": "Co-Amoxiclav",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2959,
+  "item": "Cobra Antivenin 800MU\/4.8mL, 1mL",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2960,
+  "item": "Conjugated equine estrogen 625mcg",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2962,
+  "item": "Diloxanide 500g (as furoate)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2963,
+  "item": "Diltiazem 60mg",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2964,
+  "item": "Dorzolamide eye drops solution 2% 5mL (as hydrochloride)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2965,
+  "item": "Dydrogesterone 10mg",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2966,
+  "item": "Enalapril ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2969,
+  "item": "Flumazenil ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2971,
+  "item": "Fluticasone",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2972,
+  "item": "Fluticasone ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2974,
+  "item": "Gabapentin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2976,
+  "item": "Gliclazide 30mg MR",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2977,
+  "item": "Gliclazide 60mg MR",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2978,
+  "item": "Gliclazide",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2981,
+  "item": "Hepatitis B Immunoglobulin (Human) 0.5mL (IM)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2982,
+  "item": "Human Papillomavirus quadrivalent (types 6,11, 16, 18) recombinant vaccine 0.5mL suspension glass, pre filled syringe",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2983,
+  "item": "Ibuprofen 200mg\/5mL suspension, 60ml",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2985,
+  "item": "Biphasic Insulin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2986,
+  "item": "Irbesartan ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2987,
+  "item": "Irbesartan",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2989,
+  "item": "Isosorbide-5-Mononitrate 30mg MR",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2991,
+  "item": "Lamotrigine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2992,
+  "item": "Latanoprost Eye drops",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2993,
+  "item": "Levodopa + Carbidopa",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2994,
+  "item": "Levodopa + Carbidopa",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2995,
+  "item": "Levothyroxine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2997,
+  "item": "Losartan",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2998,
+  "item": "Losartan ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 2999,
+  "item": "Meclozine (Meclizine) 12.5mg chewable",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3000,
+  "item": "Meclizine 25mg",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3001,
+  "item": "Mecobalamine ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3002,
+  "item": "Mecobalamine ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3003,
+  "item": "Mefenamic Acid 50mg\/5mL",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3004,
+  "item": "Mesalazine 500mg",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3005,
+  "item": "Metformin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3006,
+  "item": "Methimazole ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3007,
+  "item": "Montelukast",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3011,
+  "item": "Mycophenolate ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3012,
+  "item": "Nimodipine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3014,
+  "item": "Nitrofurantoin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3015,
+  "item": "Ocreotide ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3016,
+  "item": "Ofloxacin ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3017,
+  "item": "Ofloxacin ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3018,
+  "item": "Ofloxacin ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3020,
+  "item": "Oxcarbazepine 300mg",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3021,
+  "item": "Oxycodone ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3022,
+  "item": "Oxycodone ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3023,
+  "item": "Paracetamol ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3025,
+  "item": "Phenytoin ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3026,
+  "item": "Povidone Iodine 1% oral solution 240mL",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3027,
+  "item": "Prednisone ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3028,
+  "item": "Pyridostigmine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3029,
+  "item": "Quetiapine ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3030,
+  "item": "Quetiapine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3031,
+  "item": "Rabies Immunoglobulin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3032,
+  "item": "Risperidone ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3033,
+  "item": "Risperidone ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3035,
+  "item": "Sambong",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3037,
+  "item": "Sugammadex",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3039,
+  "item": "Telmisartan ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3040,
+  "item": "Telmisartan",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3044,
+  "item": "Topiramate ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3045,
+  "item": "Topiramate",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3046,
+  "item": "Topiramate ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3048,
+  "item": "Travoprost 0.004%, 2.5mL",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3049,
+  "item": "Valproic Acid",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3052,
+  "item": "Water-soluble contains Vitamin B Complex and Vitamin C, 1mL and 2mL amp (IV)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3056,
+  "item": "Dactinomycin powder, 500mcg",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3057,
+  "item": "Deferiprone 500mg",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3058,
+  "item": "Deferoxamine powder 500mg (IM,IV Infusion, SC) (as mesilate)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3059,
+  "item": "Docetaxel",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3060,
+  "item": "L-Asparaginase lyophilized ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3061,
+  "item": "Mercaptopurine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3062,
+  "item": "Methotrexate",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3063,
+  "item": "Sodium Iodide ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3064,
+  "item": "Sodium Iodide ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3065,
+  "item": "Sodium Iodide ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3066,
+  "item": "Sodium Iodide ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3067,
+  "item": "Sodium Iodide ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3068,
+  "item": "Sodium Iodide ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3069,
+  "item": "Sodium Iodide",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3070,
+  "item": "Sodium Iodide",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3071,
+  "item": "Sodium Iodide ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3072,
+  "item": "Sodium Iodide ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3073,
+  "item": "Sodium Iodide ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3074,
+  "item": "Sodium Iodide ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3075,
+  "item": "Sodium Iodide",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3076,
+  "item": "Sodium Iodide",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3077,
+  "item": "Sodium Iodide",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3078,
+  "item": "Sodium Iodide ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3079,
+  "item": "Gabapentin ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3080,
+  "item": "Docetaxel ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3993,
+  "item": "CARVEDILOL ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 3999,
+  "item": "ERYHTROMYCIN EYE OINTMENT",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4000,
+  "item": "CARBACHOL ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4001,
+  "item": "Povidone Iodine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4003,
+  "item": "ALENDRONATE",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4004,
+  "item": "Aciclovir",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4005,
+  "item": "Aciclovir ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4006,
+  "item": "atorvastatin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4007,
+  "item": "atorvastatin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4008,
+  "item": "atorvastatin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4010,
+  "item": "Azithromycin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4140,
+  "item": "Immunoglobin normal human ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4141,
+  "item": "Methimazole",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4177,
+  "item": "Varicella Zoster Immunoglobulin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4179,
+  "item": "Nifedipine ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4549,
+  "item": "Betahistine ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4550,
+  "item": "Carboprost",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4551,
+  "item": "Letrozole",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4552,
+  "item": "Idarubicin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4554,
+  "item": "Clozapine ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4556,
+  "item": "Linezolid",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4557,
+  "item": "Moxifloxacin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4558,
+  "item": "Ondansetron",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4559,
+  "item": "Salbutamol ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4562,
+  "item": "Ascorbic Acid ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4563,
+  "item": "Butamirate 75mg\/5ml syrup",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4564,
+  "item": "Cefalexin ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4565,
+  "item": "Clindamycin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4566,
+  "item": "Clonidine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4567,
+  "item": "Clobetasole",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4570,
+  "item": "Dicycloverine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4571,
+  "item": "Dobutamine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4572,
+  "item": "Mebendazole 500mg chewable",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4573,
+  "item": "Mebendazole ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4596,
+  "item": "Fluconazole",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4755,
+  "item": "Diphenhydramine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4756,
+  "item": "Colistin ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4759,
+  "item": "Sodium Bicarbonate",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4760,
+  "item": "Ondansetron",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4762,
+  "item": "Tamsulosin ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4763,
+  "item": "Tiotropium ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4764,
+  "item": "Tiotropium Handihaler",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4900,
+  "item": "Ciclosporin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4902,
+  "item": "Hydroxychloroquine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4903,
+  "item": "Sodium Sulfate powder",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4917,
+  "item": "Iopamidol ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4918,
+  "item": "Iopamidol ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4932,
+  "item": "Iopamidol ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4941,
+  "item": "Amphoterecin B Lipid Complex 50mg (IV infusion)as cholesteryl complex, colloida dispersion)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4943,
+  "item": "Amphoterecin B Non Lipid Complex 50mg lyophilized powder, (IV Infusion)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4945,
+  "item": "Hepatitis A inactivated vaccine 80 units\/0.5mL (GBM strain) pre-filled syringe single dose (IM) (pediatric)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4946,
+  "item": "Live attenuated measles, mumps, and rubella (MMR) vaccine monodose vial + 0.5mL diluent (SC)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4947,
+  "item": "Live attenuated measles vaccine monodose vial + 0.5mL diluent (SC)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4948,
+  "item": "Meningococcal polysaccharide (Neisseria meningitidis vaccine) lyophilized powder, 50mcg\/0.5mL dose (Group A + C) single dose + 0.5mL diluent syringe (IM, SC)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4949,
+  "item": "Pneumococcal conjugated vaccine 13-valent suspencion (PCV 13)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4950,
+  "item": "Typhoid vaccine Vi-capsular polysaccharide S. typhi 25 micrograms in 0.5mL (IM)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 4952,
+  "item": "Entecavir 500mcg",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5056,
+  "item": "Alteplase ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5057,
+  "item": "Alcohol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5058,
+  "item": "Amikacin 50mg\/mL, 2mL 100mg IM, IV as sulfate",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5060,
+  "item": "Beractant 25mg\/mL, suspension, 4mL vial, intratracheal administration",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5061,
+  "item": "Budesonide 250mcg\/mL respiratory solution (for nebulization), 2mL (unit dose)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5063,
+  "item": "Chlorhexedine4%, 1 gal (as gluconate)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5066,
+  "item": "Domperidone ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5070,
+  "item": "Midazolam ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5074,
+  "item": "Rifaximin ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5075,
+  "item": "Sodium Chloride 2.5mEq\/mL, 20mL",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5077,
+  "item": "Leuproreline powder 3.75mg with syringe (IM, SC) (as acetate)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5078,
+  "item": "Leuproreline powder 11.25mg depot solution, vial + syringe (IM, SC) (as acetate)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5080,
+  "item": "Sodium Iodide with activity range 26-29",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5081,
+  "item": "Sodium Iodide with activity range 5-9mci",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5269,
+  "item": "Isotonic Electrolyte Solution",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5271,
+  "item": "Co-Amoxiclav",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5272,
+  "item": "Chondroitin Sulfate + Sodium Hyaluronate",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5303,
+  "item": "Fluphenazine 25mg\/mL (as deconoate), 1 mL (IM) ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5306,
+  "item": "Fosfomycin Trometamol 3g",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5321,
+  "item": "Proxymetacaine (proparacaine) (0.5%, 15mL (as hydrochloride)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5322,
+  "item": "Fluticasone + Salmeterol 250mcg Fluticasone (as proprionate) + 50mcg Salmeterol (as Xinofoate) x 60 doses with appropriate accompanying dispenser",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5325,
+  "item": "All-in-one Admixtures (also called 3 in 1\" or \"dual energy\" solutions) 1300 kcal omega 3-enriched  1904 mL",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5326,
+  "item": "Azathioprine 50 mg",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5327,
+  "item": "Ciprofloxacin 400mg\/200mL (IV infusion)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5328,
+  "item": "Clozapine 25 mg",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5330,
+  "item": "Oxaliplatin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5331,
+  "item": "Oxaliplatin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5332,
+  "item": "Telmisartan 40mg  + Hydrochlorothiazide 12.5mg",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5333,
+  "item": "Paclitaxel 6mg\/mL, 17mL (IV, IV infusion) with IV set",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5335,
+  "item": "Rituximab",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5336,
+  "item": "Rituximab",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5371,
+  "item": "Calcium Carbonate",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5375,
+  "item": "Methylprednisolone ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5376,
+  "item": "Pyrazinamide",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5377,
+  "item": "Rifampicin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5378,
+  "item": "Valproic Acid",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5379,
+  "item": "Vitamin B Complex",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5380,
+  "item": "Etoposide",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5381,
+  "item": "Filgrastim ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5383,
+  "item": "Divalproex Sodium",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5384,
+  "item": "Divalproex Sodium",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5385,
+  "item": "Cotrimoxazole",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5388,
+  "item": "Levofloxacin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5392,
+  "item": "Theophylline",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5396,
+  "item": "Isoniazid",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5403,
+  "item": "Cytarabine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5404,
+  "item": "Leuproreline",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5420,
+  "item": "Sacubitril\/Valsartan",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5421,
+  "item": "Sacubitril\/Valsartan",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5423,
+  "item": "Cefipime",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5424,
+  "item": "Levetiracetam",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5425,
+  "item": "Levetiracetam",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5426,
+  "item": "Levetiracetam",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5427,
+  "item": "Indacaterol (as maleate) + glycopyrronium (as bromide)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5431,
+  "item": "Aciclovir",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5436,
+  "item": "polymyxin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5438,
+  "item": "Captopril",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5441,
+  "item": "Deferasirox ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5442,
+  "item": "Defrasirox",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5454,
+  "item": "Fluticasone",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5455,
+  "item": "Fluticasone",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5457,
+  "item": "Hypertonic",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5459,
+  "item": "Iohexol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5461,
+  "item": "Levobupivacaine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5462,
+  "item": "levofloxacin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5463,
+  "item": "Medroxyprogesterone",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5467,
+  "item": "Sodium Hyaluronate",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5468,
+  "item": "Sodium Chloride",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5469,
+  "item": "Tolvaptan",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5470,
+  "item": "tropiamide",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5471,
+  "item": "ciclosporin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5472,
+  "item": "verapamil",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 5476,
+  "item": "Anti-tetanus",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 8198,
+  "item": "All-in-one Admixtures",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 8205,
+  "item": "Enteral Nutrition",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 8217,
+  "item": "Enteral Nutrition",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 8228,
+  "item": "Linezolid 2mg\/mL",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 8229,
+  "item": "Moxifloxacin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 8230,
+  "item": "Spironolactone",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 8232,
+  "item": "Calcium Folinate",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 8233,
+  "item": "Cytarabine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 8235,
+  "item": "Cytarabine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 8236,
+  "item": "Doxorubicin powder",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 8237,
+  "item": "Doxorubicin powder",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 8255,
+  "item": "Dextran",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 8278,
+  "item": "Furosemide",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 8279,
+  "item": "Norephinephrine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 8284,
+  "item": "Oxygen",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 8363,
+  "item": "Povidone Iodine Surgical Skin Cleanser",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 8366,
+  "item": "Enteral Nutrition Pediatric",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 8367,
+  "item": "Enteral Nutrition - Semi Elemental",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 8368,
+  "item": "Immunoglobulin ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 8371,
+  "item": "Iohexol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 8374,
+  "item": "Bleomycin powder, 15mg (IM,IV,SC) (as sulfate)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 8378,
+  "item": "Mesna (sodium-2-mercaptoethanesulphonate) 100mg\/mL, 4mL (IV)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 8379,
+  "item": "Paclitaxel 6mg\/ml, 25ml (IV,IV Infusion)  with IV Set",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 8381,
+  "item": "Gemcitabine 1g (IV Infusion) (as hydrochloride)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 8383,
+  "item": "Suxamethonium (succinylcholine)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 8899,
+  "item": "Famotidine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 9070,
+  "item": "Eperisone",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 9072,
+  "item": "Hydrocortisone",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 9081,
+  "item": "Azithromycin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 9238,
+  "item": "Phenobarbital",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 9274,
+  "item": "Anastrazole 1mg",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 9275,
+  "item": "Bicalutamide 50mg",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 9358,
+  "item": "Iron Sucrose 20mg\/mL, 5mL",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 9560,
+  "item": "Remdesivir 100mg",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 9648,
+  "item": "Alteplase",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 9735,
+  "item": "Voriconazole 200mg",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 10205,
+  "item": "Aciclovir eye ointment",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 10256,
+  "item": "Sodium Thiosulfate",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 10274,
+  "item": "Remifentanil 1mg (in vial) lyophilized powder (IV infusion)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 10279,
+  "item": "Acetylcysteine 100mg\/mL, 3mL for inhalation",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 10285,
+  "item": "Live attenuated varicella vaccine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 10286,
+  "item": "Aspirin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 10287,
+  "item": "Clotrimazole",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 10289,
+  "item": "Ferrous Salt",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 10290,
+  "item": "Folic Acid",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 10292,
+  "item": "Methylprednisolone",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 10293,
+  "item": "Phenytoin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 10294,
+  "item": "Tenofovir",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 10300,
+  "item": "Itraconazole",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 10322,
+  "item": "Cotrimoxazole",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 10323,
+  "item": "Erythromycin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 10325,
+  "item": "Risperidone",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 10326,
+  "item": "Glyceryl Tinitrate (Nitroglycerin)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 10376,
+  "item": "Iohexol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 10377,
+  "item": "Iohexol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 10381,
+  "item": "Methotrexate",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 10468,
+  "item": "Tuberculin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 10489,
+  "item": "Favipiravir 200mg",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 10915,
+  "item": "Baricitinib",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 10916,
+  "item": "Baricitinib",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 10921,
+  "item": "oseltamivir",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 10922,
+  "item": "Ketorolac",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 10935,
+  "item": "Peritoneal Dialysis Solution, sterile with 2.3% dextrose 2L ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 10937,
+  "item": "Hydrochlorothiazide 12.5mg",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 10941,
+  "item": "Heparin (unfractionated) 1000iu\/mL 5mL (IV Infusion, SC),  (as sodium salt)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 10943,
+  "item": "Aspirin 100mg",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 11250,
+  "item": "Protamine sulfate 50mg\/5ml",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 11834,
+  "item": "Lagundi",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12015,
+  "item": "Quetiapine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12017,
+  "item": "Methotrexate",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12216,
+  "item": "0.9% Sodium Chloride",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12217,
+  "item": "0.9% Sodium Chloride",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12218,
+  "item": "5% Dextrose in Water 500ml (non-DEHP, non-PVC or latex)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12224,
+  "item": "Adult Polymeric Enteral Formula with EPA, with DHA with GLA without arginine, gluten - free, caloric density 1.5kcal:1mL per bottle; per 1000mL  Energy-1000-2000kcal,  Carbohydrates - 50.0 - 55.0 g  Protein - 30 - 35.0 g Fat - 20 - 25.0g   Sodium - 1400 - 1450mg,  Potassium - 1600 - 1650 mg,  Phosphorous - 800 - 850 mg, Calcium 800-850mg, Magnesium 250-300mg,500-800 mL, per bottle, Ready to hang, liquid form   Flavor - Vanilla or plain  ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12225,
+  "item": "Adult Polymeric Enteral Formula with HMB, Lactose-free, gluten-free per 100g,  Energy-400-450kcal,  Carbohydrates - 55.0 - 60.0 g  Protein - 15 - 20.0 g Fat - 10 - 15.0g   Sodium - 300 - 350mg,  Potassium - 650 - 700 mg,  Phosphorous - 250 - 300 mg, Calcium 400-450mg, Magnesium 90-95mg,800-1000 g per can, powder form Flavor - Vanilla  ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12226,
+  "item": "Adult Polymeric Enteral Formula with whey protein per 100 grams   Energy-420-470kcal,  Carbohydrates - 50.0 - 60.0 g  Protein - 15 - 25.0 g Fat - 10 - 20.0g   Sodium - 200 - 300mg,  Potassium - 400 - 700 mg,  Phosphorous - 250 - 350 mg, Calcium 350-500mg, Magnesium 75-115mg,600-800 g per bot or can or box, powder form, Flavor - Vanilla  ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12227,
+  "item": "Modular Protein Enteral Formula",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12229,
+  "item": "Disease specific Enteral Formula low glycemic index per 100 grams   Energy-400-500kcal,  Carbohydrates - 40.0 - 100.0 g  Protein - 10 - 25.0 g Fat - 10 - 20.0g   Sodium - 150 - 450mg,  Potassium - 350 - 750 mg,  Phosphorous - 150 - 350 mg, Calcium 250-400mg, Magnesium 80-200mg,800-1000 g per can, powder form, Flavor - Vanilla  ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12230,
+  "item": "Disease-specific Enteral Formula, calorie-dense, with EPA, Lactose-free, gluten-free per 100g,  Energy-350-450kcal,  Carbohydrates - 55.0 - 65.0 g  Protein - 20 - 30.0 g Fat - 5 - 10.0g   Sodium - 350 - 450mg,  Potassium - 550 - 650 mg,  Phosphorous - 210 - 300 mg, Calcium 450-450mg, Magnesium 120-220mg,300-1000 g per can, powder form Flavor - Vanilla ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12231,
+  "item": "Disease-specific Enteral Formula, calorie-dense, with EPA, with DHA, with MCT, Lactose-free, gluten-free; Calric Density 1.5 kacl: 1mL per bottle or can  Energy-300-400kcal,  Carbohydrates - 20.0 - 25.0 g  Protein - 15 - 20.0 g Fat - 10 - 15.0g   Sodium - 90 - 100mg,  Potassium - 250 - 300 mg,  Phosphorous - 200 - 250 mg, Calcium 400-450mg, Magnesium 50-55mg,200-500 mL per bottle, ready to drink, liquid form, Flavor - Vanilla   or cappuccino or tropical",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12232,
+  "item": "Disease specific Enteral Formula renal formula, low protein content calorie-dense, with EPA, Lactose-free, gluten-free, low glycemic index Caloric density 1.5-2.0kcal per bottle or can  Energy-400-450kcal,  Carbohydrates - 45.0 - 50.0 g  Protein - 10 - 15.0 g Fat - 20 - 25.0g   Sodium - 150 - 200mg,  Potassium - 250 - 300 mg,  Phosphorous - 150 - 200 mg, Calcium 200-250mg, Magnesium 50-55mg,200-400 mL per bottle or can, ready to drink, liquid form, Flavor - Vanilla  or plain",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12234,
+  "item": "Pediatric polymeric enteral formula for 1-3 years old per 100 grams Energy-440-445kcal,  Carbohydrates - 60.0 - 65.0 g  Protein - 10 - 15.0 g Fat - 10 - 15.0g   Sodium - 150 - 200mg,  Potassium - 600 - 650 mg,  Phosphorous - 350 - 400 mg, Calcium 500-550mg, Magnesium 50-100mg,800-1000 grams per can or box, ready to drink, powder form, Flavor - Vanilla",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12395,
+  "item": "Biperiden 2mg",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12396,
+  "item": "Haloperidol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12397,
+  "item": "Vitamin B complex ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12398,
+  "item": "Clonidine ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12399,
+  "item": "Carbamazepine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12400,
+  "item": "Paracetamol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12401,
+  "item": "Lagundi",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12402,
+  "item": "Lagundi",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12403,
+  "item": "Cetirizine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12404,
+  "item": "Amlodipine ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12405,
+  "item": "Simvastatin ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12406,
+  "item": "Fluphenazine decanoate",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12407,
+  "item": "Ascorbic Acid",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12408,
+  "item": "Lagundi",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12409,
+  "item": "Amoxicillin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12410,
+  "item": "Paracetamol ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12411,
+  "item": "Valproic Acid",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12412,
+  "item": "Lithium Carbonate",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12413,
+  "item": "Quetiapine ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12414,
+  "item": "Haloperidol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12415,
+  "item": "Albendazole",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12416,
+  "item": "Chloroquine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12417,
+  "item": "Salbutamol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12418,
+  "item": "Dexamethasone",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12419,
+  "item": "Valproic acid",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12420,
+  "item": "Ascorbic Acid",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12471,
+  "item": "Amino Acids crystalline standard 6% 100ml (IV Infusion)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12478,
+  "item": "Atorvastatin 80mg (as calcium)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12479,
+  "item": "Betamethasone Cream 0.05% 5g cream\/ ointment (as dipropionate)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12484,
+  "item": "(Calcium Sennosides) Standardized Senna concentrate ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12485,
+  "item": "(Calcium Sennosides) Standardized Senna concentrate) ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12488,
+  "item": "Chlorpromazine 100mg",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12490,
+  "item": "Dantrolene 20mg (as sodium salt) with 3g mannitol\/vial (for reconstitution with 60mL sterile water water for injection)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12492,
+  "item": "Distilled Water 1L (Water for injection) ; no preservative ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12493,
+  "item": "Adult Polymeric Enteral Formula with HMB, Lactose-free, gluten-free per 100g,  Energy-400-450kcal,  Carbohydrates - 55.0 - 60.0 g  Protein - 15 - 20.0 g Fat - 10 - 15.0g   Sodium - 300 - 350mg,  Potassium - 650 - 700 mg,  Phosphorous - 250 - 300 mg, Calcium 400-450mg, Magnesium 90-95mg,400 g per can, powder form Flavor - Vanilla  ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12494,
+  "item": "Adult Polymeric Enteral Formula with whey protein per 100 grams   Energy-420-470kcal,  Carbohydrates - 50.0 - 60.0 g  Protein - 15 - 25.0 g Fat - 10 - 20.0g   Sodium - 200 - 300mg,  Potassium - 400 - 700 mg,  Phosphorous - 250 - 350 mg, Calcium 350-500mg, Magnesium 75-115mg,600-800 g per bot or can or box, powder form, Flavor - Vanilla  ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12497,
+  "item": "Disease-specific Enteral Formula, calorie-dense, with EPA, Lactose-free, gluten-free per 100g,  Energy-350-450kcal,  Carbohydrates - 55.0 - 65.0 g  Protein - 20 - 30.0 g Fat - 5 - 10.0g   Sodium - 350 - 450mg,  Potassium - 550 - 650 mg,  Phosphorous - 210 - 300 mg, Calcium 450-450mg, Magnesium 120-220mg,300-1000 g per can, powder form Flavor - Vanilla  ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12503,
+  "item": "Felodipine 5mg MR",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12504,
+  "item": "Felodipine 10mg MR",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12505,
+  "item": "Fluoresceine 10% (100mg\/mL)  (as sodium salt), 5mL (IV)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12506,
+  "item": "Fluoxetine 20mg",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12507,
+  "item": "Gadoteric acid 0.5mmol\/mL, 20mL",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12508,
+  "item": "Gadoteric acid 0.5mmol\/mL, 10mL",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12511,
+  "item": "Levodopa + Carbidopa, 200mg Levodopa + 50mg Carbidopa extended release",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12514,
+  "item": "Levothyroxine 150mcg (as sodium\/ anhydrous sodium)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12517,
+  "item": "Morphine 10mg (as sulfate)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12518,
+  "item": "Morphine 10mg MR (as sulfate)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12519,
+  "item": "Morphine 30mg (as sulfate)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12520,
+  "item": "Morphine 30mg MR (as sulfate)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12521,
+  "item": "Mupirocin ointment 2%,  15g",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12522,
+  "item": "Olanzapine 10mg orodispersible",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12523,
+  "item": "Olanzapine 10mg",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12524,
+  "item": "Oxycodone (as hydrochloride) 10mg + Naloxone (as hydrochloride) 5mg",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12525,
+  "item": "Oxycodone (as hydrochlore)  20mg + Naloxone (as hydrochloride) 10mg",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12526,
+  "item": "Oxycodone (as hydrochloride) 40mg + Naloxone (as hydrochloride) 20mg",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12528,
+  "item": "Valproic Acid 250mg (as divalproex sodium)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12529,
+  "item": "Valproic Acid 500mg (as divalproex sodium)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12538,
+  "item": "Sodium Iodide between 6-10 mCi",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12539,
+  "item": "Sodium Iodide between 11-15 mCi",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12540,
+  "item": "Sodium Iodide between 16-20 mCi",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12546,
+  "item": "Esmolol 10mg\/mL (as hydrochloride), 10mL (IV)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12576,
+  "item": "Imatinib",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12577,
+  "item": "Leuproline acetate",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12578,
+  "item": "Diptheria toxoid, tetanus toxoid, pertussis vaccine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12579,
+  "item": "Filgrastim",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12580,
+  "item": "Polio vaccine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12581,
+  "item": "Trastuzumab ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12582,
+  "item": "Trastuzumab",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12583,
+  "item": "Rituximab ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12584,
+  "item": "Rituximab",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12753,
+  "item": "Cyclophosphamide",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12757,
+  "item": "Tocilizumab 162mg",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12763,
+  "item": "Vincristine sulfate",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12764,
+  "item": "Fluorouracil",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12774,
+  "item": "Amlodipine ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12775,
+  "item": "Levothyroxine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12776,
+  "item": "Risperidone",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12777,
+  "item": "Olanzapine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12778,
+  "item": "Losartan",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12863,
+  "item": "Molnupiravir 200 mg",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12901,
+  "item": "Levothyroxine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12902,
+  "item": "Timolol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12903,
+  "item": "Tobramycin + Dexamethasone",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12904,
+  "item": "Diphenhydramine 5",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12905,
+  "item": "Mesna",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12906,
+  "item": "Gemcitabine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12907,
+  "item": "Gemcitabine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12908,
+  "item": "Bicalutamide",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12909,
+  "item": "Capecitabine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12911,
+  "item": "Ondansetron",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12913,
+  "item": "BCG",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 12914,
+  "item": "Polio Vaccine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 13023,
+  "item": "Hydroxychloroquine ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 13036,
+  "item": "Lamotigrine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 13037,
+  "item": "Imatinib",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 13038,
+  "item": "Chlorpromazine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 13039,
+  "item": "Donepezil 10mg",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 13040,
+  "item": "Albendazole ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 13041,
+  "item": "Hepatitis B",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 13042,
+  "item": "MMR",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 13043,
+  "item": "MR",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 13239,
+  "item": "Pneumococal vaccine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 13240,
+  "item": "Hepatitis A vaccine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 13241,
+  "item": "Mumps, measles, rubella (MMR)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 13242,
+  "item": "Pneumococal vaccine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 14216,
+  "item": "Amino Acid",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 14217,
+  "item": "Amino Acid",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 14224,
+  "item": "Lamotigrine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 14225,
+  "item": "Sevelamer",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 14232,
+  "item": "Enteral Nutrition Semi-elemental Nutrition Peptide-base",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 14233,
+  "item": "Enteral Nutrition Semi-elemental Nutrition Peptide-based Formula with Omega-3-Fatty Acids",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 14234,
+  "item": "emi-Elemental enteral Formula; peptide-based formula; lactose-free:gluten-free: caloric density-1.5 kca",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 14235,
+  "item": "Semi-Elemental enteral Formula; peptide-based formula; lactose-free:gluten-free: caloric density-1.5 kcal",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 14237,
+  "item": "Enteral-Nutrition-Semi Elemental Nutrition Whey Peptide-Based formula 70% medium chained trigylyceride ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 14273,
+  "item": "Neostigmine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 14274,
+  "item": "Praziquantel",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 14319,
+  "item": "Butamirate",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 14415,
+  "item": "Sodium Iodide",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 14416,
+  "item": "Sodium Iodide 25 mCi",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 14417,
+  "item": "Sodium Iodide 30 mCi",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 14418,
+  "item": "Sodium Iodide between 31-50 mCi",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 14419,
+  "item": "Sodium Iodide between 51-75 mCi",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 14420,
+  "item": "Sodium Iodide between 76-100 mCi",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 14421,
+  "item": "Sodium Iodide 125 mCi",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 14422,
+  "item": "Sodium Iodide 150 mCi",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 14423,
+  "item": "Sodium Iodide 175mCi",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 14424,
+  "item": "Sodium Iodide 200 mCi",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 14425,
+  "item": "Sodium Iodide 250 mCi",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 14481,
+  "item": "Fluticasone",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 14575,
+  "item": "Sodium Bicarbonate 1mEq\/ml, 20mL (adult) (IV Infusion)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 14637,
+  "item": "Carbetocin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 14642,
+  "item": "MILRINONE",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 14815,
+  "item": "Phenylephrine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 14898,
+  "item": "All-in-one Admixtures (also called 3 in 1\" or \"dual energy\" solutions) 1300kcal omega - 3 enriched 1440mL Solution: Volume: 400-2500mL; Concentration: Variable; Protein: 3-6g\/100mL; Carbohydrate: 6-15g\/100mL; Lipid: 2-5g\/100mL; Calories: Variable; Electrolytes: Variable\"",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 15185,
+  "item": "Imatinib",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 15212,
+  "item": "Glycerol(Glycerin)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 15431,
+  "item": "Disease-Specific Enteral Formula; Renal formula, High Protein; Calorie-dense; Caloric Density - 1.5-2.0kcal:1ml; Per pack or can; Energy - 300-450 kcal; Carbohydrates - 35-40g; Protein - 15-22g; Fat - 20-25g; Sodium - 150-250mg; Potassium - 160-250mg; Phosphorous - 140-200mg; Calcium - 150-250mg; Magnesium - 35-50mg; 200-400 mL per pack or can; Ready-to-Drink; Liquid form; Flavor - Vanilla or plain",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 15468,
+  "item": "Imatinib",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 15582,
+  "item": "Aztreonam",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 15599,
+  "item": "Acid Concentrate",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 15750,
+  "item": "Adult Polymeric Enteral Formula with HMB, Lactose-free, gluten-free per 100g, Energy-400-450kcal, Carbohydrates - 55.0 - 60.0 g Protein - 15 - 20.0 g Fat - 10 - 15.0g Sodium - 300 - 350mg, Potassium - 650 - 700 mg, Phosphorous - 250 - 300 mg, Calcium 400-450mg, Magnesium 90-95mg, 800-1000 g per can, powder form Flavor - CHOCOLATE",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 15751,
+  "item": "Disease-Specific Enteral Formula; Calorie-dense; With EPA; Lactose-free; Gluten-free; Per 100 grams: Energy - 350-450 kcal; Carbohydrates - 55-65g; Protein - 20-30g; Fat - 5-10g; Sodium - 350-450mg; Potassium - 550-650mg; Phosphorous - 210-300mg; Calcium - 450-550mg; Magnesium - 120-220mg; 300-1000 grams per can; powder form; Flavor - Vanilla or plain",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 15755,
+  "item": "Pediatric Polymeric Enteral Formula; For 3 years old and above; Per 100 grams: Energy - 450-500 kcal; Carbohydrates - 55-65g; Protein - 10-15g; Fat - 15-20g; Sodium - 150-250mg; Potassium - 550-650mg; Phosphorous - 250-400mg; Calcium - 350-600mg; Magnesium - 45-95mg; 400-800 grams per can or box; powder form; Flavor - Chocolate",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 15803,
+  "item": "Adult Polymeric with Prebiotics and Probiotics, with Fat Soluble Vitamins, Water Soluble Vitamins, and Minerals, per 100 g: Calorie 450-500kcal, Protein 15-20g, Fat 15-20g, Fiber 5-10g, 800-1000g per can, powder form, Vanilla or Plain Flavor",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 15804,
+  "item": "Adult Polymeric Enteral Formula, Plant-based protein per 100g, Energy-400-450kcal, Carbohydrates - 55.0 - 60.0 g Protein - 15 - 20.0 g Fat - 10 - 15.0g Sodium - 300 - 350mg, Potassium - 650 - 700 mg, Phosphorous - 250 - 300 mg, Calcium 400-450mg, Magnesium 90-95mg, 800-1000 g per can, powder form Flavor - ALMOND",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 15846,
+  "item": "Semi-Elemental Enteral Formula; Peptide-based formula; With Hydrolysed Whey Protein; With medium-chained triglycerides; With Omega-3 fatty acids; Gluten-free; Caloric Density - 1.5-2.0kcal:1ml; Osmolality - 400-450 mOsm\/L; Per bottle: Energy - 750-850 kcal; Carbohydrates - 70-80g; Protein - 45-50g; Fat - 30-40g; Sodium - 600-650mg; Potassium - 1300-1400mg; Phosphorous - 300-350mg; Calcium - 500-550mg; Magnesium - 100-150mg; 500-850 grams per bottle; Ready-to-Hang; Liquid form; Flavor - Unflavored or Vanilla or Plain",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 16196,
+  "item": "Mupirocin 2%,5g",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 16910,
+  "item": "Insulin Glargine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 16911,
+  "item": "Insulin Glargine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 16912,
+  "item": "Pantoprazole",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 16913,
+  "item": "Pantoprazole",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 16921,
+  "item": "CEFEPIME",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 17136,
+  "item": "Chlorphenamine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 17137,
+  "item": "Chlorphenamine ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 17139,
+  "item": "Fluticasone + Salmeterol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 17140,
+  "item": "Nitrofurantoin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 17226,
+  "item": "Valganciclovir ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 17460,
+  "item": "Vasopressin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 17709,
+  "item": "Drugs and Medicines",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 17768,
+  "item": "Zoledronic acid",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 17841,
+  "item": "Aluminum Hydroxide  Magnesium Hydroxide",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 18134,
+  "item": "Rivaroxaban",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 18135,
+  "item": "Rivaroxaban",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 18175,
+  "item": "Goserelin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 18184,
+  "item": "Potassium Citrate",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 18199,
+  "item": "Pediatric polymeric",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 18526,
+  "item": "Dapagliflozin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 18553,
+  "item": "Midazolam",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 18555,
+  "item": "Propofol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 18562,
+  "item": "Dexmedetomidine ",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 18563,
+  "item": "5% Dextrose in 0.45%",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 18576,
+  "item": "Norepinephrine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 18577,
+  "item": "Apixaban",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 18578,
+  "item": "Apixaban",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 18579,
+  "item": "Iopamidol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 18601,
+  "item": "Potassium Citrate",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 18741,
+  "item": "Budesonide + Formoterol",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 18742,
+  "item": "Piperacillin + Tazobactam",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 18772,
+  "item": "Abiraterone",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 18819,
+  "item": "Methylene Blue",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 18840,
+  "item": "Tramadol 50mg\/ml., 2ml (IM, IV, SC)(as hydrochloride)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 18842,
+  "item": "5% Dextrose in Lactated Ringer's 1L (IV Infusion)",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 18872,
+  "item": "Vancomycin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 18877,
+  "item": "Sodium Hyaluronate 1.8%",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 18912,
+  "item": "Aripiprazole",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 18913,
+  "item": "Olanzepine",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 18914,
+  "item": "0.9% Sodium Chloride",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 18915,
+  "item": "0.9% Sodium Chloride",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 18932,
+  "item": "Voriconazole",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 18941,
+  "item": "COTRIMOXAZOLE",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 18950,
+  "item": "Donepezil",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 18966,
+  "item": "Micafungin",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 19017,
+  "item": "Adult Polymeric Enteral Formula with EPA, with DHA with GLA without arginine, gluten - free, caloric density 1.5kcal:1mL per bottle; per 1000mL Energy-1000-2000kcal, Carbohydrates - 50.0 - 55.0 g Protein - 30 - 35.0 g Fat - 20 - 25.0g Sodium - 1400 - 1450mg, Potassium - 1600 - 1650 mg, Phosphorous - 800 - 850 mg, Calcium 800-850mg, Magnesium 250-300mg,1000-1500 mL, per bottle, Ready to hang, liquid form Flavor - Vanilla or plain",
+  "catID": 9,
+  "status": "A"
+ },
+ {
+  "itemid": 19175,
+  "item": "Rifampicin",
+  "catID": 9,
+  "status": "A"
+ }
+]
