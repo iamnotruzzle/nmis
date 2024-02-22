@@ -37,6 +37,7 @@ class ItemController extends Controller
                 }
             )
             // ->where('cl2stat', 'A')
+            ->whereNotNull('catID')
             ->orderBy('cl2desc', 'ASC')
             ->paginate(10);
 

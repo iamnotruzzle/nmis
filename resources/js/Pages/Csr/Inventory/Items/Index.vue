@@ -47,21 +47,21 @@
         <template #loading> Loading item data. Please wait. </template>
         <Column expander />
         <Column
-          field="cl2code"
-          header="PRE CODE"
+          field="cl2comb"
+          header="ITEM ID"
           style="width: 10%"
         >
           <template #body="{ data }">
-            {{ data.cl2code }}
+            {{ data.cl2comb }}
           </template>
         </Column>
         <Column
-          field="cl2comb"
-          header="MAIN + SUB-CATEGORY CODE + PRE CODE"
+          field="cl1comb"
+          header="CATEGORY ID"
           style="width: 15%"
         >
           <template #body="{ data }">
-            {{ data.cl2comb }}
+            {{ data.cl1comb }}
           </template>
         </Column>
         <Column
