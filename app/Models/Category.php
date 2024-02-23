@@ -29,4 +29,9 @@ class Category extends Model
         'compense',
         'catID',
     ];
+
+    public function pims_category()
+    {
+        return $this->hasOne(PimsCategory::class, 'catID', 'catID');
+    }
 }

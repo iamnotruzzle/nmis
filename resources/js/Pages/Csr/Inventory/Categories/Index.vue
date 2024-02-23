@@ -60,9 +60,29 @@
           </template>
         </Column>
         <Column
+          field="categoryname"
+          header="CATEGORY"
+          :showFilterMenu="false"
+          style="width: 20%"
+        >
+          <template #body="{ data }">
+            {{ data.categoryname }}
+          </template>
+          <template #filter="{}">
+            <Dropdown
+              v-model="selectedCatID"
+              :options="categoryFilter"
+              optionLabel="name"
+              optionValue="catID"
+              placeholder="NO FILTER"
+              class="w-full"
+            />
+          </template>
+        </Column>
+        <Column
           field="cl1desc"
           header="DESCRIPTION"
-          style="width: 50%"
+          style="width: 30%"
         >
           <template #body="{ data }">
             {{ data.cl1desc }}
@@ -274,6 +294,7 @@ export default {
       createDataDialog: false,
       deleteCategoryDialog: false,
       selectedStatus: null,
+      selectedCatID: null,
       search: '',
       options: {},
       params: {},
@@ -283,6 +304,13 @@ export default {
         { name: 'NO FILTER', code: null },
         { name: 'Active', code: 'A' },
         { name: 'Inactive', code: 'I' },
+      ],
+      categoryFilter: [
+        { name: 'NO FILTER', code: null },
+        { name: 'Medical supplies', catID: 1 },
+        { name: 'Office Supplies', catID: 2 },
+        { name: 'IT supplies', catID: 3 },
+        { name: 'Drugs and medicines', catID: 9 },
       ],
       csrSuppliesSubCategoryList: [],
       filters: {
@@ -302,7 +330,7 @@ export default {
     this.rows = this.csrSuppliesSubCategory.per_page;
   },
   mounted() {
-    console.log(this.csrSuppliesSubCategory);
+    // console.log(this.csrSuppliesSubCategory);
     this.storeSubCategoryInContainer();
 
     this.loading = false;
@@ -314,6 +342,8 @@ export default {
       this.csrSuppliesSubCategory.data.forEach((e) => {
         this.csrSuppliesSubCategoryList.push({
           cl1comb: e.cl1comb,
+          catID: e.pims_category.catID,
+          categoryname: e.pims_category.categoryname,
           cl1desc: e.cl1desc,
           cl1stat: e.cl1stat,
         });
@@ -438,6 +468,12 @@ export default {
     selectedStatus: function (val) {
       //   console.log(val['code']);
       this.params.status = this.selectedStatus;
+
+      this.updateData();
+    },
+    selectedCatID: function (val) {
+      //   console.log(val['code']);
+      this.params.catID = this.selectedCatID;
 
       this.updateData();
     },

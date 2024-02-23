@@ -15,10 +15,18 @@ class CategoryController extends Controller
 {
     public function index(Request $request)
     {
-        $csrSuppliesSubCategory = Category::when($request->search, function ($query, $value) {
-            $query->where('cl1desc', 'LIKE', '%' . $value . '%')
-                ->orWhere('cl1comb', 'LIKE', '%' . $value . '%');
-        })
+        $catID = $request->catID;
+
+        $csrSuppliesSubCategory = Category::with('pims_category:id,catID,categoryname')
+            ->when($catID, function ($query) use ($catID) {
+                $query->whereHas('pims_category', function ($q) use ($catID) {
+                    $q->where('catID', $catID);
+                });
+            })
+            ->when($request->search, function ($query, $value) {
+                $query->where('cl1desc', 'LIKE', '%' . $value . '%')
+                    ->orWhere('cl1comb', 'LIKE', '%' . $value . '%');
+            })
             ->when(
                 $request->status,
                 function ($query, $value) {
@@ -27,7 +35,7 @@ class CategoryController extends Controller
             )
             ->where('ptcode', '1000')
             ->orderBy('cl1desc', 'ASC')
-            ->paginate(15, ['cl1comb', 'cl1desc', 'cl1stat']);
+            ->paginate(15);
         // dd($csrSuppliesSubCategory);
 
         return Inertia::render('Csr/Inventory/Categories/Index', [
