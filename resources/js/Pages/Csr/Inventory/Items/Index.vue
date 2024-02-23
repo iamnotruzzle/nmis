@@ -58,7 +58,7 @@
         <Column
           field="cl1comb"
           header="CATEGORY ID"
-          style="width: 15%"
+          style="width: 10%"
         >
           <template #body="{ data }">
             {{ data.cl1comb }}
@@ -68,7 +68,7 @@
           field="categoryname"
           header="CATEGORY"
           :showFilterMenu="false"
-          style="width: 20%"
+          style="width: 10%"
         >
           <template #body="{ data }">
             {{ data.categoryname }}
@@ -96,7 +96,7 @@
         <Column
           field="unit"
           header="UNIT"
-          style="width: 5%"
+          style="width: 7.333%"
         >
           <template #body="{ data }">
             {{ data.uomcode }}
@@ -105,7 +105,7 @@
         <Column
           field="cl2stat"
           header="STATUS"
-          style="width: 10%"
+          style="width: 7.333%"
           :showFilterMenu="false"
         >
           <template #body="{ data }">
@@ -135,7 +135,7 @@
         </Column>
         <Column
           header="ACTION"
-          style="width: 10%"
+          style="width: 5%"
         >
           <template #body="slotProps">
             <Button
