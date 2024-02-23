@@ -36,6 +36,7 @@
                 <InputText
                   v-model="search"
                   placeholder="Search sub-category"
+                  :clearable="true"
                 />
               </span>
 
@@ -148,29 +149,63 @@
         v-model:visible="createDataDialog"
         header="SUB-CATEGORY"
         :modal="true"
-        :style="{ width: '850px' }"
+        :style="{ width: '400px' }"
         class="p-fluid"
         @hide="whenDialogIsHidden"
       >
-        <!-- ITEM -->
+        <!-- category -->
         <div class="field">
-          <label>Item</label>
-          <!-- <Dropdown
+          <label>Category</label>
+          <Dropdown
             required="true"
-            v-model="form.cl2comb"
-            :options="itemsList"
-            :virtualScrollerOptions="{ itemSize: 38 }"
-            filter
-            optionLabel="cl2desc"
-            optionValue="cl2comb"
+            v-model="form.category"
+            :options="categoryList"
+            optionLabel="name"
+            optionValue="catID"
             class="w-full"
           />
           <small
             class="text-error"
-            v-if="form.errors.cl2comb"
+            v-if="form.errors.category"
           >
-            {{ form.errors.cl2comb }}
-          </small> -->
+            {{ form.errors.category }}
+          </small>
+        </div>
+        <!-- description -->
+        <div class="field">
+          <label>Description</label>
+          <InputText
+            id="Description"
+            v-model.trim="form.description"
+            required="true"
+            autofocus
+            :class="{ 'p-invalid': form.description == '' }"
+            @keyup.enter="submit"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.description"
+          >
+            {{ form.errors.description }}
+          </small>
+        </div>
+        <!-- Status -->
+        <div class="field">
+          <label>Status</label>
+          <Dropdown
+            required="true"
+            v-model="form.status"
+            :options="statusList"
+            optionLabel="name"
+            optionValue="code"
+            class="w-full"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.status"
+          >
+            {{ form.errors.status }}
+          </small>
         </div>
 
         <template #footer>
@@ -306,11 +341,27 @@ export default {
         { name: 'Inactive', code: 'I' },
       ],
       categoryFilter: [
-        { name: 'NO FILTER', code: null },
+        { name: 'NO FILTER', catID: null },
+        { name: 'Drugs and medicines', catID: 9 },
+        { name: 'IT supplies', catID: 3 },
         { name: 'Medical supplies', catID: 1 },
         { name: 'Office Supplies', catID: 2 },
-        { name: 'IT supplies', catID: 3 },
+      ],
+      statusList: [
+        {
+          name: 'Active',
+          code: 'A',
+        },
+        {
+          name: 'Inactive',
+          code: 'I',
+        },
+      ],
+      categoryList: [
         { name: 'Drugs and medicines', catID: 9 },
+        { name: 'IT supplies', catID: 3 },
+        { name: 'Medical supplies', catID: 1 },
+        { name: 'Office Supplies', catID: 2 },
       ],
       csrSuppliesSubCategoryList: [],
       filters: {
@@ -318,8 +369,9 @@ export default {
       },
       form: this.$inertia.form({
         cl1comb: null,
-        cl1desc: null,
-        cl1stat: null,
+        description: null,
+        status: null,
+        category: null,
       }),
     };
   },
@@ -376,10 +428,13 @@ export default {
       this.$emit('hide', (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
     },
     editSubCategory(item) {
-      //   console.log(item);
       this.isUpdate = true;
       this.createDataDialog = true;
-      this.form.id = item.id;
+      this.form.cl1comb = item.cl1comb;
+      this.form.description = item.cl1desc;
+      this.form.status = item.cl1stat;
+      this.form.category = Number(item.catID);
+      //   this.form.category = item.categoryname;
     },
     submit() {
       if (this.form.processing) {
@@ -414,13 +469,15 @@ export default {
       this.$emit('hide', (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
     },
     confirmDeleteCategory(item) {
+      //   console.log(item);
       this.deleteCategoryDialog = true;
+      this.form.cl1desc = item.cl1desc;
+      this.form.cl1comb = item.cl1comb;
     },
     deleteCategory() {
       this.form.delete(route('categories.destroy', this.form.cl1comb), {
         preserveScroll: true,
         onSuccess: () => {
-          this.balanceContainer = [];
           this.deleteCategoryDialog = false;
           this.form.clearErrors();
           this.form.reset();

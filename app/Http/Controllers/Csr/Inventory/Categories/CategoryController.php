@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class CategoryController extends Controller
@@ -18,6 +19,7 @@ class CategoryController extends Controller
         $catID = $request->catID;
 
         $csrSuppliesSubCategory = Category::with('pims_category:id,catID,categoryname')
+            ->has('pims_category')
             ->when($catID, function ($query) use ($catID) {
                 $query->whereHas('pims_category', function ($q) use ($catID) {
                     $q->where('catID', $catID);
@@ -45,61 +47,58 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request);
+
         $request->validate([
-            'ptcode' => 'required||unique:hproctyp,ptcode|max:5',
-            'ptdesc' => 'required|unique:hproctyp,ptdesc|max:30',
-            'ptstat' => 'required',
+            'description' => 'required|unique:hclass1,cl1desc|min:4',
+            'status' => 'required',
+            'category' => 'required',
         ]);
 
-        $categories = ProcTypeForHclass::create([
-            'ptcode' => $request->ptcode,
-            'ptdesc' => $request->ptdesc,
-            'ptstat' => $request->ptstat,
-            'dateasof' => Carbon::now(),
-            'ptlock' => 'N',
-            'ptupsw' => 'P',
-            'ptdtmd' => NULL,
-            'chrgcode' => NULL,
+        // generate unique cl1desc
+        $cl1code = 'p' . Str::random(5);
+        // dd($cl1code);
+
+        $subCategory = Category::firstOrCreate([
+            'cl1comb' => '1000' . '-' . $cl1code,
+            'ptcode' => '1000',
+            'cl1code' => $cl1code,
+            'cl1desc' => $request->description,
+            'cl1stat' => $request->status,
+            'cl1lock' => 'N',
+            'cl1upsw' => 'P',
+            'cl1dtmd' => NULL,
+            'compense' => NULL,
+            'catID' => $request->category,
         ]);
 
         return Redirect::route('categories.index');
     }
 
-    public function update(ProcTypeForHclass $category, Request $request)
+    public function update(Category $category, Request $request)
     {
-        // category
-        $cat = ProcTypeForHclass::where('ptcode', $request->ptcode)->first();
-
         $request->validate([
-            // 'ptcode' => [
-            //     'required',
-            //     'max:5',
-            //     Rule::unique('hproctyp')->ignore($request->ptcode, 'ptcode')
-            // ],
-            'ptdesc' => [
+            'description' => [
                 'required',
-                'max:30',
-                Rule::unique('hproctyp')->ignore($request->ptdesc, 'ptdesc')
+                Rule::unique('hclass1', 'cl1desc')->ignore($request->cl1comb, 'cl1comb'),
+                'min:4',
             ],
-            'ptstat' => 'required',
+            'status' => 'required',
+            'category' => 'required',
         ]);
 
         $category->update([
-            'ptcode' => $request->ptcode,
-            'ptdesc' => $request->ptdesc,
-            'ptstat' => $request->ptstat,
-            'dateasof' => Carbon::now(),
-            'ptlock' => 'N',
-            'ptupsw' => 'P',
-            'ptdtmd' => NULL,
-            'chrgcode' => NULL,
+            'cl1desc' => $request->description,
+            'cl1stat' => $request->status,
+            'catID' => $request->category,
         ]);
 
         return Redirect::route('categories.index');
     }
 
-    public function destroy(ProcTypeForHclass $category)
+    public function destroy(Category $category)
     {
+        // dd($category);
         $category->delete();
 
         return Redirect::route('categories.index');
