@@ -16,6 +16,8 @@ class ItemController extends Controller
 {
     public function index(Request $request)
     {
+        $catID = $request->catID;
+
         $cl1combs = Category::where('cl1stat', 'A')
             ->where('ptcode', '1000')
             ->orderBy('cl1comb', 'ASC')
@@ -25,7 +27,12 @@ class ItemController extends Controller
             ->orderBy('uomdesc', 'ASC')
             ->get(['uomcode', 'uomdesc']);
 
-        $items = Item::with(['unit', 'prices.userDetail'])
+        $items = Item::with(['unit', 'prices.userDetail', 'pims_category:id,catID,categoryname'])
+            ->when($catID, function ($query) use ($catID) {
+                $query->whereHas('pims_category', function ($q) use ($catID) {
+                    $q->where('catID', $catID);
+                });
+            })
             ->when($request->search, function ($query, $value) {
                 $query->where('cl2comb', 'LIKE', '%' . $value . '%')
                     ->orWhere('cl2desc', 'LIKE', '%' . $value . '%');

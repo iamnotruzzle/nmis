@@ -65,6 +65,26 @@
           </template>
         </Column>
         <Column
+          field="categoryname"
+          header="CATEGORY"
+          :showFilterMenu="false"
+          style="width: 20%"
+        >
+          <template #body="{ data }">
+            {{ data.categoryname }}
+          </template>
+          <template #filter="{}">
+            <Dropdown
+              v-model="selectedCatID"
+              :options="categoryFilter"
+              optionLabel="name"
+              optionValue="catID"
+              placeholder="NO FILTER"
+              class="w-full"
+            />
+          </template>
+        </Column>
+        <Column
           field="cl2desc"
           header="DESCRIPTION"
           style="width: 50%"
@@ -583,6 +603,14 @@ export default {
         { name: 'Active', code: 'A' },
         { name: 'Inactive', code: 'I' },
       ],
+      selectedCatID: null,
+      categoryFilter: [
+        { name: 'NO FILTER', code: null },
+        { name: 'Medical supplies', catID: 1 },
+        { name: 'Office Supplies', catID: 2 },
+        { name: 'IT supplies', catID: 3 },
+        { name: 'Drugs and medicines', catID: 9 },
+      ],
       search: '',
       options: {},
       params: {},
@@ -699,12 +727,15 @@ export default {
     // server request such as POST, the data in the table
     // is updated
     storeItemInContainer() {
+      //   console.log(this.items);
       this.items.data.forEach((e) => {
         // console.log(e);
         this.itemsList.push({
           cl2comb: e.cl2comb,
           cl1comb: e.cl1comb,
           cl2code: e.cl2code,
+          catID: e.pims_category.catID,
+          categoryname: e.pims_category.categoryname,
           cl2desc: e.cl2desc,
           uomcode: e.unit === null ? '' : e.unit.uomdesc,
           cl2stat: e.cl2stat,
@@ -1059,6 +1090,12 @@ export default {
     selectedStatus: function (val) {
       //   console.log(val['code']);
       this.params.status = this.selectedStatus;
+
+      this.updateData();
+    },
+    selectedCatID: function (val) {
+      //   console.log(val['code']);
+      this.params.catID = this.selectedCatID;
 
       this.updateData();
     },

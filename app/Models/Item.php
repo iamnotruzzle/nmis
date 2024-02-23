@@ -50,6 +50,11 @@ class Item extends Model
         return $this->hasOne(Category::class, 'cl1comb', 'cl1comb');
     }
 
+    public function pims_category()
+    {
+        return $this->hasOne(PimsCategory::class, 'catID', 'catID');
+    }
+
     // medical supplies unit
     public function unit()
     {
