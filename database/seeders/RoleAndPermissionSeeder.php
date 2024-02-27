@@ -41,7 +41,7 @@ class RoleAndPermissionSeeder extends Seeder
             'employeeid' => '002038',
             // 'email' => 'sa@sa.com',
             'image' => null,
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'password' => '$2y$10$DNZVs1Gvd/nZKXzktIij2Obcm4ghT/.GKp3ltd2K3dKpgsEwwDFjS', // pinakb3t
             'designation' => 'admin',
             'remember_token' => Str::random(10),
         ]);
