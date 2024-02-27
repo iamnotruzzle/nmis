@@ -123,12 +123,11 @@
           </template>
         </Column>
         <Column
-          field="unit"
           header="UNIT"
           style="width: 7.333%"
         >
           <template #body="{ data }">
-            {{ data.uomcode }}
+            {{ data.uomdesc }}
           </template>
         </Column>
         <Column
@@ -300,7 +299,26 @@
         dismissableMask
       >
         <div class="field">
-          <label for="cl1comb">Category</label>
+          <label for="mainCategory">Main category</label>
+          <Dropdown
+            v-model.trim="form.mainCategory"
+            required="true"
+            :options="pimsCategoryList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
+            filter
+            optionLabel="categoryname"
+            optionValue="catID"
+            class="w-full mb-3"
+            :class="{ 'p-invalid': form.cl1comb == '' }"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.unit"
+          >
+          </small>
+        </div>
+        <div class="field">
+          <label for="cl1comb">Sub-Category</label>
           <Dropdown
             v-model.trim="form.cl1comb"
             required="true"
@@ -317,24 +335,6 @@
             v-if="form.errors.cl1comb"
           >
             {{ form.errors.cl1comb }}
-          </small>
-        </div>
-        <div class="field">
-          <label for="cl2code">PRE CODE</label>
-          <InputText
-            id="cl2code"
-            v-model.trim="form.cl2code"
-            required="true"
-            autofocus
-            :class="{ 'p-invalid': form.cl2code == '' }"
-            :disabled="isUpdate"
-            @keyup.enter="submit"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.cl2code"
-          >
-            {{ form.errors.cl2code }}
           </small>
         </div>
         <div class="field">
@@ -357,15 +357,15 @@
         <div class="field">
           <label for="unit">Unit</label>
           <Dropdown
+            v-model.trim="form.unit"
             required="true"
-            v-model="form.unit"
             :options="unitsList"
-            dataKey="unit"
+            :virtualScrollerOptions="{ itemSize: 38 }"
             filter
             optionLabel="uomdesc"
-            optionValue="uomdesc"
+            optionValue="uomcode"
             class="w-full mb-3"
-            :class="{ 'p-invalid': form.unit == '' }"
+            :class="{ 'p-invalid': form.cl1comb == '' }"
           />
           <small
             class="text-error"
@@ -602,6 +602,7 @@ export default {
   },
   props: {
     cl1combs: Array,
+    pimsCategory: Array,
     units: Array,
     items: Object,
   },
@@ -648,6 +649,7 @@ export default {
       itemsList: [],
       cl1combsList: [],
       // TODO add quarterly filter
+      pimsCategoryList: [],
       dateFilterList: [
         {
           name: 'NO FILTER',
@@ -691,10 +693,10 @@ export default {
       form: this.$inertia.form({
         cl2comb: null,
         cl1comb: null,
-        cl2code: null,
         cl2desc: null,
         unit: null,
         cl2stat: null,
+        mainCategory: null,
       }),
       formPrice: this.$inertia.form({
         id: null,
@@ -711,14 +713,11 @@ export default {
     this.rows = this.items.per_page;
   },
   mounted() {
-    // console.log(this.$page.props.auth.user.roles);
-
     this.storeCl1combsInContainer();
     this.storeItemInContainer();
     this.storeUnitsInContainer();
     this.storeSubCategoryList();
-
-    // console.log(this.items);
+    this.storePimsCategoryInContainer();
 
     this.loading = false;
   },
@@ -730,6 +729,14 @@ export default {
   methods: {
     tzone(date) {
       return moment.tz(date, 'Asia/Manila').format('L');
+    },
+    storePimsCategoryInContainer() {
+      this.pimsCategory.forEach((e) => {
+        this.pimsCategoryList.push({
+          catID: e.catID,
+          categoryname: e.categoryname,
+        });
+      });
     },
     storeCl1combsInContainer() {
       this.cl1combs.forEach((e) => {
@@ -764,7 +771,6 @@ export default {
         // console.log(e);
         this.itemsList.push({
           cl2comb: e.cl2comb,
-          cl2code: e.cl2code,
 
           catID: e.pims_category.catID, // pims main category id
           mainCategory: e.pims_category.categoryname, // pims main category name
@@ -773,7 +779,8 @@ export default {
             e.category == null || e.category.cl1desc == null || e.category.cl1desc == '' ? null : e.category.cl1desc, // hclass1 sub-category name
 
           cl2desc: e.cl2desc,
-          uomcode: e.unit === null ? '' : e.unit.uomdesc,
+          uomcode: e.unit.uomcode,
+          uomdesc: e.unit.uomdesc,
           cl2stat: e.cl2stat,
           pharmaceutical: e.pharmaceutical,
           prices: e.prices.length === 0 ? [] : e.prices,
@@ -951,16 +958,16 @@ export default {
       this.$emit('hide', (this.itemId = null), (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
     },
     editItem(item) {
-      //   console.log(item.cl2comb);
+      console.log(item);
       this.isUpdate = true;
       this.createItemDialog = true;
       this.itemId = item.cl2comb;
       this.form.cl2comb = item.cl2comb;
       this.form.cl1comb = item.cl1comb;
-      this.form.cl2code = item.cl2code;
       this.form.cl2desc = item.cl2desc;
       this.form.unit = item.uomcode;
       this.form.cl2stat = item.cl2stat;
+      this.form.mainCategory = item.catID;
     },
     submit() {
       if (this.form.processing) {

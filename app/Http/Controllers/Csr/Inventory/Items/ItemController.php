@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Csr\Inventory\Items;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Item;
+use App\Models\PimsCategory;
 use App\Models\UnitOfMeasurement;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -30,6 +31,8 @@ class ItemController extends Controller
         // $subCategory = Category::where('catID', null)->get(['cl1code', 'cl1desc']);
         // dd($subCategory);
 
+        $pimsCategory = PimsCategory::orderBy('categoryname', 'DESC')->get(['id', 'catID', 'categoryname']);
+
         $items = Item::with(['unit', 'prices.userDetail', 'category:cl1comb,cl1desc', 'pims_category:id,catID,categoryname'])
             ->when($catID, function ($query) use ($catID) {
                 $query->whereHas('pims_category', function ($q) use ($catID) {
@@ -53,6 +56,7 @@ class ItemController extends Controller
 
         return Inertia::render('Csr/Inventory/Items/Index', [
             'cl1combs' => $cl1combs,
+            'pimsCategory' => $pimsCategory,
             'items' => $items,
             'units' => $units,
         ]);
@@ -63,9 +67,8 @@ class ItemController extends Controller
         // dd($request);
 
         $request->validate([
-            'cl1comb' => 'required|max:20',
-            'cl2code' => 'required|unique:hclass2,cl2code|max:10',
-            'cl2desc' => 'max:200',
+            'cl1comb' => 'required',
+            'cl2desc' => 'max:255',
             'unit' => 'required',
             'cl2stat' => 'required|max:1',
         ]);
@@ -78,7 +81,7 @@ class ItemController extends Controller
         $item = Item::create([
             'cl2comb' => $request->cl1comb . '' . $request->cl2code,
             'cl1comb' => trim($request->cl1comb),
-            'cl2code' => trim($request->cl2code),
+            'cl2code' => '101',
             'stkno' => '',
             'cl2desc' => $request->cl2desc,
             'cl2retprc' => 0.00,
@@ -102,6 +105,7 @@ class ItemController extends Controller
             'lot_no' => '',
             'barcode' => NULL,
             'rpoint' => NULL,
+            'catID' => $request->mainCategory,
         ]);
 
         // dd($item);
@@ -111,15 +115,10 @@ class ItemController extends Controller
 
     public function update(Item $item, Request $request)
     {
-        // dd($request);
+        dd($request);
 
         $request->validate([
             'cl1comb' => 'required|max:20',
-            'cl2code' => [
-                'required',
-                'max:10',
-                Rule::unique('hclass2')->ignore($request->cl2comb, 'cl2comb') // 'cl2comb' is the column
-            ],
             'cl2desc' => 'max:200',
             'unit' => 'required',
             'cl2stat' => 'required|max:1',
