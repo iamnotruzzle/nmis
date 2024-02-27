@@ -738,8 +738,6 @@ export default {
           cl1desc: e.cl1desc,
         });
       });
-
-      console.log(this.cl1combsList);
     },
     setExpandedRow($event) {
       // Check if row expanded before click or not
