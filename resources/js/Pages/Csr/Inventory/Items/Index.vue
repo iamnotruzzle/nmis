@@ -110,6 +110,7 @@
               placeholder="Search by sub-category"
             />
           </template>
+          <!--  -->
         </Column>
         <Column
           field="cl2desc"
