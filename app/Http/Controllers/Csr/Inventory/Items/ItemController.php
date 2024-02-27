@@ -27,7 +27,10 @@ class ItemController extends Controller
             ->orderBy('uomdesc', 'ASC')
             ->get(['uomcode', 'uomdesc']);
 
-        $items = Item::with(['unit', 'prices.userDetail', 'pims_category:id,catID,categoryname'])
+        // $subCategory = Category::where('catID', null)->get(['cl1code', 'cl1desc']);
+        // dd($subCategory);
+
+        $items = Item::with(['unit', 'prices.userDetail', 'category:cl1comb,cl1desc', 'pims_category:id,catID,categoryname'])
             ->when($catID, function ($query) use ($catID) {
                 $query->whereHas('pims_category', function ($q) use ($catID) {
                     $q->where('catID', $catID);

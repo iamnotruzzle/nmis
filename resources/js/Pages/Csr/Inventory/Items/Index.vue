@@ -46,7 +46,7 @@
         <template #empty> No item found. </template>
         <template #loading> Loading item data. Please wait. </template>
         <Column expander />
-        <Column
+        <!-- <Column
           field="cl2comb"
           header="ITEM ID"
           style="width: 10%"
@@ -54,29 +54,29 @@
           <template #body="{ data }">
             {{ data.cl2comb }}
           </template>
-        </Column>
-        <Column
+        </Column> -->
+        <!-- <Column
           field="cl1comb"
-          header="CATEGORY ID"
+          header="MAIN CATEGORY ID"
           style="width: 10%"
         >
           <template #body="{ data }">
             {{ data.cl1comb }}
           </template>
-        </Column>
+        </Column> -->
         <Column
-          field="categoryname"
-          header="CATEGORY"
+          field="mainCategory"
+          header="MAIN CATEGORY"
           :showFilterMenu="false"
           style="width: 10%"
         >
           <template #body="{ data }">
-            {{ data.categoryname }}
+            {{ data.mainCategory }}
           </template>
           <template #filter="{}">
             <Dropdown
               v-model="selectedCatID"
-              :options="categoryFilter"
+              :options="mainCategoryFilter"
               optionLabel="name"
               optionValue="catID"
               placeholder="NO FILTER"
@@ -84,6 +84,35 @@
             />
           </template>
         </Column>
+        <Column
+          field="cl1comb"
+          header="SUB-CATEGORY ID"
+          :showFilterMenu="false"
+          style="width: 10%"
+        >
+          <template #body="{ data }">
+            {{ data.cl1comb }}
+          </template>
+        </Column>
+        <!-- <Column
+          field="subCategory"
+          header="SUB-CATEGORY"
+          :showFilterMenu="false"
+          style="width: 10%"
+        >
+          <template #body="{ data }">
+            {{ data.subCategory }}
+          </template>
+          <template #filter="{}">
+            <Dropdown
+              v-model="selectedCl1comb"
+              :options="subCategoryFilter"
+              optionLabel="subCategory"
+              optionValue="cl1comb"
+              class="w-full"
+            />
+          </template>
+        </Column> -->
         <Column
           field="cl2desc"
           header="DESCRIPTION"
@@ -604,13 +633,15 @@ export default {
         { name: 'Inactive', code: 'I' },
       ],
       selectedCatID: null,
-      categoryFilter: [
+      mainCategoryFilter: [
         { name: 'NO FILTER', code: null },
         { name: 'Medical supplies', catID: 1 },
         { name: 'Office Supplies', catID: 2 },
         { name: 'IT supplies', catID: 3 },
         { name: 'Drugs and medicines', catID: 9 },
       ],
+      selectedCl1comb: null,
+      subCategoryFilter: [],
       search: '',
       options: {},
       params: {},
@@ -685,6 +716,7 @@ export default {
     this.storeCl1combsInContainer();
     this.storeItemInContainer();
     this.storeUnitsInContainer();
+    this.storeSubCategoryList();
 
     // console.log(this.items);
 
@@ -706,6 +738,8 @@ export default {
           cl1desc: e.cl1desc,
         });
       });
+
+      console.log(this.cl1combsList);
     },
     setExpandedRow($event) {
       // Check if row expanded before click or not
@@ -732,10 +766,14 @@ export default {
         // console.log(e);
         this.itemsList.push({
           cl2comb: e.cl2comb,
-          cl1comb: e.cl1comb,
           cl2code: e.cl2code,
-          catID: e.pims_category.catID,
-          categoryname: e.pims_category.categoryname,
+
+          catID: e.pims_category.catID, // pims main category id
+          mainCategory: e.pims_category.categoryname, // pims main category name
+          cl1comb: e.cl1comb, // hclass1 sub-category id
+          subCategory:
+            e.category == null || e.category.cl1desc == null || e.category.cl1desc == '' ? null : e.category.cl1desc, // hclass1 sub-category name
+
           cl2desc: e.cl2desc,
           uomcode: e.unit === null ? '' : e.unit.uomdesc,
           cl2stat: e.cl2stat,
@@ -743,6 +781,15 @@ export default {
           prices: e.prices.length === 0 ? [] : e.prices,
         });
       });
+    },
+    storeSubCategoryList() {
+      //   console.log(this.items);
+      //   this.items.data.forEach((e) => {
+      //     this.subCategoryFilter.push({
+      //       cl1comb: e.cl1comb, // hclass1 sub-category id
+      //       subCategory: e.category.cl1desc, // hclass1 sub-category name
+      //     });
+      //   });
     },
     priceChangesOptions(data) {
       // sort the date to ascending order
