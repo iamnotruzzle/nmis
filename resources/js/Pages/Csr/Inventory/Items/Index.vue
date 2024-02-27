@@ -46,24 +46,6 @@
         <template #empty> No item found. </template>
         <template #loading> Loading item data. Please wait. </template>
         <Column expander />
-        <!-- <Column
-          field="cl2comb"
-          header="ITEM ID"
-          style="width: 10%"
-        >
-          <template #body="{ data }">
-            {{ data.cl2comb }}
-          </template>
-        </Column> -->
-        <!-- <Column
-          field="cl1comb"
-          header="MAIN CATEGORY ID"
-          style="width: 10%"
-        >
-          <template #body="{ data }">
-            {{ data.cl1comb }}
-          </template>
-        </Column> -->
         <Column
           field="mainCategory"
           header="MAIN CATEGORY"
@@ -98,7 +80,7 @@
           field="subCategory"
           header="SUB-CATEGORY"
           :showFilterMenu="false"
-          style="width: 10%"
+          style="width: 20%"
         >
           <template #body="{ data }">
             {{ data.subCategory }}
@@ -115,7 +97,7 @@
         <Column
           field="cl2desc"
           header="DESCRIPTION"
-          style="width: 50%"
+          style="width: 40%"
         >
           <template #body="{ data }">
             {{ data.cl2desc }}
@@ -123,7 +105,7 @@
         </Column>
         <Column
           header="UNIT"
-          style="width: 7.333%"
+          style="width: 6.666%"
         >
           <template #body="{ data }">
             {{ data.uomdesc }}
@@ -132,7 +114,7 @@
         <Column
           field="cl2stat"
           header="STATUS"
-          style="width: 7.333%"
+          style="width: 6.666%"
           :showFilterMenu="false"
         >
           <template #body="{ data }">
@@ -162,7 +144,7 @@
         </Column>
         <Column
           header="ACTION"
-          style="width: 5%"
+          style="width: 6.666%"
         >
           <template #body="slotProps">
             <Button
