@@ -73,19 +73,14 @@ class ItemController extends Controller
             'cl2stat' => 'required|max:1',
         ]);
 
-        // get uomcode of the unit selected
-        $unit = UnitOfMeasurement::where('uomstat', 'A')
-            ->where('uomdesc', $request->unit)
-            ->get(['uomcode']);
-
         $item = Item::create([
-            'cl2comb' => $request->cl1comb . '' . $request->cl2code,
+            'cl2comb' => trim($request->cl1comb) . '-' . '101',
             'cl1comb' => trim($request->cl1comb),
             'cl2code' => '101',
             'stkno' => '',
             'cl2desc' => $request->cl2desc,
             'cl2retprc' => 0.00,
-            'uomcode' => $unit[0]->uomcode,
+            'uomcode' => $request->unit,
             'cl2dteas' => Carbon::now(),
             'cl2stat' => $request->cl2stat,
             'cl2lock' => 'N',
@@ -115,7 +110,7 @@ class ItemController extends Controller
 
     public function update(Item $item, Request $request)
     {
-        dd($request);
+        // dd($request);
 
         $request->validate([
             'cl1comb' => 'required|max:20',
@@ -124,38 +119,13 @@ class ItemController extends Controller
             'cl2stat' => 'required|max:1',
         ]);
 
-        // get uomcode of the unit selected
-        $unit = UnitOfMeasurement::where('uomstat', 'A')
-            ->where('uomdesc', $request->unit)
-            ->get(['uomcode']);
-
         $item->update([
-            'cl2comb' => $request->cl1comb . '' . $request->cl2code,
-            'cl1comb' => trim($request->cl1comb),
-            'cl2code' => trim($request->cl2code),
-            'stkno' => '',
-            'cl2desc' => $request->cl2desc,
-            'cl2retprc' => 0.00,
-            'uomcode' => $unit[0]->uomcode,
-            // 'cl2dteas' => Carbon::now(),
+            'catID' => $request->mainCategory, // main category
+            'cl1comb' => trim($request->cl1comb), // sub category
+            'cl2desc' => $request->cl2desc, // item desc
+            'uomcode' => $request->unit, // unit
             'cl2stat' => $request->cl2stat,
-            'cl2lock' => 'N',
-            'cl2upsw' => 'P',
-            'cl2dtmd' => NULL,
-            'curcode' => NULL,
-            'cl2purp' => NULL,
-            'curcode1' => NULL,
-            'uomcode1' => NULL,
-            'cl2ctr' => NULL,
-            'brandname' => NULL,
-            'stockbal' => 0.00,
-            'pharmaceutical' => NULL,
-            'pharmaceutical' => NULL,
-            // 'baldteasof' => Carbon::now(),
-            'begbal' => 0.00,
-            'lot_no' => '',
-            'barcode' => NULL,
-            'rpoint' => NULL,
+
         ]);
 
         return Redirect::route('items.index');
@@ -163,7 +133,7 @@ class ItemController extends Controller
 
     public function destroy(Item $item)
     {
-        $item->delete();
+        // $item->delete();
 
         return Redirect::route('items.index');
     }

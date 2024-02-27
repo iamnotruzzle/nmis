@@ -958,7 +958,7 @@ export default {
       this.$emit('hide', (this.itemId = null), (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
     },
     editItem(item) {
-      console.log(item);
+      //   console.log(item);
       this.isUpdate = true;
       this.createItemDialog = true;
       this.itemId = item.cl2comb;
