@@ -42,7 +42,7 @@ class ItemController extends Controller
             })
             ->when($cl1desc, function ($query) use ($cl1desc) {
                 $query->whereHas('category', function ($q) use ($cl1desc) {
-                    $q->where('cl1desc', '%' . $cl1desc . '%');
+                    $q->where('cl1desc', 'LIKE', '%' . $cl1desc . '%');
                 });
             })
             ->when($request->search, function ($query, $value) {

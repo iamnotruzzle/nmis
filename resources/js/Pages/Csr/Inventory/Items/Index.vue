@@ -93,15 +93,8 @@
           <template #body="{ data }">
             {{ data.cl1comb }}
           </template>
-          <template #filter="{}">
-            <InputText
-              v-model="cl1desc"
-              type="text"
-              placeholder="Search by sub-category"
-            />
-          </template>
         </Column>
-        <!-- <Column
+        <Column
           field="subCategory"
           header="SUB-CATEGORY"
           :showFilterMenu="false"
@@ -111,15 +104,13 @@
             {{ data.subCategory }}
           </template>
           <template #filter="{}">
-            <Dropdown
-              v-model="selectedCl1comb"
-              :options="subCategoryFilter"
-              optionLabel="subCategory"
-              optionValue="cl1comb"
-              class="w-full"
+            <InputText
+              v-model="cl1desc"
+              type="text"
+              placeholder="Search by sub-category"
             />
           </template>
-        </Column> -->
+        </Column>
         <Column
           field="cl2desc"
           header="DESCRIPTION"
