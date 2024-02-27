@@ -17,7 +17,8 @@ class ItemController extends Controller
 {
     public function index(Request $request)
     {
-        $catID = $request->catID;
+        $catID = $request->catID; // main category
+        $cl1desc = $request->cl1desc; // sub category
 
         $cl1combs = Category::where('cl1stat', 'A')
             ->where('ptcode', '1000')
@@ -37,6 +38,11 @@ class ItemController extends Controller
             ->when($catID, function ($query) use ($catID) {
                 $query->whereHas('pims_category', function ($q) use ($catID) {
                     $q->where('catID', $catID);
+                });
+            })
+            ->when($cl1desc, function ($query) use ($cl1desc) {
+                $query->whereHas('category', function ($q) use ($cl1desc) {
+                    $q->where('cl1desc', '%' . $cl1desc . '%');
                 });
             })
             ->when($request->search, function ($query, $value) {

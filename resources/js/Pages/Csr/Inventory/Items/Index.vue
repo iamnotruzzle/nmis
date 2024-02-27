@@ -93,6 +93,13 @@
           <template #body="{ data }">
             {{ data.cl1comb }}
           </template>
+          <template #filter="{}">
+            <InputText
+              v-model="cl1desc"
+              type="text"
+              placeholder="Search by sub-category"
+            />
+          </template>
         </Column>
         <!-- <Column
           field="subCategory"
@@ -644,6 +651,7 @@ export default {
       selectedCl1comb: null,
       subCategoryFilter: [],
       search: '',
+      cl1desc: '',
       options: {},
       params: {},
       itemsList: [],
@@ -1146,8 +1154,12 @@ export default {
       this.updateData();
     },
     selectedCatID: function (val) {
-      //   console.log(val['code']);
       this.params.catID = this.selectedCatID;
+
+      this.updateData();
+    },
+    cl1desc: function (val) {
+      this.params.cl1desc = this.cl1desc;
 
       this.updateData();
     },
