@@ -68,7 +68,7 @@ class ItemController extends Controller
         ]);
     }
 
-    public function generateUniqueID($length = 10)
+    public function generateUniqueID($length = 7)
     {
         return Str::random($length);
     }
