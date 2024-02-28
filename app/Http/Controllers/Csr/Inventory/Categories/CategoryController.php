@@ -55,7 +55,7 @@ class CategoryController extends Controller
             'category' => 'required',
         ]);
 
-        // generate unique cl1desc
+        // generate unique cl1code
         $cl1code = 'p' . Str::random(5);
         // dd($cl1code);
 

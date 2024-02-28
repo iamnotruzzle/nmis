@@ -16,9 +16,9 @@ class MedicalSuppliesSubCatSeeder extends Seeder
 
         foreach ($data as $obj) {
             $subCategory = Category::firstOrCreate([
-                'cl1comb' => '1000' . '-' . 'p' . $obj->itemid,
+                'cl1comb' => '1000' . '-' . $obj->itemid,
                 'ptcode' => '1000',
-                'cl1code' => 'p' . $obj->itemid,
+                'cl1code' => $obj->itemid,
                 'cl1desc' => $obj->item == null ? '.' : $obj->item,
                 'cl1stat' => 'A',
                 'cl1lock' => 'N',

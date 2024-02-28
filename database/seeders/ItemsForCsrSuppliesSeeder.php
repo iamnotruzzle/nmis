@@ -31,8 +31,8 @@ class ItemsForCsrSuppliesSeeder extends Seeder
                     [
                         // 1000 = ptcode from hclass1
                         // 'p' . $obj->cl1code = cl1code from hclass1
-                        'cl2comb' => '1000' . '-' . 'p' . $obj->cl1code . '-' . $uniqueID,
-                        'cl1comb' => '1000' . '-' . 'p' . $obj->cl1code,
+                        'cl2comb' => '1000' . '-' . $obj->cl1code . '-' . $uniqueID,
+                        'cl1comb' => '1000' . '-' . $obj->cl1code,
                         'cl2code' => $uniqueID,
                         'stkno' => '',
                         'cl2desc' => $obj->cl2desc,
