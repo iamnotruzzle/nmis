@@ -91,7 +91,7 @@ class ItemController extends Controller
             'cl1comb' => trim($request->cl1comb),
             'cl2code' => $uniqueID,
             'stkno' => '',
-            'cl2desc' => $request->cl2desc,
+            'cl2desc' => trim($request->cl2desc),
             'cl2retprc' => 0.00,
             'uomcode' => $request->unit,
             'cl2dteas' => Carbon::now(),
@@ -135,7 +135,7 @@ class ItemController extends Controller
         $item->update([
             'catID' => $request->mainCategory, // main category
             'cl1comb' => trim($request->cl1comb), // sub category
-            'cl2desc' => $request->cl2desc, // item desc
+            'cl2desc' => trim($request->cl2desc), // item desc
             'uomcode' => $request->unit, // unit
             'cl2stat' => $request->cl2stat,
 

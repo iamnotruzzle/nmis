@@ -63,7 +63,7 @@ class CategoryController extends Controller
             'cl1comb' => '1000' . '-' . $cl1code,
             'ptcode' => '1000',
             'cl1code' => $cl1code,
-            'cl1desc' => $request->description,
+            'cl1desc' => trim($request->description),
             'cl1stat' => $request->status,
             'cl1lock' => 'N',
             'cl1upsw' => 'P',
@@ -88,7 +88,7 @@ class CategoryController extends Controller
         ]);
 
         $category->update([
-            'cl1desc' => $request->description,
+            'cl1desc' => trim($request->description),
             'cl1stat' => $request->status,
             'catID' => $request->category,
         ]);
