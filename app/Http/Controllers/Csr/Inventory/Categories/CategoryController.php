@@ -80,8 +80,8 @@ class CategoryController extends Controller
         $request->validate([
             'description' => [
                 'required',
-                Rule::unique('hclass1', 'cl1desc')->ignore($request->cl1comb, 'cl1comb'),
                 'min:4',
+                Rule::unique('hclass1', 'cl1desc')->ignore($request->cl1comb, 'cl1comb'),
             ],
             'status' => 'required',
             'category' => 'required',
