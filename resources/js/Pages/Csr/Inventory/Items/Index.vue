@@ -675,6 +675,7 @@ export default {
       form: this.$inertia.form({
         cl2comb: null,
         cl1comb: null,
+        cl2code: null,
         cl2desc: null,
         unit: null,
         cl2stat: null,
@@ -760,6 +761,7 @@ export default {
           subCategory:
             e.category == null || e.category.cl1desc == null || e.category.cl1desc == '' ? null : e.category.cl1desc, // hclass1 sub-category name
 
+          cl2code: e.cl2code,
           cl2desc: e.cl2desc,
           uomcode: e.unit.uomcode,
           uomdesc: e.unit.uomdesc,
@@ -946,6 +948,7 @@ export default {
       this.itemId = item.cl2comb;
       this.form.cl2comb = item.cl2comb;
       this.form.cl1comb = item.cl1comb;
+      this.form.cl2code = item.cl2code;
       this.form.cl2desc = item.cl2desc;
       this.form.unit = item.uomcode;
       this.form.cl2stat = item.cl2stat;

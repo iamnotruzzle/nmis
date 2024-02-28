@@ -134,6 +134,7 @@ class ItemController extends Controller
 
         $item->update([
             'catID' => $request->mainCategory, // main category
+            'cl2comb' => trim($request->cl1comb) . '-' . trim($request->cl2code),
             'cl1comb' => trim($request->cl1comb), // sub category
             'cl2desc' => trim($request->cl2desc), // item desc
             'uomcode' => $request->unit, // unit
