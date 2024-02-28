@@ -10,7 +10,7 @@ use App\Models\UnitOfMeasurement;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class ItemController extends Controller
@@ -68,9 +68,16 @@ class ItemController extends Controller
         ]);
     }
 
+    public function generateUniqueID($length = 10)
+    {
+        return Str::random($length);
+    }
+
     public function store(Request $request)
     {
         // dd($request);
+
+        $uniqueID = $this->generateUniqueID();
 
         $request->validate([
             'cl1comb' => 'required',
@@ -80,9 +87,9 @@ class ItemController extends Controller
         ]);
 
         $item = Item::create([
-            'cl2comb' => trim($request->cl1comb) . '-' . '101',
+            'cl2comb' => trim($request->cl1comb) . '-' . $uniqueID,
             'cl1comb' => trim($request->cl1comb),
-            'cl2code' => '101',
+            'cl2code' => $uniqueID,
             'stkno' => '',
             'cl2desc' => $request->cl2desc,
             'cl2retprc' => 0.00,

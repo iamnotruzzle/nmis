@@ -19,7 +19,7 @@ class OfficeSuppliesSubCatSeeder extends Seeder
                 'cl1comb' => '1000' . '-' . 'p' . $obj->itemid,
                 'ptcode' => '1000',
                 'cl1code' => 'p' . $obj->itemid,
-                'cl1desc' => $obj->item,
+                'cl1desc' => $obj->item == null ? '.' : $obj->item,
                 'cl1stat' => 'A',
                 'cl1lock' => 'N',
                 'cl1upsw' => 'P',

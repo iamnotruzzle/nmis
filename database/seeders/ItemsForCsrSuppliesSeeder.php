@@ -8,9 +8,15 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class ItemsForCsrSuppliesSeeder extends Seeder
 {
+    public function generateUniqueID($length = 10)
+    {
+        return Str::random($length);
+    }
+
     public function run()
     {
         $json = File::get('database/data/pims_items.json');
@@ -19,13 +25,15 @@ class ItemsForCsrSuppliesSeeder extends Seeder
         try {
             foreach ($data as $obj) {
 
+                $uniqueID = $this->generateUniqueID();
+
                 $item = Item::firstOrCreate(
                     [
                         // 1000 = ptcode from hclass1
                         // 'p' . $obj->cl1code = cl1code from hclass1
-                        'cl2comb' => '1000' . '-' . 'p' . $obj->cl1code . '-' . '101',
+                        'cl2comb' => '1000' . '-' . 'p' . $obj->cl1code . '-' . $uniqueID,
                         'cl1comb' => '1000' . '-' . 'p' . $obj->cl1code,
-                        'cl2code' => '101',
+                        'cl2code' => $uniqueID,
                         'stkno' => '',
                         'cl2desc' => $obj->cl2desc,
                         'cl2retprc' => 0.00,

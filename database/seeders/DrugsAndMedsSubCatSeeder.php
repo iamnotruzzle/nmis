@@ -11,7 +11,7 @@ class DrugsAndMedsSubCatSeeder extends Seeder
     public function run()
     {
 
-        $json = File::get('database/data/it_supplies_sub_category.json');
+        $json = File::get('database/data/drugs_and_meds_supplies_sub_category.json');
         $data = json_decode($json);
 
         foreach ($data as $obj) {
@@ -19,7 +19,7 @@ class DrugsAndMedsSubCatSeeder extends Seeder
                 'cl1comb' => '1000' . '-' . 'p' . $obj->itemid,
                 'ptcode' => '1000',
                 'cl1code' => 'p' . $obj->itemid,
-                'cl1desc' => $obj->item,
+                'cl1desc' => $obj->item == null ? '.' : $obj->item,
                 'cl1stat' => 'A',
                 'cl1lock' => 'N',
                 'cl1upsw' => 'P',
