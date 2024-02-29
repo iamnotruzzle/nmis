@@ -39,7 +39,7 @@ class ItemsForCsrSuppliesSeeder extends Seeder
                         'cl2retprc' => 0.00,
                         'uomcode' => 'PC',
                         'cl2dteas' => Carbon::now(),
-                        'cl2stat' => 'A',
+                        'cl2stat' => $obj->catID == 9 ? 'I' : 'A',
                         'cl2lock' => 'N',
                         'cl2upsw' => 'P',
                         'cl2dtmd' => NULL,
