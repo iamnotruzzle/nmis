@@ -617,10 +617,10 @@ export default {
       selectedCatID: null,
       mainCategoryFilter: [
         { name: 'NO FILTER', code: null },
+        { name: 'Drugs and medicines', catID: 9 },
+        { name: 'IT supplies', catID: 3 },
         { name: 'Medical supplies', catID: 1 },
         { name: 'Office Supplies', catID: 2 },
-        { name: 'IT supplies', catID: 3 },
-        { name: 'Drugs and medicines', catID: 9 },
       ],
       selectedCl1comb: null,
       subCategoryFilter: [],
