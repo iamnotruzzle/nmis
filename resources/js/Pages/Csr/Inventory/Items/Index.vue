@@ -306,7 +306,7 @@
             :options="cl1combsList"
             :virtualScrollerOptions="{ itemSize: 38 }"
             filter
-            optionLabel="cl1desc"
+            optionLabel="cl1comb"
             optionValue="cl1comb"
             class="w-full mb-3"
             :class="{ 'p-invalid': form.cl1comb == '' }"
