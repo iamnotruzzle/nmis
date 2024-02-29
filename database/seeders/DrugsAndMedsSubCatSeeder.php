@@ -20,7 +20,7 @@ class DrugsAndMedsSubCatSeeder extends Seeder
                 'ptcode' => '1000',
                 'cl1code' => $obj->itemid,
                 'cl1desc' => $obj->item == null ? '.' : $obj->item,
-                'cl1stat' => 'A',
+                'cl1stat' => 'I',
                 'cl1lock' => 'N',
                 'cl1upsw' => 'P',
                 'cl1dtmd' => NULL,
