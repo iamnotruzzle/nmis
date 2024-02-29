@@ -32,6 +32,7 @@ class ItemController extends Controller
         // $subCategory = Category::where('catID', null)->get(['cl1code', 'cl1desc']);
         // dd($subCategory);
 
+        //
         $pimsCategory = PimsCategory::orderBy('categoryname', 'ASC')->get(['id', 'catID', 'categoryname']);
 
         $items = Item::with(['unit', 'prices.userDetail', 'category:cl1comb,cl1desc', 'pims_category:id,catID,categoryname'])
