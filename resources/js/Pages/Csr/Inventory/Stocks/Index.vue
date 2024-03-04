@@ -277,12 +277,12 @@
             :class="{ 'p-invalid': form.ris_no == '' }"
             @keyup.enter="submit"
           />
-          <small
+          <!-- <small
             class="text-error"
             v-if="form.errors.ris_no"
           >
             {{ form.errors.ris_no }}
-          </small>
+          </small> -->
         </div>
         <div class="field">
           <label for="Item">Supplier</label>
