@@ -54,6 +54,7 @@
         <Column
           field="temp_ris_no"
           header="TEMPORARY NO."
+          style="width: 5%"
         >
         </Column>
         <Column
@@ -71,7 +72,7 @@
         <Column
           field="cl2desc"
           header="ITEM"
-          style="width: 20%"
+          style="width: 15%"
         >
         </Column>
         <Column
