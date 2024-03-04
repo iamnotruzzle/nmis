@@ -10,7 +10,8 @@ class CreateCsrwCsrStocksMedSuppTable extends Migration
     {
         Schema::create('csrw_csr_stocks_med_supp', function (Blueprint $table) {
             $table->id();
-            $table->string('ris_no');
+            $table->string('ris_no')->nullable();
+            $table->string('temp_ris_no')->nullable();
             $table->string('cl2comb');
             $table->string('uomcode')->nullable();
             $table->string('suppcode')->nullable();

@@ -14,6 +14,7 @@ class CsrStocksMedicalSuppliesLogs extends Model
         'id',
         'stock_id',
         'ris_no',
+        'temp_ris_no',
         'cl2comb',
         'uomcode',
         'suppcode',
