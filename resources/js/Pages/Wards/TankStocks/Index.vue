@@ -46,15 +46,20 @@
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">PENDING STOCKS</span>
-            <div>
-              <span class="p-input-icon-left mr-2">
-                <i class="pi pi-search" />
-                <InputText
-                  v-model="search"
-                  placeholder="Search requested by"
-                />
-              </span>
+            <span class="text-xl text-900 font-bold text-primary">PENDING STOCKS</span>
+            <div class="flex">
+              <div class="mr-2">
+                <div class="p-inputgroup">
+                  <span class="p-inputgroup-addon">
+                    <i class="pi pi-search"></i>
+                  </span>
+                  <InputText
+                    id="searchInput"
+                    v-model="search"
+                    placeholder="Search requested by"
+                  />
+                </div>
+              </div>
               <Button
                 label="Request stocks"
                 icon="pi pi-plus"
@@ -143,7 +148,7 @@
         </Column>
         <Column
           field="requested_by"
-          header="PENDING BY"
+          header="REQUESTED BY"
           style="width: 30%"
         >
           <template #body="{ data }">
@@ -270,21 +275,28 @@
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">CURRENT STOCKS</span>
-            <div>
-              <span class="p-input-icon-left mr-2">
-                <i class="pi pi-search" />
-                <InputText
-                  v-model="currentWardStocksFilter['global'].value"
-                  placeholder="Search item"
-                />
-                <Button
-                  label="Consignment"
-                  icon="pi pi-plus"
-                  iconPos="right"
-                  @click="openConsignmentDialog"
-                />
-              </span>
+            <span class="text-xl text-900 font-bold text-primary">CURRENT STOCKS</span>
+
+            <div class="flex">
+              <div class="mr-2">
+                <div class="p-inputgroup">
+                  <span class="p-inputgroup-addon">
+                    <i class="pi pi-search"></i>
+                  </span>
+                  <InputText
+                    id="searchInput"
+                    v-model="currentWardStocksFilter['global'].value"
+                    placeholder="Search item"
+                  />
+                </div>
+              </div>
+
+              <Button
+                label="Consignment"
+                icon="pi pi-plus"
+                iconPos="right"
+                @click="openConsignmentDialog"
+              />
             </div>
           </div>
         </template>
@@ -369,11 +381,13 @@
       <!-- create & edit dialog -->
       <Dialog
         v-model:visible="createRequestStocksDialog"
-        header="Request stock"
         :modal="true"
         class="p-fluid w-3"
         @hide="whenDialogIsHidden"
       >
+        <template #header>
+          <div class="text-primary text-xl font-bold">REQUEST STOCK</div>
+        </template>
         <div class="field">
           <label>Item</label>
           <Dropdown
@@ -422,13 +436,16 @@
           >
             <template #header>
               <div class="flex justify-content-end">
-                <span class="p-input-icon-left">
-                  <i class="pi pi-search" />
+                <div class="p-inputgroup">
+                  <span class="p-inputgroup-addon">
+                    <i class="pi pi-search"></i>
+                  </span>
                   <InputText
+                    id="searchInput"
                     v-model="requestStockListDetailsFilter['global'].value"
-                    placeholder="Search Item"
+                    placeholder="Search item"
                   />
-                </span>
+                </div>
               </div>
             </template>
             <Column
@@ -638,11 +655,13 @@
 
       <Dialog
         v-model:visible="consignmentDialog"
-        header="Consignment"
         :modal="true"
         class="p-fluid w-3"
         @hide="whenDialogIsHidden"
       >
+        <template #header>
+          <div class="text-primary text-xl font-bold">CONSIGNMENT</div>
+        </template>
         <div class="field">
           <label>Item</label>
           <Dropdown

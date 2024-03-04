@@ -25,9 +25,9 @@
           @page="onPage($event)"
         >
           <template #header>
-            <span class="text-2xl text-cyan-500 font-bold">{{ patientName }} ( {{ hospitalNumber }} )</span>
+            <span class="text-2xl text-primary font-bold">{{ patientName }} ( {{ hospitalNumber }} )</span>
             <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-              <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">BILLS</span>
+              <span class="text-xl text-900 font-bold text-primary">BILLS</span>
               <div>
                 <!-- <span class="p-input-icon-left mr-2">
                   <i class="pi pi-search" />
@@ -192,13 +192,16 @@
           class="p-datatable-sm mt-4"
         >
           <template #header>
-            <div class="text-2xl text-cyan-500 font-bold">INSTOCK</div>
-            <div class="p-input-icon-left flex justify-content-end w-full">
-              <i class="pi pi-search" />
+            <div class="text-2xl text-primary font-bold">INSTOCK</div>
+
+            <div class="p-inputgroup">
+              <span class="p-inputgroup-addon">
+                <i class="pi pi-search"></i>
+              </span>
               <InputText
+                id="searchInput"
                 v-model="medicalSuppliesListFilter['global'].value"
-                placeholder="Item"
-                class="w-full"
+                placeholder="Search item"
               />
             </div>
           </template>
@@ -237,11 +240,13 @@
         <!-- create bill dialog -->
         <Dialog
           v-model:visible="createBillDialog"
-          header="CHARGE PATIENT"
           :modal="true"
           class="p-fluid w-5"
           @hide="whenDialogIsHidden"
         >
+          <template #header>
+            <div class="text-primary text-xl font-bold">CHARGE PATIENT</div>
+          </template>
           <div class="field mb-3">
             <label>Item</label>
             <Dropdown
@@ -303,13 +308,16 @@
             >
               <template #header>
                 <div class="flex justify-content-end">
-                  <span class="p-input-icon-left">
-                    <i class="pi pi-search" />
+                  <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon">
+                      <i class="pi pi-search"></i>
+                    </span>
                     <InputText
+                      id="searchInput"
                       v-model="itemsToBillFilter['global'].value"
                       placeholder="Search Item"
                     />
-                  </span>
+                  </div>
                 </div>
               </template>
               <Column

@@ -21,15 +21,19 @@
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">PATIENTS</span>
-            <div>
-              <span class="p-input-icon-left mr-2">
-                <i class="pi pi-search" />
+            <span class="text-xl text-900 font-bold text-primary">PATIENTS</span>
+
+            <div class="mr-2">
+              <div class="p-inputgroup">
+                <span class="p-inputgroup-addon">
+                  <i class="pi pi-search"></i>
+                </span>
                 <InputText
+                  id="searchInput"
                   v-model="search"
                   placeholder="Search patient"
                 />
-              </span>
+              </div>
             </div>
           </div>
         </template>

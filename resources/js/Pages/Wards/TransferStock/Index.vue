@@ -23,18 +23,21 @@
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">CURRENT STOCKS</span>
-            <div>
-              <span class="p-input-icon-left mr-2">
-                <i class="pi pi-search" />
-                <span class="p-input-icon-left">
-                  <i class="pi pi-search" />
+            <span class="text-xl text-900 font-bold text-primary">CURRENT STOCKS</span>
+
+            <div class="flex">
+              <div class="mr-2">
+                <div class="p-inputgroup">
+                  <span class="p-inputgroup-addon">
+                    <i class="pi pi-search"></i>
+                  </span>
                   <InputText
+                    id="searchInput"
                     v-model="wardStocksFilter['global'].value"
                     placeholder="Search item"
                   />
-                </span>
-              </span>
+                </div>
+              </div>
             </div>
           </div>
         </template>
@@ -110,17 +113,19 @@
           >
             <template #header>
               <div class="flex flex-wrap align-items-center justify-content-end">
-                <div>
-                  <span class="p-input-icon-left mr-2">
-                    <i class="pi pi-search" />
-                    <span class="p-input-icon-left">
-                      <i class="pi pi-search" />
+                <div class="flex">
+                  <div class="mr-2">
+                    <div class="p-inputgroup">
+                      <span class="p-inputgroup-addon">
+                        <i class="pi pi-search"></i>
+                      </span>
                       <InputText
+                        id="searchInput"
                         v-model="transferredStocksFilter['global'].value"
                         placeholder="Search"
                       />
-                    </span>
-                  </span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </template>
@@ -196,16 +201,20 @@
             <template #header>
               <div class="flex flex-wrap align-items-center justify-content-end">
                 <div>
-                  <span class="p-input-icon-left mr-2">
-                    <i class="pi pi-search" />
-                    <span class="p-input-icon-left">
-                      <i class="pi pi-search" />
-                      <InputText
-                        v-model="toReceiveFilter['global'].value"
-                        placeholder="Search"
-                      />
-                    </span>
-                  </span>
+                  <div class="flex">
+                    <div class="mr-2">
+                      <div class="p-inputgroup">
+                        <span class="p-inputgroup-addon">
+                          <i class="pi pi-search"></i>
+                        </span>
+                        <InputText
+                          id="searchInput"
+                          v-model="toReceiveFilter['global'].value"
+                          placeholder="Search"
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </template>
