@@ -11,7 +11,7 @@
             <div class="mb-3">
               <div class="flex justify-content-between">
                 <div>
-                  <span class="block text-xl text-900 font-bold">PENDING</span>
+                  <span class="block text-xl text-900 text-primary font-bold">PENDING</span>
                 </div>
 
                 <!-- a -->
@@ -39,7 +39,7 @@
             <div class="mb-3">
               <div class="flex justify-content-between">
                 <div>
-                  <span class="block text-xl text-900 font-bold">CANCELLED</span>
+                  <span class="block text-xl text-900 text-primary font-bold">CANCELLED</span>
                 </div>
 
                 <Link href="issueitems?page=1&status=CANCELLED">
@@ -65,7 +65,7 @@
             <div class="mb-3">
               <div class="flex justify-content-between">
                 <div>
-                  <span class="block text-xl text-900 font-bold">COMPLETED</span>
+                  <span class="block text-xl text-900 text-primary font-bold">COMPLETED</span>
                 </div>
 
                 <Link href="issueitems?page=1&status=RECEIVED">
@@ -110,16 +110,21 @@
             >
               <template #header>
                 <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-                  <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700 mr-2">DELIVERIES</span>
+                  <span class="text-xl text-primary text-900 font-bold">DELIVERIES</span>
 
-                  <div>
-                    <span class="p-input-icon-left mr-2">
-                      <i class="pi pi-search" />
-                      <InputText
-                        v-model="search"
-                        placeholder="Search item"
-                      />
-                    </span>
+                  <div class="flex">
+                    <div class="mr-2">
+                      <div class="p-inputgroup">
+                        <span class="p-inputgroup-addon">
+                          <i class="pi pi-search"></i>
+                        </span>
+                        <InputText
+                          id="searchInput"
+                          v-model="search"
+                          placeholder="Search item"
+                        />
+                      </div>
+                    </div>
                     <Button
                       label="Add deliveries"
                       icon="pi pi-plus"
@@ -332,7 +337,7 @@
           <div class="surface-card shadow-2 p-3 border-round">
             <div class="mb-3">
               <div class="flex justify-content-between">
-                <span class="block text-xl text-900 font-bold">About to expire</span>
+                <span class="block text-xl text-900 text-primary font-bold">About to expire</span>
                 <Link href="csrstocks">
                   <div
                     class="flex align-items-center justify-content-center bg-purple-100 border-round"
@@ -380,12 +385,14 @@
 
       <Dialog
         v-model:visible="createStockDialog"
-        :style="{ width: '450px' }"
-        header="Delivery Detail"
+        :style="{ width: '550px' }"
         :modal="true"
         class="p-fluid"
         @hide="clickOutsideDialog"
       >
+        <template #header>
+          <div class="text-primary text-xl font-bold">DELIVERY DETAILS</div>
+        </template>
         <div class="field">
           <label for="ris_no">RIS no.</label>
           <InputText

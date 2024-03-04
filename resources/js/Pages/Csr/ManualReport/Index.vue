@@ -27,15 +27,20 @@
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">REPORT</span>
-            <div>
-              <span class="p-input-icon-left mr-2">
-                <i class="pi pi-search" />
-                <InputText
-                  v-model="search"
-                  placeholder="Search item"
-                />
-              </span>
+            <span class="text-xl text-900 font-bold text-primary">REPORT</span>
+            <div class="flex">
+              <div class="mr-2">
+                <div class="p-inputgroup">
+                  <span class="p-inputgroup-addon">
+                    <i class="pi pi-search"></i>
+                  </span>
+                  <InputText
+                    id="searchInput"
+                    v-model="search"
+                    placeholder="Search item"
+                  />
+                </div>
+              </div>
 
               <Button
                 label="Add"
@@ -295,12 +300,14 @@
 
       <Dialog
         v-model:visible="createDataDialog"
-        header="REPORT"
         :modal="true"
         :style="{ width: '850px' }"
         class="p-fluid"
         @hide="whenDialogIsHidden"
       >
+        <template #header>
+          <div class="text-primary text-xl font-bold">REPORT</div>
+        </template>
         <!-- ITEM -->
         <div class="field">
           <label>Item</label>

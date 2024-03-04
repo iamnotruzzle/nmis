@@ -7,7 +7,7 @@
       style="width: 100%"
     >
       <div class="mb-5 flex justify-content-between">
-        <span class="font-bold text-4xl">Reports</span>
+        <span class="font-bold text-4xl text-primary">Reports</span>
         <div class="flex flex-row align-items-center">
           <div class="flex flex-row">
             <Calendar

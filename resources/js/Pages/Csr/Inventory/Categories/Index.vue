@@ -27,18 +27,20 @@
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700"
-              >CSR SUPPLIES SUB-CATEGORIES</span
-            >
-            <div>
-              <span class="p-input-icon-left mr-2">
-                <i class="pi pi-search" />
-                <InputText
-                  v-model="search"
-                  placeholder="Search sub-category"
-                  :clearable="true"
-                />
-              </span>
+            <span class="text-xl text-900 font-bold text-primary">CSR SUPPLIES SUB-CATEGORIES</span>
+            <div class="flex">
+              <div class="mr-2">
+                <div class="p-inputgroup">
+                  <span class="p-inputgroup-addon">
+                    <i class="pi pi-search"></i>
+                  </span>
+                  <InputText
+                    id="searchInput"
+                    v-model="search"
+                    placeholder="Search sub-category"
+                  />
+                </div>
+              </div>
 
               <Button
                 label="Add sub-category"
@@ -147,12 +149,14 @@
 
       <Dialog
         v-model:visible="createDataDialog"
-        header="SUB-CATEGORY"
         :modal="true"
         :style="{ width: '400px' }"
         class="p-fluid"
         @hide="whenDialogIsHidden"
       >
+        <template #header>
+          <div class="text-primary text-xl font-bold">SUB-CATEGORY</div>
+        </template>
         <!-- category -->
         <div class="field">
           <label>Category</label>

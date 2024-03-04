@@ -24,16 +24,21 @@
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700 mr-2">DELIVERIES</span>
+            <span class="text-xl text-900 font-bold text-primary mr-2">DELIVERIES</span>
 
-            <div>
-              <span class="p-input-icon-left mr-2">
-                <i class="pi pi-search" />
-                <InputText
-                  v-model="search"
-                  placeholder="Search item"
-                />
-              </span>
+            <div class="flex">
+              <div class="mr-2">
+                <div class="p-inputgroup">
+                  <span class="p-inputgroup-addon">
+                    <i class="pi pi-search"></i>
+                  </span>
+                  <InputText
+                    id="searchInput"
+                    v-model="search"
+                    placeholder="Search item"
+                  />
+                </div>
+              </div>
               <Button
                 label="Add deliveries"
                 icon="pi pi-plus"
@@ -262,11 +267,13 @@
       <Dialog
         v-model:visible="createStockDialog"
         :style="{ width: '450px' }"
-        header="Delivery Detail"
         :modal="true"
         class="p-fluid"
         @hide="clickOutsideDialog"
       >
+        <template #header>
+          <div class="text-primary text-xl font-bold">DELIVERY DETAILS</div>
+        </template>
         <div class="field">
           <label for="ris_no">RIS no.</label>
           <InputText
@@ -560,18 +567,20 @@
         >
           <template #header>
             <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-              <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">BRANDS</span>
-              <div>
-                <span class="p-input-icon-left mr-2">
-                  <i class="pi pi-search" />
-                  <span class="p-input-icon-left">
-                    <i class="pi pi-search" />
+              <span class="text-xl text-900 font-bold text-primary">BRANDS</span>
+
+              <div class="flex">
+                <div class="mr-2">
+                  <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon">
+                      <i class="pi pi-search"></i>
+                    </span>
                     <InputText
                       v-model="brandFilters['global'].value"
                       placeholder="Search brand"
                     />
-                  </span>
-                </span>
+                  </div>
+                </div>
                 <Button
                   label="Add brand"
                   icon="pi pi-plus"
@@ -655,7 +664,7 @@
         >
           <template #header>
             <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-              <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">TOTAL STOCKS</span>
+              <span class="text-xl text-900 font-bold text-primary">TOTAL STOCKS</span>
               <div>
                 <span class="p-input-icon-left mr-2">
                   <i class="pi pi-search" />
@@ -699,12 +708,14 @@
       <Dialog
         v-model:visible="createBrandDialog"
         :style="{ width: '450px' }"
-        header="Stock Detail"
         :modal="true"
         class="p-fluid"
         @hide="clickOutsideDialog"
         dismissableMask
       >
+        <template #header>
+          <div class="text-primary text-xl font-bold">STOCK DETAIL</div>
+        </template>
         <div class="field">
           <label for="brand_name">Brand name</label>
           <InputText

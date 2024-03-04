@@ -41,16 +41,18 @@
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">REQUESTS</span>
+            <span class="text-xl text-900 font-bold text-primary">REQUESTS</span>
             <div>
-              <span class="p-input-icon-left mr-2">
-                <i class="pi pi-search" />
+              <div class="p-inputgroup">
+                <span class="p-inputgroup-addon">
+                  <i class="pi pi-search"></i>
+                </span>
                 <InputText
-                  class="w-20rem"
+                  id="searchInput"
                   v-model="search"
                   placeholder="Search requested at"
                 />
-              </span>
+              </div>
             </div>
           </div>
         </template>
@@ -236,7 +238,7 @@
             >
               <template #header>
                 <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-                  <span class="text-cyan-500 hover:text-cyan-700">PENDING ITEMS</span>
+                  <span class="text-primary">PENDING ITEMS</span>
                   <div class="flex flex-row align-items-center">
                     <a
                       v-if="slotProps.data.status != 'PENDING'"
@@ -287,12 +289,14 @@
       <!-- create & edit dialog -->
       <Dialog
         v-model:visible="createRequestStocksDialog"
-        header="Requested stock"
         :modal="true"
         class="p-fluid"
         showGridlines
         @hide="whenDialogIsHidden"
       >
+        <template #header>
+          <div class="text-primary text-xl font-bold">REQUESTED STOCKS</div>
+        </template>
         <div class="field">
           <DataTable
             v-model:filters="requestStockListDetailsFilter"

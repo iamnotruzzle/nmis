@@ -42,7 +42,7 @@
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold text-cyan-500 hover:text-cyan-700">STOCK BALANCE</span>
+            <span class="text-xl text-900 font-bold text-primary">STOCK BALANCE</span>
             <div>
               <!-- <span class="p-input-icon-left mr-2">
                 <i class="pi pi-search" />
@@ -164,13 +164,15 @@
 
       <Dialog
         v-model:visible="createItemDialog"
-        header="Balance"
         :modal="true"
         :style="{ width: '350px' }"
         class="p-fluid"
         @hide="whenDialogIsHidden"
         dismissableMask
       >
+        <template #header>
+          <div class="text-primary text-xl font-bold">BALANCE</div>
+        </template>
         <div class="field">
           <label>Item</label>
           <Dropdown
