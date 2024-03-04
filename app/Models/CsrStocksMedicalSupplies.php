@@ -19,6 +19,7 @@ class CsrStocksMedicalSupplies extends Model
     protected $fillable = [
         'id',
         'ris_no',
+        'temp_ris_no',
         'cl2comb',
         'uomcode',
         'suppcode',
