@@ -59,6 +59,7 @@
                 optionValue="wardcode"
                 filter
                 class="w-full"
+                style="padding: 0.5rem"
               >
               </Dropdown>
             </div>
