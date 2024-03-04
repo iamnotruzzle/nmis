@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class CsrStocksMedicalSuppliesController extends Controller
@@ -110,14 +111,20 @@ class CsrStocksMedicalSuppliesController extends Controller
         ]);
     }
 
+    public function generateTempRisNo($length = 10)
+    {
+        return Str::random($length);
+    }
+
     public function store(Request $request)
     {
         // dd(Carbon::parse($request->expiration_date)->setTimezone('Asia/Manila'));
 
+        $temp_ris_no = $this->generateTempRisNo();
+
         $entry_by = Auth::user()->employeeid;
 
         $request->validate([
-            'ris_no' => 'required',
             'fund_source' => 'required',
             'cl2comb' => 'required',
             'brand' => 'required',
@@ -128,6 +135,7 @@ class CsrStocksMedicalSuppliesController extends Controller
 
         $stock = CsrStocksMedicalSupplies::create([
             'ris_no' => $request->ris_no,
+            'temp_ris_no' => $request->ris_no == null ? $temp_ris_no : null,
             'suppcode' => $request->suppcode,
             'chrgcode' => $request->fund_source,
             'cl2comb' => $request->cl2comb,
@@ -142,6 +150,7 @@ class CsrStocksMedicalSuppliesController extends Controller
         $stockLogs = CsrStocksMedicalSuppliesLogs::create([
             'stock_id' => $stock->id,
             'ris_no' => $stock->ris_no,
+            'temp_ris_no' => $request->ris_no == null ? $temp_ris_no : null,
             'suppcode' => $stock->suppcode,
             'chrgcode' => $stock->chrgcode,
             'cl2comb' => $stock->cl2comb,
@@ -167,7 +176,6 @@ class CsrStocksMedicalSuppliesController extends Controller
         $entry_by = Auth::user()->employeeid;
 
         $request->validate([
-            'ris_no' => 'required',
             'fund_source' => 'required',
             'cl2comb' => 'required',
             'brand' => 'required',
