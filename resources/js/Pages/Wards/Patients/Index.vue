@@ -98,7 +98,6 @@
               <RadioButton
                 v-model="filterModel.value"
                 @change="filterCallback()"
-                id="status1"
                 name="MAY GO HOME"
                 value="02"
                 inputId="02"
@@ -106,14 +105,18 @@
               <label
                 for="02"
                 class="ml-2 cursor-pointer"
-                >MAY GO HOME</label
               >
+                <Tag
+                  value="MAY GO HOME"
+                  severity="success"
+                  class="px-2"
+                />
+              </label>
             </div>
             <div>
               <RadioButton
                 v-model="filterModel.value"
                 @change="filterCallback()"
-                id="status2"
                 name="BILLED"
                 value="03"
                 inputId="03"
@@ -121,8 +124,13 @@
               <label
                 for="03"
                 class="ml-2 cursor-pointer"
-                >BILLED</label
               >
+                <Tag
+                  value="BILLED"
+                  severity="info"
+                  class="px-2"
+                />
+              </label>
             </div>
           </template>
         </Column>
@@ -157,6 +165,7 @@
         <Column
           field="room_bed"
           header="ROOM | BED"
+          sortable
           style="width: 10%"
         >
         </Column>
