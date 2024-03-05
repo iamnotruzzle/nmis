@@ -184,7 +184,6 @@
           <template #body="{ data }">
             <Button
               icon="pi pi-money-bill"
-              class="mr-1"
               rounded
               text
               severity="info"
