@@ -80,13 +80,13 @@
         </Column>
         <Column
           field="kg"
-          header="WEIGHT"
+          header="WEIGHT (kg)"
           style="width: 5%"
         >
         </Column>
         <Column
           field="cm"
-          header="HEIGHT"
+          header="HEIGHT (cm)"
           style="width: 5%"
         >
         </Column>
