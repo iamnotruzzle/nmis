@@ -8,16 +8,10 @@
         class="p-datatable-sm"
         v-model:filters="filters"
         :value="patientsList"
-        selectionMode="single"
-        lazy
         paginator
-        :rows="rows"
-        ref="dt"
-        :totalRecords="totalRecords"
-        @page="onPage($event)"
-        dataKey="hpercode"
+        :rows="10"
+        :rowsPerPageOptions="[10, 20, 50]"
         showGridlines
-        :loading="loading"
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
@@ -30,8 +24,8 @@
                 </span>
                 <InputText
                   id="searchInput"
-                  v-model="search"
-                  placeholder="Search patient"
+                  v-model="filters['global'].value"
+                  placeholder="Search"
                 />
               </div>
             </div>
@@ -179,7 +173,6 @@ export default {
       loading: false,
       totalRecords: null,
       rows: null,
-      search: '',
       options: {},
       params: {},
       patientsList: [],
@@ -195,7 +188,7 @@ export default {
     this.rows = this.patients.per_page;
   },
   mounted() {
-    // console.log('mounted', this.patients);
+    console.log('mounted', this.patients);
     this.storePatientsInContainer();
 
     this.loading = false;
@@ -286,25 +279,51 @@ export default {
     // use storePatientsInContainer() function so that every time you make
     // server request such as POST, the data in the table
     // is updated
+    // storePatientsInContainer() {
+    //   this.patients.data.forEach((e) => {
+    //     this.patientsList.push({
+    //       enccode: e.enccode,
+    //       hpercode: e.hpercode,
+    //       patient: this.setPatient(e.patient),
+    //       bill_stat: e.patient.admission_date.patient_bill_stat.billstat,
+    //       //   los: ,
+    //       admission_date: e.patient.admission_date.admdate,
+    //       kg: this.checkIfBmiExistForWeight(e.patient.admission_date),
+    //       cm: this.checkIfBmiExistForHeight(e.patient.admission_date),
+    //       bmi: this.calculateBmi(e.patient.admission_date),
+    //       room_bed: e.room.rmname + ' - ' + e.bed.bdname,
+    //       physician: this.setPhysician(
+    //         e.patient.admission_date.physician,
+    //         e.patient.admission_date.physician2,
+    //         e.patient.admission_date.physician3,
+    //         e.patient.admission_date.physician4
+    //       ),
+    //     });
+    //   });
+    // },
     storePatientsInContainer() {
-      this.patients.data.forEach((e) => {
+      this.patients.forEach((e) => {
         this.patientsList.push({
           enccode: e.enccode,
           hpercode: e.hpercode,
-          patient: this.setPatient(e.patient),
-          bill_stat: e.patient.admission_date.patient_bill_stat.billstat,
+          patient:
+            e.patlast +
+            ',' +
+            ' ' +
+            e.patfirst +
+            ' ' +
+            (e.patmiddle == null ? '' : e.patmiddle) +
+            ' ' +
+            (e.patsuffix == null ? '' : e.patsuffix),
+          bill_stat: null,
           //   los: ,
-          admission_date: e.patient.admission_date.admdate,
-          kg: this.checkIfBmiExistForWeight(e.patient.admission_date),
-          cm: this.checkIfBmiExistForHeight(e.patient.admission_date),
-          bmi: this.calculateBmi(e.patient.admission_date),
-          room_bed: e.room.rmname + ' - ' + e.bed.bdname,
-          physician: this.setPhysician(
-            e.patient.admission_date.physician,
-            e.patient.admission_date.physician2,
-            e.patient.admission_date.physician3,
-            e.patient.admission_date.physician4
-          ),
+          admission_date: e.admdate,
+          kg: null,
+          cm: null,
+          bmi: null,
+          room_bed: e.rmname + ' - ' + e.bdname,
+          //   physician: this.setPhysician(null, null),
+          physician: null,
         });
       });
     },
@@ -335,11 +354,6 @@ export default {
       });
     },
   },
-  watch: {
-    search: function (val, oldVal) {
-      this.params.search = val;
-      this.updateData();
-    },
-  },
+  watch: {},
 };
 </script>
