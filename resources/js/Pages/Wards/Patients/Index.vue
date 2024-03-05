@@ -11,6 +11,9 @@
         paginator
         :rows="20"
         :rowsPerPageOptions="[20, 30, 40]"
+        dataKey="enccode"
+        filterDisplay="row"
+        :globalFilterFields="['status']"
         showGridlines
       >
         <template #header>
@@ -70,7 +73,9 @@
         <Column
           field="bill_stat"
           header="STATUS"
-          style="width: 10%"
+          style="width: 17%"
+          :showFilterMenu="false"
+          :filterMenuStyle="{ width: '14rem' }"
         >
           <template #body="{ data }">
             <div class="flex justify-content-center">
@@ -86,6 +91,55 @@
                 severity="info"
                 class="px-2"
               />
+            </div>
+          </template>
+          <template #filter="{ filterModel, filterCallback }">
+            <!-- <Dropdown
+              v-model="filterModel.value"
+              optionValue="code"
+              optionLabel="name"
+              @change="filterCallback()"
+              :options="statuses"
+              placeholder="Select"
+              class="w-full"
+            >
+              <template #option="slotProps">
+                <Tag
+                  :value="slotProps.option.name"
+                  :severity="slotProps.option.code == '02' ? 'success' : 'info'"
+                />
+              </template>
+            </Dropdown> -->
+
+            <div class="mb-2">
+              <RadioButton
+                v-model="filterModel.value"
+                @change="filterCallback()"
+                id="status1"
+                name="MAY GO HOME"
+                value="02"
+                inputId="02"
+              />
+              <label
+                for="02"
+                class="ml-2 cursor-pointer"
+                >MAY GO HOME</label
+              >
+            </div>
+            <div>
+              <RadioButton
+                v-model="filterModel.value"
+                @change="filterCallback()"
+                id="status2"
+                name="BILLED"
+                value="03"
+                inputId="03"
+              />
+              <label
+                for="03"
+                class="ml-2 cursor-pointer"
+                >BILLED</label
+              >
             </div>
           </template>
         </Column>
@@ -133,7 +187,7 @@
 
         <Column
           header="ACTION"
-          style="width: 10%"
+          style="width: 3%"
         >
           <template #body="{ data }">
             <Button
@@ -167,6 +221,7 @@ import Avatar from 'primevue/avatar';
 import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
 import AutoComplete from 'primevue/autocomplete';
+import RadioButton from 'primevue/radiobutton';
 import Tag from 'primevue/tag';
 import moment from 'moment';
 
@@ -187,6 +242,7 @@ export default {
     Dropdown,
     AutoComplete,
     Tag,
+    RadioButton,
   },
   props: {
     patients: Object,
@@ -200,8 +256,13 @@ export default {
       options: {},
       params: {},
       patientsList: [],
+      statuses: [
+        { code: '02', name: 'MAY GO HOME' },
+        { code: '03', name: 'BILLED' },
+      ],
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        bill_stat: { value: null, matchMode: FilterMatchMode.EQUALS },
       },
     };
   },
