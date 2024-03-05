@@ -320,7 +320,7 @@ export default {
           admission_date: e.admdate,
           kg: null,
           cm: null,
-          bmi: null,
+          bmi: e.kg == null || e.cm == null ? null : 'test',
           room_bed: e.rmname + ' - ' + e.bdname,
           //   physician: this.setPhysician(null, null),
           physician: null,
