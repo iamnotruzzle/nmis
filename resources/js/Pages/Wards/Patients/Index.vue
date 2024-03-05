@@ -11,9 +11,9 @@
         paginator
         :rows="20"
         :rowsPerPageOptions="[20, 30, 40]"
-        dataKey="enccode"
+        dataKey="hpercode"
         filterDisplay="row"
-        :globalFilterFields="['status']"
+        :globalFilterFields="['hpercode', 'patient', 'status', 'room_bed', 'physician']"
         showGridlines
       >
         <template #header>
@@ -73,7 +73,7 @@
         <Column
           field="bill_stat"
           header="STATUS"
-          style="width: 17%"
+          style="width: 15%"
           :showFilterMenu="false"
           :filterMenuStyle="{ width: '14rem' }"
         >
@@ -94,23 +94,6 @@
             </div>
           </template>
           <template #filter="{ filterModel, filterCallback }">
-            <!-- <Dropdown
-              v-model="filterModel.value"
-              optionValue="code"
-              optionLabel="name"
-              @change="filterCallback()"
-              :options="statuses"
-              placeholder="Select"
-              class="w-full"
-            >
-              <template #option="slotProps">
-                <Tag
-                  :value="slotProps.option.name"
-                  :severity="slotProps.option.code == '02' ? 'success' : 'info'"
-                />
-              </template>
-            </Dropdown> -->
-
             <div class="mb-2">
               <RadioButton
                 v-model="filterModel.value"
@@ -181,7 +164,7 @@
           field="physician"
           header="PHYSICIAN"
           sortable
-          style="width: 20%"
+          style="width: 22%"
         >
         </Column>
 
@@ -256,13 +239,13 @@ export default {
       options: {},
       params: {},
       patientsList: [],
-      statuses: [
-        { code: '02', name: 'MAY GO HOME' },
-        { code: '03', name: 'BILLED' },
-      ],
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        hpercode: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        patient: { value: null, matchMode: FilterMatchMode.CONTAINS },
         bill_stat: { value: null, matchMode: FilterMatchMode.EQUALS },
+        room_bed: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        physician: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
     };
   },
