@@ -48,22 +48,27 @@ class WardPatientsController extends Controller
 
 
 
-        $patients = DB::select("SELECT enctr.enccode, adm.admdate, enctr.hpercode, pt.patfirst, pt.patmiddle, pt.patlast, pt.patsuffix,
-                                    (SELECT TOP 1 vsweight FROM hvsothr WHERE othrstat = 'A' AND enccode = adm.enccode ORDER BY othrdte DESC) as kg,
-                                    (SELECT TOP 1 vsheight FROM hvsothr WHERE othrstat = 'A' AND enccode = adm.enccode ORDER BY othrdte DESC) as cm,
-                                room.rmname, bed.bdname, ward.wardname
-                                FROM hospital.dbo.henctr enctr
-                                    RIGHT JOIN hospital.dbo.hadmlog adm ON enctr.enccode = adm.enccode
-                                    RIGHT JOIN hospital.dbo.hpatroom pat_room ON enctr.enccode = pat_room.enccode
-                                    RIGHT JOIN hospital.dbo.hroom room ON pat_room.rmintkey = room.rmintkey
-                                    RIGHT JOIN hospital.dbo.hbed bed ON bed.bdintkey = pat_room.bdintkey
-                                    RIGHT JOIN hospital.dbo.hward ward ON pat_room.wardcode = ward.wardcode
-                                    RIGHT JOIN hospital.dbo.hperson pt ON enctr.hpercode = pt.hpercode
-                                WHERE (toecode = 'ADM' OR toecode = 'OPDAD' OR toecode = 'ERADM')
-                                AND pat_room.wardcode = ?
-                                AND pat_room.patrmstat = 'A'
-                                ORDER BY pt.patlast ASC;
-                            ", [$authWardcode->wardcode]);
+        $patients = DB::select(
+            "SELECT enctr.enccode, adm.admdate, enctr.hpercode, pt.patfirst, pt.patmiddle, pt.patlast, pt.patsuffix,
+                                (SELECT TOP 1 vsweight FROM hvsothr WHERE othrstat = 'A' AND enccode = adm.enccode ORDER BY othrdte DESC) as kg,
+                                (SELECT TOP 1 vsheight FROM hvsothr WHERE othrstat = 'A' AND enccode = adm.enccode ORDER BY othrdte DESC) as cm,
+                                room.rmname, bed.bdname, ward.wardname,
+                                adm.licno,
+                                (SELECT lastname + ', ' + firstname + ' ' + middlename FROM hpersonal WHERE physician_license.employeeid = hpersonal.employeeid) as physician
+                            FROM hospital.dbo.henctr enctr
+                                RIGHT JOIN hospital.dbo.hadmlog adm ON enctr.enccode = adm.enccode
+                                RIGHT JOIN hospital.dbo.hpatroom pat_room ON enctr.enccode = pat_room.enccode
+                                RIGHT JOIN hospital.dbo.hroom room ON pat_room.rmintkey = room.rmintkey
+                                RIGHT JOIN hospital.dbo.hbed bed ON bed.bdintkey = pat_room.bdintkey
+                                RIGHT JOIN hospital.dbo.hward ward ON pat_room.wardcode = ward.wardcode
+                                RIGHT JOIN hospital.dbo.hperson pt ON enctr.hpercode = pt.hpercode
+                                LEFT JOIN hospital.dbo.hprovider physician_license ON adm.licno3 = physician_license.licno
+                            WHERE (toecode = 'ADM' OR toecode = 'OPDAD' OR toecode = 'ERADM')
+                            AND pat_room.wardcode = ?
+                            AND pat_room.patrmstat = 'A'
+                            ORDER BY pt.patlast ASC;",
+            [$authWardcode->wardcode]
+        );
 
         // dd($authWardcode->wardcode);
         // dd($patients);

@@ -319,7 +319,7 @@ export default {
           bmi: this.calculateBmi(e),
           room_bed: e.rmname + ' - ' + e.bdname,
           //   physician: this.setPhysician(null, null),
-          physician: null,
+          physician: e.physician,
         });
       });
     },
