@@ -225,14 +225,10 @@ export default {
       }
     },
     calculateBmi(e) {
-      if (e.bmi == null) {
+      if (e.cm == null || e.kg == null) {
         return null;
       } else {
-        if (e.bmi.vsheight == null || e.bmi.vsweight == null) {
-          return null;
-        } else {
-          return ((e.bmi.vsweight / e.bmi.vsheight / e.bmi.vsheight) * 10000).toFixed(2);
-        }
+        return ((e.kg / e.cm / e.cm) * 10000).toFixed(2);
       }
     },
     setPhysician(physician, physician2, physician3, physician4) {
@@ -318,9 +314,9 @@ export default {
           bill_stat: null,
           //   los: ,
           admission_date: e.admdate,
-          kg: null,
-          cm: null,
-          bmi: e.kg == null || e.cm == null ? null : 'test',
+          kg: e.kg,
+          cm: e.cm,
+          bmi: this.calculateBmi(e),
           room_bed: e.rmname + ' - ' + e.bdname,
           //   physician: this.setPhysician(null, null),
           physician: null,
