@@ -42,6 +42,7 @@
         <Column
           field="patient"
           header="PATIENT"
+          sortable
           style="width: 20%"
         >
         </Column>
@@ -70,6 +71,7 @@
         <Column
           field="admission_date"
           header="ADMISSION DATE"
+          sortable
           style="width: 10%"
         >
           <template #body="{ data }">
@@ -103,6 +105,7 @@
         <Column
           field="physician"
           header="PHYSICIAN"
+          sortable
           style="width: 20%"
         >
         </Column>
