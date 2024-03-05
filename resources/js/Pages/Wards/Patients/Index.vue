@@ -9,8 +9,8 @@
         v-model:filters="filters"
         :value="patientsList"
         paginator
-        :rows="10"
-        :rowsPerPageOptions="[10, 20, 50]"
+        :rows="20"
+        :rowsPerPageOptions="[20, 30, 40]"
         showGridlines
       >
         <template #header>
@@ -55,14 +55,14 @@
             <div class="flex justify-content-center">
               <Tag
                 v-if="data.bill_stat == '02'"
-                value="BILLED"
-                severity="info"
+                value="MAY GO HOME"
+                severity="success"
                 class="px-2"
               />
               <Tag
                 v-if="data.bill_stat == '03'"
-                value="MAY GO HOME"
-                severity="success"
+                value="BILLED"
+                severity="info"
                 class="px-2"
               />
             </div>
@@ -294,8 +294,9 @@ export default {
           cm: e.cm,
           bmi: this.calculateBmi(e),
           room_bed: e.rmname + ' - ' + e.bdname,
-          //   physician: this.setPhysician(null, null),
           physician: this.setPhysician(e),
+          bill_stat: e.bill_stat,
+          is_for_discharge: e.is_for_discharge == 'DISCH' ? true : false,
         });
       });
     },
