@@ -54,7 +54,10 @@ class WardPatientsController extends Controller
                                 (SELECT TOP 1 vsheight FROM hvsothr WHERE othrstat = 'A' AND enccode = adm.enccode ORDER BY othrdte DESC) as cm,
                                 room.rmname, bed.bdname, ward.wardname,
                                 adm.licno,
-                                (SELECT lastname + ', ' + firstname + ' ' + middlename FROM hpersonal WHERE physician_license.employeeid = hpersonal.employeeid) as physician
+                                (SELECT lastname + ', ' + firstname + ' ' + middlename FROM hpersonal WHERE physician_license_licnof.employeeid = hpersonal.employeeid) as physician_licnof,
+                                (SELECT lastname + ', ' + firstname + ' ' + middlename FROM hpersonal WHERE physician_license_licno2.employeeid = hpersonal.employeeid) as physician_licno2,
+                                (SELECT lastname + ', ' + firstname + ' ' + middlename FROM hpersonal WHERE physician_license_licno3.employeeid = hpersonal.employeeid) as physician_licno3,
+                                (SELECT lastname + ', ' + firstname + ' ' + middlename FROM hpersonal WHERE physician_license_licno4.employeeid = hpersonal.employeeid) as physician_licno4
                             FROM hospital.dbo.henctr enctr
                                 RIGHT JOIN hospital.dbo.hadmlog adm ON enctr.enccode = adm.enccode
                                 RIGHT JOIN hospital.dbo.hpatroom pat_room ON enctr.enccode = pat_room.enccode
@@ -62,7 +65,10 @@ class WardPatientsController extends Controller
                                 RIGHT JOIN hospital.dbo.hbed bed ON bed.bdintkey = pat_room.bdintkey
                                 RIGHT JOIN hospital.dbo.hward ward ON pat_room.wardcode = ward.wardcode
                                 RIGHT JOIN hospital.dbo.hperson pt ON enctr.hpercode = pt.hpercode
-                                LEFT JOIN hospital.dbo.hprovider physician_license ON adm.licno3 = physician_license.licno
+                                LEFT JOIN hospital.dbo.hprovider physician_license_licnof ON adm.licnof = physician_license_licnof.licno
+                                LEFT JOIN hospital.dbo.hprovider physician_license_licno2 ON adm.licno2 = physician_license_licno2.licno
+                                LEFT JOIN hospital.dbo.hprovider physician_license_licno3 ON adm.licno3 = physician_license_licno3.licno
+                                LEFT JOIN hospital.dbo.hprovider physician_license_licno4 ON adm.licno4 = physician_license_licno4.licno
                             WHERE (toecode = 'ADM' OR toecode = 'OPDAD' OR toecode = 'ERADM')
                             AND pat_room.wardcode = ?
                             AND pat_room.patrmstat = 'A'

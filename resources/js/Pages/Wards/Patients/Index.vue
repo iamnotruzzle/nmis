@@ -15,7 +15,7 @@
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold text-primary">PATIENTS</span>
+            <span class="text-xl text-900 font-bold text-primary">NO. OF PATIENTS: {{ patientsList.length }}</span>
 
             <div class="mr-2">
               <div class="p-inputgroup">
@@ -231,45 +231,18 @@ export default {
         return ((e.kg / e.cm / e.cm) * 10000).toFixed(2);
       }
     },
-    setPhysician(physician, physician2, physician3, physician4) {
-      if (physician != null) {
-        return (
-          physician.user_detail.lastname +
-          ', ' +
-          physician.user_detail.firstname +
-          ' ' +
-          physician.user_detail.middlename
-        );
+    setPhysician(e) {
+      if (e.physician_licnof != null) {
+        return e.physician_licnof;
       }
-
-      if (physician2 != null) {
-        return (
-          physician2.user_detail.lastname +
-          ', ' +
-          physician2.user_detail.firstname +
-          ' ' +
-          physician2.user_detail.middlename
-        );
+      if (e.physician_licno2 != null) {
+        return e.physician_licno2;
       }
-
-      if (physician3 != null) {
-        return (
-          physician3.user_detail.lastname +
-          ', ' +
-          physician3.user_detail.firstname +
-          ' ' +
-          physician3.user_detail.middlename
-        );
+      if (e.physician_licno3 != null) {
+        return e.physician_licno3;
       }
-
-      if (physician4 != null) {
-        return (
-          physician4.user_detail.lastname +
-          ', ' +
-          physician4.user_detail.firstname +
-          ' ' +
-          physician4.user_detail.middlename
-        );
+      if (e.physician_licno4 != null) {
+        return e.physician_licno4;
       }
     },
     // use storePatientsInContainer() function so that every time you make
@@ -319,7 +292,7 @@ export default {
           bmi: this.calculateBmi(e),
           room_bed: e.rmname + ' - ' + e.bdname,
           //   physician: this.setPhysician(null, null),
-          physician: e.physician,
+          physician: this.setPhysician(e),
         });
       });
     },
