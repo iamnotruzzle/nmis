@@ -14,10 +14,18 @@
         showGridlines
       >
         <template #header>
-          <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+          <div class="flex flex-wrap align-items-center justify-content-between">
             <span class="text-xl text-900 font-bold text-primary">NO. OF PATIENTS: {{ patientsList.length }}</span>
 
-            <div class="mr-2">
+            <div>
+              <v-icon
+                name="gi-run"
+                class="pi pi-send text-green-500 text-xl mr-2"
+              ></v-icon>
+              <span>:&nbsp;&nbsp;FOR DISCHARGE</span>
+            </div>
+
+            <div>
               <div class="p-inputgroup">
                 <span class="p-inputgroup-addon">
                   <i class="pi pi-search"></i>
@@ -45,6 +53,19 @@
           sortable
           style="width: 20%"
         >
+          <template #body="{ data }">
+            <div class="flex flex-row">
+              <div class="mr-2">
+                <span>{{ data.patient }}</span>
+              </div>
+              <div v-if="data.is_for_discharge == true">
+                <v-icon
+                  name="gi-run"
+                  class="pi pi-send text-green-500 text-xl"
+                ></v-icon>
+              </div>
+            </div>
+          </template>
         </Column>
         <Column
           field="bill_stat"

@@ -38,6 +38,7 @@ import {
   SiOxygen,
   BiJournalCheck,
   OiArrowSwitch,
+  GiRun,
 } from 'oh-vue-icons/icons';
 addIcons(
   CoChartLine,
@@ -60,7 +61,8 @@ addIcons(
   CoArrowThickRight,
   SiOxygen,
   BiJournalCheck,
-  OiArrowSwitch
+  OiArrowSwitch,
+  GiRun
 );
 
 moment.tz.setDefault('Asia/Manila');
