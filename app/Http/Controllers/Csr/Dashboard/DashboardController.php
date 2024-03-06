@@ -38,14 +38,8 @@ class DashboardController extends Controller
         $about_to_expire = CsrStocksMedicalSupplies::with('itemDetail:cl2comb,cl2desc')
             ->orderBy('expiration_date', 'ASC')->limit(10)->get();
 
-        // $items = Item::with('unit')
-        //     ->where('cl2stat', 'A')
-        //     ->where('cl1comb', 'LIKE', '%1000-%')
-        //     ->orderBy('cl2desc', 'ASC')
-        //     ->get();
-
         $items = DB::select(
-            "SElECT hclass2.cl2comb, hclass2.cl2desc, huom.uomcode, huom.uomdesc FROM hclass2
+            "SELECT hclass2.cl2comb, hclass2.cl2desc, huom.uomcode, huom.uomdesc FROM hclass2
                 JOIN huom ON hclass2.uomcode = huom.uomcode
                 WHERE hclass2.cl1comb LIKE '%1000-%'
                 ORDER BY hclass2.cl2desc ASC;
