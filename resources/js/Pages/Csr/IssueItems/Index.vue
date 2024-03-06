@@ -663,6 +663,7 @@ export default {
         return moment.tz(date, 'Asia/Manila').format('L');
       }
     },
+    //
     setExpandedRow($event) {
       //   console.log($event);
       // Check if row expanded before click or not
