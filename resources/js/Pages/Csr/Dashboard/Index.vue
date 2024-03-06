@@ -918,7 +918,7 @@ export default {
       this.items.forEach((e) => {
         this.itemsList.push({
           cl2comb: e.cl2comb,
-          cl2desc: e.cl2desc.trim(),
+          cl2desc: e.cl2desc,
           uomcode: e.uomcode == null ? null : e.uomcode,
           uomdesc: e.uomdesc == null ? null : e.uomdesc,
         });

@@ -39,7 +39,7 @@ class DashboardController extends Controller
             ->orderBy('expiration_date', 'ASC')->limit(10)->get();
 
         $items = DB::select(
-            "SELECT hclass2.cl2comb, hclass2.cl2desc, huom.uomcode, huom.uomdesc FROM hclass2
+            "SELECT hclass2.cl2comb as cl2comb, hclass2.cl2desc as cl2desc, huom.uomcode as uomcode, huom.uomdesc as uomdesc FROM hclass2
                 JOIN huom ON hclass2.uomcode = huom.uomcode
                 WHERE hclass2.cl1comb LIKE '%1000-%'
                 ORDER BY hclass2.cl2desc ASC;
