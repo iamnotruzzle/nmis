@@ -13,6 +13,8 @@
         :rowsPerPageOptions="[20, 30, 40]"
         dataKey="hpercode"
         filterDisplay="row"
+        sortField="patient"
+        :sortOrder="1"
         :globalFilterFields="['hpercode', 'patient', 'status', 'room_bed', 'physician']"
         showGridlines
       >
