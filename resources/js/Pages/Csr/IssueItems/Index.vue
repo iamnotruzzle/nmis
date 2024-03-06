@@ -664,12 +664,11 @@ export default {
       }
     },
     setExpandedRow($event) {
+      //   console.log($event);
       // Check if row expanded before click or not
       const isExpanded = this.expandedRow.find((p) => p.id === $event.data.id);
-
       if (isExpanded?.id) this.expandedRow = [];
       else this.expandedRow = [$event.data];
-
       //   console.log(this.expandedRow);
     },
     storeItemsInController() {
