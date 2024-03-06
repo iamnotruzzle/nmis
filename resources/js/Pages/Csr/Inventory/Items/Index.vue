@@ -185,7 +185,7 @@
                 <template #header>
                   <div class="flex justify-content-between w-full">
                     <div class="text-xl font-bold my-3">
-                      Prices for <span class="text-cyan-500 hover:text-cyan-700">[ {{ slotProps.data.cl2desc }} ]</span>
+                      Prices for <span class="text-primary">[ {{ slotProps.data.cl2desc }} ]</span>
                     </div>
 
                     <Button
