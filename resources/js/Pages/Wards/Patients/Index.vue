@@ -175,6 +175,14 @@
           sortable
           style="width: 22%"
         >
+          <template #body="{ data }">
+            <div
+              v-for="physician in data.physician"
+              class="mb-2"
+            >
+              <span>{{ physician }}</span>
+            </div>
+          </template>
         </Column>
 
         <Column
@@ -308,18 +316,21 @@ export default {
       }
     },
     setPhysician(e) {
+      let assignedPhysician = [];
+
       if (e.physician_licnof != null) {
-        return e.physician_licnof;
+        assignedPhysician.push(e.physician_licnof);
       }
       if (e.physician_licno2 != null) {
-        return e.physician_licno2;
+        assignedPhysician.push(e.physician_licno2);
       }
       if (e.physician_licno3 != null) {
-        return e.physician_licno3;
+        assignedPhysician.push(e.physician_licno3);
       }
       if (e.physician_licno4 != null) {
-        return e.physician_licno4;
+        assignedPhysician.push(e.physician_licno4);
       }
+      return assignedPhysician;
     },
     // use storePatientsInContainer() function so that every time you make
     // server request such as POST, the data in the table
@@ -372,6 +383,7 @@ export default {
           is_for_discharge: e.is_for_discharge == 'DISCH' ? true : false,
         });
       });
+      //   console.log(this.patientsList);
     },
     onPage(event) {
       this.params.page = event.page + 1;
