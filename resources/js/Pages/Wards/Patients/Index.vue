@@ -22,7 +22,7 @@
 
             <div>
               <v-icon
-                name="gi-run"
+                name="ri-user-shared-fill"
                 class="pi pi-send text-green-500 text-xl mr-2"
               ></v-icon>
               <span>:&nbsp;&nbsp;FOR DISCHARGE</span>
@@ -63,7 +63,7 @@
               </div>
               <div v-if="data.is_for_discharge == true">
                 <v-icon
-                  name="gi-run"
+                  name="ri-user-shared-fill"
                   class="pi pi-send text-green-500 text-xl"
                 ></v-icon>
               </div>
