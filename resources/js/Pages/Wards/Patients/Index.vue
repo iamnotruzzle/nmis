@@ -190,13 +190,15 @@
           style="width: 3%"
         >
           <template #body="{ data }">
-            <Button
-              icon="pi pi-money-bill"
-              rounded
-              text
-              severity="info"
-              @click="goToPatientCharge(data.enccode)"
-            />
+            <div class="flex justify-content-center">
+              <Button
+                icon="pi pi-money-bill"
+                rounded
+                text
+                severity="info"
+                @click="goToPatientCharge(data.enccode)"
+              />
+            </div>
           </template>
         </Column>
       </DataTable>
