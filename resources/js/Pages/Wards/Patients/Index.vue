@@ -94,7 +94,7 @@
             </div>
           </template>
           <template #filter="{ filterModel, filterCallback }">
-            <div class="mb-2">
+            <div class="mb-2 flex flex-row align-items-center">
               <RadioButton
                 v-model="filterModel.value"
                 @change="filterCallback()"
@@ -113,7 +113,7 @@
                 />
               </label>
             </div>
-            <div>
+            <div class="flex flex-row align-items-center">
               <RadioButton
                 v-model="filterModel.value"
                 @change="filterCallback()"
