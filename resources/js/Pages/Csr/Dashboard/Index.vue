@@ -914,7 +914,7 @@ export default {
       });
     },
     storeItemsInContainer() {
-      console.log(this.items);
+      //   console.log(this.items);
       this.items.forEach((e) => {
         this.itemsList.push({
           cl2comb: e.cl2comb,
