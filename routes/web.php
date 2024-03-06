@@ -89,9 +89,9 @@ Route::middleware(['auth:sanctum'])->group(
         Route::put('issuetankitems', [IssueTankItemsController::class, 'acknowledgedrequest'])->name('issuetankitems.acknowledgedrequest');
 
         Route::resource('csrreports', ReportsController::class)->middleware(['verified', 'designation_csr'])->only(['index']);
-        Route::resource('csrmanualreports', CsrManualReportController::class)->middleware(['verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
+        // Route::resource('csrmanualreports', CsrManualReportController::class)->middleware(['verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
         Route::get('csrstocks/export/', [CsrStocksMedicalSuppliesReportController::class, 'export']);
-        Route::get('csrmanualreports/export/', [CsrManualReportExportController::class, 'export']);
+        // Route::get('csrmanualreports/export/', [CsrManualReportExportController::class, 'export']);
         Route::resource('stockbal', LocationStockBalanceController::class)->middleware(['verified'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('tankstockbal', LocationTankStockBalanceController::class)->middleware(['verified'])->only(['index', 'store', 'update', 'destroy']);
         // Route::resource('csrstocks/export/', [CsrStocksReportController::class, 'export'])->only(['index']);
@@ -117,8 +117,8 @@ Route::middleware(['auth:sanctum'])->group(
         Route::resource('consignmenttank', WardConsignmentTankController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('wardreports', ReportController::class)->middleware(['verified', 'designation_ward'])->only(['index']);
         Route::get('wardstocks/export/', [WardStocksReportController::class, 'export']);
-        Route::resource('wardsmanualreports', WardsManualReportController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
-        Route::get('wardsmanualreports/export/', [WardsManualReportExportController::class, 'export']);
+        // Route::resource('wardsmanualreports', WardsManualReportController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
+        // Route::get('wardsmanualreports/export/', [WardsManualReportExportController::class, 'export']);
 
         Route::resource('wardspatients', WardPatientsController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('patientcharge', PatientChargeController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);

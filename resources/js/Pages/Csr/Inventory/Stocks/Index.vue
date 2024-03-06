@@ -665,17 +665,19 @@
           <template #header>
             <div class="flex flex-wrap align-items-center justify-content-between gap-2">
               <span class="text-xl text-900 font-bold text-primary">TOTAL STOCKS</span>
-              <div>
-                <span class="p-input-icon-left mr-2">
-                  <i class="pi pi-search" />
-                  <span class="p-input-icon-left">
-                    <i class="pi pi-search" />
+
+              <div class="flex">
+                <div class="mr-2">
+                  <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon">
+                      <i class="pi pi-search"></i>
+                    </span>
                     <InputText
                       v-model="totalStocksFilters['global'].value"
                       placeholder="Search item"
                     />
-                  </span>
-                </span>
+                  </div>
+                </div>
               </div>
             </div>
           </template>
@@ -1015,8 +1017,8 @@ export default {
         this.itemsList.push({
           cl2comb: e.cl2comb,
           cl2desc: e.cl2desc,
-          uomcode: e.unit == null ? null : e.unit.uomcode,
-          uomdesc: e.unit == null ? null : e.unit.uomdesc,
+          uomcode: e.uomcode == null ? null : e.uomcode,
+          uomdesc: e.uomdesc == null ? null : e.uomdesc,
         });
       });
     },

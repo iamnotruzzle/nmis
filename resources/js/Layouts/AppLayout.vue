@@ -159,25 +159,25 @@ export default {
             },
           ],
         },
-        {
-          label: 'Tools',
-          items: [
-            {
-              label: 'Manual report',
-              icon: 'si-microsoftexcel',
-              to: 'csrmanualreports',
-              prefix: 'csrmanualreports',
-              comp: 'Csr/ManualReport/Index',
-            },
-            {
-              label: 'Manual report',
-              icon: 'si-microsoftexcel',
-              to: 'wardsmanualreports',
-              prefix: 'wardsmanualreports',
-              comp: 'Wards/ManualReport/Index',
-            },
-          ],
-        },
+        // {
+        //   label: 'Tools',
+        //   items: [
+        //     {
+        //       label: 'Manual report',
+        //       icon: 'si-microsoftexcel',
+        //       to: 'csrmanualreports',
+        //       prefix: 'csrmanualreports',
+        //       comp: 'Csr/ManualReport/Index',
+        //     },
+        //     {
+        //       label: 'Manual report',
+        //       icon: 'si-microsoftexcel',
+        //       to: 'wardsmanualreports',
+        //       prefix: 'wardsmanualreports',
+        //       comp: 'Wards/ManualReport/Index',
+        //     },
+        //   ],
+        // },
       ],
       menuForNonAdmin: null,
     };
@@ -253,16 +253,16 @@ export default {
           }
         );
       }
-      if (this.$page.props.user.designation == 'admin') {
-        this.menu[1].items = this.menu[1].items.filter(function (obj) {
-          return obj.to !== 'csrmanualreports';
-        });
-      }
-      if (this.$page.props.user.designation == 'admin') {
-        this.menu[1].items = this.menu[1].items.filter(function (obj) {
-          return obj.to !== 'wardsmanualreports';
-        });
-      }
+      //   if (this.$page.props.user.designation == 'admin') {
+      //     this.menu[1].items = this.menu[1].items.filter(function (obj) {
+      //       return obj.to !== 'csrmanualreports';
+      //     });
+      //   }
+      //   if (this.$page.props.user.designation == 'admin') {
+      //     this.menu[1].items = this.menu[1].items.filter(function (obj) {
+      //       return obj.to !== 'wardsmanualreports';
+      //     });
+      //   }
       // end admin
 
       // csr
@@ -302,11 +302,11 @@ export default {
           return obj.to !== 'admindashboard';
         });
       }
-      if (this.$page.props.user.designation == 'csr') {
-        this.menu[2].items = this.menu[2].items.filter(function (obj) {
-          return obj.to !== 'wardsmanualreports';
-        });
-      }
+      //   if (this.$page.props.user.designation == 'csr') {
+      //     this.menu[2].items = this.menu[2].items.filter(function (obj) {
+      //       return obj.to !== 'wardsmanualreports';
+      //     });
+      //   }
       // end csr
 
       // ward
@@ -340,11 +340,11 @@ export default {
           return obj.to !== 'csrdashboard';
         });
       }
-      if (this.$page.props.user.designation == 'ward') {
-        this.menu[2].items = this.menu[2].items.filter(function (obj) {
-          return obj.to !== 'csrmanualreports';
-        });
-      }
+      //   if (this.$page.props.user.designation == 'ward') {
+      //     this.menu[2].items = this.menu[2].items.filter(function (obj) {
+      //       return obj.to !== 'csrmanualreports';
+      //     });
+      //   }
       // end ward
     },
     onload() {
