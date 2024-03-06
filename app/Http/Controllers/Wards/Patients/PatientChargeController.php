@@ -32,6 +32,12 @@ class PatientChargeController extends Controller
         $pat_enccode = $request->enccode;
         $medicalSupplies = array();
 
+        $pat_name = DB::select("SELECT hperson.patfirst, hperson.patmiddle, hperson.patlast FROM henctr
+            LEFT JOIN hperson ON henctr.hpercode = hperson.hpercode
+            WHERE henctr.enccode = ?
+        ", [$pat_enccode]);
+        // dd($pat_name);
+
         // get auth wardcode
         $authWardcode = DB::table('csrw_users')
             ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
@@ -192,6 +198,7 @@ class PatientChargeController extends Controller
         // dd($bills);
 
         return Inertia::render('Wards/Patients/Bill/Index', [
+            'pat_name' => $pat_name,
             'pat_enccode' => $pat_enccode,
             'bills' => $bills,
             'medicalSupplies' => $medicalSupplies,

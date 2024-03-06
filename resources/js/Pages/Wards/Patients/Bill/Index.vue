@@ -21,7 +21,9 @@
           paginator
         >
           <template #header>
-            <span class="text-2xl text-primary font-bold">{{ patientName }} ( {{ hospitalNumber }} )</span>
+            <span class="text-2xl text-primary font-bold">
+              {{ pat_name[0].patlast }}, {{ pat_name[0].patfirst }} {{ pat_name[0].patmiddle }}
+            </span>
             <div class="flex flex-wrap align-items-center justify-content-between gap-2">
               <span class="text-xl text-900 font-bold text-primary">BILLS</span>
               <div>
@@ -112,6 +114,23 @@
           >
             <template #body="{ data }">
               {{ convertToPHCurrency(data.amount) }}
+            </template>
+          </Column>
+
+          <Column
+            header="ACTION"
+            style="width: 3%"
+          >
+            <template #body="{ data }">
+              <!-- <div class="flex justify-content-center">
+                <Button
+                  icon="pi pi-money-bill"
+                  rounded
+                  text
+                  severity="info"
+                  @click="goToPatientCharge(data.enccode)"
+                />
+              </div> -->
             </template>
           </Column>
           <template #footer>
@@ -449,6 +468,7 @@ export default {
     Link,
   },
   props: {
+    pat_name: Array,
     pat_enccode: String,
     bills: Object,
     medicalSupplies: Object,
