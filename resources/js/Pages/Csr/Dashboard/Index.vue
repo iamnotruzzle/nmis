@@ -103,7 +103,7 @@
               ref="dt"
               :totalRecords="totalRecords"
               @page="onPage($event)"
-              dataKey="cl1comb"
+              dataKey="id"
               filterDisplay="row"
               showGridlines
               :loading="loading"
@@ -456,7 +456,7 @@
             :options="itemsList"
             :virtualScrollerOptions="{ itemSize: 38 }"
             filter
-            dataKey="unit"
+            dataKey="cl2comb"
             optionLabel="cl2desc"
             optionValue="cl2comb"
             class="w-full"
@@ -914,12 +914,13 @@ export default {
       });
     },
     storeItemsInContainer() {
+      console.log(this.items);
       this.items.forEach((e) => {
         this.itemsList.push({
           cl2comb: e.cl2comb,
-          cl2desc: e.cl2desc,
-          uomcode: e.unit == null ? null : e.unit.uomcode,
-          uomdesc: e.unit == null ? null : e.unit.uomdesc,
+          cl2desc: e.cl2desc.trim(),
+          uomcode: e.uomcode == null ? null : e.uomcode,
+          uomdesc: e.uomdesc == null ? null : e.uomdesc,
         });
       });
     },

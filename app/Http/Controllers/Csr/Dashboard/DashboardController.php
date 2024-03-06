@@ -20,11 +20,6 @@ use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $searchString = $request->search;
@@ -43,10 +38,19 @@ class DashboardController extends Controller
         $about_to_expire = CsrStocksMedicalSupplies::with('itemDetail:cl2comb,cl2desc')
             ->orderBy('expiration_date', 'ASC')->limit(10)->get();
 
-        $items = Item::with('unit')
-            ->where('cl2stat', 'A')
-            ->orderBy('cl2desc', 'ASC')
-            ->get();
+        // $items = Item::with('unit')
+        //     ->where('cl2stat', 'A')
+        //     ->where('cl1comb', 'LIKE', '%1000-%')
+        //     ->orderBy('cl2desc', 'ASC')
+        //     ->get();
+
+        $items = DB::select(
+            "SElECT hclass2.cl2comb, hclass2.cl2desc, huom.uomcode, huom.uomdesc FROM hclass2
+                JOIN huom ON hclass2.uomcode = huom.uomcode
+                WHERE hclass2.cl1comb LIKE '%1000-%'
+                ORDER BY hclass2.cl2desc ASC;
+            ",
+        );
 
         $stocks = CsrStocksMedicalSupplies::with('unit:uomcode,uomdesc', 'itemDetail', 'supplierDetail:suppcode,suppname', 'brandDetail', 'typeOfCharge:chrgcode,chrgdesc', 'fundSource:id,fsid,fsName,cluster_code')
             ->whereHas('itemDetail', function ($q) use ($searchString) {
