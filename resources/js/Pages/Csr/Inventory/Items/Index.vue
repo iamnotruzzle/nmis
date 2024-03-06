@@ -17,7 +17,6 @@
         ref="dt"
         :totalRecords="totalRecords"
         @page="onPage($event)"
-        @row-click="setExpandedRow"
         dataKey="cl2comb"
         filterDisplay="row"
         showGridlines
@@ -180,7 +179,7 @@
                 :rows="5"
                 class="w-9"
                 showGridlines
-                :value="expandedRow[0].prices"
+                :value="slotProps.data.prices"
                 size="small"
               >
                 <template #header>
@@ -735,14 +734,6 @@ export default {
           cl1desc: e.cl1desc,
         });
       });
-    },
-    setExpandedRow($event) {
-      // Check if row expanded before click or not
-      const isExpanded = this.expandedRow.find((p) => p.cl2comb === $event.data.cl2comb);
-
-      if (isExpanded?.cl2comb) this.expandedRow = [];
-      else this.expandedRow = [$event.data];
-      //   console.log(this.expandedRow);
     },
     storeUnitsInContainer() {
       this.units.forEach((e) => {

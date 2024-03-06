@@ -29,7 +29,6 @@
       <DataTable
         class="p-datatable-sm"
         v-model:expandedRows="expandedRow"
-        @row-click="setExpandedRow"
         v-model:filters="filters"
         :value="requestStockList"
         selectionMode="single"
@@ -1011,13 +1010,6 @@ export default {
     },
   },
   methods: {
-    setExpandedRow($event) {
-      // Check if row expanded before click or not
-      const isExpanded = this.expandedRow.find((p) => p.id === $event.data.id);
-      if (isExpanded?.id) this.expandedRow = [];
-      else this.expandedRow = [$event.data];
-      //   console.log(this.expandedRow);
-    },
     storeItemsInController() {
       this.itemsList = []; // reset
       this.tankList.forEach((e) => {

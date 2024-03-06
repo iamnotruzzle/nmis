@@ -24,7 +24,6 @@
       <DataTable
         class="p-datatable-sm"
         v-model:expandedRows="expandedRow"
-        @row-click="setExpandedRow"
         v-model:filters="filters"
         :value="requestStockList"
         selectionMode="single"
@@ -234,7 +233,7 @@
               paginator
               showGridlines
               :rows="7"
-              :value="expandedRow[0].request_stocks_details"
+              :value="slotProps.data.request_stocks_details"
             >
               <template #header>
                 <div class="flex flex-wrap align-items-center justify-content-between gap-2">
@@ -576,14 +575,6 @@ export default {
       } else {
         return moment.tz(date, 'Asia/Manila').format('L');
       }
-    },
-    setExpandedRow($event) {
-      //   console.log($event);
-      // Check if row expanded before click or not
-      const isExpanded = this.expandedRow.find((p) => p.id === $event.data.id);
-      if (isExpanded?.id) this.expandedRow = [];
-      else this.expandedRow = [$event.data];
-      //   console.log(this.expandedRow);
     },
     // storeItemsInController() {
     //   this.items.forEach((e) => {

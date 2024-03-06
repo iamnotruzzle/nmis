@@ -11,7 +11,6 @@
           dataKey="charge_slip_no"
           v-model:filters="filters"
           v-model:expandedRows="expandedRow"
-          @row-click="setExpandedRow"
           :value="billList"
           selectionMode="single"
           removableSort
@@ -627,13 +626,6 @@ export default {
       } else {
         return moment.tz(date, 'Asia/Manila').format('L');
       }
-    },
-    setExpandedRow($event) {
-      // Check if row expanded before click or not
-      const isExpanded = this.expandedRow.find((p) => p.charge_slip_no === $event.data.charge_slip_no);
-      if (isExpanded?.charge_slip_no) this.expandedRow = [];
-      else this.expandedRow = [$event.data];
-      //   console.log(this.expandedRow);
     },
     getTotalAmount() {
       this.totalAmount = 0;
