@@ -103,7 +103,7 @@
               <Tag
                 v-if="data.status == 'ACKNOWLEDGED'"
                 :value="data.status"
-                class="bg-yellow-400"
+                class="bg-yellow-400 text-gray-900"
               />
               <Tag
                 v-if="data.status == 'FILLED'"
@@ -313,13 +313,18 @@
           >
             <template #header>
               <div class="flex">
-                <span class="p-input-icon-left">
-                  <i class="pi pi-search" />
-                  <InputText
-                    v-model="requestStockListDetailsFilter['global'].value"
-                    placeholder="Search Item"
-                  />
-                </span>
+                <div class="mr-2">
+                  <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon">
+                      <i class="pi pi-search"></i>
+                    </span>
+                    <InputText
+                      id="searchInput"
+                      v-model="requestStockListDetailsFilter['global'].value"
+                      placeholder="Search item"
+                    />
+                  </div>
+                </div>
               </div>
               <p
                 class="text-error text-xl font-semibold my-1"

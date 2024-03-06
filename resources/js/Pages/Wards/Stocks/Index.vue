@@ -115,7 +115,7 @@
               <Tag
                 v-if="data.status == 'ACKNOWLEDGED'"
                 :value="data.status"
-                class="bg-yellow-400"
+                class="bg-yellow-400 text-gray-900"
               />
               <Tag
                 v-if="data.status == 'FILLED'"
