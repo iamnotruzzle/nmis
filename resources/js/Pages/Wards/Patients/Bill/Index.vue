@@ -8,20 +8,17 @@
       <div>
         <DataTable
           class="p-datatable-sm"
-          dataKey="charge_slip_no"
+          dataKey="uid"
           v-model:filters="filters"
-          v-model:expandedRows="expandedRow"
           :value="billList"
           selectionMode="single"
           removableSort
           filterDisplay="row"
+          :rows="20"
+          :rowsPerPageOptions="[20, 30, 40]"
           showGridlines
           ref="dt"
-          lazy
           paginator
-          :rows="rows"
-          :totalRecords="totalRecords"
-          @page="onPage($event)"
         >
           <template #header>
             <span class="text-2xl text-primary font-bold">{{ patientName }} ( {{ hospitalNumber }} )</span>
@@ -47,10 +44,6 @@
               </div>
             </div>
           </template>
-          <Column
-            expander
-            style="width: 5%"
-          />
           <Column
             field="charge_slip_no"
             header="CHARGE SLIP #"
@@ -124,60 +117,6 @@
           <template #footer>
             <!-- <div class="text-right text-lg text-green-600">Total: ₱ {{ totalAmount.toFixed(2) }}</div> -->
             <div class="text-right text-lg text-green-600">Total: {{ convertToPHCurrency(totalAmount) }}</div>
-          </template>
-          <template #expansion="slotProps">
-            <!-- Charge for medical supplies -->
-            <!-- v-if="slotProps.data.patient_charge_logs != null" -->
-            <div
-              class="p-3"
-              v-if="slotProps.data.patient_charge_logs != null"
-            >
-              <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-                <h5>
-                  <span class="text-cyan-500 hover:text-cyan-700">ITEMS DISPENSED</span>
-                </h5>
-              </div>
-              <!-- {{ slotProps.data }} -->
-              <DataTable
-                :value="slotProps.data.patient_charge_logs"
-                paginator
-                :rows="5"
-              >
-                <Column header="BRAND">
-                  <template #body="{ data }">
-                    <!-- {{ data }} -->
-                    <!-- {{ data.brand_details.name }} -->
-                    <span v-if="data.brand_details != null">{{ data.brand_details.name }}</span>
-                    <span v-else>NA</span>
-                  </template>
-                </Column>
-                <Column header="EXP. DATE">
-                  <template #body="{ data }">
-                    {{ tzone(data.expiration_date) }}
-                  </template>
-                </Column>
-                <Column header="QUANTITY">
-                  <template #body="{ data }">
-                    {{ data.quantity }}
-                  </template>
-                </Column>
-                <Column
-                  header="ACTION"
-                  style="min-width: 12rem"
-                >
-                  <template #body="chargeLogs">
-                    <Button
-                      icon="pi pi-pencil"
-                      class="mr-1"
-                      rounded
-                      text
-                      severity="warning"
-                      @click="editItem(slotProps, chargeLogs)"
-                    />
-                  </template>
-                </Column>
-              </DataTable>
-            </div>
           </template>
         </DataTable>
 
@@ -518,13 +457,9 @@ export default {
   },
   data() {
     return {
-      // paginator
-      loading: false,
-      totalRecords: null,
-      rows: null,
-      // end paginator
       stockBalanceDeclared: false,
       expandedRow: [],
+      uid: 0, // Initialize unique ID property
       search: '',
       options: {},
       params: {},
@@ -586,13 +521,13 @@ export default {
     };
   },
   // created will be initialize before mounted
-  created() {
-    this.totalRecords = this.bills.total;
-    this.params.page = this.bills.current_page;
-    this.rows = this.bills.per_page;
-  },
+  //   created() {
+  //     this.totalRecords = this.bills.total;
+  //     this.params.page = this.bills.current_page;
+  //     this.rows = this.bills.per_page;
+  //   },
   mounted() {
-    // console.log('bills', this.bills);
+    console.log('bills', this.bills);
 
     this.storeBillsInContainer();
     this.getTotalAmount();
@@ -608,10 +543,6 @@ export default {
     this.hospitalNumber = this.bills.hpercode;
   },
   methods: {
-    onPage(event) {
-      this.params.page = event.page + 1;
-      this.updateData();
-    },
     convertToPHCurrency(e) {
       const formatted = e.toLocaleString('en-PH', {
         style: 'currency',
@@ -634,20 +565,19 @@ export default {
       });
     },
     storeBillsInContainer() {
-      let uid = 0;
-      this.bills.data.forEach((e) => {
+      this.bills.forEach((e) => {
         // console.log(e);
 
         // only push item when chargcode are drug and meds oxygen, compressed air and carbon dioxide
-        if (e.chargcode == 'DRUMD') {
+        if (e.type_of_charge_code == 'DRUMD') {
           const matchingTank = this.tankList.find((x) => e.itemcode === x.itemcode);
 
           if (e.itemcode == matchingTank.itemcode && e.uomcode == matchingTank.unitcode) {
             this.billList.push({
-              // uid: Number(uid) + 1,
-              charge_slip_no: e.pcchrgcod,
-              type_of_charge_code: e.type_of_charge.chrgcode,
-              type_of_charge_description: e.type_of_charge.chrgdesc,
+              uid: ++this.uid,
+              charge_slip_no: e.charge_slip_no,
+              type_of_charge_code: e.type_of_charge_code,
+              type_of_charge_description: e.type_of_charge_description,
               // item: e.type_of_charge.chrgdesc,
               item:
                 matchingTank.gendesc +
@@ -660,30 +590,30 @@ export default {
                 ' ' +
                 matchingTank.rtedesc,
               itemcode: e.itemcode,
-              quantity: Math.trunc(e.pchrgqty),
+              quantity: Math.trunc(e.quantity),
               // price: e.pchrgup,
-              price: Math.round(e.pchrgup * 100) / 100,
-              amount: (Math.trunc(e.pchrgqty) * Math.round(e.pchrgup * 100)) / 100,
-              charge_date: e.pcchrgdte,
-              patient_charge_logs: e.patient_charge_logs.length == 0 ? null : e.patient_charge_logs,
+              price: Math.round(e.price * 100) / 100,
+              amount: (Math.trunc(e.quantity) * Math.round(e.price * 100)) / 100,
+              charge_date: e.charge_date,
+              //   patient_charge_logs: e.patient_charge_logs.length == 0 ? null : e.patient_charge_logs,
             });
           }
         }
         // only push item when chargcode are medical supplies or misc
-        else if (e.chargcode == 'MISC' || e.chargcode == 'DRUMN') {
+        else if (e.type_of_charge_code == 'MISC' || e.type_of_charge_code == 'DRUMN') {
           this.billList.push({
-            // uid: Number(uid) + 1,
-            charge_slip_no: e.pcchrgcod,
-            type_of_charge_code: e.type_of_charge.chrgcode,
-            type_of_charge_description: e.type_of_charge.chrgdesc,
-            item: e.misc != null ? e.misc.hmdesc : e.item.category.cl1desc + ' ' + e.item.cl2desc,
+            uid: ++this.uid,
+            charge_slip_no: e.charge_slip_no,
+            type_of_charge_code: e.type_of_charge_code,
+            type_of_charge_description: e.type_of_charge_description,
+            item: e.misc != null ? e.misc : e.category + ' ' + e.item,
             itemcode: e.itemcode,
-            quantity: Math.trunc(e.pchrgqty),
+            quantity: Math.trunc(e.quantity),
             // price: e.pchrgup,
-            price: Math.round(e.pchrgup * 100) / 100,
-            amount: (Math.trunc(e.pchrgqty) * Math.round(e.pchrgup * 100)) / 100,
-            charge_date: e.pcchrgdte,
-            patient_charge_logs: e.patient_charge_logs.length == 0 ? null : e.patient_charge_logs,
+            price: Math.round(e.price * 100) / 100,
+            amount: (Math.trunc(e.quantity) * Math.round(e.price * 100)) / 100,
+            charge_date: e.charge_date,
+            // patient_charge_logs: e.patient_charge_logs.length == 0 ? null : e.patient_charge_logs,
           });
         } else {
           return null;
@@ -850,11 +780,9 @@ export default {
         preserveState: true,
         preserveScroll: true,
         onSuccess: (visit) => {
-          this.totalRecords = this.bills.total;
           this.billList = [];
           //   this.expandedRow = [];
           this.storeBillsInContainer();
-          this.loading = false;
         },
       });
     },

@@ -109,35 +109,36 @@ class PatientChargeController extends Controller
 
         /////////////////////////////////////////////
         // original query
-        $bills = PatientCharge::with(['typeOfCharge:chrgcode,chrgdesc', 'item', 'misc', 'patientChargeLogs'])
-            ->where('enccode', $pat_enccode)
-            ->orderBy('pcchrgdte', 'DESC')
-            ->get();
-        //->paginate(7);
+        // $bills = PatientCharge::with(['typeOfCharge:chrgcode,chrgdesc', 'item', 'misc', 'patientChargeLogs'])
+        //     ->where('enccode', $pat_enccode)
+        //     ->orderBy('pcchrgdte', 'DESC')
+        //     ->get();
+        // //->paginate(7);
 
-        // $bills = DB::select(
-        //     "SELECT pat_charge.pcchrgcod as charge_slip_no,
-        //                     type_of_charge.chrgcode as type_of_charge_code,
-        //                     type_of_charge.chrgdesc as type_of_charge_description,
-        //                     item.cl2desc as item,
-        //                     misc.hmdesc as misc,
-        //                     pat_charge.itemcode as itemcode,
-        //                     pat_charge.pchrgqty as quantity,
-        //                     pat_charge.pchrgup as price,
-        //                     pat_charge.pcchrgdte as charge_date,
-        //                     charge_log.quantity as charge_log_quantity,
-        //                     charge_log.expiration_date as charge_log_expiration_date
-        //                     FROM hpatchrg pat_charge
-        //                     LEFT JOIN hclass2 as item ON pat_charge.itemcode = item.cl2comb
-        //                     LEFT JOIN hmisc as misc ON pat_charge.itemcode = misc.hmcode
-        //                     LEFT JOIN hcharge as type_of_charge ON pat_charge.chargcode = type_of_charge.chrgcode
-        //                     LEFT JOIN csrw_patient_charge_logs as charge_log ON pat_charge.enccode = charge_log.enccode
-        //                                                                                 AND pat_charge.pcchrgdte = charge_log.pcchrgdte
-        //                                                                                 AND pat_charge.itemcode = charge_log.itemcode
-        //                     WHERE pat_charge.enccode = ?
-        //                     ORDER BY pat_charge.pcchrgdte DESC;",
-        //     [$pat_enccode]
-        // );
+        $bills = DB::select(
+            "SELECT pat_charge.pcchrgcod as charge_slip_no,
+                            type_of_charge.chrgcode as type_of_charge_code,
+                            type_of_charge.chrgdesc as type_of_charge_description,
+                            item.cl2desc as item,
+                            misc.hmdesc as misc,
+                            pat_charge.itemcode as itemcode,
+                            pat_charge.pchrgqty as quantity,
+                            pat_charge.pchrgup as price,
+                            pat_charge.uomcode as uomcode,
+                            pat_charge.pcchrgdte as charge_date,
+                            charge_log.quantity as charge_log_quantity,
+                            charge_log.expiration_date as charge_log_expiration_date
+                            FROM hpatchrg pat_charge
+                            LEFT JOIN hclass2 as item ON pat_charge.itemcode = item.cl2comb
+                            LEFT JOIN hmisc as misc ON pat_charge.itemcode = misc.hmcode
+                            LEFT JOIN hcharge as type_of_charge ON pat_charge.chargcode = type_of_charge.chrgcode
+                            LEFT JOIN csrw_patient_charge_logs as charge_log ON pat_charge.enccode = charge_log.enccode
+                                                                                        AND pat_charge.pcchrgdte = charge_log.pcchrgdte
+                                                                                        AND pat_charge.itemcode = charge_log.itemcode
+                            WHERE pat_charge.enccode = ?
+                            ORDER BY pat_charge.pcchrgdte DESC;",
+            [$pat_enccode]
+        );
 
         // $bills = DB::table('hpatchrg AS pat_charge')
         //     ->select(
