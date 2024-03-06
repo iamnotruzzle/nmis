@@ -20,13 +20,13 @@
           <div class="flex flex-wrap align-items-center justify-content-between">
             <span class="text-xl text-900 font-bold text-primary">NO. OF PATIENTS: {{ patientsList.length }}</span>
 
-            <div>
+            <!-- <div>
               <v-icon
                 name="ri-user-shared-fill"
                 class="pi pi-send text-green-500 text-xl mr-2"
               ></v-icon>
               <span>:&nbsp;&nbsp;FOR DISCHARGE</span>
-            </div>
+            </div> -->
 
             <div>
               <div class="p-inputgroup">
@@ -55,17 +55,13 @@
           header="PATIENT"
           sortable
           style="width: 20%"
+          :showFilterMenu="false"
+          :filterMenuStyle="{ width: '14rem' }"
         >
           <template #body="{ data }">
-            <div class="flex flex-row">
+            <div class="flex flex-row align-items-center">
               <div class="mr-2">
                 <span>{{ data.patient }}</span>
-              </div>
-              <div v-if="data.is_for_discharge == true">
-                <v-icon
-                  name="ri-user-shared-fill"
-                  class="pi pi-send text-green-500 text-xl"
-                ></v-icon>
               </div>
             </div>
           </template>
@@ -73,7 +69,7 @@
         <Column
           field="bill_stat"
           header="STATUS"
-          style="width: 15%"
+          style="width: 13%"
           :showFilterMenu="false"
           :filterMenuStyle="{ width: '14rem' }"
         >
@@ -135,10 +131,68 @@
           </template>
         </Column>
         <Column
+          field="is_for_discharge"
+          header="FOR DISCHARGE"
+          style="width: 2%"
+          :showFilterMenu="false"
+          :filterMenuStyle="{ width: '14rem' }"
+        >
+          <template #body="{ data }">
+            <div class="flex justify-content-center">
+              <div v-if="data.is_for_discharge == true">
+                <v-icon
+                  name="ri-user-shared-fill"
+                  class="pi pi-send text-green-500 text-xl"
+                ></v-icon>
+              </div>
+            </div>
+          </template>
+          <template #filter="{ filterModel, filterCallback }">
+            <div class="mb-2 flex flex-row align-items-center">
+              <RadioButton
+                v-model="filterModel.value"
+                @change="filterCallback()"
+                name="YES"
+                value="true"
+                inputId="true"
+              />
+              <label
+                for="true"
+                class="ml-2 cursor-pointer"
+              >
+                <Tag
+                  value="YES"
+                  severity="success"
+                  class="px-2"
+                />
+              </label>
+            </div>
+            <div class="flex flex-row align-items-center">
+              <RadioButton
+                v-model="filterModel.value"
+                @change="filterCallback()"
+                name="NO"
+                value="false"
+                inputId="false"
+              />
+              <label
+                for="false"
+                class="ml-2 cursor-pointer"
+              >
+                <Tag
+                  value="NO"
+                  severity="info"
+                  class="px-2"
+                />
+              </label>
+            </div>
+          </template>
+        </Column>
+        <Column
           field="admission_date"
           header="ADMISSION DATE"
           sortable
-          style="width: 10%"
+          style="width: 15%"
         >
           <template #body="{ data }">
             {{ tzone(data.admission_date) }}
@@ -147,33 +201,33 @@
         <Column
           field="kg"
           header="WEIGHT (kg)"
-          style="width: 5%"
+          style="width: 3%"
         >
         </Column>
         <Column
           field="cm"
           header="HEIGHT (cm)"
-          style="width: 5%"
+          style="width: 3%"
         >
         </Column>
         <Column
           field="bmi"
           header="BMI"
-          style="width: 5%"
+          style="width: 3%"
         >
         </Column>
         <Column
           field="room_bed"
           header="ROOM | BED"
           sortable
-          style="width: 10%"
+          style="width: 13%"
         >
         </Column>
         <Column
           field="physician"
           header="PHYSICIAN"
           sortable
-          style="width: 22%"
+          style="width: 20%"
         >
           <template #body="{ data }">
             <div
@@ -259,6 +313,7 @@ export default {
       patientsList: [],
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        is_for_discharge: { value: null, matchMode: FilterMatchMode.EQUALS },
         hpercode: { value: null, matchMode: FilterMatchMode.CONTAINS },
         patient: { value: null, matchMode: FilterMatchMode.CONTAINS },
         bill_stat: { value: null, matchMode: FilterMatchMode.EQUALS },
@@ -373,7 +428,6 @@ export default {
             (e.patmiddle == null ? '' : e.patmiddle) +
             ' ' +
             (e.patsuffix == null ? '' : e.patsuffix),
-          bill_stat: null,
           //   los: ,
           admission_date: e.admdate,
           kg: e.kg,
