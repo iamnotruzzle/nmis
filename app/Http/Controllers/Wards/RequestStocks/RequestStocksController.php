@@ -36,10 +36,13 @@ class RequestStocksController extends Controller
             ->orderBy('csrw_login_history.created_at', 'desc')
             ->first();
 
-        $items = Item::with('unit')
-            ->where('cl2stat', 'A')
-            ->orderBy('cl2desc', 'ASC')
-            ->get();
+        $items = DB::select(
+            "SELECT hclass2.cl2comb as cl2comb, hclass2.cl2desc as cl2desc, huom.uomcode as uomcode, huom.uomdesc as uomdesc FROM hclass2
+                JOIN huom ON hclass2.uomcode = huom.uomcode
+                WHERE hclass2.cl1comb LIKE '%1000-%'
+                ORDER BY hclass2.cl2desc ASC;
+            ",
+        );
 
         $requestedStocks = RequestStocks::with(['requested_at_details', 'requested_by_details', 'approved_by_details', 'request_stocks_details.item_details'])
             ->where('location', '=', $authWardcode->wardcode)
