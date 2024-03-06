@@ -111,11 +111,39 @@ class PatientChargeController extends Controller
         //     ->orderBy('pcchrgdte', 'DESC')
         //     ->get();
 
+        // currently editing
+        // $bills = PatientCharge::with(['typeOfCharge:chrgcode,chrgdesc', 'item', 'misc', 'patientChargeLogs'])
+        //     ->where('enccode', $pat_enccode)
+        //     ->orderBy('pcchrgdte', 'DESC')
+        //     ->paginate(7);
 
-        $bills = PatientCharge::with(['typeOfCharge:chrgcode,chrgdesc', 'item', 'misc', 'patientChargeLogs'])
-            ->where('enccode', $pat_enccode)
-            ->orderBy('pcchrgdte', 'DESC')
-            ->paginate(7);
+        $bills = DB::select(
+            "SELECT pat_charge.pcchrgcod as charge_slip_no,
+                            typeOfCharge.chrgcode as type_of_charge_code,
+                            typeOfCharge.chrgdesc as type_of_charge_description,
+                            item.cl2desc as item,
+                            misc.hmdesc as misc,
+                            pat_charge.itemcode as itemcode,
+                            pat_charge.pchrgqty as quantity,
+                            pat_charge.pchrgup as price,
+                            pat_charge.pcchrgdte as charge_date,
+                            brand.name as charge_log_brand,
+                            charge_log.quantity as charge_log_quantity,
+                            charge_log.expiration_date as charge_log_expiration_date
+                            FROM hpatchrg pat_charge
+                            LEFT JOIN hclass2 as item ON pat_charge.itemcode = item.cl2comb
+                            LEFT JOIN hmisc as misc ON pat_charge.itemcode = misc.hmcode
+                            LEFT JOIN hcharge as typeOfCharge ON pat_charge.chargcode = typeOfCharge.chrgcode
+                            LEFT JOIN csrw_patient_charge_logs as charge_log ON pat_charge.enccode = charge_log.enccode
+                                                                                        AND pat_charge.pcchrgdte = charge_log.pcchrgdte
+                                                                                        AND pat_charge.itemcode = charge_log.itemcode
+                            LEFT JOIN csrw_brands as brand ON charge_log.brand = brand.id
+                            WHERE pat_charge.enccode = '000004098966412/16/202216:20:00'
+                            ORDER BY pat_charge.pcchrgdte DESC;
+                    "
+        );
+        // end currently editing
+
 
         // TANKS = drugs and med (oxygen), compressed air, carbon dioxide
         // $tanks = DB::select("SELECT cast(hdmhdr.dmdcomb as varchar) + '' + cast(hdmhdr.dmdctr as varchar) as itemcode,
@@ -158,6 +186,8 @@ class PatientChargeController extends Controller
                                 OR (hdmhdr.dmdcomb = '000000002098'))
                                 GROUP BY hdmhdr.dmdcomb, hdmhdr.dmdctr, hdmhdrsub.dmhdrsub, hdmhdrprice.unitcode, hdmhdrsub.dmdcomb, hgen.gendesc, hdmhdr.dmdnost, hdmhdr.dmdnnostp, hstre.stredesc, hform.formdesc, hroute.rtedesc;
                         ");
+
+        dd('a');
 
         return Inertia::render('Wards/Patients/Bill/Index', [
             'pat_enccode' => $pat_enccode,
