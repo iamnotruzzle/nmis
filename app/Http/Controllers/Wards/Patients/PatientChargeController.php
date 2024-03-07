@@ -127,6 +127,8 @@ class PatientChargeController extends Controller
                             pat_charge.pchrgup as price,
                             pat_charge.uomcode as uomcode,
                             pat_charge.pcchrgdte as charge_date,
+                            charge_log.id as charge_log_id,
+                            charge_log.ward_stocks_id as charge_log_ward_stocks_id,
                             charge_log.quantity as charge_log_quantity,
                             charge_log.expiration_date as charge_log_expiration_date
                             FROM hospital.dbo.hpatchrg pat_charge
@@ -698,7 +700,7 @@ class PatientChargeController extends Controller
                 }
             }
         } else {
-            // dd($request);
+            // dd($request->hospitalNumber);
 
             // dd($request);
             $previousCharge = null;

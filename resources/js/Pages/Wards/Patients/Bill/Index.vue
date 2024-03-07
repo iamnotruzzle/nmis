@@ -123,8 +123,9 @@
             style="width: 3%"
           >
             <template #body="slotProps">
-              <!-- {{ data }} -->
+              <!-- only show if the item is charge using this system and not HOMIS -->
               <Button
+                v-if="slotProps.data.charge_log_id != null"
                 icon="pi pi-pencil"
                 class="mr-1"
                 rounded
@@ -549,7 +550,7 @@ export default {
   //     this.rows = this.bills.per_page;
   //   },
   mounted() {
-    console.log(this.pat_tscode.tscode);
+    // console.log(this.pat_tscode.tscode);
 
     this.storeBillsInContainer();
     this.getTotalAmount();
@@ -611,6 +612,9 @@ export default {
                 matchingTank.formdesc +
                 ' ' +
                 matchingTank.rtedesc,
+              charge_log_id: e.charge_log_id,
+              charge_log_ward_stocks_id: e.charge_log_ward_stocks_id,
+              charge_log_quantity: e.charge_log_quantity,
               itemcode: e.itemcode,
               quantity: Math.trunc(e.quantity),
               // price: e.pchrgup,
@@ -629,6 +633,9 @@ export default {
             type_of_charge_code: e.type_of_charge_code,
             type_of_charge_description: e.type_of_charge_description,
             item: e.misc != null ? e.misc : e.category + ' ' + e.item,
+            charge_log_id: e.charge_log_id,
+            charge_log_ward_stocks_id: e.charge_log_ward_stocks_id,
+            charge_log_quantity: e.charge_log_quantity,
             itemcode: e.itemcode,
             quantity: Math.trunc(e.quantity),
             // price: e.pchrgup,
@@ -823,8 +830,8 @@ export default {
       }
 
       // set form data
-      this.form.enccode = this.enccode;
-      this.form.hospitalNumber = this.hospitalNumber;
+      this.form.enccode = this.pat_enccode;
+      this.form.hospitalNumber = this.pat_name[0].hpercode;
       this.form.itemsToBillList = this.itemsToBillList;
       this.form.tscode = this.pat_tscode.tscode;
 
@@ -847,7 +854,7 @@ export default {
             this.miscList = [];
             this.itemList = [];
             this.itemsToBillList = [];
-            // this.storeBillsInContainer();
+            this.storeBillsInContainer();
             this.getTotalAmount();
             this.storeMedicalSuppliesInContainer();
             this.storeMiscInContainer();
@@ -886,18 +893,18 @@ export default {
     editItem(e) {
       console.log('charge', e);
 
-      //   this.form.isUpdate = true;
-      //   this.form.upd_id = chargeLogs.data.id;
-      //   this.form.upd_ward_stocks_id = chargeLogs.data.ward_stocks_id;
+      this.form.isUpdate = true;
+      this.form.upd_id = e.charge_log_id;
+      this.form.upd_ward_stocks_id = e.charge_log_ward_stocks_id;
       this.form.upd_enccode = this.pat_enccode;
       this.form.upd_hospitalNumber = this.pat_name[0].hpercode;
-      //   this.form.upd_charge_slip_no = charge.data.charge_slip_no;
-      //   this.form.upd_itemcode = chargeLogs.data.itemcode;
-      //   this.form.upd_item_desc = charge.data.item;
-      //   this.form.upd_type_of_charge_code = charge.data.type_of_charge_code;
-      //   this.form.upd_currentChargeQty = chargeLogs.data.quantity;
-      //   this.form.upd_price = chargeLogs.data.price_per_piece;
-      //   this.form.upd_pcchrgdte = chargeLogs.data.pcchrgdte;
+      this.form.upd_charge_slip_no = e.charge_slip_no;
+      this.form.upd_itemcode = e.itemcode;
+      this.form.upd_item_desc = e.item;
+      this.form.upd_type_of_charge_code = e.type_of_charge_code;
+      this.form.upd_currentChargeQty = e.quantity;
+      this.form.upd_price = e.price;
+      this.form.upd_pcchrgdte = e.charge_date;
       this.updateBillDialog = true;
 
       console.log('form', this.form);
