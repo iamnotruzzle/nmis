@@ -31,6 +31,7 @@ class PatientChargeController extends Controller
     {
         $pat_enccode = $request->enccode;
         $medicalSupplies = array();
+        // dd($pat_enccode);
 
         $pat_name = DB::select("SELECT hperson.patfirst, hperson.patmiddle, hperson.patlast FROM henctr
             LEFT JOIN hperson ON henctr.hpercode = hperson.hpercode
@@ -112,15 +113,6 @@ class PatientChargeController extends Controller
         //     })
         //     ->first();
 
-
-        /////////////////////////////////////////////
-        // original query
-        // $bills = PatientCharge::with(['typeOfCharge:chrgcode,chrgdesc', 'item', 'misc', 'patientChargeLogs'])
-        //     ->where('enccode', $pat_enccode)
-        //     ->orderBy('pcchrgdte', 'DESC')
-        //     ->get();
-        // //->paginate(7);
-
         $bills = DB::select(
             "SELECT pat_charge.pcchrgcod as charge_slip_no,
                             type_of_charge.chrgcode as type_of_charge_code,
@@ -135,23 +127,18 @@ class PatientChargeController extends Controller
                             pat_charge.pcchrgdte as charge_date,
                             charge_log.quantity as charge_log_quantity,
                             charge_log.expiration_date as charge_log_expiration_date
-                            FROM hpatchrg pat_charge
-                            LEFT JOIN hclass2 as item ON pat_charge.itemcode = item.cl2comb
-                            LEFT JOIN hclass1 as category ON item.cl1comb = category.cl1comb
-                            LEFT JOIN hmisc as misc ON pat_charge.itemcode = misc.hmcode
-                            LEFT JOIN hcharge as type_of_charge ON pat_charge.chargcode = type_of_charge.chrgcode
-                            LEFT JOIN csrw_patient_charge_logs as charge_log ON pat_charge.enccode = charge_log.enccode
+                            FROM hospital.dbo.hpatchrg pat_charge
+                            LEFT JOIN hospital.dbo.hclass2 as item ON pat_charge.itemcode = item.cl2comb
+                            LEFT JOIN hospital.dbo.hclass1 as category ON item.cl1comb = category.cl1comb
+                            LEFT JOIN hospital.dbo.hmisc as misc ON pat_charge.itemcode = misc.hmcode
+                            LEFT JOIN hospital.dbo.hcharge as type_of_charge ON pat_charge.chargcode = type_of_charge.chrgcode
+                            LEFT JOIN hospital.dbo.csrw_patient_charge_logs as charge_log ON pat_charge.enccode = charge_log.enccode
                                                                                         AND pat_charge.pcchrgdte = charge_log.pcchrgdte
                                                                                         AND pat_charge.itemcode = charge_log.itemcode
-                            WHERE pat_charge.enccode = ?
+                            WHERE pat_charge.enccode = '" . $pat_enccode . "'
                             AND  (type_of_charge.chrgcode = 'DRUMD' OR type_of_charge.chrgcode = 'DRUMN' OR type_of_charge.chrgcode = 'MISC')
-                            ORDER BY pat_charge.pcchrgdte DESC;",
-            [$pat_enccode]
+                            ORDER BY pat_charge.pcchrgdte DESC;"
         );
-
-        // end currently editing
-        /////////////////////////////////////////////
-
 
         // TANKS = drugs and med (oxygen), compressed air, carbon dioxide
         // $tanks = DB::select("SELECT cast(hdmhdr.dmdcomb as varchar) + '' + cast(hdmhdr.dmdctr as varchar) as itemcode,
