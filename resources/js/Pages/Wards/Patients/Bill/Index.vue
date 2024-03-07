@@ -21,7 +21,7 @@
             removableSort
             showGridlines
             scrollable
-            scrollHeight="700px"
+            scrollHeight="800px"
           >
             <template #header>
               <span class="text-2xl text-primary font-bold">
