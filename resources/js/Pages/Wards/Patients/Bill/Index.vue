@@ -350,7 +350,7 @@
         <Dialog
           v-model:visible="updateBillDialog"
           :style="{ width: '450px' }"
-          header="Update charge"
+          header="Return/Cancel"
           :modal="true"
           class="p-fluid"
           @hide="clickOutsideDialog"
