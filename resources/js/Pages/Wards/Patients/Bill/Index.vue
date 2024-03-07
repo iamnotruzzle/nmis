@@ -147,7 +147,7 @@
             </div>
           </template>
           <template #footer>
-            <div class="text-right text-lg text-green-600">Total: ₱ {{ totalAmount }}</div>
+            <div class="text-right text-2xl text-green-600 font-bold">Total: ₱ {{ totalAmount }}</div>
           </template>
         </DataTable>
 
