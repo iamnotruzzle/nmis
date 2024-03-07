@@ -6,19 +6,22 @@
       <Toast />
 
       <div>
+        <!-- :rows="20"
+          :rowsPerPageOptions="[20, 30, 40]" -->
         <DataTable
           class="p-datatable-sm"
           dataKey="uid"
           v-model:filters="filters"
           :value="billList"
           selectionMode="single"
+          rowGroupMode="subheader"
+          groupRowsBy="charge_slip_no"
+          sortMode="single"
           removableSort
           filterDisplay="row"
-          :rows="20"
-          :rowsPerPageOptions="[20, 30, 40]"
           showGridlines
-          ref="dt"
-          paginator
+          scrollable
+          scrollHeight="400px"
         >
           <template #header>
             <span class="text-2xl text-primary font-bold">
@@ -135,8 +138,13 @@
               />
             </template>
           </Column>
+          <template #groupheader="slotProps">
+            <div class="bg-primary-reverse py-3">
+              <span class="mr-2">CHARGE SLIP #: </span>
+              <span>{{ slotProps.data.charge_slip_no }}</span>
+            </div>
+          </template>
           <template #footer>
-            <!-- <div class="text-right text-lg text-green-600">Total: ₱ {{ totalAmount.toFixed(2) }}</div> -->
             <div class="text-right text-lg text-green-600">Total: {{ convertToPHCurrency(totalAmount) }}</div>
           </template>
         </DataTable>
