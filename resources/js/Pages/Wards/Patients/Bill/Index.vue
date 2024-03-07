@@ -21,7 +21,7 @@
           filterDisplay="row"
           showGridlines
           scrollable
-          scrollHeight="400px"
+          scrollHeight="700px"
         >
           <template #header>
             <span class="text-2xl text-primary font-bold">
@@ -30,17 +30,20 @@
             <span class="text-2xl text-primary font-bold">( {{ pat_name[0].hpercode }} )</span>
             <div class="flex flex-wrap align-items-center justify-content-between gap-2">
               <span class="text-xl text-900 font-bold text-primary">BILLS</span>
-              <div>
-                <!-- <span class="p-input-icon-left mr-2">
-                  <i class="pi pi-search" />
-                  <span class="p-input-icon-left">
-                    <i class="pi pi-search" />
+              <div class="flex">
+                <div class="mr-2">
+                  <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon">
+                      <i class="pi pi-search"></i>
+                    </span>
                     <InputText
+                      id="searchInput"
                       v-model="filters['global'].value"
-                      placeholder="Keyword Search"
+                      size="large"
+                      placeholder="Search"
                     />
-                  </span>
-                </span> -->
+                  </div>
+                </div>
                 <Button
                   label="Bill patient"
                   icon="pi pi-money-bill"
