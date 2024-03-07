@@ -24,6 +24,7 @@
             <span class="text-2xl text-primary font-bold">
               {{ pat_name[0].patlast }}, {{ pat_name[0].patfirst }} {{ pat_name[0].patmiddle }}
             </span>
+            <span class="text-2xl text-primary font-bold">( {{ pat_name[0].hpercode }} )</span>
             <div class="flex flex-wrap align-items-center justify-content-between gap-2">
               <span class="text-xl text-900 font-bold text-primary">BILLS</span>
               <div>
@@ -121,16 +122,16 @@
             header="ACTION"
             style="width: 3%"
           >
-            <template #body="{ data }">
-              <!-- <div class="flex justify-content-center">
-                <Button
-                  icon="pi pi-money-bill"
-                  rounded
-                  text
-                  severity="info"
-                  @click="goToPatientCharge(data.enccode)"
-                />
-              </div> -->
+            <template #body="slotProps">
+              <!-- {{ data }} -->
+              <Button
+                icon="pi pi-pencil"
+                class="mr-1"
+                rounded
+                text
+                severity="warning"
+                @click="editItem(slotProps.data)"
+              />
             </template>
           </Column>
           <template #footer>
@@ -349,7 +350,7 @@
         <Dialog
           v-model:visible="updateBillDialog"
           :style="{ width: '450px' }"
-          header="Charge Detail"
+          header="Update charge"
           :modal="true"
           class="p-fluid"
           @hide="clickOutsideDialog"
@@ -469,6 +470,7 @@ export default {
   },
   props: {
     pat_name: Array,
+    pat_tscode: Object,
     pat_enccode: String,
     bills: Object,
     medicalSupplies: Object,
@@ -547,7 +549,7 @@ export default {
   //     this.rows = this.bills.per_page;
   //   },
   mounted() {
-    console.log('bills', this.bills);
+    console.log(this.pat_tscode.tscode);
 
     this.storeBillsInContainer();
     this.getTotalAmount();
@@ -560,7 +562,7 @@ export default {
     // set patient name
     this.patientName = this.bills.patlast + ', ' + this.bills.patfirst + ' ' + this.bills.patmiddle;
     // set hospital number
-    this.hospitalNumber = this.bills.hpercode;
+    this.hospitalNumber = this.pat_name[0].hpercode;
   },
   methods: {
     convertToPHCurrency(e) {
@@ -824,7 +826,7 @@ export default {
       this.form.enccode = this.enccode;
       this.form.hospitalNumber = this.hospitalNumber;
       this.form.itemsToBillList = this.itemsToBillList;
-      this.form.tscode = this.bills.admission_date_bill.tscode;
+      this.form.tscode = this.pat_tscode.tscode;
 
       this.form.post(route('patientcharge.store'), {
         preserveState: true,
@@ -881,23 +883,24 @@ export default {
         return null;
       }
     },
-    editItem(charge, chargeLogs) {
-      //   console.log('charge', charge.data.item);
-      //   console.log('chargeLogs', chargeLogs.data);
-      this.form.isUpdate = true;
-      this.form.upd_id = chargeLogs.data.id;
-      this.form.upd_ward_stocks_id = chargeLogs.data.ward_stocks_id;
-      this.form.upd_enccode = chargeLogs.data.enccode;
-      this.form.upd_hospitalNumber = chargeLogs.data.acctno;
-      this.form.upd_charge_slip_no = charge.data.charge_slip_no;
-      this.form.upd_itemcode = chargeLogs.data.itemcode;
-      this.form.upd_item_desc = charge.data.item;
-      this.form.upd_type_of_charge_code = charge.data.type_of_charge_code;
-      this.form.upd_currentChargeQty = chargeLogs.data.quantity;
-      this.form.upd_price = chargeLogs.data.price_per_piece;
-      this.form.upd_pcchrgdte = chargeLogs.data.pcchrgdte;
+    editItem(e) {
+      console.log('charge', e);
+
+      //   this.form.isUpdate = true;
+      //   this.form.upd_id = chargeLogs.data.id;
+      //   this.form.upd_ward_stocks_id = chargeLogs.data.ward_stocks_id;
+      this.form.upd_enccode = this.pat_enccode;
+      this.form.upd_hospitalNumber = this.pat_name[0].hpercode;
+      //   this.form.upd_charge_slip_no = charge.data.charge_slip_no;
+      //   this.form.upd_itemcode = chargeLogs.data.itemcode;
+      //   this.form.upd_item_desc = charge.data.item;
+      //   this.form.upd_type_of_charge_code = charge.data.type_of_charge_code;
+      //   this.form.upd_currentChargeQty = chargeLogs.data.quantity;
+      //   this.form.upd_price = chargeLogs.data.price_per_piece;
+      //   this.form.upd_pcchrgdte = chargeLogs.data.pcchrgdte;
       this.updateBillDialog = true;
-      //   console.log(this.form.upd_currentChargeQty);
+
+      console.log('form', this.form);
     },
     cancel() {
       this.stockBalanceDeclared = false;

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Wards\Patients;
 
 use App\Http\Controllers\Controller;
+use App\Models\AdmissionLog;
 use App\Models\CsrwCode;
 use App\Models\Item;
 use App\Models\Miscellaneous;
@@ -30,14 +31,15 @@ class PatientChargeController extends Controller
     public function index(Request $request)
     {
         $pat_enccode = $request->enccode;
+        $pat_tscode = AdmissionLog::where('enccode', $pat_enccode)->get('tscode')->first();
         $medicalSupplies = array();
+
         // dd($pat_enccode);
 
-        $pat_name = DB::select("SELECT hperson.patfirst, hperson.patmiddle, hperson.patlast FROM henctr
+        $pat_name = DB::select("SELECT hperson.hpercode, hperson.patfirst, hperson.patmiddle, hperson.patlast FROM henctr
             LEFT JOIN hperson ON henctr.hpercode = hperson.hpercode
             WHERE henctr.enccode = ?
         ", [$pat_enccode]);
-        // dd($pat_name);
 
         // get auth wardcode
         $authWardcode = DB::table('csrw_users')
@@ -140,6 +142,8 @@ class PatientChargeController extends Controller
                             ORDER BY pat_charge.pcchrgdte DESC;"
         );
 
+        // dd($bills);
+
         // TANKS = drugs and med (oxygen), compressed air, carbon dioxide
         // $tanks = DB::select("SELECT cast(hdmhdr.dmdcomb as varchar) + '' + cast(hdmhdr.dmdctr as varchar) as itemcode,
         //                     hdmhdrsub.dmhdrsub, hdmhdrprice.unitcode,
@@ -186,6 +190,7 @@ class PatientChargeController extends Controller
 
         return Inertia::render('Wards/Patients/Bill/Index', [
             'pat_name' => $pat_name,
+            'pat_tscode' => $pat_tscode,
             'pat_enccode' => $pat_enccode,
             'bills' => $bills,
             'medicalSupplies' => $medicalSupplies,
@@ -199,6 +204,8 @@ class PatientChargeController extends Controller
     public function store(Request $request)
     {
         $data = $request;
+
+        // dd($data);
 
         // dd($data->itemsToBillList);
 
