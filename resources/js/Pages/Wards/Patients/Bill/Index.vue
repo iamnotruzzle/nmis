@@ -56,9 +56,9 @@
             style="width: 10%"
             sortable
           >
-            <template #body="{ data }">
+            <!-- <template #body="{ data }">
               {{ data.charge_slip_no }}
-            </template>
+            </template> -->
           </Column>
           <Column
             field="type_of_charge_description"
