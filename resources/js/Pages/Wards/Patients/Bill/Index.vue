@@ -106,9 +106,7 @@
             sortable
             style="text-align: right; width: 15%"
           >
-            <template #body="{ data }">
-              {{ convertToPHCurrency(data.price) }}
-            </template>
+            <template #body="{ data }"> {{ data.price }} </template>
           </Column>
           <Column
             field="amount"
@@ -116,9 +114,7 @@
             sortable
             style="text-align: right; width: 15%"
           >
-            <template #body="{ data }">
-              {{ convertToPHCurrency(data.amount) }}
-            </template>
+            <template #body="{ data }"> {{ data.amount }} </template>
           </Column>
 
           <Column
@@ -138,14 +134,20 @@
               />
             </template>
           </Column>
+
           <template #groupheader="slotProps">
             <div class="bg-primary-reverse py-3">
               <span class="mr-2">CHARGE SLIP #: </span>
               <span>{{ slotProps.data.charge_slip_no }}</span>
             </div>
           </template>
+          <template #groupfooter="slotProps">
+            <div class="flex justify-content-end font-bold w-full">
+              Total: ₱ {{ totalPerChargeSlip(slotProps.data.charge_slip_no) }}
+            </div>
+          </template>
           <template #footer>
-            <div class="text-right text-lg text-green-600">Total: {{ convertToPHCurrency(totalAmount) }}</div>
+            <div class="text-right text-lg text-green-600">Total: ₱ {{ totalAmount }}</div>
           </template>
         </DataTable>
 
@@ -574,13 +576,23 @@ export default {
     this.hospitalNumber = this.pat_name[0].hpercode;
   },
   methods: {
-    convertToPHCurrency(e) {
-      const formatted = e.toLocaleString('en-PH', {
-        style: 'currency',
-        currency: 'PHP',
-      });
+    totalPerChargeSlip(charge_slip_no) {
+      let total = 0;
 
-      return formatted;
+      if (this.billList) {
+        for (let bill of this.billList) {
+          if (bill.charge_slip_no === charge_slip_no) {
+            total += bill.amount;
+          }
+        }
+      }
+
+      //   total.toLocaleString('en-PH', {
+      //     style: 'currency',
+      //     currency: 'PHP',
+      //   });
+
+      return total;
     },
     tzone(date) {
       if (date == null) {
