@@ -2,442 +2,447 @@
   <app-layout>
     <Head title="NMIS - Bill Patient" />
 
-    <div class="card">
-      <Toast />
+    <Toast />
 
-      <div>
-        <!-- :rows="20"
-          :rowsPerPageOptions="[20, 30, 40]" -->
-        <DataTable
-          class="p-datatable-sm"
-          dataKey="uid"
-          v-model:filters="filters"
-          :value="billList"
-          selectionMode="single"
-          rowGroupMode="subheader"
-          groupRowsBy="charge_slip_no"
-          sortMode="single"
-          removableSort
-          filterDisplay="row"
-          showGridlines
-          scrollable
-          scrollHeight="700px"
-        >
-          <template #header>
-            <span class="text-2xl text-primary font-bold">
-              {{ pat_name[0].patlast }}, {{ pat_name[0].patfirst }} {{ pat_name[0].patmiddle }}
-            </span>
-            <span class="text-2xl text-primary font-bold">( {{ pat_name[0].hpercode }} )</span>
-            <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-              <span class="text-xl text-900 font-bold text-primary">BILLS</span>
-              <div class="flex">
-                <div class="mr-2">
-                  <div class="p-inputgroup">
-                    <span class="p-inputgroup-addon">
-                      <i class="pi pi-search"></i>
-                    </span>
-                    <InputText
-                      id="searchInput"
-                      v-model="filters['global'].value"
-                      size="large"
-                      placeholder="Search"
-                    />
-                  </div>
-                </div>
-                <Button
-                  label="Bill patient"
-                  icon="pi pi-money-bill"
-                  iconPos="right"
-                  @click="openCreateBillDialog"
-                />
-              </div>
-            </div>
-          </template>
-          <Column
-            field="charge_slip_no"
-            header="CHARGE SLIP #"
-            style="width: 10%"
-            sortable
+    <!-- main container -->
+    <div>
+      <!-- patient bills -->
+      <div class="card">
+        <div>
+          <DataTable
+            class="p-datatable-sm"
+            dataKey="uid"
+            v-model:filters="filters"
+            :value="billList"
+            selectionMode="single"
+            rowGroupMode="subheader"
+            groupRowsBy="charge_slip_no"
+            sortMode="single"
+            removableSort
+            showGridlines
+            scrollable
+            scrollHeight="700px"
           >
-            <!-- <template #body="{ data }">
+            <template #header>
+              <span class="text-2xl text-primary font-bold">
+                {{ pat_name[0].patlast }}, {{ pat_name[0].patfirst }} {{ pat_name[0].patmiddle }}
+              </span>
+              <span class="text-2xl text-primary font-bold">( {{ pat_name[0].hpercode }} )</span>
+              <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+                <span class="text-xl text-900 font-bold text-primary">BILLS</span>
+                <div class="flex">
+                  <div class="mr-2">
+                    <div class="p-inputgroup">
+                      <span class="p-inputgroup-addon">
+                        <i class="pi pi-search"></i>
+                      </span>
+                      <InputText
+                        id="searchInput"
+                        v-model="filters['global'].value"
+                        size="large"
+                        placeholder="Search"
+                      />
+                    </div>
+                  </div>
+                  <Button
+                    label="Bill patient"
+                    icon="pi pi-money-bill"
+                    iconPos="right"
+                    @click="openCreateBillDialog"
+                  />
+                </div>
+              </div>
+            </template>
+            <Column
+              field="charge_slip_no"
+              header="CHARGE SLIP #"
+              style="width: 10%"
+              sortable
+            >
+              <!-- <template #body="{ data }">
               {{ data.charge_slip_no }}
             </template> -->
-          </Column>
-          <Column
-            field="type_of_charge_description"
-            header="TYPE OF CHARGE"
-            style="width: 10%"
-            sortable
-          >
-            <template #body="{ data }">
-              {{ data.type_of_charge_description }}
-            </template>
-          </Column>
-          <Column
-            field="item"
-            header="ITEM"
-            style="width: 30%"
-            sortable
-          >
-            <template #body="{ data }">
-              {{ data.item }}
-            </template>
-          </Column>
-          <Column
-            field="charge_date"
-            header="CHARGE DATE"
-            style="width: 10%"
-            sortable
-          >
-            <template #body="{ data }">
-              {{ tzone(data.charge_date) }}
-            </template>
-          </Column>
-          <Column
-            field="quantity"
-            header="QUANTITY"
-            style="text-align: right; width: 5%"
-            sortable
-          >
-            <template #body="{ data }">
-              {{ data.quantity }}
-            </template>
-          </Column>
-          <Column
-            field="price"
-            header="PRICE"
-            sortable
-            style="text-align: right; width: 15%"
-          >
-            <template #body="{ data }"> {{ data.price }} </template>
-          </Column>
-          <Column
-            field="amount"
-            header="AMOUNT"
-            sortable
-            style="text-align: right; width: 15%"
-          >
-            <template #body="{ data }"> {{ data.amount }} </template>
-          </Column>
+            </Column>
+            <Column
+              field="type_of_charge_description"
+              header="TYPE OF CHARGE"
+              style="width: 15%"
+              sortable
+            >
+              <template #body="{ data }">
+                {{ data.type_of_charge_description }}
+              </template>
+            </Column>
+            <Column
+              field="item"
+              header="ITEM"
+              style="width: 30%"
+              sortable
+            >
+              <template #body="{ data }">
+                {{ data.item }}
+              </template>
+            </Column>
+            <Column
+              field="charge_date"
+              header="CHARGE DATE"
+              style="width: 10%"
+              sortable
+            >
+              <template #body="{ data }">
+                {{ tzone(data.charge_date) }}
+              </template>
+            </Column>
+            <Column
+              field="quantity"
+              header="QUANTITY"
+              style="text-align: right; width: 10%"
+              sortable
+            >
+              <template #body="{ data }">
+                {{ data.quantity }}
+              </template>
+            </Column>
+            <Column
+              field="price"
+              header="PRICE"
+              sortable
+              style="text-align: right; width: 10%"
+            >
+              <template #body="{ data }"> {{ data.price }} </template>
+            </Column>
+            <Column
+              field="amount"
+              header="AMOUNT"
+              sortable
+              style="text-align: right; width: 10%"
+            >
+              <template #body="{ data }"> {{ data.amount }} </template>
+            </Column>
 
-          <Column
-            header="ACTION"
-            style="width: 3%"
+            <Column
+              header="ACTION"
+              style="width: 5%"
+            >
+              <template #body="slotProps">
+                <!-- only show if the item is charge using this system and not HOMIS -->
+                <Button
+                  v-if="slotProps.data.charge_log_id != null"
+                  icon="pi pi-pencil"
+                  class="mr-1"
+                  rounded
+                  text
+                  severity="warning"
+                  @click="editItem(slotProps.data)"
+                />
+              </template>
+            </Column>
+
+            <template #groupheader="slotProps">
+              <div class="bg-primary-reverse py-3">
+                <span class="mr-2">CHARGE SLIP #: </span>
+                <span>{{ slotProps.data.charge_slip_no }}</span>
+              </div>
+            </template>
+            <template #groupfooter="slotProps">
+              <div class="flex justify-content-end font-bold w-full">
+                Total: ₱ {{ totalPerChargeSlip(slotProps.data.charge_slip_no) }}
+              </div>
+            </template>
+            <template #footer>
+              <div class="text-right text-2xl text-green-600 font-bold">Total: ₱ {{ totalAmount }}</div>
+            </template>
+          </DataTable>
+
+          <!-- create bill dialog -->
+          <Dialog
+            v-model:visible="createBillDialog"
+            :modal="true"
+            class="p-fluid w-5"
+            @hide="whenDialogIsHidden"
           >
-            <template #body="slotProps">
-              <!-- only show if the item is charge using this system and not HOMIS -->
-              <Button
-                v-if="slotProps.data.charge_log_id != null"
-                icon="pi pi-pencil"
-                class="mr-1"
-                rounded
-                text
-                severity="warning"
-                @click="editItem(slotProps.data)"
+            <template #header>
+              <div class="text-primary text-xl font-bold">CHARGE PATIENT</div>
+            </template>
+            <div class="field mb-3">
+              <label>Item</label>
+              <Dropdown
+                required="true"
+                v-model="item"
+                :options="itemList"
+                :virtualScrollerOptions="{ itemSize: 38 }"
+                filter
+                placeholder="Select a Item"
+                optionLabel="itemDesc"
+                class="w-full"
               />
-            </template>
-          </Column>
-
-          <template #groupheader="slotProps">
-            <div class="bg-primary-reverse py-3">
-              <span class="mr-2">CHARGE SLIP #: </span>
-              <span>{{ slotProps.data.charge_slip_no }}</span>
             </div>
-          </template>
-          <template #groupfooter="slotProps">
-            <div class="flex justify-content-end font-bold w-full">
-              Total: ₱ {{ totalPerChargeSlip(slotProps.data.charge_slip_no) }}
-            </div>
-          </template>
-          <template #footer>
-            <div class="text-right text-2xl text-green-600 font-bold">Total: ₱ {{ totalAmount }}</div>
-          </template>
-        </DataTable>
-
-        <!-- current stocks -->
-        <DataTable
-          v-model:filters="medicalSuppliesListFilter"
-          :value="medicalSuppliesList"
-          scrollable
-          scrollHeight="h-full"
-          showGridlines
-          class="p-datatable-sm mt-4"
-        >
-          <template #header>
-            <div class="text-2xl text-primary font-bold">INSTOCK</div>
-
-            <div class="p-inputgroup">
-              <span class="p-inputgroup-addon">
-                <i class="pi pi-search"></i>
-              </span>
+            <div class="field">
+              <label for="Item">Quantity</label>
               <InputText
-                id="searchInput"
-                v-model="medicalSuppliesListFilter['global'].value"
-                placeholder="Search item"
+                id="quantity"
+                v-model.trim="qtyToCharge"
+                required="true"
+                autofocus
+                type="number"
+                onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                :class="{ 'p-invalid': qtyToCharge == '' || item == null }"
+                @keyup.enter="medicalSuppliesQtyValidation"
               />
+              <small
+                class="text-error"
+                v-if="itemNotSelected == true"
+              >
+                {{ itemNotSelectedMsg }}
+              </small>
             </div>
-          </template>
-          <Column
-            field="cl2desc"
-            header="ITEM"
-            style="width: 60%"
-          ></Column>
-          <Column
-            field="quantity"
-            header="QUANTITY"
-            style="width: 20%"
-          >
-            <template #body="{ data }">
-              <span
-                v-if="data.quantity <= 10"
-                class="text-yellow-500 text-bold"
-                >{{ data.quantity }}
-              </span>
-              <span
-                v-else
-                class="text-green-500 text-bold"
-                >{{ data.quantity }}
-              </span>
-            </template>
-          </Column>
-          <Column
-            field="price"
-            header="PRICE"
-            style="text-align: right; width: 20%"
-          >
-            <template #body="{ data }"> ₱ {{ data.price }} </template>
-          </Column>
-        </DataTable>
+            <div class="field mt-4">
+              <label class="mr-2 font-bold">ITEMS / SERVICES TO CHARGE</label>
 
-        <!-- create bill dialog -->
-        <Dialog
-          v-model:visible="createBillDialog"
-          :modal="true"
-          class="p-fluid w-5"
-          @hide="whenDialogIsHidden"
-        >
-          <template #header>
-            <div class="text-primary text-xl font-bold">CHARGE PATIENT</div>
-          </template>
-          <div class="field mb-3">
-            <label>Item</label>
-            <Dropdown
-              required="true"
-              v-model="item"
-              :options="itemList"
-              :virtualScrollerOptions="{ itemSize: 38 }"
-              filter
-              placeholder="Select a Item"
-              optionLabel="itemDesc"
-              class="w-full"
-            />
-          </div>
-          <div class="field">
-            <label for="Item">Quantity</label>
-            <InputText
-              id="quantity"
-              v-model.trim="qtyToCharge"
-              required="true"
-              autofocus
-              type="number"
-              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-              :class="{ 'p-invalid': qtyToCharge == '' || item == null }"
-              @keyup.enter="medicalSuppliesQtyValidation"
-            />
-            <small
-              class="text-error"
-              v-if="itemNotSelected == true"
-            >
-              {{ itemNotSelectedMsg }}
-            </small>
-          </div>
-          <div class="field mt-4">
-            <label class="mr-2 font-bold">ITEMS / SERVICES TO CHARGE</label>
-
-            <p
-              class="text-error text-xl font-semibold"
-              v-if="stockBalanceDeclared != false"
-            >
-              {{ getTankDesc($page.props.errors['itemsToBillList.0.itemCode']) }} stock balance has not yet been
-              declared.
-            </p>
-            <!-- <p
+              <p
+                class="text-error text-xl font-semibold"
+                v-if="stockBalanceDeclared != false"
+              >
+                {{ getTankDesc($page.props.errors['itemsToBillList.0.itemCode']) }} stock balance has not yet been
+                declared.
+              </p>
+              <!-- <p
               class="text-error text-xl font-semibold"
               v-if="stockBalanceDeclared != false"
             >
               {{ $page.props.errors['itemsToBillList.0.itemCode'].toUpperCase() }}
             </p> -->
 
-            <DataTable
-              v-model:filters="itemsToBillFilter"
-              :globalFilterFields="['itemDesc']"
-              :value="itemsToBillList"
-              tableStyle="min-width: 50rem"
-              class="p-datatable-sm w-full"
-              paginator
-              showGridlines
-              :rows="7"
-            >
-              <template #header>
-                <div class="flex justify-content-end">
-                  <div class="p-inputgroup">
-                    <span class="p-inputgroup-addon">
-                      <i class="pi pi-search"></i>
-                    </span>
-                    <InputText
-                      id="searchInput"
-                      v-model="itemsToBillFilter['global'].value"
-                      placeholder="Search Item"
-                    />
+              <DataTable
+                v-model:filters="itemsToBillFilter"
+                :globalFilterFields="['itemDesc']"
+                :value="itemsToBillList"
+                tableStyle="min-width: 50rem"
+                class="p-datatable-sm w-full"
+                paginator
+                showGridlines
+                :rows="7"
+              >
+                <template #header>
+                  <div class="flex justify-content-end">
+                    <div class="p-inputgroup">
+                      <span class="p-inputgroup-addon">
+                        <i class="pi pi-search"></i>
+                      </span>
+                      <InputText
+                        id="searchInput"
+                        v-model="itemsToBillFilter['global'].value"
+                        placeholder="Search Item"
+                      />
+                    </div>
                   </div>
-                </div>
-              </template>
-              <Column
-                field="itemDesc"
-                header="ITEM/SERVICE"
-                style="width: 30%"
-                sortable
-              ></Column>
-              <Column
-                field="currentStock"
-                header="CURRENT STOCK"
-                style="width: 17.5%"
-                sortable
-              ></Column>
-              <Column
-                field="qtyToCharge"
-                header="QTY TO CHARGE"
-                style="width: 17.5%"
-                sortable
-              ></Column>
-              <Column
-                field="price"
-                header="PRICE PER PC."
-                style="width: 17.5%"
-                sortable
-              >
-                <template #body="{ data }"> ₱ {{ data.price }} </template>
-              </Column>
-              <Column
-                filed="total"
-                header="TOTAL"
-                style="width: 17.5%"
-                sortable
-              >
-                <template #body="{ data }"> ₱ {{ data.total }} </template>
-              </Column>
-              <Column header="">
-                <template #body="slotProps">
-                  <Button
-                    icon="pi pi-times"
-                    rounded
-                    text
-                    severity="danger"
-                    @click="removeFromToBillContainer(slotProps.data)"
-                  />
                 </template>
-              </Column>
-            </DataTable>
-          </div>
-
-          <template #footer>
-            <Button
-              label="Cancel"
-              icon="pi pi-times"
-              severity="danger"
-              text
-              @click="cancel"
-            />
-
-            <Button
-              :disabled="itemsToBillList.length == 0 || form.processing"
-              label="Charge"
-              icon="pi pi-check"
-              text
-              type="submit"
-              @click="submit"
-            />
-          </template>
-        </Dialog>
-
-        <!-- update bill dialog -->
-        <Dialog
-          v-model:visible="updateBillDialog"
-          :style="{ width: '450px' }"
-          header="Return/Cancel"
-          :modal="true"
-          class="p-fluid"
-          @hide="clickOutsideDialog"
-          dismissableMask
-        >
-          <div class="field">
-            <label
-              for="item"
-              class="font-bold text-cyan-500"
-            >
-              ITEM / SERVICE
-            </label>
-            <div>
-              <span
-                class="text-xl text-900"
-                v-text="form.upd_item_desc"
-              ></span>
+                <Column
+                  field="itemDesc"
+                  header="ITEM/SERVICE"
+                  style="width: 30%"
+                  sortable
+                ></Column>
+                <Column
+                  field="currentStock"
+                  header="CURRENT STOCK"
+                  style="width: 17.5%"
+                  sortable
+                ></Column>
+                <Column
+                  field="qtyToCharge"
+                  header="QTY TO CHARGE"
+                  style="width: 17.5%"
+                  sortable
+                ></Column>
+                <Column
+                  field="price"
+                  header="PRICE PER PC."
+                  style="width: 17.5%"
+                  sortable
+                >
+                  <template #body="{ data }"> ₱ {{ data.price }} </template>
+                </Column>
+                <Column
+                  filed="total"
+                  header="TOTAL"
+                  style="width: 17.5%"
+                  sortable
+                >
+                  <template #body="{ data }"> ₱ {{ data.total }} </template>
+                </Column>
+                <Column header="">
+                  <template #body="slotProps">
+                    <Button
+                      icon="pi pi-times"
+                      rounded
+                      text
+                      severity="danger"
+                      @click="removeFromToBillContainer(slotProps.data)"
+                    />
+                  </template>
+                </Column>
+              </DataTable>
             </div>
-          </div>
 
-          <div class="field mt-4">
-            <label
-              for="quantity"
-              class="font-bold text-cyan-500"
-            >
-              Qty to return
-            </label>
-            <InputText
-              id="quantity"
-              v-model.trim="form.upd_QtyToReturn"
-              required="true"
-              autofocus
-              type="number"
-              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-              @keyup.enter="
-                Number(form.upd_QtyToReturn) > Number(form.upd_currentChargeQty) ||
-                form.upd_QtyToReturn == null ||
-                form.upd_QtyToReturn == 0 ||
-                form.upd_QtyToReturn == ''
-                  ? ''
-                  : submit()
-              "
-            />
-          </div>
+            <template #footer>
+              <Button
+                label="Cancel"
+                icon="pi pi-times"
+                severity="danger"
+                text
+                @click="cancel"
+              />
 
-          <template #footer>
-            <Button
-              label="Cancel"
-              icon="pi pi-times"
-              severity="danger"
-              text
-              @click="cancel"
-            />
-            <!-- form.upd_QtyToReturn == null ||
+              <Button
+                :disabled="itemsToBillList.length == 0 || form.processing"
+                label="Charge"
+                icon="pi pi-check"
+                text
+                type="submit"
+                @click="submit"
+              />
+            </template>
+          </Dialog>
+
+          <!-- update bill dialog -->
+          <Dialog
+            v-model:visible="updateBillDialog"
+            :style="{ width: '450px' }"
+            header="Return/Cancel"
+            :modal="true"
+            class="p-fluid"
+            @hide="clickOutsideDialog"
+            dismissableMask
+          >
+            <div class="field">
+              <label
+                for="item"
+                class="font-bold text-cyan-500"
+              >
+                ITEM / SERVICE
+              </label>
+              <div>
+                <span
+                  class="text-xl text-900"
+                  v-text="form.upd_item_desc"
+                ></span>
+              </div>
+            </div>
+
+            <div class="field mt-4">
+              <label
+                for="quantity"
+                class="font-bold text-cyan-500"
+              >
+                Qty to return
+              </label>
+              <InputText
+                id="quantity"
+                v-model.trim="form.upd_QtyToReturn"
+                required="true"
+                autofocus
+                type="number"
+                onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                @keyup.enter="
+                  Number(form.upd_QtyToReturn) > Number(form.upd_currentChargeQty) ||
+                  form.upd_QtyToReturn == null ||
+                  form.upd_QtyToReturn == 0 ||
+                  form.upd_QtyToReturn == ''
+                    ? ''
+                    : submit()
+                "
+              />
+            </div>
+
+            <template #footer>
+              <Button
+                label="Cancel"
+                icon="pi pi-times"
+                severity="danger"
+                text
+                @click="cancel"
+              />
+              <!-- form.upd_QtyToReturn == null ||
                 form.upd_QtyToReturn == 0 ||
                 form.upd_QtyToReturn == '' -->
-            <Button
-              :disabled="
-                Number(form.upd_QtyToReturn) > Number(form.upd_currentChargeQty) ||
-                form.upd_QtyToReturn == null ||
-                form.upd_QtyToReturn == 0 ||
-                form.upd_QtyToReturn == '' ||
-                form.processing
-              "
-              label="Return"
-              icon="pi pi-check"
-              severity="warning"
-              text
-              type="submit"
-              @click="submit"
-            />
-          </template>
-        </Dialog>
+              <Button
+                :disabled="
+                  Number(form.upd_QtyToReturn) > Number(form.upd_currentChargeQty) ||
+                  form.upd_QtyToReturn == null ||
+                  form.upd_QtyToReturn == 0 ||
+                  form.upd_QtyToReturn == '' ||
+                  form.processing
+                "
+                label="Return"
+                icon="pi pi-check"
+                severity="warning"
+                text
+                type="submit"
+                @click="submit"
+              />
+            </template>
+          </Dialog>
+        </div>
+      </div>
+
+      <!-- current stocks -->
+      <div class="card">
+        <div>
+          <DataTable
+            v-model:filters="medicalSuppliesListFilter"
+            :value="medicalSuppliesList"
+            scrollable
+            scrollHeight="h-full"
+            showGridlines
+            class="p-datatable-sm mt-4"
+          >
+            <template #header>
+              <div class="text-2xl text-primary font-bold">INSTOCK</div>
+
+              <div class="p-inputgroup">
+                <span class="p-inputgroup-addon">
+                  <i class="pi pi-search"></i>
+                </span>
+                <InputText
+                  id="searchInput"
+                  v-model="medicalSuppliesListFilter['global'].value"
+                  placeholder="Search item"
+                />
+              </div>
+            </template>
+            <Column
+              field="cl2desc"
+              header="ITEM"
+              style="width: 60%"
+            ></Column>
+            <Column
+              field="quantity"
+              header="QUANTITY"
+              style="width: 20%"
+            >
+              <template #body="{ data }">
+                <span
+                  v-if="data.quantity <= 10"
+                  class="text-yellow-500 text-bold"
+                  >{{ data.quantity }}
+                </span>
+                <span
+                  v-else
+                  class="text-green-500 text-bold"
+                  >{{ data.quantity }}
+                </span>
+              </template>
+            </Column>
+            <Column
+              field="price"
+              header="PRICE"
+              style="text-align: right; width: 20%"
+            >
+              <template #body="{ data }"> ₱ {{ data.price }} </template>
+            </Column>
+          </DataTable>
+        </div>
       </div>
     </div>
   </app-layout>
