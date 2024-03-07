@@ -221,6 +221,7 @@
                 class="p-datatable-sm w-full"
                 paginator
                 showGridlines
+                removableSort
                 :rows="7"
               >
                 <template #header>
@@ -395,6 +396,7 @@
             scrollable
             scrollHeight="h-full"
             showGridlines
+            removableSort
             class="p-datatable-sm mt-4"
           >
             <template #header>

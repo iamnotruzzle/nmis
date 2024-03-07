@@ -17,6 +17,7 @@
         lazy
         paginator
         :rows="rows"
+        removableSort
         ref="dt"
         :totalRecords="totalRecords"
         @page="onPage($event)"

@@ -98,6 +98,7 @@
               :value="stocksList"
               selectionMode="single"
               lazy
+              removableSort
               paginator
               :rows="rows"
               ref="dt"
@@ -356,6 +357,7 @@
               showGridlines
               class="p-datatable-sm"
               scrollable
+              removableSort
               scrollHeight="500px"
               tableStyle="min-height: h-full;"
             >

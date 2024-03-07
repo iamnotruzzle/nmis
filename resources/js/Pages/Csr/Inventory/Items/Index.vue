@@ -15,6 +15,7 @@
         paginator
         :rows="rows"
         ref="dt"
+        removableSort
         :totalRecords="totalRecords"
         @page="onPage($event)"
         dataKey="cl2comb"
@@ -181,6 +182,7 @@
                 showGridlines
                 :value="slotProps.data.prices"
                 size="small"
+                removableSort
               >
                 <template #header>
                   <div class="flex justify-content-between w-full">

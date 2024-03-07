@@ -15,6 +15,7 @@
         filterDisplay="row"
         sortField="patient"
         :sortOrder="1"
+        removableSort
         :globalFilterFields="['hpercode', 'patient', 'status', 'room_bed', 'physician']"
         showGridlines
       >

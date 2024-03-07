@@ -34,6 +34,7 @@
         selectionMode="single"
         lazy
         paginator
+        removableSort
         :rows="rows"
         ref="dt"
         :totalRecords="totalRecords"
@@ -229,6 +230,7 @@
             <h5 class="text-cyan-500 hover:text-cyan-700">ITEMS</h5>
             <DataTable
               paginator
+              removableSort
               :rows="7"
               :value="slotProps.data.request_stocks_details"
             >
@@ -431,6 +433,7 @@
             class="p-datatable-sm w-full"
             paginator
             showGridlines
+            removableSort
             :rows="5"
           >
             <template #header>

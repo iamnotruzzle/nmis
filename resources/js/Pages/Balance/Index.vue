@@ -31,6 +31,7 @@
         selectionMode="single"
         lazy
         paginator
+        removableSort
         :rows="rows"
         ref="dt"
         :totalRecords="totalRecords"

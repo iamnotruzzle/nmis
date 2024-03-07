@@ -29,6 +29,7 @@
         selectionMode="single"
         lazy
         paginator
+        removableSort
         :rows="rows"
         ref="dt"
         :totalRecords="totalRecords"
@@ -232,6 +233,7 @@
             <DataTable
               paginator
               showGridlines
+              removableSort
               :rows="7"
               :value="slotProps.data.request_stocks_details"
             >
@@ -304,6 +306,7 @@
             class="p-datatable-sm"
             paginator
             showGridlines
+            removableSort
             :rows="7"
           >
             <template #header>
