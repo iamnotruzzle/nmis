@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\ProcTypeForHclass;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
@@ -18,26 +19,36 @@ class CategoryController extends Controller
     {
         $catID = $request->catID;
 
-        $csrSuppliesSubCategory = Category::with('pims_category:id,catID,categoryname')
-            ->has('pims_category')
-            ->when($catID, function ($query) use ($catID) {
-                $query->whereHas('pims_category', function ($q) use ($catID) {
-                    $q->where('catID', $catID);
-                });
-            })
-            ->when($request->search, function ($query, $value) {
-                $query->where('cl1desc', 'LIKE', '%' . $value . '%')
-                    ->orWhere('cl1comb', 'LIKE', '%' . $value . '%');
-            })
-            ->when(
-                $request->status,
-                function ($query, $value) {
-                    $query->where('cl1stat', $value);
-                }
-            )
-            ->where('ptcode', '1000')
-            ->orderBy('cl1desc', 'ASC')
-            ->paginate(15);
+        // $csrSuppliesSubCategory = Category::with('pims_category:id,catID,categoryname')
+        //     ->has('pims_category')
+        //     ->when($catID, function ($query) use ($catID) {
+        //         $query->whereHas('pims_category', function ($q) use ($catID) {
+        //             $q->where('catID', $catID);
+        //         });
+        //     })
+        //     ->when($request->search, function ($query, $value) {
+        //         $query->where('cl1desc', 'LIKE', '%' . $value . '%')
+        //             ->orWhere('cl1comb', 'LIKE', '%' . $value . '%');
+        //     })
+        //     ->when(
+        //         $request->status,
+        //         function ($query, $value) {
+        //             $query->where('cl1stat', $value);
+        //         }
+        //     )
+        //     ->where('ptcode', '1000')
+        //     ->orderBy('cl1desc', 'ASC')
+        //     ->paginate(15);
+        // dd($csrSuppliesSubCategory);
+
+        $csrSuppliesSubCategory = DB::select(
+            "SELECT sub_category.cl1comb, main_category.catID, main_category.categoryname, sub_category.cl1desc, sub_category.cl1stat
+                FROM hclass1 as sub_category
+                JOIN csrw_pims_categories as main_category ON sub_category.catID = main_category.catID
+                WHERE sub_category.ptcode = '1000'
+                ORDER BY sub_category.cl1desc ASC;"
+        );
+
         // dd($csrSuppliesSubCategory);
 
         return Inertia::render('Csr/Inventory/Categories/Index', [

@@ -13,18 +13,16 @@
         class="p-datatable-sm"
         v-model:filters="filters"
         :value="csrSuppliesSubCategoryList"
-        selectionMode="single"
-        lazy
         paginator
-        removableSort
-        :rows="rows"
-        ref="dt"
-        :totalRecords="totalRecords"
-        @page="onPage($event)"
+        :rows="20"
+        :rowsPerPageOptions="[20, 30, 40]"
         dataKey="cl1comb"
         filterDisplay="row"
+        sortField="categoryname"
+        :sortOrder="1"
+        removableSort
+        :globalFilterFields="['cl1comb', 'cl1desc', 'cl1stat']"
         showGridlines
-        :loading="loading"
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
@@ -37,7 +35,7 @@
                   </span>
                   <InputText
                     id="searchInput"
-                    v-model="search"
+                    v-model="filters['global'].value"
                     placeholder="Search sub-category"
                   />
                 </div>
@@ -72,20 +70,22 @@
           <template #body="{ data }">
             {{ data.categoryname }}
           </template>
-          <template #filter="{}">
+
+          <template #filter="{ filterModel, filterCallback }">
             <Dropdown
-              v-model="selectedCatID"
+              v-model="filterModel.value"
               :options="categoryFilter"
+              @change="filterCallback()"
               optionLabel="name"
-              optionValue="catID"
+              optionValue="name"
               placeholder="NO FILTER"
-              class="w-full"
             />
           </template>
         </Column>
         <Column
           field="cl1desc"
           header="DESCRIPTION"
+          sortable
           style="width: 30%"
         >
           <template #body="{ data }">
@@ -112,10 +112,11 @@
               />
             </div>
           </template>
-          <template #filter="{}">
+          <template #filter="{ filterModel, filterCallback }">
             <Dropdown
-              v-model="selectedStatus"
+              v-model="filterModel.value"
               :options="statusFilter"
+              @change="filterCallback()"
               optionLabel="name"
               optionValue="code"
               placeholder="NO FILTER"
@@ -326,9 +327,9 @@ export default {
   data() {
     return {
       // paginator
-      loading: false,
-      totalRecords: null,
-      rows: null,
+      //   loading: false,
+      //   totalRecords: null,
+      //   rows: null,
       // end paginator
       isUpdate: false,
       createDataDialog: false,
@@ -371,6 +372,10 @@ export default {
       csrSuppliesSubCategoryList: [],
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        cl1comb: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        categoryname: { value: null, matchMode: FilterMatchMode.EQUALS },
+        cl1desc: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        cl1stat: { value: null, matchMode: FilterMatchMode.EQUALS },
       },
       form: this.$inertia.form({
         cl1comb: null,
@@ -381,26 +386,24 @@ export default {
     };
   },
   // created will be initialize before mounted
-  created() {
-    this.totalRecords = this.csrSuppliesSubCategory.total;
-    this.params.page = this.csrSuppliesSubCategory.current_page;
-    this.rows = this.csrSuppliesSubCategory.per_page;
-  },
+  //   created() {
+  //     this.totalRecords = this.csrSuppliesSubCategory.total;
+  //     this.params.page = this.csrSuppliesSubCategory.current_page;
+  //     this.rows = this.csrSuppliesSubCategory.per_page;
+  //   },
   mounted() {
     // console.log(this.csrSuppliesSubCategory);
     this.storeSubCategoryInContainer();
-
-    this.loading = false;
   },
   methods: {
     storeSubCategoryInContainer() {
       this.csrSuppliesSubCategoryList = []; // reset
 
-      this.csrSuppliesSubCategory.data.forEach((e) => {
+      this.csrSuppliesSubCategory.forEach((e) => {
         this.csrSuppliesSubCategoryList.push({
           cl1comb: e.cl1comb,
-          catID: e.pims_category.catID,
-          categoryname: e.pims_category.categoryname,
+          catID: e.catID,
+          categoryname: e.categoryname,
           cl1desc: e.cl1desc,
           cl1stat: e.cl1stat,
         });
@@ -523,22 +526,20 @@ export default {
     },
   },
   watch: {
-    search: function (val, oldVal) {
-      this.params.search = val;
-      this.updateData();
-    },
-    selectedStatus: function (val) {
-      //   console.log(val['code']);
-      this.params.status = this.selectedStatus;
-
-      this.updateData();
-    },
-    selectedCatID: function (val) {
-      //   console.log(val['code']);
-      this.params.catID = this.selectedCatID;
-
-      this.updateData();
-    },
+    // search: function (val, oldVal) {
+    //   this.params.search = val;
+    //   this.updateData();
+    // },
+    // selectedStatus: function (val) {
+    //   //   console.log(val['code']);
+    //   this.params.status = this.selectedStatus;
+    //   this.updateData();
+    // },
+    // selectedCatID: function (val) {
+    //   //   console.log(val['code']);
+    //   this.params.catID = this.selectedCatID;
+    //   this.updateData();
+    // },
   },
 };
 </script>
