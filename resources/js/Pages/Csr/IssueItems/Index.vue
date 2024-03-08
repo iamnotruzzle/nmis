@@ -315,7 +315,7 @@
             :rows="7"
           >
             <template #header>
-              <div class="flex">
+              <div>
                 <div class="mr-2">
                   <div class="p-inputgroup">
                     <span class="p-inputgroup-addon">
@@ -447,14 +447,17 @@
             :rows="7"
           >
             <template #header>
-              <div class="flex mb-2">
-                <span class="p-input-icon-left">
-                  <i class="pi pi-search" />
+              <div>
+                <div class="p-inputgroup">
+                  <span class="p-inputgroup-addon">
+                    <i class="pi pi-search"></i>
+                  </span>
                   <InputText
+                    id="searchInput"
                     v-model="issuedItemsFilter['global'].value"
                     placeholder="Search issued item"
                   />
-                </span>
+                </div>
               </div>
             </template>
             <Column
