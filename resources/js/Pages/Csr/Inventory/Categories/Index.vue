@@ -8,7 +8,6 @@
     >
       <Toast />
 
-      <!-- :value="balanceContainer" -->
       <DataTable
         class="p-datatable-sm"
         v-model:filters="filters"
@@ -326,21 +325,9 @@ export default {
   },
   data() {
     return {
-      // paginator
-      //   loading: false,
-      //   totalRecords: null,
-      //   rows: null,
-      // end paginator
       isUpdate: false,
       createDataDialog: false,
       deleteCategoryDialog: false,
-      selectedStatus: null,
-      selectedCatID: null,
-      search: '',
-      options: {},
-      params: {},
-      from: null,
-      to: null,
       statusFilter: [
         { name: 'Active', code: 'A' },
         { name: 'Inactive', code: 'I' },
@@ -383,14 +370,7 @@ export default {
       }),
     };
   },
-  // created will be initialize before mounted
-  //   created() {
-  //     this.totalRecords = this.csrSuppliesSubCategory.total;
-  //     this.params.page = this.csrSuppliesSubCategory.current_page;
-  //     this.rows = this.csrSuppliesSubCategory.per_page;
-  //   },
   mounted() {
-    // console.log(this.csrSuppliesSubCategory);
     this.storeSubCategoryInContainer();
   },
   methods: {
@@ -408,21 +388,13 @@ export default {
       });
     },
     updateData() {
-      this.loading = true;
-
       this.$inertia.get('categories', this.params, {
         preserveState: true,
         preserveScroll: true,
         onFinish: (visit) => {
-          this.totalRecords = this.csrSuppliesSubCategory.total;
           this.storeSubCategoryInContainer();
-          this.loading = false;
         },
       });
-    },
-    onPage(event) {
-      this.params.page = event.page + 1;
-      this.updateData();
     },
     openCreateDataDialog() {
       this.isUpdate = false;
@@ -440,7 +412,6 @@ export default {
       this.form.description = item.cl1desc;
       this.form.status = item.cl1stat;
       this.form.category = Number(item.catID);
-      //   this.form.category = item.categoryname;
     },
     submit() {
       if (this.form.processing) {
@@ -475,7 +446,6 @@ export default {
       this.$emit('hide', (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
     },
     confirmDeleteCategory(item) {
-      //   console.log(item);
       this.deleteCategoryDialog = true;
       this.form.cl1desc = item.cl1desc;
       this.form.cl1comb = item.cl1comb;
@@ -522,22 +492,6 @@ export default {
         life: 3000,
       });
     },
-  },
-  watch: {
-    // search: function (val, oldVal) {
-    //   this.params.search = val;
-    //   this.updateData();
-    // },
-    // selectedStatus: function (val) {
-    //   //   console.log(val['code']);
-    //   this.params.status = this.selectedStatus;
-    //   this.updateData();
-    // },
-    // selectedCatID: function (val) {
-    //   //   console.log(val['code']);
-    //   this.params.catID = this.selectedCatID;
-    //   this.updateData();
-    // },
   },
 };
 </script>
