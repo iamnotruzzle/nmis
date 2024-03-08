@@ -342,12 +342,10 @@ export default {
       from: null,
       to: null,
       statusFilter: [
-        { name: 'NO FILTER', code: null },
         { name: 'Active', code: 'A' },
         { name: 'Inactive', code: 'I' },
       ],
       categoryFilter: [
-        { name: 'NO FILTER', catID: null },
         { name: 'Drugs and medicines', catID: 9 },
         { name: 'IT supplies', catID: 3 },
         { name: 'Medical supplies', catID: 1 },
