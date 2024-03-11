@@ -67,13 +67,15 @@ class ItemController extends Controller
         $items = DB::select(
             "SELECT item.cl2comb, item.cl2code, main_category.categoryname as main_category,  category.cl1comb as cl1comb,
                 category.cl1desc as sub_category, item.catID, item.cl2desc as item,
-                price.selling_price as price, unit.uomcode, unit.uomdesc as unit,
+                price.id as price_id, price.selling_price as price, price.entry_by, employee.firstname as entry_by_firstname, employee.middlename as entry_by_middlename, employee.lastname as entry_by_lastname, price.created_at as price_created_at,
+                unit.uomcode, unit.uomdesc as unit,
                 item.cl2stat
             FROM hclass2 item
             JOIN huom as unit ON item.uomcode = unit.uomcode
             JOIN hclass1 as category ON item.cl1comb = category.cl1comb
             LEFT JOIN csrw_item_prices as price  ON item.cl2comb = price.cl2comb
             JOIN csrw_pims_categories as main_category ON item.catID = main_category.catID
+            LEFT JOIN hpersonal as employee ON price.entry_by = employee.employeeid
             WHERE item.cl2comb LIKE '%1000-%'
             ORDER BY item.cl2desc ASC;"
         );

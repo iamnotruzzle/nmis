@@ -164,8 +164,6 @@
         <template #expansion="slotProps">
           <div class="max-w-full flex justify-content-center">
             <div class="w-11 flex flex-column align-items-center">
-              <!-- {{ slotProps.data }} -->
-
               <DataTable
                 paginator
                 :rows="5"
@@ -192,22 +190,16 @@
                   </div>
                 </template>
                 <Column
-                  field="selling_price"
+                  field="price"
                   header="SELLING PRICE"
                   style="width: 20%"
                 >
                 </Column>
                 <Column
+                  field="entry_by"
                   header="ENTRY BY"
                   style="width: 50%"
                 >
-                  <template #body="{ data }">
-                    <span v-if="data.user_detail === null"></span>
-                    <span v-else>
-                      {{ data.user_detail.firstname }} {{ data.user_detail.middlename }} {{ data.user_detail.lastname }}
-                      {{ data.user_detail.empsuffix }}
-                    </span>
-                  </template>
                 </Column>
                 <Column
                   field="created_at"
@@ -605,7 +597,7 @@ export default {
       createItemPriceDialog: false,
       deleteItemPriceDialog: false,
       // end price
-      dateFilter: 'NO FILTER',
+      dateFilter: 'this year',
       selectedStatus: null,
       statusFilter: [
         { name: 'Active', code: 'A' },
@@ -626,10 +618,6 @@ export default {
       // TODO add quarterly filter
       pimsCategoryList: [],
       dateFilterList: [
-        {
-          name: 'NO FILTER',
-          value: 'NO FILTER',
-        },
         {
           name: 'yesterday',
           value: 'yesterday',
@@ -734,21 +722,78 @@ export default {
     // is updated
     storeItemInContainer() {
       //   console.log(this.items);
+      //   this.items.forEach((e) => {
+      //     const itemAlreadyExist = this.itemsList.some((item) => item.cl2comb === e.cl2comb);
+
+      //     if (!itemAlreadyExist) {
+      //       this.itemsList.push({
+
+      //         //   prices: e.prices.length === 0 ? [] : e.prices,
+      //       });
+      //     } else {
+      //       this.itemsList.push({
+      //         cl2comb: e.cl2comb,
+      //         catID: e.catID, // pims main category id
+      //         mainCategory: e.main_category, // pims main category name
+      //         cl1comb: e.cl1comb, // hclass1 sub-category id
+      //         subCategory: e.sub_category == '' || e.sub_category == null ? null : e.sub_category, // hclass1 sub-category name
+      //         cl2code: e.cl2code,
+      //         cl2desc: e.item,
+      //         uomcode: e.uomcode,
+      //         uomdesc: e.unit,
+      //         cl2stat: e.cl2stat,
+      //         //   prices: e.prices.length === 0 ? [] : e.prices,
+      //       });
+      //     }
+      //   });
+
       this.items.forEach((e) => {
-        // console.log(e);
-        this.itemsList.push({
-          cl2comb: e.cl2comb,
-          catID: e.catID, // pims main category id
-          mainCategory: e.main_category, // pims main category name
-          cl1comb: e.cl1comb, // hclass1 sub-category id
-          subCategory: e.sub_category == '' || e.sub_category == null ? null : e.sub_category, // hclass1 sub-category name
-          cl2code: e.cl2code,
-          cl2desc: e.item,
-          uomcode: e.uomcode,
-          uomdesc: e.unit,
-          cl2stat: e.cl2stat,
-          //   prices: e.prices.length === 0 ? [] : e.prices,
-        });
+        const existingItemIndex = this.itemsList.findIndex((item) => item.cl2comb === e.cl2comb);
+
+        if (existingItemIndex === -1) {
+          // Item does not exist, add a new object to the itemsList
+          this.itemsList.push({
+            cl2comb: e.cl2comb,
+            catID: e.catID,
+            mainCategory: e.main_category,
+            cl1comb: e.cl1comb,
+            subCategory: e.sub_category == '' || e.sub_category == null ? null : e.sub_category,
+            cl2code: e.cl2code,
+            cl2desc: e.item,
+            uomcode: e.uomcode,
+            uomdesc: e.unit,
+            cl2stat: e.cl2stat,
+            prices:
+              e.price == null
+                ? []
+                : [
+                    {
+                      price_id: e.price_id,
+                      price: e.price,
+                      entry_by:
+                        e.entry_by == null
+                          ? null
+                          : e.entry_by_firstname + ' ' + e.entry_by_middlename + ' ' + e.entry_by_lastname,
+                      created_at: e.price_created_at,
+                    },
+                  ],
+          });
+        } else {
+          // Item already exists, insert the prices into the existing item's prices array
+          if (e.price == null) {
+            this.itemsList[existingItemIndex].prices.push([]);
+          } else {
+            this.itemsList[existingItemIndex].prices.push({
+              price_id: e.price_id,
+              price: e.price,
+              entry_by:
+                e.entry_by == null
+                  ? null
+                  : e.entry_by_firstname + ' ' + e.entry_by_middlename + ' ' + e.entry_by_lastname,
+              created_at: e.price_created_at,
+            });
+          }
+        }
       });
     },
     storeSubCategoryList() {
@@ -761,6 +806,7 @@ export default {
       //   });
     },
     priceChangesOptions(data) {
+      //   console.log('price data', data.prices);
       // sort the date to ascending order
 
       let result = data.prices;
@@ -799,26 +845,15 @@ export default {
 
       moment.suppressDeprecationWarnings = true;
       switch (this.dateFilter) {
-        case 'NO FILTER':
-          priceDetails.forEach((e) => {
-            if (e.selling_price.length != 0) {
-              option.xAxis.data.push(moment(e.created_at).format('YYYY-MM-DD, hh:mm'));
-              option.series[0].data.push(Number(e.selling_price).toFixed(2));
-            } else {
-              option.xAxis.data.push(null);
-              option.series.data.push(null);
-            }
-          });
-          break;
         case 'yesterday':
           priceDetails.forEach((e) => {
-            if (e.selling_price.length != 0) {
+            if (e.length != 0) {
               let created_at = moment(e.created_at);
 
               // if created_ate is equal to yesterday
               if (moment(created_at).format('MM/DD/YYYY') === moment().subtract(1, 'days').format('MM/DD/YYYY')) {
                 option.xAxis.data.push(moment(e.created_at).format('YYYY-MM-DD, hh:mm'));
-                option.series[0].data.push(Number(e.selling_price).toFixed(2));
+                option.series[0].data.push(Number(e.price).toFixed(2));
               }
             } else {
               option.xAxis.data.push(null);
@@ -828,12 +863,12 @@ export default {
           break;
         case 'today':
           priceDetails.forEach((e) => {
-            if (e.selling_price.length != 0) {
+            if (e.length != 0) {
               let created_at = moment(e.created_at).format('MM/DD/YYYY');
               let today = moment().format('MM/DD/YYYY');
               if (moment(created_at).isSame(today)) {
                 option.xAxis.data.push(moment(e.created_at).format('YYYY-MM-DD, hh:mm'));
-                option.series[0].data.push(Number(e.selling_price).toFixed(2));
+                option.series[0].data.push(Number(e.price).toFixed(2));
               }
             } else {
               option.xAxis.data.push(null);
@@ -843,11 +878,11 @@ export default {
           break;
         case 'this week':
           priceDetails.forEach((e) => {
-            if (e.selling_price.length != 0) {
+            if (e.length != 0) {
               let created_at = moment(e.created_at).format('MM/DD/YYYY');
               if (moment(created_at).week() === moment().week()) {
                 option.xAxis.data.push(moment(e.created_at).format('YYYY-MM-DD, hh:mm'));
-                option.series[0].data.push(Number(e.selling_price).toFixed(2));
+                option.series[0].data.push(Number(e.price).toFixed(2));
               }
             } else {
               option.xAxis.data.push(null);
@@ -857,12 +892,12 @@ export default {
           break;
         case 'this month':
           priceDetails.forEach((e) => {
-            if (e.selling_price.length != 0) {
+            if (e.length != 0) {
               let created_at = moment(e.created_at).format('MM/DD/YYYY');
               if (moment(created_at).month() === moment().month()) {
                 // option.xAxis.data.push(this.tzone(e.created_at));
                 option.xAxis.data.push(moment(e.created_at).format('YYYY-MM-DD, hh:mm'));
-                option.series[0].data.push(Number(e.selling_price).toFixed(2));
+                option.series[0].data.push(Number(e.price).toFixed(2));
               }
             } else {
               option.xAxis.data.push(null);
@@ -872,11 +907,11 @@ export default {
           break;
         case 'this year':
           priceDetails.forEach((e) => {
-            if (e.selling_price.length != 0) {
+            if (e.length != 0) {
               let created_at = moment(e.created_at).format('LL');
               if (moment(created_at).year() === moment().year()) {
                 option.xAxis.data.push(moment(e.created_at).format('YYYY-MM-DD, hh:mm'));
-                option.series[0].data.push(Number(e.selling_price).toFixed(2));
+                option.series[0].data.push(Number(e.price).toFixed(2));
               }
             } else {
               option.xAxis.data.push(null);
