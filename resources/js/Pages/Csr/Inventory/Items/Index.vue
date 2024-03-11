@@ -167,7 +167,7 @@
               <DataTable
                 paginator
                 :rows="5"
-                class="w-9"
+                class="w-9 mt-2"
                 showGridlines
                 :value="slotProps.data.prices"
                 size="small"
@@ -175,18 +175,20 @@
               >
                 <template #header>
                   <div class="flex justify-content-between w-full">
-                    <div class="text-xl font-bold my-3">
+                    <div class="text-l font-bold my-3">
                       Prices for <span class="text-primary">[ {{ slotProps.data.cl2desc }} ]</span>
                     </div>
 
-                    <Button
-                      label="Add price"
-                      icon="pi pi-plus"
-                      iconPos="right"
-                      size="small"
-                      class="ml-2 my-0"
-                      @click="openCreateItemPriceDialog(slotProps.data)"
-                    />
+                    <div>
+                      <Button
+                        label="Add price"
+                        icon="pi pi-plus"
+                        iconPos="right"
+                        size="small"
+                        class="ml-2 my-0"
+                        @click="openCreateItemPriceDialog(slotProps.data)"
+                      />
+                    </div>
                   </div>
                 </template>
                 <Column
