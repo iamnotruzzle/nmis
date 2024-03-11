@@ -167,7 +167,7 @@
               <DataTable
                 paginator
                 :rows="5"
-                class="w-9 mt-2"
+                class="w-8 mt-2"
                 showGridlines
                 :value="slotProps.data.prices"
                 size="small"
@@ -175,7 +175,7 @@
               >
                 <template #header>
                   <div class="flex justify-content-between w-full">
-                    <div class="text-l font-bold my-3">
+                    <div class="text-lg font-bold my-3">
                       Prices for <span class="text-primary">[ {{ slotProps.data.cl2desc }} ]</span>
                     </div>
 
@@ -217,22 +217,24 @@
                   style="width: 10%"
                 >
                   <template #body="slotProps">
-                    <Button
-                      icon="pi pi-pencil"
-                      class="mr-1"
-                      rounded
-                      text
-                      severity="warning"
-                      @click="editPrice(slotProps.data)"
-                    />
+                    <div class="flex flex-row">
+                      <Button
+                        icon="pi pi-pencil"
+                        class="mr-1"
+                        rounded
+                        text
+                        severity="warning"
+                        @click="editPrice(slotProps.data)"
+                      />
 
-                    <Button
-                      icon="pi pi-trash"
-                      rounded
-                      text
-                      severity="danger"
-                      @click="confirmDeletePrice(slotProps.data)"
-                    />
+                      <Button
+                        icon="pi pi-trash"
+                        rounded
+                        text
+                        severity="danger"
+                        @click="confirmDeletePrice(slotProps.data)"
+                      />
+                    </div>
                   </template>
                 </Column>
               </DataTable>
