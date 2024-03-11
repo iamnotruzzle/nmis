@@ -62,7 +62,8 @@ use Maatwebsite\Excel\Facades\Excel;
 
 Route::redirect('/', 'login');
 
-Route::middleware(['auth:sanctum'])->group(
+// Route::middleware(['auth:sanctum'])->group(
+Route::middleware(['web', 'auth', 'verified'])->group(
     function () {
         Route::resource('dashboard', DashboardController::class)->middleware(['verified'])->only(['index']);
 
