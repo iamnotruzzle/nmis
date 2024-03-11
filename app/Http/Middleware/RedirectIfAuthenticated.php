@@ -22,8 +22,17 @@ class RedirectIfAuthenticated
         $guards = empty($guards) ? [null] : $guards;
 
         foreach ($guards as $guard) {
+            // if (Auth::guard($guard)->check()) {
+            //     return redirect(RouteServiceProvider::HOME);
+            // }
             if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::HOME);
+                if (Auth::user()->designation == 'admin') {
+                    return redirect()->route('admindashboard.index');
+                } else if (Auth::user()->designation == 'csr') {
+                    return redirect()->route('admindashboard.index');
+                } else {
+                    return redirect()->route('wardspatients.index');
+                }
             }
         }
 
