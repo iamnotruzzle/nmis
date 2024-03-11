@@ -679,7 +679,6 @@ export default {
     this.storeCl1combsInContainer();
     this.storeItemInContainer();
     this.storeUnitsInContainer();
-    this.storeSubCategoryList();
     this.storePimsCategoryInContainer();
 
     this.loading = false;
@@ -721,32 +720,6 @@ export default {
     // server request such as POST, the data in the table
     // is updated
     storeItemInContainer() {
-      //   console.log(this.items);
-      //   this.items.forEach((e) => {
-      //     const itemAlreadyExist = this.itemsList.some((item) => item.cl2comb === e.cl2comb);
-
-      //     if (!itemAlreadyExist) {
-      //       this.itemsList.push({
-
-      //         //   prices: e.prices.length === 0 ? [] : e.prices,
-      //       });
-      //     } else {
-      //       this.itemsList.push({
-      //         cl2comb: e.cl2comb,
-      //         catID: e.catID, // pims main category id
-      //         mainCategory: e.main_category, // pims main category name
-      //         cl1comb: e.cl1comb, // hclass1 sub-category id
-      //         subCategory: e.sub_category == '' || e.sub_category == null ? null : e.sub_category, // hclass1 sub-category name
-      //         cl2code: e.cl2code,
-      //         cl2desc: e.item,
-      //         uomcode: e.uomcode,
-      //         uomdesc: e.unit,
-      //         cl2stat: e.cl2stat,
-      //         //   prices: e.prices.length === 0 ? [] : e.prices,
-      //       });
-      //     }
-      //   });
-
       this.items.forEach((e) => {
         const existingItemIndex = this.itemsList.findIndex((item) => item.cl2comb === e.cl2comb);
 
@@ -796,17 +769,8 @@ export default {
         }
       });
     },
-    storeSubCategoryList() {
-      //   console.log(this.items);
-      //   this.items.data.forEach((e) => {
-      //     this.subCategoryFilter.push({
-      //       cl1comb: e.cl1comb, // hclass1 sub-category id
-      //       subCategory: e.category.cl1desc, // hclass1 sub-category name
-      //     });
-      //   });
-    },
     priceChangesOptions(data) {
-      //   console.log('price data', data.prices);
+      // console.log('price data', data.prices);
       // sort the date to ascending order
 
       let result = data.prices;
