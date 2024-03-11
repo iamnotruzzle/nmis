@@ -1051,12 +1051,12 @@ export default {
       );
     },
     editPrice(item) {
+      //   console.log('item', item);
       this.isPriceUpdate = true;
       this.createItemPriceDialog = true;
-      this.priceId = item.id;
-      this.formPrice.id = item.id;
-      this.formPrice.cl2comb = item.cl2comb;
-      this.formPrice.selling_price = item.selling_price;
+      this.priceId = item.price_id;
+      this.formPrice.id = item.price_id;
+      this.formPrice.selling_price = item.price;
     },
     submitPrice() {
       if (this.formPrice.processing) {
@@ -1088,8 +1088,7 @@ export default {
       }
     },
     confirmDeletePrice(item) {
-      this.priceId = item.id;
-      this.formPrice.selling_price = item.selling_price;
+      this.priceId = item.price_id;
       this.deleteItemPriceDialog = true;
     },
     deletePrice() {
