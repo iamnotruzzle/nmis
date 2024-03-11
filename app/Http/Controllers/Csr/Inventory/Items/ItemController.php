@@ -9,6 +9,7 @@ use App\Models\PimsCategory;
 use App\Models\UnitOfMeasurement;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -35,31 +36,49 @@ class ItemController extends Controller
         //
         $pimsCategory = PimsCategory::orderBy('categoryname', 'ASC')->get(['id', 'catID', 'categoryname']);
 
-        $items = Item::with(['unit', 'prices.userDetail', 'category:cl1comb,cl1desc', 'pims_category:id,catID,categoryname'])
-            ->when($catID, function ($query) use ($catID) {
-                $query->whereHas('pims_category', function ($q) use ($catID) {
-                    $q->where('catID', $catID);
-                });
-            })
-            ->when($cl1desc, function ($query) use ($cl1desc) {
-                $query->whereHas('category', function ($q) use ($cl1desc) {
-                    $q->where('cl1desc', 'LIKE', '%' . $cl1desc . '%');
-                });
-            })
-            ->when($request->search, function ($query, $value) {
-                $query->where('cl2comb', 'LIKE', '%' . $value . '%')
-                    ->orWhere('cl2desc', 'LIKE', '%' . $value . '%');
-            })
-            ->when(
-                $request->status,
-                function ($query, $value) {
-                    $query->where('cl2stat', $value);
-                }
-            )
-            // ->where('cl2stat', 'A')
-            ->whereNotNull('catID')
-            ->orderBy('cl2desc', 'ASC')
-            ->paginate(10);
+        // original
+        // $items = Item::with(['unit', 'prices.userDetail', 'category:cl1comb,cl1desc', 'pims_category:id,catID,categoryname'])
+        //     ->when($catID, function ($query) use ($catID) {
+        //         $query->whereHas('pims_category', function ($q) use ($catID) {
+        //             $q->where('catID', $catID);
+        //         });
+        //     })
+        //     ->when($cl1desc, function ($query) use ($cl1desc) {
+        //         $query->whereHas('category', function ($q) use ($cl1desc) {
+        //             $q->where('cl1desc', 'LIKE', '%' . $cl1desc . '%');
+        //         });
+        //     })
+        //     ->when($request->search, function ($query, $value) {
+        //         $query->where('cl2comb', 'LIKE', '%' . $value . '%')
+        //             ->orWhere('cl2desc', 'LIKE', '%' . $value . '%');
+        //     })
+        //     ->when(
+        //         $request->status,
+        //         function ($query, $value) {
+        //             $query->where('cl2stat', $value);
+        //         }
+        //     )
+        //     // ->where('cl2stat', 'A')
+        //     ->whereNotNull('catID')
+        //     ->orderBy('cl2desc', 'ASC')
+        //     ->paginate(10);
+
+
+        $items = DB::select(
+            "SELECT item.cl2comb, item.cl2code, main_category.categoryname as main_category,  category.cl1comb as cl1comb,
+                category.cl1desc as sub_category, item.catID, item.cl2desc as item,
+                price.selling_price as price, unit.uomcode, unit.uomdesc as unit,
+                item.cl2stat
+            FROM hclass2 item
+            JOIN huom as unit ON item.uomcode = unit.uomcode
+            JOIN hclass1 as category ON item.cl1comb = category.cl1comb
+            LEFT JOIN csrw_item_prices as price  ON item.cl2comb = price.cl2comb
+            JOIN csrw_pims_categories as main_category ON item.catID = main_category.catID
+            WHERE item.cl2comb LIKE '%1000-%'
+            ORDER BY item.cl2desc ASC;"
+        );
+
+        // dd($items);
 
         return Inertia::render('Csr/Inventory/Items/Index', [
             'cl1combs' => $cl1combs,

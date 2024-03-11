@@ -10,18 +10,16 @@
         v-model:expandedRows="expandedRow"
         v-model:filters="filters"
         :value="itemsList"
-        selectionMode="single"
-        lazy
         paginator
-        :rows="rows"
-        ref="dt"
-        removableSort
-        :totalRecords="totalRecords"
-        @page="onPage($event)"
+        :rows="20"
+        :rowsPerPageOptions="[20, 30, 40]"
         dataKey="cl2comb"
         filterDisplay="row"
+        sortField="item"
+        :sortOrder="1"
+        removableSort
+        :globalFilterFields="['cl1comb', 'cl2desc', 'cl2stat']"
         showGridlines
-        :loading="loading"
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
@@ -34,7 +32,7 @@
                   </span>
                   <InputText
                     id="searchInput"
-                    v-model="search"
+                    v-model="filters['global'].value"
                     placeholder="Search item"
                   />
                 </div>
@@ -60,12 +58,13 @@
           <template #body="{ data }">
             {{ data.mainCategory }}
           </template>
-          <template #filter="{}">
+          <template #filter="{ filterModel, filterCallback }">
             <Dropdown
-              v-model="selectedCatID"
+              v-model="filterModel.value"
               :options="mainCategoryFilter"
+              @change="filterCallback()"
               optionLabel="name"
-              optionValue="catID"
+              optionValue="code"
               placeholder="NO FILTER"
               class="w-full"
             />
@@ -74,7 +73,6 @@
         <Column
           field="cl1comb"
           header="SUB-CATEGORY ID"
-          :showFilterMenu="false"
           style="width: 10%"
         >
           <template #body="{ data }">
@@ -90,14 +88,6 @@
           <template #body="{ data }">
             {{ data.subCategory }}
           </template>
-          <template #filter="{}">
-            <InputText
-              v-model="cl1desc"
-              type="text"
-              placeholder="Search by sub-category"
-            />
-          </template>
-          <!--  -->
         </Column>
         <Column
           field="cl2desc"
@@ -136,10 +126,11 @@
               />
             </div>
           </template>
-          <template #filter="{}">
+          <template #filter="{ filterModel, filterCallback }">
             <Dropdown
-              v-model="selectedStatus"
+              v-model="filterModel.value"
               :options="statusFilter"
+              @change="filterCallback()"
               optionLabel="name"
               optionValue="code"
               placeholder="NO FILTER"
@@ -602,7 +593,6 @@ export default {
       // end data table expand
       // paginator
       loading: false,
-      totalRecords: null,
       rows: null,
       // end paginator
       itemId: null,
@@ -618,24 +608,19 @@ export default {
       dateFilter: 'NO FILTER',
       selectedStatus: null,
       statusFilter: [
-        { name: 'NO FILTER', code: null },
         { name: 'Active', code: 'A' },
         { name: 'Inactive', code: 'I' },
       ],
       selectedCatID: null,
       mainCategoryFilter: [
-        { name: 'NO FILTER', code: null },
-        { name: 'Drugs and medicines', catID: 9 },
-        { name: 'IT supplies', catID: 3 },
-        { name: 'Medical supplies', catID: 1 },
-        { name: 'Office Supplies', catID: 2 },
+        { name: 'Drugs and medicines', code: 'Drugs and medicines' },
+        { name: 'IT supplies', code: 'IT supplies' },
+        { name: 'Medical supplies', code: 'Medical supplies' },
+        { name: 'Office Supplies', code: 'Office Supplies' },
       ],
       selectedCl1comb: null,
       subCategoryFilter: [],
-      search: '',
       cl1desc: '',
-      options: {},
-      params: {},
       itemsList: [],
       cl1combsList: [],
       // TODO add quarterly filter
@@ -669,6 +654,10 @@ export default {
       unitsList: [],
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        cl1comb: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        cl2desc: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        cl2stat: { value: null, matchMode: FilterMatchMode.EQUALS },
+        mainCategory: { value: null, matchMode: FilterMatchMode.EQUALS },
       },
       cl2stats: [
         {
@@ -698,11 +687,6 @@ export default {
     };
   },
   // created will be initialize before mounted
-  created() {
-    this.totalRecords = this.items.total;
-    this.params.page = this.items.current_page;
-    this.rows = this.items.per_page;
-  },
   mounted() {
     this.storeCl1combsInContainer();
     this.storeItemInContainer();
@@ -750,24 +734,20 @@ export default {
     // is updated
     storeItemInContainer() {
       //   console.log(this.items);
-      this.items.data.forEach((e) => {
+      this.items.forEach((e) => {
         // console.log(e);
         this.itemsList.push({
           cl2comb: e.cl2comb,
-
-          catID: e.pims_category.catID, // pims main category id
-          mainCategory: e.pims_category.categoryname, // pims main category name
+          catID: e.catID, // pims main category id
+          mainCategory: e.main_category, // pims main category name
           cl1comb: e.cl1comb, // hclass1 sub-category id
-          subCategory:
-            e.category == null || e.category.cl1desc == null || e.category.cl1desc == '' ? null : e.category.cl1desc, // hclass1 sub-category name
-
+          subCategory: e.sub_category == '' || e.sub_category == null ? null : e.sub_category, // hclass1 sub-category name
           cl2code: e.cl2code,
-          cl2desc: e.cl2desc,
-          uomcode: e.unit.uomcode,
-          uomdesc: e.unit.uomdesc,
+          cl2desc: e.item,
+          uomcode: e.uomcode,
+          uomdesc: e.unit,
           cl2stat: e.cl2stat,
-          pharmaceutical: e.pharmaceutical,
-          prices: e.prices.length === 0 ? [] : e.prices,
+          //   prices: e.prices.length === 0 ? [] : e.prices,
         });
       });
     },
@@ -910,10 +890,6 @@ export default {
 
       return option;
     },
-    onPage(event) {
-      this.params.page = event.page + 1;
-      this.updateData();
-    },
     updateData() {
       this.itemsList = [];
       this.loading = true;
@@ -922,7 +898,6 @@ export default {
         preserveState: true,
         preserveScroll: true,
         onFinish: (visit) => {
-          this.totalRecords = this.items.total;
           this.itemsList = [];
           this.expandedRow = [];
           this.storeItemInContainer();
@@ -1113,33 +1088,6 @@ export default {
       this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Price deleted', life: 3000 });
     },
     // ********** end prices
-  },
-  watch: {
-    search: function (val, oldVal) {
-      this.params.search = val;
-      this.updateData();
-    },
-    // uncomment watcher for dateFIlter if not working
-    // dateFilter: function (val, oldVal) {
-    //   // this watches the dateFilter property value that will filter
-    //   // the price changes
-    // },
-    selectedStatus: function (val) {
-      //   console.log(val['code']);
-      this.params.status = this.selectedStatus;
-
-      this.updateData();
-    },
-    selectedCatID: function (val) {
-      this.params.catID = this.selectedCatID;
-
-      this.updateData();
-    },
-    cl1desc: function (val) {
-      this.params.cl1desc = this.cl1desc;
-
-      this.updateData();
-    },
   },
 };
 </script>
