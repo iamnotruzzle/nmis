@@ -11,7 +11,7 @@
             <div class="mb-3">
               <div class="flex justify-content-between">
                 <div>
-                  <span class="block text-xl text-900 text-primary font-bold">PENDING</span>
+                  <span class="block text-xl text-900 text-blue-500 font-bold">PENDING</span>
                 </div>
 
                 <!-- a -->
@@ -39,7 +39,7 @@
             <div class="mb-3">
               <div class="flex justify-content-between">
                 <div>
-                  <span class="block text-xl text-900 text-primary font-bold">CANCELLED</span>
+                  <span class="block text-xl text-900 text-orange-500 font-bold">CANCELLED</span>
                 </div>
 
                 <Link href="issueitems?page=1&status=CANCELLED">
@@ -65,7 +65,7 @@
             <div class="mb-3">
               <div class="flex justify-content-between">
                 <div>
-                  <span class="block text-xl text-900 text-primary font-bold">COMPLETED</span>
+                  <span class="block text-xl text-900 text-green-500 font-bold">COMPLETED</span>
                 </div>
 
                 <Link href="issueitems?page=1&status=RECEIVED">
@@ -338,7 +338,7 @@
           <div class="surface-card shadow-2 p-3 border-round">
             <div class="mb-3">
               <div class="flex justify-content-between">
-                <span class="block text-xl text-900 text-primary font-bold">About to expire</span>
+                <span class="block text-xl text-900 text-purple-500 font-bold">About to expire</span>
                 <Link href="csrstocks">
                   <div
                     class="flex align-items-center justify-content-center bg-purple-100 border-round"
