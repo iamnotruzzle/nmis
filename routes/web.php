@@ -65,8 +65,6 @@ Route::redirect('/', 'login');
 // Route::middleware(['auth:sanctum'])->group(
 Route::middleware(['web', 'auth', 'verified'])->group(
     function () {
-        // Route::resource('dashboard', DashboardController::class)->middleware(['verified'])->only(['index']);
-
         // admin routes
         Route::resource('admindashboard', AdminDashboardController::class)->middleware(['verified', 'designation_admin'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('users', UserController::class)->middleware(['verified', 'designation_admin'])->only(['index', 'store', 'update', 'destroy']);
