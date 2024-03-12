@@ -49,32 +49,47 @@ class PatientChargeController extends Controller
             ->orderBy('csrw_login_history.created_at', 'desc')
             ->first();
 
-        // get wards current stocks / MEDICAL SUPPLIES
-        $stocksFromCsr = DB::table('hclass2')
-            ->join('csrw_wards_stocks_med_supp', 'csrw_wards_stocks_med_supp.cl2comb', '=', 'hclass2.cl2comb')
-            ->join('csrw_request_stocks', 'csrw_request_stocks.id', '=', 'csrw_wards_stocks_med_supp.request_stocks_id')
-            ->select(DB::raw("hclass2.cl2comb, hclass2.cl2desc, hclass2.uomcode, SUM(csrw_wards_stocks_med_supp.quantity) as quantity, (SELECT TOP 1 selling_price FROM csrw_item_prices WHERE cl2comb = csrw_wards_stocks_med_supp.cl2comb ORDER BY created_at DESC) as 'price'"))
-            ->where('csrw_wards_stocks_med_supp.location', $authWardcode->wardcode)
-            ->where('csrw_wards_stocks_med_supp.expiration_date', '>', Carbon::today())
-            ->where('csrw_request_stocks.status', 'RECEIVED')
-            ->groupBy('hclass2.cl2comb', 'hclass2.cl2desc', 'hclass2.uomcode', 'csrw_wards_stocks_med_supp.cl2comb')
-            ->get();
+        $wardcode = $authWardcode->wardcode;
 
-        $stocksConvertedAndConsignment = DB::table('hclass2')
-            ->join('csrw_wards_stocks_med_supp', 'csrw_wards_stocks_med_supp.cl2comb', '=', 'hclass2.cl2comb')
-            // ->join('csrw_request_stocks', 'csrw_request_stocks.id', '=', 'csrw_wards_stocks_med_supp.request_stocks_id')
-            ->select(DB::raw("hclass2.cl2comb, hclass2.cl2desc, hclass2.uomcode, SUM(csrw_wards_stocks_med_supp.quantity) as quantity, (SELECT TOP 1 selling_price FROM csrw_item_prices WHERE cl2comb = csrw_wards_stocks_med_supp.cl2comb ORDER BY created_at DESC) as 'price'"))
-            ->where('csrw_wards_stocks_med_supp.location', $authWardcode->wardcode)
-            ->where('csrw_wards_stocks_med_supp.expiration_date', '>', Carbon::today())
-            // ->where('csrw_wards_stocks_med_supp.from', 'CSR')
-            // ->where('csrw_wards_stocks_med_supp.is_converted', 'y')
-            ->where(function ($query) {
-                $query->where('csrw_wards_stocks_med_supp.from', 'CSR')
-                    ->where('csrw_wards_stocks_med_supp.is_converted', 'y');
-            })
-            ->orWhere('csrw_wards_stocks_med_supp.from', 'CONSIGNMENT')
-            ->groupBy('hclass2.cl2comb', 'hclass2.cl2desc', 'hclass2.uomcode', 'csrw_wards_stocks_med_supp.cl2comb')
-            ->get();
+        $stocksFromCsr = DB::select(
+            "SELECT
+                    hclass2.cl2comb,
+                    hclass2.cl2desc,
+                    hclass2.uomcode,
+                    SUM(csrw_wards_stocks_med_supp.quantity) as quantity,
+                    (
+                        SELECT TOP 1 selling_price
+                        FROM csrw_item_prices
+                        WHERE cl2comb = csrw_wards_stocks_med_supp.cl2comb
+                        ORDER BY created_at DESC
+                    ) as price
+                FROM hclass2
+                JOIN csrw_wards_stocks_med_supp ON csrw_wards_stocks_med_supp.cl2comb = hclass2.cl2comb
+                JOIN csrw_request_stocks ON csrw_request_stocks.id = csrw_wards_stocks_med_supp.request_stocks_id
+                WHERE csrw_wards_stocks_med_supp.location = '" . $wardcode . "'
+                    AND csrw_wards_stocks_med_supp.expiration_date > GETDATE()
+                    AND csrw_request_stocks.status = 'RECEIVED'
+                    AND (hclass2.catID = 1 OR hclass2.catID = 9)
+                GROUP BY hclass2.cl2comb, hclass2.cl2desc, hclass2.uomcode, csrw_wards_stocks_med_supp.cl2comb;"
+        );
+
+        $stocksConvertedAndConsignment = DB::select(
+            "SELECT
+                    hclass2.cl2comb,
+                    hclass2.cl2desc,
+                    hclass2.uomcode,
+                    SUM(csrw_wards_stocks_med_supp.quantity) as quantity,
+                    (SELECT TOP 1 selling_price FROM csrw_item_prices WHERE cl2comb = csrw_wards_stocks_med_supp.cl2comb ORDER BY created_at DESC) as price
+                FROM hclass2
+                JOIN csrw_wards_stocks_med_supp ON csrw_wards_stocks_med_supp.cl2comb = hclass2.cl2comb
+                WHERE csrw_wards_stocks_med_supp.location = '" . $wardcode . "'
+                    AND csrw_wards_stocks_med_supp.expiration_date > GETDATE()
+                    AND (
+                        (csrw_wards_stocks_med_supp.[from] = 'CSR' AND csrw_wards_stocks_med_supp.is_converted = 'y')
+                        OR csrw_wards_stocks_med_supp.[from] = 'CONSIGNMENT'
+                    )
+                GROUP BY hclass2.cl2comb, hclass2.cl2desc, hclass2.uomcode, csrw_wards_stocks_med_supp.cl2comb;"
+        );
 
         // dd($stocksFromCsr);
         // dd($stocksConvertedAndConsignment);
@@ -104,16 +119,6 @@ class PatientChargeController extends Controller
             ->where('hmstat', 'A')
             ->get(['hmcode', 'hmdesc', 'hmamt', 'uomcode']);
         // dd($misc);
-
-        // get patients bills
-        // $bills = Patient::with([
-        //     'admissionDateBill',
-        // ])
-        //     // this will filter patients that hasn't been discharge
-        //     ->whereHas('admissionDateBill', function ($q) use ($enccode) {
-        //         $q->where('enccode', $enccode);
-        //     })
-        //     ->first();
 
         $bills = DB::select(
             "SELECT pat_charge.pcchrgcod as charge_slip_no,
