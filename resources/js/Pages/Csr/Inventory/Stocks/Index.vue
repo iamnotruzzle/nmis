@@ -5,7 +5,7 @@
     <div class="card">
       <Toast />
 
-      <!-- v-model:filters="filters" -->
+      <!-- DELIVERIES -->
       <DataTable
         class="p-datatable-sm"
         v-model:filters="filters"
@@ -64,18 +64,21 @@
         <Column
           field="suppname"
           header="SUPPLIER"
+          sortable
           style="width: 10%"
         >
         </Column>
         <Column
           field="chrgdesc"
           header="FUND SOURCE"
+          sortable
           style="width: 10%"
         >
         </Column>
         <Column
           field="cl2desc"
           header="ITEM"
+          sortable
           style="width: 15%"
         >
         </Column>
@@ -94,6 +97,7 @@
         <Column
           field="quantity"
           header="QTY"
+          sortable
           style="width: 5%"
         >
           <template #body="{ data }">
@@ -113,6 +117,7 @@
           field="manufactured_date"
           header="MFD. DATE"
           style="width: 10%"
+          sortable
           :showFilterMenu="false"
         >
           <template #body="{ data }">
@@ -142,6 +147,7 @@
           field="delivered_date"
           header="DD. DATE"
           style="width: 10%"
+          sortable
           :showFilterMenu="false"
         >
           <template #body="{ data }">
@@ -170,6 +176,7 @@
           field="expiration_date"
           header="EXP. DATE"
           style="width: 10%"
+          sortable
           :showFilterMenu="false"
         >
           <template #body="{ data }">
