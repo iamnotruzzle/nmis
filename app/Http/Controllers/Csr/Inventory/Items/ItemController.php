@@ -10,6 +10,7 @@ use App\Models\PimsCategory;
 use App\Models\UnitOfMeasurement;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
@@ -31,46 +32,14 @@ class ItemController extends Controller
             ->orderBy('uomdesc', 'ASC')
             ->get(['uomcode', 'uomdesc']);
 
-        // $subCategory = Category::where('catID', null)->get(['cl1code', 'cl1desc']);
-        // dd($subCategory);
-
-        //
         $pimsCategory = PimsCategory::orderBy('categoryname', 'ASC')->get(['id', 'catID', 'categoryname']);
-
-        // original
-        // $items = Item::with(['unit', 'prices.userDetail', 'category:cl1comb,cl1desc', 'pims_category:id,catID,categoryname'])
-        //     ->when($catID, function ($query) use ($catID) {
-        //         $query->whereHas('pims_category', function ($q) use ($catID) {
-        //             $q->where('catID', $catID);
-        //         });
-        //     })
-        //     ->when($cl1desc, function ($query) use ($cl1desc) {
-        //         $query->whereHas('category', function ($q) use ($cl1desc) {
-        //             $q->where('cl1desc', 'LIKE', '%' . $cl1desc . '%');
-        //         });
-        //     })
-        //     ->when($request->search, function ($query, $value) {
-        //         $query->where('cl2comb', 'LIKE', '%' . $value . '%')
-        //             ->orWhere('cl2desc', 'LIKE', '%' . $value . '%');
-        //     })
-        //     ->when(
-        //         $request->status,
-        //         function ($query, $value) {
-        //             $query->where('cl2stat', $value);
-        //         }
-        //     )
-        //     // ->where('cl2stat', 'A')
-        //     ->whereNotNull('catID')
-        //     ->orderBy('cl2desc', 'ASC')
-        //     ->paginate(10);
-
 
         $items = DB::select(
             "SELECT item.cl2comb, item.cl2code, main_category.categoryname as main_category,  category.cl1comb as cl1comb,
                 category.cl1desc as sub_category, item.catID, item.cl2desc as item,
                 price.id as price_id, price.selling_price as price, price.entry_by, employee.firstname as entry_by_firstname, employee.middlename as entry_by_middlename, employee.lastname as entry_by_lastname, price.created_at as price_created_at,
                 unit.uomcode, unit.uomdesc as unit,
-                reoder_level.normal_stock, reoder_level.alert_stock, reoder_level.critical_stock,
+                reoder_level.normal_stock as normal_stock, reoder_level.alert_stock, reoder_level.critical_stock,
                 item.cl2stat
             FROM hclass2 item
             JOIN huom as unit ON item.uomcode = unit.uomcode
@@ -78,8 +47,15 @@ class ItemController extends Controller
             LEFT JOIN csrw_item_prices as price  ON item.cl2comb = price.cl2comb
             JOIN csrw_pims_categories as main_category ON item.catID = main_category.catID
             LEFT JOIN hpersonal as employee ON price.entry_by = employee.employeeid
-            LEFT JOIN csrw_item_reorder_level as reoder_level ON reoder_level.cl2comb = item.cl2comb
+            LEFT JOIN (
+                SELECT TOP 1 r.cl2comb, r.normal_stock as normal_stock, r.alert_stock, r.critical_stock
+                FROM csrw_item_reorder_level as r
+                WHERE r.location = 'CSR'
+                OR r.location = 'ADMIN'
+                ORDER BY r.created_at DESC
+            ) as reoder_level ON item.cl2comb = reoder_level.cl2comb
             WHERE item.cl2comb LIKE '%1000-%'
+            --AND item.cl2desc LIKE '%test test test test test%'
             ORDER BY item.cl2desc ASC;"
         );
 
@@ -169,14 +145,22 @@ class ItemController extends Controller
             'cl2stat' => 'required|max:1',
         ]);
 
-        $item->update([
+        $updated_item =  $item->update([
             'catID' => $request->mainCategory, // main category
             'cl2comb' => trim($request->cl1comb) . '-' . trim($request->cl2code),
             'cl1comb' => trim($request->cl1comb), // sub category
             'cl2desc' => trim($request->cl2desc), // item desc
             'uomcode' => $request->unit, // unit
             'cl2stat' => $request->cl2stat,
+        ]);
 
+        $itemReorderLevel = ItemReorderLevel::create([
+            'cl2comb' => trim($request->cl1comb) . '-' . trim($request->cl2code),
+            'normal_stock' => $request->normal_stock,
+            'alert_stock' => $request->alert_stock,
+            'critical_stock' => $request->critical_stock,
+            'entry_by' => $request->entry_by,
+            'location' => $request->location,
         ]);
 
         return Redirect::route('items.index');

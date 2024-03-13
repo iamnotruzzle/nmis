@@ -99,6 +99,33 @@
           </template>
         </Column>
         <Column
+          field="normal_stock"
+          header="NORMAL STOCK"
+          style="width: 40%"
+        >
+          <template #body="{ data }">
+            {{ data.normal_stock }}
+          </template>
+        </Column>
+        <Column
+          field="alert_stock"
+          header="ALERT STOCK"
+          style="width: 40%"
+        >
+          <template #body="{ data }">
+            {{ data.alert_stock }}
+          </template>
+        </Column>
+        <Column
+          field="critical_stock"
+          header="CRITICAL STOCK"
+          style="width: 40%"
+        >
+          <template #body="{ data }">
+            {{ data.critical_stock }}
+          </template>
+        </Column>
+        <Column
           header="UNIT"
           style="width: 6.666%"
         >
@@ -748,7 +775,8 @@ export default {
     this.storePimsCategoryInContainer();
 
     this.entry_by = this.$page.props.auth.user.userDetail.employeeid;
-    this.authLocation = this.$page.props.auth.user.location.location_name.wardname;
+    this.authLocation = this.$page.props.auth.user;
+    // console.log(this.authLocation.location.wardcode);
 
     this.loading = false;
   },
@@ -996,6 +1024,9 @@ export default {
       this.form.cl1comb = item.cl1comb;
       this.form.cl2code = item.cl2code;
       this.form.cl2desc = item.cl2desc;
+      this.form.normal_stock = item.normal_stock;
+      this.form.alert_stock = item.alert_stock;
+      this.form.critical_stock = item.critical_stock;
       this.form.unit = item.uomcode;
       this.form.cl2stat = item.cl2stat;
       this.form.mainCategory = item.catID;
@@ -1006,7 +1037,7 @@ export default {
       }
 
       this.form.entry_by = this.entry_by;
-      this.form.location = this.authLocation;
+      this.form.location = this.authLocation.location.wardcode;
 
       if (this.isUpdate) {
         this.form.put(route('items.update', this.itemId), {
