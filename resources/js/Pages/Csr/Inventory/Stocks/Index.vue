@@ -13,7 +13,7 @@
         paginator
         :rows="20"
         :rowsPerPageOptions="[20, 30, 40]"
-        dataKey="cl2comb"
+        dataKey="id"
         filterDisplay="row"
         sortField="item"
         :sortOrder="1"
