@@ -547,9 +547,87 @@
         </template>
       </Dialog>
 
-      <div class="grid mt-8">
-        <!-- brand -->
+      <!-- create & edit dialog -->
+      <Dialog
+        v-model:visible="createBrandDialog"
+        :style="{ width: '450px' }"
+        :modal="true"
+        class="p-fluid"
+        @hide="clickOutsideDialog"
+        dismissableMask
+      >
+        <template #header>
+          <div class="text-primary text-xl font-bold">STOCK DETAIL</div>
+        </template>
+        <div class="field">
+          <label for="brand_name">Brand name</label>
+          <InputText
+            id="brand_name"
+            v-model.trim="formBrand.name"
+            required="true"
+            autofocus
+            :class="{ 'p-invalid': formBrand.name == '' }"
+          />
+          <small
+            class="text-error"
+            v-if="formBrand.errors.name"
+          >
+            {{ formBrand.errors.name }}
+          </small>
+        </div>
 
+        <div class="field">
+          <label for="status">Status</label>
+          <Dropdown
+            v-model="formBrand.status"
+            :options="brandStatus"
+            optionLabel="name"
+            optionValue="value"
+            class="w-full md:w-14rem"
+          />
+          <small
+            class="text-error"
+            v-if="formBrand.errors.status"
+          >
+            {{ formBrand.errors.status }}
+          </small>
+        </div>
+
+        <template #footer>
+          <Button
+            label="Cancel"
+            icon="pi pi-times"
+            severity="danger"
+            text
+            @click="cancel"
+          />
+          <Button
+            v-if="isUpdateBrand == true"
+            label="Update"
+            icon="pi pi-check"
+            severity="warning"
+            text
+            type="submit"
+            :disabled="formBrand.processing"
+            @click="submitBrand"
+          />
+          <Button
+            v-else
+            label="Save"
+            icon="pi pi-check"
+            text
+            type="submit"
+            :disabled="formBrand.processing"
+            @click="submitBrand"
+          />
+        </template>
+      </Dialog>
+      <!-- end brand -->
+    </div>
+
+    <div class="card">
+      <div class="grid">
+        <!-- brand -->
         <DataTable
           class="p-datatable-sm sm:col-12 md:col-6"
           dataKey="id"
@@ -704,83 +782,6 @@
           </Column>
         </DataTable>
       </div>
-
-      <!-- create & edit dialog -->
-      <Dialog
-        v-model:visible="createBrandDialog"
-        :style="{ width: '450px' }"
-        :modal="true"
-        class="p-fluid"
-        @hide="clickOutsideDialog"
-        dismissableMask
-      >
-        <template #header>
-          <div class="text-primary text-xl font-bold">STOCK DETAIL</div>
-        </template>
-        <div class="field">
-          <label for="brand_name">Brand name</label>
-          <InputText
-            id="brand_name"
-            v-model.trim="formBrand.name"
-            required="true"
-            autofocus
-            :class="{ 'p-invalid': formBrand.name == '' }"
-          />
-          <small
-            class="text-error"
-            v-if="formBrand.errors.name"
-          >
-            {{ formBrand.errors.name }}
-          </small>
-        </div>
-
-        <div class="field">
-          <label for="status">Status</label>
-          <Dropdown
-            v-model="formBrand.status"
-            :options="brandStatus"
-            optionLabel="name"
-            optionValue="value"
-            class="w-full md:w-14rem"
-          />
-          <small
-            class="text-error"
-            v-if="formBrand.errors.status"
-          >
-            {{ formBrand.errors.status }}
-          </small>
-        </div>
-
-        <template #footer>
-          <Button
-            label="Cancel"
-            icon="pi pi-times"
-            severity="danger"
-            text
-            @click="cancel"
-          />
-          <Button
-            v-if="isUpdateBrand == true"
-            label="Update"
-            icon="pi pi-check"
-            severity="warning"
-            text
-            type="submit"
-            :disabled="formBrand.processing"
-            @click="submitBrand"
-          />
-          <Button
-            v-else
-            label="Save"
-            icon="pi pi-check"
-            text
-            type="submit"
-            :disabled="formBrand.processing"
-            @click="submitBrand"
-          />
-        </template>
-      </Dialog>
-      <!-- end brand -->
     </div>
   </app-layout>
 </template>
