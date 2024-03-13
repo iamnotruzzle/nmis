@@ -350,6 +350,60 @@
           </small>
         </div>
         <div class="field">
+          <label>Normal stock</label>
+          <InputText
+            id="Normal stock"
+            v-model.trim="form.normal_stock"
+            required="true"
+            autofocus
+            type="number"
+            :class="{ 'p-invalid': form.normal_stock == '' }"
+            @keyup.enter="submit"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.normal_stock"
+          >
+            {{ form.errors.normal_stock }}
+          </small>
+        </div>
+        <div class="field">
+          <label>Alert stock</label>
+          <InputText
+            id="Alert stock"
+            v-model.trim="form.alert_stock"
+            required="true"
+            autofocus
+            type="number"
+            :class="{ 'p-invalid': form.alert_stock == '' }"
+            @keyup.enter="submit"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.alert_stock"
+          >
+            {{ form.errors.alert_stock }}
+          </small>
+        </div>
+        <div class="field">
+          <label>Critical stock</label>
+          <InputText
+            id="Critical stock"
+            v-model.trim="form.critical_stock"
+            required="true"
+            autofocus
+            type="number"
+            :class="{ 'p-invalid': form.critical_stock == '' }"
+            @keyup.enter="submit"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.critical_stock"
+          >
+            {{ form.errors.critical_stock }}
+          </small>
+        </div>
+        <div class="field">
           <label for="cl2stat">Status</label>
           <Dropdown
             v-model="form.cl2stat"
@@ -591,6 +645,8 @@ export default {
       loading: false,
       rows: null,
       // end paginator
+      entry_by: null,
+      authLocation: null,
       itemId: null,
       isUpdate: false,
       createItemDialog: false,
@@ -669,6 +725,11 @@ export default {
         unit: null,
         cl2stat: null,
         mainCategory: null,
+        normal_stock: null,
+        critical_stock: null,
+        alert_stock: null,
+        entry_by: null,
+        location: null,
       }),
       formPrice: this.$inertia.form({
         id: null,
@@ -678,12 +739,16 @@ export default {
       }),
     };
   },
+
   // created will be initialize before mounted
   mounted() {
     this.storeCl1combsInContainer();
     this.storeItemInContainer();
     this.storeUnitsInContainer();
     this.storePimsCategoryInContainer();
+
+    this.entry_by = this.$page.props.auth.user.userDetail.employeeid;
+    this.authLocation = this.$page.props.auth.user.location.location_name.wardname;
 
     this.loading = false;
   },
@@ -740,6 +805,9 @@ export default {
             uomcode: e.uomcode,
             uomdesc: e.unit,
             cl2stat: e.cl2stat,
+            normal_stock: e.normal_stock,
+            alert_stock: e.alert_stock,
+            critical_stock: e.critical_stock,
             prices:
               e.price == null
                 ? []
@@ -936,6 +1004,9 @@ export default {
       if (this.form.processing) {
         return false;
       }
+
+      this.form.entry_by = this.entry_by;
+      this.form.location = this.authLocation;
 
       if (this.isUpdate) {
         this.form.put(route('items.update', this.itemId), {

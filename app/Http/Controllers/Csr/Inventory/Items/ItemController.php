@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Csr\Inventory\Items;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Item;
+use App\Models\ItemReorderLevel;
 use App\Models\PimsCategory;
 use App\Models\UnitOfMeasurement;
 use Carbon\Carbon;
@@ -69,6 +70,7 @@ class ItemController extends Controller
                 category.cl1desc as sub_category, item.catID, item.cl2desc as item,
                 price.id as price_id, price.selling_price as price, price.entry_by, employee.firstname as entry_by_firstname, employee.middlename as entry_by_middlename, employee.lastname as entry_by_lastname, price.created_at as price_created_at,
                 unit.uomcode, unit.uomdesc as unit,
+                reoder_level.normal_stock, reoder_level.alert_stock, reoder_level.critical_stock,
                 item.cl2stat
             FROM hclass2 item
             JOIN huom as unit ON item.uomcode = unit.uomcode
@@ -76,6 +78,7 @@ class ItemController extends Controller
             LEFT JOIN csrw_item_prices as price  ON item.cl2comb = price.cl2comb
             JOIN csrw_pims_categories as main_category ON item.catID = main_category.catID
             LEFT JOIN hpersonal as employee ON price.entry_by = employee.employeeid
+            LEFT JOIN csrw_item_reorder_level as reoder_level ON reoder_level.cl2comb = item.cl2comb
             WHERE item.cl2comb LIKE '%1000-%'
             ORDER BY item.cl2desc ASC;"
         );
@@ -103,9 +106,12 @@ class ItemController extends Controller
 
         $request->validate([
             'cl1comb' => 'required',
-            'cl2desc' => 'max:255',
+            'cl2desc' => 'required|max:255',
             'unit' => 'required',
             'cl2stat' => 'required|max:1',
+            'normal_stock' => 'required|numeric',
+            'alert_stock' => 'required|numeric',
+            'critical_stock' => 'required|numeric',
         ]);
 
         $item = Item::create([
@@ -136,6 +142,15 @@ class ItemController extends Controller
             'barcode' => NULL,
             'rpoint' => NULL,
             'catID' => $request->mainCategory,
+        ]);
+
+        $itemReorderLevel = ItemReorderLevel::create([
+            'cl2comb' => $item->cl2comb,
+            'normal_stock' => $request->normal_stock,
+            'alert_stock' => $request->alert_stock,
+            'critical_stock' => $request->critical_stock,
+            'entry_by' => $request->entry_by,
+            'location' => $request->location,
         ]);
 
         // dd($item);
