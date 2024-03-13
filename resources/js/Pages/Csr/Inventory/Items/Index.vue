@@ -92,7 +92,7 @@
         <Column
           field="cl2desc"
           header="DESCRIPTION"
-          style="width: 40%"
+          style="width: 30%"
         >
           <template #body="{ data }">
             {{ data.cl2desc }}
@@ -101,7 +101,7 @@
         <Column
           field="normal_stock"
           header="NORMAL STOCK"
-          style="width: 40%"
+          style="width: 5%"
         >
           <template #body="{ data }">
             {{ data.normal_stock }}
@@ -110,7 +110,7 @@
         <Column
           field="alert_stock"
           header="ALERT STOCK"
-          style="width: 40%"
+          style="width: 5%"
         >
           <template #body="{ data }">
             {{ data.alert_stock }}
@@ -119,7 +119,7 @@
         <Column
           field="critical_stock"
           header="CRITICAL STOCK"
-          style="width: 40%"
+          style="width: 5%"
         >
           <template #body="{ data }">
             {{ data.critical_stock }}
@@ -127,7 +127,7 @@
         </Column>
         <Column
           header="UNIT"
-          style="width: 6.666%"
+          style="width: 5%"
         >
           <template #body="{ data }">
             {{ data.uomdesc }}
@@ -136,7 +136,7 @@
         <Column
           field="cl2stat"
           header="STATUS"
-          style="width: 6.666%"
+          style="width: 5%"
           :showFilterMenu="false"
         >
           <template #body="{ data }">
@@ -167,7 +167,7 @@
         </Column>
         <Column
           header="ACTION"
-          style="width: 6.666%"
+          style="width: 5%"
         >
           <template #body="slotProps">
             <Button
