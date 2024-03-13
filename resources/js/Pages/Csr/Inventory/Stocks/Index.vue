@@ -10,18 +10,16 @@
         class="p-datatable-sm"
         v-model:filters="filters"
         :value="stocksList"
-        selectionMode="single"
-        lazy
         paginator
-        removableSort
-        :rows="rows"
-        ref="dt"
-        :totalRecords="totalRecords"
-        @page="onPage($event)"
-        dataKey="cl1comb"
+        :rows="20"
+        :rowsPerPageOptions="[20, 30, 40]"
+        dataKey="cl2comb"
         filterDisplay="row"
+        sortField="item"
+        :sortOrder="1"
+        removableSort
+        :globalFilterFields="['cl2desc', 'suppname', 'chrgdesc']"
         showGridlines
-        :loading="loading"
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
@@ -35,7 +33,7 @@
                   </span>
                   <InputText
                     id="searchInput"
-                    v-model="search"
+                    v-model="filters['global'].value"
                     placeholder="Search item"
                   />
                 </div>
@@ -839,11 +837,6 @@ export default {
   data() {
     return {
       minimumDate: null,
-      // paginator
-      loading: false,
-      totalRecords: null,
-      rows: null,
-      // end paginator
       stockId: null,
       isUpdate: false,
       isUpdateBrand: false,
@@ -852,8 +845,6 @@ export default {
       deleteStockDialog: false,
       deleteBrandDialog: false,
       search: '',
-      options: {},
-      params: {},
       // manufactured date
       from_md: null,
       to_md: null,
@@ -871,7 +862,13 @@ export default {
       totalStocksList: [],
       suppliersList: [],
       filters: {
-        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        global: {
+          value: null,
+          matchMode: FilterMatchMode.CONTAINS,
+          cl2desc: { value: null, matchMode: FilterMatchMode.CONTAINS },
+          suppname: { value: null, matchMode: FilterMatchMode.CONTAINS },
+          chrgdesc: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        },
       },
       brandFilters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -921,14 +918,8 @@ export default {
       ],
     };
   },
-  // created will be initialize before mounted
-  created() {
-    this.totalRecords = this.stocks.total;
-    this.params.page = this.stocks.current_page;
-    this.rows = this.stocks.per_page;
-  },
   mounted() {
-    // console.log('total stocks', this.totalStocks);
+    console.log('stocks', this.stocks);
 
     this.setMinimumDate();
     this.storeFundSourceInContainer();
@@ -938,8 +929,6 @@ export default {
     this.storeActiveBrandsInContainer();
     this.storeTotalStocksInContainer();
     this.storeSuppliersInContainer();
-
-    this.loading = false;
   },
   methods: {
     tzone(date) {
@@ -1039,21 +1028,21 @@ export default {
     // is updated
     storeStocksInContainer() {
       //   console.log(this.stocks.data);
-      this.stocks.data.forEach((e) => {
+      this.stocks.forEach((e) => {
         this.stocksList.push({
           id: e.id,
           ris_no: e.ris_no == null ? null : e.ris_no,
           temp_ris_no: e.temp_ris_no == null ? null : e.temp_ris_no,
           suppcode: e.suppcode,
-          suppname: e.supplier_detail.suppname,
-          chrgcode: e.type_of_charge === null ? e.fund_source.fsid : e.type_of_charge.chrgcode,
-          chrgdesc: e.type_of_charge === null ? e.fund_source.fsName : e.type_of_charge.chrgdesc,
+          suppname: e.suppname,
+          chrgcode: e.codeFromHCharge === null ? e.codeFromFundSource : e.codeFromHCharge,
+          chrgdesc: e.codeFromHCharge === null ? e.descFromFundSource : e.descFromHCharge,
           cl2comb: e.cl2comb,
-          cl2desc: e.item_detail.cl2desc,
-          uomcode: e.unit == null ? null : e.unit.uomcode,
-          uomdesc: e.unit == null ? null : e.unit.uomdesc,
-          brand_id: e.brand_detail.id,
-          brand_name: e.brand_detail.name,
+          cl2desc: e.cl2desc,
+          uomcode: e.uomcode == null ? null : e.uomcode,
+          uomdesc: e.uomcode == null ? null : e.uomdesc,
+          brand_id: e.brand_id,
+          brand_name: e.brand_name,
           quantity: e.quantity,
           manufactured_date: e.manufactured_date === null ? '' : e.manufactured_date,
           delivered_date: e.delivered_date === null ? '' : e.delivered_date,
@@ -1062,18 +1051,11 @@ export default {
       });
       //   console.log(this.stocks);
     },
-    onPage(event) {
-      this.params.page = event.page + 1;
-      this.updateData();
-    },
     updateData() {
-      this.loading = true;
-
       this.$inertia.get('csrstocks', this.params, {
         preserveState: true,
         preserveScroll: true,
         onFinish: (visit) => {
-          this.totalRecords = this.stocks.total;
           this.stocksList = [];
           this.brandsList = [];
           this.totalStocksList = [];
@@ -1082,7 +1064,6 @@ export default {
           this.storeBrandsInContainer();
           this.storeActiveBrandsInContainer();
           this.storeTotalStocksInContainer();
-          this.loading = false;
         },
       });
       //a
@@ -1117,7 +1098,7 @@ export default {
       this.form.fund_source = item.chrgcode;
       this.form.cl2comb = item.cl2comb;
       this.form.uomcode = item.uomcode;
-      this.form.brand = item.brand_id;
+      this.form.brand = Number(item.brand_id);
       this.form.quantity = item.quantity;
       this.form.manufactured_date = item.manufactured_date;
       this.form.delivered_date = item.delivered_date;
@@ -1261,70 +1242,6 @@ export default {
     // end brand
   },
   watch: {
-    search: function (val, oldVal) {
-      this.params.search = val;
-      this.updateData();
-    },
-    from_md: function (val) {
-      if (val != null) {
-        let from_md = val;
-        this.params.from_md = from_md;
-      } else {
-        this.params.from_md = null;
-        this.from_md = null;
-      }
-      this.updateData();
-    },
-    to_md: function (val) {
-      if (val != null) {
-        let to_md = val;
-        this.params.to_md = to_md;
-      } else {
-        this.params.to_md = null;
-        this.to_md = null;
-      }
-      this.updateData();
-    },
-    from_dd: function (val) {
-      if (val != null) {
-        let from_dd = val;
-        this.params.from_dd = from_dd;
-      } else {
-        this.params.from_dd = null;
-        this.from_dd = null;
-      }
-      this.updateData();
-    },
-    to_dd: function (val) {
-      if (val != null) {
-        let to_dd = val;
-        this.params.to_dd = to_dd;
-      } else {
-        this.params.to_dd = null;
-        this.to_dd = null;
-      }
-      this.updateData();
-    },
-    from_ed: function (val) {
-      if (val != null) {
-        let from_ed = val;
-        this.params.from_ed = from_ed;
-      } else {
-        this.params.from_ed = null;
-        this.from_ed = null;
-      }
-      this.updateData();
-    },
-    to_ed: function (val) {
-      if (val != null) {
-        let to_ed = val;
-        this.params.to_ed = to_ed;
-      } else {
-        this.params.to_ed = null;
-        this.to_ed = null;
-      }
-      this.updateData();
-    },
     'form.cl2comb': function (val) {
       this.selectedItemsUomDesc = null;
 
