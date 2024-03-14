@@ -180,7 +180,6 @@ class CsrStocksMedicalSuppliesController extends Controller
         $stockLogs = CsrStocksMedicalSuppliesLogs::create([
             'stock_id' => $stock->id,
             'ris_no' => $stock->ris_no,
-            'temp_ris_no' => $request->ris_no == null ? $temp_ris_no : null,
             'suppcode' => $stock->suppcode,
             'chrgcode' => $stock->chrgcode,
             'cl2comb' => $stock->cl2comb,
