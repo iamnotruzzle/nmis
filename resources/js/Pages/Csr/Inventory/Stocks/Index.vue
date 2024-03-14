@@ -99,16 +99,66 @@
           style="width: 5%"
         >
           <template #body="{ data }">
-            <span
-              v-if="data.quantity > 30"
-              class="text-green-500"
-              >{{ data.quantity }}</span
-            >
-            <span
-              v-else
-              class="text-yellow-500"
-              >{{ data.quantity }}</span
-            >
+            <div class="text-center">
+              <span
+                v-if="data.quantity >= data.normal_stock || data.quantity > data.alert_stock"
+                class="text-green-500 font-bold"
+              >
+                {{ data.quantity }}
+              </span>
+              <span
+                v-else-if="data.quantity <= data.alert_stock && data.quantity > data.critical_stock"
+                class="text-yellow-500 font-bold"
+              >
+                {{ data.quantity }}
+              </span>
+              <span
+                v-else-if="data.quantity <= data.critical_stock && data.quantity != 0"
+                style="color: #c02422; font-weight: bold"
+              >
+                {{ data.quantity }}
+              </span>
+              <span
+                v-else
+                class="text-white font-bold"
+                >{{ data.quantity }}</span
+              >
+            </div>
+          </template>
+        </Column>
+        <Column
+          header="STOCK LVL."
+          style="width: 5%"
+        >
+          <template #body="slotProps">
+            <div class="flex justify-content-center">
+              <Tag
+                v-if="
+                  slotProps.data.quantity >= slotProps.data.normal_stock ||
+                  slotProps.data.quantity > slotProps.data.alert_stock
+                "
+                value="NORMAL"
+                severity="success"
+              />
+              <Tag
+                v-else-if="
+                  slotProps.data.quantity <= slotProps.data.alert_stock &&
+                  slotProps.data.quantity > slotProps.data.critical_stock
+                "
+                value="ALERT"
+                severity="warning"
+              />
+              <Tag
+                v-else-if="slotProps.data.quantity <= slotProps.data.critical_stock && slotProps.data.quantity != 0"
+                value="CRITICAL"
+                severity="danger"
+              />
+              <Tag
+                v-else
+                value="OUTOFSTOCK"
+                severity="contrast"
+              />
+            </div>
           </template>
         </Column>
         <Column
@@ -212,32 +262,6 @@
               showButtonBar
               :hideOnDateTimeSelect="true"
             />
-          </template>
-        </Column>
-        <Column
-          header="STATUS"
-          style="width: 5%"
-        >
-          <template #body="slotProps">
-            <div class="flex flex-column">
-              <div>
-                <Tag
-                  v-if="slotProps.data.quantity > 30"
-                  value="INSTOCK"
-                  severity="success"
-                />
-                <Tag
-                  v-else-if="slotProps.data.quantity >= 1 && slotProps.data.quantity <= 30"
-                  value="LOWSTOCK"
-                  severity="warning"
-                />
-                <Tag
-                  v-else
-                  value="OUTOFSTOCK"
-                  severity="danger"
-                />
-              </div>
-            </div>
           </template>
         </Column>
         <Column
@@ -1049,10 +1073,10 @@ export default {
           uomdesc: e.uomcode == null ? null : e.uomdesc,
           brand_id: e.brand_id,
           brand_name: e.brand_name,
-          quantity: e.quantity,
-          normal_stock: e.normal_stock,
-          alert_stock: e.alert_stock,
-          critical_stock: e.critical_stock,
+          quantity: Number(e.quantity),
+          normal_stock: Number(e.normal_stock),
+          alert_stock: Number(e.alert_stock),
+          critical_stock: Number(e.critical_stock),
           manufactured_date: e.manufactured_date === null ? '' : e.manufactured_date,
           delivered_date: e.delivered_date === null ? '' : e.delivered_date,
           expiration_date: e.expiration_date === null ? '' : e.expiration_date,
