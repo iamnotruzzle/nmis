@@ -85,9 +85,6 @@ class ItemController extends Controller
             'cl2desc' => 'required|max:255',
             'unit' => 'required',
             'cl2stat' => 'required|max:1',
-            'normal_stock' => 'required|numeric',
-            'alert_stock' => 'required|numeric',
-            'critical_stock' => 'required|numeric',
         ]);
 
         $item = Item::create([
