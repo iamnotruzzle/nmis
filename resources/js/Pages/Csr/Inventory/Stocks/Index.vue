@@ -15,8 +15,6 @@
         :rowsPerPageOptions="[20, 30, 40]"
         dataKey="id"
         filterDisplay="row"
-        sortField="item"
-        :sortOrder="1"
         removableSort
         :globalFilterFields="['cl2desc', 'suppname', 'chrgdesc']"
         showGridlines
@@ -1052,6 +1050,9 @@ export default {
           brand_id: e.brand_id,
           brand_name: e.brand_name,
           quantity: e.quantity,
+          normal_stock: e.normal_stock,
+          alert_stock: e.alert_stock,
+          critical_stock: e.critical_stock,
           manufactured_date: e.manufactured_date === null ? '' : e.manufactured_date,
           delivered_date: e.delivered_date === null ? '' : e.delivered_date,
           expiration_date: e.expiration_date === null ? '' : e.expiration_date,
