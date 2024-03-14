@@ -92,6 +92,7 @@ return array(
     'App\\Models\\FundSource' => $baseDir . '/app/Models/FundSource.php',
     'App\\Models\\Item' => $baseDir . '/app/Models/Item.php',
     'App\\Models\\ItemPrices' => $baseDir . '/app/Models/ItemPrices.php',
+    'App\\Models\\ItemReorderLevel' => $baseDir . '/app/Models/ItemReorderLevel.php',
     'App\\Models\\Location' => $baseDir . '/app/Models/Location.php',
     'App\\Models\\LocationStockBalance' => $baseDir . '/app/Models/LocationStockBalance.php',
     'App\\Models\\LocationTankStockBalance' => $baseDir . '/app/Models/LocationTankStockBalance.php',

@@ -746,6 +746,7 @@ class ComposerStaticInita35f14ec21fb126801fb4364978bffb6
         'App\\Models\\FundSource' => __DIR__ . '/../..' . '/app/Models/FundSource.php',
         'App\\Models\\Item' => __DIR__ . '/../..' . '/app/Models/Item.php',
         'App\\Models\\ItemPrices' => __DIR__ . '/../..' . '/app/Models/ItemPrices.php',
+        'App\\Models\\ItemReorderLevel' => __DIR__ . '/../..' . '/app/Models/ItemReorderLevel.php',
         'App\\Models\\Location' => __DIR__ . '/../..' . '/app/Models/Location.php',
         'App\\Models\\LocationStockBalance' => __DIR__ . '/../..' . '/app/Models/LocationStockBalance.php',
         'App\\Models\\LocationTankStockBalance' => __DIR__ . '/../..' . '/app/Models/LocationTankStockBalance.php',
