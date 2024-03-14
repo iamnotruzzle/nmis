@@ -61,7 +61,7 @@ class CategoryController extends Controller
         // dd($request);
 
         $request->validate([
-            'description' => 'required|unique:hclass1,cl1desc|min:4',
+            'description' => 'required|min:4',
             'status' => 'required',
             'category' => 'required',
         ]);
@@ -91,8 +91,7 @@ class CategoryController extends Controller
         $request->validate([
             'description' => [
                 'required',
-                'min:4',
-                Rule::unique('hclass1', 'cl1desc')->ignore($request->cl1comb, 'cl1comb'),
+                'min:4'
             ],
             'status' => 'required',
             'category' => 'required',
