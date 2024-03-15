@@ -253,7 +253,7 @@
               </div>
             </div>
           </template>
-          <!-- <template #filter="{}">
+          <template #filter="{}">
             <Calendar
               v-model="from_ed"
               placeholder="FROM"
@@ -269,7 +269,7 @@
               showButtonBar
               :hideOnDateTimeSelect="true"
             />
-          </template> -->
+          </template>
         </Column>
         <Column
           header="ACTION"
@@ -722,16 +722,18 @@
             style="width: 15%"
           >
             <template #body="{ data }">
-              <Tag
-                v-if="data.status == 'A'"
-                value="ACTIVE"
-                severity="success"
-              />
-              <Tag
-                v-else
-                value="INACTIVE"
-                severity="danger"
-              />
+              <div class="flex justify-content-center">
+                <Tag
+                  v-if="data.status == 'A'"
+                  value="ACTIVE"
+                  severity="success"
+                />
+                <Tag
+                  v-else
+                  value="INACTIVE"
+                  severity="danger"
+                />
+              </div>
             </template>
           </Column>
           <Column
