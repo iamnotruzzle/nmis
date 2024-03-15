@@ -16,7 +16,7 @@
         dataKey="id"
         filterDisplay="row"
         removableSort
-        :globalFilterFields="['cl2desc', 'suppname', 'chrgdesc']"
+        :globalFilterFields="['cl2desc', 'suppname', 'chrgdesc', 'stock_lvl']"
         showGridlines
       >
         <template #header>
@@ -127,29 +127,25 @@
           </template>
         </Column>
         <Column
+          field="stock_lvl"
           header="STOCK LVL."
+          :showFilterMenu="false"
           style="width: 5%"
         >
           <template #body="slotProps">
             <div class="flex justify-content-center">
               <Tag
-                v-if="
-                  slotProps.data.quantity >= slotProps.data.normal_stock ||
-                  slotProps.data.quantity > slotProps.data.alert_stock
-                "
+                v-if="slotProps.data.stock_lvl == 'NORMAL'"
                 value="NORMAL"
                 severity="success"
               />
               <Tag
-                v-else-if="
-                  slotProps.data.quantity <= slotProps.data.alert_stock &&
-                  slotProps.data.quantity > slotProps.data.critical_stock
-                "
+                v-else-if="slotProps.data.stock_lvl == 'ALERT'"
                 value="ALERT"
                 severity="warning"
               />
               <Tag
-                v-else-if="slotProps.data.quantity <= slotProps.data.critical_stock && slotProps.data.quantity != 0"
+                v-else-if="slotProps.data.stock_lvl == 'CRITICAL'"
                 value="CRITICAL"
                 severity="danger"
               />
@@ -159,6 +155,17 @@
                 severity="contrast"
               />
             </div>
+          </template>
+          <template #filter="{ filterModel, filterCallback }">
+            <Dropdown
+              v-model="filterModel.value"
+              :options="stockLvlFilter"
+              @change="filterCallback()"
+              optionLabel="name"
+              optionValue="code"
+              placeholder="NO FILTER"
+              class="w-full"
+            />
           </template>
         </Column>
         <Column
@@ -895,10 +902,11 @@ export default {
         global: {
           value: null,
           matchMode: FilterMatchMode.CONTAINS,
-          cl2desc: { value: null, matchMode: FilterMatchMode.CONTAINS },
-          suppname: { value: null, matchMode: FilterMatchMode.CONTAINS },
-          chrgdesc: { value: null, matchMode: FilterMatchMode.CONTAINS },
         },
+        cl2desc: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        suppname: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        chrgdesc: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        stock_lvl: { value: null, matchMode: FilterMatchMode.EQUALS },
       },
       brandFilters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -946,10 +954,28 @@ export default {
           value: 'I',
         },
       ],
+      stockLvlFilter: [
+        {
+          name: 'NORMAL',
+          code: 'NORMAL',
+        },
+        {
+          name: 'ALERT',
+          code: 'ALERT',
+        },
+        {
+          name: 'CRITICAL',
+          code: 'CRITICAL',
+        },
+        {
+          name: 'OUTOFSTOCK',
+          code: 'OUTOFSTOCK',
+        },
+      ],
     };
   },
   mounted() {
-    console.log('stocks', this.stocks);
+    // console.log('stocks', this.stocks);
 
     this.setMinimumDate();
     this.storeFundSourceInContainer();
@@ -1077,12 +1103,20 @@ export default {
           normal_stock: Number(e.normal_stock),
           alert_stock: Number(e.alert_stock),
           critical_stock: Number(e.critical_stock),
+          stock_lvl:
+            e.quantity <= e.critical_stock && e.quantity !== 0
+              ? 'CRITICAL'
+              : e.quantity <= e.alert_stock
+              ? 'ALERT'
+              : e.quantity >= e.normal_stock
+              ? 'NORMAL'
+              : 'OUTOFSTOCK',
           manufactured_date: e.manufactured_date === null ? '' : e.manufactured_date,
           delivered_date: e.delivered_date === null ? '' : e.delivered_date,
           expiration_date: e.expiration_date === null ? '' : e.expiration_date,
         });
       });
-      //   console.log(this.stocks);
+      //   console.log(this.stocksList);
     },
     updateData() {
       this.$inertia.get('csrstocks', this.params, {
