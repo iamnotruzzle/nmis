@@ -178,7 +178,7 @@
           <template #body="{ data }">
             {{ tzone(data.manufactured_date) }}
           </template>
-          <template #filter="{}">
+          <!-- <template #filter="{}">
             <Calendar
               v-model="from_md"
               dateFormat="mm-dd-yy"
@@ -196,7 +196,7 @@
               showButtonBar
               :hideOnDateTimeSelect="true"
             />
-          </template>
+          </template> -->
         </Column>
         <Column
           field="delivered_date"
@@ -208,7 +208,7 @@
           <template #body="{ data }">
             {{ tzone(data.delivered_date) }}
           </template>
-          <template #filter="{}">
+          <!-- <template #filter="{}">
             <Calendar
               v-model="from_dd"
               dateFormat="mm-dd-yy"
@@ -225,7 +225,7 @@
               showButtonBar
               :hideOnDateTimeSelect="true"
             />
-          </template>
+          </template> -->
         </Column>
         <Column
           field="expiration_date"
@@ -253,7 +253,7 @@
               </div>
             </div>
           </template>
-          <template #filter="{}">
+          <!-- <template #filter="{}">
             <Calendar
               v-model="from_ed"
               placeholder="FROM"
@@ -269,7 +269,7 @@
               showButtonBar
               :hideOnDateTimeSelect="true"
             />
-          </template>
+          </template> -->
         </Column>
         <Column
           header="ACTION"
