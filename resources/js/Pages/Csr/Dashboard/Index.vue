@@ -204,6 +204,7 @@
                     placeholder="FROM"
                     showIcon
                     showButtonBar
+                    :manualInput="false"
                     :hideOnDateTimeSelect="true"
                   />
                   <div class="mt-2"></div>
@@ -213,6 +214,7 @@
                     placeholder="TO"
                     showIcon
                     showButtonBar
+                    :manualInput="false"
                     :hideOnDateTimeSelect="true"
                   />
                 </template>
@@ -232,6 +234,7 @@
                     placeholder="FROM"
                     showIcon
                     showButtonBar
+                    :manualInput="false"
                     :hideOnDateTimeSelect="true"
                   />
                   <div class="mt-2"></div>
@@ -240,6 +243,7 @@
                     placeholder="TO"
                     showIcon
                     showButtonBar
+                    :manualInput="false"
                     :hideOnDateTimeSelect="true"
                   />
                 </template>
@@ -274,6 +278,7 @@
                     placeholder="FROM"
                     showIcon
                     showButtonBar
+                    :manualInput="false"
                     :hideOnDateTimeSelect="true"
                   />
                   <div class="mt-2"></div>
@@ -282,6 +287,7 @@
                     placeholder="TO"
                     showIcon
                     showButtonBar
+                    :manualInput="false"
                     :hideOnDateTimeSelect="true"
                   />
                 </template>
@@ -526,6 +532,7 @@
             dateFormat="mm-dd-yy"
             showIcon
             showButtonBar
+            :manualInput="false"
             :hideOnDateTimeSelect="true"
           />
           <small
@@ -542,6 +549,7 @@
             dateFormat="mm-dd-yy"
             showIcon
             showButtonBar
+            :manualInput="false"
             :hideOnDateTimeSelect="true"
           />
           <small
@@ -558,6 +566,7 @@
             dateFormat="mm-dd-yy"
             showIcon
             showButtonBar
+            :manualInput="false"
             :minDate="minimumDate"
             :hideOnDateTimeSelect="true"
           />

@@ -89,6 +89,7 @@
               placeholder="FROM"
               showIcon
               showButtonBar
+              :manualInput="false"
               :hideOnDateTimeSelect="true"
             />
             <div class="mt-2"></div>
@@ -98,6 +99,7 @@
               placeholder="TO"
               showIcon
               showButtonBar
+              :manualInput="false"
               :hideOnDateTimeSelect="true"
             />
           </template>
@@ -709,6 +711,7 @@
             dateFormat="mm-dd-yy"
             showIcon
             showButtonBar
+            :manualInput="false"
             :hideOnDateTimeSelect="true"
           />
         </div>
@@ -719,6 +722,7 @@
             dateFormat="mm-dd-yy"
             showIcon
             showButtonBar
+            :manualInput="false"
             :hideOnDateTimeSelect="true"
           />
         </div>
@@ -729,6 +733,7 @@
             dateFormat="mm-dd-yy"
             showIcon
             showButtonBar
+            :manualInput="false"
             :hideOnDateTimeSelect="true"
           />
           <small

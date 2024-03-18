@@ -16,6 +16,7 @@
               placeholder="FROM"
               showIcon
               showButtonBar
+              :manualInput="false"
               :hideOnDateTimeSelect="true"
               class="mr-2"
             />
@@ -25,6 +26,7 @@
               placeholder="TO"
               showIcon
               showButtonBar
+              :manualInput="false"
               :hideOnDateTimeSelect="true"
               class="mr-2"
             />

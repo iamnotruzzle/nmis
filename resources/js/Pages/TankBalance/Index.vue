@@ -125,6 +125,7 @@
               placeholder="FROM"
               showIcon
               showButtonBar
+              :manualInput="false"
               :hideOnDateTimeSelect="true"
             />
             <div class="mt-2"></div>
@@ -134,6 +135,7 @@
               placeholder="TO"
               showIcon
               showButtonBar
+              :manualInput="false"
               :hideOnDateTimeSelect="true"
             />
           </template>
