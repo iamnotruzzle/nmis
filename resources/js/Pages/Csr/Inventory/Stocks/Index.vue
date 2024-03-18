@@ -99,7 +99,18 @@
           style="width: 5%"
         >
           <template #body="{ data }">
-            <div class="text-center">
+            <div
+              v-if="data.normal_stock == null && data.alert_stock == null && data.critical_stock == null"
+              class="text-center"
+            >
+              <span>
+                {{ data.quantity }}
+              </span>
+            </div>
+            <div
+              v-else
+              class="text-center"
+            >
               <span
                 v-if="data.quantity >= data.normal_stock || data.quantity > data.alert_stock"
                 class="text-green-500 font-bold"
@@ -133,7 +144,19 @@
           style="width: 5%"
         >
           <template #body="slotProps">
-            <div class="flex justify-content-center">
+            <div
+              v-if="slotProps.data.stock_lvl == 'N/A'"
+              class="flex justify-content-center"
+            >
+              <Tag
+                value="N/A"
+                severity="contrast"
+              />
+            </div>
+            <div
+              v-else
+              class="flex justify-content-center"
+            >
               <Tag
                 v-if="slotProps.data.stock_lvl == 'NORMAL'"
                 value="NORMAL"
@@ -152,7 +175,7 @@
               <Tag
                 v-else
                 value="OUTOFSTOCK"
-                severity="contrast"
+                severity="info"
               />
             </div>
           </template>
@@ -982,6 +1005,10 @@ export default {
           name: 'OUTOFSTOCK',
           code: 'OUTOFSTOCK',
         },
+        {
+          name: 'N/A',
+          code: 'N/A',
+        },
       ],
     };
   },
@@ -1090,11 +1117,13 @@ export default {
           brand_id: e.brand_id,
           brand_name: e.brand_name,
           quantity: Number(e.quantity),
-          normal_stock: Number(e.normal_stock),
-          alert_stock: Number(e.alert_stock),
-          critical_stock: Number(e.critical_stock),
+          normal_stock: e.normal_stock == null ? 'N/A' : Number(e.normal_stock),
+          alert_stock: e.alert_stock == null ? 'N/A' : Number(e.alert_stock),
+          critical_stock: e.critical_stock == null ? 'N/A' : Number(e.critical_stock),
           stock_lvl:
-            e.quantity <= e.critical_stock && e.quantity !== 0
+            e.normal_stock == null && e.alert_stock == null && e.critical_stock == null
+              ? 'N/A'
+              : e.quantity <= e.critical_stock && e.quantity !== 0
               ? 'CRITICAL'
               : e.quantity <= e.alert_stock
               ? 'ALERT'
