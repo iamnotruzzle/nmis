@@ -1069,27 +1069,6 @@ export default {
         });
       });
     },
-    storeItemsInContainer() {
-      this.items.forEach((e) => {
-        this.itemsList.push({
-          cl2comb: e.cl2comb,
-          cl2desc: e.cl2desc,
-          uomcode: e.uomcode == null ? null : e.uomcode,
-          uomdesc: e.uomdesc == null ? null : e.uomdesc,
-        });
-      });
-    },
-    storeTotalStocksInContainer() {
-      this.totalStocks.forEach((e) => {
-        this.totalStocksList.push({
-          cl2comb: e.cl2comb,
-          cl2desc: e.item_detail.cl2desc.trim(),
-          total_quantity: e.total_quantity,
-        });
-      });
-
-      //   console.log(this.totalStocksList);
-    },
     // use storeStocksInContainer() function so that every time you make
     // server request such as POST, the data in the table
     // is updated
@@ -1128,6 +1107,27 @@ export default {
         });
       });
       //   console.log(this.stocksList);
+    },
+    storeItemsInContainer() {
+      this.items.forEach((e) => {
+        this.itemsList.push({
+          cl2comb: e.cl2comb,
+          cl2desc: e.cl2desc,
+          uomcode: e.uomcode == null ? null : e.uomcode,
+          uomdesc: e.uomdesc == null ? null : e.uomdesc,
+        });
+      });
+    },
+    storeTotalStocksInContainer() {
+      this.totalStocks.forEach((e) => {
+        this.totalStocksList.push({
+          cl2comb: e.cl2comb,
+          cl2desc: e.item_detail.cl2desc.trim(),
+          total_quantity: e.total_quantity,
+        });
+      });
+
+      //   console.log(this.totalStocksList);
     },
     updateData() {
       this.$inertia.get('csrstocks', this.params, {
