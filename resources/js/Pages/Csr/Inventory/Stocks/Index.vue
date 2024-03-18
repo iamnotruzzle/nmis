@@ -1069,33 +1069,6 @@ export default {
       } else {
       }
     },
-    storeSuppliersInContainer() {
-      this.suppliers.forEach((e) => {
-        this.suppliersList.push({
-          suppcode: e.suppcode,
-          suppname: e.suppname,
-        });
-      });
-    },
-    storeFundSourceInContainer() {
-      this.typeOfCharge.forEach((e) => {
-        this.fundSourceList.push({
-          chrgcode: e.chrgcode,
-          chrgdesc: e.chrgdesc,
-          bentypcod: e.bentypcod,
-          chrgtable: e.chrgtable,
-        });
-      });
-
-      this.fundSource.forEach((e) => {
-        this.fundSourceList.push({
-          chrgcode: e.fsid,
-          chrgdesc: e.fsName,
-          bentypcod: null,
-          chrgtable: null,
-        });
-      });
-    },
     // use storeStocksInContainer() function so that every time you make
     // server request such as POST, the data in the table
     // is updated
@@ -1136,6 +1109,33 @@ export default {
         });
       });
       //   console.log(this.stocksList);
+    },
+    storeSuppliersInContainer() {
+      this.suppliers.forEach((e) => {
+        this.suppliersList.push({
+          suppcode: e.suppcode,
+          suppname: e.suppname,
+        });
+      });
+    },
+    storeFundSourceInContainer() {
+      this.typeOfCharge.forEach((e) => {
+        this.fundSourceList.push({
+          chrgcode: e.chrgcode,
+          chrgdesc: e.chrgdesc,
+          bentypcod: e.bentypcod,
+          chrgtable: e.chrgtable,
+        });
+      });
+
+      this.fundSource.forEach((e) => {
+        this.fundSourceList.push({
+          chrgcode: e.fsid,
+          chrgdesc: e.fsName,
+          bentypcod: null,
+          chrgtable: null,
+        });
+      });
     },
     storeItemsInContainer() {
       this.items.forEach((e) => {
