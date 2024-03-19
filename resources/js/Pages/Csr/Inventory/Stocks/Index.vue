@@ -9,7 +9,7 @@
       <DataTable
         class="p-datatable-sm"
         v-model:filters="filters"
-        :value="stocksList"
+        :value="filteredData"
         paginator
         :rows="20"
         :rowsPerPageOptions="[20, 30, 40]"
@@ -280,9 +280,9 @@
               </div>
             </div>
           </template>
-          <template #filter="{}">
+          <template #filter="slotProps">
             <Calendar
-              v-model="from_ed"
+              v-model="filters['expiration'].from"
               placeholder="FROM"
               showIcon
               showButtonBar
@@ -291,7 +291,7 @@
             />
             <div class="mt-2"></div>
             <Calendar
-              v-model="to_ed"
+              v-model="filters['expiration'].to"
               placeholder="TO"
               showIcon
               showButtonBar
@@ -941,6 +941,7 @@ export default {
         suppname: { value: null, matchMode: FilterMatchMode.CONTAINS },
         chrgdesc: { value: null, matchMode: FilterMatchMode.CONTAINS },
         stock_lvl: { value: null, matchMode: FilterMatchMode.EQUALS },
+        expiration: { from: null, to: null },
       },
       brandFilters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -1012,6 +1013,41 @@ export default {
       ],
     };
   },
+  computed: {
+    filteredData() {
+      let filtered = this.stocksList;
+
+      // Apply global filter
+      if (this.filters['global'] && this.filters['global'].value) {
+        const filterText = this.filters['global'].value.toLowerCase();
+        filtered = filtered.filter(
+          (item) =>
+            item.cl2desc.toLowerCase().includes(filterText) ||
+            item.suppname.toLowerCase().includes(filterText) ||
+            item.chrgdesc.toLowerCase().includes(filterText) ||
+            item.stock_lvl.toLowerCase().includes(filterText)
+        );
+      }
+
+      // Apply expiration date range filter
+      if (this.filters['expiration']) {
+        const from = this.filters['expiration'].from;
+        const to = this.filters['expiration'].to;
+
+        console.log(to);
+
+        // console.log('Expiration date filter range:', from, to); // Debugging
+
+        if (from && to) {
+          filtered = filtered.filter((item) => {
+            return item.expiration_date >= from && item.expiration_date <= to;
+          });
+        }
+      }
+
+      return filtered;
+    },
+  },
   mounted() {
     // console.log('stocks', this.stocks);
 
@@ -1073,8 +1109,8 @@ export default {
     // server request such as POST, the data in the table
     // is updated
     storeStocksInContainer() {
-      //   console.log(this.stocks.data);
       this.stocks.forEach((e) => {
+        const expirationDate = e.expiration_date === null ? null : new Date(e.expiration_date); // Convert expiration_date to Date object
         this.stocksList.push({
           id: e.id,
           ris_no: e.ris_no == null ? null : e.ris_no,
@@ -1105,11 +1141,11 @@ export default {
               : 'OUTOFSTOCK',
           manufactured_date: e.manufactured_date === null ? '' : e.manufactured_date,
           delivered_date: e.delivered_date === null ? '' : e.delivered_date,
-          expiration_date: e.expiration_date === null ? '' : e.expiration_date,
+          expiration_date: expirationDate, // Assign expirationDate to expiration_date field
         });
       });
-      //   console.log(this.stocksList);
     },
+
     storeSuppliersInContainer() {
       this.suppliers.forEach((e) => {
         this.suppliersList.push({
