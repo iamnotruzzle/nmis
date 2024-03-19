@@ -1034,10 +1034,6 @@ export default {
         const from = this.filters['expiration'].from;
         const to = this.filters['expiration'].to;
 
-        console.log(to);
-
-        // console.log('Expiration date filter range:', from, to); // Debugging
-
         if (from && to) {
           filtered = filtered.filter((item) => {
             return item.expiration_date >= from && item.expiration_date <= to;
