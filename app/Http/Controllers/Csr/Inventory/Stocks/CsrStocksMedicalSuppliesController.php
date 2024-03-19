@@ -24,9 +24,6 @@ class CsrStocksMedicalSuppliesController extends Controller
 {
     public function index(Request $request)
     {
-        $searchString = $request->search;
-
-
         $items = DB::select(
             "SELECT hclass2.cl2comb as cl2comb, hclass2.cl2desc as cl2desc, huom.uomcode as uomcode, huom.uomdesc as uomdesc FROM hclass2
                 JOIN huom ON hclass2.uomcode = huom.uomcode
@@ -35,57 +32,6 @@ class CsrStocksMedicalSuppliesController extends Controller
                 ORDER BY hclass2.cl2desc ASC;
             ",
         );
-
-        $from_md = Carbon::parse($request->from_md)->startOfDay();
-        $to_md = Carbon::parse($request->to_md)->endOfDay();
-        $from_dd = Carbon::parse($request->from_dd)->startOfDay();
-        $to_dd = Carbon::parse($request->to_dd)->endOfDay();
-        $from_ed = Carbon::parse($request->from_ed)->startOfDay();
-        $to_ed = Carbon::parse($request->to_ed)->endOfDay();
-
-        // $stocks = CsrStocksMedicalSupplies::with('unit:uomcode,uomdesc', 'itemDetail', 'supplierDetail:suppcode,suppname', 'brandDetail', 'typeOfCharge:chrgcode,chrgdesc', 'fundSource:id,fsid,fsName,cluster_code')
-        //     ->whereHas('itemDetail', function ($q) use ($searchString) {
-        //         $q->where('cl2desc', 'LIKE', '%' . $searchString . '%')
-        //             ->orWhere('ris_no', 'LIKE', '%' . $searchString . '%');
-        //     })
-        //     ->when(
-        //         $request->from_md,
-        //         function ($query, $value) use ($from_md) {
-        //             $query->whereDate('manufactured_date', '>=', $from_md);
-        //         }
-        //     )
-        //     ->when(
-        //         $request->to_md,
-        //         function ($query, $value) use ($to_md) {
-        //             $query->whereDate('manufactured_date', '<=', $to_md);
-        //         }
-        //     )
-        //     ->when(
-        //         $request->from_dd,
-        //         function ($query, $value) use ($from_dd) {
-        //             $query->whereDate('delivered_date', '>=', $from_dd);
-        //         }
-        //     )
-        //     ->when(
-        //         $request->to_dd,
-        //         function ($query, $value) use ($to_dd) {
-        //             $query->whereDate('delivered_date', '<=', $to_dd);
-        //         }
-        //     )
-        //     ->when(
-        //         $request->from_ed,
-        //         function ($query, $value) use ($from_ed) {
-        //             $query->whereDate('expiration_date', '>=', $from_ed);
-        //         }
-        //     )
-        //     ->when(
-        //         $request->to_ed,
-        //         function ($query, $value) use ($to_ed) {
-        //             $query->whereDate('expiration_date', '<=', $to_ed);
-        //         }
-        //     )
-        //     ->orderBy('expiration_date', 'asc')
-        //     ->paginate(15);
 
         $stocks = DB::select(
             "SELECT medsupply.id, medsupply.ris_no, medsupply.temp_ris_no,
