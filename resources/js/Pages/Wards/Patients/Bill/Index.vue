@@ -145,7 +145,7 @@
               </div>
             </template>
             <template #groupfooter="slotProps">
-              <div class="flex justify-content-end font-bold w-full">
+              <div class="flex justify-content-end font-bold w-full text-green-400">
                 Total: ₱ {{ totalPerChargeSlip(slotProps.data.charge_slip_no) }}
               </div>
             </template>
