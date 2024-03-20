@@ -101,7 +101,7 @@
         <Column
           field="normal_stock"
           header="NORMAL STOCK"
-          style="width: 5%"
+          style="text-align: right; width: 5%"
         >
           <template #body="{ data }">
             {{ data.normal_stock }}
@@ -110,7 +110,7 @@
         <Column
           field="alert_stock"
           header="ALERT STOCK"
-          style="width: 5%"
+          style="text-align: right; width: 5%"
         >
           <template #body="{ data }">
             {{ data.alert_stock }}
@@ -119,7 +119,7 @@
         <Column
           field="critical_stock"
           header="CRITICAL STOCK"
-          style="width: 5%"
+          style="text-align: right; width: 5%"
         >
           <template #body="{ data }">
             {{ data.critical_stock }}
