@@ -15,7 +15,7 @@
           />
         </div>
         <div class="flex flex-column align-items-center mt-2">
-          <p class="text-lg my-0 py-0">{{ employeeId }}</p>
+          <!-- <p class="text-lg my-0 py-0">{{ employeeId }}</p> -->
           <p class="text-2xl text-primary font-bold my-1 py-0">{{ name }}</p>
           <p class="text-lg font-italic my-0 py-0">{{ authLocation }}</p>
         </div>
