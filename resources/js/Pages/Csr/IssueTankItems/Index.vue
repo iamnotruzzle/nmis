@@ -102,6 +102,7 @@
               <Tag
                 v-if="data.status == 'PENDING'"
                 :value="data.status"
+                class="bg-orange-400 text-gray-900"
               />
               <Tag
                 v-if="data.status == 'ACKNOWLEDGED'"
@@ -116,7 +117,7 @@
               <Tag
                 v-if="data.status == 'RECEIVED'"
                 :value="data.status"
-                class="bg-green-400"
+                class="bg-green-400 text-gray-900"
               />
               <Tag
                 v-if="data.status == 'CANCELLED'"
@@ -271,12 +272,13 @@
               <Column
                 field="requested_qty"
                 header="PENDING QTY"
-                style="width: 20%"
-              ></Column>
+                style="text-align: right; width: 20%"
+              >
+              </Column>
               <Column
                 field="approved_qty"
                 header="APPROVED QTY"
-                style="width: 20%"
+                style="text-align: right; width: 20%"
               ></Column>
               <Column
                 field="remarks"
@@ -312,14 +314,19 @@
             :rows="7"
           >
             <template #header>
-              <div class="flex">
-                <span class="p-input-icon-left">
-                  <i class="pi pi-search" />
-                  <InputText
-                    v-model="requestStockListDetailsFilter['global'].value"
-                    placeholder="Search Item"
-                  />
-                </span>
+              <div>
+                <div class="mr-2">
+                  <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon">
+                      <i class="pi pi-search"></i>
+                    </span>
+                    <InputText
+                      id="searchInput"
+                      v-model="requestStockListDetailsFilter['global'].value"
+                      placeholder="Search item"
+                    />
+                  </div>
+                </div>
               </div>
             </template>
             <Column
@@ -331,12 +338,12 @@
             <Column
               field="requested_qty"
               header="PENDING QTY"
-              style="width: 15%"
+              style="text-align: right; width: 15%"
             ></Column>
             <Column
               field="approved_qty"
               header="APPROVED QTY"
-              style="width: 15%"
+              style="text-align: right; width: 15%"
             >
               <template #body="slotProps">
                 <InputText

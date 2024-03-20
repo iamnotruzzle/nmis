@@ -102,6 +102,7 @@
               <Tag
                 v-if="data.status == 'PENDING'"
                 :value="data.status"
+                class="bg-orange-400 text-gray-900"
               />
               <Tag
                 v-if="data.status == 'ACKNOWLEDGED'"
@@ -116,7 +117,7 @@
               <Tag
                 v-if="data.status == 'RECEIVED'"
                 :value="data.status"
-                class="bg-green-400"
+                class="bg-green-400 text-gray-900"
               />
               <Tag
                 v-if="data.status == 'CANCELLED'"
@@ -276,13 +277,13 @@
               <Column
                 field="requested_qty"
                 header="PENDING QTY"
-                style="width: 20%"
+                style="text-align: right; width: 20%"
               >
               </Column>
               <Column
                 field="approved_qty"
                 header="APPROVED QTY"
-                style="width: 20%"
+                style="text-align: right; width: 20%"
               ></Column>
               <Column
                 field="remarks"
@@ -347,13 +348,13 @@
             <Column
               field="requested_qty"
               header="PENDING QTY"
-              style="width: 10%"
+              style="text-align: right; width: 10%"
             ></Column>
             <Column
               v-if="isUpdate"
               field="stock_qty"
               header="Current stock including approved qty"
-              style="width: 10%"
+              style="text-align: right; width: 10%"
             >
               <template #body="{ data }">
                 {{ data.stock_w_approved }}
@@ -363,12 +364,12 @@
               v-else
               field="stock_qty"
               header="TOTAL STOCK"
-              style="width: 10%"
+              style="text-align: right; width: 10%"
             ></Column>
             <Column
               field="approved_qty"
               header="APPROVED QTY"
-              style="width: 10%"
+              style="text-align: right; width: 10%"
             >
               <template #body="slotProps">
                 <InputText
