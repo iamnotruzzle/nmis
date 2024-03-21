@@ -540,49 +540,41 @@
               <Column
                 field="ris_no"
                 header="RIS NO."
-                style="width: 5%"
               >
               </Column>
               <Column
                 field="cl2desc"
                 header="ITEM"
-                style="width: 5%"
               >
               </Column>
               <Column
                 field="unitName"
                 header="UNIT"
-                style="width: 5%"
               >
               </Column>
               <Column
                 field="brandName"
                 header="BRAND"
-                style="width: 5%"
               >
               </Column>
               <Column
                 field="supplierName"
                 header="SUPPLIER"
-                style="width: 5%"
               >
               </Column>
               <Column
                 field="fundSourceName"
                 header="FUND SOURCE"
-                style="width: 5%"
               >
               </Column>
               <Column
                 field="quantity"
                 header="QTY"
-                style="width: 5%"
               >
               </Column>
               <Column
                 field="manufactured_date"
                 header="MFD. DATE"
-                style="width: 5%"
               >
                 <template #body="{ data }">
                   {{ tzone(data.manufactured_date) }}
@@ -591,7 +583,6 @@
               <Column
                 field="delivered_date"
                 header="DELIVERED DATE"
-                style="width: 5%"
               >
                 <template #body="{ data }">
                   {{ tzone(data.delivered_date) }}
@@ -600,7 +591,6 @@
               <Column
                 field="expiration_date"
                 header="EXPIRATION DATE"
-                style="width: 5%"
               >
                 <template #body="{ data }">
                   {{ tzone(data.expiration_date) }}
@@ -608,7 +598,7 @@
               </Column>
               <Column
                 header=""
-                style="width: 10%"
+                style="width: 3%"
               >
                 <template #body="slotProps">
                   <Button
