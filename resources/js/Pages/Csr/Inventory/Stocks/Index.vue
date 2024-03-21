@@ -330,9 +330,8 @@
       <!-- create & edit dialog -->
       <Dialog
         v-model:visible="createStockDialog"
-        :style="{ width: '90%' }"
         :modal="true"
-        class="p-fluid"
+        class="p-fluid w-11"
         @hide="clickOutsideDialog"
       >
         <template #header>
@@ -341,8 +340,8 @@
 
         <div class="flex flex-row justify-content-between">
           <!-- form -->
-          <div class="w-6 mr-2">
-            <div class="field">
+          <div class="w-3">
+            <!-- <div class="field">
               <label for="ris_no">RIS no.</label>
               <InputText
                 id="ris_no"
@@ -381,7 +380,7 @@
                 dataKey="chrgcode"
                 optionLabel="chrgdesc"
                 optionValue="chrgcode"
-                class="w-full"
+                class="min-w-full"
                 :class="{ 'p-invalid': form.fund_source == '' }"
               />
               <small
@@ -390,19 +389,18 @@
               >
                 {{ form.errors.fund_source }}
               </small>
-            </div>
+            </div> -->
             <div class="field">
               <label for="Item">Item</label>
               <Dropdown
                 required="true"
                 v-model="form.cl2comb"
                 :options="itemsList"
-                :virtualScrollerOptions="{ itemSize: 38 }"
                 filter
                 dataKey="unit"
                 optionLabel="cl2desc"
                 optionValue="cl2comb"
-                class="w-full"
+                :virtualScrollerOptions="{ itemSize: 38 }"
                 :class="{ 'p-invalid': form.cl2comb == '' }"
               />
               <small
@@ -515,7 +513,7 @@
           </div>
           <div class="border-1 mx-4"></div>
           <!-- delivery list -->
-          <div class="w-full">
+          <div class="w-9">
             <DataTable
               class="p-datatable-sm"
               v-model:filters="filters"
@@ -531,7 +529,7 @@
             >
               <template #header>
                 <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-                  <span class="text-xl text-900 font-bold text-primary mr-2">DELIVERIES</span>
+                  <span class="text-xl text-900 font-bold text-primary mr-2">LIST</span>
 
                   <div class="flex">
                     <div class="mr-2">
