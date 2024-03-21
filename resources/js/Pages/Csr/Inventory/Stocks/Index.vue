@@ -584,18 +584,41 @@
                 header="MFD. DATE"
                 style="width: 5%"
               >
+                <template #body="{ data }">
+                  {{ tzone(data.manufactured_date) }}
+                </template>
               </Column>
               <Column
                 field="delivered_date"
                 header="DELIVERED DATE"
                 style="width: 5%"
               >
+                <template #body="{ data }">
+                  {{ tzone(data.delivered_date) }}
+                </template>
               </Column>
               <Column
                 field="expiration_date"
                 header="EXPIRATION DATE"
                 style="width: 5%"
               >
+                <template #body="{ data }">
+                  {{ tzone(data.expiration_date) }}
+                </template>
+              </Column>
+              <Column
+                header=""
+                style="width: 10%"
+              >
+                <template #body="slotProps">
+                  <Button
+                    icon="pi pi-times"
+                    rounded
+                    text
+                    severity="danger"
+                    @click="removeFromRequestContainer(slotProps.data)"
+                  />
+                </template>
               </Column>
             </DataTable>
           </div>
@@ -1390,6 +1413,12 @@ export default {
         }
       }
       //   console.log(this.deliveryDetails);
+    },
+    removeFromRequestContainer(item) {
+      this.deliveryDetails.splice(
+        this.deliveryDetails.findIndex((e) => e.cl2comb === item.cl2comb),
+        1
+      );
     },
     submit() {
       if (this.form.processing) {
