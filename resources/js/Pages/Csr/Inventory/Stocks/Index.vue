@@ -1340,6 +1340,18 @@ export default {
         (this.stockId = null),
         (this.isUpdate = false),
         (this.isUpdateBrand = false),
+        (this.form.ris_no = null),
+        (this.item = null),
+        (this.brand = null),
+        (this.supplier = null),
+        (this.selectedFundSource = null),
+        (this.selectedItemsUomCode = null),
+        (this.selectedItemsUomDesc = null),
+        (this.quantity = null),
+        (this.deliveryDetails = []),
+        (this.manufactured_date = null),
+        (this.delivered_date = null),
+        (this.expiration_date = null),
         this.form.clearErrors(),
         this.form.reset(),
         this.formBrand.clearErrors(),
@@ -1552,7 +1564,7 @@ export default {
       //   console.log(val);
       this.selectedItemsUomDesc = null;
 
-      if (val.uomdesc != null) {
+      if (val != null) {
         this.selectedItemsUomDesc = val.uomdesc;
         this.unit = val.uomcode;
       } else {
