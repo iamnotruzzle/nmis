@@ -330,7 +330,7 @@
       <!-- create & edit dialog -->
       <Dialog
         v-model:visible="createStockDialog"
-        :style="{ width: '450px' }"
+        :style="{ width: '90%' }"
         :modal="true"
         class="p-fluid"
         @hide="clickOutsideDialog"
@@ -338,181 +338,239 @@
         <template #header>
           <div class="text-primary text-xl font-bold">DELIVERY DETAILS</div>
         </template>
-        <div class="field">
-          <label for="ris_no">RIS no.</label>
-          <InputText
-            id="ris_no"
-            v-model.trim="form.ris_no"
-            required="true"
-            autofocus
-            :class="{ 'p-invalid': form.ris_no == '' }"
-            @keyup.enter="submit"
-          />
-          <!-- <small
-            class="text-error"
-            v-if="form.errors.ris_no"
-          >
-            {{ form.errors.ris_no }}
-          </small> -->
-        </div>
-        <div class="field">
-          <label for="Item">Supplier</label>
-          <Dropdown
-            required="true"
-            v-model="form.suppcode"
-            :options="suppliersList"
-            :virtualScrollerOptions="{ itemSize: 38 }"
-            filter
-            dataKey="suppcode"
-            optionLabel="suppname"
-            optionValue="suppcode"
-            class="w-full"
-            :class="{ 'p-invalid': form.suppcode == '' }"
-          />
-        </div>
-        <div class="field">
-          <label for="fundSource">Fund source</label>
-          <Dropdown
-            id="fundSource"
-            required="true"
-            v-model="form.fund_source"
-            :options="fundSourceList"
-            :virtualScrollerOptions="{ itemSize: 38 }"
-            filter
-            showClear
-            dataKey="chrgcode"
-            optionLabel="chrgdesc"
-            optionValue="chrgcode"
-            class="w-full"
-            :class="{ 'p-invalid': form.fund_source == '' }"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.fund_source"
-          >
-            {{ form.errors.fund_source }}
-          </small>
-        </div>
-        <div class="field">
-          <label for="Item">Item</label>
-          <Dropdown
-            required="true"
-            v-model="form.cl2comb"
-            :options="itemsList"
-            :virtualScrollerOptions="{ itemSize: 38 }"
-            filter
-            dataKey="unit"
-            optionLabel="cl2desc"
-            optionValue="cl2comb"
-            class="w-full"
-            :class="{ 'p-invalid': form.cl2comb == '' }"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.cl2comb"
-          >
-            The item field is required.
-          </small>
-        </div>
-        <div class="field">
-          <label for="unit">Unit</label>
-          <InputText
-            id="unit"
-            v-model.trim="selectedItemsUomDesc"
-            readonly
-          />
-        </div>
-        <div class="field">
-          <label for="brand">Brand</label>
-          <Dropdown
-            required="true"
-            v-model="form.brand"
-            :options="brandDropDownList"
-            :virtualScrollerOptions="{ itemSize: 38 }"
-            filter
-            showClear
-            dataKey="id"
-            optionLabel="name"
-            optionValue="id"
-            class="w-full mb-3"
-            :class="{ 'p-invalid': form.brand == '' }"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.brand"
-          >
-            {{ form.errors.brand }}
-          </small>
-        </div>
-        <div class="field">
-          <label for="quantity">Quantity</label>
-          <InputText
-            id="quantity"
-            v-model.trim="form.quantity"
-            required="true"
-            type="number"
-            autofocus
-            :class="{ 'p-invalid': form.quantity == '' }"
-            @keyup.enter="submit"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.quantity"
-          >
-            {{ form.errors.quantity }}
-          </small>
-        </div>
-        <div class="field">
-          <label for="manufactured_date">Manufactured date</label>
-          <Calendar
-            v-model="form.manufactured_date"
-            dateFormat="mm-dd-yy"
-            showIcon
-            showButtonBar
-            :manualInput="false"
-            :hideOnDateTimeSelect="true"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.manufactured_date"
-          >
-            {{ form.errors.manufactured_date }}
-          </small>
-        </div>
-        <div class="field">
-          <label for="delivered_date">Delivered date</label>
-          <Calendar
-            v-model="form.delivered_date"
-            dateFormat="mm-dd-yy"
-            showIcon
-            showButtonBar
-            :manualInput="false"
-            :hideOnDateTimeSelect="true"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.delivered_date"
-          >
-            {{ form.errors.delivered_date }}
-          </small>
-        </div>
-        <div class="field">
-          <label for="expiration_date">Expiration date</label>
-          <Calendar
-            v-model="form.expiration_date"
-            dateFormat="mm-dd-yy"
-            showIcon
-            showButtonBar
-            :manualInput="false"
-            :minDate="minimumDate"
-            :hideOnDateTimeSelect="true"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.expiration_date"
-          >
-            {{ form.errors.expiration_date }}
-          </small>
+
+        <div class="flex flex-row justify-content-between">
+          <!-- form -->
+          <div class="w-6 mr-2">
+            <div class="field">
+              <label for="ris_no">RIS no.</label>
+              <InputText
+                id="ris_no"
+                v-model.trim="form.ris_no"
+                required="true"
+                autofocus
+                :class="{ 'p-invalid': form.ris_no == '' }"
+                @keyup.enter="submit"
+              />
+            </div>
+            <div class="field">
+              <label for="Item">Supplier</label>
+              <Dropdown
+                required="true"
+                v-model="form.suppcode"
+                :options="suppliersList"
+                :virtualScrollerOptions="{ itemSize: 38 }"
+                filter
+                dataKey="suppcode"
+                optionLabel="suppname"
+                optionValue="suppcode"
+                class="w-full"
+                :class="{ 'p-invalid': form.suppcode == '' }"
+              />
+            </div>
+            <div class="field">
+              <label for="fundSource">Fund source</label>
+              <Dropdown
+                id="fundSource"
+                required="true"
+                v-model="form.fund_source"
+                :options="fundSourceList"
+                :virtualScrollerOptions="{ itemSize: 38 }"
+                filter
+                showClear
+                dataKey="chrgcode"
+                optionLabel="chrgdesc"
+                optionValue="chrgcode"
+                class="w-full"
+                :class="{ 'p-invalid': form.fund_source == '' }"
+              />
+              <small
+                class="text-error"
+                v-if="form.errors.fund_source"
+              >
+                {{ form.errors.fund_source }}
+              </small>
+            </div>
+            <div class="field">
+              <label for="Item">Item</label>
+              <Dropdown
+                required="true"
+                v-model="form.cl2comb"
+                :options="itemsList"
+                :virtualScrollerOptions="{ itemSize: 38 }"
+                filter
+                dataKey="unit"
+                optionLabel="cl2desc"
+                optionValue="cl2comb"
+                class="w-full"
+                :class="{ 'p-invalid': form.cl2comb == '' }"
+              />
+              <small
+                class="text-error"
+                v-if="form.errors.cl2comb"
+              >
+                The item field is required.
+              </small>
+            </div>
+            <div class="field">
+              <label for="unit">Unit</label>
+              <InputText
+                id="unit"
+                v-model.trim="selectedItemsUomDesc"
+                readonly
+              />
+            </div>
+            <div class="field">
+              <label for="brand">Brand</label>
+              <Dropdown
+                required="true"
+                v-model="form.brand"
+                :options="brandDropDownList"
+                :virtualScrollerOptions="{ itemSize: 38 }"
+                filter
+                showClear
+                dataKey="id"
+                optionLabel="name"
+                optionValue="id"
+                class="w-full mb-3"
+                :class="{ 'p-invalid': form.brand == '' }"
+              />
+              <small
+                class="text-error"
+                v-if="form.errors.brand"
+              >
+                {{ form.errors.brand }}
+              </small>
+            </div>
+            <div class="field">
+              <label for="manufactured_date">Manufactured date</label>
+              <Calendar
+                v-model="form.manufactured_date"
+                dateFormat="mm-dd-yy"
+                showIcon
+                showButtonBar
+                :manualInput="false"
+                :hideOnDateTimeSelect="true"
+              />
+              <small
+                class="text-error"
+                v-if="form.errors.manufactured_date"
+              >
+                {{ form.errors.manufactured_date }}
+              </small>
+            </div>
+            <div class="field">
+              <label for="delivered_date">Delivered date</label>
+              <Calendar
+                v-model="form.delivered_date"
+                dateFormat="mm-dd-yy"
+                showIcon
+                showButtonBar
+                :manualInput="false"
+                :hideOnDateTimeSelect="true"
+              />
+              <small
+                class="text-error"
+                v-if="form.errors.delivered_date"
+              >
+                {{ form.errors.delivered_date }}
+              </small>
+            </div>
+            <div class="field">
+              <label for="expiration_date">Expiration date</label>
+              <Calendar
+                v-model="form.expiration_date"
+                dateFormat="mm-dd-yy"
+                showIcon
+                showButtonBar
+                :manualInput="false"
+                :minDate="minimumDate"
+                :hideOnDateTimeSelect="true"
+              />
+              <small
+                class="text-error"
+                v-if="form.errors.expiration_date"
+              >
+                {{ form.errors.expiration_date }}
+              </small>
+            </div>
+            <div class="field">
+              <label for="quantity">Quantity</label>
+              <InputText
+                id="quantity"
+                v-model.trim="form.quantity"
+                required="true"
+                type="number"
+                autofocus
+                :class="{ 'p-invalid': form.quantity == '' }"
+                @keyup.enter="submit"
+              />
+              <small
+                class="text-error"
+                v-if="form.errors.quantity"
+              >
+                {{ form.errors.quantity }}
+              </small>
+            </div>
+          </div>
+          <div class="border-1 mx-4"></div>
+          <!-- delivery list -->
+          <div class="w-full">
+            <DataTable
+              class="p-datatable-sm"
+              v-model:filters="filters"
+              :value="filteredData"
+              paginator
+              :rows="20"
+              :rowsPerPageOptions="[20, 30, 40]"
+              dataKey="id"
+              filterDisplay="row"
+              removableSort
+              :globalFilterFields="['cl2desc', 'suppname', 'chrgdesc', 'stock_lvl']"
+              showGridlines
+            >
+              <template #header>
+                <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+                  <span class="text-xl text-900 font-bold text-primary mr-2">DELIVERIES</span>
+
+                  <div class="flex">
+                    <div class="mr-2">
+                      <div class="p-inputgroup">
+                        <span class="p-inputgroup-addon">
+                          <i class="pi pi-search"></i>
+                        </span>
+                        <InputText
+                          id="searchInput"
+                          v-model="filters['global'].value"
+                          placeholder="Search item"
+                        />
+                      </div>
+                    </div>
+                    <Button
+                      label="Add deliveries"
+                      icon="pi pi-plus"
+                      iconPos="right"
+                      @click="openCreateItemDialog"
+                    />
+                  </div>
+                </div>
+              </template>
+              <template #empty> No stock found. </template>
+              <template #loading> Loading stock data. Please wait. </template>
+              <Column
+                field="ris_no"
+                header="RIS NO."
+                style="width: 5%"
+              >
+              </Column>
+              <Column
+                field="temp_ris_no"
+                header="TEMPORARY NO."
+                style="width: 5%"
+              >
+              </Column>
+            </DataTable>
+          </div>
         </div>
 
         <div
