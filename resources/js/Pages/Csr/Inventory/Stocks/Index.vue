@@ -341,7 +341,7 @@
         <div class="flex flex-row justify-content-between">
           <!-- form -->
           <div class="w-3">
-            <!-- <div class="field">
+            <div class="field">
               <label for="ris_no">RIS no.</label>
               <InputText
                 id="ris_no"
@@ -389,7 +389,7 @@
               >
                 {{ form.errors.fund_source }}
               </small>
-            </div> -->
+            </div>
             <div class="field">
               <label for="Item">Item</label>
               <Dropdown
