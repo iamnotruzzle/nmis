@@ -349,22 +349,19 @@
                 required="true"
                 autofocus
                 :class="{ 'p-invalid': form.ris_no == '' }"
-                @keyup.enter="submit"
               />
             </div>
             <div class="field">
               <label for="Item">Supplier</label>
               <Dropdown
                 required="true"
-                v-model="form.suppcode"
+                v-model="supplier"
                 :options="suppliersList"
                 :virtualScrollerOptions="{ itemSize: 38 }"
                 filter
                 dataKey="suppcode"
                 optionLabel="suppname"
-                optionValue="suppcode"
                 class="w-full"
-                :class="{ 'p-invalid': form.suppcode == '' }"
               />
             </div>
             <div class="field">
@@ -372,43 +369,39 @@
               <Dropdown
                 id="fundSource"
                 required="true"
-                v-model="form.fund_source"
+                v-model="selectedFundSource"
                 :options="fundSourceList"
                 :virtualScrollerOptions="{ itemSize: 38 }"
                 filter
                 showClear
                 dataKey="chrgcode"
                 optionLabel="chrgdesc"
-                optionValue="chrgcode"
                 class="min-w-full"
-                :class="{ 'p-invalid': form.fund_source == '' }"
               />
-              <small
+              <!-- <small
                 class="text-error"
                 v-if="form.errors.fund_source"
               >
                 {{ form.errors.fund_source }}
-              </small>
+              </small> -->
             </div>
             <div class="field">
               <label for="Item">Item</label>
               <Dropdown
                 required="true"
-                v-model="form.cl2comb"
+                v-model="item"
                 :options="itemsList"
                 filter
-                dataKey="unit"
+                dataKey="cl2comb"
                 optionLabel="cl2desc"
-                optionValue="cl2comb"
                 :virtualScrollerOptions="{ itemSize: 38 }"
-                :class="{ 'p-invalid': form.cl2comb == '' }"
               />
-              <small
+              <!-- <small
                 class="text-error"
                 v-if="form.errors.cl2comb"
               >
                 The item field is required.
-              </small>
+              </small> -->
             </div>
             <div class="field">
               <label for="unit">Unit</label>
@@ -422,62 +415,60 @@
               <label for="brand">Brand</label>
               <Dropdown
                 required="true"
-                v-model="form.brand"
+                v-model="brand"
                 :options="brandDropDownList"
                 :virtualScrollerOptions="{ itemSize: 38 }"
                 filter
                 showClear
                 dataKey="id"
                 optionLabel="name"
-                optionValue="id"
                 class="w-full mb-3"
-                :class="{ 'p-invalid': form.brand == '' }"
               />
-              <small
+              <!-- <small
                 class="text-error"
                 v-if="form.errors.brand"
               >
                 {{ form.errors.brand }}
-              </small>
+              </small> -->
             </div>
             <div class="field">
               <label for="manufactured_date">Manufactured date</label>
               <Calendar
-                v-model="form.manufactured_date"
+                v-model="manufactured_date"
                 dateFormat="mm-dd-yy"
                 showIcon
                 showButtonBar
                 :manualInput="false"
                 :hideOnDateTimeSelect="true"
               />
-              <small
+              <!-- <small
                 class="text-error"
                 v-if="form.errors.manufactured_date"
               >
                 {{ form.errors.manufactured_date }}
-              </small>
+              </small> -->
             </div>
             <div class="field">
               <label for="delivered_date">Delivered date</label>
               <Calendar
-                v-model="form.delivered_date"
+                v-model="delivered_date"
                 dateFormat="mm-dd-yy"
                 showIcon
                 showButtonBar
                 :manualInput="false"
                 :hideOnDateTimeSelect="true"
               />
-              <small
+              <!-- <small
                 class="text-error"
                 v-if="form.errors.delivered_date"
               >
                 {{ form.errors.delivered_date }}
-              </small>
+              </small> -->
             </div>
             <div class="field">
               <label for="expiration_date">Expiration date</label>
               <Calendar
-                v-model="form.expiration_date"
+                v-model="expiration_date"
                 dateFormat="mm-dd-yy"
                 showIcon
                 showButtonBar
@@ -485,29 +476,29 @@
                 :minDate="minimumDate"
                 :hideOnDateTimeSelect="true"
               />
-              <small
+              <!-- <small
                 class="text-error"
                 v-if="form.errors.expiration_date"
               >
                 {{ form.errors.expiration_date }}
-              </small>
+              </small> -->
             </div>
             <div class="field">
               <label for="quantity">Quantity</label>
               <InputText
                 id="quantity"
-                v-model.trim="form.quantity"
+                v-model.trim="quantity"
                 required="true"
                 type="number"
                 autofocus
-                :class="{ 'p-invalid': form.quantity == '' }"
-                @keyup.enter="submit"
+                :class="{ 'p-invalid': quantity == '' || item == null }"
+                @keyup.enter="fillDeliveriesContainer"
               />
               <small
                 class="text-error"
-                v-if="form.errors.quantity"
+                v-if="itemNotSelected == true"
               >
-                {{ form.errors.quantity }}
+                {{ itemNotSelectedMsg }}
               </small>
             </div>
           </div>
@@ -516,15 +507,12 @@
           <div class="w-9">
             <DataTable
               class="p-datatable-sm"
-              v-model:filters="filters"
-              :value="filteredData"
+              v-model:filters="deliveryDetailsFilter"
+              :value="deliveryDetails"
               paginator
-              :rows="20"
-              :rowsPerPageOptions="[20, 30, 40]"
+              :rows="5"
               dataKey="id"
-              filterDisplay="row"
               removableSort
-              :globalFilterFields="['cl2desc', 'suppname', 'chrgdesc', 'stock_lvl']"
               showGridlines
             >
               <template #header>
@@ -539,17 +527,11 @@
                         </span>
                         <InputText
                           id="searchInput"
-                          v-model="filters['global'].value"
+                          v-model="deliveryDetailsFilter['global'].value"
                           placeholder="Search item"
                         />
                       </div>
                     </div>
-                    <Button
-                      label="Add deliveries"
-                      icon="pi pi-plus"
-                      iconPos="right"
-                      @click="openCreateItemDialog"
-                    />
                   </div>
                 </div>
               </template>
@@ -562,8 +544,56 @@
               >
               </Column>
               <Column
-                field="temp_ris_no"
-                header="TEMPORARY NO."
+                field="cl2desc"
+                header="ITEM"
+                style="width: 5%"
+              >
+              </Column>
+              <Column
+                field="unitName"
+                header="UNIT"
+                style="width: 5%"
+              >
+              </Column>
+              <Column
+                field="brandName"
+                header="BRAND"
+                style="width: 5%"
+              >
+              </Column>
+              <Column
+                field="supplierName"
+                header="SUPPLIER"
+                style="width: 5%"
+              >
+              </Column>
+              <Column
+                field="fundSourceName"
+                header="FUND SOURCE"
+                style="width: 5%"
+              >
+              </Column>
+              <Column
+                field="quantity"
+                header="QTY"
+                style="width: 5%"
+              >
+              </Column>
+              <Column
+                field="manufactured_date"
+                header="MFD. DATE"
+                style="width: 5%"
+              >
+              </Column>
+              <Column
+                field="delivered_date"
+                header="DELIVERED DATE"
+                style="width: 5%"
+              >
+              </Column>
+              <Column
+                field="expiration_date"
+                header="EXPIRATION DATE"
                 style="width: 5%"
               >
               </Column>
@@ -982,7 +1012,25 @@ export default {
       from_ed: null,
       to_ed: null,
       fundSourceList: [],
+      // -----------------
+      itemNotSelected: false,
+      itemNotSelectedMsg: null,
+      item: null,
       itemsList: [],
+      brand: null,
+      supplier: null,
+      selectedFundSource: null,
+      selectedItemsUomCode: null,
+      selectedItemsUomDesc: null,
+      quantity: null,
+      deliveryDetails: [],
+      manufactured_date: null,
+      delivered_date: null,
+      expiration_date: null,
+      deliveryDetailsFilter: {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      },
+      // ------------------
       brandsList: [],
       brandDropDownList: [],
       stocksList: [],
@@ -1015,7 +1063,6 @@ export default {
           value: 'I',
         },
       ],
-      selectedItemsUomDesc: null,
       form: this.$inertia.form({
         ris_no: null,
         suppcode: null,
@@ -1201,7 +1248,6 @@ export default {
         });
       });
     },
-
     storeSuppliersInContainer() {
       this.suppliers.forEach((e) => {
         this.suppliersList.push({
@@ -1302,6 +1348,48 @@ export default {
       this.form.manufactured_date = item.manufactured_date;
       this.form.delivered_date = item.delivered_date;
       this.form.expiration_date = item.expiration_date;
+    },
+    fillDeliveriesContainer() {
+      //   console.log(this.brand);
+      // check if no selected item
+      if (this.item == null || this.item == '') {
+        this.itemNotSelected = true;
+        this.itemNotSelectedMsg = 'Item not selected.';
+      } else {
+        // check if request qty is not provided
+        if (this.quantity == 0 || this.quantity == null || this.quantity == '') {
+          this.itemNotSelected = true;
+          this.itemNotSelectedMsg = 'Please provide quantity.';
+        } else {
+          // check if item selected is already on the list
+          if (this.deliveryDetails.some((e) => e.cl2comb === this.item['cl2comb'])) {
+            this.itemNotSelected = true;
+            this.itemNotSelectedMsg = 'Item is already on the list.';
+          } else {
+            this.itemNotSelected = false;
+            this.itemNotSelectedMsg = null;
+            this.deliveryDetails.push({
+              ris_no: this.form.ris_no,
+              cl2comb: this.item.cl2comb,
+              cl2desc: this.item.cl2desc,
+              quantity: this.quantity,
+              unit: this.selectedItemsUomCode,
+              unitName: this.selectedItemsUomDesc,
+              brand: this.brand.id,
+              brandName: this.brand.name,
+              supplier: this.supplier.suppcode,
+              supplierName: this.supplier.suppname,
+              fundSource: this.selectedFundSource.chrgcode,
+              fundSourceName: this.selectedFundSource.chrgdesc,
+              suppcode: this.suppcode,
+              manufactured_date: this.manufactured_date,
+              delivered_date: this.delivered_date,
+              expiration_date: this.expiration_date,
+            });
+          }
+        }
+      }
+      //   console.log(this.deliveryDetails);
     },
     submit() {
       if (this.form.processing) {
@@ -1441,19 +1529,16 @@ export default {
     // end brand
   },
   watch: {
-    'form.cl2comb': function (val) {
+    item: function (val) {
+      //   console.log(val);
       this.selectedItemsUomDesc = null;
 
-      this.itemsList.forEach((e) => {
-        if (e.cl2comb == val) {
-          if (e.uomdesc != null) {
-            this.selectedItemsUomDesc = e.uomdesc;
-            this.form.uomcode = e.uomcode;
-          } else {
-            this.selectedItemsUomDesc = null;
-          }
-        }
-      });
+      if (val.uomdesc != null) {
+        this.selectedItemsUomDesc = val.uomdesc;
+        this.unit = val.uomcode;
+      } else {
+        this.selectedItemsUomDesc = null;
+      }
     },
   },
 };

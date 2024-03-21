@@ -94,7 +94,7 @@ class CsrStocksMedicalSuppliesController extends Controller
 
     public function store(Request $request)
     {
-        // dd(Carbon::parse($request->expiration_date)->setTimezone('Asia/Manila'));
+        dd($request);
 
         $temp_ris_no = $this->generateTempRisNo();
 
