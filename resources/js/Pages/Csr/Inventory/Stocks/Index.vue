@@ -396,6 +396,12 @@
                 optionLabel="cl2desc"
                 :virtualScrollerOptions="{ itemSize: 38 }"
               />
+              <p
+                v-if="itemNotSelected == true"
+                class="text-error"
+              >
+                Item is already on the list.
+              </p>
             </div>
             <div class="field">
               <label for="unit">Unit</label>
@@ -998,6 +1004,7 @@ export default {
       to_ed: null,
       fundSourceList: [],
       // -----------------
+      itemNotSelected: false,
       item: null,
       itemsList: [],
       brand: null,
@@ -1353,24 +1360,29 @@ export default {
         this.expiration_date !== null &&
         this.quantity !== null
       ) {
-        this.deliveryDetails.push({
-          ris_no: this.form.ris_no,
-          cl2comb: this.item.cl2comb,
-          cl2desc: this.item.cl2desc,
-          quantity: this.quantity,
-          unit: this.unit,
-          unitName: this.selectedItemsUomDesc,
-          brand: this.brand.id,
-          brandName: this.brand.name,
-          supplier: this.supplier.suppcode,
-          supplierName: this.supplier.suppname,
-          fundSource: this.selectedFundSource.chrgcode,
-          fundSourceName: this.selectedFundSource.chrgdesc,
-          suppcode: this.suppcode,
-          manufactured_date: this.manufactured_date,
-          delivered_date: this.delivered_date,
-          expiration_date: this.expiration_date,
-        });
+        if (this.deliveryDetails.some((e) => e.cl2comb === this.item['cl2comb'])) {
+          this.itemNotSelected = true;
+        } else {
+          this.itemNotSelected = false;
+          this.deliveryDetails.push({
+            ris_no: this.form.ris_no,
+            cl2comb: this.item.cl2comb,
+            cl2desc: this.item.cl2desc,
+            quantity: this.quantity,
+            unit: this.unit,
+            unitName: this.selectedItemsUomDesc,
+            brand: this.brand.id,
+            brandName: this.brand.name,
+            supplier: this.supplier.suppcode,
+            supplierName: this.supplier.suppname,
+            fundSource: this.selectedFundSource.chrgcode,
+            fundSourceName: this.selectedFundSource.chrgdesc,
+            suppcode: this.suppcode,
+            manufactured_date: this.manufactured_date,
+            delivered_date: this.delivered_date,
+            expiration_date: this.expiration_date,
+          });
+        }
         this.form.delivery_list = this.deliveryDetails;
       }
     },
