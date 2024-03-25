@@ -104,7 +104,6 @@ class CsrStocksMedicalSuppliesController extends Controller
             // dd($delivery);
             $stock = CsrStocksMedicalSupplies::create([
                 'ris_no' => $delivery['ris_no'] == null ? $temp_ris_no : null,
-                // 'temp_ris_no' => $delivery['ris_no'] == null ? $temp_ris_no : null,
                 'suppcode' => $delivery['supplier'],
                 'chrgcode' => $delivery['fundSource'],
                 'cl2comb' => $delivery['cl2comb'],
@@ -146,7 +145,6 @@ class CsrStocksMedicalSuppliesController extends Controller
 
         // $stock = CsrStocksMedicalSupplies::create([
         //     'ris_no' => $request->ris_no,
-        //     'temp_ris_no' => $request->ris_no == null ? $temp_ris_no : null,
         //     'suppcode' => $request->suppcode,
         //     'chrgcode' => $request->fund_source,
         //     'cl2comb' => $request->cl2comb,

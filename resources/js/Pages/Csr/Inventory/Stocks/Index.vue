@@ -19,6 +19,7 @@
         :globalFilterFields="['cl2desc', 'suppname', 'chrgdesc', 'stock_lvl']"
         showGridlines
         rowGroupMode="subheader"
+        groupRowsBy="ris_no"
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
@@ -1205,7 +1206,6 @@ export default {
         this.stocksList.push({
           id: e.id,
           ris_no: e.ris_no == null ? null : e.ris_no,
-          //   temp_ris_no: e.temp_ris_no == null ? null : e.temp_ris_no,
           suppcode: e.suppcode,
           suppname: e.suppname,
           chrgcode: e.codeFromHCharge === null ? e.codeFromFundSource : e.codeFromHCharge,
