@@ -96,14 +96,14 @@ class CsrStocksMedicalSuppliesController extends Controller
     {
         // dd($request);
 
-        $temp_ris_no = $this->generateTempRisNo();
+        $temp_ris_no = 'TEMP-RIS-' . $this->generateTempRisNo();
 
         $entry_by = Auth::user()->employeeid;
 
         foreach ($request->delivery_list as $delivery) {
             // dd($delivery);
             $stock = CsrStocksMedicalSupplies::create([
-                'ris_no' => $delivery['ris_no'],
+                'ris_no' => $delivery['ris_no'] == null ? $temp_ris_no : null,
                 // 'temp_ris_no' => $delivery['ris_no'] == null ? $temp_ris_no : null,
                 'suppcode' => $delivery['supplier'],
                 'chrgcode' => $delivery['fundSource'],

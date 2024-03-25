@@ -341,8 +341,10 @@
               <InputText
                 v-model.trim="form.ris_no"
                 autofocus
+                :disabled="deliveryDetails.length != 0"
                 :class="{ 'p-invalid': form.ris_no == '' }"
               />
+              <div class="mt-1 text-blue-400">If RIS No. is not provided, a temporary RIS No. will be assigned.</div>
             </div>
             <div class="field">
               <div class="flex align-content-center">
