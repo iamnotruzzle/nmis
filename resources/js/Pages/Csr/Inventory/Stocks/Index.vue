@@ -1137,10 +1137,6 @@ export default {
         const from = this.filters['expiration'].from;
         const to = this.filters['expiration'].to;
 
-        // console.log(to);
-
-        // console.log('Expiration date filter range:', from, to); // Debugging
-
         if (from && to) {
           filtered = filtered.filter((item) => {
             return item.expiration_date >= from && item.expiration_date <= to;
@@ -1152,8 +1148,6 @@ export default {
     },
   },
   mounted() {
-    // console.log('stocks', this.stocks);
-
     this.setMinimumDate();
     this.storeFundSourceInContainer();
     this.storeItemsInContainer();
@@ -1178,9 +1172,6 @@ export default {
       // adding +1 to include the starting date
       let date_diff = exp_date.diff(current_date, 'days') + 1;
 
-      //   console.log(current_date.format('MM-DD-YY') == exp_date.format('MM-DD-YY'));
-
-      //    exp_date.format('MM-DD-YY') < current_date.format('MM-DD-YY')
       if (
         current_date.format('MM-DD-YY') == exp_date.format('MM-DD-YY') ||
         Date.parse(exp_date) < Date.parse(current_date)
@@ -1212,7 +1203,6 @@ export default {
     // server request such as POST, the data in the table
     // is updated
     storeStocksInContainer() {
-      console.log(this.stocks);
       this.stocks.forEach((e) => {
         const expirationDate = e.expiration_date === null ? null : new Date(e.expiration_date); // Convert expiration_date to Date object
         this.stocksList.push({
@@ -1293,8 +1283,6 @@ export default {
           total_quantity: e.total_quantity,
         });
       });
-
-      //   console.log(this.totalStocksList);
     },
     updateData() {
       this.$inertia.get('csrstocks', this.params, {
@@ -1345,7 +1333,6 @@ export default {
       );
     },
     editItem(item) {
-      // console.log(item);
       this.isUpdate = true;
       this.createStockDialog = true;
       this.stockId = item.id;
@@ -1546,7 +1533,6 @@ export default {
   },
   watch: {
     item: function (val) {
-      //   console.log(val);
       this.selectedItemsUomDesc = null;
 
       if (val != null) {
