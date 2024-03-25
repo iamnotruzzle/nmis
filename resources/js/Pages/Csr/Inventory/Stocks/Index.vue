@@ -327,7 +327,7 @@
         </Column>
       </DataTable>
 
-      <!-- create & edit dialog -->
+      <!-- create & edit delivery details dialog -->
       <Dialog
         v-model:visible="createStockDialog"
         :modal="true"
@@ -335,7 +335,7 @@
         @hide="clickOutsideDialog"
       >
         <template #header>
-          <div class="text-primary text-xl font-bold">DELIVERY DETAILS</div>
+          <div class="text-primary text-xl font-bold">DELIVERIES</div>
         </template>
 
         <div class="flex flex-row justify-content-between">
@@ -366,15 +366,11 @@
               />
             </div>
             <div class="field">
-              <div
-                for="fundSource"
-                class="flex align-content-center"
-              >
+              <div class="flex align-content-center">
                 <label>Fund source</label>
                 <span class="ml-2 text-error">(Required)</span>
               </div>
               <Dropdown
-                id="fundSource"
                 required="true"
                 v-model="selectedFundSource"
                 :options="fundSourceList"
@@ -454,6 +450,7 @@
                 <span class="ml-2 text-error">(Required)</span>
               </div>
               <Calendar
+                required="true"
                 v-model="expiration_date"
                 dateFormat="mm-dd-yy"
                 showIcon
@@ -469,8 +466,8 @@
                 <span class="ml-2 text-error">(Required)</span>
               </div>
               <InputText
-                v-model.trim="quantity"
                 required="true"
+                v-model.trim="quantity"
                 type="number"
                 autofocus
                 @keyup.enter="fillDeliveriesContainer"
@@ -1350,46 +1347,77 @@ export default {
       this.form.expiration_date = item.expiration_date;
     },
     fillDeliveriesContainer() {
-      //   console.log(this.brand);
-      // check if no selected item
-      if (this.item == null || this.item == '') {
-        this.itemNotSelected = true;
-        this.itemNotSelectedMsg = 'Item not selected.';
-      } else {
-        // check if request qty is not provided
-        if (this.quantity == 0 || this.quantity == null || this.quantity == '') {
-          this.itemNotSelected = true;
-          this.itemNotSelectedMsg = 'Please provide quantity.';
-        } else {
-          // check if item selected is already on the list
-          if (this.deliveryDetails.some((e) => e.cl2comb === this.item['cl2comb'])) {
-            this.itemNotSelected = true;
-            this.itemNotSelectedMsg = 'Item is already on the list.';
-          } else {
-            this.itemNotSelected = false;
-            this.itemNotSelectedMsg = null;
-            this.deliveryDetails.push({
-              ris_no: this.form.ris_no,
-              cl2comb: this.item.cl2comb,
-              cl2desc: this.item.cl2desc,
-              quantity: this.quantity,
-              unit: this.selectedItemsUomCode,
-              unitName: this.selectedItemsUomDesc,
-              brand: this.brand.id,
-              brandName: this.brand.name,
-              supplier: this.supplier.suppcode,
-              supplierName: this.supplier.suppname,
-              fundSource: this.selectedFundSource.chrgcode,
-              fundSourceName: this.selectedFundSource.chrgdesc,
-              suppcode: this.suppcode,
-              manufactured_date: this.manufactured_date,
-              delivered_date: this.delivered_date,
-              expiration_date: this.expiration_date,
-            });
-          }
-        }
+      if (
+        this.supplier !== null &&
+        this.selectedFundSource !== null &&
+        this.item !== null &&
+        this.brand !== null &&
+        this.expiration_date !== null &&
+        this.quantity !== null
+      ) {
+        this.itemNotSelected = false;
+        this.itemNotSelectedMsg = null;
+        this.deliveryDetails.push({
+          ris_no: this.form.ris_no,
+          cl2comb: this.item.cl2comb,
+          cl2desc: this.item.cl2desc,
+          quantity: this.quantity,
+          unit: this.selectedItemsUomCode,
+          unitName: this.selectedItemsUomDesc,
+          brand: this.brand.id,
+          brandName: this.brand.name,
+          supplier: this.supplier.suppcode,
+          supplierName: this.supplier.suppname,
+          fundSource: this.selectedFundSource.chrgcode,
+          fundSourceName: this.selectedFundSource.chrgdesc,
+          suppcode: this.suppcode,
+          manufactured_date: this.manufactured_date,
+          delivered_date: this.delivered_date,
+          expiration_date: this.expiration_date,
+        });
+        this.form.delivery_list = this.deliveryDetails;
       }
-      this.form.delivery_list = this.deliveryDetails;
+
+      //   // console.log(this.brand);
+      //   // check if no selected item
+      //   if (this.item == null || this.item == '') {
+      //     this.itemNotSelected = true;
+      //     this.itemNotSelectedMsg = 'Item not selected.';
+      //   } else {
+      //     // check if request qty is not provided
+      //     if (this.quantity == 0 || this.quantity == null || this.quantity == '') {
+      //       this.itemNotSelected = true;
+      //       this.itemNotSelectedMsg = 'Please provide quantity.';
+      //     } else {
+      //       // check if item selected is already on the list
+      //       if (this.deliveryDetails.some((e) => e.cl2comb === this.item['cl2comb'])) {
+      //         this.itemNotSelected = true;
+      //         this.itemNotSelectedMsg = 'Item is already on the list.';
+      //       } else {
+      //         this.itemNotSelected = false;
+      //         this.itemNotSelectedMsg = null;
+      //         this.deliveryDetails.push({
+      //           ris_no: this.form.ris_no,
+      //           cl2comb: this.item.cl2comb,
+      //           cl2desc: this.item.cl2desc,
+      //           quantity: this.quantity,
+      //           unit: this.selectedItemsUomCode,
+      //           unitName: this.selectedItemsUomDesc,
+      //           brand: this.brand.id,
+      //           brandName: this.brand.name,
+      //           supplier: this.supplier.suppcode,
+      //           supplierName: this.supplier.suppname,
+      //           fundSource: this.selectedFundSource.chrgcode,
+      //           fundSourceName: this.selectedFundSource.chrgdesc,
+      //           suppcode: this.suppcode,
+      //           manufactured_date: this.manufactured_date,
+      //           delivered_date: this.delivered_date,
+      //           expiration_date: this.expiration_date,
+      //         });
+      //       }
+      //     }
+      //   }
+      //   this.form.delivery_list = this.deliveryDetails;
       //   console.log(this.deliveryDetails);
     },
     removeFromRequestContainer(item) {
