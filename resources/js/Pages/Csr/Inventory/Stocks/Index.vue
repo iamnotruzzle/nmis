@@ -342,17 +342,18 @@
           <!-- form -->
           <div class="w-3">
             <div class="field">
-              <label for="ris_no">RIS no.</label>
+              <label>RIS no.</label>
               <InputText
-                id="ris_no"
                 v-model.trim="form.ris_no"
-                required="true"
                 autofocus
                 :class="{ 'p-invalid': form.ris_no == '' }"
               />
             </div>
             <div class="field">
-              <label for="Item">Supplier</label>
+              <div class="flex align-content-center">
+                <label>Supplier</label>
+                <span class="ml-2 text-error">(Required)</span>
+              </div>
               <Dropdown
                 required="true"
                 v-model="supplier"
@@ -365,7 +366,13 @@
               />
             </div>
             <div class="field">
-              <label for="fundSource">Fund source</label>
+              <div
+                for="fundSource"
+                class="flex align-content-center"
+              >
+                <label>Fund source</label>
+                <span class="ml-2 text-error">(Required)</span>
+              </div>
               <Dropdown
                 id="fundSource"
                 required="true"
@@ -378,15 +385,12 @@
                 optionLabel="chrgdesc"
                 class="min-w-full"
               />
-              <!-- <small
-                class="text-error"
-                v-if="form.errors.fund_source"
-              >
-                {{ form.errors.fund_source }}
-              </small> -->
             </div>
             <div class="field">
-              <label for="Item">Item</label>
+              <div class="flex align-content-center">
+                <label>Item</label>
+                <span class="ml-2 text-error">(Required)</span>
+              </div>
               <Dropdown
                 required="true"
                 v-model="item"
@@ -396,23 +400,20 @@
                 optionLabel="cl2desc"
                 :virtualScrollerOptions="{ itemSize: 38 }"
               />
-              <!-- <small
-                class="text-error"
-                v-if="form.errors.cl2comb"
-              >
-                The item field is required.
-              </small> -->
             </div>
             <div class="field">
               <label for="unit">Unit</label>
               <InputText
                 id="unit"
                 v-model.trim="selectedItemsUomDesc"
-                readonly
+                disabled
               />
             </div>
             <div class="field">
-              <label for="brand">Brand</label>
+              <div class="flex align-content-center">
+                <label>Brand</label>
+                <span class="ml-2 text-error">(Required)</span>
+              </div>
               <Dropdown
                 required="true"
                 v-model="brand"
@@ -424,12 +425,6 @@
                 optionLabel="name"
                 class="w-full mb-3"
               />
-              <!-- <small
-                class="text-error"
-                v-if="form.errors.brand"
-              >
-                {{ form.errors.brand }}
-              </small> -->
             </div>
             <div class="field">
               <label for="manufactured_date">Manufactured date</label>
@@ -441,12 +436,6 @@
                 :manualInput="false"
                 :hideOnDateTimeSelect="true"
               />
-              <!-- <small
-                class="text-error"
-                v-if="form.errors.manufactured_date"
-              >
-                {{ form.errors.manufactured_date }}
-              </small> -->
             </div>
             <div class="field">
               <label for="delivered_date">Delivered date</label>
@@ -458,15 +447,12 @@
                 :manualInput="false"
                 :hideOnDateTimeSelect="true"
               />
-              <!-- <small
-                class="text-error"
-                v-if="form.errors.delivered_date"
-              >
-                {{ form.errors.delivered_date }}
-              </small> -->
             </div>
             <div class="field">
-              <label for="expiration_date">Expiration date</label>
+              <div class="flex align-content-center">
+                <label>Expiration date</label>
+                <span class="ml-2 text-error">(Required)</span>
+              </div>
               <Calendar
                 v-model="expiration_date"
                 dateFormat="mm-dd-yy"
@@ -476,30 +462,19 @@
                 :minDate="minimumDate"
                 :hideOnDateTimeSelect="true"
               />
-              <!-- <small
-                class="text-error"
-                v-if="form.errors.expiration_date"
-              >
-                {{ form.errors.expiration_date }}
-              </small> -->
             </div>
             <div class="field">
-              <label for="quantity">Quantity</label>
+              <div class="flex align-content-center">
+                <label>Quantity</label>
+                <span class="ml-2 text-error">(Required)</span>
+              </div>
               <InputText
-                id="quantity"
                 v-model.trim="quantity"
                 required="true"
                 type="number"
                 autofocus
-                :class="{ 'p-invalid': quantity == '' || item == null }"
                 @keyup.enter="fillDeliveriesContainer"
               />
-              <small
-                class="text-error"
-                v-if="itemNotSelected == true"
-              >
-                {{ itemNotSelectedMsg }}
-              </small>
             </div>
           </div>
           <div class="border-1 mx-4"></div>
@@ -657,7 +632,7 @@
             icon="pi pi-check"
             text
             type="submit"
-            :disabled="form.processing"
+            :disabled="form.processing || deliveryDetails.length == 0"
             @click="submit"
           />
         </template>
@@ -1089,6 +1064,7 @@ export default {
         delivered_date: null,
         expiration_date: null,
         remarks: null,
+        delivery_list: [],
       }),
       formBrand: this.$inertia.form({
         id: null,
@@ -1340,7 +1316,6 @@ export default {
         (this.stockId = null),
         (this.isUpdate = false),
         (this.isUpdateBrand = false),
-        (this.form.ris_no = null),
         (this.item = null),
         (this.brand = null),
         (this.supplier = null),
@@ -1414,6 +1389,7 @@ export default {
           }
         }
       }
+      this.form.delivery_list = this.deliveryDetails;
       //   console.log(this.deliveryDetails);
     },
     removeFromRequestContainer(item) {
