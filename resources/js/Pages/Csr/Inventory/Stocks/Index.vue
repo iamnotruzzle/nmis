@@ -998,8 +998,6 @@ export default {
       to_ed: null,
       fundSourceList: [],
       // -----------------
-      itemNotSelected: false,
-      itemNotSelectedMsg: null,
       item: null,
       itemsList: [],
       brand: null,
@@ -1050,17 +1048,17 @@ export default {
       ],
       form: this.$inertia.form({
         ris_no: null,
-        suppcode: null,
-        fund_source: null,
-        cl2comb: null,
-        uomcode: null,
-        brand: null,
-        cl2desc: null,
-        quantity: null,
-        manufactured_date: null,
-        delivered_date: null,
-        expiration_date: null,
-        remarks: null,
+        // suppcode: null,
+        // fund_source: null,
+        // cl2comb: null,
+        // uomcode: null,
+        // brand: null,
+        // cl2desc: null,
+        // quantity: null,
+        // manufactured_date: null,
+        // delivered_date: null,
+        // expiration_date: null,
+        // remarks: null,
         delivery_list: [],
       }),
       formBrand: this.$inertia.form({
@@ -1355,14 +1353,12 @@ export default {
         this.expiration_date !== null &&
         this.quantity !== null
       ) {
-        this.itemNotSelected = false;
-        this.itemNotSelectedMsg = null;
         this.deliveryDetails.push({
           ris_no: this.form.ris_no,
           cl2comb: this.item.cl2comb,
           cl2desc: this.item.cl2desc,
           quantity: this.quantity,
-          unit: this.selectedItemsUomCode,
+          unit: this.unit,
           unitName: this.selectedItemsUomDesc,
           brand: this.brand.id,
           brandName: this.brand.name,
@@ -1377,48 +1373,6 @@ export default {
         });
         this.form.delivery_list = this.deliveryDetails;
       }
-
-      //   // console.log(this.brand);
-      //   // check if no selected item
-      //   if (this.item == null || this.item == '') {
-      //     this.itemNotSelected = true;
-      //     this.itemNotSelectedMsg = 'Item not selected.';
-      //   } else {
-      //     // check if request qty is not provided
-      //     if (this.quantity == 0 || this.quantity == null || this.quantity == '') {
-      //       this.itemNotSelected = true;
-      //       this.itemNotSelectedMsg = 'Please provide quantity.';
-      //     } else {
-      //       // check if item selected is already on the list
-      //       if (this.deliveryDetails.some((e) => e.cl2comb === this.item['cl2comb'])) {
-      //         this.itemNotSelected = true;
-      //         this.itemNotSelectedMsg = 'Item is already on the list.';
-      //       } else {
-      //         this.itemNotSelected = false;
-      //         this.itemNotSelectedMsg = null;
-      //         this.deliveryDetails.push({
-      //           ris_no: this.form.ris_no,
-      //           cl2comb: this.item.cl2comb,
-      //           cl2desc: this.item.cl2desc,
-      //           quantity: this.quantity,
-      //           unit: this.selectedItemsUomCode,
-      //           unitName: this.selectedItemsUomDesc,
-      //           brand: this.brand.id,
-      //           brandName: this.brand.name,
-      //           supplier: this.supplier.suppcode,
-      //           supplierName: this.supplier.suppname,
-      //           fundSource: this.selectedFundSource.chrgcode,
-      //           fundSourceName: this.selectedFundSource.chrgdesc,
-      //           suppcode: this.suppcode,
-      //           manufactured_date: this.manufactured_date,
-      //           delivered_date: this.delivered_date,
-      //           expiration_date: this.expiration_date,
-      //         });
-      //       }
-      //     }
-      //   }
-      //   this.form.delivery_list = this.deliveryDetails;
-      //   console.log(this.deliveryDetails);
     },
     removeFromRequestContainer(item) {
       this.deliveryDetails.splice(
