@@ -34,7 +34,7 @@ class CsrStocksMedicalSuppliesController extends Controller
         );
 
         $stocks = DB::select(
-            "SELECT medsupply.id, medsupply.ris_no, medsupply.temp_ris_no,
+            "SELECT medsupply.id, medsupply.ris_no,
                 medsupply.suppcode, supplier.suppname,
                 typeOfCharge.chrgcode as codeFromHCharge, typeOfCharge.chrgdesc as descFromHCharge,
                 fundSource.fsid as codeFromFundSource, fundSource.fsName as descFromFundSource,
@@ -104,7 +104,7 @@ class CsrStocksMedicalSuppliesController extends Controller
             // dd($delivery);
             $stock = CsrStocksMedicalSupplies::create([
                 'ris_no' => $delivery['ris_no'],
-                'temp_ris_no' => $delivery['ris_no'] == null ? $temp_ris_no : null,
+                // 'temp_ris_no' => $delivery['ris_no'] == null ? $temp_ris_no : null,
                 'suppcode' => $delivery['supplier'],
                 'chrgcode' => $delivery['fundSource'],
                 'cl2comb' => $delivery['cl2comb'],

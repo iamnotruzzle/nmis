@@ -143,11 +143,6 @@
               >
               </Column>
               <Column
-                field="temp_ris_no"
-                header="TEMPORARY NO."
-              >
-              </Column>
-              <Column
                 field="suppname"
                 header="SUPPLIER"
               >
@@ -941,7 +936,7 @@ export default {
         this.stocksList.push({
           id: e.id,
           ris_no: e.ris_no == null ? null : e.ris_no,
-          temp_ris_no: e.temp_ris_no == null ? null : e.temp_ris_no,
+          //   temp_ris_no: e.temp_ris_no == null ? null : e.temp_ris_no,
           suppcode: e.suppcode,
           suppname: e.supplier_detail.suppname,
           chrgcode: e.type_of_charge === null ? e.fund_source.fsid : e.type_of_charge.chrgcode,

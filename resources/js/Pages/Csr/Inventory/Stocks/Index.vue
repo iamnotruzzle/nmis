@@ -18,6 +18,7 @@
         removableSort
         :globalFilterFields="['cl2desc', 'suppname', 'chrgdesc', 'stock_lvl']"
         showGridlines
+        rowGroupMode="subheader"
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
@@ -50,12 +51,6 @@
         <Column
           field="ris_no"
           header="RIS NO."
-          style="width: 5%"
-        >
-        </Column>
-        <Column
-          field="temp_ris_no"
-          header="TEMPORARY NO."
           style="width: 5%"
         >
         </Column>
@@ -352,7 +347,7 @@
             <div class="field">
               <div class="flex align-content-center">
                 <label>Supplier</label>
-                <span class="ml-2 text-error">(Required)</span>
+                <span class="ml-2 text-error">*</span>
               </div>
               <Dropdown
                 required="true"
@@ -368,7 +363,7 @@
             <div class="field">
               <div class="flex align-content-center">
                 <label>Fund source</label>
-                <span class="ml-2 text-error">(Required)</span>
+                <span class="ml-2 text-error">*</span>
               </div>
               <Dropdown
                 required="true"
@@ -385,7 +380,7 @@
             <div class="field">
               <div class="flex align-content-center">
                 <label>Item</label>
-                <span class="ml-2 text-error">(Required)</span>
+                <span class="ml-2 text-error">*</span>
               </div>
               <Dropdown
                 required="true"
@@ -414,7 +409,7 @@
             <div class="field">
               <div class="flex align-content-center">
                 <label>Brand</label>
-                <span class="ml-2 text-error">(Required)</span>
+                <span class="ml-2 text-error">*</span>
               </div>
               <Dropdown
                 required="true"
@@ -453,7 +448,7 @@
             <div class="field">
               <div class="flex align-content-center">
                 <label>Expiration date</label>
-                <span class="ml-2 text-error">(Required)</span>
+                <span class="ml-2 text-error">*</span>
               </div>
               <Calendar
                 required="true"
@@ -469,7 +464,7 @@
             <div class="field">
               <div class="flex align-content-center">
                 <label>Quantity</label>
-                <span class="ml-2 text-error">(Required)</span>
+                <span class="ml-2 text-error">*</span>
               </div>
               <InputText
                 required="true"
@@ -596,7 +591,7 @@
           v-if="isUpdate == true"
           class="field"
         >
-          <label for="remarks">Remarks <span class="text-error">(Required)</span></label>
+          <label for="remarks">Remarks <span class="text-error">*</span></label>
           <Textarea
             v-model.trim="form.remarks"
             rows="5"
@@ -660,7 +655,7 @@
         </div>
 
         <div class="field mt-5 flex flex-column">
-          <label for="remarks">REMARKS <span class="text-error">(REQUIRED)</span></label>
+          <label for="remarks">REMARKS <span class="text-error">*</span></label>
           <Textarea
             v-model.trim="form.remarks"
             rows="5"
@@ -1208,7 +1203,7 @@ export default {
         this.stocksList.push({
           id: e.id,
           ris_no: e.ris_no == null ? null : e.ris_no,
-          temp_ris_no: e.temp_ris_no == null ? null : e.temp_ris_no,
+          //   temp_ris_no: e.temp_ris_no == null ? null : e.temp_ris_no,
           suppcode: e.suppcode,
           suppname: e.suppname,
           chrgcode: e.codeFromHCharge === null ? e.codeFromFundSource : e.codeFromHCharge,
@@ -1360,7 +1355,13 @@ export default {
         this.expiration_date !== null &&
         this.quantity !== null
       ) {
-        if (this.deliveryDetails.some((e) => e.cl2comb === this.item['cl2comb'])) {
+        // e.cl2comb === this.item['cl2comb']) &&
+        //   e.fundSource == this.selectedFundSource.chrgcode
+        if (
+          this.deliveryDetails.some(
+            (e) => e.cl2comb === this.item['cl2comb'] && e.fundSource == this.selectedFundSource.chrgcode
+          )
+        ) {
           this.itemNotSelected = true;
         } else {
           this.itemNotSelected = false;
