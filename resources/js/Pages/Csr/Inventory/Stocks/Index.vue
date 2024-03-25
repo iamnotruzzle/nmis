@@ -11,13 +11,15 @@
         v-model:filters="filters"
         :value="filteredData"
         paginator
-        :rows="20"
+        :rows="10"
         :rowsPerPageOptions="[20, 30, 40]"
         dataKey="id"
         filterDisplay="row"
         removableSort
-        :globalFilterFields="['cl2desc', 'suppname', 'chrgdesc', 'stock_lvl']"
+        :globalFilterFields="['ris_no', 'cl2desc', 'suppname', 'chrgdesc', 'stock_lvl']"
         showGridlines
+        selectionMode="single"
+        sortMode="single"
         rowGroupMode="subheader"
         groupRowsBy="ris_no"
       >
@@ -321,6 +323,13 @@
             </div>
           </template>
         </Column>
+
+        <template #groupheader="slotProps">
+          <div class="bg-primary-reverse py-3">
+            <span class="mr-2">RIS No.: </span>
+            <span>{{ slotProps.data.ris_no }}</span>
+          </div>
+        </template>
       </DataTable>
 
       <!-- create & edit delivery details dialog -->
@@ -1029,6 +1038,7 @@ export default {
           value: null,
           matchMode: FilterMatchMode.CONTAINS,
         },
+        ris_no: { value: null, matchMode: FilterMatchMode.CONTAINS },
         cl2desc: { value: null, matchMode: FilterMatchMode.CONTAINS },
         suppname: { value: null, matchMode: FilterMatchMode.CONTAINS },
         chrgdesc: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -1114,6 +1124,7 @@ export default {
         const filterText = this.filters['global'].value.toLowerCase();
         filtered = filtered.filter(
           (item) =>
+            item.ris_no.toLowerCase().includes(filterText) ||
             item.cl2desc.toLowerCase().includes(filterText) ||
             item.suppname.toLowerCase().includes(filterText) ||
             item.chrgdesc.toLowerCase().includes(filterText) ||
@@ -1201,11 +1212,12 @@ export default {
     // server request such as POST, the data in the table
     // is updated
     storeStocksInContainer() {
+      console.log(this.stocks);
       this.stocks.forEach((e) => {
         const expirationDate = e.expiration_date === null ? null : new Date(e.expiration_date); // Convert expiration_date to Date object
         this.stocksList.push({
           id: e.id,
-          ris_no: e.ris_no == null ? null : e.ris_no,
+          ris_no: e.ris_no,
           suppcode: e.suppcode,
           suppname: e.suppname,
           chrgcode: e.codeFromHCharge === null ? e.codeFromFundSource : e.codeFromHCharge,
