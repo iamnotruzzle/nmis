@@ -1526,7 +1526,6 @@ export default {
           total_quantity: e.total_quantity,
         });
       });
-      console.log(this.totalStocks);
     },
     updateData() {
       this.$inertia.get('csrstocks', this.params, {
@@ -1596,7 +1595,6 @@ export default {
       this.form.expiration_date = item.expiration_date;
     },
     editRisNo(data) {
-      console.log(data);
       this.isRisNoUpdate = true;
       this.form.ris_no = data.ris_no;
       this.form.newRisNo = data.ris_no;
