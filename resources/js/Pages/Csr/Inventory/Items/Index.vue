@@ -531,7 +531,8 @@
             autofocus
             :class="{ 'p-invalid': formPrice.selling_price == '' }"
             @keyup.enter="submitPrice"
-            inputId="integeronly"
+            inputId="minmaxfraction"
+            :maxFractionDigits="2"
           />
           <small
             class="text-error"
