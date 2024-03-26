@@ -326,9 +326,11 @@
         </Column>
 
         <template #groupheader="slotProps">
-          <div class="bg-primary-reverse py-3">
-            <span class="mr-2">RIS No.: </span>
-            <span>{{ slotProps.data.ris_no }}</span>
+          <div class="bg-primary-reverse py-3 flex align-items-center">
+            <div>
+              <span class="mr-2">RIS No.: </span>
+              <span>{{ slotProps.data.ris_no }}</span>
+            </div>
             <Button
               icon="pi pi-pencil"
               class="mr-1"
@@ -358,6 +360,7 @@
               <label>RIS NO.</label>
             </div>
             <InputText
+              class="mt-2"
               required="true"
               v-model.trim="form.newRisNo"
               autofocus
@@ -1686,7 +1689,7 @@ export default {
           this.isRisNoUpdate = false;
           this.cancel();
           this.updateData();
-          this.createdMsg();
+          this.updateRisNo();
         },
       });
     },
@@ -1730,6 +1733,9 @@ export default {
     },
     updatedMsg() {
       this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Delivery updated', life: 3000 });
+    },
+    updateRisNo() {
+      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'RIS NO. updated', life: 3000 });
     },
     deletedMsg() {
       this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Delivery deleted', life: 3000 });
