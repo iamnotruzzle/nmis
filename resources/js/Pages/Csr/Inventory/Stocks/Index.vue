@@ -13,7 +13,6 @@
         paginator
         :rows="10"
         :rowsPerPageOptions="[20, 30, 40]"
-        dataKey="id"
         filterDisplay="row"
         removableSort
         :globalFilterFields="['ris_no', 'cl2desc', 'suppname', 'chrgdesc', 'stock_lvl']"
@@ -1546,11 +1545,15 @@ export default {
         this.expiration_date !== null &&
         this.quantity !== null
       ) {
-        // e.cl2comb === this.item['cl2comb']) &&
-        //   e.fundSource == this.selectedFundSource.chrgcode
+        // console.log(this.brand);
         if (
           this.deliveryDetails.some(
-            (e) => e.cl2comb === this.item['cl2comb'] && e.fundSource == this.selectedFundSource.chrgcode
+            (e) =>
+              e.cl2comb === this.item['cl2comb'] &&
+              e.supplier == this.supplier.suppcode &&
+              e.fundSource == this.selectedFundSource.chrgcode &&
+              e.brand == this.brand.id &&
+              e.expiration_date == this.expiration_date
           )
         ) {
           this.itemNotSelected = true;
@@ -1594,7 +1597,7 @@ export default {
           preserveScroll: true,
           onSuccess: () => {
             this.stockId = null;
-            this.createStockDialog = false;
+            this.updateStockDialog = false;
             this.cancel();
             this.updateData();
             this.updatedMsg();
