@@ -1448,7 +1448,24 @@ export default {
     // server request such as POST, the data in the table
     // is updated
     storeStocksInContainer() {
+      let stock_lvl = null;
       this.stocks.forEach((e) => {
+        if (e.normal_stock == null) {
+          stock_lvl = 'N/A';
+        } else if (Number(e.quantity) >= Number(e.normal_stock)) {
+          stock_lvl = 'NORMAL';
+        } else if (
+          Number(e.alert_stock) >= Number(e.quantity) &&
+          Number(e.quantity) <= Number(e.normal_stock) &&
+          Number(e.quantity) > Number(e.critical_stock)
+        ) {
+          stock_lvl = 'ALERT';
+        } else if (Number(e.critical_stock) >= Number(e.quantity) && Number(e.quantity) > 0) {
+          stock_lvl = 'CRITICAL';
+        } else if (Number(e.quantity) == 0) {
+          stock_lvl = 'OUTOFSTOCK';
+        }
+
         const expirationDate = e.expiration_date === null ? null : new Date(e.expiration_date); // Convert expiration_date to Date object
         this.stocksList.push({
           id: e.id,
@@ -1467,16 +1484,7 @@ export default {
           normal_stock: e.normal_stock == null ? 'N/A' : Number(e.normal_stock),
           alert_stock: e.alert_stock == null ? 'N/A' : Number(e.alert_stock),
           critical_stock: e.critical_stock == null ? 'N/A' : Number(e.critical_stock),
-          stock_lvl:
-            e.normal_stock == null && e.alert_stock == null && e.critical_stock == null
-              ? 'N/A'
-              : e.quantity <= e.critical_stock && e.quantity !== 0
-              ? 'CRITICAL'
-              : e.quantity <= e.alert_stock
-              ? 'ALERT'
-              : e.quantity >= e.normal_stock
-              ? 'NORMAL'
-              : 'OUTOFSTOCK',
+          stock_lvl: stock_lvl,
           manufactured_date: e.manufactured_date === null ? '' : e.manufactured_date,
           delivered_date: e.delivered_date === null ? '' : e.delivered_date,
           expiration_date: expirationDate, // Assign expirationDate to expiration_date field
