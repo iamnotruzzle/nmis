@@ -504,14 +504,14 @@
         </div>
         <div class="field">
           <label for="quantity">Quantity</label>
-          <InputText
+          <InputNumber
             id="quantity"
             v-model.trim="form.quantity"
             required="true"
-            type="number"
             autofocus
             :class="{ 'p-invalid': form.quantity == '' }"
             @keyup.enter="submit"
+            inputId="integeronly"
           />
           <small
             class="text-error"
@@ -693,6 +693,7 @@ import Calendar from 'primevue/calendar';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
+import InputNumber from 'primevue/inputnumber';
 import moment, { now } from 'moment';
 import { use } from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
@@ -720,6 +721,7 @@ export default {
     Button,
     Dialog,
     InputText,
+    InputNumber,
   },
   props: {
     pending_requests: Number,

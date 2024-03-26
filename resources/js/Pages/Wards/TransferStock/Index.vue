@@ -296,14 +296,14 @@
         </div>
         <div class="field">
           <label for="quantity">Quantity</label>
-          <InputText
+          <InputNumber
             id="quantity"
             v-model.number="form.quantity"
             class="w-full"
             autofocus
-            type="number"
             @keyup.enter="submit"
             :class="{ 'p-invalid': Number(form.quantity) > Number(form.prevQuantity) }"
+            inputId="integeronly"
           />
           <small
             class="text-error"
@@ -473,6 +473,7 @@ import AutoComplete from 'primevue/autocomplete';
 import Textarea from 'primevue/textarea';
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
+import InputNumber from 'primevue/inputnumber';
 import Tag from 'primevue/tag';
 import moment from 'moment';
 
@@ -495,6 +496,7 @@ export default {
     Textarea,
     TabView,
     TabPanel,
+    InputNumber,
     Tag,
   },
   props: {

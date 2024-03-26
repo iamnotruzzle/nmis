@@ -405,14 +405,14 @@
         </div>
         <div class="field">
           <label for="Item">Quantity</label>
-          <InputText
+          <InputNumber
             id="quantity"
             v-model.trim="requested_qty"
             required="true"
             autofocus
-            type="number"
             :class="{ 'p-invalid': requested_qty == '' || item == null }"
             @keyup.enter="fillRequestContainer"
+            inputId="integeronly"
           />
           <small
             class="text-error"
@@ -681,14 +681,14 @@
         </div>
         <div class="field">
           <label for="Item">Quantity</label>
-          <InputText
+          <InputNumber
             id="quantity"
             v-model.trim="formConsignment.quantity"
             required="true"
             autofocus
-            type="number"
             :class="{ 'p-invalid': formConsignment.quantity == '' || item == null }"
             @keyup.enter="submitConsignment"
+            inputId="integeronly"
           />
           <small
             class="text-error"
@@ -759,18 +759,18 @@
 
             <div class="p-field flex flex-column">
               <label for="qty_to_convert">QUANTITY TO CONVERT</label>
-              <InputText
+              <InputNumber
                 id="qty_to_convert"
                 v-model.trim="formConvertItem.qty_to_convert"
                 required="true"
                 autofocus
-                type="number"
                 :class="{
                   'p-invalid':
                     formConvertItem.qty_to_convert == '' ||
                     formConvertItem.qty_to_convert == null ||
                     formConvertItem.qty_to_convert > oldQuantity,
                 }"
+                inputId="integeronly"
               />
               <span
                 v-if="formConvertItem.qty_to_convert > oldQuantity"
@@ -808,15 +808,16 @@
 
             <div class="p-field flex flex-column">
               <label for="qty_after">EQUIVALENT QUANTITY</label>
-              <InputText
+              <InputNumber
                 id="qty_after"
                 v-model.trim="formConvertItem.equivalent_quantity"
                 required="true"
                 autofocus
-                type="number"
                 :class="{
                   'p-invalid': formConvertItem.equivalent_quantity == '' || formConvertItem.equivalent_quantity == null,
                 }"
+                inputId="minmaxfraction"
+                :maxFractionDigits="2"
               />
             </div>
           </div>
@@ -871,6 +872,7 @@ import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
 import AutoComplete from 'primevue/autocomplete';
 import TextArea from 'primevue/textarea';
+import InputNumber from 'primevue/inputnumber';
 import Tag from 'primevue/tag';
 import moment from 'moment';
 import NProgress from 'nprogress';
@@ -896,6 +898,7 @@ export default {
     Tag,
     TextArea,
     Link,
+    InputNumber,
   },
   props: {
     authWardcode: Object,

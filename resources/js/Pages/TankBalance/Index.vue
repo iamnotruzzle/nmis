@@ -203,12 +203,12 @@
         </div>
         <div class="field">
           <label>Ending balance</label>
-          <InputText
+          <InputNumber
             v-model.trim="form.ending_balance"
             required="true"
             autofocus
-            type="number"
             @keyup.enter="submit"
+            inputId="integeronly"
           />
           <small
             class="text-error"
@@ -219,12 +219,12 @@
         </div>
         <div class="field">
           <label>Starting balance</label>
-          <InputText
+          <InputNumber
             v-model.trim="form.beginning_balance"
             required="true"
             autofocus
-            type="number"
             @keyup.enter="submit"
+            inputId="integeronly"
           />
           <small
             class="text-error"
@@ -318,6 +318,7 @@ import Avatar from 'primevue/avatar';
 import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
 import AutoComplete from 'primevue/autocomplete';
+import InputNumber from 'primevue/inputnumber';
 import Tag from 'primevue/tag';
 import moment from 'moment';
 import { Link } from '@inertiajs/vue3';
@@ -340,6 +341,7 @@ export default {
     AutoComplete,
     Tag,
     Link,
+    InputNumber,
   },
   props: {
     currentStocks: Object,

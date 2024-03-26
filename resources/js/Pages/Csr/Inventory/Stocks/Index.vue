@@ -535,12 +535,12 @@
                 <label>Quantity</label>
                 <span class="ml-2 text-error">*</span>
               </div>
-              <InputText
+              <InputNumber
                 required="true"
                 v-model.trim="quantity"
-                type="number"
                 autofocus
                 @keyup.enter="fillDeliveriesContainer"
+                inputId="integeronly"
               />
             </div>
           </div>
@@ -801,14 +801,14 @@
         </div>
         <div class="field">
           <label for="quantity">Quantity</label>
-          <InputText
+          <InputNumber
             id="quantity"
             v-model.trim="form.quantity"
             required="true"
-            type="number"
             autofocus
             :class="{ 'p-invalid': form.quantity == '' }"
             @keyup.enter="submit"
+            inputId="integeronly"
           />
         </div>
         <div class="field">
@@ -1194,6 +1194,7 @@ import Avatar from 'primevue/avatar';
 import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
 import AutoComplete from 'primevue/autocomplete';
+import InputNumber from 'primevue/inputnumber';
 import Tag from 'primevue/tag';
 import Textarea from 'primevue/textarea';
 
@@ -1217,6 +1218,7 @@ export default {
     AutoComplete,
     Tag,
     Textarea,
+    InputNumber,
   },
   props: {
     items: Object,

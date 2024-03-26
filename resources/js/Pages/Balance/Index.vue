@@ -208,12 +208,12 @@
         </div>
         <div class="field">
           <label>Ending balance</label>
-          <InputText
+          <InputNumber
             v-model.trim="form.ending_balance"
             required="true"
             autofocus
-            type="number"
             @keyup.enter="submit"
+            inputId="integeronly"
           />
           <small
             class="text-error"
@@ -224,12 +224,12 @@
         </div>
         <div class="field">
           <label>Starting balance</label>
-          <InputText
+          <InputNumber
             v-model.trim="form.beginning_balance"
             required="true"
             autofocus
-            type="number"
             @keyup.enter="submit"
+            inputId="integeronly"
           />
           <small
             class="text-error"
@@ -318,6 +318,7 @@ import DataTable from 'primevue/datatable';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import FileUpload from 'primevue/fileupload';
+import InputNumber from 'primevue/inputnumber';
 import Toast from 'primevue/toast';
 import Avatar from 'primevue/avatar';
 import Calendar from 'primevue/calendar';
@@ -345,6 +346,7 @@ export default {
     AutoComplete,
     Tag,
     Link,
+    InputNumber,
   },
   props: {
     currentStocks: Object,

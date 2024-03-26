@@ -179,15 +179,15 @@
             </div>
             <div class="field">
               <label for="Item">Quantity</label>
-              <InputText
+              <InputNumber
                 id="quantity"
                 v-model.trim="qtyToCharge"
                 required="true"
                 autofocus
-                type="number"
                 onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                 :class="{ 'p-invalid': qtyToCharge == '' || item == null }"
                 @keyup.enter="medicalSuppliesQtyValidation"
+                inputId="integeronly"
               />
               <small
                 class="text-error"
@@ -338,12 +338,11 @@
               >
                 Qty to return
               </label>
-              <InputText
+              <InputNumber
                 id="quantity"
                 v-model.trim="form.upd_QtyToReturn"
                 required="true"
                 autofocus
-                type="number"
                 onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                 @keyup.enter="
                   Number(form.upd_QtyToReturn) > Number(form.upd_currentChargeQty) ||
@@ -353,6 +352,7 @@
                     ? ''
                     : submit()
                 "
+                inputId="integeronly"
               />
             </div>
 
@@ -466,6 +466,7 @@ import Avatar from 'primevue/avatar';
 import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
 import AutoComplete from 'primevue/autocomplete';
+import InputNumber from 'primevue/inputnumber';
 import Tag from 'primevue/tag';
 import moment from 'moment';
 import { Link } from '@inertiajs/vue3';
@@ -488,6 +489,7 @@ export default {
     AutoComplete,
     Tag,
     Link,
+    InputNumber,
   },
   props: {
     pat_name: Array,

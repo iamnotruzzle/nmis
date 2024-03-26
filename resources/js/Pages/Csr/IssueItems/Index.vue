@@ -372,13 +372,13 @@
               style="text-align: right; width: 10%"
             >
               <template #body="slotProps">
-                <InputText
+                <InputNumber
                   id="quantity"
                   v-model.trim="slotProps.data.approved_qty"
                   required="true"
                   autofocus
-                  type="number"
                   @keyup.enter="submit"
+                  inputId="integeronly"
                 />
               </template>
             </Column>
@@ -546,6 +546,7 @@ import Avatar from 'primevue/avatar';
 import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
 import AutoComplete from 'primevue/autocomplete';
+import InputNumber from 'primevue/inputnumber';
 import Textarea from 'primevue/textarea';
 import Tag from 'primevue/tag';
 import moment from 'moment';
@@ -571,6 +572,7 @@ export default {
     Tag,
     Textarea,
     Link,
+    InputNumber,
   },
   props: {
     authWardcode: Object,

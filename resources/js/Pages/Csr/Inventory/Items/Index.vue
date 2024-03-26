@@ -378,14 +378,14 @@
         </div>
         <div class="field">
           <label>Normal stock</label>
-          <InputText
+          <InputNumber
             id="Normal stock"
             v-model.trim="form.normal_stock"
             required="true"
             autofocus
-            type="number"
             :class="{ 'p-invalid': form.normal_stock == '' }"
             @keyup.enter="submit"
+            inputId="integeronly"
           />
           <small
             class="text-error"
@@ -396,14 +396,14 @@
         </div>
         <div class="field">
           <label>Alert stock</label>
-          <InputText
+          <InputNumber
             id="Alert stock"
             v-model.trim="form.alert_stock"
             required="true"
             autofocus
-            type="number"
             :class="{ 'p-invalid': form.alert_stock == '' }"
             @keyup.enter="submit"
+            inputId="integeronly"
           />
           <small
             class="text-error"
@@ -414,14 +414,14 @@
         </div>
         <div class="field">
           <label>Critical stock</label>
-          <InputText
+          <InputNumber
             id="Critical stock"
             v-model.trim="form.critical_stock"
             required="true"
             autofocus
-            type="number"
             :class="{ 'p-invalid': form.critical_stock == '' }"
             @keyup.enter="submit"
+            inputId="integeronly"
           />
           <small
             class="text-error"
@@ -524,14 +524,14 @@
       >
         <div class="field">
           <label for="selling_price">Selling price</label>
-          <InputText
+          <InputNumber
             id="selling_price"
             v-model.trim="formPrice.selling_price"
             required="true"
-            type="number"
             autofocus
             :class="{ 'p-invalid': formPrice.selling_price == '' }"
             @keyup.enter="submitPrice"
+            inputId="integeronly"
           />
           <small
             class="text-error"
