@@ -332,7 +332,7 @@
         </template>
       </DataTable>
 
-      <!-- create & edit delivery details dialog -->
+      <!-- create delivery details dialog -->
       <Dialog
         v-model:visible="createStockDialog"
         :modal="true"
@@ -627,22 +627,205 @@
             @click="cancel"
           />
           <Button
-            v-if="isUpdate == true"
+            label="Save"
+            icon="pi pi-check"
+            text
+            type="submit"
+            :disabled="form.processing || deliveryDetails.length == 0"
+            @click="submit"
+          />
+        </template>
+      </Dialog>
+
+      <!-- update delivery details dialog -->
+      <Dialog
+        v-model:visible="updateStockDialog"
+        :style="{ width: '550px' }"
+        :modal="true"
+        class="p-fluid"
+        @hide="clickOutsideDialog"
+      >
+        <template #header>
+          <div class="text-primary text-xl font-bold">DELIVERY DETAILS</div>
+        </template>
+        <div class="field">
+          <label for="ris_no">RIS no.</label>
+          <InputText
+            id="ris_no"
+            v-model.trim="form.ris_no"
+            disabled
+            :class="{ 'p-invalid': form.ris_no == '' }"
+            @keyup.enter="submit"
+          />
+        </div>
+        <div class="field">
+          <div class="flex align-content-center">
+            <label>Supplier</label>
+            <span class="ml-2 text-error">*</span>
+          </div>
+          <Dropdown
+            required="true"
+            v-model="form.suppcode"
+            :options="suppliersList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
+            filter
+            dataKey="suppcode"
+            optionLabel="suppname"
+            optionValue="suppcode"
+            class="w-full"
+            :class="{ 'p-invalid': form.suppcode == '' }"
+          />
+        </div>
+        <div class="field">
+          <div class="flex align-content-center">
+            <label>Fund source</label>
+            <span class="ml-2 text-error">*</span>
+          </div>
+          <Dropdown
+            id="fundSource"
+            required="true"
+            v-model="form.fund_source"
+            :options="fundSourceList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
+            filter
+            showClear
+            dataKey="chrgcode"
+            optionLabel="chrgdesc"
+            optionValue="chrgcode"
+            class="w-full"
+            :class="{ 'p-invalid': form.fund_source == '' }"
+          />
+        </div>
+        <div class="field">
+          <div class="flex align-content-center">
+            <label>Item</label>
+            <span class="ml-2 text-error">*</span>
+          </div>
+          <Dropdown
+            required="true"
+            v-model="form.cl2comb"
+            :options="itemsList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
+            filter
+            dataKey="cl2comb"
+            optionLabel="cl2desc"
+            optionValue="cl2comb"
+            class="w-full"
+            :class="{ 'p-invalid': form.cl2comb == '' }"
+          />
+        </div>
+        <div class="field">
+          <label for="unit">Unit</label>
+          <InputText
+            id="unit"
+            v-model.trim="form.uomdesc"
+            disabled
+            readonly
+          />
+        </div>
+        <div class="field">
+          <div class="flex align-content-center">
+            <label>Brand</label>
+            <span class="ml-2 text-error">*</span>
+          </div>
+          <Dropdown
+            required="true"
+            v-model="form.brand"
+            :options="brandDropDownList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
+            filter
+            showClear
+            dataKey="id"
+            optionLabel="name"
+            optionValue="id"
+            class="w-full mb-3"
+            :class="{ 'p-invalid': form.brand == '' }"
+          />
+        </div>
+        <div class="field">
+          <label for="quantity">Quantity</label>
+          <InputText
+            id="quantity"
+            v-model.trim="form.quantity"
+            required="true"
+            type="number"
+            autofocus
+            :class="{ 'p-invalid': form.quantity == '' }"
+            @keyup.enter="submit"
+          />
+        </div>
+        <div class="field">
+          <label for="manufactured_date">Manufactured date</label>
+          <Calendar
+            v-model="form.manufactured_date"
+            dateFormat="mm-dd-yy"
+            showIcon
+            showButtonBar
+            :manualInput="false"
+            :hideOnDateTimeSelect="true"
+          />
+        </div>
+        <div class="field">
+          <label for="delivered_date">Delivered date</label>
+          <Calendar
+            v-model="form.delivered_date"
+            dateFormat="mm-dd-yy"
+            showIcon
+            showButtonBar
+            :manualInput="false"
+            :hideOnDateTimeSelect="true"
+          />
+        </div>
+        <div class="field">
+          <div class="flex align-content-center">
+            <label>Expiration date</label>
+            <span class="ml-2 text-error">*</span>
+          </div>
+          <Calendar
+            v-model="form.expiration_date"
+            dateFormat="mm-dd-yy"
+            showIcon
+            showButtonBar
+            :manualInput="false"
+            :minDate="minimumDate"
+            :hideOnDateTimeSelect="true"
+          />
+        </div>
+
+        <div class="field">
+          <div class="flex align-content-center">
+            <label>Remarks</label>
+            <span class="ml-2 text-error">*</span>
+          </div>
+          <Textarea
+            v-model.trim="form.remarks"
+            rows="5"
+            autofocus
+            :class="{ 'p-invalid': form.remarks == '' }"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.remarks"
+          >
+            {{ form.errors.remarks }}
+          </small>
+        </div>
+
+        <template #footer>
+          <Button
+            label="Cancel"
+            icon="pi pi-times"
+            severity="danger"
+            text
+            @click="cancel"
+          />
+          <Button
             label="Update"
             icon="pi pi-check"
             severity="warning"
             text
             type="submit"
             :disabled="form.processing || form.remarks == '' || form.remarks == null"
-            @click="submit"
-          />
-          <Button
-            v-else
-            label="Save"
-            icon="pi pi-check"
-            text
-            type="submit"
-            :disabled="form.processing || deliveryDetails.length == 0"
             @click="submit"
           />
         </template>
@@ -699,7 +882,7 @@
         </template>
       </Dialog>
 
-      <!-- create & edit dialog -->
+      <!-- create & edit brand dialog -->
       <Dialog
         v-model:visible="createBrandDialog"
         :style="{ width: '450px' }"
@@ -996,6 +1179,7 @@ export default {
       isUpdate: false,
       isUpdateBrand: false,
       createStockDialog: false,
+      updateStockDialog: false,
       createBrandDialog: false,
       deleteStockDialog: false,
       deleteBrandDialog: false,
@@ -1062,18 +1246,21 @@ export default {
         },
       ],
       form: this.$inertia.form({
+        isRisNoUpdate: false,
+        newRisNo: null,
         ris_no: null,
-        // suppcode: null,
-        // fund_source: null,
-        // cl2comb: null,
-        // uomcode: null,
-        // brand: null,
-        // cl2desc: null,
-        // quantity: null,
-        // manufactured_date: null,
-        // delivered_date: null,
-        // expiration_date: null,
-        // remarks: null,
+        suppcode: null,
+        fund_source: null,
+        cl2comb: null,
+        uomcode: null,
+        uomdesc: null,
+        brand: null,
+        cl2desc: null,
+        quantity: null,
+        manufactured_date: null,
+        delivered_date: null,
+        expiration_date: null,
+        remarks: null,
         delivery_list: [],
       }),
       formBrand: this.$inertia.form({
@@ -1333,14 +1520,17 @@ export default {
       );
     },
     editItem(item) {
+      console.log(item);
+
       this.isUpdate = true;
-      this.createStockDialog = true;
+      this.updateStockDialog = true;
       this.stockId = item.id;
       this.form.ris_no = item.ris_no;
       this.form.suppcode = item.suppcode;
       this.form.fund_source = item.chrgcode;
       this.form.cl2comb = item.cl2comb;
       this.form.uomcode = item.uomcode;
+      this.form.uomdesc = item.uomdesc;
       this.form.brand = Number(item.brand_id);
       this.form.quantity = item.quantity;
       this.form.manufactured_date = item.manufactured_date;
