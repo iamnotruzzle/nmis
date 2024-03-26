@@ -524,15 +524,14 @@
       >
         <div class="field">
           <label for="selling_price">Selling price</label>
-          <InputNumber
+          <InputText
             id="selling_price"
             v-model.trim="formPrice.selling_price"
             required="true"
             autofocus
+            type="number"
             :class="{ 'p-invalid': formPrice.selling_price == '' }"
             @keyup.enter="submitPrice"
-            inputId="minmaxfraction"
-            :maxFractionDigits="2"
           />
           <small
             class="text-error"
