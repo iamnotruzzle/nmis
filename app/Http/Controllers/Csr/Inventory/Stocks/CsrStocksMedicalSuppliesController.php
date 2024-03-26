@@ -123,7 +123,7 @@ class CsrStocksMedicalSuppliesController extends Controller
             foreach ($request->delivery_list as $delivery) {
                 // dd($delivery);
                 $stock = CsrStocksMedicalSupplies::create([
-                    'ris_no' => $delivery['ris_no'] == null ? $temp_ris_no : $request->ris_no,
+                    'ris_no' => $delivery['ris_no'] == null ? trim($temp_ris_no) : trim($request->ris_no),
                     'suppcode' => $delivery['supplier'],
                     'chrgcode' => $delivery['fundSource'],
                     'cl2comb' => $delivery['cl2comb'],

@@ -12,7 +12,7 @@
         :value="filteredData"
         paginator
         :rows="10"
-        :rowsPerPageOptions="[20, 30, 40]"
+        :rowsPerPageOptions="[10, 20, 30, 40]"
         filterDisplay="row"
         removableSort
         :globalFilterFields="['ris_no', 'cl2desc', 'suppname', 'chrgdesc', 'stock_lvl']"
