@@ -102,6 +102,11 @@ class CsrStocksMedicalSuppliesController extends Controller
             ->update([
                 'ris_no' => $newRisNo
             ]);
+
+        CsrStocksMedicalSuppliesLogs::where('ris_no', $currentRisNo)
+            ->update([
+                'ris_no' => $newRisNo
+            ]);
     }
 
     public function store(Request $request)
