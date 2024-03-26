@@ -326,7 +326,7 @@
         </Column>
 
         <template #groupheader="slotProps">
-          <div class="bg-primary-reverse py-3 flex align-items-center">
+          <div class="bg-primary-reverse py-2 flex align-items-center">
             <div>
               <span class="mr-2">RIS No.: </span>
               <span>{{ slotProps.data.ris_no }}</span>
