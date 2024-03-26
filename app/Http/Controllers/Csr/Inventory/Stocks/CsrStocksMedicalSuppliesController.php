@@ -57,7 +57,9 @@ class CsrStocksMedicalSuppliesController extends Controller
                 ORDER BY r.created_at DESC
             ) as reoder_level ON medsupply.cl2comb = reoder_level.cl2comb
             ORDER BY medsupply.expiration_date ASC;"
+
         );
+        //  ORDER BY medsupply.expiration_date ASC;"
 
         $totalStocks = CsrStocksMedicalSupplies::with('itemDetail')
             ->where('expiration_date', '>', Carbon::now()->setTimezone('Asia/Manila'))
