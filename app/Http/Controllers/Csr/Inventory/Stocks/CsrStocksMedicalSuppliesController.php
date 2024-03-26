@@ -56,7 +56,7 @@ class CsrStocksMedicalSuppliesController extends Controller
                 FROM csrw_item_reorder_level as r
                 ORDER BY r.created_at DESC
             ) as reoder_level ON medsupply.cl2comb = reoder_level.cl2comb
-            ORDER BY medsupply.expiration_date ASC;"
+            ORDER BY medsupply.ris_no ASC;"
 
         );
         //  ORDER BY medsupply.expiration_date ASC;"
