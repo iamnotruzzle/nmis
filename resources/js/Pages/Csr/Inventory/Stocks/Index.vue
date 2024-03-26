@@ -1031,7 +1031,6 @@
           removableSort
           sortField="name"
           :sortOrder="1"
-          filterDisplay="row"
           showGridlines
         >
           <template #header>
@@ -1130,7 +1129,6 @@
           removableSort
           sortField="name"
           :sortOrder="1"
-          filterDisplay="row"
           showGridlines
         >
           <template #header>
@@ -1528,6 +1526,7 @@ export default {
           total_quantity: e.total_quantity,
         });
       });
+      console.log(this.totalStocks);
     },
     updateData() {
       this.$inertia.get('csrstocks', this.params, {
