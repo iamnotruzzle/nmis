@@ -329,9 +329,62 @@
           <div class="bg-primary-reverse py-3">
             <span class="mr-2">RIS No.: </span>
             <span>{{ slotProps.data.ris_no }}</span>
+            <Button
+              icon="pi pi-pencil"
+              class="mr-1"
+              rounded
+              text
+              severity="warning"
+              @click="editRisNo(slotProps.data)"
+            />
           </div>
         </template>
       </DataTable>
+
+      <!-- update ris no. -->
+      <Dialog
+        v-model:visible="isRisNoUpdate"
+        :modal="true"
+        class="p-fluid w-3"
+        @hide="clickOutsideDialog"
+      >
+        <template #header>
+          <div class="text-primary text-xl font-bold">UPDATE RIS NO.</div>
+        </template>
+
+        <div class="">
+          <div class="field">
+            <div class="flex align-content-center">
+              <label>RIS NO.</label>
+            </div>
+            <InputText
+              required="true"
+              v-model.trim="form.newRisNo"
+              autofocus
+              @keyup.enter="submit"
+            />
+          </div>
+        </div>
+
+        <template #footer>
+          <Button
+            label="Cancel"
+            icon="pi pi-times"
+            severity="danger"
+            text
+            @click="cancel"
+          />
+          <Button
+            label="Update"
+            icon="pi pi-check"
+            text
+            severity="warning"
+            type="submit"
+            :disabled="form.processing"
+            @click="submit"
+          />
+        </template>
+      </Dialog>
 
       <!-- create delivery details dialog -->
       <Dialog
@@ -1184,6 +1237,7 @@ export default {
       createBrandDialog: false,
       deleteStockDialog: false,
       deleteBrandDialog: false,
+      isRisNoUpdate: false,
       search: '',
       // manufactured date
       from_md: null,
@@ -1247,8 +1301,8 @@ export default {
         },
       ],
       form: this.$inertia.form({
-        isRisNoUpdate: false,
         newRisNo: null,
+
         ris_no: null,
         suppcode: null,
         fund_source: null,
@@ -1514,6 +1568,7 @@ export default {
         (this.manufactured_date = null),
         (this.delivered_date = null),
         (this.expiration_date = null),
+        (this.isRisNoUpdate = false),
         this.form.clearErrors(),
         this.form.reset(),
         this.formBrand.clearErrors(),
@@ -1521,7 +1576,7 @@ export default {
       );
     },
     editItem(item) {
-      console.log(item);
+      //   console.log(item);
 
       this.isUpdate = true;
       this.updateStockDialog = true;
@@ -1537,6 +1592,12 @@ export default {
       this.form.manufactured_date = item.manufactured_date;
       this.form.delivered_date = item.delivered_date;
       this.form.expiration_date = item.expiration_date;
+    },
+    editRisNo(data) {
+      console.log(data);
+      this.isRisNoUpdate = true;
+      this.form.ris_no = data.ris_no;
+      this.form.newRisNo = data.ris_no;
     },
     fillDeliveriesContainer() {
       if (
@@ -1618,6 +1679,17 @@ export default {
         });
       }
     },
+    submitUpdateRisNo() {
+      this.form.post(route('csrstocks.store'), {
+        preserveScroll: true,
+        onSuccess: () => {
+          this.isRisNoUpdate = false;
+          this.cancel();
+          this.updateData();
+          this.createdMsg();
+        },
+      });
+    },
     confirmDeleteItem(item) {
       this.stockId = item.id;
       this.form.ris_no = item.ris_no;
@@ -1645,6 +1717,7 @@ export default {
       this.isUpdateBrand = false;
       this.createStockDialog = false;
       this.createBrandDialog = false;
+      this.isRisNoUpdate = false;
       this.form.reset();
       this.form.clearErrors();
       this.formBrand.reset();
