@@ -157,11 +157,19 @@ class CsrStocksMedicalSuppliesController extends Controller
 
             return redirect()->back();
         } else {
+            // $result = DB::connection('pims')->select(
+            //     "SELECT *
+            //     FROM tbl_ris_release
+            //     WHERE risid = ?
+            //     ORDER BY created_at ASC;",
+            //     [$request->ris_no]
+            // );
+
             $result = DB::connection('pims')->select(
-                "SELECT *
-                FROM tbl_ris_release
-                WHERE risid = ?
-                ORDER BY created_at ASC;",
+                "SELECT ris_rel.risid, ris_rel.itemid, item.description, ris_rel.releaseqty, ris_rel.unitprice
+                    FROM tbl_ris_release as ris_rel
+                    JOIN tbl_items as item ON item.itemid = ris_rel.itemid
+                    WHERE ris_rel.risid = ?;",
                 [$request->ris_no]
             );
 
