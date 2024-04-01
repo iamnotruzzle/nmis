@@ -532,6 +532,40 @@
             </div>
             <div class="field">
               <div class="flex align-content-center">
+                <label>Acquisition price</label>
+                <span class="ml-2 text-error">*</span>
+              </div>
+              <InputNumber
+                required="true"
+                v-model.trim="acquisitionPrice"
+                autofocus
+                :maxFractionDigits="2"
+              />
+            </div>
+            <div class="field">
+              <div class="flex align-content-center">
+                <label>Markup price</label>
+                <span class="ml-2 text-error">*</span>
+              </div>
+              <InputNumber
+                required="true"
+                v-model.trim="markupPercentage"
+                autofocus
+                suffix="%"
+              />
+            </div>
+            <div class="field">
+              <div class="flex align-content-center">
+                <label>Selling price</label>
+              </div>
+              <InputNumber
+                required="true"
+                v-model="roundedSellingPrice"
+                readonly
+              />
+            </div>
+            <div class="field">
+              <div class="flex align-content-center">
                 <label>Quantity</label>
                 <span class="ml-2 text-error">*</span>
               </div>
@@ -1266,6 +1300,10 @@ export default {
       manufactured_date: null,
       delivered_date: null,
       expiration_date: null,
+      acquisitionPrice: 0,
+      markupPercentage: 0,
+      localSellingPrice: 0,
+      //   sellingPrice: null,
       deliveryDetailsFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
@@ -1391,6 +1429,23 @@ export default {
 
       return filtered;
     },
+    sellingPrice() {
+      return this.acquisitionPrice * (1 + this.markupPercentage / 100);
+    },
+    roundedSellingPrice() {
+      let sellingPrice = this.sellingPrice;
+
+      // Round to the nearest 0.25, 0.50, or 0.75
+      if (sellingPrice % 1 < 0.25) {
+        return Math.floor(sellingPrice) + 0.25;
+      } else if (sellingPrice % 1 >= 0.25 && sellingPrice % 1 < 0.5) {
+        return Math.floor(sellingPrice) + 0.5;
+      } else if (sellingPrice % 1 >= 0.5 && sellingPrice % 1 < 0.75) {
+        return Math.floor(sellingPrice) + 0.75;
+      } else {
+        return Math.ceil(sellingPrice);
+      }
+    },
   },
   mounted() {
     this.setMinimumDate();
@@ -1403,6 +1458,9 @@ export default {
     this.storeSuppliersInContainer();
   },
   methods: {
+    updateLocalSellingPrice() {
+      this.localSellingPrice = this.roundedSellingPrice;
+    },
     tzone(date) {
       if (date == null || date == '') {
         return null;
@@ -1822,6 +1880,13 @@ export default {
       } else {
         this.selectedItemsUomDesc = null;
       }
+    },
+    // Watch for changes in acquisitionPrice and markupPercentage
+    acquisitionPrice(newValue) {
+      this.updateLocalSellingPrice();
+    },
+    markupPercentage(newValue) {
+      this.updateLocalSellingPrice();
     },
   },
 };
