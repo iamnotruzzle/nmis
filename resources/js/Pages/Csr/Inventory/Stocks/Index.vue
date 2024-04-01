@@ -410,6 +410,7 @@
                 autofocus
                 :disabled="deliveryDetails.length != 0"
                 :class="{ 'p-invalid': form.ris_no == '' }"
+                @keyup.enter="fillDeliveriesContainer"
               />
               <div class="mt-1 text-blue-400">If RIS No. is not provided, a temporary RIS No. will be assigned.</div>
             </div>
@@ -1231,6 +1232,7 @@ import AutoComplete from 'primevue/autocomplete';
 import InputNumber from 'primevue/inputnumber';
 import Tag from 'primevue/tag';
 import Textarea from 'primevue/textarea';
+import axios from 'axios';
 
 import moment, { now } from 'moment';
 
@@ -1275,6 +1277,7 @@ export default {
       deleteStockDialog: false,
       deleteBrandDialog: false,
       isRisNoUpdate: false,
+      params: {},
       search: '',
       // manufactured date
       from_md: null,
@@ -1667,50 +1670,71 @@ export default {
       this.form.ris_no = data.ris_no;
       this.form.newRisNo = data.ris_no;
     },
-    fillDeliveriesContainer() {
-      if (
-        this.supplier !== null &&
-        this.selectedFundSource !== null &&
-        this.item !== null &&
-        this.brand !== null &&
-        this.expiration_date !== null &&
-        this.quantity !== null
-      ) {
-        // console.log(this.brand);
-        if (
-          this.deliveryDetails.some(
-            (e) =>
-              e.cl2comb === this.item['cl2comb'] &&
-              e.supplier == this.supplier.suppcode &&
-              e.fundSource == this.selectedFundSource.chrgcode &&
-              e.brand == this.brand.id &&
-              e.expiration_date == this.expiration_date
-          )
-        ) {
-          this.itemNotSelected = true;
-        } else {
-          this.itemNotSelected = false;
-          this.deliveryDetails.push({
-            ris_no: this.form.ris_no,
-            cl2comb: this.item.cl2comb,
-            cl2desc: this.item.cl2desc,
-            quantity: this.quantity,
-            unit: this.unit,
-            unitName: this.selectedItemsUomDesc,
-            brand: this.brand.id,
-            brandName: this.brand.name,
-            supplier: this.supplier.suppcode,
-            supplierName: this.supplier.suppname,
-            fundSource: this.selectedFundSource.chrgcode,
-            fundSourceName: this.selectedFundSource.chrgdesc,
-            suppcode: this.suppcode,
-            manufactured_date: this.manufactured_date,
-            delivered_date: this.delivered_date,
-            expiration_date: this.expiration_date,
-          });
-        }
-        this.form.delivery_list = this.deliveryDetails;
+    async fillDeliveriesContainer() {
+      //   this.form.post(route('csrstocks.store'), {
+      //     preserveScroll: true,
+      //     onSuccess: (e) => {
+      //       //   this.stockId = null;
+      //       //   this.createStockDialog = false;
+      //       //   this.cancel();
+      //       //   this.updateData();
+      //       //   this.createdMsg();
+      //       console.log('res', e);
+      //     },
+      //   });
+
+      try {
+        const response = await axios.post('csrstocks', this.form);
+        console.log(response.data); // Log the response data if needed
+        // Handle successful response
+      } catch (error) {
+        console.error('Error submitting form:', error);
+        // Handle error
       }
+
+      //   if (
+      //     this.supplier !== null &&
+      //     this.selectedFundSource !== null &&
+      //     this.item !== null &&
+      //     this.brand !== null &&
+      //     this.expiration_date !== null &&
+      //     this.quantity !== null
+      //   ) {
+      //     // console.log(this.brand);
+      //     if (
+      //       this.deliveryDetails.some(
+      //         (e) =>
+      //           e.cl2comb === this.item['cl2comb'] &&
+      //           e.supplier == this.supplier.suppcode &&
+      //           e.fundSource == this.selectedFundSource.chrgcode &&
+      //           e.brand == this.brand.id &&
+      //           e.expiration_date == this.expiration_date
+      //       )
+      //     ) {
+      //       this.itemNotSelected = true;
+      //     } else {
+      //       this.itemNotSelected = false;
+      //       this.deliveryDetails.push({
+      //         ris_no: this.form.ris_no,
+      //         cl2comb: this.item.cl2comb,
+      //         cl2desc: this.item.cl2desc,
+      //         quantity: this.quantity,
+      //         unit: this.unit,
+      //         unitName: this.selectedItemsUomDesc,
+      //         brand: this.brand.id,
+      //         brandName: this.brand.name,
+      //         supplier: this.supplier.suppcode,
+      //         supplierName: this.supplier.suppname,
+      //         fundSource: this.selectedFundSource.chrgcode,
+      //         fundSourceName: this.selectedFundSource.chrgdesc,
+      //         suppcode: this.suppcode,
+      //         manufactured_date: this.manufactured_date,
+      //         delivered_date: this.delivered_date,
+      //         expiration_date: this.expiration_date,
+      //       });
+      //     }
+      //     this.form.delivery_list = this.deliveryDetails;
+      //   }
     },
     removeFromRequestContainer(item) {
       this.deliveryDetails.splice(
