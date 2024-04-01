@@ -25,16 +25,6 @@ class CsrStocksMedicalSuppliesController extends Controller
 {
     public function index(Request $request)
     {
-        // SQL query
-        $result = DB::connection('pims')->select(
-            "SELECT DISTINCT item, catID
-                FROM tbl_items
-                WHERE status = 'A'
-                AND catID IN (1, 2, 3, 9)
-                LIMIT 18446744073709551615;"
-        );
-        dd($result);
-
         $items = DB::select(
             "SELECT hclass2.cl2comb as cl2comb, hclass2.cl2desc as cl2desc, huom.uomcode as uomcode, huom.uomdesc as uomdesc FROM hclass2
                 JOIN huom ON hclass2.uomcode = huom.uomcode
@@ -98,11 +88,6 @@ class CsrStocksMedicalSuppliesController extends Controller
             'fundSource' => $fundSource,
             'suppliers' => $suppliers,
         ]);
-    }
-
-    public function show(Request $request)
-    {
-        dd();
     }
 
     public function generateTempRisNo($length = 10)
