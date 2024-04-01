@@ -1316,6 +1316,7 @@ export default {
       stocksList: [],
       totalStocksList: [],
       suppliersList: [],
+      risRelease: [],
       filters: {
         global: {
           value: null,
