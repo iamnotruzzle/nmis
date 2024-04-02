@@ -10,7 +10,7 @@ class PimsItemsSeeder extends Seeder
 {
     public function run()
     {
-        // $json = if item column is null, ' ' or '.' the item column will be equal to its description column
+        // $json = item column is null, ' ' or '.', the item column will be equal to its description column
         $json = File::get('database/data/pims_items.json');
         $data = json_decode($json);
 
