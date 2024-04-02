@@ -7,11 +7,12 @@ use App\Models\Item;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class PimsItemsSeeder extends Seeder
 {
-    public function generateUniqueID($length = 7)
+    public function generateUniqueID($length = 5)
     {
         return Str::random($length);
     }
@@ -19,13 +20,18 @@ class PimsItemsSeeder extends Seeder
     public function run()
     {
         // $categories = item column is null, ' ' or '.', the item column will be equal to its description column
-        $categories = File::get('database/data/pims_items.categories');
+        $categories = File::get('database/data/pims_items.json');
         $data = json_decode($categories);
 
         // normalized and duplicate items are remove
         $duplicatedItemsRemoved = [];
         $seenItems = [];
 
+        // normalized and duplicate descriptions are remove
+        $duplicatedDescriptionsRemoved = [];
+        $seenDescriptions = [];
+
+        // populating item table
         foreach ($data as $item) {
             // Normalize the item property by removing extra whitespace characters, trailing punctuation, converting to lowercase, and trimming
             $normalizedItem = strtolower(trim(preg_replace('/[\s\p{P}]+$/u', '', $item->item)));
@@ -59,43 +65,60 @@ class PimsItemsSeeder extends Seeder
             ]);
         }
 
-        // saving items to table
-        // foreach ($data as $obj) {
-        //     $uniqueID = $this->generateUniqueID();
+        $hclass1 = DB::select(
+            "SELECT cl1comb, cl1desc
+                FROM hclass1
+                WHERE cl1comb LIKE '1000-%'
+                ORDER BY cl1desc ASC",
+        );
 
-        //     $item = Item::firstOrCreate(
-        //         [
-        //             // 1000 = ptcode from hclass1
-        //             // 'p' . $obj->cl1code = cl1code from hclass1
-        //             'cl2comb' => '1000' . '-' . cl1code from category . '-' . $uniqueID,
-        //             'cl1comb' => '1000' . '-' . cl1code from category,
-        //             'cl2code' => $uniqueID,
-        //             'stkno' => '',
-        //             'cl2desc' => $obj->description,
-        //             'cl2retprc' => 0.00,
-        //             'uomcode' => 'PC',
-        //             'cl2dteas' => Carbon::now(),
-        //             'cl2stat' => 'I',
-        //             'cl2lock' => 'N',
-        //             'cl2upsw' => 'P',
-        //             'cl2dtmd' => NULL,
-        //             'curcode' => NULL,
-        //             'cl2purp' => NULL,
-        //             'curcode1' => NULL,
-        //             'uomcode1' => NULL,
-        //             'cl2ctr' => NULL,
-        //             'brandname' => NULL,
-        //             'stockbal' => 0.00,
-        //             'pharmaceutical' => NULL,
-        //             'pharmaceutical' => NULL,
-        //             'baldteasof' => Carbon::now(),
-        //             'begbal' => 0.00,
-        //             'lot_no' => '',
-        //             'barcode' => NULL,
-        //             'rpoint' => NULL,
-        //             'catID' => $obj->catID
-        //         ]
-        //     );
-        // }
+        // populating item table
+        foreach ($hclass1 as $hclass) {
+            // Normalize hclass1.cl1desc
+            $normalizedHclassDesc = strtolower(trim(preg_replace('/[\s\p{P}]+$/u', '', $hclass->cl1desc)));
+
+            foreach ($data as $obj) {
+                // Normalize data.item
+                $normalizedItem = strtolower(trim(preg_replace('/[\s\p{P}]+$/u', '', $obj->item)));
+
+                // Calculate MD5 hash of normalized strings
+                $hclassDescHash = md5($normalizedHclassDesc);
+                $itemHash = md5($normalizedItem);
+
+                // Compare MD5 hashes
+                if ($hclassDescHash === $itemHash) {
+                    // Create item if hclass1.cl1desc is EQUAL TO data.item
+                    $uniqueID = $this->generateUniqueID();
+                    $item = Item::create([
+                        'cl2comb' => $hclass->cl1comb . '-' . $uniqueID,
+                        'cl1comb' => $hclass->cl1comb,
+                        'cl2code' => $uniqueID,
+                        'stkno' => '',
+                        'cl2desc' => $obj->description, // Assuming description is provided in $data
+                        'cl2retprc' => 0.00,
+                        'uomcode' => 'PC',
+                        'cl2dteas' => Carbon::now(),
+                        'cl2stat' => 'I',
+                        'cl2lock' => 'N',
+                        'cl2upsw' => 'P',
+                        'cl2dtmd' => NULL,
+                        'curcode' => NULL,
+                        'cl2purp' => NULL,
+                        'curcode1' => NULL,
+                        'uomcode1' => NULL,
+                        'cl2ctr' => NULL,
+                        'brandname' => NULL,
+                        'stockbal' => 0.00,
+                        'pharmaceutical' => NULL,
+                        'baldteasof' => Carbon::now(),
+                        'begbal' => 0.00,
+                        'lot_no' => '',
+                        'barcode' => NULL,
+                        'rpoint' => NULL,
+                        'catID' => $obj->catid
+                    ]);
+                }
+            }
+        }
     }
 }
