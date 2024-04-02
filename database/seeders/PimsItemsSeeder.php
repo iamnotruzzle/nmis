@@ -10,9 +10,9 @@ class PimsItemsSeeder extends Seeder
 {
     public function run()
     {
-        // $json = item column is null, ' ' or '.', the item column will be equal to its description column
-        $json = File::get('database/data/pims_items.json');
-        $data = json_decode($json);
+        // $categories = item column is null, ' ' or '.', the item column will be equal to its description column
+        $categories = File::get('database/data/pims_items.categories');
+        $data = json_decode($categories);
 
         // normalized and duplicate items are remove
         $duplicatedItemsRemoved = [];
