@@ -15,7 +15,7 @@ class PimsItemsSeeder extends Seeder
         $data = json_decode($json);
 
         // normalized and duplicate items are remove
-        $newArray = [];
+        $duplicatedItemsRemoved = [];
         $seenItems = [];
 
         foreach ($data as $item) {
@@ -27,14 +27,14 @@ class PimsItemsSeeder extends Seeder
 
             // Check if the hash is already seen
             if (!isset($seenItems[$hash])) {
-                // If not a duplicate, add to newArray and seenItems
-                $newArray[] = $item;
+                // If not a duplicate, add to duplicatedItemsRemoved and seenItems
+                $duplicatedItemsRemoved[] = $item;
                 $seenItems[$hash] = true;
             }
         }
         // dd($duplicateItemsRemoved);
 
-        foreach ($newArray as $obj) {
+        foreach ($duplicatedItemsRemoved as $obj) {
             $trimmedItem = trim($obj->item);
 
             $subCategory = Category::firstOrCreate([
