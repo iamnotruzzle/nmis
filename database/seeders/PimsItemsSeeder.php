@@ -14,23 +14,27 @@ class PimsItemsSeeder extends Seeder
         $json = File::get('database/data/pims_items.json');
         $data = json_decode($json);
 
-        $duplicateItemsRemoved = [];
+        // normalized and duplicate items are remove
+        $newArray = [];
         $seenItems = [];
 
         foreach ($data as $item) {
-            // Trim and convert the item property to lowercase before checking for duplicates
-            $trimmedLowerItem = strtolower(trim($item->item));
+            // Normalize the item property by removing extra whitespace characters, trailing punctuation, converting to lowercase, and trimming
+            $normalizedItem = strtolower(trim(preg_replace('/[\s\p{P}]+$/u', '', $item->item)));
 
-            // Ensure you're accessing object properties correctly
-            if (!isset($seenItems[$trimmedLowerItem]) && !in_array($trimmedLowerItem, array_column($duplicateItemsRemoved, 'item'))) {
-                $duplicateItemsRemoved[] = $item;
-                $seenItems[$trimmedLowerItem] = true;
+            // Calculate MD5 hash of the normalized item
+            $hash = md5($normalizedItem);
+
+            // Check if the hash is already seen
+            if (!isset($seenItems[$hash])) {
+                // If not a duplicate, add to newArray and seenItems
+                $newArray[] = $item;
+                $seenItems[$hash] = true;
             }
         }
-
         // dd($duplicateItemsRemoved);
 
-        foreach ($duplicateItemsRemoved as $obj) {
+        foreach ($newArray as $obj) {
             $trimmedItem = trim($obj->item);
 
             $subCategory = Category::firstOrCreate([
