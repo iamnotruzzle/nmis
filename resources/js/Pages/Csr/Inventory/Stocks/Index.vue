@@ -587,7 +587,7 @@
               v-model:filters="deliveryDetailsFilter"
               :value="deliveryDetails"
               paginator
-              :rows="5"
+              :rows="15"
               dataKey="id"
               removableSort
               showGridlines
@@ -645,6 +645,11 @@
               >
               </Column>
               <Column
+                field="price"
+                header="ACQUISITION PRICE"
+              >
+              </Column>
+              <Column
                 field="quantity"
                 header="QTY"
               >
@@ -671,20 +676,6 @@
               >
                 <template #body="{ data }">
                   {{ tzone(data.expiration_date) }}
-                </template>
-              </Column>
-              <Column
-                header=""
-                style="width: 3%"
-              >
-                <template #body="slotProps">
-                  <Button
-                    icon="pi pi-times"
-                    rounded
-                    text
-                    severity="danger"
-                    @click="removeFromRequestContainer(slotProps.data)"
-                  />
                 </template>
               </Column>
             </DataTable>
@@ -1316,7 +1307,6 @@ export default {
       stocksList: [],
       totalStocksList: [],
       suppliersList: [],
-      risRelease: [],
       filters: {
         global: {
           value: null,
@@ -1687,7 +1677,19 @@ export default {
       try {
         const response = await axios.post('csrstocks', this.form);
         console.log(response.data); // Log the response data if needed
-        // Handle successful response
+
+        response.data.forEach((e) => {
+          //   this.deliveryDetails.ris_no = e.risid;
+          //   this.deliveryDetails.cl2desc = e.description;
+          //   this.deliveryDetails.price = e.unitprice;
+
+          this.deliveryDetails.push({
+            ris_no: e.risid,
+            cl2desc: e.description,
+            quantity: e.releaseqty,
+            price: e.unitprice,
+          });
+        });
       } catch (error) {
         console.error('Error submitting form:', error);
         // Handle error
