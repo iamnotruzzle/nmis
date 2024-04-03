@@ -31,7 +31,7 @@ class PimsItemsSeeder extends Seeder
         $duplicatedDescriptionsRemoved = [];
         $seenDescriptions = [];
 
-        // populating item table
+
         foreach ($data as $item) {
             // Normalize the item property by removing extra whitespace characters, trailing punctuation, converting to lowercase, and trimming
             $normalizedItem = strtolower(trim(preg_replace('/[\s\p{P}]+$/u', '', $item->item)));

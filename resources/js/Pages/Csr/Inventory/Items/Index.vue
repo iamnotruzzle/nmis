@@ -15,7 +15,7 @@
         :rowsPerPageOptions="[20, 30, 40]"
         dataKey="cl2comb"
         filterDisplay="row"
-        sortField="item"
+        sortField="cl2desc"
         :sortOrder="1"
         removableSort
         :globalFilterFields="['cl1comb', 'cl2desc', 'cl2stat']"
@@ -93,6 +93,8 @@
           field="cl2desc"
           header="DESCRIPTION"
           style="width: 30%"
+          sortable
+          removableSort
         >
           <template #body="{ data }">
             {{ data.cl2desc }}
@@ -692,10 +694,13 @@ export default {
       ],
       selectedCatID: null,
       mainCategoryFilter: [
+        { name: 'Accountable forms', code: 'Accountable forms' },
         { name: 'Drugs and medicines', code: 'Drugs and medicines' },
         { name: 'IT supplies', code: 'IT supplies' },
         { name: 'Medical supplies', code: 'Medical supplies' },
+        { name: 'Non-accountable Forms', code: 'Non-accountable Forms' },
         { name: 'Office Supplies', code: 'Office Supplies' },
+        { name: 'Other Supplies and Materials', code: 'Other Supplies and Materials' },
       ],
       selectedCl1comb: null,
       subCategoryFilter: [],
