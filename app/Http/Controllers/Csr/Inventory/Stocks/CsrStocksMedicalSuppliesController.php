@@ -160,12 +160,6 @@ class CsrStocksMedicalSuppliesController extends Controller
             $result = array();
 
             $pims = DB::connection('pims')->select(
-                // "SELECT ris_rel.risid, ris_rel.itemid, item.description, ris_rel.releaseqty, ris_rel.unitprice
-                //     FROM tbl_ris_release as ris_rel
-                //     JOIN tbl_items as item ON item.itemid = ris_rel.itemid
-                //     WHERE ris_rel.risid = ?;",
-                // [$request->ris_no]
-
                 "SELECT ris_rel.risid, ris_rel.itemid, item.description, ris_rel.releaseqty, ris_rel.unitprice
                     FROM tbl_ris_release as ris_rel
                     JOIN tbl_items as item ON item.itemid = ris_rel.itemid
@@ -175,9 +169,6 @@ class CsrStocksMedicalSuppliesController extends Controller
                     ORDER BY item.description ASC;",
                 [$request->ris_no]
             );
-
-            // ddd($pims);
-
 
             $items = DB::select(
                 "SELECT * FROM hclass2
@@ -200,7 +191,7 @@ class CsrStocksMedicalSuppliesController extends Controller
                 // Check if a match was found
                 if ($matchedItem) {
                     $result[] = [
-                        'ris_no' => $pim->risid,
+                        'risid' => $pim->risid,
                         'cl2comb' => $matchedItem->cl2comb,
                         'cl2desc' => $matchedItem->cl2desc,
                         'releaseqty' => $pim->releaseqty,

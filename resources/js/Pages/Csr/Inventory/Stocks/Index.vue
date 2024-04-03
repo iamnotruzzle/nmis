@@ -393,7 +393,7 @@
       <Dialog
         v-model:visible="createStockDialog"
         :modal="true"
-        class="p-fluid w-11"
+        class="p-fluid w-11 overflow-hidden"
         @hide="clickOutsideDialog"
       >
         <template #header>
@@ -412,7 +412,6 @@
                 :class="{ 'p-invalid': form.ris_no == '' }"
                 @keyup.enter="fillDeliveriesContainer"
               />
-              <div class="mt-1 text-blue-400">If RIS No. is not provided, a temporary RIS No. will be assigned.</div>
             </div>
             <div class="field">
               <div class="flex align-content-center">
@@ -615,11 +614,6 @@
               <template #empty> No stock found. </template>
               <template #loading> Loading stock data. Please wait. </template>
               <Column
-                field="ris_no"
-                header="RIS NO."
-              >
-              </Column>
-              <Column
                 field="cl2desc"
                 header="ITEM"
               >
@@ -645,12 +639,12 @@
               >
               </Column>
               <Column
-                field="price"
+                field="unitprice"
                 header="ACQUISITION PRICE"
               >
               </Column>
               <Column
-                field="quantity"
+                field="releaseqty"
                 header="QTY"
               >
               </Column>
@@ -682,7 +676,7 @@
           </div>
         </div>
 
-        <div
+        <!-- <div
           v-if="isUpdate == true"
           class="field"
         >
@@ -699,7 +693,7 @@
           >
             {{ form.errors.remarks }}
           </small>
-        </div>
+        </div> -->
 
         <template #footer>
           <Button
@@ -1678,18 +1672,19 @@ export default {
         const response = await axios.post('csrstocks', this.form);
         console.log(response.data); // Log the response data if needed
 
-        // response.data.forEach((e) => {
-        //   //   this.deliveryDetails.ris_no = e.risid;
-        //   //   this.deliveryDetails.cl2desc = e.description;
-        //   //   this.deliveryDetails.price = e.unitprice;
+        response.data.forEach((e) => {
+          //   this.deliveryDetails.ris_no = e.risid;
+          //   this.deliveryDetails.cl2desc = e.description;
+          //   this.deliveryDetails.price = e.unitprice;
 
-        //   this.deliveryDetails.push({
-        //     ris_no: e.risid,
-        //     cl2desc: e.description,
-        //     quantity: e.releaseqty,
-        //     price: e.unitprice,
-        //   });
-        // });
+          this.deliveryDetails.push({
+            risid: e.risid,
+            cl2comb: e.cl2comb,
+            cl2desc: e.cl2desc,
+            releaseqty: e.releaseqty,
+            unitprice: e.unitprice,
+          });
+        });
       } catch (error) {
         console.error('Error submitting form:', error);
         // Handle error
