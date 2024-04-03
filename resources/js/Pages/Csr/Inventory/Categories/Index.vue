@@ -333,10 +333,13 @@ export default {
         { name: 'Inactive', code: 'I' },
       ],
       categoryFilter: [
+        { name: 'Accountable forms', catID: 22 },
         { name: 'Drugs and medicines', catID: 9 },
         { name: 'IT supplies', catID: 3 },
         { name: 'Medical supplies', catID: 1 },
+        { name: 'Non-accountable Forms', catID: 25 },
         { name: 'Office Supplies', catID: 2 },
+        { name: 'Other Supplies and Materials', catID: 28 },
       ],
       statusList: [
         {
@@ -349,10 +352,13 @@ export default {
         },
       ],
       categoryList: [
+        { name: 'Accountable forms', catID: 22 },
         { name: 'Drugs and medicines', catID: 9 },
         { name: 'IT supplies', catID: 3 },
         { name: 'Medical supplies', catID: 1 },
+        { name: 'Non-accountable Forms', catID: 25 },
         { name: 'Office Supplies', catID: 2 },
+        { name: 'Other Supplies and Materials', catID: 28 },
       ],
       csrSuppliesSubCategoryList: [],
       filters: {
