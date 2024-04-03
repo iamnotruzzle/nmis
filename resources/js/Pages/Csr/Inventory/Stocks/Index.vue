@@ -1678,18 +1678,18 @@ export default {
         const response = await axios.post('csrstocks', this.form);
         console.log(response.data); // Log the response data if needed
 
-        response.data.forEach((e) => {
-          //   this.deliveryDetails.ris_no = e.risid;
-          //   this.deliveryDetails.cl2desc = e.description;
-          //   this.deliveryDetails.price = e.unitprice;
+        // response.data.forEach((e) => {
+        //   //   this.deliveryDetails.ris_no = e.risid;
+        //   //   this.deliveryDetails.cl2desc = e.description;
+        //   //   this.deliveryDetails.price = e.unitprice;
 
-          this.deliveryDetails.push({
-            ris_no: e.risid,
-            cl2desc: e.description,
-            quantity: e.releaseqty,
-            price: e.unitprice,
-          });
-        });
+        //   this.deliveryDetails.push({
+        //     ris_no: e.risid,
+        //     cl2desc: e.description,
+        //     quantity: e.releaseqty,
+        //     price: e.unitprice,
+        //   });
+        // });
       } catch (error) {
         console.error('Error submitting form:', error);
         // Handle error

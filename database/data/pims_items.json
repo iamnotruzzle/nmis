@@ -21,8 +21,22 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 9311,
+		"catid" : 28,
+		"item" : "'UV Sterilizer Lamp",
+		"description" : "'UV Sterilizer Lamp",
+		"status" : "A"
+	},
+	{
 		"itemid" : 18867,
 		"catid" : 2,
+		"item" : "(2UNITS) 6.5 & 7.5MM CANNULATED CANCELLOUS SCREW (1 UNIT) RECON PLATE (1 UNIT) FELVIC REDUCTION CLAMPS",
+		"description" : "(2UNITS) 6.5 & 7.5MM CANNULATED CANCELLOUS SCREW (1 UNIT) RECON PLATE (1 UNIT) FELVIC REDUCTION CLAMPS",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18868,
+		"catid" : 28,
 		"item" : "(2UNITS) 6.5 & 7.5MM CANNULATED CANCELLOUS SCREW (1 UNIT) RECON PLATE (1 UNIT) FELVIC REDUCTION CLAMPS",
 		"description" : "(2UNITS) 6.5 & 7.5MM CANNULATED CANCELLOUS SCREW (1 UNIT) RECON PLATE (1 UNIT) FELVIC REDUCTION CLAMPS",
 		"status" : "A"
@@ -84,6 +98,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 9619,
+		"catid" : 28,
+		"item" : "1 liter Air for Misting Machine",
+		"description" : "1 liter Air for Misting Machine",
+		"status" : "A"
+	},
+	{
 		"itemid" : 13517,
 		"catid" : 1,
 		"item" : "1% PVP Impregnated Antimicrobial Foam Dressing Non adhesive 20cm x 20cm x 0.5cm, 10 's/ box",
@@ -91,10 +112,24 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 17615,
+		"catid" : 28,
+		"item" : "10 cylinder of gas helium",
+		"description" : "10 cylinder of gas helium",
+		"status" : "A"
+	},
+	{
 		"itemid" : 13779,
 		"catid" : 3,
 		"item" : "107A",
 		"description" : "107A or its equivalent",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12896,
+		"catid" : 28,
+		"item" : "12% VAT",
+		"description" : "12% VAT",
 		"status" : "A"
 	},
 	{
@@ -109,6 +144,13 @@
 		"catid" : 3,
 		"item" : "17A or its equivalent",
 		"description" : "17A laserjet tone or its equivalent",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12850,
+		"catid" : 28,
+		"item" : "2.4 Titanium Reconstruction Plate with Titanium Screws",
+		"description" : "2.4 Titanium Reconstruction Plate with Titanium Screws",
 		"status" : "A"
 	},
 	{
@@ -130,6 +172,20 @@
 		"catid" : 3,
 		"item" : "26X or its equivalent",
 		"description" : "26X laserjet toner or its equivalent",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10498,
+		"catid" : 28,
+		"item" : "2nd Mirror",
+		"description" : "2nd Mirror",
+		"status" : "A"
+	},
+	{
+		"itemid" : 7927,
+		"catid" : 28,
+		"item" : "3 in 1 coffee with cup and stirrer",
+		"description" : "3 in 1 coffee with cup and stirrer",
 		"status" : "A"
 	},
 	{
@@ -161,10 +217,38 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 15476,
+		"catid" : 28,
+		"item" : "5-in-1 Pitcher Set",
+		"description" : "5-in-1 Pitcher Set",
+		"status" : "A"
+	},
+	{
 		"itemid" : 14665,
 		"catid" : 3,
 		"item" : "55x",
 		"description" : "55x or its equivalent, page yield up to 12,000, for HP Laserjet Pro M521DW",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15477,
+		"catid" : 28,
+		"item" : "6 pcs plate",
+		"description" : "6 pcs plate",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9473,
+		"catid" : 28,
+		"item" : "60kg Weighing Scale Flat Plate",
+		"description" : "60kg Weighing Scale Flat Plate",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9559,
+		"catid" : 28,
+		"item" : "6SM/N100, 12 Volts Battery",
+		"description" : "6SM/N100, 12 Volts Battery",
 		"status" : "A"
 	},
 	{
@@ -207,6 +291,13 @@
 		"catid" : 1,
 		"item" : "Absorbent cotton, pure, 400-500 grams, smooth, with USP standard of absorbency",
 		"description" : "Absorbent cotton, pure, 400-500 grams, smooth, with USP standard of absorbency",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18012,
+		"catid" : 28,
+		"item" : "Accommodation",
+		"description" : "Accommodation (11 rooms, 2 pax/room, 2 single bed with complementary breakfast)",
 		"status" : "A"
 	},
 	{
@@ -315,6 +406,62 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 12574,
+		"catid" : 28,
+		"item" : "Acrylic Arts and Craft Paint 100mL, green",
+		"description" : "Acrylic Arts and Craft Paint 100mL, green (OT)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10385,
+		"catid" : 28,
+		"item" : "Acrylic Arts and Craft Paint, 100mL, black",
+		"description" : "Acrylic Arts and Craft Paint, 100mL, black (OT)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10384,
+		"catid" : 28,
+		"item" : "Acrylic Arts and Craft Paint, 100mL, blue",
+		"description" : "Acrylic Arts and Craft Paint, 100mL, blue (OT)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10387,
+		"catid" : 28,
+		"item" : "Acrylic Arts and Craft Paint, 100mL, red",
+		"description" : "Acrylic Arts and Craft Paint, 100mL, red (OT)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10388,
+		"catid" : 28,
+		"item" : "Acrylic Arts and Craft Paint, 100mL, yellow",
+		"description" : "Acrylic Arts and Craft Paint, 100mL, yellow (OT)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9551,
+		"catid" : 28,
+		"item" : "Acrylic plastic sheet dffuser white (4'x8'x2.0mm)",
+		"description" : "Acrylic plastic sheet dffuser white (4'x8'x2.0mm)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9552,
+		"catid" : 28,
+		"item" : "Acrylic plastic sheet dffuser white (4'x8'x3.0mm)",
+		"description" : "Acrylic plastic sheet dffuser white (4'x8'x3.0mm)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9553,
+		"catid" : 28,
+		"item" : "Acrylic plastic sheet dffuser white (4'x8'x4.0mm)",
+		"description" : "Acrylic plastic sheet dffuser white (4'x8'x4.0mm)",
+		"status" : "A"
+	},
+	{
 		"itemid" : 671,
 		"catid" : 9,
 		"item" : "Activated Charcoal powder",
@@ -343,6 +490,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 10310,
+		"catid" : 28,
+		"item" : "Add: 12% E-Vat",
+		"description" : "Add: 12% E-Vat",
+		"status" : "A"
+	},
+	{
 		"itemid" : 106,
 		"catid" : 9,
 		"item" : "ADENOSINE ",
@@ -354,6 +508,104 @@
 		"catid" : 1,
 		"item" : "Adhesive bandage, made of woven fabric, 100's/pack",
 		"description" : "Adhesive bandage, made of woven fabric, 100's/pack",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12695,
+		"catid" : 28,
+		"item" : "Adjustable flat to incline bench press machine",
+		"description" : "Adjustable flat to incline bench press machine",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12698,
+		"catid" : 28,
+		"item" : "Adjustable treatment plinth",
+		"description" : "Adjustable treatment plinth",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9444,
+		"catid" : 28,
+		"item" : "Adjustable Wrench",
+		"description" : "Adjustable Wrench",
+		"status" : "A"
+	},
+	{
+		"itemid" : 11289,
+		"catid" : 25,
+		"item" : "Admission and Registry Logbook",
+		"description" : "Admission and Registry Logbook, as per sample (RERC)\r\nAdditional Specifications: 1.Made out of raw materials from at least 50% recycled fibre. 2.The supplier shall supply paper which is at least Elementary Chlorine Free (ECF). 3.Any paper wrapping and carton box packing must be made from 100% recycled fibre.",
+		"status" : "A"
+	},
+	{
+		"itemid" : 11290,
+		"catid" : 25,
+		"item" : "Admission and Registry Logbook",
+		"description" : "Admission and Registry Logbook, 300pages, color red, 24\"x13\", as per sample (Admitting Unit)\r\nAdditional Specifications: 1.Made out of raw materials from at least 50% recycled fibre. 2.The supplier shall supply paper which is at least Elementary Chlorine Free (ECF). 3.Any paper wrapping and carton box packing must be made from 100% recycled fibre.",
+		"status" : "A"
+	},
+	{
+		"itemid" : 7584,
+		"catid" : 25,
+		"item" : "Admission and Registry Logbook",
+		"description" : "Admission and Registry Logbook, as per sample (Operating Room)\r\nAdditional Specifications: 1.Made out of raw materials from at least 50% recycled fibre. 2.The supplier shall supply paper which is at least Elementary Chlorine Free (ECF). 3.Any paper wrapping and carton box packing must be made from 100% recycled fibre.",
+		"status" : "A"
+	},
+	{
+		"itemid" : 7585,
+		"catid" : 25,
+		"item" : "Admission and Registry Logbook",
+		"description" : "Admission and Registry Logbook, as per sample (Emergency Room)\r\nAdditional Specifications: 1.Made out of raw materials from at least 50% recycled fibre. 2.The supplier shall supply paper which is at least Elementary Chlorine Free (ECF). 3.Any paper wrapping and carton box packing must be made from 100% recycled fibre.",
+		"status" : "A"
+	},
+	{
+		"itemid" : 7586,
+		"catid" : 25,
+		"item" : "Admission and Registry logbook",
+		"description" : "Admission and Registry logbook, as per sample (X-ray/UTZ/CT Scan/MRI)\r\nAdditional Specifications: 1.Made out of raw materials from at least 50% recycled fibre. 2.The supplier shall supply paper which is at least Elementary Chlorine Free (ECF). 3.Any paper wrapping and carton box packing must be made from 100% recycled fibre.",
+		"status" : "A"
+	},
+	{
+		"itemid" : 7587,
+		"catid" : 25,
+		"item" : "Admission and Registry Logbook",
+		"description" : "Admission and Registry Logbook, as per sample (Laboratory)\r\nAdditional Specifications: 1.Made out of raw materials from at least 50% recycled fibre. 2.The supplier shall supply paper which is at least Elementary Chlorine Free (ECF). 3.Any paper wrapping and carton box packing must be made from 100% recycled fibre.",
+		"status" : "A"
+	},
+	{
+		"itemid" : 7588,
+		"catid" : 25,
+		"item" : "Admission and Registry Logbook",
+		"description" : "Admission and Registry Logbook, as per sample (Phic Department)\r\nAdditional Specifications: 1.Made out of raw materials from at least 50% recycled fibre. 2.The supplier shall supply paper which is at least Elementary Chlorine Free (ECF). 3.Any paper wrapping and carton box packing must be made from 100% recycled fibre.",
+		"status" : "A"
+	},
+	{
+		"itemid" : 8880,
+		"catid" : 28,
+		"item" : "Admission Kit",
+		"description" : "Admission kit, with the following components: a pair or STAINLESS spoon and fork, 1 germ killing bath soap 30 ml, 1 toothbush for ADULT (medium), 1  30 g toothpaste , 1   210cc  plastic cup calibrated with hospital logo, 1 face towel WHITE 10\" x 10\", 1 toilet paper 2-PLY, 1  60 ml   70%  Isopropyl Alcohol, 1 digital thermometer, 1 plastic dipper assorted colors PACKED with plastic transparent zipped bag with printed hospital logo and offered services (as per sample) (Admitting Unit)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15734,
+		"catid" : 25,
+		"item" : "Adolescent Answer Sheet",
+		"description" : "Minnesota Multiphasic Personality Inventory II or  III Adolescent Answer Sheet",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15735,
+		"catid" : 25,
+		"item" : "Adolescent Profile Form",
+		"description" : "Minnesota Multiphasic Personality Inventory II or III Adolescent Profile Form",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10156,
+		"catid" : 28,
+		"item" : "Adult coloring books (secret garden, enchanted forest animal kingdom), 100 pages",
+		"description" : "Adult coloring books (secret garden, enchanted forest animal kingdom), 100 pages",
 		"status" : "A"
 	},
 	{
@@ -420,6 +672,27 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 10162,
+		"catid" : 28,
+		"item" : "Advocacy for Hema-Onco Patients (bag, canvass)",
+		"description" : "Advocacy for Hema-Onco Patients (bag, canvass) ",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10022,
+		"catid" : 28,
+		"item" : "Advocacy T-shirt (assorted sizes)",
+		"description" : "Advocacy T-shirt (assorted sizes)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9135,
+		"catid" : 28,
+		"item" : "Air Cleaner",
+		"description" : "Air Cleaner",
+		"status" : "A"
+	},
+	{
 		"itemid" : 11307,
 		"catid" : 1,
 		"item" : "Air Cushion",
@@ -452,6 +725,27 @@
 		"catid" : 1,
 		"item" : "Air Cushion Mask/Inflatable Face Mask with valve, soft/fine cushion, size 1",
 		"description" : "Air Cushion Mask/Inflatable Face Mask with valve, soft/fine cushion, size 1",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12193,
+		"catid" : 28,
+		"item" : "Aircooler",
+		"description" : "Aircooler",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10313,
+		"catid" : 28,
+		"item" : "Akapulko Soap",
+		"description" : "Akapulko Soap",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10541,
+		"catid" : 28,
+		"item" : "Alarm Bell",
+		"description" : "Alarm Bell",
 		"status" : "A"
 	},
 	{
@@ -494,6 +788,20 @@
 		"catid" : 9,
 		"item" : "Alcohol",
 		"description" : "Alcohol, Ethyl, 70% topical solution, 1 gal",
+		"status" : "A"
+	},
+	{
+		"itemid" : 17924,
+		"catid" : 28,
+		"item" : "Alcon BSS Bag",
+		"description" : "Alcon BSS Bag NGP 500ml - ETG",
+		"status" : "A"
+	},
+	{
+		"itemid" : 17921,
+		"catid" : 28,
+		"item" : "Alcon Clearcut",
+		"description" : "Alcon Clearcut HP2 2.2",
 		"status" : "A"
 	},
 	{
@@ -606,6 +914,13 @@
 		"catid" : 9,
 		"item" : "Alteplase ",
 		"description" : "Alteplase (Recombinant Tissue Plasminogen Activator) 50mg powder for IV Infusion",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13184,
+		"catid" : 28,
+		"item" : "Aluminum Foil",
+		"description" : "Aluminum Foil",
 		"status" : "A"
 	},
 	{
@@ -812,6 +1127,69 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 8031,
+		"catid" : 28,
+		"item" : "Android Cellphone",
+		"description" : "Android Cellphone ",
+		"status" : "A"
+	},
+	{
+		"itemid" : 19286,
+		"catid" : 28,
+		"item" : "Android Smartphone ",
+		"description" : "Android Smartphone -  SIM: Dual SIM (Nano-SIM, dual stand-by); Display: IPS LCD, 90Hz 6.5\"; RAM: at least 4GB; ROM: at least 128GB;  Main Camera: Dual 50 MP (wide), 2 MP (macro); Selfie Camera: 8 MP; OS: Android 13",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10444,
+		"catid" : 28,
+		"item" : "Anesthesia Machine Assembly cover seal absorber breathing circuit gas",
+		"description" : "Anesthesia Machine Assembly cover seal absorber breathing circuit gas",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10443,
+		"catid" : 28,
+		"item" : "Anesthesia Machine Flow Sensor",
+		"description" : "Anesthesia Machine Flow Sensor",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10445,
+		"catid" : 28,
+		"item" : "Anesthesia Machine Foam Kit 20's",
+		"description" : "Anesthesia Machine Foam Kit 20's",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10442,
+		"catid" : 28,
+		"item" : "Anesthesia Machine Oxygen Sensor",
+		"description" : "Anesthesia Machine Oxygen Sensor",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9445,
+		"catid" : 28,
+		"item" : "Angle Grinder",
+		"description" : "Angle Grinder",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12623,
+		"catid" : 28,
+		"item" : "Animal form board tray",
+		"description" : "Animal form board tray (Occupational Therapy Section)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18274,
+		"catid" : 25,
+		"item" : "Answer Sheet ",
+		"description" : "TOGRA Answer Sheet (pack of 25)",
+		"status" : "A"
+	},
+	{
 		"itemid" : 2941,
 		"catid" : 9,
 		"item" : "Anti D immunoglobulin (human anti-D immunoglobulin) 200mcg/ml, 1.5mL (IM)",
@@ -868,6 +1246,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 17614,
+		"catid" : 28,
+		"item" : "APD Compressor absorber",
+		"description" : "APD Compressor absorber",
+		"status" : "A"
+	},
+	{
 		"itemid" : 18577,
 		"catid" : 9,
 		"item" : "Apixaban",
@@ -921,6 +1306,13 @@
 		"catid" : 1,
 		"item" : "Arm sling",
 		"description" : "Arm sling, blue cloth and shoulder strap, large size",
+		"status" : "A"
+	},
+	{
+		"itemid" : 14184,
+		"catid" : 28,
+		"item" : "Art Paper",
+		"description" : "Art Paper, 10's/pack (OT)",
 		"status" : "A"
 	},
 	{
@@ -1008,6 +1400,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 12624,
+		"catid" : 28,
+		"item" : "Assorted square and round pegboard (10 round and 10 square)",
+		"description" : "Assorted square and round pegboard (10 round and 10 square) (Occupational Therapy Section)",
+		"status" : "A"
+	},
+	{
 		"itemid" : 1365,
 		"catid" : 9,
 		"item" : "ATENOLOL ",
@@ -1061,6 +1460,13 @@
 		"catid" : 9,
 		"item" : "ATROPINE EYE DROPS SOLUTION",
 		"description" : "Atropine Eye Drops Solution,1%, 5 mL (as sulfate)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13122,
+		"catid" : 28,
+		"item" : "Auto Darkening Welding Mask",
+		"description" : "Auto Darkening Welding Mask",
 		"status" : "A"
 	},
 	{
@@ -1127,6 +1533,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 10253,
+		"catid" : 28,
+		"item" : "Back-up Power Supply for Emergency Light & Alarm Bell (input: 220VAC/Output:12VDC)",
+		"description" : "Back-up Power Supply for Emergency Light & Alarm Bell (input: 220VAC/Output:12VDC)",
+		"status" : "A"
+	},
+	{
 		"itemid" : 2942,
 		"catid" : 9,
 		"item" : "Baclofen",
@@ -1162,6 +1575,20 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 10042,
+		"catid" : 28,
+		"item" : "Ball Joint (Lower) - left and right",
+		"description" : "Ball Joint (Lower) - left and right",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10043,
+		"catid" : 28,
+		"item" : "Ball Joint (Upper) - left and right",
+		"description" : "Ball Joint (Upper) - left and right",
+		"status" : "A"
+	},
+	{
 		"itemid" : 18652,
 		"catid" : 1,
 		"item" : "Balloon Dilator, 12-15mm, 240cm long",
@@ -1180,6 +1607,13 @@
 		"catid" : 1,
 		"item" : "Balloon Dilator, 18-20mm, 240cm long",
 		"description" : "Balloon Dilator, 18-20mm, 240cm long",
+		"status" : "A"
+	},
+	{
+		"itemid" : 19333,
+		"catid" : 22,
+		"item" : "Ballpen (black, 0.5mm)",
+		"description" : "Ballpen (black, 0.5mm)",
 		"status" : "A"
 	},
 	{
@@ -1260,6 +1694,27 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 8015,
+		"catid" : 25,
+		"item" : "Baron Emotional Quotient Inventory",
+		"description" : "Baron Emotional Quotient Inventory, Answer Sheet",
+		"status" : "A"
+	},
+	{
+		"itemid" : 8016,
+		"catid" : 25,
+		"item" : "Baron Emotional Quotient Inventory",
+		"description" : "Baron Emotional Quotient Inventory, Profile Form",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10167,
+		"catid" : 28,
+		"item" : "Basic Blind 50% UV with measurement 56\"x54' (2 panels of window) and 56x71\" (2 panels of window) with installation",
+		"description" : "Basic Blind 50% UV with measurement 56\"x54' (2 panels of window) and 56x71\" (2 panels of window) with installation",
+		"status" : "A"
+	},
+	{
 		"itemid" : 7550,
 		"catid" : 2,
 		"item" : "Battery",
@@ -1323,6 +1778,20 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 12699,
+		"catid" : 28,
+		"item" : "Battle rope",
+		"description" : "Battle rope, 80 ft",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10314,
+		"catid" : 28,
+		"item" : "Bayabas Soap",
+		"description" : "Bayabas Soap",
+		"status" : "A"
+	},
+	{
 		"itemid" : 16795,
 		"catid" : 1,
 		"item" : "BB20 Sediment Filter 5 micron 20 ",
@@ -1344,6 +1813,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 17645,
+		"catid" : 28,
+		"item" : "Bed caster medical wheel",
+		"description" : "5\" Bed caster medical wheel universal screw with foot break equipped.",
+		"status" : "A"
+	},
+	{
 		"itemid" : 11326,
 		"catid" : 1,
 		"item" : "Bed pan",
@@ -1351,10 +1827,45 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 13230,
+		"catid" : 28,
+		"item" : "Bed Sheet",
+		"description" : "Bed Sheet with Pillow Case",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12571,
+		"catid" : 25,
+		"item" : "Beery - Buktenika Developmental Test of Visual - Motor Integration, Sixth edition (short form Tests; 10 long form Tests; 10 Supplementary Motor Tests Forms)",
+		"description" : "Beery - Buktenika Developmental Test of Visual - Motor Integration, Sixth edition (short form Tests; 10 long form Tests; 10 Supplementary Motor Tests Forms)",
+		"status" : "A"
+	},
+	{
 		"itemid" : 15219,
 		"catid" : 1,
 		"item" : "Belfour Retractor, 100mm depth, 250mm wide\r\n",
 		"description" : "Belfour Retractor, 100mm depth, 250mm wide\r\n",
+		"status" : "A"
+	},
+	{
+		"itemid" : 14163,
+		"catid" : 28,
+		"item" : "Bench Counter Top",
+		"description" : "Bench Counter Top",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18277,
+		"catid" : 25,
+		"item" : "Bender gestalt II motor test booklet",
+		"description" : "Bender gestalt II motor test booklet (pack of 25)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18276,
+		"catid" : 25,
+		"item" : "Bender visual motor gestalt",
+		"description" : "Bender visual motor gestalt II",
 		"status" : "A"
 	},
 	{
@@ -1428,6 +1939,27 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 18047,
+		"catid" : 28,
+		"item" : "Bicolumnar Plating Distal Humerus",
+		"description" : "Bicolumnar Plating Distal Humerus",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18048,
+		"catid" : 28,
+		"item" : "BICOLUMNAR PLATING DISTAL HUMERUS",
+		"description" : "BICOLUMNAR PLATING DISTAL HUMERUS",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18181,
+		"catid" : 28,
+		"item" : "BILATERAL DISTAL RADIUS LOCKING PLATES",
+		"description" : "BILATERAL DISTAL RADIUS LOCKING PLATES",
+		"status" : "A"
+	},
+	{
 		"itemid" : 15587,
 		"catid" : 1,
 		"item" : "Biliary Stent, 10F, 12cm, soft plastic\r\n",
@@ -1467,6 +1999,13 @@
 		"catid" : 1,
 		"item" : "Biliary Stent, Fr. 7, 10cm, soft plastic",
 		"description" : "Biliary Stent, Fr. 7, 10cm, soft plastic",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15005,
+		"catid" : 28,
+		"item" : "Bingo cards",
+		"description" : "Bingo Cards",
 		"status" : "A"
 	},
 	{
@@ -1568,6 +2107,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 13227,
+		"catid" : 28,
+		"item" : "Blackbox nerve stimulator",
+		"description" : "Blackbox nerve stimulator",
+		"status" : "A"
+	},
+	{
 		"itemid" : 11334,
 		"catid" : 1,
 		"item" : "Blade",
@@ -1624,10 +2170,24 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 15471,
+		"catid" : 28,
+		"item" : "Blender, heavy duty",
+		"description" : "Blender, heavy duty",
+		"status" : "A"
+	},
+	{
 		"itemid" : 8374,
 		"catid" : 9,
 		"item" : "Bleomycin powder, 15mg (IM,IV,SC) (as sulfate)",
 		"description" : "Bleomycin powder, 15mg (IM,IV,SC) (as sulfate)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10161,
+		"catid" : 28,
+		"item" : "Blood bank Advocacy Program for Cancer Patients (t-shirts)",
+		"description" : "Blood bank Advocacy Program for Cancer Patients (t-shirts)",
 		"status" : "A"
 	},
 	{
@@ -1673,10 +2233,24 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 9360,
+		"catid" : 28,
+		"item" : "Boots and Metal Toe",
+		"description" : "Boots and Metal Toe",
+		"status" : "A"
+	},
+	{
 		"itemid" : 16794,
 		"catid" : 1,
 		"item" : "Bowie Dick test pack, 100pcs/box, compatible to steam autoclave at OR",
 		"description" : "Bowie Dick test pack, 100pcs/box, compatible to steam autoclave at OR",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12625,
+		"catid" : 28,
+		"item" : "Box garter",
+		"description" : "Box garter (Occupational Therapy Section)",
 		"status" : "A"
 	},
 	{
@@ -1764,6 +2338,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 9137,
+		"catid" : 28,
+		"item" : "Brake Pad",
+		"description" : "Brake Pad",
+		"status" : "A"
+	},
+	{
 		"itemid" : 18865,
 		"catid" : 1,
 		"item" : "Breast biopsy site marker",
@@ -1827,6 +2408,34 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 13945,
+		"catid" : 28,
+		"item" : "Brown Paper Bag",
+		"description" : "Brown Paper Bag 3.5\" x 2\" x 7\"",
+		"status" : "A"
+	},
+	{
+		"itemid" : 14978,
+		"catid" : 28,
+		"item" : "Brown Paper Bag, size 12, 100's/pack",
+		"description" : "Brown Paper Bag, size 12, 100's/pack\r\n",
+		"status" : "A"
+	},
+	{
+		"itemid" : 14979,
+		"catid" : 28,
+		"item" : "Brown Paper Bag, size 2, 100's/pack",
+		"description" : "Brown Paper Bag, size 2, 100's/pack\r\n",
+		"status" : "A"
+	},
+	{
+		"itemid" : 14977,
+		"catid" : 28,
+		"item" : "Brown Paper Bag, size 25, 100's/pack",
+		"description" : "Brown Paper Bag, size 25, 100's/pack\r\n",
+		"status" : "A"
+	},
+	{
 		"itemid" : 1366,
 		"catid" : 9,
 		"item" : "Budesodine",
@@ -1887,6 +2496,13 @@
 		"catid" : 9,
 		"item" : "Butamirate 75mg/5ml syrup",
 		"description" : "Butamirate 75mg/5ml syrup, 60mL as citrate",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9643,
+		"catid" : 28,
+		"item" : "Butane Gas Cartridge",
+		"description" : "Butane Gas Cartridge",
 		"status" : "A"
 	},
 	{
@@ -1960,6 +2576,20 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 11247,
+		"catid" : 28,
+		"item" : "Calibration and Preventive Maintenance",
+		"description" : "Calibration and Preventive Maintenance",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15265,
+		"catid" : 28,
+		"item" : "Candle Kit for the making of Scented Candles",
+		"description" : "Candle Kit for the making of Scented Candles",
+		"status" : "A"
+	},
+	{
 		"itemid" : 14289,
 		"catid" : 1,
 		"item" : "Cannula",
@@ -1985,6 +2615,13 @@
 		"catid" : 1,
 		"item" : "Cannula, transparent inner cap, 5 mm for laparascopic cholecystectomy, compatible with the existing machine",
 		"description" : "Cannula, transparent inner cap, 5 mm for laparascopic cholecystectomy, compatible with the existing machine",
+		"status" : "A"
+	},
+	{
+		"itemid" : 17953,
+		"catid" : 28,
+		"item" : "Cannulated Screws",
+		"description" : "Cannulated Screws",
 		"status" : "A"
 	},
 	{
@@ -2027,6 +2664,13 @@
 		"catid" : 9,
 		"item" : "Captopril",
 		"description" : "Captopril 25mg",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9565,
+		"catid" : 28,
+		"item" : "car vacuum",
+		"description" : "Car Vacuum",
 		"status" : "A"
 	},
 	{
@@ -2300,6 +2944,13 @@
 		"catid" : 1,
 		"item" : "Cardiac Patch Monitor clear with foam compatible to the existing cardiac monitors for mindray, 20's/pack",
 		"description" : "Cardiac Patch Monitor clear with foam compatible to the existing cardiac monitors for mindray, 20's/pack",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10315,
+		"catid" : 28,
+		"item" : "Carrot Soap",
+		"description" : "Carrot Soap",
 		"status" : "A"
 	},
 	{
@@ -3451,6 +4102,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 17925,
+		"catid" : 28,
+		"item" : "Centurion",
+		"description" : "Centurion Ultravit Anterior Vitrectomy Probe G.23",
+		"status" : "A"
+	},
+	{
 		"itemid" : 17930,
 		"catid" : 1,
 		"item" : "Centurion",
@@ -3469,6 +4127,34 @@
 		"catid" : 2,
 		"item" : "Certificate Holder",
 		"description" : "Certificate holder, plastic, size 8.5\" x 11\"",
+		"status" : "A"
+	},
+	{
+		"itemid" : 8332,
+		"catid" : 22,
+		"item" : "Certificate of Death",
+		"description" : "MF-103 (Certificate of Death) (HIMS)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 8331,
+		"catid" : 22,
+		"item" : "Certificate of Live Birth",
+		"description" : "MF-102 (Certificate of Birth) (HIMS)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 17110,
+		"catid" : 28,
+		"item" : "Certified Photo Copy",
+		"description" : "Certified Photo Copy (Cadastral/Vicinity Map)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15263,
+		"catid" : 28,
+		"item" : "Cervical Pedicle Screw",
+		"description" : "Cervical Pedicle Screw 3.5 x 4.0MM, Crosslink, Burr, Mayfield, Wilson Frame ",
 		"status" : "A"
 	},
 	{
@@ -3500,10 +4186,45 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 18202,
+		"catid" : 28,
+		"item" : "Chair",
+		"description" : "Ergonomic Chair Mid-Back Height Adjustable  w/Lumbar Support Home Office Chairs  Classical Adjustable Computer Chair",
+		"status" : "A"
+	},
+	{
+		"itemid" : 11291,
+		"catid" : 22,
+		"item" : "Charge slip",
+		"description" : "Charge slip, pre-numbered, triplicate, 50's/booklet (as per sample)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 17337,
+		"catid" : 22,
+		"item" : "Charge slip",
+		"description" : "Charge slip, pre-numbered, duplicate, 50's/booklet (as per sample)",
+		"status" : "A"
+	},
+	{
 		"itemid" : 11422,
 		"catid" : 1,
 		"item" : "Chest Wound Drainage Bottle with rubber connector tubing, 1000mL capacity (autoclavable)",
 		"description" : "Chest Wound Drainage Bottle with rubber connector tubing, 1000mL capacity (autoclavable)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18352,
+		"catid" : 25,
+		"item" : "Children's Problem Checklist",
+		"description" : "Children's Problem Checklist (package of 50)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18305,
+		"catid" : 25,
+		"item" : "Childrens Problems Checklist",
+		"description" : "Children's Problems Checklist",
 		"status" : "A"
 	},
 	{
@@ -3721,6 +4442,41 @@
 		"catid" : 9,
 		"item" : "Clarithromycin ",
 		"description" : "Clarithromycin 250mg/5mL granules/powder for suspension, 50mL",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12795,
+		"catid" : 28,
+		"item" : "Clavicle Plating with complete instrumentation",
+		"description" : "Clavicle Plating with complete instrumentation",
+		"status" : "A"
+	},
+	{
+		"itemid" : 14849,
+		"catid" : 28,
+		"item" : "Clay",
+		"description" : "Modelling clay, red",
+		"status" : "A"
+	},
+	{
+		"itemid" : 14850,
+		"catid" : 28,
+		"item" : "Clay",
+		"description" : "Modelling clay, green",
+		"status" : "A"
+	},
+	{
+		"itemid" : 14851,
+		"catid" : 28,
+		"item" : "Clay",
+		"description" : "Modelling clay, yellow",
+		"status" : "A"
+	},
+	{
+		"itemid" : 14852,
+		"catid" : 28,
+		"item" : "Clay",
+		"description" : "Modelling clay, brown",
 		"status" : "A"
 	},
 	{
@@ -3948,6 +4704,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 12626,
+		"catid" : 28,
+		"item" : "Clothes pin",
+		"description" : "Clothes pin 20 pcs (Occupational Therapy Section)",
+		"status" : "A"
+	},
+	{
 		"itemid" : 10287,
 		"catid" : 9,
 		"item" : "Clotrimazole",
@@ -3980,6 +4743,13 @@
 		"catid" : 9,
 		"item" : "Clozapine 25 mg",
 		"description" : "Clozapine 25 mg",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10040,
+		"catid" : 28,
+		"item" : "Clutch Lining",
+		"description" : "Clutch Lining",
 		"status" : "A"
 	},
 	{
@@ -4025,10 +4795,38 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 17909,
+		"catid" : 28,
+		"item" : "Coil Mat",
+		"description" : "Coil Mat (4Ã—10yard per roll)",
+		"status" : "A"
+	},
+	{
 		"itemid" : 796,
 		"catid" : 9,
 		"item" : "Colchicine ",
 		"description" : "Colchicine 500mcg",
+		"status" : "A"
+	},
+	{
+		"itemid" : 17610,
+		"catid" : 28,
+		"item" : "Cold head exchange",
+		"description" : "Cold head exchange price",
+		"status" : "A"
+	},
+	{
+		"itemid" : 17611,
+		"catid" : 28,
+		"item" : "Cold temperature adapter",
+		"description" : "Cold temperature adapter",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18803,
+		"catid" : 28,
+		"item" : "Coldhead Replacement",
+		"description" : "Coldhead Replacement",
 		"status" : "A"
 	},
 	{
@@ -4071,6 +4869,13 @@
 		"catid" : 2,
 		"item" : "Colored Paper",
 		"description" : "Colored Paper, size 8.5\" x 11\", color orange, 250's/ream",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10157,
+		"catid" : 28,
+		"item" : "Coloring books for kids (100 pages)",
+		"description" : "Coloring books for kids (100 pages)",
 		"status" : "A"
 	},
 	{
@@ -4137,10 +4942,24 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 10106,
+		"catid" : 28,
+		"item" : "Comprehensive Filters for Plasma Air Sterilizer",
+		"description" : "Comprehensive Filters for Plasma Air Sterilizer",
+		"status" : "A"
+	},
+	{
 		"itemid" : 667,
 		"catid" : 9,
 		"item" : "Compressed Air",
 		"description" : "Compressed Air",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10446,
+		"catid" : 28,
+		"item" : "Compression Belt",
+		"description" : "Compression Belt",
 		"status" : "A"
 	},
 	{
@@ -4214,6 +5033,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 18379,
+		"catid" : 28,
+		"item" : "Computer Printer Maximum print resolution: 48000x1200\r\nDuplex print speed: 5ppm\r\nOptical scan resolution: 1200dpi",
+		"description" : "Computer Printer Maximum print resolution: 48000x1200\r\nDuplex print speed: 5ppm\r\nOptical scan resolution: 1200dpi",
+		"status" : "A"
+	},
+	{
 		"itemid" : 7244,
 		"catid" : 3,
 		"item" : "Computer Processor (Intel/Core)",
@@ -4232,6 +5058,13 @@
 		"catid" : 3,
 		"item" : "Computer Speaker",
 		"description" : "Computer Speaker USB",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15006,
+		"catid" : 28,
+		"item" : "Condenser Lens Assembly",
+		"description" : "Condenser Lens Assembly",
 		"status" : "A"
 	},
 	{
@@ -4267,6 +5100,13 @@
 		"catid" : 3,
 		"item" : "Connector",
 		"description" : "Connector/Adapter, HDMI to VGA",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12627,
+		"catid" : 28,
+		"item" : "Cooking knife",
+		"description" : "Cooking knife (Occupational Therapy Section)",
 		"status" : "A"
 	},
 	{
@@ -4326,6 +5166,20 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 13187,
+		"catid" : 28,
+		"item" : "Cornstarchware",
+		"description" : "Cornstarchware 2 compartments, biodegradable, 6pks/box",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13188,
+		"catid" : 28,
+		"item" : "Cornstarchware",
+		"description" : "Cornstarchware 3 compartments, biodegradable, 6pks/box",
+		"status" : "A"
+	},
+	{
 		"itemid" : 11809,
 		"catid" : 1,
 		"item" : "Coronary Syringe",
@@ -4375,6 +5229,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 13243,
+		"catid" : 28,
+		"item" : "Courier Fee",
+		"description" : "Courier Fee (60 booklets)",
+		"status" : "A"
+	},
+	{
 		"itemid" : 11767,
 		"catid" : 1,
 		"item" : "Cover All PPE, disposable, with blue lining with cuffed sleeves and ankle with hood,and foot cover, size large",
@@ -4403,10 +5264,80 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 10474,
+		"catid" : 25,
+		"item" : "COVID-19 Vaccination Card",
+		"description" : "COVID-19 Vaccination Card",
+		"status" : "A"
+	},
+	{
+		"itemid" : 11045,
+		"catid" : 28,
+		"item" : "CPU Server with pre installed Central Monitoring System",
+		"description" : "CPU Server with pre installed Central Monitoring System",
+		"status" : "A"
+	},
+	{
 		"itemid" : 7276,
 		"catid" : 3,
 		"item" : "Crimping Tool",
 		"description" : "Crimping Tool, Heavy Duty",
+		"status" : "A"
+	},
+	{
+		"itemid" : 17109,
+		"catid" : 28,
+		"item" : "CTC of Tax Declaration",
+		"description" : "CTC of Tax Declaration",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10316,
+		"catid" : 28,
+		"item" : "Cucumber Soap",
+		"description" : "Cucumber Soap",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15113,
+		"catid" : 28,
+		"item" : "Curtain Blinds",
+		"description" : "Curtain Blinds (White or Yellow Green) at least 160cm(width)x180cm(height)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15114,
+		"catid" : 28,
+		"item" : "Curtain Blinds",
+		"description" : "Curtain Blinds (White or Yellow Green) at least 120cm(width)x180cm(height)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9114,
+		"catid" : 28,
+		"item" : "Curtain Wall with aluminum framing with single leaf door",
+		"description" : "Curtain Wall with aluminum framing with single leaf door",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10021,
+		"catid" : 28,
+		"item" : "Customized face mask",
+		"description" : "Customized face mask",
+		"status" : "A"
+	},
+	{
+		"itemid" : 11952,
+		"catid" : 28,
+		"item" : "Customized Polo Shirt (Mint green and light gray cotton with embroidered NSC-NL logo, colored print, front; black print, back ",
+		"description" : "Customized Polo Shirt (Mint green and light gray cotton with embroidered NSC-NL logo, colored print, front; black print, back ",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9446,
+		"catid" : 28,
+		"item" : "Cut-Off Machine, 14\" diameter",
+		"description" : "Cut-Off Machine, 14\" diameter",
 		"status" : "A"
 	},
 	{
@@ -4655,6 +5586,20 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 19234,
+		"catid" : 28,
+		"item" : "DESK FAN",
+		"description" : "DESK FAN",
+		"status" : "A"
+	},
+	{
+		"itemid" : 8203,
+		"catid" : 28,
+		"item" : "developer Type 28 Black",
+		"description" : "developer type 28 Black",
+		"status" : "A"
+	},
+	{
 		"itemid" : 802,
 		"catid" : 9,
 		"item" : "DEXAMETHASONE",
@@ -4851,6 +5796,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 16337,
+		"catid" : 28,
+		"item" : "Digital clamp",
+		"description" : "Digital clamp tester with capacitance settings, heavy duty",
+		"status" : "A"
+	},
+	{
 		"itemid" : 18908,
 		"catid" : 3,
 		"item" : "Digital Fingerprint Scanner",
@@ -4890,6 +5842,20 @@
 		"catid" : 9,
 		"item" : "Diltiazem 60mg",
 		"description" : "Diltiazem 60mg (as hydrochloride)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13229,
+		"catid" : 28,
+		"item" : "Dining Table",
+		"description" : "Dining Table",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13032,
+		"catid" : 28,
+		"item" : "Diode",
+		"description" : "Diode",
 		"status" : "A"
 	},
 	{
@@ -4984,6 +5950,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 13189,
+		"catid" : 28,
+		"item" : "Dishwashing Liquid",
+		"description" : "Dishwashing Liquid",
+		"status" : "A"
+	},
+	{
 		"itemid" : 15213,
 		"catid" : 1,
 		"item" : "Disinfectant",
@@ -5033,6 +6006,34 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 13190,
+		"catid" : 28,
+		"item" : "Disposable Bowl",
+		"description" : "Disposable Bowl, 390cc",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13191,
+		"catid" : 28,
+		"item" : "Disposable Cup",
+		"description" : "Disposable Cup, 8oz",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13192,
+		"catid" : 28,
+		"item" : "Disposable Fork",
+		"description" : "Disposable Fork, 100's",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13193,
+		"catid" : 28,
+		"item" : "Disposable Gloves",
+		"description" : "Disposable Gloves, 100's/box",
+		"status" : "A"
+	},
+	{
 		"itemid" : 11531,
 		"catid" : 1,
 		"item" : "Disposable Hemoperfusion Cartridge; loading capacity -300+/-3; volume (mL) 185+-5; absorbent material-styreme divinylbenzene copolymers; housing material polycarbonate; sterilization method-irradiation sterilization method-irradiation sterlization; unit package - 290mm (L) x105mm (W) x 105mm (H), 0.90 kg",
@@ -5047,6 +6048,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 13194,
+		"catid" : 28,
+		"item" : "Disposable Spoon",
+		"description" : "Disposable Spoon, 100's",
+		"status" : "A"
+	},
+	{
 		"itemid" : 11449,
 		"catid" : 1,
 		"item" : "Disposable transdcucer kit with monitoring kit connected to a single use disposable pressure transducer with an integrated  pressure sensor and a stopcock",
@@ -5054,10 +6062,31 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 15784,
+		"catid" : 28,
+		"item" : "Distal Femoral Locking Plate",
+		"description" : "Distal Femoral Locking Plate with complete implant and instrumentation set",
+		"status" : "A"
+	},
+	{
 		"itemid" : 18677,
 		"catid" : 1,
 		"item" : "Distal hood compatible with the existing duodenoscope.",
 		"description" : "Distal hood compatible with the existing duodenoscope.",
+		"status" : "A"
+	},
+	{
+		"itemid" : 17711,
+		"catid" : 28,
+		"item" : "Distal Radius",
+		"description" : "Distal Radius Locking Plate Variable Angle LCP",
+		"status" : "A"
+	},
+	{
+		"itemid" : 11245,
+		"catid" : 28,
+		"item" : "Distal Tibia Locked plate with instrumentation",
+		"description" : "Distal Tibia Locked plate with instrumentation",
 		"status" : "A"
 	},
 	{
@@ -5166,6 +6195,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 15473,
+		"catid" : 28,
+		"item" : "Double Burner Gas Stove",
+		"description" : "Double Burner Gas Stove",
+		"status" : "A"
+	},
+	{
 		"itemid" : 11450,
 		"catid" : 1,
 		"item" : "Double Lumen Tube, size 35 left bronchus",
@@ -5222,6 +6258,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 17970,
+		"catid" : 28,
+		"item" : "Dropbox Subscription",
+		"description" : "Dropbox Subscription",
+		"status" : "A"
+	},
+	{
 		"itemid" : 17709,
 		"catid" : 9,
 		"item" : "Drugs and Medicines",
@@ -5229,10 +6272,24 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 8201,
+		"catid" : 28,
+		"item" : "Drum 1312/ MP 1500 / MP 2001",
+		"description" : "Drum 1312/ MP 1500 / MP 2001",
+		"status" : "A"
+	},
+	{
 		"itemid" : 14683,
 		"catid" : 3,
 		"item" : "Drum Drive Gear",
 		"description" : "Drum Drive Gear",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10394,
+		"catid" : 28,
+		"item" : "Dry Iron 1200W",
+		"description" : "Dry Iron 1200W",
 		"status" : "A"
 	},
 	{
@@ -5383,6 +6440,62 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 9574,
+		"catid" : 28,
+		"item" : "Electric Breast Pump",
+		"description" : "Electric Breast Pump",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15611,
+		"catid" : 28,
+		"item" : "Electric Comb Binding Machine",
+		"description" : "Electric Comb Binding Machine",
+		"status" : "A"
+	},
+	{
+		"itemid" : 17848,
+		"catid" : 28,
+		"item" : "Electric Fan",
+		"description" : "Electric Fan, Stand Fan 16\"",
+		"status" : "A"
+	},
+	{
+		"itemid" : 17849,
+		"catid" : 28,
+		"item" : "Electric Fan",
+		"description" : "Electric Fan, Wall Mounted Fan 16â€",
+		"status" : "A"
+	},
+	{
+		"itemid" : 17850,
+		"catid" : 28,
+		"item" : "Electric Fan",
+		"description" : "Electric Fan, Ceiling fan 16â€",
+		"status" : "A"
+	},
+	{
+		"itemid" : 19233,
+		"catid" : 28,
+		"item" : "ELECTRIC FAN (STAND FAN)",
+		"description" : "ELECTRIC FAN (STAND FAN)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15485,
+		"catid" : 28,
+		"item" : "Electric Kettle 1.8 Liters",
+		"description" : "Electric Kettle 1.8 Liters",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18432,
+		"catid" : 28,
+		"item" : "Electrical Fiberglass, hot stick",
+		"description" : "Electrical Fiberglass, hot stick",
+		"status" : "A"
+	},
+	{
 		"itemid" : 14173,
 		"catid" : 1,
 		"item" : "Electrode",
@@ -5411,10 +6524,24 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 12628,
+		"catid" : 28,
+		"item" : "Electronic alphabet toy",
+		"description" : "Electronic alphabet toy (Occupational Therapy Section)",
+		"status" : "A"
+	},
+	{
 		"itemid" : 14234,
 		"catid" : 9,
 		"item" : "emi-Elemental enteral Formula; peptide-based formula; lactose-free:gluten-free: caloric density-1.5 kca",
 		"description" : "Semi-Elemental enteral Formula; peptide-based formula; lactose-free:gluten-free: caloric density-1.5 kcal:1ml per bottle: energy-300-400 kcal; Carbohydrates-35-40 g; Protein-10-15g; Fat-1-15g; sodium-335-400 mg; Potassium-400-450 mg; Phosphorus 200-250mg:Calcium-200-250mg;Magnesiu 55-60 mg; 200-500 ml per bottle;Ready to drink ; liquid form; Falvor-vanilla or plain",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18946,
+		"catid" : 25,
+		"item" : "Employee Aptitude Survey (EAS)",
+		"description" : "Employee Aptitude Survey (EAS): 1 Manual, 50 pcs each test form (10 components), 1 set Scoring stencil",
 		"status" : "A"
 	},
 	{
@@ -5992,10 +7119,24 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 9284,
+		"catid" : 25,
+		"item" : "Equipment/Property Tag, as per sample (MMS)",
+		"description" : "Equipment/Property Tag, as per sample (MMS)",
+		"status" : "A"
+	},
+	{
 		"itemid" : 18855,
 		"catid" : 2,
 		"item" : "Eraser, for whiteboard, 19mm, thick felt",
 		"description" : "Eraser, for whiteboard, 19mm, thick felt",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9568,
+		"catid" : 28,
+		"item" : "Erlenmeyer Flask",
+		"description" : "Erlenmeyer Flask",
 		"status" : "A"
 	},
 	{
@@ -6055,10 +7196,24 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 9061,
+		"catid" : 28,
+		"item" : "Exhaust Fan",
+		"description" : "Exhaust Fan",
+		"status" : "A"
+	},
+	{
 		"itemid" : 12021,
 		"catid" : 1,
 		"item" : "Expanded Newborn Screening Collection Kit (minimum of 5 kits per order) *Filter Card, Lancet, Transmittal Form & Brochures",
 		"description" : "Expanded Newborn Screening Collection Kit (minimum of 5 kits per order) *Filter Card, Lancet, Transmittal Form & Brochures",
+		"status" : "A"
+	},
+	{
+		"itemid" : 17258,
+		"catid" : 28,
+		"item" : "Expert low contact",
+		"description" : "Expert low contact Proximal Humerus Locking Plate With complete instrumentations",
 		"status" : "A"
 	},
 	{
@@ -6188,6 +7343,20 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 14706,
+		"catid" : 28,
+		"item" : "Femur IIizarov",
+		"description" : "Femur IIizarov",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10257,
+		"catid" : 28,
+		"item" : "Femur IM Nail (Instrumentation included)",
+		"description" : "Femur IM Nail (Instrumentation included)",
+		"status" : "A"
+	},
+	{
 		"itemid" : 1378,
 		"catid" : 9,
 		"item" : "fenofibrate",
@@ -6241,6 +7410,20 @@
 		"catid" : 1,
 		"item" : "Fetal monitor paper",
 		"description" : "Fetal Monitor Paper, 152mm x 90mm x 150 SH compatible with Edan machine",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10378,
+		"catid" : 28,
+		"item" : "Fiber Optic Light Guide Cable for Olympus Laparascopy Tower",
+		"description" : "Fiber Optic Light Guide Cable for Olympus Laparascopy Tower",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12747,
+		"catid" : 28,
+		"item" : "Fibre Optic Lamp Type 6834FO EFP AI/231 12V 100W GZ6.3T 409737",
+		"description" : "Fibre Optic Lamp Type 6834FO EFP AI/231 12V 100W GZ6.3T 409737",
 		"status" : "A"
 	},
 	{
@@ -6356,6 +7539,62 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 14307,
+		"catid" : 28,
+		"item" : "Fire Extinguisher",
+		"description" : "10 lbs Fire Extinguisher class A:B:C (new)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15740,
+		"catid" : 25,
+		"item" : "Five Factor Personality Inventory",
+		"description" : "FFPI-C: Five Factor Personality Inventory- Children",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15741,
+		"catid" : 25,
+		"item" : "Five Factor Personality Inventory-Children  Administration and Scoring forms",
+		"description" : "FFPI-C: Five Factor Personality Inventory-Children  Administration and Scoring forms",
+		"status" : "A"
+	},
+	{
+		"itemid" : 16339,
+		"catid" : 28,
+		"item" : "Flairing tools",
+		"description" : "Flairing tools, clutch type ",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12603,
+		"catid" : 28,
+		"item" : "Flash light",
+		"description" : "Flash light, heavy duty, rechargeable (Security)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15475,
+		"catid" : 28,
+		"item" : "Flat Iron",
+		"description" : "Flat Iron",
+		"status" : "A"
+	},
+	{
+		"itemid" : 16340,
+		"catid" : 28,
+		"item" : "Flat screw driver",
+		"description" : "Flat screw driver, 12\" to 15\", heavy duty",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18453,
+		"catid" : 28,
+		"item" : "Floor pallet",
+		"description" : "Floor pallet, heavy duty, HDEP material, size 1200 by 1000 by 150mm",
+		"status" : "A"
+	},
+	{
 		"itemid" : 844,
 		"catid" : 9,
 		"item" : "floucinolone",
@@ -6374,6 +7613,20 @@
 		"catid" : 1,
 		"item" : "Flow Sensor for Pedia/Adult",
 		"description" : "Flow Sensor for Pedia/Adult",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10487,
+		"catid" : 28,
+		"item" : "Flower Standee",
+		"description" : "Flower Standee",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12621,
+		"catid" : 28,
+		"item" : "Flower wreath",
+		"description" : "Flower wreath (HRMS)",
 		"status" : "A"
 	},
 	{
@@ -6496,6 +7749,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 13195,
+		"catid" : 28,
+		"item" : "Fly Catcher",
+		"description" : "Fly Catcher",
+		"status" : "A"
+	},
+	{
 		"itemid" : 18208,
 		"catid" : 1,
 		"item" : "FMS Pack",
@@ -6538,6 +7798,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 9609,
+		"catid" : 28,
+		"item" : "Folding Table",
+		"description" : "Folding Table With Bench Lifetime, Uv Protected High Density Polyethylene (Hdpe), Seats 6-8 Comfortably, Steel Frame With All Weather Finish, Size: 42 Inches X 24 Inches",
+		"status" : "A"
+	},
+	{
 		"itemid" : 10290,
 		"catid" : 9,
 		"item" : "Folic Acid",
@@ -6556,6 +7823,27 @@
 		"catid" : 9,
 		"item" : "fondaparinux",
 		"description" : "Fondaparinux 2.5mg/0.5mL solution (as sodium salt)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13196,
+		"catid" : 28,
+		"item" : "Food Container",
+		"description" : "Food Container, big (R-2500)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13197,
+		"catid" : 28,
+		"item" : "Food Container",
+		"description" : "Food Container, small (R-1000)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13198,
+		"catid" : 28,
+		"item" : "Food Thickener",
+		"description" : "Instant Food Thickener Packets 100's",
 		"status" : "A"
 	},
 	{
@@ -6671,6 +7959,34 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 8018,
+		"catid" : 25,
+		"item" : "Forer Structured Sentence Completion ",
+		"description" : "Forer Structured Sentence Completion Test Form W",
+		"status" : "A"
+	},
+	{
+		"itemid" : 8017,
+		"catid" : 25,
+		"item" : "Forer Structured Sentence Completion Test",
+		"description" : "Forer Structured Sentence Completion Test Form M",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9289,
+		"catid" : 25,
+		"item" : "Forer Structured Sentence Completion Test Form B",
+		"description" : "Forer Structured Sentence Completion Test Form B",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12566,
+		"catid" : 25,
+		"item" : "Forer Structured Sentence completion Test Form G",
+		"description" : "Forer Structured Sentence completion Test Form G",
+		"status" : "A"
+	},
+	{
 		"itemid" : 5306,
 		"catid" : 9,
 		"item" : "Fosfomycin Trometamol 3g",
@@ -6685,10 +8001,38 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 9570,
+		"catid" : 28,
+		"item" : "Freezer Thermometer",
+		"description" : "Freezer Thermometer",
+		"status" : "A"
+	},
+	{
+		"itemid" : 11841,
+		"catid" : 28,
+		"item" : "Friction pad",
+		"description" : "Friction pad",
+		"status" : "A"
+	},
+	{
 		"itemid" : 18807,
 		"catid" : 1,
 		"item" : "Full Core Biopsy Instrument, 16G x 10cm, tri-axial core, cut and capture system to harvest diagnostic specimens, full cylindrical specimen harvest, 3 years expiration date",
 		"description" : "Full Core Biopsy Instrument, 16G x 10cm, tri-axial core, cut and capture system to harvest diagnostic specimens, full cylindrical specimen harvest, 3 years expiration date",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9320,
+		"catid" : 28,
+		"item" : "Full face shield",
+		"description" : "Full face shield",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9573,
+		"catid" : 28,
+		"item" : "Funnel Glass",
+		"description" : "Funnel Glass",
 		"status" : "A"
 	},
 	{
@@ -6745,6 +8089,13 @@
 		"catid" : 9,
 		"item" : "Gadoteric acid 0.5mmol/mL, 20mL",
 		"description" : "Gadoteric acid 0.5mmol/mL, 20mL",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18802,
+		"catid" : 28,
+		"item" : "gas helium",
+		"description" : "8 cylinder of gas helium",
 		"status" : "A"
 	},
 	{
@@ -6986,6 +8337,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 15620,
+		"catid" : 28,
+		"item" : "Google One Subscription",
+		"description" : "Google One Subscription",
+		"status" : "A"
+	},
+	{
 		"itemid" : 18175,
 		"catid" : 9,
 		"item" : "Goserelin",
@@ -7070,6 +8428,27 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 9447,
+		"catid" : 28,
+		"item" : "Hammer Drill",
+		"description" : "Hammer Drill",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9603,
+		"catid" : 28,
+		"item" : "Handcuff",
+		"description" : "Handcuff",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9633,
+		"catid" : 28,
+		"item" : "Harness Galvo Motor SP6H8029",
+		"description" : "Harness Galvo Motor SP6H8029",
+		"status" : "A"
+	},
+	{
 		"itemid" : 10130,
 		"catid" : 3,
 		"item" : "HDMI 4K 1080P to USB Video Capture Dongle",
@@ -7091,10 +8470,24 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 8875,
+		"catid" : 28,
+		"item" : "HDPE Pipe",
+		"description" : "HDPE Pipe, 3/4\" x 150ft/S600",
+		"status" : "A"
+	},
+	{
 		"itemid" : 12203,
 		"catid" : 3,
 		"item" : "Headset Specifications: Height: 162 mm Width: 144 mm Depth: 46 mm Weight: 0.074 kg Cable length: 2.35 m Single 3.5 mm jack Microphone Type: Bi-directional Sensitivity (headphone): 32 Ohms Sensitivity (headphone): 100 dB +/-3 dB Sensitivity (microphone): -58 dBV/ÂµBar, -38 dBV/Pa +/- 4 dB Frequency response (Headset): 20 Hz - 20 KHz Frequency response (Microphone): 100 Hz - 16 KHz",
 		"description" : "Headset",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12629,
+		"catid" : 28,
+		"item" : "Heat gun",
+		"description" : "Heat gun (Occupational Therapy Section)",
 		"status" : "A"
 	},
 	{
@@ -7116,6 +8509,34 @@
 		"catid" : 1,
 		"item" : "Heated Breathing Tube and Chamber",
 		"description" : "Humidification Chamber and Heated Tube with adapter, quad spiral heater wires, air inlet end, compatible with the existing BMC H-80 machine",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9314,
+		"catid" : 28,
+		"item" : "Heavy  Duty Wheel Trolley (ball bearing) 3.5x1.5",
+		"description" : "Heavy  Duty Wheel Trolley (ball bearing) 3.5x1.5",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9315,
+		"catid" : 28,
+		"item" : "Heavy  Duty Wheel Trolley (ball bearing) 7.5x1.5",
+		"description" : "Heavy  Duty Wheel Trolley (ball bearing) 7.5x1.5",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9448,
+		"catid" : 28,
+		"item" : "Heavy duty Rotary Hammer Drill, 710 Watts, 220V",
+		"description" : "Heavy duty Rotary Hammer Drill, 710 Watts, 220V",
+		"status" : "A"
+	},
+	{
+		"itemid" : 16598,
+		"catid" : 28,
+		"item" : "Helium Gas",
+		"description" : "Supply of 5 cylinder of Helium Gas AL: N ECCN: N",
 		"status" : "A"
 	},
 	{
@@ -7238,6 +8659,20 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 12772,
+		"catid" : 28,
+		"item" : "High Pressure Hose, 1/4 x 10 feet with female fitting and 1 CO2 adapter (brass for Olympus Laparascopy Machine)",
+		"description" : "High Pressure Hose, 1/4 x 10 feet with female fitting and 1 CO2 adapter (brass for Olympus Laparascopy Machine)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 16286,
+		"catid" : 28,
+		"item" : "High Voltage Gloves",
+		"description" : "High Voltage Gloves 12 kv",
+		"status" : "A"
+	},
+	{
 		"itemid" : 17439,
 		"catid" : 1,
 		"item" : "HMB",
@@ -7319,6 +8754,13 @@
 		"catid" : 1,
 		"item" : "Hot moist pack",
 		"description" : "Hot moist pack, standard (25cm x 30cm- 45cm), beige",
+		"status" : "A"
+	},
+	{
+		"itemid" : 16285,
+		"catid" : 28,
+		"item" : "Hot Stick",
+		"description" : "Hot Stick",
 		"status" : "A"
 	},
 	{
@@ -7420,6 +8862,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 15940,
+		"catid" : 28,
+		"item" : "Humerus Locking Plate",
+		"description" : "Humerus Locking Plate with complete implant and instrumentation",
+		"status" : "A"
+	},
+	{
 		"itemid" : 14341,
 		"catid" : 1,
 		"item" : "Humidification Chamber and Heated Tube",
@@ -7508,6 +8957,13 @@
 		"catid" : 9,
 		"item" : "Hydrochlorothiazide 12.5mg",
 		"description" : "Hydrochlorothiazide 12.5mg",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12894,
+		"catid" : 28,
+		"item" : "Hydrocollator tank filament; 220 volts",
+		"description" : "Hydrocollator tank filament; 220 volts",
 		"status" : "A"
 	},
 	{
@@ -7630,6 +9086,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 10182,
+		"catid" : 28,
+		"item" : "Hygiene Kit: 1 alcohol, 1 box mask, 1 face shield",
+		"description" : "Hygiene Kit: 1 alcohol, 1 box mask, 1 face shield",
+		"status" : "A"
+	},
+	{
 		"itemid" : 873,
 		"catid" : 9,
 		"item" : "hyoscine",
@@ -7742,6 +9205,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 9459,
+		"catid" : 28,
+		"item" : "Igniter",
+		"description" : "Igniter",
+		"status" : "A"
+	},
+	{
 		"itemid" : 14685,
 		"catid" : 3,
 		"item" : "Imaging Drum",
@@ -7791,6 +9261,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 11931,
+		"catid" : 28,
+		"item" : "Implementing Rules and Regulations of RA 9184 (Government Procurement Reform Act)",
+		"description" : "Implementing Rules and Regulations of RA 9184 (Government Procurement Reform Act)",
+		"status" : "A"
+	},
+	{
 		"itemid" : 13800,
 		"catid" : 1,
 		"item" : "Incentive Spirometer",
@@ -7816,6 +9293,13 @@
 		"catid" : 2,
 		"item" : "Index Card",
 		"description" : "Index Card, size 5\" x 8\", color white, 50's/pack",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10532,
+		"catid" : 28,
+		"item" : "Industrial Fan, with stand, heavy duty",
+		"description" : "Industrial Fan, with stand, heavy duty",
 		"status" : "A"
 	},
 	{
@@ -8026,6 +9510,13 @@
 		"catid" : 2,
 		"item" : "Ink",
 		"description" : "Ink, (S-8113AG) sf5230EII (1,000ml) (for HIMS)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 8079,
+		"catid" : 28,
+		"item" : "Ink ",
+		"description" : "Ink Back for DX 2430",
 		"status" : "A"
 	},
 	{
@@ -8267,6 +9758,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 13031,
+		"catid" : 28,
+		"item" : "Intelligent Power Module",
+		"description" : "Intelligent Power Module",
+		"status" : "A"
+	},
+	{
 		"itemid" : 14500,
 		"catid" : 1,
 		"item" : "Intraaortic ballon Pump",
@@ -8278,6 +9776,13 @@
 		"catid" : 1,
 		"item" : "Intraaortic ballon Pump",
 		"description" : "Intraaortic ballon Pump:  8Fr 40cc that is compatible with existing IABP machine",
+		"status" : "A"
+	},
+	{
+		"itemid" : 11829,
+		"catid" : 28,
+		"item" : "Intramedullary nail with interlocking screws-femur",
+		"description" : "Intramedullary nail with interlocking screws-femur",
 		"status" : "A"
 	},
 	{
@@ -8442,6 +9947,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 10439,
+		"catid" : 28,
+		"item" : "Ironing Board 30-42 inches length",
+		"description" : "Ironing Board 30-42 inches length",
+		"status" : "A"
+	},
+	{
 		"itemid" : 887,
 		"catid" : 9,
 		"item" : "Isoflurane",
@@ -8589,6 +10101,27 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 10317,
+		"catid" : 28,
+		"item" : "Kalamansi Soap",
+		"description" : "Kalamansi Soap",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10318,
+		"catid" : 28,
+		"item" : "Kamias Soap",
+		"description" : "Kamias Soap",
+		"status" : "A"
+	},
+	{
+		"itemid" : 8019,
+		"catid" : 25,
+		"item" : "Kaufmann Brief Intelligence Test 2nd Edition",
+		"description" : "Kaufmann Brief Intelligence Test 2nd Edition, Answer Sheet",
+		"status" : "A"
+	},
+	{
 		"itemid" : 13419,
 		"catid" : 1,
 		"item" : "Kelly forcep curve",
@@ -8652,6 +10185,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 15099,
+		"catid" : 28,
+		"item" : "Knee Spanning",
+		"description" : "Knee Spanning Ilizarov External Fixator",
+		"status" : "A"
+	},
+	{
 		"itemid" : 17369,
 		"catid" : 1,
 		"item" : "Knuckle Bender Coil Spring- 10 pcs. (Gauge 1mm - 1/24\" - coil diameter 10mm - 5/12\")",
@@ -8666,10 +10206,24 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 10319,
+		"catid" : 28,
+		"item" : "Labanos Soap",
+		"description" : "Labanos soap",
+		"status" : "A"
+	},
+	{
 		"itemid" : 16303,
 		"catid" : 1,
 		"item" : "Label for sterile container, full size, 100's/pack, with indicator, compatible with OR containers\r\n",
 		"description" : "Label for sterile container, full size, 100's/pack, with indicator, compatible with OR containers\r\n",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10484,
+		"catid" : 28,
+		"item" : "Labor",
+		"description" : "labor",
 		"status" : "A"
 	},
 	{
@@ -8862,6 +10416,34 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 15556,
+		"catid" : 28,
+		"item" : "Lateral Mass Screw",
+		"description" : "Lateral Mass Screw - 10 pcs, Peek Cage - 2 pcs, WINLOC Plate, Burr, Mayfield, Wilson Frame",
+		"status" : "A"
+	},
+	{
+		"itemid" : 14507,
+		"catid" : 28,
+		"item" : "Lateral Mass Screws",
+		"description" : "Lateral Mass Screws - 6 pcs, Pedicle Screws - 6 pcs, Rods - 2 pcs, WINLOC plate and screws Mesh Cage Mayfiel Burr, Wilson Grame Neuro Monitoring",
+		"status" : "A"
+	},
+	{
+		"itemid" : 8890,
+		"catid" : 28,
+		"item" : "Laundry Boots",
+		"description" : "Laundry Boots, assorted sizes (size 7- 2pairs, 8, 9, 10)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 17453,
+		"catid" : 28,
+		"item" : "Layout Fee",
+		"description" : "Layout Fee",
+		"status" : "A"
+	},
+	{
 		"itemid" : 13345,
 		"catid" : 3,
 		"item" : "LC-565 XL ink cartridge, black",
@@ -8869,10 +10451,59 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 11249,
+		"catid" : 28,
+		"item" : "LCD monitor for Apheresis Machine",
+		"description" : "LCD monitor for Apheresis Machine",
+		"status" : "A"
+	},
+	{
 		"itemid" : 15675,
 		"catid" : 1,
 		"item" : "Lead seal",
 		"description" : "Lead seal with adhesive layer white for aesculap instrument tray, 500's/pack or its equivalent",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12685,
+		"catid" : 28,
+		"item" : "Leather back support (olympic belt)",
+		"description" : "Leather back support (olympic belt)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12681,
+		"catid" : 28,
+		"item" : "Leather wall medicine ball",
+		"description" : "Leather wall medicine ball, 4kg (8 lbs)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12682,
+		"catid" : 28,
+		"item" : "Leather wall medicine ball",
+		"description" : "Leather wall medicine ball, 5kg (10 lbs)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12683,
+		"catid" : 28,
+		"item" : "Leather wall medicine ball",
+		"description" : "Leather wall medicine ball, 6kg (14 lbs)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12684,
+		"catid" : 28,
+		"item" : "Leather wall medicine ball",
+		"description" : "Leather wall medicine ball, 7kg (18 lbs)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12622,
+		"catid" : 28,
+		"item" : "Lei/bouquet",
+		"description" : "Lei/bouquet (HRMS)",
 		"status" : "A"
 	},
 	{
@@ -9037,6 +10668,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 12604,
+		"catid" : 28,
+		"item" : "Li-ion battery pack 7.2V type, 1990mah",
+		"description" : "Li-ion battery pack 7.2V type, 1990mah (Security)",
+		"status" : "A"
+	},
+	{
 		"itemid" : 907,
 		"catid" : 9,
 		"item" : "Lidocaine",
@@ -9079,6 +10717,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 8049,
+		"catid" : 28,
+		"item" : "Linen Paper (for Printing of Certificates)",
+		"description" : "Linen Paper (for Printing of Certificates)",
+		"status" : "A"
+	},
+	{
 		"itemid" : 4556,
 		"catid" : 9,
 		"item" : "Linezolid",
@@ -9090,6 +10735,34 @@
 		"catid" : 9,
 		"item" : "Linezolid 2mg/mL",
 		"description" : "Linezolid 2mg/mL (600mg/300mL) (solution for Infusion) (IV)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 17846,
+		"catid" : 28,
+		"item" : "Linoleum",
+		"description" : "Linoleum 30 yards",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18801,
+		"catid" : 28,
+		"item" : "liquid helium",
+		"description" : "500 liters of liquid helium",
+		"status" : "A"
+	},
+	{
+		"itemid" : 17616,
+		"catid" : 28,
+		"item" : "liquid helium",
+		"description" : "1,000 liters of liquid helium",
+		"status" : "A"
+	},
+	{
+		"itemid" : 16597,
+		"catid" : 28,
+		"item" : "Liquid Helium",
+		"description" : "Supply of 500L of Liquid Helium AL: ECCN:N",
 		"status" : "A"
 	},
 	{
@@ -9132,6 +10805,13 @@
 		"catid" : 1,
 		"item" : "lock",
 		"description" : "Tamperproof lock orange steam indicator compatible for aesculap instrument container system, 500's/pack or its equivalent",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10413,
+		"catid" : 28,
+		"item" : "Logo Stickers",
+		"description" : "Logo Stickers",
 		"status" : "A"
 	},
 	{
@@ -9212,6 +10892,34 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 7869,
+		"catid" : 28,
+		"item" : "Lunch",
+		"description" : "Lunch ( adobo + chopsuey + rice + dessert",
+		"status" : "A"
+	},
+	{
+		"itemid" : 7871,
+		"catid" : 28,
+		"item" : "Lunch",
+		"description" : "Lunch ( igado + pakbet + rice + dessert)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9464,
+		"catid" : 28,
+		"item" : "Magnahelic gauge",
+		"description" : "Magnahelic gauge",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9438,
+		"catid" : 28,
+		"item" : "Magnetic Contactors",
+		"description" : "Magnetic contactors-220V/Single phase",
+		"status" : "A"
+	},
+	{
 		"itemid" : 19118,
 		"catid" : 3,
 		"item" : "Maintenance Box",
@@ -9223,6 +10931,27 @@
 		"catid" : 1,
 		"item" : "Maleable medium\r\n",
 		"description" : "Maleable medium\r\n",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9291,
+		"catid" : 25,
+		"item" : "Manchester Personality Questionaire Asnwer Sheet",
+		"description" : "Manchester Personality Questionaire Asnwer Sheet",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9290,
+		"catid" : 25,
+		"item" : "Manchester Personality Questionaire Profile Sheet",
+		"description" : "Manchester Personality Questionaire Profile Sheet",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10039,
+		"catid" : 28,
+		"item" : "Mandibular Reconstruction Plate (Angled) with locking screws",
+		"description" : "Mandibular Reconstruction Plate (Angled) with locking screws",
 		"status" : "A"
 	},
 	{
@@ -9373,6 +11102,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 18355,
+		"catid" : 25,
+		"item" : "MD5 mental ability test",
+		"description" : "MD5 mental ability test question/answer booklet (package of 25)",
+		"status" : "A"
+	},
+	{
 		"itemid" : 1029,
 		"catid" : 9,
 		"item" : "MDI",
@@ -9506,10 +11242,24 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 9602,
+		"catid" : 28,
+		"item" : "Megaphone",
+		"description" : "Megaphone",
+		"status" : "A"
+	},
+	{
 		"itemid" : 4948,
 		"catid" : 9,
 		"item" : "Meningococcal polysaccharide (Neisseria meningitidis vaccine) lyophilized powder, 50mcg/0.5mL dose (Group A + C) single dose + 0.5mL diluent syringe (IM, SC)",
 		"description" : "Meningococcal polysaccharide (Neisseria meningitidis vaccine) lyophilized powder, 50mcg/0.5mL dose (Group A + C) single dose + 0.5mL diluent syringe (IM, SC)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18304,
+		"catid" : 25,
+		"item" : "Mental ability test",
+		"description" : "MD5 Mental ability test",
 		"status" : "A"
 	},
 	{
@@ -9559,6 +11309,13 @@
 		"catid" : 9,
 		"item" : "Mesna (sodium-2-mercaptoethanesulphonate) 100mg/mL, 4mL (IV)",
 		"description" : "Mesna (sodium-2-mercaptoethanesulphonate) 100mg/mL, 4mL (IV) solution for injection",
+		"status" : "A"
+	},
+	{
+		"itemid" : 17613,
+		"catid" : 28,
+		"item" : "Metal seal",
+		"description" : "Metal seal",
 		"status" : "A"
 	},
 	{
@@ -9615,6 +11372,13 @@
 		"catid" : 9,
 		"item" : "Methotrexate",
 		"description" : "Methotrexate 100mg/mL, 10 mL (IM,IV, Intrathecal) (as sodium salt, preservative-free)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10401,
+		"catid" : 28,
+		"item" : "Methyl campor 30g liniment, Katinko x 12's",
+		"description" : "Methyl campor 30g liniment, Katinko x 12's",
 		"status" : "A"
 	},
 	{
@@ -9793,10 +11557,59 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 9571,
+		"catid" : 28,
+		"item" : "Milk storage BPA Container",
+		"description" : "Milk storage BPA Container",
+		"status" : "A"
+	},
+	{
+		"itemid" : 16959,
+		"catid" : 25,
+		"item" : "Million Clinical Multiaxial Work Sheet",
+		"description" : "Million Clinical Multiaxial Work Sheet",
+		"status" : "A"
+	},
+	{
 		"itemid" : 14642,
 		"catid" : 9,
 		"item" : "MILRINONE",
 		"description" : "Milrinone Lactate 10mg/mL solution for injection",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15723,
+		"catid" : 25,
+		"item" : "Minnesota Multiphasic Personality Inventory",
+		"description" : "Minnesota Multiphasic Personality Inventory II or  III Answer Sheet",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15724,
+		"catid" : 25,
+		"item" : "Minnesota Multiphasic Personality Inventory",
+		"description" : "Minnesota Multiphasic Personality Inventory II or III Profile Form",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15725,
+		"catid" : 25,
+		"item" : "Minnesota Multiphasic Personality Inventory Adolescent",
+		"description" : "Minnesota Multiphasic Personality Inventory Adolescent",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12569,
+		"catid" : 25,
+		"item" : "Minnesota Multiphasic Personality Inventory II",
+		"description" : "Minnesota Multiphasic Personality Inventory II",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12570,
+		"catid" : 25,
+		"item" : "Minnesota Multiphasic Personality Inventory II Adolescent",
+		"description" : "Minnesota Multiphasic Personality Inventory II Adolescent",
 		"status" : "A"
 	},
 	{
@@ -9863,6 +11676,20 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 9149,
+		"catid" : 28,
+		"item" : "Mop bucket with squeezer, heavy duty",
+		"description" : "Mop bucket with squeezer, heavy duty",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13579,
+		"catid" : 28,
+		"item" : "Mop with bucket",
+		"description" : "Mop with bucket, 360 degree rotating head, high quality floor mop",
+		"status" : "A"
+	},
+	{
 		"itemid" : 948,
 		"catid" : 9,
 		"item" : "Morphine",
@@ -9905,10 +11732,24 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 17844,
+		"catid" : 28,
+		"item" : "Mosquito screen",
+		"description" : "Mosquito screen (4ft x 3ft)",
+		"status" : "A"
+	},
+	{
 		"itemid" : 10067,
 		"catid" : 1,
 		"item" : "Mosquito straight",
 		"description" : "Mosquito straight, 12cm",
+		"status" : "A"
+	},
+	{
+		"itemid" : 11951,
+		"catid" : 28,
+		"item" : "Motor Compressor",
+		"description" : "Motor Compressor",
 		"status" : "A"
 	},
 	{
@@ -9954,6 +11795,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 12697,
+		"catid" : 28,
+		"item" : "Multi adjustable bench",
+		"description" : "Multi adjustable bench",
+		"status" : "A"
+	},
+	{
 		"itemid" : 15594,
 		"catid" : 1,
 		"item" : "Multi Band Ligator (6 band)",
@@ -9965,6 +11813,27 @@
 		"catid" : 1,
 		"item" : "Multi enzyme high performance, manual disinfectant detergent for endoscopes and surgical instruments. contains at least 7.7 g didecyldimethylammonium chloride, at least 0.4 g polyhexemethylene biguanide.",
 		"description" : "Multi enzyme high performance, manual disinfectant detergent for endoscopes and surgical instruments. contains at least 7.7 g didecyldimethylammonium chloride, at least 0.4 g polyhexemethylene biguanide.",
+		"status" : "A"
+	},
+	{
+		"itemid" : 8020,
+		"catid" : 25,
+		"item" : "Multi-dimensional Aptitude Battery II",
+		"description" : "Multi-dimensional Aptitude Battery II, Record Forms",
+		"status" : "A"
+	},
+	{
+		"itemid" : 8021,
+		"catid" : 25,
+		"item" : "Multi-dimensional Aptitude Battery II",
+		"description" : "Multi-dimensional Aptitude Battery II, Answer Sheet Verbal",
+		"status" : "A"
+	},
+	{
+		"itemid" : 8022,
+		"catid" : 25,
+		"item" : "Multi-dimensional Aptitude Battery II",
+		"description" : "Multi-dimensional Aptitude Battery II, Answer Sheet Performance",
 		"status" : "A"
 	},
 	{
@@ -10388,6 +12257,20 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 8023,
+		"catid" : 25,
+		"item" : "NEO-PIR Inventory Revised",
+		"description" : "NEO-PIR Inventory Revised, Answer Sheet ",
+		"status" : "A"
+	},
+	{
+		"itemid" : 8024,
+		"catid" : 25,
+		"item" : "NEO-PIR Inventory Revised",
+		"description" : "NEO-PIR Inventory Revised, Profile Form",
+		"status" : "A"
+	},
+	{
 		"itemid" : 14273,
 		"catid" : 9,
 		"item" : "Neostigmine",
@@ -10406,6 +12289,20 @@
 		"catid" : 1,
 		"item" : "Neurosurgical Patties 0.5 x 1.5 - 2.5 inches/ 10 pcs/pack; 20 packs in a box",
 		"description" : "Neurosurgical Patties 0.5 x 1.5 - 2.5 inches/ 10 pcs/pack; 20 packs in a box",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13244,
+		"catid" : 25,
+		"item" : "Newborn Hearing Test Registry Seals, ",
+		"description" : "Newborn Hearing Test Registry Seals, 20 sets per pad",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12592,
+		"catid" : 28,
+		"item" : "Newspaper",
+		"description" : "Newspaper (OMCC)",
 		"status" : "A"
 	},
 	{
@@ -10542,6 +12439,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 12630,
+		"catid" : 28,
+		"item" : "Numbers form board toy",
+		"description" : "Numbers form board toy (Occupational Therapy Section)",
+		"status" : "A"
+	},
+	{
 		"itemid" : 965,
 		"catid" : 9,
 		"item" : "Nystatin ",
@@ -10560,6 +12464,13 @@
 		"catid" : 1,
 		"item" : "OB Dept.",
 		"description" : "Manual Vacuum Aspiration kit",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18279,
+		"catid" : 25,
+		"item" : "observation form",
+		"description" : "Bender gestalt II observation form (pack of 25)",
 		"status" : "A"
 	},
 	{
@@ -10619,6 +12530,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 9134,
+		"catid" : 28,
+		"item" : "Oil Filter",
+		"description" : "Oil Filter",
+		"status" : "A"
+	},
+	{
 		"itemid" : 15676,
 		"catid" : 1,
 		"item" : "Oil spray lubricant",
@@ -10658,6 +12576,62 @@
 		"catid" : 9,
 		"item" : "Olanzepine",
 		"description" : "Olanzepine 5mg",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12687,
+		"catid" : 28,
+		"item" : "Olympic barbell",
+		"description" : "Olympic barbell, 5 feet",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12688,
+		"catid" : 28,
+		"item" : "Olympic barbell",
+		"description" : "Olympic barbell, EZ curl",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12689,
+		"catid" : 28,
+		"item" : "Olympic barbell",
+		"description" : "Olympic barbell, 7 feet",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12690,
+		"catid" : 28,
+		"item" : "Olympic hole rubber plate",
+		"description" : "Olympic hole rubber plate, 25 kg (50 lbs)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12691,
+		"catid" : 28,
+		"item" : "Olympic hole rubber plate",
+		"description" : "Olympic hole rubber plate, 20 kg (45 lbs)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12692,
+		"catid" : 28,
+		"item" : "Olympic hole rubber plate",
+		"description" : "Olympic hole rubber plate, 15 kg (35 lbs)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12693,
+		"catid" : 28,
+		"item" : "Olympic hole rubber plate",
+		"description" : "Olympic hole rubber plate, 10 kg (20 lbs)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12694,
+		"catid" : 28,
+		"item" : "Olympic hole rubber plate",
+		"description" : "Olympic hole rubber plate, 5 kg (10 lbs)",
 		"status" : "A"
 	},
 	{
@@ -10707,6 +12681,13 @@
 		"catid" : 9,
 		"item" : "Ondansetron",
 		"description" : "Ondansetron 2mg/ml, 4mL (IM, IV) (as hydrochloride)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10447,
+		"catid" : 28,
+		"item" : "One time service",
+		"description" : "One time Service",
 		"status" : "A"
 	},
 	{
@@ -10906,6 +12887,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 13577,
+		"catid" : 28,
+		"item" : "OSL",
+		"description" : "OSL (Optically Stimulated Luminiscence) Dosimeter for Radiation Monitoring of Radiologic Technologist",
+		"status" : "A"
+	},
+	{
 		"itemid" : 16037,
 		"catid" : 1,
 		"item" : "OSL (Optically Stimulated Luminiscence) Dosimeter for Radiation Monitoring of Radiologic Technologist\r\n",
@@ -10917,6 +12905,13 @@
 		"catid" : 2,
 		"item" : "Oslo Paper 10pcs/pack",
 		"description" : "Oslo Paper, 9x12, 10pcs/pack (for OSM)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10141,
+		"catid" : 28,
+		"item" : "Osram HLX 64606 Bulb, 21V/150W",
+		"description" : "Osram HLX 64606 Bulb, 21V/150W",
 		"status" : "A"
 	},
 	{
@@ -11130,6 +13125,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 10420,
+		"catid" : 28,
+		"item" : "Outdoor Antenna (heavy duty)",
+		"description" : "Outdoor Antenna (heavy duty)",
+		"status" : "A"
+	},
+	{
 		"itemid" : 10063,
 		"catid" : 1,
 		"item" : "Ovum Forcep",
@@ -11218,6 +13220,13 @@
 		"catid" : 9,
 		"item" : "Oxygen ",
 		"description" : "Oxygen Flask Type",
+		"status" : "A"
+	},
+	{
+		"itemid" : 16417,
+		"catid" : 28,
+		"item" : "Oxygen and acetelyn, refill",
+		"description" : "Oxygen and acetelyn, refill",
 		"status" : "A"
 	},
 	{
@@ -11340,6 +13349,48 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 10320,
+		"catid" : 28,
+		"item" : "Papaya Soap",
+		"description" : "Papaya Soap",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13946,
+		"catid" : 28,
+		"item" : "Paper Bag",
+		"description" : "Brown Paper Bag 4\" x 2.5\" x 8\"\r\n",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13947,
+		"catid" : 28,
+		"item" : "Paper Bag",
+		"description" : "Brown Paper Bag 4.5\" x 3\" x 8.5\"",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13948,
+		"catid" : 28,
+		"item" : "Paper Bag",
+		"description" : "Brown Paper Bag 4.7\" x 3\" x 9.5\"",
+		"status" : "A"
+	},
+	{
+		"itemid" : 14077,
+		"catid" : 28,
+		"item" : "Paper Bag",
+		"description" : "Brown Paper Bag 6'' x 3.75'' x 11.25''",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13183,
+		"catid" : 28,
+		"item" : "Paper Box",
+		"description" : "3 Division Paper Box",
+		"status" : "A"
+	},
+	{
 		"itemid" : 7567,
 		"catid" : 2,
 		"item" : "Paper clip",
@@ -11354,10 +13405,24 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 13200,
+		"catid" : 28,
+		"item" : "Paper Cup",
+		"description" : "Paper Cup, 8oz, 50's",
+		"status" : "A"
+	},
+	{
 		"itemid" : 17180,
 		"catid" : 2,
 		"item" : "Paper cutter",
 		"description" : "Paper cutter, heavy duty, 12â€ x 15â€ (B4) wood base",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10490,
+		"catid" : 28,
+		"item" : "Paper Delivery Belt",
+		"description" : "Paper Delivery Belt",
 		"status" : "A"
 	},
 	{
@@ -11382,6 +13447,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 11840,
+		"catid" : 28,
+		"item" : "Paper Feed Roller",
+		"description" : "Paper Feed Roller",
+		"status" : "A"
+	},
+	{
 		"itemid" : 17181,
 		"catid" : 2,
 		"item" : "Paper file tray",
@@ -11396,10 +13468,24 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 13199,
+		"catid" : 28,
+		"item" : "Paper Kitchen Towel",
+		"description" : "Paper Kitchen Towel, jumbo",
+		"status" : "A"
+	},
+	{
 		"itemid" : 16308,
 		"catid" : 1,
 		"item" : "Paper roll, assy, pack of 3, compatible with OR containers",
 		"description" : "Paper roll, assy, pack of 3, compatible with OR containers",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10497,
+		"catid" : 28,
+		"item" : "Paper Tray Unit EU",
+		"description" : "Paper Tray Unit EU",
 		"status" : "A"
 	},
 	{
@@ -11494,6 +13580,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 11126,
+		"catid" : 28,
+		"item" : "Partial hip replacement with bone cement",
+		"description" : "Partial hip replacement with bone cement",
+		"status" : "A"
+	},
+	{
 		"itemid" : 16085,
 		"catid" : 1,
 		"item" : "Passivation and rust remover",
@@ -11505,6 +13598,34 @@
 		"catid" : 2,
 		"item" : "Paste",
 		"description" : "Paste, solid with water well and applicator, 200g",
+		"status" : "A"
+	},
+	{
+		"itemid" : 17954,
+		"catid" : 28,
+		"item" : "Patella Bond Wiring with complete instrumentation and inclusions",
+		"description" : "Patella Bond Wiring with complete instrumentation and inclusions",
+		"status" : "A"
+	},
+	{
+		"itemid" : 8052,
+		"catid" : 25,
+		"item" : "Patient Identification Card",
+		"description" : "Patient Identification Card (HIMS)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12573,
+		"catid" : 25,
+		"item" : "Patient Identification Card with Plastic Jacket",
+		"description" : "Patient Identification Card with Plastic Jacket",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12171,
+		"catid" : 25,
+		"item" : "Patient's Watchers Pass",
+		"description" : "Patient's Watchers Pass, PVC, CR100 2.63\"x3.88\", design (as per sample), with necklace, assorted colors (Admitting Unit)",
 		"status" : "A"
 	},
 	{
@@ -11557,6 +13678,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 14277,
+		"catid" : 28,
+		"item" : "Pedicle Screws & Long Rods",
+		"description" : "Pedicle Screws & Long Rods",
+		"status" : "A"
+	},
+	{
 		"itemid" : 11628,
 		"catid" : 1,
 		"item" : "PEG Kit",
@@ -11568,6 +13696,13 @@
 		"catid" : 1,
 		"item" : "Peg Kit",
 		"description" : "Peg Kit",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18530,
+		"catid" : 28,
+		"item" : "Pelvis Ilizarov Fixator",
+		"description" : "Pelvis Ilizarov Fixator - 2 sets\r\nWith Spine Halo - 1 set\r\nWith Complete Instrumentation",
 		"status" : "A"
 	},
 	{
@@ -11627,6 +13762,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 18278,
+		"catid" : 25,
+		"item" : "perception test booklet",
+		"description" : "Bender gestalt II perception test booklet (pack of 25)",
+		"status" : "A"
+	},
+	{
 		"itemid" : 19012,
 		"catid" : 1,
 		"item" : "Percutaneous Sheath Introducer Set with integral hemostasis valve/side",
@@ -11673,6 +13815,48 @@
 		"catid" : 9,
 		"item" : "Peritoneal Dialysis Solution, sterile with 2.3% dextrose 2L ",
 		"description" : "Peritoneal Dialysis Solution, sterile with 2.3% or 2.5% dextrose 2L Content per Liter: Glucose monohydrate (equivalent to 15.0g glucose) - 16.5g, Fructose - up tp 0.75g, sodium chloride - 5.786g, Sodium (S) - lactate solution 7.85 (equivalent to 3.925g sodium (S) - lactate), Calcium Chloride dihydrate 183.8mg, Magnesium chloride hexahydrate - 101.7 mg with disinfection cap",
+		"status" : "A"
+	},
+	{
+		"itemid" : 16955,
+		"catid" : 25,
+		"item" : "Personality Assessment Inventory",
+		"description" : "Personality Assessment Inventory - Adolescent",
+		"status" : "A"
+	},
+	{
+		"itemid" : 16956,
+		"catid" : 25,
+		"item" : "Personality Assessment Inventory",
+		"description" : "Personality Assessment Inventory - Adolescent Hand  Scorable Answer Sheet",
+		"status" : "A"
+	},
+	{
+		"itemid" : 16957,
+		"catid" : 25,
+		"item" : "Personality Assessment Inventory",
+		"description" : "Personality Assessment Inventory - Adolescent profile forms",
+		"status" : "A"
+	},
+	{
+		"itemid" : 16958,
+		"catid" : 25,
+		"item" : "Personality Assessment Inventory",
+		"description" : "Personality Assessment Inventory - Adolescent critical items forms",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18944,
+		"catid" : 25,
+		"item" : "Personality Inventory for Children",
+		"description" : "Personality Inventory for Children 2nd Ed (PIC-2) : Manual; 2 Reusable Administration\r\nBooklets; 50 Answer sheets; 1 set of Scoring\r\nTemplates; 25 Behavioral Summary\r\nAutoscore Forms; 50 Standard Form Profile\r\nSheets; 50 Critical Items Summary Sheets",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12013,
+		"catid" : 22,
+		"item" : "Personalized Official Receipt",
+		"description" : "Personalized Official Receipt (AF51) (in continuous form) Size: 8-1/2\"x5\" Material: White, Canary and Blue Carbonless Paper with NPO security marks Others: One-side printing; all black print with RP seal, Official logo, amienda and serial numbers Packaging: In boxes of 1,000 x 3ply/box with front and back cover OR Starts at 2195001 (Cashier)",
 		"status" : "A"
 	},
 	{
@@ -11809,6 +13993,20 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 14639,
+		"catid" : 28,
+		"item" : "Physical and Chemical Analysis",
+		"description" : "Physical and Chemical Analysis",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18945,
+		"catid" : 25,
+		"item" : "Piers-Harris Childrenâ€™s Self Concept Scale 2nd Ed",
+		"description" : "Piers-Harris Childrenâ€™s Self Concept Scale 2nd Ed (PHCSCS-2): Includes 50Autoscore Answer Forms; 1 Manual",
+		"status" : "A"
+	},
+	{
 		"itemid" : 15591,
 		"catid" : 1,
 		"item" : "Pigtail Stent, 7F, 12cm, soft plastic\r\n",
@@ -11820,6 +14018,13 @@
 		"catid" : 1,
 		"item" : "Pigtail Stent, 7F, 15cm, soft plastic\r\n",
 		"description" : "Pigtail Stent, 7F, 15cm, soft plastic\r\n",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9611,
+		"catid" : 28,
+		"item" : "Pillow 20x30 Cotton Magic White",
+		"description" : "Pillow 20x30 Cotton Magic White",
 		"status" : "A"
 	},
 	{
@@ -11900,6 +14105,83 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 13944,
+		"catid" : 28,
+		"item" : "Plastic Bag",
+		"description" : "Transparent Plastic Bag 2\" x 1\"",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13201,
+		"catid" : 28,
+		"item" : "Plastic Bag",
+		"description" : "Plastic Bag large, 100's/pack",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13202,
+		"catid" : 28,
+		"item" : "Plastic Bag",
+		"description" : "Plastic Bag med, 50's/pack",
+		"status" : "A"
+	},
+	{
+		"itemid" : 14074,
+		"catid" : 28,
+		"item" : "Plastic bag",
+		"description" : "Transparent plastic bag 2.75\" x 4.75\"",
+		"status" : "A"
+	},
+	{
+		"itemid" : 14075,
+		"catid" : 28,
+		"item" : "Plastic bag",
+		"description" : "Transparent plastic bag 2\" x 2.75\"",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12172,
+		"catid" : 25,
+		"item" : "Plastic Jacket for Patient Identification Card",
+		"description" : "Plastic Jacket for Patient Identification Card (HIMS)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15136,
+		"catid" : 28,
+		"item" : "Plastic pallet",
+		"description" : "Heavy duty plastic pallet, 1meter x 1.2meters (CSR)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12631,
+		"catid" : 28,
+		"item" : "Plastic toy blocks toy",
+		"description" : "Plastic toy blocks toy (Occupational Therapy Section)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 16345,
+		"catid" : 28,
+		"item" : "plier",
+		"description" : "Lineman's plier, heavy duty",
+		"status" : "A"
+	},
+	{
+		"itemid" : 16346,
+		"catid" : 28,
+		"item" : "plier",
+		"description" : "Long-nose plier, heavy duty",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12696,
+		"catid" : 28,
+		"item" : "Plyobox",
+		"description" : "Plyobox",
+		"status" : "A"
+	},
+	{
 		"itemid" : 13239,
 		"catid" : 9,
 		"item" : "Pneumococal vaccine",
@@ -11932,6 +14214,13 @@
 		"catid" : 9,
 		"item" : "Polio Vaccine",
 		"description" : "(DOH) Polio Vaccine (OPV)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 19004,
+		"catid" : 28,
+		"item" : "Polo cotton shirt with sublimation printing",
+		"description" : "Polo cotton shirt with sublimation printing with embroidered logo of 56th Foundation Anniversary",
 		"status" : "A"
 	},
 	{
@@ -11974,6 +14263,34 @@
 		"catid" : 1,
 		"item" : "Polypropylene 10-0 non-absorbable suture 30cm (12\") blue monofilament spatulated, 12pcs/box",
 		"description" : "Polypropylene 10-0 non-absorbable suture 30cm (12\") blue monofilament spatulated, 12pcs/box",
+		"status" : "A"
+	},
+	{
+		"itemid" : 14191,
+		"catid" : 28,
+		"item" : "Popsickle Sticks",
+		"description" : "Popsickle Sticks, Small (Colored) (OT)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 14192,
+		"catid" : 28,
+		"item" : "Popsickle Sticks",
+		"description" : "Popsickle Sticks, Large (Colored) (OT)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 14193,
+		"catid" : 28,
+		"item" : "Popsickle Sticks",
+		"description" : "Popsickle Sticks, Small (Plain) (OT)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12565,
+		"catid" : 28,
+		"item" : "Portable/Handheld Radio, heavy duty",
+		"description" : "Portable/Handheld Radio, heavy duty",
 		"status" : "A"
 	},
 	{
@@ -12047,6 +14364,20 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 12686,
+		"catid" : 28,
+		"item" : "Power hammer + tractor tires",
+		"description" : "Power hammer + tractor tires",
+		"status" : "A"
+	},
+	{
+		"itemid" : 8341,
+		"catid" : 28,
+		"item" : "Power Supply",
+		"description" : "Power Supply for Cardiac Monitor",
+		"status" : "A"
+	},
+	{
 		"itemid" : 14274,
 		"catid" : 9,
 		"item" : "Praziquantel",
@@ -12054,10 +14385,24 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 13203,
+		"catid" : 28,
+		"item" : "Pre Cut Tissue",
+		"description" : "Pre Cut Tissue",
+		"status" : "A"
+	},
+	{
 		"itemid" : 1004,
 		"catid" : 9,
 		"item" : "pre-filled syringe",
 		"description" : "Pneumococcal 25mcg/0.5mL polysaccharide from each capsular type in 0.5ml",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15816,
+		"catid" : 28,
+		"item" : "Pre-Paid satellite Phone",
+		"description" : "Pre-Paid satellite Phone",
 		"status" : "A"
 	},
 	{
@@ -12103,6 +14448,48 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 15819,
+		"catid" : 28,
+		"item" : "Prepaid Load",
+		"description" : "Prepaid Load",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10041,
+		"catid" : 28,
+		"item" : "Pressure Plate",
+		"description" : "Pressure Plate",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10422,
+		"catid" : 28,
+		"item" : "Pressure Pump",
+		"description" : "Pressure Pump",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10494,
+		"catid" : 28,
+		"item" : "Pressure roller",
+		"description" : "Pressure Roller",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9342,
+		"catid" : 28,
+		"item" : "Pressure Tank Stainless 21 gal",
+		"description" : "Pressure Tank Stainless 21 gal",
+		"status" : "A"
+	},
+	{
+		"itemid" : 11950,
+		"catid" : 28,
+		"item" : "Preventive Maintenance",
+		"description" : "Preventive Maintenance, Repair of Photocopying Machine and Procurement of Consumables",
+		"status" : "A"
+	},
+	{
 		"itemid" : 7245,
 		"catid" : 3,
 		"item" : "Printer paper",
@@ -12114,6 +14501,34 @@
 		"catid" : 1,
 		"item" : "Printer ribbon for Steris brand sterilizer, box of 2, compatible with Amsco Autoclave",
 		"description" : "Printer ribbon for Steris brand sterilizer, box of 2, compatible with Amsco Autoclave",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13022,
+		"catid" : 25,
+		"item" : "Printing for Vaccination Card",
+		"description" : "Printing for Vaccination Card",
+		"status" : "A"
+	},
+	{
+		"itemid" : 7867,
+		"catid" : 28,
+		"item" : "Printing of Manual, colored with plastic cover and ring binder, 184 pages",
+		"description" : "Printing of Manual, colored with plastic cover and ring binder, 184 pages",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18594,
+		"catid" : 28,
+		"item" : "Printing of Patanor (Folded Newspaper type with 24 pages, colored, glossy type)",
+		"description" : "Printing of Patanor (Folded Newspaper type with 24 pages, colored, glossy type)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 17431,
+		"catid" : 28,
+		"item" : "Printing of Patanor (Folded Newspaper type with 32 pages, colored, glossy type)",
+		"description" : "Printing of Patanor (Folded Newspaper type with 32 pages, colored, glossy type)",
 		"status" : "A"
 	},
 	{
@@ -12142,6 +14557,13 @@
 		"catid" : 1,
 		"item" : "Propanol",
 		"description" : "2 Propanol,1-propanol,ethanol and Amimopropyl-Glycine with high tear proof and absorbent PET fleece, 80 sheets/pack",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12173,
+		"catid" : 25,
+		"item" : "Property Card",
+		"description" : "Property Card, MMS (NPO)",
 		"status" : "A"
 	},
 	{
@@ -12184,6 +14606,20 @@
 		"catid" : 2,
 		"item" : "Protector sheets",
 		"description" : "Protector sheets for binder folder, legal size, 3\" width, with 3 rings, 100's/pack",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18055,
+		"catid" : 28,
+		"item" : "Proximal Humerus Locking Plate",
+		"description" : "Proximal Humerus Locking Plate with Locking Screws Versus; Partial Shoulder Arthroplasty with Instrumentation and Power Drill / Saw",
+		"status" : "A"
+	},
+	{
+		"itemid" : 17347,
+		"catid" : 28,
+		"item" : "Proximal Tibia Locking Plate",
+		"description" : "Expert low contact Proximal Tibia Locking Plate with complete instrumentations",
 		"status" : "A"
 	},
 	{
@@ -12264,6 +14700,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 12680,
+		"catid" : 28,
+		"item" : "Puzzle mat hi-density",
+		"description" : "Puzzle mat hi-density",
+		"status" : "A"
+	},
+	{
 		"itemid" : 5376,
 		"catid" : 9,
 		"item" : "Pyrazinamide",
@@ -12306,6 +14749,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 18531,
+		"catid" : 28,
+		"item" : "R.U Plating",
+		"description" : "R.U Plating - 1 set",
+		"status" : "A"
+	},
+	{
 		"itemid" : 3031,
 		"catid" : 9,
 		"item" : "Rabies Immunoglobulin",
@@ -12338,6 +14788,13 @@
 		"catid" : 1,
 		"item" : "Radiopaque Balloon with multiple sizing 12-15 above",
 		"description" : "Radiopaque Balloon with multiple sizing 12-15 above",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9359,
+		"catid" : 28,
+		"item" : "Raincoat Heavy Duty",
+		"description" : "Raincoat Heavy Duty",
 		"status" : "A"
 	},
 	{
@@ -12376,6 +14833,76 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 9292,
+		"catid" : 25,
+		"item" : "Raven's Progressive Matrices, Answer Sheet",
+		"description" : "Raven's Progressive Matrices, Answer Sheet",
+		"status" : "A"
+	},
+	{
+		"itemid" : 16904,
+		"catid" : 28,
+		"item" : "Reconstruction angled plate",
+		"description" : "1 set - Reconstruction angled plate 2.4mm system with HT Locking Screws; 1 set - Archbar and Dental Wires (Surgical Drill, Drillbit and Instrumentation Included)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 16905,
+		"catid" : 28,
+		"item" : "Reconstruction angled plate",
+		"description" : "1 set - Reconstruction angled plate 2.4mm system with HT Locking Screw (Surgical oscillating, reciprocating drill with handpiece foot controller and machine)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 14228,
+		"catid" : 28,
+		"item" : "Reconstruction Angled Plate",
+		"description" : "Reconstruction Angled Plate 2.4mm system with titanium locking screws",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15039,
+		"catid" : 28,
+		"item" : "reconstruction angled to angled plate 2.4mm system with HT locking screws (Surgical drill, oscillating, reciprocating, drill with micromotor, footcontroller and cord)",
+		"description" : "reconstruction angled to angled plate 2.4mm system with HT locking screws (Surgical drill, oscillating, reciprocating, drill with micromotor, footcontroller and cord)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 16906,
+		"catid" : 28,
+		"item" : "Reconstruction plate",
+		"description" : "1 set - Reconstruction plate 2.4mm system with HT Locking Screws (Surgical Drill, Drillbit and Instrumentation Included)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 17222,
+		"catid" : 28,
+		"item" : "Reconstruction plate",
+		"description" : "1 set - Reconstruction plate 2.4mm system with HT Locking Screws; 1 set - Straight plate 8 holes 1.5mm system with HT Screws\r\n(Surgical Drill, Drillbit and Instrumentation Included)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18014,
+		"catid" : 28,
+		"item" : "Reconstruction plate",
+		"description" : "1 Set - Reconstruction plate 18 holes 2.4mm System with HT screws; Surgical drill, drillbit and instrumentation included",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15560,
+		"catid" : 28,
+		"item" : "Reconstruction Plate",
+		"description" : "Reconstruction Plate 6x21 Angled Plate 2.4mm System with HT Locking Screws; Surgical Drill, Drillbit and instrumentation included",
+		"status" : "A"
+	},
+	{
+		"itemid" : 16084,
+		"catid" : 28,
+		"item" : "Reconstruction Plate",
+		"description" : "Reconstruction Plate 2.4mm System with HT Locking Screws (Surgical Drill, Drill Bit and Instrumentation included)",
+		"status" : "A"
+	},
+	{
 		"itemid" : 9820,
 		"catid" : 2,
 		"item" : "Record book",
@@ -12411,6 +14938,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 18820,
+		"catid" : 25,
+		"item" : "Registry Monitoring Tool",
+		"description" : "Registry Monitoring Tool",
+		"status" : "A"
+	},
+	{
 		"itemid" : 9560,
 		"catid" : 9,
 		"item" : "Remdesivir 100mg",
@@ -12432,6 +14966,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 12679,
+		"catid" : 28,
+		"item" : "Resistance bungee cord set",
+		"description" : "Resistance bungee cord set",
+		"status" : "A"
+	},
+	{
 		"itemid" : 11648,
 		"catid" : 1,
 		"item" : "Resuscitator Bag",
@@ -12450,6 +14991,13 @@
 		"catid" : 1,
 		"item" : "Resuscitator Bag",
 		"description" : "Resuscitator Bag, neonate/infant",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9600,
+		"catid" : 28,
+		"item" : "Retractable Belt Barrier to secure and separate people",
+		"description" : "Retractable Belt Barrier to secure and separate people",
 		"status" : "A"
 	},
 	{
@@ -12502,6 +15050,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 10549,
+		"catid" : 28,
+		"item" : "Retrograde Nail with power drill and complete instrumentation",
+		"description" : "Retrograde Nail with power drill and complete instrumentation",
+		"status" : "A"
+	},
+	{
 		"itemid" : 18664,
 		"catid" : 1,
 		"item" : "Reusable cleaning brush for endoscopes",
@@ -12544,6 +15099,20 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 8025,
+		"catid" : 25,
+		"item" : "Reynolds Adjustment Screening Inventory",
+		"description" : "Reynolds Adjustment Screening Inventory AS and record Forms",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15486,
+		"catid" : 28,
+		"item" : "Rice Cooker, 1L",
+		"description" : "Rice Cooker, 1L",
+		"status" : "A"
+	},
+	{
 		"itemid" : 5377,
 		"catid" : 9,
 		"item" : "Rifampicin",
@@ -12562,6 +15131,13 @@
 		"catid" : 9,
 		"item" : "Rifaximin ",
 		"description" : "Rifaximin 200mg",
+		"status" : "A"
+	},
+	{
+		"itemid" : 11839,
+		"catid" : 28,
+		"item" : "Right Door Level",
+		"description" : "Right Door Level",
 		"status" : "A"
 	},
 	{
@@ -12663,6 +15239,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 10492,
+		"catid" : 28,
+		"item" : "Roller Paper Feed Assembly",
+		"description" : "Roller Paper Feed Assembly",
+		"status" : "A"
+	},
+	{
 		"itemid" : 1024,
 		"catid" : 9,
 		"item" : "Rosuvastatin",
@@ -12761,6 +15344,20 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 12665,
+		"catid" : 28,
+		"item" : "Rubber grip",
+		"description" : "Rubber grip, 6\"",
+		"status" : "A"
+	},
+	{
+		"itemid" : 17204,
+		"catid" : 28,
+		"item" : "Rubber Matting",
+		"description" : "Rubber Matting 4feetx8feet",
+		"status" : "A"
+	},
+	{
 		"itemid" : 12726,
 		"catid" : 2,
 		"item" : "Rubber stamp",
@@ -12810,6 +15407,20 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 13205,
+		"catid" : 28,
+		"item" : "Salad Cup",
+		"description" : "Salad Cup, 100's",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13204,
+		"catid" : 28,
+		"item" : "Salad Cup Lid",
+		"description" : "Salad Cup Lid, 100's",
+		"status" : "A"
+	},
+	{
 		"itemid" : 1027,
 		"catid" : 9,
 		"item" : "Salbutamol ",
@@ -12842,6 +15453,13 @@
 		"catid" : 9,
 		"item" : "Sambong",
 		"description" : "Sambong 500mg",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13206,
+		"catid" : 28,
+		"item" : "Sauce Cup",
+		"description" : "Sauce Cup, 50's/60ml",
 		"status" : "A"
 	},
 	{
@@ -12950,10 +15568,45 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 18275,
+		"catid" : 25,
+		"item" : "score summary",
+		"description" : "TOGRA score summary forms (pack of 25)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13208,
+		"catid" : 28,
+		"item" : "Scotchbrite",
+		"description" : "Scotchbrite, plain",
+		"status" : "A"
+	},
+	{
+		"itemid" : 17842,
+		"catid" : 28,
+		"item" : "Screen door",
+		"description" : "Screen door diamond shape (4ft x 3ft)",
+		"status" : "A"
+	},
+	{
 		"itemid" : 11653,
 		"catid" : 1,
 		"item" : "Scrub Brush",
 		"description" : "Scrub Brush with sponge and nail cleaner per piece",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9645,
+		"catid" : 28,
+		"item" : "Scrub Suit",
+		"description" : "Scrub Suit",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10150,
+		"catid" : 28,
+		"item" : "Security Alarm",
+		"description" : "Security Alarm",
 		"status" : "A"
 	},
 	{
@@ -12992,6 +15645,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 9115,
+		"catid" : 28,
+		"item" : "Self Closing glass door with complete accessories",
+		"description" : "Self Closing glass door with complete accessories",
+		"status" : "A"
+	},
+	{
 		"itemid" : 14235,
 		"catid" : 9,
 		"item" : "Semi-Elemental enteral Formula; peptide-based formula; lactose-free:gluten-free: caloric density-1.5 kcal",
@@ -13006,6 +15666,20 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 15625,
+		"catid" : 25,
+		"item" : "Semi-expendable Property Card",
+		"description" : "Semi-expendable Property Card, MMS (NPO)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 16944,
+		"catid" : 28,
+		"item" : "Senior Citizen Booklet",
+		"description" : "Senior Citizen Booklet 8.27x11.69 (A4 size)",
+		"status" : "A"
+	},
+	{
 		"itemid" : 18428,
 		"catid" : 1,
 		"item" : "Sensitive wipes",
@@ -13013,10 +15687,38 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 12572,
+		"catid" : 25,
+		"item" : "Sensory Processing Measure (SPM) - Preschool Forms; Home Forms; Main Environments Form",
+		"description" : "Sensory Processing Measure (SPM) - Preschool Forms; Home Forms; Main Environments Form",
+		"status" : "A"
+	},
+	{
 		"itemid" : 1034,
 		"catid" : 9,
 		"item" : "Sertraline",
 		"description" : "Sertraline 50mg (as hydrochloride)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 16722,
+		"catid" : 28,
+		"item" : "Set",
+		"description" : "1 set - Reconstruction Plte 2.4mm System 12 Holes with HT Locking Screws; 1 set - Archbar and Dental Wires (Surgical Drill, Drillbit and Instrumentation Included)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18019,
+		"catid" : 28,
+		"item" : "Set",
+		"description" : "1 set -DISTAL FEMORAL LOCKING PLATE; \r\n1 set- 7.0/4.0 CANNULATED 1; \r\n1 set -PATELLA TENSION BOND WIRING",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18020,
+		"catid" : 28,
+		"item" : "Set",
+		"description" : "PROXIMAL TIBIA LOCKING PLATE AND SCREWS WITH COMPLETE INSTRUMENTATION ",
 		"status" : "A"
 	},
 	{
@@ -13041,6 +15743,20 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 12632,
+		"catid" : 28,
+		"item" : "Shape sorter toy, plastic",
+		"description" : "Shape sorter toy, plastic (Occupational Therapy Section)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12633,
+		"catid" : 28,
+		"item" : "Shapes form board toy",
+		"description" : "Shapes form board toy (Occupational Therapy Section)",
+		"status" : "A"
+	},
+	{
 		"itemid" : 11656,
 		"catid" : 1,
 		"item" : "Sharp Disposal Box",
@@ -13062,10 +15778,45 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 18282,
+		"catid" : 25,
+		"item" : "Shipley-2",
+		"description" : "Shipley-2 block patterns form (pack of 25) includes block patterns form and block patterns answer key",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18283,
+		"catid" : 25,
+		"item" : "Shipley-2",
+		"description" : "Shipley-2 abstraction autoscore form (pack of 25)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18280,
+		"catid" : 25,
+		"item" : "Shipley-2 Kit",
+		"description" : "Shipley-2 Kit",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9136,
+		"catid" : 28,
+		"item" : "Shock Absorber",
+		"description" : "Shock Absorber",
+		"status" : "A"
+	},
+	{
 		"itemid" : 11776,
 		"catid" : 1,
 		"item" : "Shoe Cover",
 		"description" : "Shoe Cover, non-permeable, 100's/pack",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13231,
+		"catid" : 28,
+		"item" : "Shower with heater",
+		"description" : "Shower with heater",
 		"status" : "A"
 	},
 	{
@@ -13108,6 +15859,13 @@
 		"catid" : 2,
 		"item" : "Sign pen",
 		"description" : "Sign pen, 0.5mm point, color blue",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18737,
+		"catid" : 28,
+		"item" : "Signage",
+		"description" : "Supply, delivery and installation of MMMHMC Hospital Signage at the Laboratory and Diagnostics Building",
 		"status" : "A"
 	},
 	{
@@ -13188,6 +15946,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 15472,
+		"catid" : 28,
+		"item" : "Single Burner Gas Stove",
+		"description" : "Single Burner Gas Stove",
+		"status" : "A"
+	},
+	{
 		"itemid" : 18666,
 		"catid" : 1,
 		"item" : "Single use injector Fr.5, G.23, 200cm long",
@@ -13237,10 +16002,101 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 9285,
+		"catid" : 25,
+		"item" : "Small Tangible Asset Tag (STAT)",
+		"description" : "Small Tangible Asset Tag (STAT), as per sample (MMS)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 7868,
+		"catid" : 28,
+		"item" : "Snacks",
+		"description" : "Snacks (cheese pimiento sandwich)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 7870,
+		"catid" : 28,
+		"item" : "Snacks",
+		"description" : "Snacks (egg sandwch)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 7925,
+		"catid" : 28,
+		"item" : "Snacks",
+		"description" : "Snacks (Chicken sandwich + Pork Barbeque on stick)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 7926,
+		"catid" : 28,
+		"item" : "Snacks",
+		"description" : "Snacks ( Arroz Caldo + turon)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 7928,
+		"catid" : 28,
+		"item" : "Snacks",
+		"description" : "Snacks ( Sotanghon guisado with calamansi + biko)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 7929,
+		"catid" : 28,
+		"item" : "Snacks",
+		"description" : "Snacks (Miki special + puto)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 7930,
+		"catid" : 28,
+		"item" : "Snacks",
+		"description" : "Snacks (Siopao + buchi)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 7931,
+		"catid" : 28,
+		"item" : "Snacks",
+		"description" : "Snacks (Sopas + tubig)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 7874,
+		"catid" : 28,
+		"item" : "Snacks for Donors",
+		"description" : "Snacks for Donors (500mL bottled water & biscuit) ",
+		"status" : "A"
+	},
+	{
+		"itemid" : 7875,
+		"catid" : 28,
+		"item" : "Snacks for Donors ",
+		"description" : "Snacks for Donors (500mL bottled water & biscuit) - JFEBRUARY",
+		"status" : "A"
+	},
+	{
+		"itemid" : 7876,
+		"catid" : 28,
+		"item" : "Snacks for Donors",
+		"description" : "Snacks for Donors (500mL bottled water & biscuit) - MARCH",
+		"status" : "A"
+	},
+	{
 		"itemid" : 13418,
 		"catid" : 1,
 		"item" : "Soaking Tray",
 		"description" : "Soaking Tray 10 x 15 inches, regular, stainless, with cover",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12431,
+		"catid" : 25,
+		"item" : "Social Service Card",
+		"description" : "Social Service Card, as per sample (MSS)",
 		"status" : "A"
 	},
 	{
@@ -13559,6 +16415,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 17135,
+		"catid" : 28,
+		"item" : "Soft Rubber Matting",
+		"description" : "Rubber Matting/Flooring, 10mmx4feet",
+		"status" : "A"
+	},
+	{
 		"itemid" : 10129,
 		"catid" : 3,
 		"item" : "Solid State Drive",
@@ -13587,6 +16450,62 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 18284,
+		"catid" : 25,
+		"item" : "SPECTRA",
+		"description" : "SPECTRA Indices of Psychopathology Introductory Kit",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18285,
+		"catid" : 25,
+		"item" : "SPECTRA",
+		"description" : "SPECTRA response booklets (pack of 25)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18286,
+		"catid" : 25,
+		"item" : "SPECTRA",
+		"description" : "SPECTRA score summary/profile forms (pack of 25)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18361,
+		"catid" : 25,
+		"item" : "Spectra",
+		"description" : "Spectra score summary/profile forms (package of 25)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18363,
+		"catid" : 25,
+		"item" : "Spectra",
+		"description" : "Spectra data entry item/response booklet (package of 25)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18357,
+		"catid" : 25,
+		"item" : "Spectra indices of psychopathology",
+		"description" : "Spectra indices of psychopathology",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18359,
+		"catid" : 25,
+		"item" : "Spectra response booklets",
+		"description" : "Spectra response booklets (package of 25)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 14789,
+		"catid" : 28,
+		"item" : "Spine Fracture",
+		"description" : "Spine Fracture 6 pedicle screws Set screws and rod Spine Instrumentations Plifcage, Power drill Surgical Assistance Cargo/Transportaion",
+		"status" : "A"
+	},
+	{
 		"itemid" : 11545,
 		"catid" : 1,
 		"item" : "Spirometer",
@@ -13608,10 +16527,52 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 13207,
+		"catid" : 28,
+		"item" : "Sponge",
+		"description" : "Scotch Brite with Sponge, 3's/pack",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13209,
+		"catid" : 28,
+		"item" : "Sponge",
+		"description" : "Sponge, small",
+		"status" : "A"
+	},
+	{
 		"itemid" : 11302,
 		"catid" : 1,
 		"item" : "Spray Head, for spray application of operative site disinfectant, fits to 1L bottle",
 		"description" : "Spray Head, for spray application of operative site disinfectant, fits to 1L bottle",
+		"status" : "A"
+	},
+	{
+		"itemid" : 16353,
+		"catid" : 28,
+		"item" : "Spring bender",
+		"description" : "Spring bender for copper",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9569,
+		"catid" : 28,
+		"item" : "Stainless Pitcher",
+		"description" : "Stainless Pitcher",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9572,
+		"catid" : 28,
+		"item" : "Stainless Small Basin",
+		"description" : "Stainless Small Basin",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15487,
+		"catid" : 28,
+		"item" : "Stainless Stockpot with stainless cover",
+		"description" : "Stainless Stockpot with stainless cover",
 		"status" : "A"
 	},
 	{
@@ -13675,6 +16636,20 @@
 		"catid" : 2,
 		"item" : "Stamp pad ink",
 		"description" : "Stamp pad ink, 50ml, with applicator/brush, color red",
+		"status" : "A"
+	},
+	{
+		"itemid" : 16932,
+		"catid" : 25,
+		"item" : "Stanford binet 5th edition",
+		"description" : "Stanford binet 5th edition, complete test kit with carrying case",
+		"status" : "A"
+	},
+	{
+		"itemid" : 16933,
+		"catid" : 25,
+		"item" : "Stanford Record Forms",
+		"description" : "Stanford Record Forms",
 		"status" : "A"
 	},
 	{
@@ -13745,6 +16720,20 @@
 		"catid" : 2,
 		"item" : "Stapler",
 		"description" : "Stapler, heavy duty, for staples 23/16 up to 23/24",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12162,
+		"catid" : 28,
+		"item" : "Steel Shelves",
+		"description" : "Steel Shelves, 12\" gaps, 6-8 layers, at least 3 meters wide",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13210,
+		"catid" : 28,
+		"item" : "Steel Wool",
+		"description" : "Steel Wool",
 		"status" : "A"
 	},
 	{
@@ -13888,6 +16877,55 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 12004,
+		"catid" : 28,
+		"item" : "Sticker",
+		"description" : "Sticker (50m x 4ft) White (Reflectorize)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12005,
+		"catid" : 28,
+		"item" : "Sticker",
+		"description" : "Sticker (50m x 4ft) Blue (Reflectorize)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12007,
+		"catid" : 28,
+		"item" : "Sticker",
+		"description" : "Sticker (50m x 4ft) Green (Reflectorize)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12008,
+		"catid" : 28,
+		"item" : "Sticker",
+		"description" : "Sticker (50m x 4ft) Red (Reflectorize)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12009,
+		"catid" : 28,
+		"item" : "Sticker",
+		"description" : "Sticker (50m x 4ft) Yellow (Reflectorize)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12010,
+		"catid" : 28,
+		"item" : "Sticker",
+		"description" : "Sticker (50m x 4ft) Black (Reflectorize)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12003,
+		"catid" : 28,
+		"item" : "Sticker Cutter Needle",
+		"description" : "Sticker Cutter Needle",
+		"status" : "A"
+	},
+	{
 		"itemid" : 17845,
 		"catid" : 2,
 		"item" : "Sticker Paper",
@@ -13965,6 +17003,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 9321,
+		"catid" : 25,
+		"item" : "Stock Card",
+		"description" : "Stock Card (NPO)",
+		"status" : "A"
+	},
+	{
 		"itemid" : 14195,
 		"catid" : 1,
 		"item" : "Stockinette",
@@ -13979,10 +17024,73 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 12594,
+		"catid" : 28,
+		"item" : "Storage box",
+		"description" : "Storage box slim with cover (APU)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15438,
+		"catid" : 28,
+		"item" : "Storage box",
+		"description" : "Storage box, plastic",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15615,
+		"catid" : 28,
+		"item" : "Storage box",
+		"description" : "Storage box, plastic, 50 liters",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10159,
+		"catid" : 28,
+		"item" : "Storybook for children (50 pages per booklet)",
+		"description" : "Storybook for children (50 pages per booklet)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15950,
+		"catid" : 28,
+		"item" : "Straight plate",
+		"description" : "Straight plate 16 holes regular 1.5mm system with HT screws; Straight plate 4 holes regular 1.5mm system with HT screws. Surgical drill, drillbit and instrumentation included",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18515,
+		"catid" : 28,
+		"item" : "Straight plate",
+		"description" : "Straight plate 6 holes regular 2.0mm System with HT screws; Surgical drill, drillbit and instrumentation included",
+		"status" : "A"
+	},
+	{
+		"itemid" : 14227,
+		"catid" : 28,
+		"item" : "Straight plate",
+		"description" : "1.5mm system, straight plate with titanium screws (set)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18659,
+		"catid" : 28,
+		"item" : "Straight plate",
+		"description" : "Straight plate 10 holes holes regular 1.5mm System with HT screws; Surgical drill, drillbit and instrumentation included",
+		"status" : "A"
+	},
+	{
 		"itemid" : 1046,
 		"catid" : 9,
 		"item" : "Streptomycin",
 		"description" : "Streptomycin 1g (IM) (as sulfate) ",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10496,
+		"catid" : 28,
+		"item" : "Stripper Pawls, Sub-Assy",
+		"description" : "Stripper Pawls, Sub-Assy",
 		"status" : "A"
 	},
 	{
@@ -14053,6 +17161,13 @@
 		"catid" : 9,
 		"item" : "Sugammadex",
 		"description" : "Sugammadex 100mg/mL solution for injection (IV), 2mL",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12435,
+		"catid" : 28,
+		"item" : "Supply and installation of battery for the UPS of Waters Xevo TQD System",
+		"description" : "Supply and installation of battery for the UPS of Waters Xevo TQD System",
 		"status" : "A"
 	},
 	{
@@ -14602,6 +17717,20 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 16354,
+		"catid" : 28,
+		"item" : "Swagging tools",
+		"description" : "Swagging tools",
+		"status" : "A"
+	},
+	{
+		"itemid" : 17612,
+		"catid" : 28,
+		"item" : "Syphon seal",
+		"description" : "Syphon seal",
+		"status" : "A"
+	},
+	{
 		"itemid" : 14428,
 		"catid" : 1,
 		"item" : "Syringe",
@@ -14816,6 +17945,13 @@
 		"catid" : 9,
 		"item" : "tab/cap",
 		"description" : "Phenoxymethyl Penicillin 500mg as potassium salt",
+		"status" : "A"
+	},
+	{
+		"itemid" : 14152,
+		"catid" : 28,
+		"item" : "Table with chairs",
+		"description" : "Table with chairs, 8-seater",
 		"status" : "A"
 	},
 	{
@@ -15043,6 +18179,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 12595,
+		"catid" : 28,
+		"item" : "Tarpaulin",
+		"description" : "Tarpaulin (PHU)",
+		"status" : "A"
+	},
+	{
 		"itemid" : 3039,
 		"catid" : 9,
 		"item" : "Telmisartan ",
@@ -15078,6 +18221,48 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 18273,
+		"catid" : 25,
+		"item" : "Test",
+		"description" : "Test of general reasoning ability (togra)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15739,
+		"catid" : 25,
+		"item" : "Test Form",
+		"description" : "FAB-C Test Forms",
+		"status" : "A"
+	},
+	{
+		"itemid" : 11286,
+		"catid" : 25,
+		"item" : "Test of Nonverbal Intelligence Test 4th Edition Response Form A",
+		"description" : "Test of Nonverbal Intelligence Test 4th Edition Response Form A",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9286,
+		"catid" : 25,
+		"item" : "Test of Nonverbal Intelligence-IV Response Form",
+		"description" : "Test of Nonverbal Intelligence-IV Response Form",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10946,
+		"catid" : 25,
+		"item" : "Test of Visual Perceptual Skills (Test Kit; Manual test Plates and Record Forms",
+		"description" : "Test of Visual Perceptual Skills (Test Kit; Manual test Plates and Record Forms",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9620,
+		"catid" : 28,
+		"item" : "Test Strips, 20's",
+		"description" : "Test Strips, 20's",
+		"status" : "A"
+	},
+	{
 		"itemid" : 1053,
 		"catid" : 9,
 		"item" : "Tetanus Immunoglobulin",
@@ -15089,6 +18274,48 @@
 		"catid" : 9,
 		"item" : "Tetanus Toxoid",
 		"description" : "Tetanus Toxoid 0.5mL IM",
+		"status" : "A"
+	},
+	{
+		"itemid" : 8026,
+		"catid" : 25,
+		"item" : "The Millon Adolescent Personality Inventory",
+		"description" : "The Millon Adolescent Personality Inventory",
+		"status" : "A"
+	},
+	{
+		"itemid" : 8027,
+		"catid" : 25,
+		"item" : "The Millon Clinical Multiaxial Inventory III",
+		"description" : "The Millon Clinical Multiaxial Inventory III, Hand Scoring Answer S",
+		"status" : "A"
+	},
+	{
+		"itemid" : 8028,
+		"catid" : 25,
+		"item" : "The Millon Clinical Multiaxial Inventory III",
+		"description" : "The Millon Clinical Multiaxial Inventory III, Profile Form",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9287,
+		"catid" : 25,
+		"item" : "The Millon Clinical Multiaxial Inventory III, Hand Scoring Answer Sheet",
+		"description" : "The Millon Clinical Multiaxial Inventory III, Hand Scoring Answer Sheet",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9288,
+		"catid" : 25,
+		"item" : "The Millon Clinical Multiaxial Inventory III, Profile Form",
+		"description" : "The Millon Clinical Multiaxial Inventory III, Profile Form",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18303,
+		"catid" : 25,
+		"item" : "Thematic Apperception Test",
+		"description" : "Thematic Apperception Test (TAT)",
 		"status" : "A"
 	},
 	{
@@ -15124,6 +18351,13 @@
 		"catid" : 3,
 		"item" : "Thermal Paste",
 		"description" : "Thermal Paste",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10495,
+		"catid" : 28,
+		"item" : "Thermistor",
+		"description" : "Thermistor",
 		"status" : "A"
 	},
 	{
@@ -15201,6 +18435,20 @@
 		"catid" : 1,
 		"item" : "Thermoplastic Sheet",
 		"description" : "Thermoplastic Sheet (Natural) 60cm x 90cm x 3.2mm, plain",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9583,
+		"catid" : 28,
+		"item" : "Thick Fabric material for curtain, beige or light grey or any neutral color",
+		"description" : "Thick Fabric material for curtain, beige or light grey or any neutral color",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9582,
+		"catid" : 28,
+		"item" : "Thick Fabric material for curtain, navy blue, brown, dark green or moss green color",
+		"description" : "Thick Fabric material for curtain, navy blue, brown, dark green or moss green color",
 		"status" : "A"
 	},
 	{
@@ -15295,6 +18543,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 17937,
+		"catid" : 28,
+		"item" : "Tibia Plating",
+		"description" : "1set - Tibia Plating VS Tibia Nail",
+		"status" : "A"
+	},
+	{
 		"itemid" : 12902,
 		"catid" : 9,
 		"item" : "Timolol",
@@ -15344,10 +18599,143 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 18179,
+		"catid" : 28,
+		"item" : "TITANIUM",
+		"description" : "TITANIUM RADIUS AND ULNA LOCKING PLATE",
+		"status" : "A"
+	},
+	{
+		"itemid" : 17936,
+		"catid" : 28,
+		"item" : "Titanium",
+		"description" : "1-Titanium Distal Tibia LCP, \r\n1-Titanium Semi Tubular",
+		"status" : "A"
+	},
+	{
+		"itemid" : 16915,
+		"catid" : 28,
+		"item" : "Titanium",
+		"description" : "1 set - Titanium straight plate 16 holes regular 1.5 mm system with HT Screws (Surgical drill, oscillating, reciprocating, drill with micromotor foot controller and cord)\r\n",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13881,
+		"catid" : 28,
+		"item" : "Titanium",
+		"description" : "Titanium Distal Humerus LCP Bone Graft with Complete Ortho Instruments",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15433,
+		"catid" : 28,
+		"item" : "Titanium",
+		"description" : "Titanium plate, 20 holes regular 1/5mm system with HT screws. Surgical drill, drillbit and instrumentation included",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15434,
+		"catid" : 28,
+		"item" : "Titanium",
+		"description" : "Titanium plate 1.5mm system with HT screws; Mesh Panel Plate 1.5mm system with HT screws. Surgical drill, drillbit and instrumentation included",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13387,
+		"catid" : 28,
+		"item" : "Titanium",
+		"description" : "Titanium Femur Nail Patella Band Wiring with complete Ortho instruments",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13388,
+		"catid" : 28,
+		"item" : "Titanium",
+		"description" : "Titanium Distal Radius Plating with Complete Ortho Instruments",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13404,
+		"catid" : 28,
+		"item" : "Titanium",
+		"description" : "Titanium Tibia Nail, Titanium Fibula Plating with complete Ortho Instruments",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18021,
+		"catid" : 28,
+		"item" : "TITANIUM",
+		"description" : "TITANIUM ORTHOPEDIC IMPLANT AND SCREWS AND COMPLETE INTRUMENTATIONS",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13431,
+		"catid" : 28,
+		"item" : "Titanium",
+		"description" : "Titanium Schatzker Tibia LCP with complete Ortho Instruments",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15256,
+		"catid" : 28,
+		"item" : "Titanium",
+		"description" : "Titanium Tibia Nail Titanium Fibula Plating with Complete Instrumentation",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13255,
+		"catid" : 28,
+		"item" : "Titanium Broad Narrow LCP",
+		"description" : "Titanium Broad Narrow LCP with Removal Instruments",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12852,
+		"catid" : 28,
+		"item" : "Titanium Femur Nail Right",
+		"description" : "Titanium Femur Nail Right",
+		"status" : "A"
+	},
+	{
 		"itemid" : 15516,
 		"catid" : 1,
 		"item" : "Titanium lock adapter",
 		"description" : "Titanium lock adapter between peritoneal dialysis catheter and the transfer set",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15134,
+		"catid" : 28,
+		"item" : "Titanium Mesh Orbital 1.5mm system with screws Surgical drill, drillbit and instrumentation included",
+		"description" : "Titanium Mesh Orbital 1.5mm system with screws Surgical drill, drillbit and instrumentation included",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15719,
+		"catid" : 28,
+		"item" : "Titanium Plate",
+		"description" : "Titanium Plate 20 Holes Regular 1.5mm System with HT Screws, Surgical Drill, Drillbit and Instrumentation Included",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18516,
+		"catid" : 28,
+		"item" : "Titanium plates",
+		"description" : "Titanium plates 2.0mm System with HT screws; Surgical drill, drillbit and instrumentation included",
+		"status" : "A"
+	},
+	{
+		"itemid" : 17961,
+		"catid" : 28,
+		"item" : "Titanium Tibia Locking Plate",
+		"description" : "Titanium Tibia Locking Plate",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12794,
+		"catid" : 28,
+		"item" : "Titanium Tibia Nail vs Plating with complete instrumentation",
+		"description" : "Titanium Tibia Nail vs Plating with complete instrumentation",
 		"status" : "A"
 	},
 	{
@@ -15491,6 +18879,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 12634,
+		"catid" : 28,
+		"item" : "Tongs - Heat Resistant",
+		"description" : "Tongs - Heat Resistant (Occupational Therapy Section)",
+		"status" : "A"
+	},
+	{
 		"itemid" : 11734,
 		"catid" : 1,
 		"item" : "tongue depressor\r\n",
@@ -15516,6 +18911,27 @@
 		"catid" : 9,
 		"item" : "Topiramate ",
 		"description" : "Topiramate 100mg",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10469,
+		"catid" : 28,
+		"item" : "Total Hip Cementless",
+		"description" : "Total Hip Cementless",
+		"status" : "A"
+	},
+	{
+		"itemid" : 11244,
+		"catid" : 28,
+		"item" : "Total Hip replacement femoral stem/acetabular cup and liner/femoral head Cementless Hip System",
+		"description" : "Total Hip replacement femoral stem/acetabular cup and liner/femoral head Cementless Hip System",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12597,
+		"catid" : 28,
+		"item" : "Tough box",
+		"description" : "Tough box by Home Gallery, 120L (HEMS)",
 		"status" : "A"
 	},
 	{
@@ -15694,6 +19110,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 12635,
+		"catid" : 28,
+		"item" : "Trampoline 35-40 inches diameter",
+		"description" : "Trampoline 35-40 inches diameter (Occupational Therapy Section)",
+		"status" : "A"
+	},
+	{
 		"itemid" : 1066,
 		"catid" : 9,
 		"item" : "Tranexamic Acid ",
@@ -15743,6 +19166,76 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 11160,
+		"catid" : 28,
+		"item" : "Trash container",
+		"description" : "Trash container, black, heavy duty, XL with wheel, plastic",
+		"status" : "A"
+	},
+	{
+		"itemid" : 11161,
+		"catid" : 28,
+		"item" : "Trash container",
+		"description" : "Trash container, green, heavy duty, XL with wheel, plastic",
+		"status" : "A"
+	},
+	{
+		"itemid" : 11162,
+		"catid" : 28,
+		"item" : "Trash container",
+		"description" : "Trash container, yellow, heavy duty, XL with wheel, plastic",
+		"status" : "A"
+	},
+	{
+		"itemid" : 11163,
+		"catid" : 28,
+		"item" : "Trash container",
+		"description" : "Trash container, black, heavy duty, 16\" height, plastic",
+		"status" : "A"
+	},
+	{
+		"itemid" : 11164,
+		"catid" : 28,
+		"item" : "Trash container",
+		"description" : "Trash container, green, heavy duty, 16\" height, plastic",
+		"status" : "A"
+	},
+	{
+		"itemid" : 11165,
+		"catid" : 28,
+		"item" : "Trash container",
+		"description" : "Trash container, yellow, heavy duty, 16\" height, plastic",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13556,
+		"catid" : 28,
+		"item" : "Trash container",
+		"description" : "Trash container, yellow, heavy duty, HT XL at least 100 liters with wheel, plastic",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13555,
+		"catid" : 28,
+		"item" : "Trash container, black, heavy duty, HT XL at least 100 liters with wheel, plastic",
+		"description" : "Trash container, black, heavy duty, HT XL at least 100 liters with wheel, plastic",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9150,
+		"catid" : 28,
+		"item" : "Trash Container, black, heavy duty, large",
+		"description" : "Trash Container, black, heavy duty, large",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9151,
+		"catid" : 28,
+		"item" : "Trash Container, yellow, heavy duty, large",
+		"description" : "Trash Container, yellow, heavy duty, large",
+		"status" : "A"
+	},
+	{
 		"itemid" : 12581,
 		"catid" : 9,
 		"item" : "Trastuzumab ",
@@ -15761,6 +19254,48 @@
 		"catid" : 9,
 		"item" : "Trastuzumab",
 		"description" : "Trastuzumab 150mg lyophilized powder (IV Infusion)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18270,
+		"catid" : 25,
+		"item" : "Trauma symptom inventory",
+		"description" : "Trauma symptom inventory - 2 introductory kit",
+		"status" : "A"
+	},
+	{
+		"itemid" : 8029,
+		"catid" : 25,
+		"item" : "Trauma Symptoms Checklist ",
+		"description" : "Trauma Symptoms Checklist for Children Answer Sheet",
+		"status" : "A"
+	},
+	{
+		"itemid" : 8030,
+		"catid" : 25,
+		"item" : "Trauma Symptoms Checklist ",
+		"description" : "Trauma Symptoms Checklist for Children Profile",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15726,
+		"catid" : 25,
+		"item" : "Trauma Symptoms Checklist",
+		"description" : "Trauma Symptoms Checklist for Children Profile M",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15727,
+		"catid" : 25,
+		"item" : "Trauma Symptoms Checklist",
+		"description" : "Trauma Symptoms Checklist for Children Profile F",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12567,
+		"catid" : 25,
+		"item" : "Trauma Symptoms Checklist for Children Profile",
+		"description" : "Trauma Symptoms Checklist for Children Profile",
 		"status" : "A"
 	},
 	{
@@ -15792,6 +19327,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 17406,
+		"catid" : 28,
+		"item" : "Trolley",
+		"description" : "Dispensing Trolley",
+		"status" : "A"
+	},
+	{
 		"itemid" : 5470,
 		"catid" : 9,
 		"item" : "tropiamide",
@@ -15813,10 +19355,38 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 18271,
+		"catid" : 25,
+		"item" : "Tsi",
+		"description" : "Tsi hand scorable answer sheets (pack of 25)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18272,
+		"catid" : 25,
+		"item" : "TSI",
+		"description" : "TSI-2 profile forms (pack of 25)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 16356,
+		"catid" : 28,
+		"item" : "Tube cutter",
+		"description" : "Tube cutter, small (for copper)",
+		"status" : "A"
+	},
+	{
 		"itemid" : 10468,
 		"catid" : 9,
 		"item" : "Tuberculin",
 		"description" : "Tuberculin, Purified Protein Derivative (PPD) 2TU/0.1ml solution, 1ml vial (ID)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12700,
+		"catid" : 28,
+		"item" : "Turf mats",
+		"description" : "Turf mats, 5 ft x 30 ft",
 		"status" : "A"
 	},
 	{
@@ -15831,6 +19401,13 @@
 		"catid" : 9,
 		"item" : "Typhoid vaccine Vi-capsular polysaccharide S. typhi 25 micrograms in 0.5mL (IM)",
 		"description" : "Typhoid vaccine Vi-capsular polysaccharide S. typhi 25 micrograms in 0.5mL (IM)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13211,
+		"catid" : 28,
+		"item" : "Uling",
+		"description" : "Uling",
 		"status" : "A"
 	},
 	{
@@ -15901,6 +19478,27 @@
 		"catid" : 1,
 		"item" : "Umbilical Tape",
 		"description" : "Fat Umbilical Tape",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12602,
+		"catid" : 28,
+		"item" : "Umbrella",
+		"description" : "Umbrella, heavy duty, with security name tag (Security)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9598,
+		"catid" : 28,
+		"item" : "Umbrella",
+		"description" : "Umbrella",
+		"status" : "A"
+	},
+	{
+		"itemid" : 8361,
+		"catid" : 25,
+		"item" : "Under 5 Growth Chart and Treatment Record",
+		"description" : "Under 5 Growth Chart and Treatment Record, as per sample (3FA)",
 		"status" : "A"
 	},
 	{
@@ -16114,6 +19712,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 12636,
+		"catid" : 28,
+		"item" : "Vegetable form board toy",
+		"description" : "Vegetable form board toy (Occupational Therapy Section)",
+		"status" : "A"
+	},
+	{
 		"itemid" : 14199,
 		"catid" : 1,
 		"item" : "Velcro",
@@ -16146,6 +19751,13 @@
 		"catid" : 1,
 		"item" : "Verify steam indicator, 250's/pack, for Steris brand sterilizer, compatible with OR containers\r\n",
 		"description" : "Verify steam indicator, 250's/pack, for Steris brand sterilizer, compatible with OR containers\r\n",
+		"status" : "A"
+	},
+	{
+		"itemid" : 12637,
+		"catid" : 28,
+		"item" : "Vestibular/yoga ball 30-45cm diameter",
+		"description" : "Vestibular/yoga ball 30-45cm diameter (Occupational Therapy Section)",
 		"status" : "A"
 	},
 	{
@@ -16254,10 +19866,31 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 9377,
+		"catid" : 28,
+		"item" : "Vinyl Floor Sticker",
+		"description" : "Vinyl Floor Sticker",
+		"status" : "A"
+	},
+	{
 		"itemid" : 11759,
 		"catid" : 1,
 		"item" : "Visceral Pack/Surgical Lap Sponge",
 		"description" : "Visceral Pack/Surgical Lap Sponge, 12 x 12, 12-ply mesh 24 x 24, sterile, 1's/pack",
+		"status" : "A"
+	},
+	{
+		"itemid" : 16359,
+		"catid" : 28,
+		"item" : "Vise grip",
+		"description" : "Vise grip, heavy duty",
+		"status" : "A"
+	},
+	{
+		"itemid" : 16360,
+		"catid" : 28,
+		"item" : "Vise grip",
+		"description" : "Vise grip, medium size, heavy duty",
 		"status" : "A"
 	},
 	{
@@ -16310,6 +19943,13 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 18281,
+		"catid" : 25,
+		"item" : "Vocabulary Auto Score",
+		"description" : "Shipley-2 Vocabulary Auto Score (pack of 25)",
+		"status" : "A"
+	},
+	{
 		"itemid" : 11760,
 		"catid" : 1,
 		"item" : "Volumetric Solution",
@@ -16338,6 +19978,20 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 15461,
+		"catid" : 28,
+		"item" : "Wallpaper",
+		"description" : "Wallpaper, 10 meters/roll",
+		"status" : "A"
+	},
+	{
+		"itemid" : 15462,
+		"catid" : 28,
+		"item" : "Wallpaper paste",
+		"description" : "Wallpaper paste",
+		"status" : "A"
+	},
+	{
 		"itemid" : 1083,
 		"catid" : 9,
 		"item" : "Warfarin",
@@ -16345,10 +19999,31 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 17195,
+		"catid" : 28,
+		"item" : "Warning tape",
+		"description" : "Warning tape, CAUTION, 25 meters",
+		"status" : "A"
+	},
+	{
 		"itemid" : 11298,
 		"catid" : 1,
 		"item" : "Wash Lotion",
 		"description" : "Wash Lotion mild surfactant pH 5.5 cleanser,1000 ml /bottle with wall mounted dispenser ",
+		"status" : "A"
+	},
+	{
+		"itemid" : 14640,
+		"catid" : 28,
+		"item" : "Water Analysis",
+		"description" : "Water Analysis",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13046,
+		"catid" : 28,
+		"item" : "Water Analysis",
+		"description" : "Water Analysis at the Dietary Section",
 		"status" : "A"
 	},
 	{
@@ -16363,6 +20038,20 @@
 		"catid" : 1,
 		"item" : "Water Filter",
 		"description" : "5 Micron Water Filter",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18433,
+		"catid" : 28,
+		"item" : "Water Pump",
+		"description" : "Water Pump",
+		"status" : "A"
+	},
+	{
+		"itemid" : 10542,
+		"catid" : 28,
+		"item" : "Water Pump of Toyota Grandia",
+		"description" : "Water Pump of Toyota Grandia",
 		"status" : "A"
 	},
 	{
@@ -16387,6 +20076,34 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 12568,
+		"catid" : 25,
+		"item" : "Wechsler Intelligence Scale for Children",
+		"description" : "Wechsler Intelligence Scale for Children",
+		"status" : "A"
+	},
+	{
+		"itemid" : 16934,
+		"catid" : 25,
+		"item" : "Wechsler Intelligence Scale for Children 5th Edition",
+		"description" : "Wechsler Intelligence Scale for Children 5th Edition",
+		"status" : "A"
+	},
+	{
+		"itemid" : 11284,
+		"catid" : 25,
+		"item" : "Wechsler Intelligence Scale for Children Response Form 1",
+		"description" : "Wechsler Intelligence Scale for Children Response Form 1",
+		"status" : "A"
+	},
+	{
+		"itemid" : 11285,
+		"catid" : 25,
+		"item" : "Wechsler Intelligence Scale for Children Response Form 2",
+		"description" : "Wechsler Intelligence Scale for Children Response Form 2",
+		"status" : "A"
+	},
+	{
 		"itemid" : 15180,
 		"catid" : 1,
 		"item" : "Weitlaner retractor, teeth type 2x3 or 3x4, blunt type , length 6.5\r\n",
@@ -16394,10 +20111,73 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 13212,
+		"catid" : 28,
+		"item" : "Wheel Trolley",
+		"description" : "Wheel Trolley, heavy duty",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9474,
+		"catid" : 28,
+		"item" : "Wheel Trolley, Size 5",
+		"description" : "Wheel Trolley, Size 5",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9475,
+		"catid" : 28,
+		"item" : "Wheel Trolley, Size 8",
+		"description" : "Wheel Trolley, Size 8",
+		"status" : "A"
+	},
+	{
+		"itemid" : 18446,
+		"catid" : 28,
+		"item" : "White board",
+		"description" : "White board 150cm x 90cm",
+		"status" : "A"
+	},
+	{
+		"itemid" : 14161,
+		"catid" : 28,
+		"item" : "White board",
+		"description" : "White board",
+		"status" : "A"
+	},
+	{
 		"itemid" : 12204,
 		"catid" : 3,
 		"item" : "Wi-Fi Routers Specifications: 867 Mbps + 300 Mbps 5Ã— 10/100 MbpsÂ Ports Beamforming, MU-MIMO Compact Design",
 		"description" : "Wi-Fi Routers\r\nSpecifications:\r\n867 Mbps + 300 Mbps\r\n5Ã— 10/100 MbpsÂ Ports\r\nBeamforming, MU-MIMO\r\nCompact Design\r\n",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13472,
+		"catid" : 28,
+		"item" : "Window",
+		"description" : "Window - 1 Aluminum Casement 0.60m x 2.45m",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13473,
+		"catid" : 28,
+		"item" : "Window",
+		"description" : "Window - 2 Aluminum Casement 1.20m x 1.55m",
+		"status" : "A"
+	},
+	{
+		"itemid" : 13474,
+		"catid" : 28,
+		"item" : "Window",
+		"description" : "Window - 3 Aluminum Casement 0.60m x 2.10m",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9558,
+		"catid" : 28,
+		"item" : "Wiper Linkage Assembly",
+		"description" : "Wiper Linkage Assembly",
 		"status" : "A"
 	},
 	{
@@ -16464,6 +20244,27 @@
 		"status" : "A"
 	},
 	{
+		"itemid" : 10158,
+		"catid" : 28,
+		"item" : "Wooden Sungka (20-36 inches)",
+		"description" : "Wooden Sungka (20-36 inches)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9442,
+		"catid" : 28,
+		"item" : "Woodstain Assorted Colors",
+		"description" : "Woodstain Assorted Colors",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9443,
+		"catid" : 28,
+		"item" : "Woodstain Assorted Colors",
+		"description" : "Woodstain Assorted Colors",
+		"status" : "A"
+	},
+	{
 		"itemid" : 11954,
 		"catid" : 1,
 		"item" : "Wrist Tag",
@@ -16482,6 +20283,20 @@
 		"catid" : 1,
 		"item" : "Wrist Tag",
 		"description" : "Wrist Tag/ID bracelet for pedia, pink, 100's/box",
+		"status" : "A"
+	},
+	{
+		"itemid" : 11832,
+		"catid" : 25,
+		"item" : "X-ray/Ultrasound/CT-scan/MRI logbook (300 pages/hard bound, cover color (green or maroon)",
+		"description" : "X-ray/Ultrasound/CT-scan/MRI logbook (300 pages/hard bound, cover color (green or maroon)",
+		"status" : "A"
+	},
+	{
+		"itemid" : 9458,
+		"catid" : 28,
+		"item" : "Xenon Power Supply 320W Provido",
+		"description" : "Xenon Power Supply 320W Provido",
 		"status" : "A"
 	},
 	{

@@ -157,24 +157,78 @@ class CsrStocksMedicalSuppliesController extends Controller
 
             return redirect()->back();
         } else {
-            // $result = DB::connection('pims')->select(
-            //     "SELECT *
-            //     FROM tbl_ris_release
-            //     WHERE risid = ?
-            //     ORDER BY created_at ASC;",
-            //     [$request->ris_no]
-            // );
+            $result = array();
 
-            $result = DB::connection('pims')->select(
+            $pims = DB::connection('pims')->select(
+                // "SELECT ris_rel.risid, ris_rel.itemid, item.description, ris_rel.releaseqty, ris_rel.unitprice
+                //     FROM tbl_ris_release as ris_rel
+                //     JOIN tbl_items as item ON item.itemid = ris_rel.itemid
+                //     WHERE ris_rel.risid = ?;",
+                // [$request->ris_no]
+
                 "SELECT ris_rel.risid, ris_rel.itemid, item.description, ris_rel.releaseqty, ris_rel.unitprice
                     FROM tbl_ris_release as ris_rel
                     JOIN tbl_items as item ON item.itemid = ris_rel.itemid
-                    WHERE ris_rel.risid = ?;",
+                    JOIN tbl_ris as ris ON ris.risid = ris_rel.risid
+                    WHERE  ris.officeID = 37
+                    AND ris_rel.risid = ?
+                    ORDER BY item.description ASC;",
                 [$request->ris_no]
             );
 
+
+            $items = DB::select(
+                "SELECT * FROM hclass2
+                    WHERE cl1comb LIKE '1000-%'
+                    ORDER BY cl2desc;"
+            );
+
+            foreach ($pims as $pim) {
+                $matchedItem = null;
+
+                // Loop through $items to find a match
+                foreach ($items as $item) {
+                    // Comparing the description and cl2desc
+                    if ($pim->description == $item->cl2desc) {
+                        $matchedItem = $item;
+                        break;
+                    }
+                }
+
+                // Check if a match was found
+                if ($matchedItem) {
+                    $result[] = [
+                        'ris_no' => $pim->risid,
+                        'cl2comb' => $matchedItem->cl2comb,
+                        'cl2desc' => $matchedItem->cl2desc,
+                        'releaseqty' => $pim->releaseqty,
+                        'unitprice' => $pim->unitprice,
+                    ];
+                }
+                // else {
+                //     // No match found for the current $pim
+                // }
+            }
+
             return $result;
         }
+
+        // ris_no: this.form.ris_no,
+        // cl2comb: this.item.cl2comb,
+        // cl2desc: this.item.cl2desc,
+        // quantity: this.quantity,
+        // unit: this.unit,
+        // unitName: this.selectedItemsUomDesc,
+        // brand: this.brand.id,
+        // brandName: this.brand.name,
+        // supplier: this.supplier.suppcode,
+        // supplierName: this.supplier.suppname,
+        // fundSource: this.selectedFundSource.chrgcode,
+        // fundSourceName: this.selectedFundSource.chrgdesc,
+        // suppcode: this.suppcode,
+        // manufactured_date: this.manufactured_date,
+        // delivered_date: this.delivered_date,
+        // expiration_date: this.expiration_date,
     }
 
     public function update(CsrStocksMedicalSupplies $csrstock, Request $request)
