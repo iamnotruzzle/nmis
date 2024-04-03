@@ -18,6 +18,9 @@ class PimsCategorySeeder extends Seeder
                 ['catID' => 2, 'categoryname' => 'Office Supplies', 'status' => 'A'],
                 ['catID' => 3, 'categoryname' => 'IT Supplies', 'status' => 'A'],
                 ['catID' => 9, 'categoryname' => 'Drugs and Medicines', 'status' => 'A'],
+                ['catID' => 22, 'categoryname' => 'Accountable forms', 'status' => 'A'],
+                ['catID' => 25, 'categoryname' => 'Non-accountable Forms', 'status' => 'A'],
+                ['catID' => 28, 'categoryname' => 'Other Supplies and Materials', 'status' => 'A'],
             ];
 
         $categoryData = [];

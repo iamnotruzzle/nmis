@@ -176,6 +176,8 @@ class CsrStocksMedicalSuppliesController extends Controller
                 [$request->ris_no]
             );
 
+            // ddd($pims);
+
 
             $items = DB::select(
                 "SELECT * FROM hclass2
