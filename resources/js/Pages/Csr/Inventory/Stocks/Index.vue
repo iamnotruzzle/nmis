@@ -1644,6 +1644,8 @@ export default {
         (this.isRisNoUpdate = false),
         this.form.clearErrors(),
         this.form.reset(),
+        this.formAdditional.clearErrors(),
+        this.formAdditional.reset(),
         this.formBrand.clearErrors(),
         this.formBrand.reset()
       );
@@ -1849,6 +1851,8 @@ export default {
       this.disableSearchRisInput = false;
       this.form.reset();
       this.form.clearErrors();
+      this.formAdditional.reset();
+      this.formAdditional.clearErrors();
       this.formBrand.reset();
       this.formBrand.clearErrors();
       this.stocksList = [];
