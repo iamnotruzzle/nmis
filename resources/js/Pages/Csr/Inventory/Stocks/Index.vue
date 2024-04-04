@@ -1643,18 +1643,6 @@ export default {
       this.form.newRisNo = data.ris_no;
     },
     async fillDeliveriesContainer() {
-      //   this.form.post(route('csrstocks.store'), {
-      //     preserveScroll: true,
-      //     onSuccess: (e) => {
-      //       //   this.stockId = null;
-      //       //   this.createStockDialog = false;
-      //       //   this.cancel();
-      //       //   this.updateData();
-      //       //   this.createdMsg();
-      //       console.log('res', e);
-      //     },
-      //   });
-
       try {
         const response = await axios.post('csrstocks', this.form);
         console.log(response.data); // Log the response data if needed
@@ -1662,15 +1650,18 @@ export default {
         let sanitizedData = response.data;
 
         sanitizedData.forEach((e) => {
-          this.deliveryDetails.push({
-            risid: e.risid,
-            cl2comb: e.cl2comb,
-            cl2desc: e.cl2desc,
-            uomcode: e.uomcode,
-            uomdesc: e.uomdesc,
-            releaseqty: e.releaseqty,
-            unitprice: e.unitprice,
-          });
+          // conditions make it so that items are not entered twice
+          if (sanitizedData.length != this.deliveryDetails.length) {
+            this.deliveryDetails.push({
+              risid: e.risid,
+              cl2comb: e.cl2comb,
+              cl2desc: e.cl2desc,
+              uomcode: e.uomcode,
+              uomdesc: e.uomdesc,
+              releaseqty: e.releaseqty,
+              unitprice: e.unitprice,
+            });
+          }
         });
       } catch (error) {
         console.error('Error submitting form:', error);
