@@ -454,7 +454,7 @@
                 <span class="ml-2 text-error">*</span>
               </div>
               <InputText
-                v-model="formAdditional.cl2comb"
+                v-model="formAdditional.cl2desc"
                 readonly
               />
             </div>
@@ -573,7 +573,7 @@
               </div>
               <InputNumber
                 required="true"
-                v-model.trim="quantity"
+                v-model.trim="formAdditional.quantity"
                 autofocus
                 @keyup.enter="addNewDetailsToADelivery"
                 inputId="integeronly"
@@ -1303,6 +1303,7 @@ export default {
         markupPercentage: 0,
         calculatedSellingPrice: null,
         quantity: null,
+        deliveryDetails: null,
       }),
       // end data when clicking row to populate form
       brandsList: [],
@@ -1760,7 +1761,7 @@ export default {
       this.formAdditional.uomcode = e.data.uomcode;
       this.formAdditional.uomdesc = e.data.uomdesc;
       this.formAdditional.brandId = null;
-      this.formAdditional.quantity = e.data.releaseqty;
+      this.formAdditional.quantity = Number(e.data.releaseqty);
       this.formAdditional.manufactured_date = e.data.manufactured_date;
       this.formAdditional.delivered_date = e.data.delivered_date;
       this.formAdditional.expiration_date = e.data.expiration_date;
@@ -1966,4 +1967,8 @@ input[type='number'] {
   -moz-appearance: textfield;
 }
 /* END Remove arrow for input type number */
+
+.p-datatable .p-datatable-tbody > tr:hover {
+  cursor: pointer;
+}
 </style>
