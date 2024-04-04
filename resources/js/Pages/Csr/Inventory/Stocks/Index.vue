@@ -394,13 +394,23 @@
         v-model:visible="createStockDialog"
         :modal="true"
         class="p-fluid w-11 overflow-hidden"
+        :style="{ height: '90%' }"
         @hide="clickOutsideDialog"
+        :draggable="false"
       >
-        <!-- <template #header>
-          <div class="text-primary text-xl font-bold">DELIVERIES</div>
-        </template> -->
+        <template #header>
+          <!-- <div class="text-primary text-xl font-bold">DELIVERIES</div> -->
+          <!-- <div class="field">
+            <label>RIS no.</label>
+            <InputText
+              v-model.trim="form.ris_no"
+              autofocus
+              @keyup.enter="fillDeliveriesContainer"
+            />
+          </div> -->
+        </template>
 
-        <div class="flex flex-row justify-content-between">
+        <div class="flex flex-row justify-content-between overflow-hidden">
           <!-- form -->
           <div class="w-3">
             <div class="field">
@@ -408,8 +418,6 @@
               <InputText
                 v-model.trim="form.ris_no"
                 autofocus
-                :disabled="deliveryDetails.length != 0"
-                :class="{ 'p-invalid': form.ris_no == '' }"
                 @keyup.enter="fillDeliveriesContainer"
               />
             </div>
@@ -451,28 +459,14 @@
                 <label>Item</label>
                 <span class="ml-2 text-error">*</span>
               </div>
-              <Dropdown
-                required="true"
-                v-model="item"
-                :options="itemsList"
-                filter
-                dataKey="cl2comb"
-                optionLabel="cl2desc"
-                :virtualScrollerOptions="{ itemSize: 38 }"
-              />
-              <p
-                v-if="itemNotSelected == true"
-                class="text-error"
-              >
-                Item is already on the list.
-              </p>
+              <InputText readonly />
             </div>
             <div class="field">
               <label for="unit">Unit</label>
               <InputText
                 id="unit"
                 v-model.trim="selectedItemsUomDesc"
-                disabled
+                readonly
               />
             </div>
             <div class="field">
@@ -492,27 +486,32 @@
                 class="w-full mb-3"
               />
             </div>
-            <div class="field">
-              <label for="manufactured_date">Manufactured date</label>
-              <Calendar
-                v-model="manufactured_date"
-                dateFormat="mm-dd-yy"
-                showIcon
-                showButtonBar
-                :manualInput="false"
-                :hideOnDateTimeSelect="true"
-              />
-            </div>
-            <div class="field">
-              <label for="delivered_date">Delivered date</label>
-              <Calendar
-                v-model="delivered_date"
-                dateFormat="mm-dd-yy"
-                showIcon
-                showButtonBar
-                :manualInput="false"
-                :hideOnDateTimeSelect="true"
-              />
+            <div class="field flex flex-row justify-space-between">
+              <div>
+                <label for="manufactured_date">Manufactured date</label>
+                <Calendar
+                  v-model="manufactured_date"
+                  dateFormat="mm-dd-yy"
+                  showIcon
+                  showButtonBar
+                  :manualInput="false"
+                  :hideOnDateTimeSelect="true"
+                />
+              </div>
+
+              <div class="mx-2"></div>
+
+              <div>
+                <label for="delivered_date">Delivered date</label>
+                <Calendar
+                  v-model="delivered_date"
+                  dateFormat="mm-dd-yy"
+                  showIcon
+                  showButtonBar
+                  :manualInput="false"
+                  :hideOnDateTimeSelect="true"
+                />
+              </div>
             </div>
             <div class="field">
               <div class="flex align-content-center">
@@ -530,29 +529,34 @@
                 :hideOnDateTimeSelect="true"
               />
             </div>
-            <div class="field">
-              <div class="flex align-content-center">
-                <label>Acquisition price</label>
-                <span class="ml-2 text-error">*</span>
+            <div class="field flex justify-content-between">
+              <div>
+                <div class="flex align-content-center">
+                  <label>Acquisition price</label>
+                  <span class="ml-2 text-error">*</span>
+                </div>
+                <InputNumber
+                  required="true"
+                  v-model.trim="acquisitionPrice"
+                  autofocus
+                  :maxFractionDigits="2"
+                />
               </div>
-              <InputNumber
-                required="true"
-                v-model.trim="acquisitionPrice"
-                autofocus
-                :maxFractionDigits="2"
-              />
-            </div>
-            <div class="field">
-              <div class="flex align-content-center">
-                <label>Markup price</label>
-                <span class="ml-2 text-error">*</span>
+
+              <div class="mx-2"></div>
+
+              <div>
+                <div class="flex align-content-center">
+                  <label>Markup price</label>
+                  <span class="ml-2 text-error">*</span>
+                </div>
+                <InputNumber
+                  required="true"
+                  v-model.trim="markupPercentage"
+                  autofocus
+                  suffix="%"
+                />
               </div>
-              <InputNumber
-                required="true"
-                v-model.trim="markupPercentage"
-                autofocus
-                suffix="%"
-              />
             </div>
             <div class="field">
               <div class="flex align-content-center">
@@ -591,7 +595,7 @@
               removableSort
               showGridlines
               scrollable
-              scrollHeight="800px"
+              scrollHeight="570px"
             >
               <template #header>
                 <div class="flex flex-wrap align-items-center justify-content-between gap-2">
@@ -678,7 +682,7 @@
           </div>
         </div>
 
-        <!-- <template #footer>
+        <template #footer>
           <Button
             label="Cancel"
             icon="pi pi-times"
@@ -694,7 +698,7 @@
             :disabled="form.processing || deliveryDetails.length == 0"
             @click="submit"
           />
-        </template> -->
+        </template>
       </Dialog>
 
       <!-- update delivery details dialog -->
