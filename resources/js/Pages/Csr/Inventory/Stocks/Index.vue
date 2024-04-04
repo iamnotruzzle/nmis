@@ -577,7 +577,7 @@
                 required="true"
                 v-model.trim="quantity"
                 autofocus
-                @keyup.enter="fillDeliveriesContainer"
+                @keyup.enter="addNewDetailsToADelivery"
                 inputId="integeronly"
               />
             </div>
@@ -594,6 +594,7 @@
               dataKey="id"
               removableSort
               showGridlines
+              @row-click="onRowClick"
               scrollable
               scrollHeight="580px"
             >
@@ -1656,6 +1657,12 @@ export default {
               risid: e.risid,
               cl2comb: e.cl2comb,
               cl2desc: e.cl2desc,
+              brandId: null,
+              brandName: null,
+              supplierId: null,
+              supplierName: null,
+              fsid: e.fundSourId,
+              fundSourceName: e.fundSourceName,
               uomcode: e.uomcode,
               uomdesc: e.uomdesc,
               releaseqty: e.releaseqty,
@@ -1711,6 +1718,15 @@ export default {
       //     }
       //     this.form.delivery_list = this.deliveryDetails;
       //   }
+    },
+    onRowClick(e) {
+      console.log(e.data);
+      this.form.ris_no = e.risid;
+      //   this.
+    },
+    addNewDetailsToADelivery() {
+      // this.form.delivery_list.push[{
+      // }]
     },
     removeFromRequestContainer(item) {
       this.deliveryDetails.splice(

@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use mysqli;
+use PDO;
 
 class CsrStocksMedicalSuppliesController extends Controller
 {
@@ -160,15 +161,20 @@ class CsrStocksMedicalSuppliesController extends Controller
             $result = array();
 
             $pims = DB::connection('pims')->select(
-                "SELECT ris_rel.risid, ris_rel.itemid, item.description, ris_rel.releaseqty, ris_rel.unitprice
+                "SELECT ris_rel.risid,
+                ris_rel.itemid, item.description,
+                ris_rel.fsid as fs_id, fs.fsName,
+                ris_rel.releaseqty, ris_rel.unitprice
                     FROM tbl_ris_release as ris_rel
                     JOIN tbl_items as item ON item.itemid = ris_rel.itemid
                     JOIN tbl_ris as ris ON ris.risid = ris_rel.risid
+                    JOIN tbl_fund_source as fs ON fs.fsid = ris_rel.fsid
                     WHERE  ris.officeID = 37
                     AND ris_rel.risid = ?
                     ORDER BY item.description ASC;",
                 [$request->ris_no]
             );
+            // ddd($pims);
 
             $items = DB::select(
                 "SELECT * FROM hclass2
@@ -193,7 +199,6 @@ class CsrStocksMedicalSuppliesController extends Controller
                     }
                 }
 
-
                 // Check if a match was found
                 if ($matchedItem) {
                     foreach ($units as $unit) {
@@ -202,6 +207,8 @@ class CsrStocksMedicalSuppliesController extends Controller
                                 'risid' => $pim->risid,
                                 'cl2comb' => $matchedItem->cl2comb,
                                 'cl2desc' => $matchedItem->cl2desc,
+                                'fundSourId' => $pim->fs_id,
+                                'fundSourceName' => $pim->fsName,
                                 'uomcode' => $matchedItem->uomcode,
                                 'uomdesc' => $unit->uomdesc,
                                 'releaseqty' => $pim->releaseqty,
@@ -209,6 +216,7 @@ class CsrStocksMedicalSuppliesController extends Controller
                             ];
                         }
                     }
+                    // dd($result);
                 }
                 // else {
                 //     // No match found for the current $pim
