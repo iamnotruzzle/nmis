@@ -396,9 +396,9 @@
         class="p-fluid w-11 overflow-hidden"
         @hide="clickOutsideDialog"
       >
-        <template #header>
+        <!-- <template #header>
           <div class="text-primary text-xl font-bold">DELIVERIES</div>
-        </template>
+        </template> -->
 
         <div class="flex flex-row justify-content-between">
           <!-- form -->
@@ -586,10 +586,12 @@
               v-model:filters="deliveryDetailsFilter"
               :value="deliveryDetails"
               paginator
-              :rows="15"
+              :rows="30"
               dataKey="id"
               removableSort
               showGridlines
+              scrollable
+              scrollHeight="800px"
             >
               <template #header>
                 <div class="flex flex-wrap align-items-center justify-content-between gap-2">
@@ -676,26 +678,7 @@
           </div>
         </div>
 
-        <!-- <div
-          v-if="isUpdate == true"
-          class="field"
-        >
-          <label for="remarks">Remarks <span class="text-error">*</span></label>
-          <Textarea
-            v-model.trim="form.remarks"
-            rows="5"
-            autofocus
-            :class="{ 'p-invalid': form.remarks == '' }"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.remarks"
-          >
-            {{ form.errors.remarks }}
-          </small>
-        </div> -->
-
-        <template #footer>
+        <!-- <template #footer>
           <Button
             label="Cancel"
             icon="pi pi-times"
@@ -711,7 +694,7 @@
             :disabled="form.processing || deliveryDetails.length == 0"
             @click="submit"
           />
-        </template>
+        </template> -->
       </Dialog>
 
       <!-- update delivery details dialog -->
@@ -1672,7 +1655,9 @@ export default {
         const response = await axios.post('csrstocks', this.form);
         console.log(response.data); // Log the response data if needed
 
-        response.data.forEach((e) => {
+        let sanitizedData = response.data;
+
+        sanitizedData.forEach((e) => {
           this.deliveryDetails.push({
             risid: e.risid,
             cl2comb: e.cl2comb,
