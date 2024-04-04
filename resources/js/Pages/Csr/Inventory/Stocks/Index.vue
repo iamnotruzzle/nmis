@@ -399,7 +399,7 @@
         :draggable="false"
       >
         <template #header>
-          <!-- <div class="text-primary text-xl font-bold">DELIVERIES</div> -->
+          <div class="text-primary text-xl font-bold">DELIVERIES</div>
           <!-- <div class="field">
             <label>RIS no.</label>
             <InputText
@@ -416,9 +416,10 @@
             <div class="field">
               <label>RIS no.</label>
               <InputText
-                v-model.trim="form.ris_no"
+                v-model.trim="form.searchRis"
                 autofocus
                 @keyup.enter="fillDeliveriesContainer"
+                :readonly="disableSearchRisInput == true"
               />
             </div>
             <div class="field">
@@ -428,7 +429,7 @@
               </div>
               <Dropdown
                 required="true"
-                v-model="supplier"
+                v-model="formAdditional.suppcode"
                 :options="suppliersList"
                 :virtualScrollerOptions="{ itemSize: 38 }"
                 filter
@@ -442,16 +443,9 @@
                 <label>Fund source</label>
                 <span class="ml-2 text-error">*</span>
               </div>
-              <Dropdown
-                required="true"
-                v-model="selectedFundSource"
-                :options="fundSourceList"
-                :virtualScrollerOptions="{ itemSize: 38 }"
-                filter
-                showClear
-                dataKey="chrgcode"
-                optionLabel="chrgdesc"
-                class="min-w-full"
+              <InputText
+                v-model="formAdditional.fsName"
+                readonly
               />
             </div>
             <div class="field">
@@ -459,13 +453,16 @@
                 <label>Item</label>
                 <span class="ml-2 text-error">*</span>
               </div>
-              <InputText readonly />
+              <InputText
+                v-model="formAdditional.cl2comb"
+                readonly
+              />
             </div>
             <div class="field">
               <label for="unit">Unit</label>
               <InputText
                 id="unit"
-                v-model.trim="selectedItemsUomDesc"
+                v-model.trim="formAdditional.uomdesc"
                 readonly
               />
             </div>
@@ -476,7 +473,7 @@
               </div>
               <Dropdown
                 required="true"
-                v-model="brand"
+                v-model="formAdditional.brandId"
                 :options="brandDropDownList"
                 :virtualScrollerOptions="{ itemSize: 38 }"
                 filter
@@ -1263,11 +1260,12 @@ export default {
       to_ed: null,
       fundSourceList: [],
       // -----------------
+      disableSearchRisInput: false,
       itemNotSelected: false,
       item: null,
       itemsList: [],
-      brand: null,
       supplier: null,
+      brand: null,
       selectedFundSource: null,
       selectedItemsUomCode: null,
       selectedItemsUomDesc: null,
@@ -1284,6 +1282,20 @@ export default {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       // ------------------
+      // data when clicking row to populate form
+      formAdditional: this.$inertia.form({
+        ris_no: null,
+        suppcode: null,
+        suppname: null,
+        fsId: null,
+        fsName: null,
+        cl2comb: null,
+        cl2desc: null,
+        uomcode: null,
+        uomdesc: null,
+        brandId: null,
+      }),
+      // end data when clicking row to populate form
       brandsList: [],
       brandDropDownList: [],
       stocksList: [],
@@ -1319,6 +1331,8 @@ export default {
       ],
       form: this.$inertia.form({
         newRisNo: null,
+
+        searchRis: null,
 
         ris_no: null,
         suppcode: null,
@@ -1599,7 +1613,7 @@ export default {
     clickOutsideDialog() {
       this.$emit(
         'hide',
-        (this.stockId = null),
+        (this.disableSearchRisInput = false),
         (this.isUpdate = false),
         (this.isUpdateBrand = false),
         (this.item = null),
@@ -1661,7 +1675,7 @@ export default {
               brandName: null,
               supplierId: null,
               supplierName: null,
-              fsid: e.fundSourId,
+              fsid: e.fundSourceId,
               fundSourceName: e.fundSourceName,
               uomcode: e.uomcode,
               uomdesc: e.uomdesc,
@@ -1670,8 +1684,10 @@ export default {
             });
           }
         });
+
+        this.disableSearchRisInput = true;
       } catch (error) {
-        console.error('Error submitting form:', error);
+        console.error('Something went wrong:', error);
         // Handle error
       }
 
@@ -1721,8 +1737,15 @@ export default {
     },
     onRowClick(e) {
       console.log(e.data);
-      this.form.ris_no = e.risid;
-      //   this.
+      this.formAdditional.ris_no = e.data.risid;
+      this.formAdditional.suppcode = e.data.supplierId;
+      this.formAdditional.suppname = e.data.supplierName;
+      this.formAdditional.fsId = e.data.fsid;
+      this.formAdditional.fsName = e.data.fundSourceName;
+      this.formAdditional.cl2comb = e.data.cl2comb;
+      this.formAdditional.cl2desc = e.data.cl2desc;
+      this.formAdditional.uomcode = e.data.uomcode;
+      this.formAdditional.uomdesc = e.data.uomdesc;
     },
     addNewDetailsToADelivery() {
       // this.form.delivery_list.push[{
@@ -1802,6 +1825,7 @@ export default {
       this.createStockDialog = false;
       this.createBrandDialog = false;
       this.isRisNoUpdate = false;
+      this.disableSearchRisInput = false;
       this.form.reset();
       this.form.clearErrors();
       this.formBrand.reset();
