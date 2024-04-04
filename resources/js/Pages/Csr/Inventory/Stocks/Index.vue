@@ -595,7 +595,7 @@
               removableSort
               showGridlines
               scrollable
-              scrollHeight="570px"
+              scrollHeight="580px"
             >
               <template #header>
                 <div class="flex flex-wrap align-items-center justify-content-between gap-2">
