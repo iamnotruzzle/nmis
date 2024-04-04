@@ -619,7 +619,7 @@
               >
               </Column>
               <Column
-                field="unitName"
+                field="uomdesc"
                 header="UNIT"
               >
               </Column>
@@ -1673,14 +1673,12 @@ export default {
         console.log(response.data); // Log the response data if needed
 
         response.data.forEach((e) => {
-          //   this.deliveryDetails.ris_no = e.risid;
-          //   this.deliveryDetails.cl2desc = e.description;
-          //   this.deliveryDetails.price = e.unitprice;
-
           this.deliveryDetails.push({
             risid: e.risid,
             cl2comb: e.cl2comb,
             cl2desc: e.cl2desc,
+            uomcode: e.uomcode,
+            uomdesc: e.uomdesc,
             releaseqty: e.releaseqty,
             unitprice: e.unitprice,
           });

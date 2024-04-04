@@ -176,6 +176,11 @@ class CsrStocksMedicalSuppliesController extends Controller
                     ORDER BY cl2desc;"
             );
 
+            $units = DB::select(
+                "SELECT * FROM huom
+                    WHERE uomstat = 'A';"
+            );
+
             foreach ($pims as $pim) {
                 $matchedItem = null;
 
@@ -188,15 +193,22 @@ class CsrStocksMedicalSuppliesController extends Controller
                     }
                 }
 
+
                 // Check if a match was found
                 if ($matchedItem) {
-                    $result[] = [
-                        'risid' => $pim->risid,
-                        'cl2comb' => $matchedItem->cl2comb,
-                        'cl2desc' => $matchedItem->cl2desc,
-                        'releaseqty' => $pim->releaseqty,
-                        'unitprice' => $pim->unitprice,
-                    ];
+                    foreach ($units as $unit) {
+                        if ($unit->uomcode == $matchedItem->uomcode) {
+                            $result[] = [
+                                'risid' => $pim->risid,
+                                'cl2comb' => $matchedItem->cl2comb,
+                                'cl2desc' => $matchedItem->cl2desc,
+                                'uomcode' => $matchedItem->uomcode,
+                                'uomdesc' => $unit->uomdesc,
+                                'releaseqty' => $pim->releaseqty,
+                                'unitprice' => $pim->unitprice,
+                            ];
+                        }
+                    }
                 }
                 // else {
                 //     // No match found for the current $pim
