@@ -487,7 +487,7 @@
               <div>
                 <label for="manufactured_date">Manufactured date</label>
                 <Calendar
-                  v-model="manufactured_date"
+                  v-model="formAdditional.manufactured_date"
                   dateFormat="mm-dd-yy"
                   showIcon
                   showButtonBar
@@ -501,7 +501,7 @@
               <div>
                 <label for="delivered_date">Delivered date</label>
                 <Calendar
-                  v-model="delivered_date"
+                  v-model="formAdditional.delivered_date"
                   dateFormat="mm-dd-yy"
                   showIcon
                   showButtonBar
@@ -517,7 +517,7 @@
               </div>
               <Calendar
                 required="true"
-                v-model="expiration_date"
+                v-model="formAdditional.expiration_date"
                 dateFormat="mm-dd-yy"
                 showIcon
                 showButtonBar
@@ -534,9 +534,10 @@
                 </div>
                 <InputNumber
                   required="true"
-                  v-model.trim="acquisitionPrice"
+                  v-model.trim="formAdditional.acquisitionPrice"
                   autofocus
                   :maxFractionDigits="2"
+                  readonly
                 />
               </div>
 
@@ -549,7 +550,7 @@
                 </div>
                 <InputNumber
                   required="true"
-                  v-model.trim="markupPercentage"
+                  v-model.trim="formAdditional.markupPercentage"
                   autofocus
                   suffix="%"
                 />
@@ -1294,6 +1295,14 @@ export default {
         uomcode: null,
         uomdesc: null,
         brandId: null,
+        markUp: null,
+        manufactured_date: null,
+        delivered_date: null,
+        expiration_date: null,
+        acquisitionPrice: null,
+        markupPercentage: 0,
+        calculatedSellingPrice: null,
+        quantity: null,
       }),
       // end data when clicking row to populate form
       brandsList: [],
@@ -1420,19 +1429,23 @@ export default {
       return filtered;
     },
     sellingPrice() {
-      return this.acquisitionPrice * (1 + this.markupPercentage / 100);
+      return this.formAdditional.acquisitionPrice * (1 + this.formAdditional.markupPercentage / 100);
     },
     roundedSellingPrice() {
       let sellingPrice = this.sellingPrice;
 
       // Round to the nearest 0.25, 0.50, or 0.75
       if (sellingPrice % 1 < 0.25) {
+        this.formAdditional.calculatedSellingPrice = Math.floor(sellingPrice) + 0.25;
         return Math.floor(sellingPrice) + 0.25;
       } else if (sellingPrice % 1 >= 0.25 && sellingPrice % 1 < 0.5) {
+        this.formAdditional.calculatedSellingPrice = Math.floor(sellingPrice) + 0.5;
         return Math.floor(sellingPrice) + 0.5;
       } else if (sellingPrice % 1 >= 0.5 && sellingPrice % 1 < 0.75) {
+        this.formAdditional.calculatedSellingPrice = Math.floor(sellingPrice) + 0.75;
         return Math.floor(sellingPrice) + 0.75;
       } else {
+        this.formAdditional.calculatedSellingPrice = Math.ceil(sellingPrice);
         return Math.ceil(sellingPrice);
       }
     },
@@ -1746,6 +1759,13 @@ export default {
       this.formAdditional.cl2desc = e.data.cl2desc;
       this.formAdditional.uomcode = e.data.uomcode;
       this.formAdditional.uomdesc = e.data.uomdesc;
+      this.formAdditional.brandId = null;
+      this.formAdditional.quantity = e.data.releaseqty;
+      this.formAdditional.manufactured_date = e.data.manufactured_date;
+      this.formAdditional.delivered_date = e.data.delivered_date;
+      this.formAdditional.expiration_date = e.data.expiration_date;
+      this.formAdditional.acquisitionPrice = Number(e.data.unitprice);
+      // NOTE markUpPrice and calculatedSellingPrice is on watch
     },
     addNewDetailsToADelivery() {
       // this.form.delivery_list.push[{
@@ -1922,10 +1942,10 @@ export default {
       }
     },
     // Watch for changes in acquisitionPrice and markupPercentage
-    acquisitionPrice(newValue) {
+    'formAdditional.acquisitionPrice': function (val) {
       this.updateLocalSellingPrice();
     },
-    markupPercentage(newValue) {
+    'formAdditional.markupPercentage': function (val) {
       this.updateLocalSellingPrice();
     },
   },
