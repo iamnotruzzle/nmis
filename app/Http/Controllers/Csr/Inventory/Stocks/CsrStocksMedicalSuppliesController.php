@@ -40,7 +40,7 @@ class CsrStocksMedicalSuppliesController extends Controller
                 medsupply.suppcode, supplier.suppname,
                 typeOfCharge.chrgcode as codeFromHCharge, typeOfCharge.chrgdesc as descFromHCharge,
                 fundSource.fsid as codeFromFundSource, fundSource.fsName as descFromFundSource,
-                medsupply.cl2comb, item.cl2desc,
+                medsupply.cl2comb, item.cl2desc, medsupply.acquisition_price, medsupply.mark_up, medsupply.selling_price,
                 unit.uomcode, unit.uomdesc,
                 brand.id as brand_id, brand.[name] as brand_name,
                 medsupply.quantity,
@@ -224,7 +224,28 @@ class CsrStocksMedicalSuppliesController extends Controller
 
             return $result;
         } else {
-            dd($request->deliveryDetails);
+            $deliveryDetails = $request->deliveryDetails;
+
+            foreach ($deliveryDetails as $r) {
+                // dd($r['supplier']['suppcode']);
+                CsrStocksMedicalSupplies::create([
+                    'ris_no' => $r['risid'],
+                    'cl2comb' => $r['cl2comb'],
+                    'uomcode' => $r['uomcode'],
+                    'suppcode' => $r['supplier']['suppcode'],
+                    'brand' => $r['brand']['id'],
+                    'chrgcode' => $r['fsid'],
+                    'quantity' => $r['releaseqty'],
+                    'manufactured_date' => $r['manufactured_date'],
+                    'delivered_date' => $r['delivered_date'],
+                    'expiration_date' => $r['expiration_date'],
+                    'acquisition_price' => $r['unitprice'],
+                    'mark_up' => $r['markupPercentage'],
+                    'selling_price' => $r['sellingPrice'],
+                ]);
+            }
+
+            return redirect()->back();
         }
     }
 

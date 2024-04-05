@@ -137,6 +137,24 @@
           </template>
         </Column>
         <Column
+          field="acquisition_price"
+          header="ACQ. PRICE"
+          style="width: 5%"
+        >
+        </Column>
+        <Column
+          field="mark_up"
+          header="MARK UP"
+          style="width: 5%"
+        >
+        </Column>
+        <Column
+          field="selling_price"
+          header="SELLING PRICE"
+          style="width: 5%"
+        >
+        </Column>
+        <Column
           field="stock_lvl"
           header="STOCK LVL."
           :showFilterMenu="false"
@@ -1553,6 +1571,9 @@ export default {
           brand_id: e.brand_id,
           brand_name: e.brand_name,
           quantity: Number(e.quantity),
+          acquisition_price: e.acquisition_price,
+          mark_up: e.mark_up,
+          selling_price: e.selling_price,
           normal_stock: e.normal_stock == null ? 'N/A' : Number(e.normal_stock),
           alert_stock: e.alert_stock == null ? 'N/A' : Number(e.alert_stock),
           critical_stock: e.critical_stock == null ? 'N/A' : Number(e.critical_stock),
@@ -1721,50 +1742,6 @@ export default {
         console.error('Something went wrong:', error);
         // Handle error
       }
-
-      //   if (
-      //     this.supplier !== null &&
-      //     this.selectedFundSource !== null &&
-      //     this.item !== null &&
-      //     this.brand !== null &&
-      //     this.expiration_date !== null &&
-      //     this.quantity !== null
-      //   ) {
-      //     // console.log(this.brand);
-      //     if (
-      //       this.deliveryDetails.some(
-      //         (e) =>
-      //           e.cl2comb === this.item['cl2comb'] &&
-      //           e.supplier == this.supplier.suppcode &&
-      //           e.fundSource == this.selectedFundSource.chrgcode &&
-      //           e.brand == this.brand.id &&
-      //           e.expiration_date == this.expiration_date
-      //       )
-      //     ) {
-      //       this.itemNotSelected = true;
-      //     } else {
-      //       this.itemNotSelected = false;
-      //       this.deliveryDetails.push({
-      //         ris_no: this.form.ris_no,
-      //         cl2comb: this.item.cl2comb,
-      //         cl2desc: this.item.cl2desc,
-      //         quantity: this.quantity,
-      //         unit: this.unit,
-      //         unitName: this.selectedItemsUomDesc,
-      //         brand: this.brand.id,
-      //         brandName: this.brand.name,
-      //         supplier: this.supplier.suppcode,
-      //         supplierName: this.supplier.suppname,
-      //         fundSource: this.selectedFundSource.chrgcode,
-      //         fundSourceName: this.selectedFundSource.chrgdesc,
-      //         suppcode: this.suppcode,
-      //         manufactured_date: this.manufactured_date,
-      //         delivered_date: this.delivered_date,
-      //         expiration_date: this.expiration_date,
-      //       });
-      //     }
-      //     this.form.delivery_list = this.deliveryDetails;
-      //   }
     },
     onRowClick(e) {
       //   console.log(e.data);
