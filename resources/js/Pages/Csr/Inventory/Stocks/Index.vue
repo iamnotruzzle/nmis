@@ -1798,7 +1798,8 @@ export default {
             e.brand == null ||
             e.markupPercentage == null ||
             e.sellingPrice == null ||
-            e.expiration_date == null
+            e.expiration_date == null ||
+            e.markupPercentage != this.formAdditional.markupPercentage
           ) {
             e.supplier = this.formAdditional.supplier;
             e.supplierName = this.formAdditional.supplier == null ? null : this.formAdditional.supplier.suppname;
@@ -1809,8 +1810,8 @@ export default {
             e.manufactured_date = this.formAdditional.manufactured_date;
             e.delivered_date = this.formAdditional.delivered_date;
             e.expiration_date = this.formAdditional.expiration_date;
-            e.markupPercentage = this.formAdditional.markupPercentage;
             e.sellingPrice = this.formAdditional.calculatedSellingPrice;
+            e.releaseqty = this.formAdditional.quantity;
           }
         }
       });
