@@ -1829,6 +1829,8 @@ export default {
         return false;
       }
 
+      this.formAdditional.deliveryDetails = this.deliveryDetails;
+
       if (this.isUpdate) {
         this.form.put(route('csrstocks.update', this.stockId), {
           preserveScroll: true,
@@ -1841,7 +1843,7 @@ export default {
           },
         });
       } else {
-        this.form.post(route('csrstocks.store'), {
+        this.formAdditional.post(route('csrstocks.store'), {
           preserveScroll: true,
           onSuccess: () => {
             this.stockId = null;

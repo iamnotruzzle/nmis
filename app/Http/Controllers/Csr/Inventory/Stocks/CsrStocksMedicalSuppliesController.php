@@ -220,30 +220,12 @@ class CsrStocksMedicalSuppliesController extends Controller
                     }
                     // dd($result);
                 }
-                // else {
-                //     // No match found for the current $pim
-                // }
             }
 
             return $result;
+        } else {
+            dd($request->deliveryDetails);
         }
-
-        // ris_no: this.form.ris_no,
-        // cl2comb: this.item.cl2comb,
-        // cl2desc: this.item.cl2desc,
-        // quantity: this.quantity,
-        // unit: this.unit,
-        // unitName: this.selectedItemsUomDesc,
-        // brand: this.brand.id,
-        // brandName: this.brand.name,
-        // supplier: this.supplier.suppcode,
-        // supplierName: this.supplier.suppname,
-        // fundSource: this.selectedFundSource.chrgcode,
-        // fundSourceName: this.selectedFundSource.chrgdesc,
-        // suppcode: this.suppcode,
-        // manufactured_date: this.manufactured_date,
-        // delivered_date: this.delivered_date,
-        // expiration_date: this.expiration_date,
     }
 
     public function update(CsrStocksMedicalSupplies $csrstock, Request $request)
