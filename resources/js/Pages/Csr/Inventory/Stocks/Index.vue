@@ -429,7 +429,7 @@
               </div>
               <Dropdown
                 required="true"
-                v-model="formAdditional.suppcode"
+                v-model="formAdditional.supplier"
                 :options="suppliersList"
                 :virtualScrollerOptions="{ itemSize: 38 }"
                 filter
@@ -473,7 +473,7 @@
               </div>
               <Dropdown
                 required="true"
-                v-model="formAdditional.brandId"
+                v-model="formAdditional.brand"
                 :options="brandDropDownList"
                 :virtualScrollerOptions="{ itemSize: 38 }"
                 filter
@@ -1296,16 +1296,16 @@ export default {
       // data when clicking row to populate form
       formAdditional: this.$inertia.form({
         ris_no: null,
-        suppcode: null,
-        suppname: null,
+        supplier: null,
+        supplierName: null,
+        brand: null,
+        brandName: null,
         fsId: null,
         fsName: null,
         cl2comb: null,
         cl2desc: null,
         uomcode: null,
         uomdesc: null,
-        brandId: null,
-        markUp: null,
         manufactured_date: null,
         delivered_date: null,
         expiration_date: null,
@@ -1697,9 +1697,9 @@ export default {
               risid: e.risid,
               cl2comb: e.cl2comb,
               cl2desc: e.cl2desc,
-              brandId: null,
+              brand: null,
               brandName: null,
-              supplierId: null,
+              supplier: null,
               supplierName: null,
               fsid: e.fundSourceId,
               fundSourceName: e.fundSourceName,
@@ -1792,10 +1792,30 @@ export default {
           this.formAdditional.cl2comb == e.cl2comb &&
           this.formAdditional.quantity == e.releaseqty
         ) {
-          e.markupPercentage = this.formAdditional.markupPercentage;
-          e.sellingPrice = this.formAdditional.calculatedSellingPrice;
+          // only update property if none on the properties is null
+          if (
+            e.supplier == null ||
+            e.brand == null ||
+            e.markupPercentage == null ||
+            e.sellingPrice == null ||
+            e.expiration_date == null
+          ) {
+            e.supplier = this.formAdditional.supplier;
+            e.supplierName = this.formAdditional.supplier == null ? null : this.formAdditional.supplier.suppname;
+            e.brand = this.formAdditional.brand;
+            e.brandName = this.formAdditional.brand == null ? null : this.formAdditional.brand.name;
+            e.markupPercentage = this.formAdditional.markupPercentage;
+            e.sellingPrice = this.formAdditional.calculatedSellingPrice;
+            e.manufactured_date = this.formAdditional.manufactured_date;
+            e.delivered_date = this.formAdditional.delivered_date;
+            e.expiration_date = this.formAdditional.expiration_date;
+            e.markupPercentage = this.formAdditional.markupPercentage;
+            e.sellingPrice = this.formAdditional.calculatedSellingPrice;
+          }
         }
       });
+
+      console.log(this.deliveryDetails);
     },
     removeFromRequestContainer(item) {
       this.deliveryDetails.splice(
