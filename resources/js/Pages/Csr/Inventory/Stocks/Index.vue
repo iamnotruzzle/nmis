@@ -575,7 +575,7 @@
                 required="true"
                 v-model.trim="formAdditional.quantity"
                 autofocus
-                @keyup.enter="addNewDetailsToADelivery"
+                @keyup.enter="updateNewDetailsToDeliveryDets"
                 inputId="integeronly"
               />
             </div>
@@ -646,6 +646,16 @@
               <Column
                 field="unitprice"
                 header="ACQUISITION PRICE"
+              >
+              </Column>
+              <Column
+                field="markupPercentage"
+                header="MARK UP PERCENTAGE"
+              >
+              </Column>
+              <Column
+                field="sellingPrice"
+                header="SELLING PRICE"
               >
               </Column>
               <Column
@@ -1695,8 +1705,13 @@ export default {
               fundSourceName: e.fundSourceName,
               uomcode: e.uomcode,
               uomdesc: e.uomdesc,
-              releaseqty: e.releaseqty,
               unitprice: e.unitprice,
+              markupPercentage: null,
+              sellingPrice: null,
+              releaseqty: e.releaseqty,
+              manufactured_date: null,
+              delivered_date: null,
+              expiration_date: null,
             });
           }
         });
@@ -1752,7 +1767,7 @@ export default {
       //   }
     },
     onRowClick(e) {
-      console.log(e.data);
+      //   console.log(e.data);
       this.formAdditional.ris_no = e.data.risid;
       this.formAdditional.suppcode = e.data.supplierId;
       this.formAdditional.suppname = e.data.supplierName;
@@ -1770,9 +1785,17 @@ export default {
       this.formAdditional.acquisitionPrice = Number(e.data.unitprice);
       // NOTE markUpPrice and calculatedSellingPrice is on watch
     },
-    addNewDetailsToADelivery() {
-      // this.form.delivery_list.push[{
-      // }]
+    updateNewDetailsToDeliveryDets() {
+      this.deliveryDetails.forEach((e) => {
+        if (
+          this.formAdditional.ris_no == e.risid &&
+          this.formAdditional.cl2comb == e.cl2comb &&
+          this.formAdditional.quantity == e.releaseqty
+        ) {
+          e.markupPercentage = this.formAdditional.markupPercentage;
+          e.sellingPrice = this.formAdditional.calculatedSellingPrice;
+        }
+      });
     },
     removeFromRequestContainer(item) {
       this.deliveryDetails.splice(
