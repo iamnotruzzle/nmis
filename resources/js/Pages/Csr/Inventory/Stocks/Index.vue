@@ -290,14 +290,6 @@
                 severity="warning"
                 @click="editItem(slotProps.data)"
               />
-
-              <Button
-                icon="pi pi-trash"
-                rounded
-                text
-                severity="danger"
-                @click="confirmDeleteItem(slotProps.data)"
-              />
             </div>
           </template>
         </Column>
@@ -680,6 +672,12 @@
                 class="w-full"
                 :class="{ 'p-invalid': form.suppcode == '' }"
               />
+              <small
+                class="text-error"
+                v-if="form.errors.suppcode"
+              >
+                Supplier is required.
+              </small>
             </div>
             <div class="field">
               <div class="flex align-content-center">
@@ -779,6 +777,12 @@
                 :minDate="minimumDate"
                 :hideOnDateTimeSelect="true"
               />
+              <small
+                class="text-error"
+                v-if="form.errors.expiration_date"
+              >
+                Expiration date is required.
+              </small>
             </div>
           </div>
 
@@ -794,19 +798,27 @@
             </div>
             <div class="field">
               <div class="flex align-content-center">
-                <label>Mark up (%)</label>
+                <label>Markup (%)</label>
               </div>
               <InputText
-                v-model="form.mark_up"
-                readonly
+                autofocus
+                type="number"
+                v-model.trim="form.mark_up"
+                @keydown="restrictNonNumeric"
               />
+              <small
+                class="text-error"
+                v-if="form.errors.mark_up"
+              >
+                Markup is required.
+              </small>
             </div>
             <div class="field">
               <div class="flex align-content-center">
                 <label>Selling price</label>
               </div>
               <InputText
-                v-model="form.selling_price"
+                v-model="onUpdateRoundedSellingPrice"
                 readonly
               />
             </div>
@@ -846,57 +858,6 @@
             type="submit"
             :disabled="form.processing || form.remarks == '' || form.remarks == null"
             @click="submit"
-          />
-        </template>
-      </Dialog>
-
-      <!-- Delete confirmation dialog -->
-      <Dialog
-        v-model:visible="deleteStockDialog"
-        :style="{ width: '450px' }"
-        header="Confirm"
-        :modal="true"
-        dismissableMask
-      >
-        <div class="flex align-items-center justify-content-center">
-          <i
-            class="pi pi-exclamation-triangle mr-3"
-            style="font-size: 2rem"
-          />
-          <span v-if="form"
-            >Are you sure you want to delete <b>{{ form.cl2desc }}</b> with RIS number <b>{{ form.ris_no }}</b> ?</span
-          >
-        </div>
-
-        <div class="field mt-5 flex flex-column">
-          <label for="remarks">REMARKS <span class="text-error">*</span></label>
-          <Textarea
-            v-model.trim="form.remarks"
-            rows="5"
-            autofocus
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.remarks"
-          >
-            {{ form.errors.remarks }}
-          </small>
-        </div>
-
-        <template #footer>
-          <Button
-            label="No"
-            icon="pi pi-times"
-            class="p-button-text"
-            @click="deleteStockDialog = false"
-          />
-          <Button
-            label="Yes"
-            icon="pi pi-check"
-            severity="danger"
-            text
-            :disabled="form.remarks == '' || form.remarks == null || form.processing"
-            @click="deleteItem"
           />
         </template>
       </Dialog>
@@ -1067,14 +1028,6 @@
                 severity="warning"
                 @click="editBrand(slotProps.data)"
               />
-
-              <!-- <Button
-              icon="pi pi-trash"
-              rounded
-              text
-              severity="danger"
-              @click="confirmDeleteItem(slotProps.data)"
-            /> -->
             </template>
           </Column>
         </DataTable>
@@ -1201,7 +1154,6 @@ export default {
       createStockDialog: false,
       updateStockDialog: false,
       createBrandDialog: false,
-      deleteStockDialog: false,
       deleteBrandDialog: false,
       params: {},
       search: '',
@@ -1408,6 +1360,27 @@ export default {
       } else {
         this.formAdditional.calculatedSellingPrice = Math.ceil(sellingPrice);
         return Math.ceil(sellingPrice);
+      }
+    },
+    onUpdateSellingPrice() {
+      return this.form.acquisition_price * (1 + this.form.mark_up / 100);
+    },
+    onUpdateRoundedSellingPrice() {
+      let onUpdateSellingPrice = this.onUpdateSellingPrice;
+
+      // Round to the nearest 0.25, 0.50, or 0.75
+      if (onUpdateSellingPrice % 1 < 0.25) {
+        this.form.selling_price = Math.floor(onUpdateSellingPrice) + 0.25;
+        return Math.floor(onUpdateSellingPrice) + 0.25;
+      } else if (onUpdateSellingPrice % 1 >= 0.25 && onUpdateSellingPrice % 1 < 0.5) {
+        this.form.selling_price = Math.floor(onUpdateSellingPrice) + 0.5;
+        return Math.floor(onUpdateSellingPrice) + 0.5;
+      } else if (onUpdateSellingPrice % 1 >= 0.5 && onUpdateSellingPrice % 1 < 0.75) {
+        this.form.selling_price = Math.floor(onUpdateSellingPrice) + 0.75;
+        return Math.floor(onUpdateSellingPrice) + 0.75;
+      } else {
+        this.form.selling_price = Math.ceil(onUpdateSellingPrice);
+        return Math.ceil(onUpdateSellingPrice);
       }
     },
   },
@@ -1651,7 +1624,7 @@ export default {
       );
     },
     editItem(item) {
-      console.log(item);
+      //   console.log(item);
       this.isUpdate = true;
       this.updateStockDialog = true;
       this.stockId = item.id;
@@ -1797,27 +1770,6 @@ export default {
         });
       }
     },
-    confirmDeleteItem(item) {
-      this.stockId = item.id;
-      this.form.ris_no = item.ris_no;
-      this.form.cl2desc = item.cl2desc;
-      this.deleteStockDialog = true;
-    },
-    deleteItem() {
-      this.form.delete(route('csrstocks.destroy', this.stockId), {
-        preserveScroll: true,
-        onSuccess: () => {
-          this.stocksList = [];
-          this.deleteStockDialog = false;
-          this.stockId = null;
-          this.form.clearErrors();
-          this.form.reset();
-          this.updateData();
-          this.deletedMsg();
-          this.storeStocksInContainer();
-        },
-      });
-    },
     cancel() {
       this.stockId = null;
       this.isUpdate = false;
@@ -1842,9 +1794,6 @@ export default {
     },
     updateRisNo() {
       this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'RIS NO. updated', life: 3000 });
-    },
-    deletedMsg() {
-      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Delivery deleted', life: 3000 });
     },
     // brand
     storeBrandsInContainer() {

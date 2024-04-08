@@ -194,17 +194,18 @@ class CsrStocksMedicalSuppliesController extends Controller
 
         $entry_by = Auth::user()->employeeid;
 
-        // $request->validate([
-        //     'fund_source' => 'required',
-        //     'cl2comb' => 'required',
-        //     'brand' => 'required',
-        //     'quantity' => 'required|numeric|min:0',
-        //     'delivered_date' => 'required',
-        //     'expiration_date' => 'required',
-        //     'remarks' => 'required'
-        // ]);
+        $request->validate([
+            'suppcode' => 'required',
+            'mark_up' => 'required',
+            'expiration_date' => 'required',
+            'remarks' => 'required'
+        ]);
 
         $prevStockDetails = CsrStocksMedicalSupplies::where('id', $csrstock->id)->first();
+
+        // 'acquisition_price',
+        // 'mark_up',
+        // 'selling_price'
 
         $updated = $csrstock->update([
             'suppcode' => $request->suppcode,
@@ -213,28 +214,31 @@ class CsrStocksMedicalSuppliesController extends Controller
             'uomcode' => $request->uomcode,
             'brand' => $request->brand,
             'quantity' => $request->quantity,
+            'acquisition_price' => $request->acquisition_price,
+            'mark_up' => $request->mark_up,
+            'selling_price' => $request->selling_price,
             'manufactured_date' => $request->manufactured_date == null ? null : Carbon::parse($request->manufactured_date)->setTimezone('Asia/Manila'),
             'delivered_date' => $request->delivered_date == null ? null : Carbon::parse($request->delivered_date)->setTimezone('Asia/Manila'),
             'expiration_date' => $request->expiration_date == null ? null : Carbon::parse($request->expiration_date)->setTimezone('Asia/Manila'),
         ]);
 
-        $stockLogs = CsrStocksMedicalSuppliesLogs::create([
-            'stock_id' => $prevStockDetails->id,
-            'ris_no' => $prevStockDetails->ris_no,
-            'suppcode' => $prevStockDetails->suppcode,
-            'chrgcode' => $prevStockDetails->chrgcode,
-            'cl2comb' => $prevStockDetails->cl2comb,
-            'uomcode' => $prevStockDetails->uomcode,
-            'brand' => $prevStockDetails->brand,
-            'prev_qty' => $prevStockDetails->quantity,
-            'new_qty' => $request->quantity,
-            'manufactured_date' => $prevStockDetails->manufactured_date,
-            'delivered_date' => $prevStockDetails->delivered_date,
-            'expiration_date' => $prevStockDetails->expiration_date,
-            'action' => 'UPDATE',
-            'remarks' => $request->remarks,
-            'entry_by' => $entry_by,
-        ]);
+        // $stockLogs = CsrStocksMedicalSuppliesLogs::create([
+        //     'stock_id' => $prevStockDetails->id,
+        //     'ris_no' => $prevStockDetails->ris_no,
+        //     'suppcode' => $prevStockDetails->suppcode,
+        //     'chrgcode' => $prevStockDetails->chrgcode,
+        //     'cl2comb' => $prevStockDetails->cl2comb,
+        //     'uomcode' => $prevStockDetails->uomcode,
+        //     'brand' => $prevStockDetails->brand,
+        //     'prev_qty' => $prevStockDetails->quantity,
+        //     'new_qty' => $request->quantity,
+        //     'manufactured_date' => $prevStockDetails->manufactured_date,
+        //     'delivered_date' => $prevStockDetails->delivered_date,
+        //     'expiration_date' => $prevStockDetails->expiration_date,
+        //     'action' => 'UPDATE',
+        //     'remarks' => $request->remarks,
+        //     'entry_by' => $entry_by,
+        // ]);
 
 
         return redirect()->back();
@@ -242,34 +246,34 @@ class CsrStocksMedicalSuppliesController extends Controller
 
     public function destroy(CsrStocksMedicalSupplies $csrstock, Request $request)
     {
-        $request->validate([
-            'remarks' => 'required'
-        ]);
+        // $request->validate([
+        //     'remarks' => 'required'
+        // ]);
 
-        $entry_by = Auth::user()->employeeid;
+        // $entry_by = Auth::user()->employeeid;
 
-        $prevStockDetails = CsrStocksMedicalSupplies::where('id', $csrstock->id)->first();
+        // $prevStockDetails = CsrStocksMedicalSupplies::where('id', $csrstock->id)->first();
 
-        $csrstock->delete();
+        // $csrstock->delete();
 
-        $stockLogs = CsrStocksMedicalSuppliesLogs::create([
-            'stock_id' => $prevStockDetails->id,
-            'ris_no' => $prevStockDetails->ris_no,
-            'suppcode' => $prevStockDetails->suppcode,
-            'chrgcode' => $prevStockDetails->chrgcode,
-            'cl2comb' => $prevStockDetails->cl2comb,
-            'uomcode' => $prevStockDetails->uomcode,
-            'brand' => $prevStockDetails->brand,
-            'prev_qty' => $prevStockDetails->quantity,
-            'new_qty' => $prevStockDetails->quantity,
-            'manufactured_date' => $prevStockDetails->manufactured_date,
-            'delivered_date' => $prevStockDetails->delivered_date,
-            'expiration_date' => $prevStockDetails->expiration_date,
-            'action' => 'DELETE',
-            'remarks' => $request->remarks,
-            'entry_by' => $entry_by,
-        ]);
+        // $stockLogs = CsrStocksMedicalSuppliesLogs::create([
+        //     'stock_id' => $prevStockDetails->id,
+        //     'ris_no' => $prevStockDetails->ris_no,
+        //     'suppcode' => $prevStockDetails->suppcode,
+        //     'chrgcode' => $prevStockDetails->chrgcode,
+        //     'cl2comb' => $prevStockDetails->cl2comb,
+        //     'uomcode' => $prevStockDetails->uomcode,
+        //     'brand' => $prevStockDetails->brand,
+        //     'prev_qty' => $prevStockDetails->quantity,
+        //     'new_qty' => $prevStockDetails->quantity,
+        //     'manufactured_date' => $prevStockDetails->manufactured_date,
+        //     'delivered_date' => $prevStockDetails->delivered_date,
+        //     'expiration_date' => $prevStockDetails->expiration_date,
+        //     'action' => 'DELETE',
+        //     'remarks' => $request->remarks,
+        //     'entry_by' => $entry_by,
+        // ]);
 
-        return redirect()->back();
+        // return redirect()->back();
     }
 }
