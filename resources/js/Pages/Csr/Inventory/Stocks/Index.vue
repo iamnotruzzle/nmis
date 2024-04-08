@@ -817,7 +817,7 @@
               </div>
               <Textarea
                 v-model.trim="form.remarks"
-                rows="5"
+                rows="10"
                 class="w-full"
               />
               <small
