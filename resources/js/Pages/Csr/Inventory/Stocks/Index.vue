@@ -712,6 +712,7 @@
             <div class="field">
               <div class="flex align-content-center">
                 <label>Brand</label>
+                <span class="ml-2 text-error">*</span>
               </div>
               <Dropdown
                 required="true"
@@ -782,21 +783,50 @@
           </div>
 
           <div class="w-full">
-            <div class="flex align-content-center">
-              <label>Remarks</label>
-              <span class="ml-2 text-error">*</span>
+            <div class="field">
+              <div class="flex align-content-center">
+                <label>Acquisition price</label>
+              </div>
+              <InputText
+                v-model="form.acquisition_price"
+                readonly
+              />
             </div>
-            <Textarea
-              v-model.trim="form.remarks"
-              rows="5"
-              class="w-full"
-            />
-            <small
-              class="text-error"
-              v-if="form.errors.remarks"
-            >
-              {{ form.errors.remarks }}
-            </small>
+            <div class="field">
+              <div class="flex align-content-center">
+                <label>Mark up (%)</label>
+              </div>
+              <InputText
+                v-model="form.mark_up"
+                readonly
+              />
+            </div>
+            <div class="field">
+              <div class="flex align-content-center">
+                <label>Selling price</label>
+              </div>
+              <InputText
+                v-model="form.selling_price"
+                readonly
+              />
+            </div>
+            <div>
+              <div class="flex align-content-center">
+                <label>Remarks</label>
+                <span class="ml-2 text-error">*</span>
+              </div>
+              <Textarea
+                v-model.trim="form.remarks"
+                rows="5"
+                class="w-full"
+              />
+              <small
+                class="text-error"
+                v-if="form.errors.remarks"
+              >
+                {{ form.errors.remarks }}
+              </small>
+            </div>
           </div>
         </div>
 
@@ -1280,6 +1310,9 @@ export default {
         brand: null,
         cl2desc: null,
         quantity: null,
+        acquisition_price: null,
+        mark_up: null,
+        selling_price: null,
         manufactured_date: null,
         delivered_date: null,
         expiration_date: null,
@@ -1632,6 +1665,9 @@ export default {
       this.form.uomdesc = item.uomdesc;
       this.form.brand = Number(item.brand_id);
       this.form.quantity = item.quantity;
+      this.form.acquisition_price = item.acquisition_price;
+      this.form.mark_up = item.mark_up;
+      this.form.selling_price = item.selling_price;
       this.form.manufactured_date = item.manufactured_date;
       this.form.delivered_date = item.delivered_date;
       this.form.expiration_date = item.expiration_date;
