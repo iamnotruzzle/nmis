@@ -218,27 +218,6 @@
           <template #body="{ data }">
             {{ tzone(data.manufactured_date) }}
           </template>
-          <!-- <template #filter="{}">
-            <Calendar
-              v-model="from_md"
-              dateFormat="mm-dd-yy"
-              placeholder="FROM"
-              showIcon
-              showButtonBar
-              :manualInput="false"
-              :hideOnDateTimeSelect="true"
-            />
-            <div class="mt-2"></div>
-            <Calendar
-              v-model="to_md"
-              dateFormat="mm-dd-yy"
-              placeholder="TO"
-              showIcon
-              showButtonBar
-              :manualInput="false"
-              :hideOnDateTimeSelect="true"
-            />
-          </template> -->
         </Column>
         <Column
           field="delivered_date"
@@ -250,26 +229,6 @@
           <template #body="{ data }">
             {{ tzone(data.delivered_date) }}
           </template>
-          <!-- <template #filter="{}">
-            <Calendar
-              v-model="from_dd"
-              dateFormat="mm-dd-yy"
-              placeholder="FROM"
-              showIcon
-              showButtonBar
-              :manualInput="false"
-              :hideOnDateTimeSelect="true"
-            />
-            <div class="mt-2"></div>
-            <Calendar
-              v-model="to_dd"
-              placeholder="TO"
-              showIcon
-              showButtonBar
-              :manualInput="false"
-              :hideOnDateTimeSelect="true"
-            />
-          </template> -->
         </Column>
         <Column
           field="expiration_date"
@@ -679,7 +638,7 @@
       <!-- update delivery details dialog -->
       <Dialog
         v-model:visible="updateStockDialog"
-        :style="{ width: '550px' }"
+        :style="{ width: '650px' }"
         :modal="true"
         class="p-fluid"
         @hide="clickOutsideDialog"
@@ -687,152 +646,158 @@
         <template #header>
           <div class="text-primary text-xl font-bold">DELIVERY DETAILS</div>
         </template>
-        <div class="field">
-          <label for="ris_no">RIS no.</label>
-          <InputText
-            id="ris_no"
-            v-model.trim="form.ris_no"
-            readonly
-          />
-        </div>
-        <div class="field">
-          <div class="flex align-content-center">
-            <label>Supplier</label>
-            <span class="ml-2 text-error">*</span>
-          </div>
-          <Dropdown
-            required="true"
-            v-model="form.suppcode"
-            :options="suppliersList"
-            :virtualScrollerOptions="{ itemSize: 38 }"
-            filter
-            dataKey="suppcode"
-            optionLabel="suppname"
-            optionValue="suppcode"
-            class="w-full"
-            :class="{ 'p-invalid': form.suppcode == '' }"
-          />
-        </div>
-        <div class="field">
-          <div class="flex align-content-center">
-            <label>Fund source</label>
-            <span class="ml-2 text-error">*</span>
-          </div>
-          <InputText
-            v-model="form.chrgdesc"
-            readonly
-          />
-        </div>
-        <div class="field">
-          <div class="flex align-content-center">
-            <label>Item</label>
-            <span class="ml-2 text-error">*</span>
-          </div>
-          <InputText
-            v-model="form.cl2desc"
-            readonly
-          />
-        </div>
-        <div class="field">
-          <div class="flex align-content-center">
-            <label>Unit</label>
-          </div>
-          <InputText
-            id="unit"
-            v-model.trim="form.uomdesc"
-            readonly
-          />
-        </div>
-        <div class="field">
-          <div class="flex align-content-center">
-            <label>Brand</label>
-            <span class="ml-2 text-error">*</span>
-          </div>
-          <Dropdown
-            required="true"
-            v-model="form.brand"
-            :options="brandDropDownList"
-            :virtualScrollerOptions="{ itemSize: 38 }"
-            filter
-            showClear
-            dataKey="id"
-            optionLabel="name"
-            optionValue="id"
-            class="w-full mb-3"
-            :class="{ 'p-invalid': form.brand == '' }"
-          />
-        </div>
-        <div class="field">
-          <div class="flex align-content-center">
-            <label>Quantity</label>
-            <span class="ml-2 text-error">*</span>
-          </div>
-          <InputNumber
-            id="quantity"
-            v-model.trim="form.quantity"
-            readonly
-            inputId="integeronly"
-          />
-        </div>
-        <div class="field">
-          <div class="flex align-content-center">
-            <label>Manufactured date</label>
-          </div>
-          <Calendar
-            v-model="form.manufactured_date"
-            dateFormat="mm-dd-yy"
-            showIcon
-            showButtonBar
-            :manualInput="false"
-            :hideOnDateTimeSelect="true"
-          />
-        </div>
-        <div class="field">
-          <div class="flex align-content-center">
-            <label>Delivered date</label>
-          </div>
-          <Calendar
-            v-model="form.delivered_date"
-            dateFormat="mm-dd-yy"
-            showIcon
-            showButtonBar
-            :manualInput="false"
-            :hideOnDateTimeSelect="true"
-          />
-        </div>
-        <div class="field">
-          <div class="flex align-content-center">
-            <label>Expiration date</label>
-            <span class="ml-2 text-error">*</span>
-          </div>
-          <Calendar
-            v-model="form.expiration_date"
-            dateFormat="mm-dd-yy"
-            showIcon
-            showButtonBar
-            :manualInput="false"
-            :minDate="minimumDate"
-            :hideOnDateTimeSelect="true"
-          />
-        </div>
 
-        <div class="field">
-          <div class="flex align-content-center">
-            <label>Remarks</label>
-            <span class="ml-2 text-error">*</span>
+        <div class="flex flex-row w-full">
+          <!-- left side form -->
+          <div class="mr-2">
+            <div class="field">
+              <div class="flex align-content-center">
+                <label>RIS No.</label>
+              </div>
+              <InputText
+                id="ris_no"
+                v-model.trim="form.ris_no"
+                readonly
+              />
+            </div>
+            <div
+              class="field"
+              style="width: 300px"
+            >
+              <div class="flex align-content-center">
+                <label>Supplier</label>
+                <span class="ml-2 text-error">*</span>
+              </div>
+              <Dropdown
+                required="true"
+                v-model="form.suppcode"
+                :options="suppliersList"
+                :virtualScrollerOptions="{ itemSize: 38 }"
+                filter
+                dataKey="suppcode"
+                optionLabel="suppname"
+                optionValue="suppcode"
+                class="w-full"
+                :class="{ 'p-invalid': form.suppcode == '' }"
+              />
+            </div>
+            <div class="field">
+              <div class="flex align-content-center">
+                <label>Fund source</label>
+              </div>
+              <InputText
+                v-model="form.chrgdesc"
+                readonly
+              />
+            </div>
+            <div class="field">
+              <div class="flex align-content-center">
+                <label>Item</label>
+              </div>
+              <InputText
+                v-model="form.cl2desc"
+                readonly
+              />
+            </div>
+            <div class="field">
+              <div class="flex align-content-center">
+                <label>Unit</label>
+              </div>
+              <InputText
+                id="unit"
+                v-model.trim="form.uomdesc"
+                readonly
+              />
+            </div>
+            <div class="field">
+              <div class="flex align-content-center">
+                <label>Brand</label>
+              </div>
+              <Dropdown
+                required="true"
+                v-model="form.brand"
+                :options="brandDropDownList"
+                :virtualScrollerOptions="{ itemSize: 38 }"
+                filter
+                showClear
+                dataKey="id"
+                optionLabel="name"
+                optionValue="id"
+                class="w-full mb-3"
+                :class="{ 'p-invalid': form.brand == '' }"
+              />
+            </div>
+            <div class="field">
+              <div class="flex align-content-center">
+                <label>Quantity</label>
+              </div>
+              <InputNumber
+                id="quantity"
+                v-model.trim="form.quantity"
+                readonly
+                inputId="integeronly"
+              />
+            </div>
+            <div class="field">
+              <div class="flex align-content-center">
+                <label>Manufactured date</label>
+              </div>
+              <Calendar
+                v-model="form.manufactured_date"
+                dateFormat="mm-dd-yy"
+                showIcon
+                showButtonBar
+                :manualInput="false"
+                :hideOnDateTimeSelect="true"
+              />
+            </div>
+            <div class="field">
+              <div class="flex align-content-center">
+                <label>Delivered date</label>
+              </div>
+              <Calendar
+                v-model="form.delivered_date"
+                dateFormat="mm-dd-yy"
+                showIcon
+                showButtonBar
+                :manualInput="false"
+                :hideOnDateTimeSelect="true"
+              />
+            </div>
+            <div class="field">
+              <div class="flex align-content-center">
+                <label>Expiration date</label>
+                <span class="ml-2 text-error">*</span>
+              </div>
+              <Calendar
+                v-model="form.expiration_date"
+                dateFormat="mm-dd-yy"
+                showIcon
+                showButtonBar
+                :manualInput="false"
+                :minDate="minimumDate"
+                :hideOnDateTimeSelect="true"
+              />
+            </div>
           </div>
-          <Textarea
-            v-model.trim="form.remarks"
-            rows="5"
-            autofocus
-            :class="{ 'p-invalid': form.remarks == '' }"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.remarks"
-          >
-            {{ form.errors.remarks }}
-          </small>
+
+          <div class="w-full">
+            <div class="flex align-content-center">
+              <label>Remarks</label>
+              <span class="ml-2 text-error">*</span>
+            </div>
+            <Textarea
+              v-model.trim="form.remarks"
+              rows="5"
+              class="w-full"
+            />
+            <small
+              class="text-error"
+              v-if="form.errors.remarks"
+            >
+              {{ form.errors.remarks }}
+            </small>
+          </div>
         </div>
 
         <template #footer>
