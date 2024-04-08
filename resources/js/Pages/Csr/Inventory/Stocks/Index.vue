@@ -329,7 +329,18 @@
           <!-- form -->
           <div class="w-3">
             <div class="field">
-              <label>RIS no.</label>
+              <div class="flex justify-content-between align-items-center">
+                <label>RIS no.</label>
+                <Button
+                  icon="pi pi-refresh"
+                  severity="success"
+                  text
+                  rounded
+                  aria-label="Cancel"
+                  class="p-0 m-0"
+                  @click="resetDeliveryDialog"
+                />
+              </div>
               <InputText
                 v-model.trim="form.searchRis"
                 autofocus
@@ -1402,6 +1413,28 @@ export default {
     document.removeEventListener('keydown', this.handleKeyPress);
   },
   methods: {
+    resetDeliveryDialog() {
+      this.disableSearchRisInput = false;
+      this.isUpdate = false;
+      this.isUpdateBrand = false;
+      this.item = null;
+      this.brand = null;
+      this.supplier = null;
+      this.selectedFundSource = null;
+      this.selectedItemsUomCode = null;
+      this.selectedItemsUomDesc = null;
+      this.quantity = null;
+      this.deliveryDetails = [];
+      this.manufactured_date = null;
+      this.delivered_date = null;
+      this.expiration_date = null;
+      this.form.clearErrors();
+      this.form.reset();
+      this.formAdditional.clearErrors();
+      this.formAdditional.reset();
+      this.formBrand.clearErrors();
+      this.formBrand.reset();
+    },
     handleKeyPress(event) {
       // Check if Ctrl key is pressed and key is 'd'
       if (event.ctrlKey && event.key === 'd') {
