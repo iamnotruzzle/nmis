@@ -587,11 +587,6 @@
                   autofocus
                   @keydown="restrictNonNumeric"
                 />
-                <!-- <input
-                  type="text"
-                  v-model.trim="formAdditional.markupPercentage"
-                  @keyup.ctrl.d="updateNewDetailsToDeliveryDets"
-                /> -->
               </div>
             </div>
             <div class="field">
@@ -1691,7 +1686,6 @@ export default {
           this.storeTotalStocksInContainer();
         },
       });
-      //a
     },
     openCreateItemDialog() {
       this.isUpdate = false;
@@ -1728,8 +1722,6 @@ export default {
       );
     },
     editItem(item) {
-      //   console.log(item);
-
       this.isUpdate = true;
       this.updateStockDialog = true;
       this.stockId = item.id;
@@ -1806,7 +1798,6 @@ export default {
       this.formAdditional.delivered_date = e.data.delivered_date;
       this.formAdditional.expiration_date = e.data.expiration_date;
       this.formAdditional.acquisitionPrice = Number(e.data.unitprice);
-      // NOTE markUpPrice and calculatedSellingPrice is on watch
     },
     updateNewDetailsToDeliveryDets() {
       this.deliveryDetails.forEach((e) => {
@@ -2013,13 +2004,6 @@ export default {
         this.selectedItemsUomDesc = null;
       }
     },
-    // Watch for changes in acquisitionPrice and markupPercentage
-    // 'formAdditional.acquisitionPrice': function (val) {
-    //   this.updateLocalSellingPrice();
-    // },
-    // 'formAdditional.markupPercentage': function (val) {
-    //   this.updateLocalSellingPrice();
-    // },
   },
 };
 </script>
