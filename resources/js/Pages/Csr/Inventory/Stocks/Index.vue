@@ -1767,7 +1767,7 @@ export default {
               unitprice: e.unitprice,
               markupPercentage: null,
               sellingPrice: null,
-              releaseqty: e.releaseqty,
+              releaseqty: Number(e.releaseqty),
               manufactured_date: null,
               delivered_date: null,
               expiration_date: null,
