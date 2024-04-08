@@ -577,16 +577,21 @@
 
               <div>
                 <div class="flex align-content-center">
-                  <label>Markup price</label>
+                  <label>Markup price (%)</label>
                   <span class="ml-2 text-error">*</span>
                 </div>
-                <InputNumber
+                <InputText
                   required="true"
+                  type="number"
                   v-model.trim="formAdditional.markupPercentage"
                   autofocus
-                  suffix="%"
-                  @keyup.enter="updateNewDetailsToDeliveryDets"
+                  @keydown="restrictNonNumeric"
                 />
+                <!-- <input
+                  type="text"
+                  v-model.trim="formAdditional.markupPercentage"
+                  @keyup.ctrl.d="updateNewDetailsToDeliveryDets"
+                /> -->
               </div>
             </div>
             <div class="field">
@@ -1490,8 +1495,47 @@ export default {
     this.storeActiveBrandsInContainer();
     this.storeTotalStocksInContainer();
     this.storeSuppliersInContainer();
+
+    // Add event listener to the document
+    document.addEventListener('keydown', this.handleKeyPress);
+  },
+  beforeUnmount() {
+    // Remove event listener before component is destroyed
+    document.removeEventListener('keydown', this.handleKeyPress);
   },
   methods: {
+    handleKeyPress(event) {
+      // Check if Ctrl key is pressed and key is 'd'
+      if (event.ctrlKey && event.key === 'd') {
+        // Prevent the default action of the browser
+        event.preventDefault();
+        // Execute the function
+        this.updateNewDetailsToDeliveryDets();
+      }
+    },
+    // this a method to make sure that non-numeric character is remove
+    // because the component using this is InputText and type number the letter 'e' can be type
+    restrictNonNumeric(event) {
+      // Allow: backspace, delete, tab, escape, enter, and . (for decimal point)
+      if (
+        [46, 8, 9, 27, 13, 110, 190].includes(event.keyCode) ||
+        // Allow: Ctrl+A, Command+A
+        (event.keyCode === 65 && (event.ctrlKey === true || event.metaKey === true)) ||
+        // Allow: Ctrl+C, Command+C
+        (event.keyCode === 67 && (event.ctrlKey === true || event.metaKey === true)) ||
+        // Allow: Ctrl+V, Command+V
+        (event.keyCode === 86 && (event.ctrlKey === true || event.metaKey === true)) ||
+        // Allow: Ctrl+X, Command+X
+        (event.keyCode === 88 && (event.ctrlKey === true || event.metaKey === true))
+      ) {
+        // Let it happen, don't do anything
+        return;
+      }
+      // Ensure that it is a number and stop the keypress
+      if ((event.shiftKey || event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105)) {
+        event.preventDefault();
+      }
+    },
     updateLocalSellingPrice() {
       this.localSellingPrice = this.roundedSellingPrice;
     },
@@ -1794,8 +1838,6 @@ export default {
           }
         }
       });
-
-      console.log(this.deliveryDetails);
     },
     removeFromRequestContainer(item) {
       this.deliveryDetails.splice(
