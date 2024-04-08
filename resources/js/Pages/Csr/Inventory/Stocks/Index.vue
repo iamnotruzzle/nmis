@@ -734,7 +734,9 @@
           />
         </div>
         <div class="field">
-          <label for="unit">Unit</label>
+          <div class="flex align-content-center">
+            <label>Unit</label>
+          </div>
           <InputText
             id="unit"
             v-model.trim="form.uomdesc"
@@ -761,19 +763,21 @@
           />
         </div>
         <div class="field">
-          <label for="quantity">Quantity</label>
+          <div class="flex align-content-center">
+            <label>Quantity</label>
+            <span class="ml-2 text-error">*</span>
+          </div>
           <InputNumber
             id="quantity"
             v-model.trim="form.quantity"
-            required="true"
-            autofocus
-            :class="{ 'p-invalid': form.quantity == '' }"
-            @keyup.enter="submit"
+            readonly
             inputId="integeronly"
           />
         </div>
         <div class="field">
-          <label for="manufactured_date">Manufactured date</label>
+          <div class="flex align-content-center">
+            <label>Manufactured date</label>
+          </div>
           <Calendar
             v-model="form.manufactured_date"
             dateFormat="mm-dd-yy"
@@ -784,7 +788,9 @@
           />
         </div>
         <div class="field">
-          <label for="delivered_date">Delivered date</label>
+          <div class="flex align-content-center">
+            <label>Delivered date</label>
+          </div>
           <Calendar
             v-model="form.delivered_date"
             dateFormat="mm-dd-yy"
