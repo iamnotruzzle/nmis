@@ -720,19 +720,9 @@
             <label>Fund source</label>
             <span class="ml-2 text-error">*</span>
           </div>
-          <Dropdown
-            id="fundSource"
-            required="true"
-            v-model="form.fund_source"
-            :options="fundSourceList"
-            :virtualScrollerOptions="{ itemSize: 38 }"
-            filter
-            showClear
-            dataKey="chrgcode"
-            optionLabel="chrgdesc"
-            optionValue="chrgcode"
-            class="w-full"
-            :class="{ 'p-invalid': form.fund_source == '' }"
+          <InputText
+            v-model="form.chrgdesc"
+            readonly
           />
         </div>
         <div class="field">
@@ -751,6 +741,7 @@
             optionValue="cl2comb"
             class="w-full"
             :class="{ 'p-invalid': form.cl2comb == '' }"
+            disabled
           />
         </div>
         <div class="field">
@@ -1322,6 +1313,7 @@ export default {
         ris_no: null,
         suppcode: null,
         fund_source: null,
+        chrgdesc: null,
         cl2comb: null,
         uomcode: null,
         uomdesc: null,
@@ -1666,12 +1658,14 @@ export default {
       );
     },
     editItem(item) {
+      console.log(item);
       this.isUpdate = true;
       this.updateStockDialog = true;
       this.stockId = item.id;
       this.form.ris_no = item.ris_no;
       this.form.suppcode = item.suppcode;
       this.form.fund_source = item.chrgcode;
+      this.form.chrgdesc = item.chrgdesc;
       this.form.cl2comb = item.cl2comb;
       this.form.uomcode = item.uomcode;
       this.form.uomdesc = item.uomdesc;
