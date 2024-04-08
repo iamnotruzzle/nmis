@@ -96,69 +96,8 @@ class CsrStocksMedicalSuppliesController extends Controller
         return Str::random($length);
     }
 
-    public function updateRisNo($currentRisNo, $newRisNo)
-    {
-        // dd($newRisNo);
-
-        CsrStocksMedicalSupplies::where('ris_no', $currentRisNo)
-            ->update([
-                'ris_no' => $newRisNo
-            ]);
-
-        CsrStocksMedicalSuppliesLogs::where('ris_no', $currentRisNo)
-            ->update([
-                'ris_no' => $newRisNo
-            ]);
-    }
-
     public function store(Request $request)
     {
-
-        // if ($request->newRisNo != null) {
-        //     $this->updateRisNo($request->ris_no, $request->newRisNo);
-        // } else {
-        //     $temp_ris_no = 'TEMP-RIS-' . $this->generateTempRisNo();
-
-        //     $entry_by = Auth::user()->employeeid;
-
-        //     foreach ($request->delivery_list as $delivery) {
-        //         // dd($delivery);
-        //         $stock = CsrStocksMedicalSupplies::create([
-        //             'ris_no' => $delivery['ris_no'] == null ? trim($temp_ris_no) : trim($request->ris_no),
-        //             'suppcode' => $delivery['supplier'],
-        //             'chrgcode' => $delivery['fundSource'],
-        //             'cl2comb' => $delivery['cl2comb'],
-        //             'uomcode' => $delivery['unit'],
-        //             'brand' => $delivery['brand'],
-        //             'quantity' => $delivery['quantity'],
-        //             'manufactured_date' => $delivery['manufactured_date'] == null ? null : Carbon::parse($delivery['manufactured_date'])->setTimezone('Asia/Manila'),
-        //             'delivered_date' => $delivery['delivered_date'] == null ? null : Carbon::parse($delivery['delivered_date'])->setTimezone('Asia/Manila'),
-        //             'expiration_date' => $delivery['expiration_date'] == null ? null : Carbon::parse($delivery['expiration_date'])->setTimezone('Asia/Manila'),
-        //         ]);
-
-        //         $stockLogs = CsrStocksMedicalSuppliesLogs::create([
-        //             'stock_id' => $stock->id,
-        //             'ris_no' => $stock->ris_no,
-        //             'suppcode' => $stock->suppcode,
-        //             'chrgcode' => $stock->chrgcode,
-        //             'cl2comb' => $stock->cl2comb,
-        //             'uomcode' => $stock->uomcode,
-        //             'brand' => $stock->brand,
-        //             'prev_qty' => 0,
-        //             'new_qty' => $stock->quantity,
-        //             'manufactured_date' => $stock->manufactured_date,
-        //             'delivered_date' => $stock->delivered_date,
-        //             'expiration_date' => $stock->expiration_date,
-        //             'action' => 'CREATE',
-        //             'remarks' => NULL,
-        //             'entry_by' => $entry_by,
-        //         ]);
-        //     }
-
-        //     return redirect()->back();
-        // }
-
-
         if ($request->searchRis != null) {
             $result = array();
 
