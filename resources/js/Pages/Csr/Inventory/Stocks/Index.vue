@@ -477,7 +477,9 @@
               />
             </div>
             <div class="field">
-              <label for="unit">Unit</label>
+              <div class="">
+                <label>Unit</label>
+              </div>
               <InputText
                 id="unit"
                 v-model.trim="formAdditional.uomdesc"
@@ -544,6 +546,18 @@
                 :hideOnDateTimeSelect="true"
               />
             </div>
+            <div class="field">
+              <div class="flex align-content-center">
+                <label>Quantity</label>
+              </div>
+              <InputNumber
+                required="true"
+                v-model.trim="formAdditional.quantity"
+                autofocus
+                @keyup.enter="updateNewDetailsToDeliveryDets"
+                inputId="integeronly"
+              />
+            </div>
             <div class="field flex justify-content-between">
               <div>
                 <div class="flex align-content-center">
@@ -582,19 +596,6 @@
                 required="true"
                 v-model="roundedSellingPrice"
                 readonly
-              />
-            </div>
-            <div class="field">
-              <div class="flex align-content-center">
-                <label>Quantity</label>
-                <span class="ml-2 text-error">*</span>
-              </div>
-              <InputNumber
-                required="true"
-                v-model.trim="formAdditional.quantity"
-                autofocus
-                @keyup.enter="updateNewDetailsToDeliveryDets"
-                inputId="integeronly"
               />
             </div>
           </div>
