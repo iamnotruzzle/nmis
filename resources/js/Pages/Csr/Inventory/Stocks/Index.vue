@@ -554,8 +554,8 @@
                 required="true"
                 v-model.trim="formAdditional.quantity"
                 autofocus
-                @keyup.enter="updateNewDetailsToDeliveryDets"
                 inputId="integeronly"
+                readonly
               />
             </div>
             <div class="field flex justify-content-between">
@@ -585,6 +585,7 @@
                   v-model.trim="formAdditional.markupPercentage"
                   autofocus
                   suffix="%"
+                  @keyup.enter="updateNewDetailsToDeliveryDets"
                 />
               </div>
             </div>
