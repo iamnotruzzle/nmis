@@ -692,9 +692,7 @@
           <InputText
             id="ris_no"
             v-model.trim="form.ris_no"
-            disabled
-            :class="{ 'p-invalid': form.ris_no == '' }"
-            @keyup.enter="submit"
+            readonly
           />
         </div>
         <div class="field">
@@ -730,18 +728,9 @@
             <label>Item</label>
             <span class="ml-2 text-error">*</span>
           </div>
-          <Dropdown
-            required="true"
-            v-model="form.cl2comb"
-            :options="itemsList"
-            :virtualScrollerOptions="{ itemSize: 38 }"
-            filter
-            dataKey="cl2comb"
-            optionLabel="cl2desc"
-            optionValue="cl2comb"
-            class="w-full"
-            :class="{ 'p-invalid': form.cl2comb == '' }"
-            disabled
+          <InputText
+            v-model="form.cl2desc"
+            readonly
           />
         </div>
         <div class="field">
@@ -749,7 +738,6 @@
           <InputText
             id="unit"
             v-model.trim="form.uomdesc"
-            disabled
             readonly
           />
         </div>
@@ -1315,6 +1303,7 @@ export default {
         fund_source: null,
         chrgdesc: null,
         cl2comb: null,
+        cl2desc: null,
         uomcode: null,
         uomdesc: null,
         brand: null,
@@ -1668,6 +1657,7 @@ export default {
       this.form.chrgdesc = item.chrgdesc;
       this.form.cl2comb = item.cl2comb;
       this.form.uomcode = item.uomcode;
+      this.form.cl2desc = item.cl2desc;
       this.form.uomdesc = item.uomdesc;
       this.form.brand = Number(item.brand_id);
       this.form.quantity = item.quantity;
