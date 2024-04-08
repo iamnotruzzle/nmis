@@ -1972,12 +1972,12 @@ export default {
       }
     },
     // Watch for changes in acquisitionPrice and markupPercentage
-    'formAdditional.acquisitionPrice': function (val) {
-      this.updateLocalSellingPrice();
-    },
-    'formAdditional.markupPercentage': function (val) {
-      this.updateLocalSellingPrice();
-    },
+    // 'formAdditional.acquisitionPrice': function (val) {
+    //   this.updateLocalSellingPrice();
+    // },
+    // 'formAdditional.markupPercentage': function (val) {
+    //   this.updateLocalSellingPrice();
+    // },
   },
 };
 </script>
