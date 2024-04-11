@@ -182,6 +182,24 @@ class CsrStocksMedicalSuppliesController extends Controller
                     'mark_up' => $r['markupPercentage'],
                     'selling_price' => $r['sellingPrice'],
                 ]);
+
+                // CsrStocksMedicalSupplies::create([
+                //     'ris_no' => $r['risid'],
+                //     'cl2comb' => $r['cl2comb'],
+                //     'uomcode' => $r['uomcode'],
+                //     'suppcode' => $r['supplier']['suppcode'],
+                //     'brand' => $r['brand']['id'],
+                //     'chrgcode' => $r['fsid'],
+                //     'prev_qty' => 0,
+                //     'new_qty' => $r['releaseqty'],
+                //     'quantity' => $r['releaseqty'],
+                //     'manufactured_date' => $r['manufactured_date'],
+                //     'delivered_date' => $r['delivered_date'],
+                //     'expiration_date' => $r['expiration_date'],
+                //     'acquisition_price' => $r['unitprice'],
+                //     'mark_up' => $r['markupPercentage'],
+                //     'selling_price' => $r['sellingPrice'],
+                // ]);
             }
 
             return redirect()->back();

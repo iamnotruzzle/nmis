@@ -27,5 +27,8 @@ class CsrStocksMedicalSuppliesLogs extends Model
         'action',
         'remarks',
         'entry_by',
+        'acquisition_price',
+        'mark_up',
+        'selling_price'
     ];
 }
