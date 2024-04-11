@@ -349,7 +349,7 @@
               />
               <small
                 v-if="deliveryExist == true"
-                class="text-error"
+                class="text-error font-semibold"
               >
                 Delivery already exist
               </small>
