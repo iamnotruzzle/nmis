@@ -347,6 +347,12 @@
                 @keyup.enter="fillDeliveriesContainer"
                 :readonly="disableSearchRisInput == true"
               />
+              <small
+                v-if="deliveryExist == true"
+                class="text-error"
+              >
+                Delivery already exist
+              </small>
             </div>
             <div class="field">
               <div class="flex align-content-center">
@@ -1166,6 +1172,7 @@ export default {
       updateStockDialog: false,
       createBrandDialog: false,
       deleteBrandDialog: false,
+      deliveryExist: false,
       params: {},
       search: '',
       // manufactured date
@@ -1679,42 +1686,46 @@ export default {
       this.form.expiration_date = item.expiration_date;
     },
     async fillDeliveriesContainer() {
-      try {
-        const response = await axios.post('csrstocks', this.form);
-        console.log(response.data); // Log the response data if needed
+      this.deliveryExist = this.stocksList.some((item) => item.ris_no === this.form.searchRis);
 
-        let sanitizedData = response.data;
+      if (this.deliveryExist != true) {
+        try {
+          const response = await axios.post('csrstocks', this.form);
+          console.log(response.data); // Log the response data if needed
 
-        sanitizedData.forEach((e) => {
-          // conditions make it so that items are not entered twice
-          if (sanitizedData.length != this.deliveryDetails.length) {
-            this.deliveryDetails.push({
-              risid: e.risid,
-              cl2comb: e.cl2comb,
-              cl2desc: e.cl2desc,
-              brand: null,
-              brandName: null,
-              supplier: null,
-              supplierName: null,
-              fsid: e.fundSourceId,
-              fundSourceName: e.fundSourceName,
-              uomcode: e.uomcode,
-              uomdesc: e.uomdesc,
-              unitprice: e.unitprice,
-              markupPercentage: null,
-              sellingPrice: null,
-              releaseqty: Number(e.releaseqty),
-              manufactured_date: null,
-              delivered_date: null,
-              expiration_date: null,
-            });
-          }
-        });
+          let sanitizedData = response.data;
 
-        this.disableSearchRisInput = true;
-      } catch (error) {
-        console.error('Something went wrong:', error);
-        // Handle error
+          sanitizedData.forEach((e) => {
+            // conditions make it so that items are not entered twice
+            if (sanitizedData.length != this.deliveryDetails.length) {
+              this.deliveryDetails.push({
+                risid: e.risid,
+                cl2comb: e.cl2comb,
+                cl2desc: e.cl2desc,
+                brand: null,
+                brandName: null,
+                supplier: null,
+                supplierName: null,
+                fsid: e.fundSourceId,
+                fundSourceName: e.fundSourceName,
+                uomcode: e.uomcode,
+                uomdesc: e.uomdesc,
+                unitprice: e.unitprice,
+                markupPercentage: null,
+                sellingPrice: null,
+                releaseqty: Number(e.releaseqty),
+                manufactured_date: null,
+                delivered_date: null,
+                expiration_date: null,
+              });
+            }
+          });
+
+          this.disableSearchRisInput = true;
+        } catch (error) {
+          console.error('Something went wrong:', error);
+          // Handle error
+        }
       }
     },
     onRowClick(e) {
