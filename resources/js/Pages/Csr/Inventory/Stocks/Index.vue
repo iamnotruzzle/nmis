@@ -373,7 +373,6 @@
             <div class="field">
               <div class="flex align-content-center">
                 <label>Fund source</label>
-                <span class="ml-2 text-error">*</span>
               </div>
               <InputText
                 v-model="formAdditional.fsName"
@@ -383,7 +382,6 @@
             <div class="field">
               <div class="flex align-content-center">
                 <label>Item</label>
-                <span class="ml-2 text-error">*</span>
               </div>
               <InputText
                 v-model="formAdditional.cl2desc"
@@ -476,7 +474,6 @@
               <div>
                 <div class="flex align-content-center">
                   <label>Acquisition price</label>
-                  <span class="ml-2 text-error">*</span>
                 </div>
                 <InputNumber
                   required="true"
@@ -1790,6 +1787,10 @@ export default {
 
       this.formAdditional.deliveryDetails = this.deliveryDetails;
 
+      const isEmpty = this.deliveryDetails.some((item) => {
+        return !item.suppler || !item.brand || !item.expiration_date;
+      });
+
       if (this.isUpdate) {
         this.form.put(route('csrstocks.update', this.stockId), {
           preserveScroll: true,
@@ -1802,16 +1803,18 @@ export default {
           },
         });
       } else {
-        this.formAdditional.post(route('csrstocks.store'), {
-          preserveScroll: true,
-          onSuccess: () => {
-            this.stockId = null;
-            this.createStockDialog = false;
-            this.cancel();
-            this.updateData();
-            this.createdMsg();
-          },
-        });
+        if (isEmpty != true) {
+          this.formAdditional.post(route('csrstocks.store'), {
+            preserveScroll: true,
+            onSuccess: () => {
+              this.stockId = null;
+              this.createStockDialog = false;
+              this.cancel();
+              this.updateData();
+              this.createdMsg();
+            },
+          });
+        }
       }
     },
     cancel() {

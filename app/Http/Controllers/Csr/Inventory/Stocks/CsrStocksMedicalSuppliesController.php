@@ -165,9 +165,13 @@ class CsrStocksMedicalSuppliesController extends Controller
         } else {
             $deliveryDetails = $request->deliveryDetails;
 
+            $entry_by = Auth::user()->employeeid;
+
+            // dd($entry_by);
+
             foreach ($deliveryDetails as $r) {
                 // dd($r['supplier']['suppcode']);
-                CsrStocksMedicalSupplies::create([
+                $stock = CsrStocksMedicalSupplies::create([
                     'ris_no' => $r['risid'],
                     'cl2comb' => $r['cl2comb'],
                     'uomcode' => $r['uomcode'],
@@ -183,28 +187,33 @@ class CsrStocksMedicalSuppliesController extends Controller
                     'selling_price' => $r['sellingPrice'],
                 ]);
 
-                // CsrStocksMedicalSupplies::create([
-                //     'ris_no' => $r['risid'],
-                //     'cl2comb' => $r['cl2comb'],
-                //     'uomcode' => $r['uomcode'],
-                //     'suppcode' => $r['supplier']['suppcode'],
-                //     'brand' => $r['brand']['id'],
-                //     'chrgcode' => $r['fsid'],
-                //     'prev_qty' => 0,
-                //     'new_qty' => $r['releaseqty'],
-                //     'quantity' => $r['releaseqty'],
-                //     'manufactured_date' => $r['manufactured_date'],
-                //     'delivered_date' => $r['delivered_date'],
-                //     'expiration_date' => $r['expiration_date'],
-                //     'acquisition_price' => $r['unitprice'],
-                //     'mark_up' => $r['markupPercentage'],
-                //     'selling_price' => $r['sellingPrice'],
-                // ]);
+                $stockLog = CsrStocksMedicalSuppliesLogs::create([
+                    'stock_id' => $stock->id,
+                    'ris_no' => $r['risid'],
+                    'cl2comb' => $r['cl2comb'],
+                    'uomcode' => $r['uomcode'],
+                    'suppcode' => $r['supplier']['suppcode'],
+                    'brand' => $r['brand']['id'],
+                    'chrgcode' => $r['fsid'],
+                    'prev_qty' => 0,
+                    'new_qty' => $r['releaseqty'],
+                    'quantity' => $r['releaseqty'],
+                    'manufactured_date' => $r['manufactured_date'],
+                    'delivered_date' => $r['delivered_date'],
+                    'expiration_date' => $r['expiration_date'],
+                    'action' => 'ADDED DELIVERY',
+                    'remarks' => '',
+                    'acquisition_price' => $r['unitprice'],
+                    'mark_up' => $r['markupPercentage'],
+                    'selling_price' => $r['sellingPrice'],
+                    'entry_by' => $entry_by,
+                ]);
             }
 
             return redirect()->back();
         }
     }
+
 
     public function update(CsrStocksMedicalSupplies $csrstock, Request $request)
     {
