@@ -742,11 +742,11 @@
               <div class="flex align-content-center">
                 <label>Quantity</label>
               </div>
-              <InputNumber
+              <InputText
                 id="quantity"
+                type="number"
                 v-model.trim="form.quantity"
-                readonly
-                inputId="integeronly"
+                @keydown="restrictNonNumericAndPeriod"
               />
             </div>
             <div class="field">
@@ -1452,6 +1452,26 @@ export default {
       // Allow: backspace, delete, tab, escape, enter, and . (for decimal point)
       if (
         [46, 8, 9, 27, 13, 110, 190].includes(event.keyCode) ||
+        // Allow: Ctrl+A, Command+A
+        (event.keyCode === 65 && (event.ctrlKey === true || event.metaKey === true)) ||
+        // Allow: Ctrl+C, Command+C
+        (event.keyCode === 67 && (event.ctrlKey === true || event.metaKey === true)) ||
+        // Allow: Ctrl+V, Command+V
+        (event.keyCode === 86 && (event.ctrlKey === true || event.metaKey === true)) ||
+        // Allow: Ctrl+X, Command+X
+        (event.keyCode === 88 && (event.ctrlKey === true || event.metaKey === true))
+      ) {
+        // Let it happen, don't do anything
+        return;
+      }
+      // Ensure that it is a number and stop the keypress
+      if ((event.shiftKey || event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105)) {
+        event.preventDefault();
+      }
+    },
+    restrictNonNumericAndPeriod(event) {
+      if (
+        [46, 8, 9, 27, 13].includes(event.keyCode) ||
         // Allow: Ctrl+A, Command+A
         (event.keyCode === 65 && (event.ctrlKey === true || event.metaKey === true)) ||
         // Allow: Ctrl+C, Command+C
