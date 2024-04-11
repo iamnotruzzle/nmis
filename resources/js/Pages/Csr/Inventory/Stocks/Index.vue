@@ -1264,6 +1264,7 @@ export default {
 
         searchRis: null,
 
+        stock_id: null,
         ris_no: null,
         suppcode: null,
         fund_source: null,
@@ -1808,6 +1809,8 @@ export default {
       const isEmpty = this.deliveryDetails.some((item) => {
         return !item.supplier || !item.brand || !item.expiration_date;
       });
+
+      this.form.stock_id = this.stockId;
 
       if (this.isUpdate) {
         this.form.put(route('csrstocks.update', this.stockId), {

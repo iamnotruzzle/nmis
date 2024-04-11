@@ -217,8 +217,6 @@ class CsrStocksMedicalSuppliesController extends Controller
 
     public function update(CsrStocksMedicalSupplies $csrstock, Request $request)
     {
-        // dd($request);
-
         $entry_by = Auth::user()->employeeid;
 
         $request->validate([
@@ -230,43 +228,37 @@ class CsrStocksMedicalSuppliesController extends Controller
 
         $prevStockDetails = CsrStocksMedicalSupplies::where('id', $csrstock->id)->first();
 
-        // 'acquisition_price',
-        // 'mark_up',
-        // 'selling_price'
-
         $updated = $csrstock->update([
-            'suppcode' => $request->suppcode,
-            'chrgcode' => $request->fund_source,
-            'cl2comb' => $request->cl2comb,
-            'uomcode' => $request->uomcode,
+            'suppcode' => $request->supplier,
             'brand' => $request->brand,
             'quantity' => $request->quantity,
-            'acquisition_price' => $request->acquisition_price,
+            'manufactured_date' => $request->manufactured_date,
+            'delivered_date' => $request->delivered_date,
+            'expiration_date' => $request->expiration_date,
             'mark_up' => $request->mark_up,
             'selling_price' => $request->selling_price,
-            'manufactured_date' => $request->manufactured_date == null ? null : Carbon::parse($request->manufactured_date)->setTimezone('Asia/Manila'),
-            'delivered_date' => $request->delivered_date == null ? null : Carbon::parse($request->delivered_date)->setTimezone('Asia/Manila'),
-            'expiration_date' => $request->expiration_date == null ? null : Carbon::parse($request->expiration_date)->setTimezone('Asia/Manila'),
+            'remarks' => $request->remarks,
         ]);
 
-        // $stockLogs = CsrStocksMedicalSuppliesLogs::create([
-        //     'stock_id' => $prevStockDetails->id,
-        //     'ris_no' => $prevStockDetails->ris_no,
-        //     'suppcode' => $prevStockDetails->suppcode,
-        //     'chrgcode' => $prevStockDetails->chrgcode,
-        //     'cl2comb' => $prevStockDetails->cl2comb,
-        //     'uomcode' => $prevStockDetails->uomcode,
-        //     'brand' => $prevStockDetails->brand,
-        //     'prev_qty' => $prevStockDetails->quantity,
-        //     'new_qty' => $request->quantity,
-        //     'manufactured_date' => $prevStockDetails->manufactured_date,
-        //     'delivered_date' => $prevStockDetails->delivered_date,
-        //     'expiration_date' => $prevStockDetails->expiration_date,
-        //     'action' => 'UPDATE',
-        //     'remarks' => $request->remarks,
-        //     'entry_by' => $entry_by,
-        // ]);
-
+        $stockLog = CsrStocksMedicalSuppliesLogs::create([
+            'stock_id' => $prevStockDetails->id,
+            'ris_no' => $prevStockDetails->ris_no,
+            'cl2comb' => $prevStockDetails->cl2comb,
+            'uomcode' => $prevStockDetails->uomcode,
+            'suppcode' => $prevStockDetails->suppcode,
+            'brand' => $prevStockDetails->brand,
+            'chrgcode' => $prevStockDetails->chrgcode,
+            'prev_qty' => $prevStockDetails->quantity,
+            'new_qty' => $request->quantity,
+            'manufactured_date' => $request->manufactured_date,
+            'delivered_date' => $request->delivered_date,
+            'expiration_date' => $request->expiration_date,
+            'action' => 'UPDATE DELIVERY',
+            'remarks' => $request->remarks,
+            'mark_up' => $request->mark_up,
+            'selling_price' => $request->selling_price,
+            'entry_by' => $entry_by,
+        ]);
 
         return redirect()->back();
     }
