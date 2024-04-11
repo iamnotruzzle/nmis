@@ -1788,7 +1788,7 @@ export default {
       this.formAdditional.deliveryDetails = this.deliveryDetails;
 
       const isEmpty = this.deliveryDetails.some((item) => {
-        return !item.suppler || !item.brand || !item.expiration_date;
+        return !item.supplier || !item.brand || !item.expiration_date;
       });
 
       if (this.isUpdate) {
