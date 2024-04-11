@@ -203,20 +203,9 @@
                 removableSort
               >
                 <template #header>
-                  <div class="flex justify-content-between w-full">
+                  <div class="w-full">
                     <div class="text-lg font-bold my-3">
                       Prices for <span class="text-primary">[ {{ slotProps.data.cl2desc }} ]</span>
-                    </div>
-
-                    <div>
-                      <Button
-                        label="Add price"
-                        icon="pi pi-plus"
-                        iconPos="right"
-                        size="small"
-                        class="ml-2 my-0"
-                        @click="openCreateItemPriceDialog(slotProps.data)"
-                      />
                     </div>
                   </div>
                 </template>
@@ -239,31 +228,6 @@
                 >
                   <template #body="{ data }">
                     {{ tzone(data.created_at) }}
-                  </template>
-                </Column>
-                <Column
-                  header="ACTION"
-                  style="width: 10%"
-                >
-                  <template #body="slotProps">
-                    <div class="flex flex-row">
-                      <Button
-                        icon="pi pi-pencil"
-                        class="mr-1"
-                        rounded
-                        text
-                        severity="warning"
-                        @click="editPrice(slotProps.data)"
-                      />
-
-                      <Button
-                        icon="pi pi-trash"
-                        rounded
-                        text
-                        severity="danger"
-                        @click="confirmDeletePrice(slotProps.data)"
-                      />
-                    </div>
                   </template>
                 </Column>
               </DataTable>
@@ -513,99 +477,6 @@
           />
         </template>
       </Dialog>
-
-      <!-- create & edit price dialog -->
-      <Dialog
-        v-model:visible="createItemPriceDialog"
-        :style="{ width: '450px' }"
-        header="Price Detail"
-        :modal="true"
-        class="p-fluid"
-        @hide="clickOutsidePriceDialog"
-        dismissableMask
-      >
-        <div class="field">
-          <label for="selling_price">Selling price</label>
-          <InputText
-            id="selling_price"
-            v-model.trim="formPrice.selling_price"
-            required="true"
-            autofocus
-            type="number"
-            :class="{ 'p-invalid': formPrice.selling_price == '' }"
-            @keyup.enter="submitPrice"
-          />
-          <small
-            class="text-error"
-            v-if="formPrice.errors.selling_price"
-          >
-            {{ formPrice.errors.selling_price }}
-          </small>
-        </div>
-        <template #footer>
-          <Button
-            label="Cancel"
-            icon="pi pi-times"
-            severity="danger"
-            text
-            @click="cancelPrice"
-          />
-          <Button
-            v-if="isPriceUpdate == true"
-            label="Update"
-            icon="pi pi-check"
-            severity="warning"
-            text
-            type="submit"
-            :disabled="formPrice.processing"
-            @click="submitPrice"
-          />
-          <Button
-            v-else
-            label="Save"
-            icon="pi pi-check"
-            text
-            type="submit"
-            :disabled="formPrice.processing"
-            @click="submitPrice"
-          />
-        </template>
-      </Dialog>
-
-      <!-- Delete item price confirmation dialog -->
-      <Dialog
-        v-model:visible="deleteItemPriceDialog"
-        :style="{ width: '450px' }"
-        header="Confirm"
-        :modal="true"
-        dismissableMask
-      >
-        <div class="flex align-items-center justify-content-center">
-          <i
-            class="pi pi-exclamation-triangle mr-3"
-            style="font-size: 2rem"
-          />
-          <span v-if="form">
-            Are you sure you want to delete <b>₱ {{ formPrice.selling_price }}</b> price ?
-          </span>
-        </div>
-        <template #footer>
-          <Button
-            label="No"
-            icon="pi pi-times"
-            class="p-button-text"
-            @click="deleteItemPriceDialog = false"
-          />
-          <Button
-            label="Yes"
-            icon="pi pi-check"
-            severity="danger"
-            text
-            :disabled="form.processing"
-            @click="deletePrice"
-          />
-        </template>
-      </Dialog>
     </div>
   </app-layout>
 </template>
@@ -680,12 +551,6 @@ export default {
       isUpdate: false,
       createItemDialog: false,
       deleteItemDialog: false,
-      // price
-      priceId: null,
-      isPriceUpdate: false,
-      createItemPriceDialog: false,
-      deleteItemPriceDialog: false,
-      // end price
       dateFilter: 'this year',
       selectedStatus: null,
       statusFilter: [
@@ -762,12 +627,6 @@ export default {
         alert_stock: null,
         entry_by: null,
         location: null,
-      }),
-      formPrice: this.$inertia.form({
-        id: null,
-        cl2comb: null,
-        selling_price: null,
-        entry_by: this.$page.props.auth.user.userDetail.employeeid,
       }),
     };
   },
@@ -1107,96 +966,6 @@ export default {
     deletedMsg() {
       this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Item deleted', life: 3000 });
     },
-    // ********** prices
-    openCreateItemPriceDialog(item) {
-      this.formPrice.id = item.id;
-      this.formPrice.cl2comb = item.cl2comb;
-      this.isPriceUpdate = false;
-      this.priceId = item.id;
-      this.createItemPriceDialog = true;
-    },
-    // emit price close dialog
-    clickOutsidePriceDialog() {
-      this.$emit(
-        'hide',
-        (this.priceId = null),
-        (this.isPriceUpdate = false),
-        this.formPrice.clearErrors(),
-        this.formPrice.reset()
-      );
-    },
-    editPrice(item) {
-      //   console.log('item', item);
-      this.isPriceUpdate = true;
-      this.createItemPriceDialog = true;
-      this.priceId = item.price_id;
-      this.formPrice.id = item.price_id;
-      this.formPrice.selling_price = item.price;
-    },
-    submitPrice() {
-      if (this.formPrice.processing) {
-        return false;
-      }
-
-      if (this.isPriceUpdate) {
-        this.formPrice.put(route('itemprices.update', this.priceId), {
-          preserveScroll: true,
-          onSuccess: () => {
-            this.priceId = null;
-            this.createItemPriceDialog = false;
-            this.cancelPrice();
-            this.updateData();
-            this.updatedPriceMsg();
-          },
-        });
-      } else {
-        this.formPrice.post(route('itemprices.store'), {
-          preserveScroll: true,
-          onSuccess: () => {
-            this.priceId = null;
-            this.createItemDialog = false;
-            this.cancelPrice();
-            this.updateData();
-            this.createdPriceMsg();
-          },
-        });
-      }
-    },
-    confirmDeletePrice(item) {
-      this.priceId = item.price_id;
-      this.deleteItemPriceDialog = true;
-    },
-    deletePrice() {
-      this.form.delete(route('itemprices.destroy', this.priceId), {
-        preserveScroll: true,
-        onSuccess: () => {
-          this.deleteItemPriceDialog = false;
-          this.priceId = null;
-          this.formPrice.clearErrors();
-          this.formPrice.reset();
-          this.updateData();
-          this.deletedPriceMsg();
-          //   this.storeItemInContainer();
-        },
-      });
-    },
-    cancelPrice() {
-      this.priceId = null;
-      this.isPriceUpdate = false;
-      this.createItemPriceDialog = false;
-      this.formPrice.reset();
-      this.formPrice.clearErrors();
-    },
-    createdPriceMsg() {
-      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Price created', life: 3000 });
-    },
-    updatedPriceMsg() {
-      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Price updated', life: 3000 });
-    },
-    deletedPriceMsg() {
-      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Price deleted', life: 3000 });
-    },
-    // ********** end prices
   },
 };
 </script>
