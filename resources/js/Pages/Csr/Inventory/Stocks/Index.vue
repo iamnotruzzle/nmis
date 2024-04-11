@@ -349,7 +349,7 @@
               />
               <small
                 v-if="deliveryExist == true"
-                class="text-error font-semibold"
+                class="text-error text-lg font-semibold"
               >
                 Delivery already exist
               </small>
@@ -1688,7 +1688,7 @@ export default {
     async fillDeliveriesContainer() {
       this.deliveryExist = this.stocksList.some((item) => item.ris_no === this.form.searchRis);
 
-      if (this.deliveryExist != true) {
+      if (this.deliveryExist != true && this.form.searchRis != null && this.form.searchRis != '') {
         try {
           const response = await axios.post('csrstocks', this.form);
           console.log(response.data); // Log the response data if needed
