@@ -229,7 +229,7 @@ class CsrStocksMedicalSuppliesController extends Controller
         $prevStockDetails = CsrStocksMedicalSupplies::where('id', $csrstock->id)->first();
 
         $updated = $csrstock->update([
-            'suppcode' => $request->supplier,
+            'suppcode' => $request->suppcode,
             'brand' => $request->brand,
             'quantity' => $request->quantity,
             'manufactured_date' => $request->manufactured_date,
