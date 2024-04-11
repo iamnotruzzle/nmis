@@ -409,7 +409,6 @@
                 :options="brandDropDownList"
                 :virtualScrollerOptions="{ itemSize: 38 }"
                 filter
-                showClear
                 dataKey="id"
                 optionLabel="name"
                 class="w-full mb-3"
@@ -635,7 +634,7 @@
             icon="pi pi-check"
             text
             type="submit"
-            :disabled="form.processing || deliveryDetails.length == 0"
+            :disabled="formAdditional.processing || deliveryDetails.length == 0"
             @click="submit"
           />
         </template>
@@ -732,7 +731,6 @@
                 :options="brandDropDownList"
                 :virtualScrollerOptions="{ itemSize: 38 }"
                 filter
-                showClear
                 dataKey="id"
                 optionLabel="name"
                 optionValue="id"
@@ -1781,7 +1779,7 @@ export default {
       );
     },
     submit() {
-      if (this.form.processing) {
+      if (this.form.processing && this.formAdditional.processing) {
         return false;
       }
 
