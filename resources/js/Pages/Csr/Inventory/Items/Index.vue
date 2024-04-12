@@ -210,16 +210,24 @@
                   </div>
                 </template>
                 <Column
-                  field="price"
-                  header="SELLING PRICE"
+                  field="acquisition_price"
+                  header="ACQUISITION PRICE"
                   style="width: 20%"
                 >
                 </Column>
                 <Column
-                  field="entry_by"
-                  header="ENTRY BY"
-                  style="width: 50%"
+                  field="mark_up"
+                  header="MARKUP"
+                  style="width: 20%"
                 >
+                  <template #body="{ data }"> {{ data.mark_up }}% </template>
+                </Column>
+                <Column
+                  field="selling_price"
+                  header="SELLING PRICE"
+                  style="width: 20%"
+                >
+                  <!-- <template #body="{ data }"> {{ data.mark_up }}% </template> -->
                 </Column>
                 <Column
                   field="created_at"
@@ -545,7 +553,6 @@ export default {
       loading: false,
       rows: null,
       // end paginator
-      entry_by: null,
       authLocation: null,
       itemId: null,
       isUpdate: false,
@@ -625,7 +632,6 @@ export default {
         normal_stock: null,
         critical_stock: null,
         alert_stock: null,
-        entry_by: null,
         location: null,
       }),
     };
@@ -638,7 +644,6 @@ export default {
     this.storeUnitsInContainer();
     this.storePimsCategoryInContainer();
 
-    this.entry_by = this.$page.props.auth.user.userDetail.employeeid;
     this.authLocation = this.$page.props.auth.user;
     // console.log(this.authLocation.location.wardcode);
 
@@ -701,32 +706,28 @@ export default {
             alert_stock: e.alert_stock,
             critical_stock: e.critical_stock,
             prices:
-              e.price == null
+              e.acquisition_price == null
                 ? []
                 : [
                     {
                       price_id: e.price_id,
-                      price: e.price,
-                      entry_by:
-                        e.entry_by == null
-                          ? null
-                          : e.entry_by_firstname + ' ' + e.entry_by_middlename + ' ' + e.entry_by_lastname,
+                      acquisition_price: e.acquisition_price,
+                      mark_up: e.mark_up,
+                      selling_price: e.selling_price,
                       created_at: e.price_created_at,
                     },
                   ],
           });
         } else {
           // Item already exists, insert the prices into the existing item's prices array
-          if (e.price == null) {
+          if (e.acquisition_price == null) {
             this.itemsList[existingItemIndex].prices.push([]);
           } else {
             this.itemsList[existingItemIndex].prices.push({
               price_id: e.price_id,
-              price: e.price,
-              entry_by:
-                e.entry_by == null
-                  ? null
-                  : e.entry_by_firstname + ' ' + e.entry_by_middlename + ' ' + e.entry_by_lastname,
+              acquisition_price: e.acquisition_price,
+              mark_up: e.mark_up,
+              selling_price: e.selling_price,
               created_at: e.price_created_at,
             });
           }
@@ -781,7 +782,7 @@ export default {
               // if created_ate is equal to yesterday
               if (moment(created_at).format('MM/DD/YYYY') === moment().subtract(1, 'days').format('MM/DD/YYYY')) {
                 option.xAxis.data.push(moment(e.created_at).format('YYYY-MM-DD, hh:mm'));
-                option.series[0].data.push(Number(e.price).toFixed(2));
+                option.series[0].data.push(Number(e.selling_price).toFixed(2));
               }
             } else {
               option.xAxis.data.push(null);
@@ -796,7 +797,7 @@ export default {
               let today = moment().format('MM/DD/YYYY');
               if (moment(created_at).isSame(today)) {
                 option.xAxis.data.push(moment(e.created_at).format('YYYY-MM-DD, hh:mm'));
-                option.series[0].data.push(Number(e.price).toFixed(2));
+                option.series[0].data.push(Number(e.selling_price).toFixed(2));
               }
             } else {
               option.xAxis.data.push(null);
@@ -810,7 +811,7 @@ export default {
               let created_at = moment(e.created_at).format('MM/DD/YYYY');
               if (moment(created_at).week() === moment().week()) {
                 option.xAxis.data.push(moment(e.created_at).format('YYYY-MM-DD, hh:mm'));
-                option.series[0].data.push(Number(e.price).toFixed(2));
+                option.series[0].data.push(Number(e.selling_price).toFixed(2));
               }
             } else {
               option.xAxis.data.push(null);
@@ -825,7 +826,7 @@ export default {
               if (moment(created_at).month() === moment().month()) {
                 // option.xAxis.data.push(this.tzone(e.created_at));
                 option.xAxis.data.push(moment(e.created_at).format('YYYY-MM-DD, hh:mm'));
-                option.series[0].data.push(Number(e.price).toFixed(2));
+                option.series[0].data.push(Number(e.selling_price).toFixed(2));
               }
             } else {
               option.xAxis.data.push(null);
@@ -839,7 +840,7 @@ export default {
               let created_at = moment(e.created_at).format('LL');
               if (moment(created_at).year() === moment().year()) {
                 option.xAxis.data.push(moment(e.created_at).format('YYYY-MM-DD, hh:mm'));
-                option.series[0].data.push(Number(e.price).toFixed(2));
+                option.series[0].data.push(Number(e.selling_price).toFixed(2));
               }
             } else {
               option.xAxis.data.push(null);
@@ -900,7 +901,6 @@ export default {
         return false;
       }
 
-      this.form.entry_by = this.entry_by;
       this.form.location = this.authLocation.location.wardcode;
 
       if (this.isUpdate) {
