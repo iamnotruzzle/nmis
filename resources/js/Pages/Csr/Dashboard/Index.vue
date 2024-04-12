@@ -11,7 +11,7 @@
             <div class="mb-3">
               <div class="flex justify-content-between">
                 <div>
-                  <span class="block text-xl text-900 text-blue-500 font-bold">PENDING</span>
+                  <span class="block text-xl text-900 text-blue-500 font-bold">INCOMING REQUEST</span>
                 </div>
 
                 <!-- a -->

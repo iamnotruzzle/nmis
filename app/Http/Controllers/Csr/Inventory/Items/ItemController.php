@@ -158,7 +158,7 @@ class ItemController extends Controller
 
     public function update(Item $item, Request $request)
     {
-        // dd($request);
+        $entry_by = Auth::user()->employeeid;
 
         $request->validate([
             'cl1comb' => 'required|max:20',
@@ -181,7 +181,7 @@ class ItemController extends Controller
             'normal_stock' => $request->normal_stock,
             'alert_stock' => $request->alert_stock,
             'critical_stock' => $request->critical_stock,
-            'entry_by' => $request->entry_by,
+            'entry_by' => $entry_by,
             'location' => $request->location,
         ]);
 
