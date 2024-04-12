@@ -180,14 +180,6 @@
               severity="warning"
               @click="editItem(slotProps.data)"
             />
-
-            <!-- <Button
-              icon="pi pi-trash"
-              rounded
-              text
-              severity="danger"
-              @click="confirmDeleteItem(slotProps.data)"
-            /> -->
           </template>
         </Column>
         <template #expansion="slotProps">
@@ -449,42 +441,6 @@
           />
         </template>
       </Dialog>
-
-      <!-- Delete confirmation dialog -->
-      <Dialog
-        v-model:visible="deleteItemDialog"
-        :style="{ width: '450px' }"
-        header="Confirm"
-        :modal="true"
-        dismissableMask
-      >
-        <div class="flex align-items-center justify-content-center">
-          <i
-            class="pi pi-exclamation-triangle mr-3"
-            style="font-size: 2rem"
-          />
-          <span v-if="form"
-            >Are you sure you want to delete <b>{{ form.cl2desc }}</b> ?</span
-          >
-        </div>
-
-        <template #footer>
-          <Button
-            label="No"
-            icon="pi pi-times"
-            class="p-button-text"
-            @click="deleteItemDialog = false"
-          />
-          <Button
-            label="Yes"
-            icon="pi pi-check"
-            severity="danger"
-            text
-            :disabled="form.processing"
-            @click="deleteItem"
-          />
-        </template>
-      </Dialog>
     </div>
   </app-layout>
 </template>
@@ -557,7 +513,6 @@ export default {
       itemId: null,
       isUpdate: false,
       createItemDialog: false,
-      deleteItemDialog: false,
       dateFilter: 'this year',
       selectedStatus: null,
       statusFilter: [
@@ -928,26 +883,6 @@ export default {
       }
       //   console.log(this.$page.props.errors);
     },
-    confirmDeleteItem(item) {
-      this.itemId = item.cl2comb;
-      this.form.cl2desc = item.cl2desc;
-      this.deleteItemDialog = true;
-    },
-    deleteItem() {
-      this.form.delete(route('items.destroy', this.itemId), {
-        preserveScroll: true,
-        onSuccess: () => {
-          this.itemsList = [];
-          this.deleteItemDialog = false;
-          this.itemId = null;
-          this.form.clearErrors();
-          this.form.reset();
-          this.updateData();
-          this.deletedMsg();
-          this.storeItemInContainer();
-        },
-      });
-    },
     cancel() {
       this.itemId = null;
       this.isUpdate = false;
@@ -962,9 +897,6 @@ export default {
     },
     updatedMsg() {
       this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Item updated', life: 3000 });
-    },
-    deletedMsg() {
-      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Item deleted', life: 3000 });
     },
   },
 };
