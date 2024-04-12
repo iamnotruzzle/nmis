@@ -137,13 +137,13 @@
               @click="editSubCategory(slotProps.data)"
             />
 
-            <Button
+            <!-- <Button
               icon="pi pi-trash"
               rounded
               text
               severity="danger"
               @click="confirmDeleteCategory(slotProps.data)"
-            />
+            /> -->
           </template>
         </Column>
       </DataTable>
@@ -243,7 +243,7 @@
         </template>
       </Dialog>
 
-      <Dialog
+      <!-- <Dialog
         v-model:visible="deleteCategoryDialog"
         :style="{ width: '450px' }"
         header="Confirm"
@@ -275,7 +275,7 @@
             @click="deleteCategory"
           />
         </template>
-      </Dialog>
+      </Dialog> -->
     </div>
   </app-layout>
 </template>
@@ -327,7 +327,7 @@ export default {
     return {
       isUpdate: false,
       createDataDialog: false,
-      deleteCategoryDialog: false,
+      //   deleteCategoryDialog: false,
       statusFilter: [
         { name: 'Active', code: 'A' },
         { name: 'Inactive', code: 'I' },
@@ -451,23 +451,23 @@ export default {
     whenDialogIsHidden() {
       this.$emit('hide', (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
     },
-    confirmDeleteCategory(item) {
-      this.deleteCategoryDialog = true;
-      this.form.cl1desc = item.cl1desc;
-      this.form.cl1comb = item.cl1comb;
-    },
-    deleteCategory() {
-      this.form.delete(route('categories.destroy', this.form.cl1comb), {
-        preserveScroll: true,
-        onSuccess: () => {
-          this.deleteCategoryDialog = false;
-          this.form.clearErrors();
-          this.form.reset();
-          this.updateData();
-          this.deletedMsg();
-        },
-      });
-    },
+    // confirmDeleteCategory(item) {
+    //   this.deleteCategoryDialog = true;
+    //   this.form.cl1desc = item.cl1desc;
+    //   this.form.cl1comb = item.cl1comb;
+    // },
+    // deleteCategory() {
+    //   this.form.delete(route('categories.destroy', this.form.cl1comb), {
+    //     preserveScroll: true,
+    //     onSuccess: () => {
+    //       this.deleteCategoryDialog = false;
+    //       this.form.clearErrors();
+    //       this.form.reset();
+    //       this.updateData();
+    //       this.deletedMsg();
+    //     },
+    //   });
+    // },
     cancel() {
       this.isUpdate = false;
       this.createDataDialog = false;
@@ -490,14 +490,14 @@ export default {
         life: 3000,
       });
     },
-    deletedMsg() {
-      this.$toast.add({
-        severity: 'error',
-        summary: 'Success',
-        detail: 'SubCategory deleted',
-        life: 3000,
-      });
-    },
+    // deletedMsg() {
+    //   this.$toast.add({
+    //     severity: 'error',
+    //     summary: 'Success',
+    //     detail: 'SubCategory deleted',
+    //     life: 3000,
+    //   });
+    // },
   },
 };
 </script>
