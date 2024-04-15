@@ -8,6 +8,7 @@ use App\Models\CsrStocksMedicalSupplies;
 use App\Models\CsrStocksMedicalSuppliesLogs;
 use App\Models\FundSource;
 use App\Models\Item;
+use App\Models\ItemPrices;
 use App\Models\Supplier;
 use App\Models\TypeOfCharge;
 use Carbon\Carbon;
@@ -208,6 +209,12 @@ class CsrStocksMedicalSuppliesController extends Controller
                     'selling_price' => $r['sellingPrice'],
                     'entry_by' => $entry_by,
                 ]);
+
+                // $itemPrices = ItemPrices::create([
+                //     'cl2comb' => $request->cl2comb,
+                //     'selling_price' => $request->selling_price,
+                //     'entry_by' => $request->entry_by,
+                // ]);
             }
 
             return redirect()->back();
