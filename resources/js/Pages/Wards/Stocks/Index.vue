@@ -14,7 +14,14 @@
           href="requeststocks"
           class="text-2xl border-bottom-2 mr-2 font-semibold"
         >
-          DRUG AND MEDS
+          OTHER ITEMS
+        </Link>
+
+        <Link
+          href="requestmedsstocks"
+          class="text-2xl my-link"
+        >
+          MEDICINE
         </Link>
 
         <Link

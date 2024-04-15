@@ -13,9 +13,16 @@
       <div class="mb-2">
         <Link
           href="requeststocks"
-          class="text-2xl mr-2 my-link"
+          class="text-2xl my-link"
         >
-          DRUG AND MEDS
+          OTHER ITEMS
+        </Link>
+
+        <Link
+          href="requestmedsstocks"
+          class="text-2xl my-link"
+        >
+          MEDICINE
         </Link>
 
         <Link

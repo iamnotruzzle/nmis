@@ -12,9 +12,15 @@
       <div class="mb-2">
         <Link
           href="requeststocks"
+          class="text-2xl my-link"
+          >OTHER ITEMS
+        </Link>
+
+        <Link
+          href="requestmedsstocks"
           class="text-2xl border-bottom-2 mr-2 font-semibold"
         >
-          DRUG AND MEDS
+          MEDICINE
         </Link>
 
         <Link
@@ -1133,24 +1139,12 @@ export default {
   },
   // created will be initialize before mounted
   created() {
-    this.totalRecords = this.requestedStocks.total;
-    this.params.page = this.requestedStocks.current_page;
-    this.rows = this.requestedStocks.per_page;
+    // this.totalRecords = this.requestedStocks.total;
+    // this.params.page = this.requestedStocks.current_page;
+    // this.rows = this.requestedStocks.per_page;
   },
   mounted() {
     this.storeBrandsInContainer();
-
-    window.Echo.channel('issued').listen('ItemIssued', (args) => {
-      if (args.message[0] == this.$page.props.authWardcode.wardcode) {
-        router.reload({
-          onSuccess: (e) => {
-            this.requestStockList = [];
-            this.storeRequestedStocksInContainer();
-            this.createRequestStocksDialog = false;
-          },
-        });
-      }
-    });
 
     this.storeFundSourceInContainer();
     this.storeItemsInController();
@@ -1294,22 +1288,21 @@ export default {
       this.updateData();
     },
     updateData() {
-      this.loading = true;
-
-      this.$inertia.get('requeststocks', this.params, {
-        preserveState: true,
-        preserveScroll: true,
-        onFinish: (visit) => {
-          this.totalRecords = this.requestedStocks.total;
-          this.requestStockList = [];
-          this.currentWardStocksList = [];
-          this.expandedRow = [];
-          this.storeRequestedStocksInContainer();
-          this.storeCurrentWardStocksInContainer();
-          this.loading = false;
-          this.formUpdateStatus.reset();
-        },
-      });
+      //   this.loading = true;
+      //   this.$inertia.get('requeststocks', this.params, {
+      //     preserveState: true,
+      //     preserveScroll: true,
+      //     onFinish: (visit) => {
+      //       this.totalRecords = this.requestedStocks.total;
+      //       this.requestStockList = [];
+      //       this.currentWardStocksList = [];
+      //       this.expandedRow = [];
+      //       this.storeRequestedStocksInContainer();
+      //       this.storeCurrentWardStocksInContainer();
+      //       this.loading = false;
+      //       this.formUpdateStatus.reset();
+      //     },
+      //   });
     },
     openCreateRequestStocksDialog() {
       this.isUpdate = false;
@@ -1419,17 +1412,16 @@ export default {
     updateStatus() {
       //   console.log(item);
       //   this.formUpdateStatus.status = item;
-
-      this.formUpdateStatus.put(route('requeststocks.updatedeliverystatus', this.formUpdateStatus), {
-        preserveScroll: true,
-        onSuccess: () => {
-          this.requestStockId = null;
-          this.editStatusDialog = false;
-          this.cancel();
-          this.updateData();
-          this.updatedStatusMsg();
-        },
-      });
+      //   this.formUpdateStatus.put(route('requeststocks.updatedeliverystatus', this.formUpdateStatus), {
+      //     preserveScroll: true,
+      //     onSuccess: () => {
+      //       this.requestStockId = null;
+      //       this.editStatusDialog = false;
+      //       this.cancel();
+      //       this.updateData();
+      //       this.updatedStatusMsg();
+      //     },
+      //   });
     },
     submit() {
       if (this.form.processing) {
@@ -1608,30 +1600,30 @@ export default {
     // end ward stocks logs
   },
   watch: {
-    search: function (val, oldVal) {
-      this.params.search = val;
-      this.updateData();
-    },
-    from: function (val) {
-      if (val != null) {
-        let from = this.getLocalDateString(val);
-        this.params.from = from;
-      } else {
-        this.params.from = null;
-        this.from = null;
-      }
-      this.updateData();
-    },
-    to: function (val) {
-      if (val != null) {
-        let to = this.getLocalDateString(val);
-        this.params.to = to;
-      } else {
-        this.params.to = null;
-        this.to = null;
-      }
-      this.updateData();
-    },
+    // search: function (val, oldVal) {
+    //   this.params.search = val;
+    //   this.updateData();
+    // },
+    // from: function (val) {
+    //   if (val != null) {
+    //     let from = this.getLocalDateString(val);
+    //     this.params.from = from;
+    //   } else {
+    //     this.params.from = null;
+    //     this.from = null;
+    //   }
+    //   this.updateData();
+    // },
+    // to: function (val) {
+    //   if (val != null) {
+    //     let to = this.getLocalDateString(val);
+    //     this.params.to = to;
+    //   } else {
+    //     this.params.to = null;
+    //     this.to = null;
+    //   }
+    //   this.updateData();
+    // },
     'formConsignment.cl2comb': function (val) {
       this.selectedItemsUomDesc = null;
 
