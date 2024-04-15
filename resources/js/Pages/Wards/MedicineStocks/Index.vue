@@ -401,7 +401,7 @@
           <Dropdown
             required="true"
             v-model="item"
-            :options="itemsList"
+            :options="medicinesList"
             :virtualScrollerOptions="{ itemSize: 38 }"
             filter
             optionLabel="cl2desc"
@@ -720,7 +720,7 @@ export default {
   },
   props: {
     authWardcode: Object,
-    items: Object,
+    medicines: Object,
     requestedStocks: Object,
     currentWardStocks: Object,
     fundSource: Object,
@@ -747,7 +747,7 @@ export default {
       from: null,
       to: null,
       stockBalanceDeclared: false,
-      itemsList: [],
+      medicinesList: [],
       requestStockList: [],
       currentWardStocksList: [],
       // stock list details
@@ -798,7 +798,7 @@ export default {
   },
   mounted() {
     this.storeFundSourceInContainer();
-    this.storeItemsInController();
+    this.storeMedicinesInContainer();
     this.storeRequestedStocksInContainer();
     this.storeCurrentWardStocksInContainer();
 
@@ -820,10 +820,10 @@ export default {
         });
       });
     },
-    storeItemsInController() {
-      this.itemsList = []; // reset
-      this.items.forEach((e) => {
-        this.itemsList.push({
+    storeMedicinesInContainer() {
+      this.medicinesList = []; // reset
+      this.medicines.forEach((e) => {
+        this.medicinesList.push({
           cl2comb: e.cl2comb,
           cl2desc: e.cl2desc,
           uomcode: e.unit == null ? null : e.unit.uomcode,
