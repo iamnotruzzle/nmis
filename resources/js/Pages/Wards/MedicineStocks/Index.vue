@@ -141,14 +141,6 @@
                 :value="data.status"
                 style="background-color: rgb(239, 42, 42); color: rgb(253, 249, 249)"
               />
-              <div>
-                <i
-                  v-if="data.status == 'FILLED'"
-                  class="pi pi-check ml-3"
-                  style="color: skyblue"
-                  @click="editStatus(data)"
-                ></i>
-              </div>
             </div>
           </template>
         </Column>
@@ -516,41 +508,6 @@
         </template>
       </Dialog>
 
-      <!-- edit status confirmation dialog -->
-      <Dialog
-        v-model:visible="editStatusDialog"
-        :style="{ width: '450px' }"
-        header="Confirm"
-        :modal="true"
-        dismissableMask
-      >
-        <div class="flex align-items-center justify-content-center">
-          <i
-            class="pi pi-exclamation-triangle mr-3"
-            style="font-size: 2rem"
-          />
-          <span v-if="form">
-            Are you sure you want to <b>update</b> the status of this requested stocks to <b>RECEIVED</b>?
-          </span>
-        </div>
-        <template #footer>
-          <Button
-            label="No"
-            icon="pi pi-times"
-            class="p-button-text"
-            @click="editStatusDialog = false"
-          />
-          <Button
-            label="Yes"
-            icon="pi pi-check"
-            severity="danger"
-            text
-            :disabled="formUpdateStatus.processing"
-            @click="updateStatus"
-          />
-        </template>
-      </Dialog>
-
       <!-- Cancel confirmation dialog -->
       <Dialog
         v-model:visible="cancelItemDialog"
@@ -737,7 +694,6 @@ export default {
       isUpdate: false,
       createRequestStocksDialog: false,
       editWardStocksDialog: false,
-      editStatusDialog: false,
       cancelItemDialog: false,
       search: '',
       selectedItemsUomDesc: null,
@@ -774,10 +730,6 @@ export default {
         location: null,
         requested_by: null,
         requestStockListDetails: [],
-      }),
-      formUpdateStatus: this.$inertia.form({
-        request_stock_id: null,
-        status: null,
       }),
       formWardStocks: this.$inertia.form({
         ward_stock_id: null,
@@ -947,8 +899,7 @@ export default {
         this.form.clearErrors(),
         this.form.reset(),
         this.formWardStocks.clearErrors(),
-        this.formWardStocks.reset(),
-        this.formUpdateStatus.reset()
+        this.formWardStocks.reset()
       );
     },
     fillRequestContainer() {
@@ -1000,26 +951,6 @@ export default {
           requested_qty: e.requested_qty,
         });
       });
-    },
-    editStatus(item) {
-      //   console.log(item);
-      this.editStatusDialog = true;
-      this.formUpdateStatus.request_stock_id = item.id;
-      this.formUpdateStatus.status = 'RECEIVED';
-    },
-    updateStatus() {
-      //   console.log(item);
-      //   this.formUpdateStatus.status = item;
-      //   this.formUpdateStatus.put(route('requeststocks.updatedeliverystatus', this.formUpdateStatus), {
-      //     preserveScroll: true,
-      //     onSuccess: () => {
-      //       this.requestStockId = null;
-      //       this.editStatusDialog = false;
-      //       this.cancel();
-      //       this.updateData();
-      //       this.updatedStatusMsg();
-      //     },
-      //   });
     },
     submit() {
       if (this.form.processing) {
@@ -1091,9 +1022,6 @@ export default {
     },
     updatedMsg() {
       this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Stock request updated', life: 3000 });
-    },
-    updatedStatusMsg() {
-      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Changed requested stocks status', life: 3000 });
     },
     cancelledMsg() {
       this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Stock request canceld', life: 3000 });
