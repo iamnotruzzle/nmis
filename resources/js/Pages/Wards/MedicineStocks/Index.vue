@@ -325,16 +325,6 @@
           </template>
         </Column>
         <Column
-          field="brand"
-          header="BRAND"
-          style="width: 10%"
-          sortable
-        >
-          <template #body="{ data }">
-            {{ data.brand }}
-          </template>
-        </Column>
-        <Column
           field="unit"
           header="UNIT"
           style="width: 10%"
@@ -645,28 +635,6 @@
           </small>
         </div>
         <div class="field">
-          <label for="brand">Brand</label>
-          <Dropdown
-            required="true"
-            v-model="formConsignment.brand"
-            :options="brandsList"
-            :virtualScrollerOptions="{ itemSize: 38 }"
-            filter
-            showClear
-            dataKey="id"
-            optionLabel="name"
-            optionValue="id"
-            class="w-full mb-3"
-            :class="{ 'p-invalid': formConsignment.brand == '' }"
-          />
-          <small
-            class="text-error"
-            v-if="formConsignment.errors.brand"
-          >
-            {{ formConsignment.errors.brand }}
-          </small>
-        </div>
-        <div class="field">
           <label>Item</label>
           <Dropdown
             required="true"
@@ -907,15 +875,6 @@
         dismissableMask
       >
         <div class="field">
-          <label for="brand">Brand</label>
-          <InputText
-            id="brand"
-            v-model.trim="formWardStocks.brand"
-            readonly
-            class="w-full"
-          />
-        </div>
-        <div class="field">
           <label for="item">Item</label>
           <InputText
             id="item"
@@ -1045,9 +1004,6 @@ export default {
     items: Object,
     requestedStocks: Object,
     currentWardStocks: Object,
-    currentWardStocks2: Object,
-    brands: Object,
-    typeOfCharge: Object,
     fundSource: Object,
   },
   data() {
@@ -1077,7 +1033,6 @@ export default {
       itemsList: [],
       requestStockList: [],
       currentWardStocksList: [],
-      brandsList: [],
       // stock list details
       requestStockListDetailsFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -1110,7 +1065,6 @@ export default {
       formConsignment: this.$inertia.form({
         authLocation: null,
         fund_source: null,
-        brand: null,
         cl2comb: null,
         uomcode: null,
         quantity: null,
@@ -1120,7 +1074,6 @@ export default {
       }),
       formWardStocks: this.$inertia.form({
         ward_stock_id: null,
-        brand: null,
         item: null,
         current_quantity: null,
         quantity: null,
@@ -1144,8 +1097,6 @@ export default {
     // this.rows = this.requestedStocks.per_page;
   },
   mounted() {
-    this.storeBrandsInContainer();
-
     this.storeFundSourceInContainer();
     this.storeItemsInController();
     this.storeRequestedStocksInContainer();
@@ -1160,29 +1111,12 @@ export default {
   },
   methods: {
     storeFundSourceInContainer() {
-      this.typeOfCharge.forEach((e) => {
-        this.fundSourceList.push({
-          chrgcode: e.chrgcode,
-          chrgdesc: e.chrgdesc,
-          bentypcod: e.bentypcod,
-          chrgtable: e.chrgtable,
-        });
-      });
-
       this.fundSource.forEach((e) => {
         this.fundSourceList.push({
           chrgcode: e.fsid,
           chrgdesc: e.fsName,
           bentypcod: null,
           chrgtable: null,
-        });
-      });
-    },
-    storeBrandsInContainer() {
-      this.brands.forEach((e) => {
-        this.brandsList.push({
-          id: e.id,
-          name: e.name,
         });
       });
     },
@@ -1231,22 +1165,6 @@ export default {
         this.currentWardStocksList.push({
           from: e.from,
           ward_stock_id: e.id,
-          brand: e.brand_details.name,
-          cl2comb: e.item_details.cl2comb,
-          item: e.item_details.cl2desc,
-          unit: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomdesc,
-          quantity: e.quantity,
-          expiration_date: expiration_date.toString(),
-        });
-      });
-
-      this.currentWardStocks2.forEach((e) => {
-        let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
-
-        this.currentWardStocksList.push({
-          from: e.from,
-          ward_stock_id: e.id,
-          brand: e.brand_details.name,
           cl2comb: e.item_details.cl2comb,
           item: e.item_details.cl2desc,
           unit: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomdesc,
@@ -1577,7 +1495,6 @@ export default {
       this.editWardStocksDialog = true;
 
       this.formWardStocks.ward_stock_id = data.ward_stock_id;
-      this.formWardStocks.brand = data.brand;
       this.formWardStocks.item = data.item;
       this.formWardStocks.current_quantity = data.quantity;
       this.formWardStocks.quantity = data.quantity;
