@@ -39,7 +39,8 @@ class RequestStocksController extends Controller
         $items = DB::select(
             "SELECT hclass2.cl2comb as cl2comb, hclass2.cl2desc as cl2desc, huom.uomcode as uomcode, huom.uomdesc as uomdesc FROM hclass2
                 JOIN huom ON hclass2.uomcode = huom.uomcode
-                WHERE hclass2.cl1comb LIKE '%1000-%'
+                WHERE hclass2.catID IS NOT NULL
+                AND hclass2.catID != 9
                 AND hclass2.cl2stat = 'A'
                 ORDER BY hclass2.cl2desc ASC;
             ",

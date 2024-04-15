@@ -99,10 +99,14 @@ Route::middleware(['web', 'auth', 'verified'])->group(
 
         // ward routes
         Route::resource('warddashboard', WardDashboardController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
-        // medical supplies
-        Route::resource('requeststocks', RequestStocksController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
+        // non-medicine supplies
+        Route::resource('requestmedsstocks', RequestStocksController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         Route::put('requeststocks', [RequestStocksController::class, 'updatedeliverystatus'])->name('requeststocks.updatedeliverystatus');
-        // end medical supplies
+        // end non-medicine supplies
+
+        // medicine supplies
+        Route::resource('requeststocks', RequestStocksController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
+        // end medicine supplies
 
         // tanks
         Route::resource('requesttankstocks', RequestTankStocksController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
