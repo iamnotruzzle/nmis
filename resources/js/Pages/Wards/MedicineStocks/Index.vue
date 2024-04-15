@@ -296,12 +296,6 @@
                   />
                 </div>
               </div>
-              <Button
-                label="Consignment"
-                icon="pi pi-plus"
-                iconPos="right"
-                @click="openConsignmentDialog"
-              />
             </div>
           </div>
         </template>
@@ -590,147 +584,6 @@
         </template>
       </Dialog>
 
-      <!-- Consignment -->
-      <Dialog
-        v-model:visible="consignmentDialog"
-        :modal="true"
-        class="p-fluid w-4"
-        @hide="whenDialogIsHidden"
-      >
-        <template #header>
-          <div class="text-primary text-xl font-bold">CONSIGNMENT</div>
-        </template>
-        <div class="field">
-          <label for="fundSource">Fund source</label>
-          <Dropdown
-            id="fundSource"
-            required="true"
-            v-model="formConsignment.fund_source"
-            :options="fundSourceList"
-            filter
-            showClear
-            dataKey="chrgcode"
-            optionLabel="chrgdesc"
-            optionValue="chrgcode"
-            class="w-full"
-            :class="{ 'p-invalid': formConsignment.fund_source == '' }"
-          />
-          <small
-            class="text-error"
-            v-if="formConsignment.errors.fund_source"
-          >
-            {{ formConsignment.errors.fund_source }}
-          </small>
-        </div>
-        <div class="field">
-          <label>Item</label>
-          <Dropdown
-            required="true"
-            v-model="formConsignment.cl2comb"
-            :options="itemsList"
-            :virtualScrollerOptions="{ itemSize: 38 }"
-            filter
-            optionValue="cl2comb"
-            optionLabel="cl2desc"
-            class="w-full mb-3"
-          />
-          <small
-            class="text-error"
-            v-if="formConsignment.errors.cl2comb"
-          >
-            {{ formConsignment.errors.cl2comb }}
-          </small>
-        </div>
-        <div class="field">
-          <label for="unit">Unit</label>
-          <InputText
-            id="unit"
-            v-model.trim="selectedItemsUomDesc"
-            readonly
-          />
-        </div>
-        <div class="field">
-          <label>Quantity</label>
-          <InputNumber
-            id="quantity"
-            v-model.trim="formConsignment.quantity"
-            required="true"
-            autofocus
-            :class="{ 'p-invalid': formConsignment.quantity == '' || formConsignment.quantity == null }"
-            inputId="integeronly"
-          />
-          <small
-            class="text-error"
-            v-if="formConsignment.errors.quantity"
-          >
-            {{ formConsignment.errors.quantity }}
-          </small>
-        </div>
-        <div class="field">
-          <label for="manufactured_date">Manufactured date</label>
-          <Calendar
-            v-model="formConsignment.manufactured_date"
-            dateFormat="mm-dd-yy"
-            showIcon
-            showButtonBar
-            :manualInput="false"
-            :hideOnDateTimeSelect="true"
-          />
-        </div>
-        <div class="field">
-          <label for="delivered_date">Delivered date</label>
-          <Calendar
-            v-model="formConsignment.delivered_date"
-            dateFormat="mm-dd-yy"
-            showIcon
-            showButtonBar
-            :manualInput="false"
-            :hideOnDateTimeSelect="true"
-          />
-        </div>
-        <div class="field">
-          <label for="expiration_date">Expiration date</label>
-          <Calendar
-            v-model="formConsignment.expiration_date"
-            dateFormat="mm-dd-yy"
-            showIcon
-            showButtonBar
-            :manualInput="false"
-            :hideOnDateTimeSelect="true"
-          />
-          <small
-            class="text-error"
-            v-if="formConsignment.errors.expiration_date"
-          >
-            {{ formConsignment.errors.expiration_date }}
-          </small>
-        </div>
-
-        <template #footer>
-          <Button
-            label="Cancel"
-            icon="pi pi-times"
-            severity="danger"
-            text
-            @click="cancel"
-          />
-          <Button
-            label="Save"
-            icon="pi pi-check"
-            text
-            type="submit"
-            :disabled="
-              formConsignment.processing ||
-              formConsignment.fund_source == null ||
-              formConsignment.cl2comb == null ||
-              formConsignment.quantity == null ||
-              formConsignment.expiration_date == null
-            "
-            @click="submitConsignment"
-          />
-        </template>
-      </Dialog>
-
       <!-- update ward stock dialog -->
       <Dialog
         v-model:visible="editWardStocksDialog"
@@ -883,7 +736,6 @@ export default {
       requestStockId: null,
       isUpdate: false,
       createRequestStocksDialog: false,
-      consignmentDialog: false,
       editWardStocksDialog: false,
       editStatusDialog: false,
       cancelItemDialog: false,
@@ -926,16 +778,6 @@ export default {
       formUpdateStatus: this.$inertia.form({
         request_stock_id: null,
         status: null,
-      }),
-      formConsignment: this.$inertia.form({
-        authLocation: null,
-        fund_source: null,
-        cl2comb: null,
-        uomcode: null,
-        quantity: null,
-        manufactured_date: null,
-        delivered_date: null,
-        expiration_date: null,
       }),
       formWardStocks: this.$inertia.form({
         ward_stock_id: null,
@@ -1087,11 +929,6 @@ export default {
       this.requestStockId = null;
       this.createRequestStocksDialog = true;
     },
-    openConsignmentDialog() {
-      this.formConsignment.clearErrors();
-      this.formConsignment.reset();
-      this.consignmentDialog = true;
-    },
     // when dialog is hidden, do this function
     whenDialogIsHidden() {
       this.$emit(
@@ -1218,34 +1055,6 @@ export default {
         });
       }
     },
-    submitConsignment() {
-      if (this.formConsignment.processing) {
-        return false;
-      }
-
-      this.formConsignment.authLocation = this.$page.props.authWardcode.wardcode;
-      if (
-        this.formConsignment.fund_source != null ||
-        this.formConsignment.fund_source != '' ||
-        this.formConsignment.cl2comb != null ||
-        this.formConsignment.cl2comb != '' ||
-        this.formConsignment.quantity != null ||
-        this.formConsignment.quantity != '' ||
-        this.formConsignment.quantity != 0 ||
-        this.formConsignment.expiration_date != null ||
-        this.formConsignment.expiration_date != ''
-      ) {
-        this.formConsignment.post(route('consignment.store'), {
-          preserveScroll: true,
-          onSuccess: () => {
-            this.formConsignment.reset();
-            this.cancel();
-            this.updateData();
-            this.createdMsg();
-          },
-        });
-      }
-    },
     confirmCancelItem(item) {
       //   console.log(item);
       this.requestStockId = item.id;
@@ -1270,7 +1079,6 @@ export default {
       this.isUpdate = false;
       this.createRequestStocksDialog = false;
       this.editWardStocksDialog = false;
-      this.consignmentDialog = false;
       this.targetItemDesc = null;
       this.oldQuantity = 0;
       this.form.reset();
@@ -1356,21 +1164,6 @@ export default {
     //   }
     //   this.updateData();
     // },
-    'formConsignment.cl2comb': function (val) {
-      this.selectedItemsUomDesc = null;
-
-      this.itemsList.forEach((e) => {
-        if (e.cl2comb == val) {
-          if (e.uomdesc != null) {
-            // console.log(e.uomdesc);
-            this.selectedItemsUomDesc = e.uomdesc;
-            this.formConsignment.uomcode = e.uomcode;
-          } else {
-            this.selectedItemsUomDesc = null;
-          }
-        }
-      });
-    },
   },
 };
 </script>
