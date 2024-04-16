@@ -70,7 +70,7 @@ class ItemController extends Controller
             JOIN huom as unit ON item.uomcode = unit.uomcode
             JOIN hclass1 as category ON item.cl1comb = category.cl1comb
             LEFT JOIN csrw_item_prices as price ON item.cl2comb = price.cl2comb
-            LEFT JOIN csrw_csr_stocks_med_supp as csr_stock ON csr_stock.cl2comb = item.cl2comb
+            LEFT JOIN csrw_csr_stocks as csr_stock ON csr_stock.cl2comb = item.cl2comb
             JOIN csrw_pims_categories as main_category ON item.catID = main_category.catID
             LEFT JOIN (
                 SELECT TOP 1 r.cl2comb, r.normal_stock as normal_stock, r.alert_stock, r.critical_stock

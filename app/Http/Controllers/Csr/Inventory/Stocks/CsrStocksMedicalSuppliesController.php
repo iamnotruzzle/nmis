@@ -47,7 +47,7 @@ class CsrStocksMedicalSuppliesController extends Controller
                 medsupply.quantity,
                 reoder_level.normal_stock as normal_stock, reoder_level.alert_stock, reoder_level.critical_stock,
                 medsupply.manufactured_date, medsupply.delivered_date, expiration_date
-            FROM csrw_csr_stocks_med_supp as medsupply
+            FROM csrw_csr_stocks as medsupply
             JOIN hclass2 as item ON medsupply.cl2comb = item.cl2comb
             JOIN huom as unit ON medsupply.uomcode = unit.uomcode
             JOIN hsupplier as supplier ON medsupply.suppcode = supplier.suppcode

@@ -9,7 +9,7 @@ class CsrStocksMedicalSupplies extends Model
 {
     use HasFactory;
 
-    protected $table = 'csrw_csr_stocks_med_supp';
+    protected $table = 'csrw_csr_stocks';
     // protected $primaryKey = 'cl1comb';
     // public $incrementing = false;
     // declare primary as string

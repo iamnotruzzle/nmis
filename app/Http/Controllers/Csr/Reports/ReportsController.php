@@ -30,13 +30,13 @@ class ReportsController extends Controller
                 clsb_ward.beginning_balance as ward_beginning_balance,
                 clsb_ward.ending_balance as ward_ending_balance,
                 (SELECT TOP 1 selling_price FROM csrw_item_prices WHERE cl2comb = hclass2.cl2comb ORDER BY created_at DESC) as 'selling_price',
-                SUM(csrw_csr_stocks_med_supp.quantity) as csr_quantity,
+                SUM(csrw_csr_stocks.quantity) as csr_quantity,
                 csrw_wards_stocks_med_supp.wards_quantity,
                 csrw_wards_stocks_med_supp.converted_quantity as converted_quantity,
                 csrw_patient_charge_logs.charge_quantity as consumption_quantity,
                 csrw_patient_charge_logs.charge_total as consumption_total_cost
-                FROM csrw_csr_stocks_med_supp
-                JOIN hclass2 ON csrw_csr_stocks_med_supp.cl2comb = hclass2.cl2comb
+                FROM csrw_csr_stocks
+                JOIN hclass2 ON csrw_csr_stocks.cl2comb = hclass2.cl2comb
                 LEFT JOIN (
                     SELECT ward.cl2comb, SUM(ward.quantity) as wards_quantity, SUM(ward.converted_quantity) as converted_quantity
                     FROM csrw_wards_stocks_med_supp as ward
@@ -48,8 +48,8 @@ class ReportsController extends Controller
                     FROM csrw_patient_charge_logs as charge
                     WHERE charge.[from] = 'CSR'
                     GROUP BY charge.itemcode
-                ) csrw_patient_charge_logs ON csrw_csr_stocks_med_supp.cl2comb = csrw_patient_charge_logs.itemcode
-                LEFT JOIN huom ON csrw_csr_stocks_med_supp.uomcode = huom.uomcode
+                ) csrw_patient_charge_logs ON csrw_csr_stocks.cl2comb = csrw_patient_charge_logs.itemcode
+                LEFT JOIN huom ON csrw_csr_stocks.uomcode = huom.uomcode
                 RIGHT JOIN (
                     SELECT id, cl2comb, ending_balance, beginning_balance
                     FROM csrw_location_stock_balance
@@ -77,13 +77,13 @@ class ReportsController extends Controller
                 clsb_ward.beginning_balance as ward_beginning_balance,
                 clsb_ward.ending_balance as ward_ending_balance,
                 (SELECT TOP 1 selling_price FROM csrw_item_prices WHERE cl2comb = hclass2.cl2comb ORDER BY created_at DESC) as 'selling_price',
-                SUM(csrw_csr_stocks_med_supp.quantity) as csr_quantity,
+                SUM(csrw_csr_stocks.quantity) as csr_quantity,
                 csrw_wards_stocks_med_supp.wards_quantity,
                 csrw_wards_stocks_med_supp.converted_quantity as converted_quantity,
                 csrw_patient_charge_logs.charge_quantity as consumption_quantity,
                 csrw_patient_charge_logs.charge_total as consumption_total_cost
-                FROM csrw_csr_stocks_med_supp
-                JOIN hclass2 ON csrw_csr_stocks_med_supp.cl2comb = hclass2.cl2comb
+                FROM csrw_csr_stocks
+                JOIN hclass2 ON csrw_csr_stocks.cl2comb = hclass2.cl2comb
                 LEFT JOIN (
                     SELECT ward.cl2comb, SUM(ward.quantity) as wards_quantity, SUM(ward.converted_quantity) as converted_quantity
                     FROM csrw_wards_stocks_med_supp as ward
@@ -95,8 +95,8 @@ class ReportsController extends Controller
                     FROM csrw_patient_charge_logs as charge
                     WHERE charge.[from] = 'CSR'
                     GROUP BY charge.itemcode
-                ) csrw_patient_charge_logs ON csrw_csr_stocks_med_supp.cl2comb = csrw_patient_charge_logs.itemcode
-                LEFT JOIN huom ON csrw_csr_stocks_med_supp.uomcode = huom.uomcode
+                ) csrw_patient_charge_logs ON csrw_csr_stocks.cl2comb = csrw_patient_charge_logs.itemcode
+                LEFT JOIN huom ON csrw_csr_stocks.uomcode = huom.uomcode
                 RIGHT JOIN (
                     SELECT id, cl2comb, ending_balance, beginning_balance
                     FROM csrw_location_stock_balance

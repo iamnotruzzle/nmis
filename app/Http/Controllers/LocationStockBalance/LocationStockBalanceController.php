@@ -34,7 +34,7 @@ class LocationStockBalanceController extends Controller
         if ($authWardcode->wardcode == 'CSR') {
             $currentStocks = DB::select(
                 "SELECT clsb_csr.cl2comb as clsb_cl2comb, hc.cl2comb as hc_cl2comb, hc.cl2desc
-                FROM csrw_csr_stocks_med_supp as csr
+                FROM csrw_csr_stocks as csr
                 JOIN hclass2 as hc on csr.cl2comb = hc.cl2comb
                 LEFT JOIN (
                     SELECT id, cl2comb, ending_balance, beginning_balance
