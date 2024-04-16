@@ -522,7 +522,7 @@
               showGridlines
               @row-click="onRowClick"
               scrollable
-              scrollHeight="580px"
+              scrollHeight="680px"
             >
               <template #header>
                 <div class="flex flex-wrap align-items-center justify-content-between gap-2">
