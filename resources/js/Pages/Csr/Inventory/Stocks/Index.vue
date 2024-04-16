@@ -44,11 +44,16 @@
               <div>
                 <Button
                   label="Import delivery"
+                  icon="pi pi-angle-up"
+                  iconPos="right"
                   @click="openImportDeliveryDialog"
                 />
                 <Button
                   class="ml-2"
                   label="Add delivery"
+                  severity="success"
+                  icon="pi pi-plus"
+                  iconPos="right"
                   @click="openAddDeliveryDialog"
                 />
               </div>
