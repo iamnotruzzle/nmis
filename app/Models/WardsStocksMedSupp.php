@@ -45,7 +45,7 @@ class WardsStocksMedSupp extends Model
 
     public function stocks_details()
     {
-        return $this->hasOne(CsrStocksMedicalSupplies::class, 'stock_id', 'id');
+        return $this->hasOne(CsrStocks::class, 'stock_id', 'id');
     }
 
     public function location()

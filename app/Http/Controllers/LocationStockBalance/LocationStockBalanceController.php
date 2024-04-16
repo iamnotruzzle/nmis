@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\LocationStockBalance;
 
 use App\Http\Controllers\Controller;
-use App\Models\CsrStocksMedicalSupplies;
+use App\Models\CsrStocks;
 use App\Models\LocationStockBalance;
 use App\Rules\StockBalanceRule;
 use Carbon\Carbon;

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CsrStocksMedicalSupplies extends Model
+class CsrStocks extends Model
 {
     use HasFactory;
 
@@ -56,7 +56,7 @@ class CsrStocksMedicalSupplies extends Model
 
     public function stockLogs()
     {
-        return $this->hasOne(CsrStocksMedicalSuppliesLogs::class, 'id', 'csrw_stocks_id');
+        return $this->hasOne(CsrStocksLogs::class, 'id', 'csrw_stocks_id');
     }
 
     public function ward_stocks()

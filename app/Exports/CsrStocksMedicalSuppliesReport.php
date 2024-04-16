@@ -15,7 +15,7 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Style;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 
-class CsrStocksMedicalSuppliesReport implements FromArray, WithHeadings, ShouldAutoSize, WithStyles, WithEvents
+class CsrStocksReport implements FromArray, WithHeadings, ShouldAutoSize, WithStyles, WithEvents
 {
     protected $data;
 

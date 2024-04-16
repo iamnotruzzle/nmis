@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Csr\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
-use App\Models\CsrStocksMedicalSupplies;
-use App\Models\CsrStocksMedicalSuppliesLogs;
+use App\Models\CsrStocks;
+use App\Models\CsrStocksLogs;
 use App\Models\FundSource;
 use App\Models\Item;
 use App\Models\RequestStocks;
@@ -26,7 +26,7 @@ class DashboardController extends Controller
         $cancelled_requests = RequestStocks::where('status', 'CANCELLED')->count();
         $completed_requests = RequestStocks::where('status', 'RECEIVED')->count();
 
-        $about_to_expire = CsrStocksMedicalSupplies::with('itemDetail:cl2comb,cl2desc')
+        $about_to_expire = CsrStocks::with('itemDetail:cl2comb,cl2desc')
             ->orderBy('expiration_date', 'ASC')->limit(10)->get();
 
         return Inertia::render('Csr/Dashboard/Index', [
@@ -44,7 +44,7 @@ class DashboardController extends Controller
         return Redirect::route('csrdashboard.index');
     }
 
-    // public function update(CsrStocksMedicalSupplies $csrdashboard, Request $request)
+    // public function update(CsrStocks $csrdashboard, Request $request)
     // {
     //     // dd($csrdashboard);
     //     $entry_by = Auth::user()->employeeid;
@@ -60,7 +60,7 @@ class DashboardController extends Controller
     //         'remarks' => 'required'
     //     ]);
 
-    //     $prevStockDetails = CsrStocksMedicalSupplies::where('id', $request->stockId)->first();
+    //     $prevStockDetails = CsrStocks::where('id', $request->stockId)->first();
 
     //     $updated = $csrstock->update([
     //         'ris_no' => $request->ris_no,
@@ -75,7 +75,7 @@ class DashboardController extends Controller
     //         'expiration_date' => $request->expiration_date == null ? null : Carbon::parse($request->expiration_date)->setTimezone('Asia/Manila'),
     //     ]);
 
-    //     $stockLogs = CsrStocksMedicalSuppliesLogs::create([
+    //     $stockLogs = CsrStocksLogs::create([
     //         'stock_id' => $prevStockDetails->id,
     //         'ris_no' => $prevStockDetails->ris_no,
     //         'suppcode' => $prevStockDetails->suppcode,
@@ -96,7 +96,7 @@ class DashboardController extends Controller
     //     return Redirect::route('csrdashboard.index');
     // }
 
-    // public function destroy(CsrStocksMedicalSupplies $csrdashboard, Request $request)
+    // public function destroy(CsrStocks $csrdashboard, Request $request)
     // {
     //     $request->validate([
     //         'remarks' => 'required'
@@ -104,11 +104,11 @@ class DashboardController extends Controller
 
     //     $entry_by = Auth::user()->employeeid;
 
-    //     $prevStockDetails = CsrStocksMedicalSupplies::where('id', $csrstock->id)->first();
+    //     $prevStockDetails = CsrStocks::where('id', $csrstock->id)->first();
 
     //     $csrstock->delete();
 
-    //     $stockLogs = CsrStocksMedicalSuppliesLogs::create([
+    //     $stockLogs = CsrStocksLogs::create([
     //         'stock_id' => $prevStockDetails->id,
     //         'ris_no' => $prevStockDetails->ris_no,
     //         'suppcode' => $prevStockDetails->suppcode,

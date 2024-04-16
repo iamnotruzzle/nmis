@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Csr\IssueItems;
 
 use App\Events\ItemIssued;
 use App\Http\Controllers\Controller;
-use App\Models\CsrStocksMedicalSupplies;
+use App\Models\CsrStocks;
 use App\Models\Item;
 use App\Models\RequestStocks;
 use App\Models\RequestStocksDetails;
@@ -116,7 +116,7 @@ class IssueItemController extends Controller
             ]);
 
             // check current stock of the item
-            $current_stock = CsrStocksMedicalSupplies::where('cl2comb', $rsc['cl2comb'])
+            $current_stock = CsrStocks::where('cl2comb', $rsc['cl2comb'])
                 ->whereDate('expiration_date', '>', Carbon::today())
                 ->sum('quantity');
 
@@ -128,7 +128,7 @@ class IssueItemController extends Controller
             while ($remaining_qty_to_be_issued > 0) {
 
                 // get the the specific item that is first to expire and quantity != 0
-                $stock = CsrStocksMedicalSupplies::where('cl2comb', $rsc['cl2comb'])
+                $stock = CsrStocks::where('cl2comb', $rsc['cl2comb'])
                     ->where('quantity', '!=', 0)
                     ->whereDate('expiration_date', '>', Carbon::today())
                     ->orderBy('expiration_date')
@@ -136,7 +136,7 @@ class IssueItemController extends Controller
 
                 // execute if block when condition is met then do the while loop again
                 if ($stock->quantity >= $remaining_qty_to_be_issued) {
-                    $row = CsrStocksMedicalSupplies::where('id', $stock->id)->first();
+                    $row = CsrStocks::where('id', $stock->id)->first();
                     $row_to_change_status = RequestStocksDetails::where('id', $rsc['request_stocks_details_id'])->first();
 
                     $issueditem = WardsStocksMedSupp::create([
@@ -172,7 +172,7 @@ class IssueItemController extends Controller
                 } else {
                     $remaining_qty_to_be_issued = $remaining_qty_to_be_issued - $stock->quantity;
 
-                    $row = CsrStocksMedicalSupplies::where('id', $stock->id)->first();
+                    $row = CsrStocks::where('id', $stock->id)->first();
                     $row_to_change_status = RequestStocksDetails::where('id', $rsc['request_stocks_details_id'])->first();
 
                     $issueditem = WardsStocksMedSupp::create([
@@ -235,7 +235,7 @@ class IssueItemController extends Controller
         // loop through the wards stocks
         foreach ($wardStocks as $ws) {
             // get the stock where the stock id is true
-            $stock = CsrStocksMedicalSupplies::where('id', $ws['stock_id'])->first();
+            $stock = CsrStocks::where('id', $ws['stock_id'])->first();
 
             // update the stocks quantity to it's original quantity
             $stock->update([
@@ -262,7 +262,7 @@ class IssueItemController extends Controller
             ]);
 
             // check current stock of the item
-            $current_stock = CsrStocksMedicalSupplies::where('cl2comb', $rsc['cl2comb'])
+            $current_stock = CsrStocks::where('cl2comb', $rsc['cl2comb'])
                 ->sum('quantity');
 
             // check the current value of issue_qty after the loop
@@ -274,7 +274,7 @@ class IssueItemController extends Controller
 
         foreach ($requestStocksContainer as $rsc) {
             // check current stock of the item
-            $current_stock = CsrStocksMedicalSupplies::where('cl2comb', $rsc['cl2comb'])
+            $current_stock = CsrStocks::where('cl2comb', $rsc['cl2comb'])
                 ->sum('quantity');
 
             // check the current value of issued_qty after the loop
@@ -285,14 +285,14 @@ class IssueItemController extends Controller
             while ($remaining_qty_to_be_issued > 0) {
 
                 // get the the specific item that is first to expire and quantity != 0
-                $stock = CsrStocksMedicalSupplies::where('cl2comb', $rsc['cl2comb'])
+                $stock = CsrStocks::where('cl2comb', $rsc['cl2comb'])
                     ->where('quantity', '!=', 0)
                     ->orderBy('expiration_date')
                     ->first();
 
                 // execute if block when condition is met then do the while loop again
                 if ($stock->quantity >= $remaining_qty_to_be_issued) {
-                    $row = CsrStocksMedicalSupplies::where('id', $stock->id)->first();
+                    $row = CsrStocks::where('id', $stock->id)->first();
                     $row_to_change_status = RequestStocksDetails::where('id', $rsc['request_stocks_details_id'])->first();
 
                     $issueditem = WardsStocksMedSupp::create([
@@ -328,7 +328,7 @@ class IssueItemController extends Controller
                 } else {
                     $remaining_qty_to_be_issued = $remaining_qty_to_be_issued - $stock->quantity;
 
-                    $row = CsrStocksMedicalSupplies::where('id', $stock->id)->first();
+                    $row = CsrStocks::where('id', $stock->id)->first();
                     $row_to_change_status = RequestStocksDetails::where('id', $rsc['request_stocks_details_id'])->first();
 
                     $issueditem = WardsStocksMedSupp::create([

@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Csr\Inventory\Stocks;
 
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
-use App\Models\CsrStocksMedicalSupplies;
-use App\Models\CsrStocksMedicalSuppliesLogs;
+use App\Models\CsrStocks;
+use App\Models\CsrStocksLogs;
 use App\Models\FundSource;
 use App\Models\Item;
 use App\Models\ItemPrices;
@@ -23,7 +23,7 @@ use Inertia\Inertia;
 use mysqli;
 use PDO;
 
-class CsrStocksMedicalSuppliesController extends Controller
+class CsrStocksControllers extends Controller
 {
     public function index(Request $request)
     {
@@ -64,7 +64,7 @@ class CsrStocksMedicalSuppliesController extends Controller
         );
         //  ORDER BY medsupply.expiration_date ASC;"
 
-        $totalStocks = CsrStocksMedicalSupplies::with('itemDetail')
+        $totalStocks = CsrStocks::with('itemDetail')
             ->where('expiration_date', '>', Carbon::now()->setTimezone('Asia/Manila'))
             ->groupBy('cl2comb')
             ->select('cl2comb', DB::raw('SUM(quantity) as total_quantity'))
@@ -172,7 +172,7 @@ class CsrStocksMedicalSuppliesController extends Controller
 
             foreach ($deliveryDetails as $r) {
                 // dd($r['supplier']['suppcode']);
-                $stock = CsrStocksMedicalSupplies::create([
+                $stock = CsrStocks::create([
                     'ris_no' => $r['risid'],
                     'cl2comb' => $r['cl2comb'],
                     'uomcode' => $r['uomcode'],
@@ -188,7 +188,7 @@ class CsrStocksMedicalSuppliesController extends Controller
                     'selling_price' => $r['sellingPrice'],
                 ]);
 
-                $stockLog = CsrStocksMedicalSuppliesLogs::create([
+                $stockLog = CsrStocksLogs::create([
                     'stock_id' => $stock->id,
                     'ris_no' => $r['risid'],
                     'cl2comb' => $r['cl2comb'],
@@ -222,7 +222,7 @@ class CsrStocksMedicalSuppliesController extends Controller
     }
 
 
-    public function update(CsrStocksMedicalSupplies $csrstock, Request $request)
+    public function update(CsrStocks $csrstock, Request $request)
     {
         $entry_by = Auth::user()->employeeid;
 
@@ -233,7 +233,7 @@ class CsrStocksMedicalSuppliesController extends Controller
             'remarks' => 'required'
         ]);
 
-        $prevStockDetails = CsrStocksMedicalSupplies::where('id', $csrstock->id)->first();
+        $prevStockDetails = CsrStocks::where('id', $csrstock->id)->first();
 
         $updated = $csrstock->update([
             'suppcode' => $request->suppcode,
@@ -247,7 +247,7 @@ class CsrStocksMedicalSuppliesController extends Controller
             'remarks' => $request->remarks,
         ]);
 
-        $stockLog = CsrStocksMedicalSuppliesLogs::create([
+        $stockLog = CsrStocksLogs::create([
             'stock_id' => $prevStockDetails->id,
             'ris_no' => $prevStockDetails->ris_no,
             'cl2comb' => $prevStockDetails->cl2comb,
@@ -270,7 +270,7 @@ class CsrStocksMedicalSuppliesController extends Controller
         return redirect()->back();
     }
 
-    public function destroy(CsrStocksMedicalSupplies $csrstock, Request $request)
+    public function destroy(CsrStocks $csrstock, Request $request)
     {
         // $request->validate([
         //     'remarks' => 'required'
@@ -278,11 +278,11 @@ class CsrStocksMedicalSuppliesController extends Controller
 
         // $entry_by = Auth::user()->employeeid;
 
-        // $prevStockDetails = CsrStocksMedicalSupplies::where('id', $csrstock->id)->first();
+        // $prevStockDetails = CsrStocks::where('id', $csrstock->id)->first();
 
         // $csrstock->delete();
 
-        // $stockLogs = CsrStocksMedicalSuppliesLogs::create([
+        // $stockLogs = CsrStocksLogs::create([
         //     'stock_id' => $prevStockDetails->id,
         //     'ris_no' => $prevStockDetails->ris_no,
         //     'suppcode' => $prevStockDetails->suppcode,

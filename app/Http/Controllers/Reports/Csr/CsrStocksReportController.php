@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Reports\Csr;
 
-use App\Exports\CsrStocksMedicalSuppliesReport;
+use App\Exports\CsrStocksReport;
 use App\Http\Controllers\Controller;
-use App\Models\CsrStocksMedicalSupplies;
+use App\Models\CsrStocks;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
-class CsrStocksMedicalSuppliesReportController extends Controller
+class CsrStocksReportController extends Controller
 {
     public function export(Request $request)
     {
@@ -139,6 +139,6 @@ class CsrStocksMedicalSuppliesReportController extends Controller
         }
         // dd($reports);
 
-        return Excel::download(new CsrStocksMedicalSuppliesReport($reports), 'report.xlsx');
+        return Excel::download(new CsrStocksReport($reports), 'report.xlsx');
     }
 }
