@@ -45,7 +45,7 @@ class LocationStockBalanceController extends Controller
         } else {
             $currentStocks =  DB::select(
                 "SELECT clsb_ward.cl2comb as clsb_cl2comb, hc.cl2comb as hc_cl2comb, hc.cl2desc
-                    FROM csrw_wards_stocks_med_supp as ward
+                    FROM csrw_wards_stocks as ward
                     JOIN hclass2 as hc on ward.cl2comb = hc.cl2comb
                     left JOIN (
                         SELECT id, cl2comb, ending_balance, beginning_balance

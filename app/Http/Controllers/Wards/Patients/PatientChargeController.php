@@ -56,21 +56,21 @@ class PatientChargeController extends Controller
                     hclass2.cl2comb,
                     hclass2.cl2desc,
                     hclass2.uomcode,
-                    SUM(csrw_wards_stocks_med_supp.quantity) as quantity,
+                    SUM(csrw_wards_stocks.quantity) as quantity,
                     (
                         SELECT TOP 1 selling_price
                         FROM csrw_item_prices
-                        WHERE cl2comb = csrw_wards_stocks_med_supp.cl2comb
+                        WHERE cl2comb = csrw_wards_stocks.cl2comb
                         ORDER BY created_at DESC
                     ) as price
                 FROM hclass2
-                JOIN csrw_wards_stocks_med_supp ON csrw_wards_stocks_med_supp.cl2comb = hclass2.cl2comb
-                JOIN csrw_request_stocks ON csrw_request_stocks.id = csrw_wards_stocks_med_supp.request_stocks_id
-                WHERE csrw_wards_stocks_med_supp.location = '" . $wardcode . "'
-                    AND csrw_wards_stocks_med_supp.expiration_date > GETDATE()
+                JOIN csrw_wards_stocks ON csrw_wards_stocks.cl2comb = hclass2.cl2comb
+                JOIN csrw_request_stocks ON csrw_request_stocks.id = csrw_wards_stocks.request_stocks_id
+                WHERE csrw_wards_stocks.location = '" . $wardcode . "'
+                    AND csrw_wards_stocks.expiration_date > GETDATE()
                     AND csrw_request_stocks.status = 'RECEIVED'
                     AND (hclass2.catID = 1 OR hclass2.catID = 9)
-                GROUP BY hclass2.cl2comb, hclass2.cl2desc, hclass2.uomcode, csrw_wards_stocks_med_supp.cl2comb;"
+                GROUP BY hclass2.cl2comb, hclass2.cl2desc, hclass2.uomcode, csrw_wards_stocks.cl2comb;"
         );
 
         $stocksConvertedAndConsignment = DB::select(
@@ -78,17 +78,17 @@ class PatientChargeController extends Controller
                     hclass2.cl2comb,
                     hclass2.cl2desc,
                     hclass2.uomcode,
-                    SUM(csrw_wards_stocks_med_supp.quantity) as quantity,
-                    (SELECT TOP 1 selling_price FROM csrw_item_prices WHERE cl2comb = csrw_wards_stocks_med_supp.cl2comb ORDER BY created_at DESC) as price
+                    SUM(csrw_wards_stocks.quantity) as quantity,
+                    (SELECT TOP 1 selling_price FROM csrw_item_prices WHERE cl2comb = csrw_wards_stocks.cl2comb ORDER BY created_at DESC) as price
                 FROM hclass2
-                JOIN csrw_wards_stocks_med_supp ON csrw_wards_stocks_med_supp.cl2comb = hclass2.cl2comb
-                WHERE csrw_wards_stocks_med_supp.location = '" . $wardcode . "'
-                    AND csrw_wards_stocks_med_supp.expiration_date > GETDATE()
+                JOIN csrw_wards_stocks ON csrw_wards_stocks.cl2comb = hclass2.cl2comb
+                WHERE csrw_wards_stocks.location = '" . $wardcode . "'
+                    AND csrw_wards_stocks.expiration_date > GETDATE()
                     AND (
-                        (csrw_wards_stocks_med_supp.[from] = 'CSR' AND csrw_wards_stocks_med_supp.is_converted = 'y')
-                        OR csrw_wards_stocks_med_supp.[from] = 'CONSIGNMENT'
+                        (csrw_wards_stocks.[from] = 'CSR' AND csrw_wards_stocks.is_converted = 'y')
+                        OR csrw_wards_stocks.[from] = 'CONSIGNMENT'
                     )
-                GROUP BY hclass2.cl2comb, hclass2.cl2desc, hclass2.uomcode, csrw_wards_stocks_med_supp.cl2comb;"
+                GROUP BY hclass2.cl2comb, hclass2.cl2desc, hclass2.uomcode, csrw_wards_stocks.cl2comb;"
         );
 
         // dd($stocksFromCsr);

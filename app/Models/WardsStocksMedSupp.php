@@ -11,7 +11,7 @@ class WardsStocksMedSupp extends Model
 {
     use HasFactory;
 
-    protected $table = 'csrw_wards_stocks_med_supp';
+    protected $table = 'csrw_wards_stocks';
 
     protected $fillable = [
         'id',
