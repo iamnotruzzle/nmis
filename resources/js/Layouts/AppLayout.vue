@@ -148,7 +148,7 @@ export default {
               icon: 'bi-journal-check',
               to: 'requeststocks',
               prefix: 'requeststocks',
-              comp: 'Wards/Stocks/Index',
+              comp: 'Wards/RequestStocks/Index',
             },
             {
               label: 'Deliveries',

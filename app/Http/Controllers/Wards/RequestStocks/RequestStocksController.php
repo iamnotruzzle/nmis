@@ -96,7 +96,7 @@ class RequestStocksController extends Controller
             ->where('chrgtable', 'NONDR')
             ->get(['chrgcode', 'chrgdesc', 'bentypcod', 'chrgtable']);
 
-        return Inertia::render('Wards/Stocks/Index', [
+        return Inertia::render('Wards/RequestStocks/Index', [
             'items' => $items,
             'requestedStocks' => $requestedStocks,
             'authWardcode' => $authWardcode,
