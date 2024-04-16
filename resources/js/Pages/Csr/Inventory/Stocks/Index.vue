@@ -42,10 +42,8 @@
                 </div>
               </div>
               <Button
-                label="Add deliveries"
-                icon="pi pi-plus"
-                iconPos="right"
-                @click="openCreateItemDialog"
+                label="Import delivery"
+                @click="openImportDeliveryDialog"
               />
             </div>
           </div>
@@ -306,7 +304,7 @@
 
       <!-- create delivery details dialog -->
       <Dialog
-        v-model:visible="createStockDialog"
+        v-model:visible="importDeliveryDialog"
         :modal="true"
         class="p-fluid w-11 overflow-hidden"
         :style="{ height: '90%' }"
@@ -314,7 +312,7 @@
         :draggable="false"
       >
         <template #header>
-          <div class="text-primary text-xl font-bold">DELIVERIES</div>
+          <div class="text-primary text-xl font-bold">IMPORT DELIVERY</div>
           <!-- <div class="field">
             <label>RIS no.</label>
             <InputText
@@ -1163,7 +1161,7 @@ export default {
       stockId: null,
       isUpdate: false,
       isUpdateBrand: false,
-      createStockDialog: false,
+      importDeliveryDialog: false,
       updateStockDialog: false,
       createBrandDialog: false,
       deleteBrandDialog: false,
@@ -1646,12 +1644,12 @@ export default {
         },
       });
     },
-    openCreateItemDialog() {
+    openImportDeliveryDialog() {
       this.isUpdate = false;
       this.form.clearErrors();
       this.form.reset();
       this.stockId = null;
-      this.createStockDialog = true;
+      this.importDeliveryDialog = true;
     },
     // emit close dialog
     clickOutsideDialog() {
@@ -1829,7 +1827,7 @@ export default {
             preserveScroll: true,
             onSuccess: () => {
               this.stockId = null;
-              this.createStockDialog = false;
+              this.importDeliveryDialog = false;
               this.cancel();
               this.updateData();
               this.createdMsg();
@@ -1842,7 +1840,7 @@ export default {
       this.stockId = null;
       this.isUpdate = false;
       this.isUpdateBrand = false;
-      this.createStockDialog = false;
+      this.importDeliveryDialog = false;
       this.createBrandDialog = false;
       this.disableSearchRisInput = false;
       this.form.reset();
