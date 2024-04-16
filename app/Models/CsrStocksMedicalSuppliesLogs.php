@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class CsrStocksMedicalSuppliesLogs extends Model
 {
     use HasFactory;
-    protected $table = 'csrw_csr_stocks_med_supp_logs';
+    protected $table = 'csrw_csr_stocks_logs';
 
     protected $fillable = [
         'id',
