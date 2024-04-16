@@ -105,7 +105,7 @@ Route::middleware(['web', 'auth', 'verified'])->group(
         // end non-medicine supplies
 
         // medicine supplies
-        Route::resource('requestmedsstocks', RequestStocksController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('requestmedsstocks', RequestMedsController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         // end medicine supplies
 
         // tanks

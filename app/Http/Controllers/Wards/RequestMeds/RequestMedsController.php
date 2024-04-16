@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
-class RequestStocksController extends Controller
+class RequestMedsController extends Controller
 {
     public function index()
     {

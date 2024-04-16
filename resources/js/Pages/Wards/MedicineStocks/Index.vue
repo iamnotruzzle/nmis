@@ -9,16 +9,18 @@
             asc = 1
             desc =-1
         -->
+
       <div class="mb-2">
         <Link
           href="requeststocks"
           class="text-2xl my-link"
-          >OTHER ITEMS
+        >
+          OTHER ITEMS
         </Link>
 
         <Link
           href="requestmedsstocks"
-          class="text-2xl border-bottom-2 mr-2 font-semibold"
+          class="text-2xl border-bottom-2 font-semibold"
         >
           MEDICINE
         </Link>
@@ -30,6 +32,7 @@
           TANKS
         </Link>
       </div>
+
       <DataTable
         class="p-datatable-sm"
         v-model:expandedRows="expandedRow"
@@ -963,7 +966,7 @@ export default {
       this.form.requestStockListDetails = this.requestStockListDetails;
 
       if (this.isUpdate) {
-        this.form.put(route('requeststocks.update', this.requestStockId), {
+        this.form.put(route('requestmedsstocks.update', this.requestStockId), {
           preserveScroll: true,
           onSuccess: () => {
             this.requestStockId = null;
@@ -974,7 +977,7 @@ export default {
           },
         });
       } else {
-        this.form.post(route('requeststocks.store'), {
+        this.form.post(route('requestmedsstocks.store'), {
           preserveScroll: true,
           onSuccess: () => {
             this.requestStockId = null;
@@ -992,7 +995,7 @@ export default {
       this.cancelItemDialog = true;
     },
     cancelItem() {
-      this.form.delete(route('requeststocks.destroy', this.requestStockId), {
+      this.form.delete(route('requestmedsstocks.destroy', this.requestStockId), {
         preserveScroll: true,
         onSuccess: () => {
           this.requestStockList = [];
