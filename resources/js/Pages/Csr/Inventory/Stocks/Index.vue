@@ -47,6 +47,7 @@
                   @click="openImportDeliveryDialog"
                 />
                 <Button
+                  class="ml-2"
                   label="Add delivery"
                   @click="openAddDeliveryDialog"
                 />
@@ -641,7 +642,7 @@
         v-model:visible="addDeliveryDialog"
         :modal="true"
         class="p-fluid overflow-hidden"
-        :style="{ width: '450px' }"
+        :style="{ width: '550px' }"
         @hide="clickOutsideDialog"
         :draggable="false"
       >
@@ -650,30 +651,14 @@
         </template>
 
         <div class="field">
-          <div class="flex justify-content-between align-items-center">
+          <div class="flex align-content-center">
             <label>RIS no.</label>
-            <Button
-              icon="pi pi-refresh"
-              severity="success"
-              text
-              rounded
-              aria-label="Cancel"
-              class="p-0 m-0"
-              @click="resetDeliveryDialog"
-            />
+            <span class="ml-2 text-error">*</span>
           </div>
           <InputText
-            v-model.trim="form.searchRis"
+            v-model.trim="formAddDelivery.ris_no"
             autofocus
-            @keyup.enter="fillDeliveriesContainer"
-            :readonly="disableSearchRisInput == true"
           />
-          <small
-            v-if="deliveryExist == true"
-            class="text-error text-lg font-semibold"
-          >
-            Delivery already exist
-          </small>
         </div>
         <div class="field">
           <div class="flex align-content-center">
@@ -682,11 +667,12 @@
           </div>
           <Dropdown
             required="true"
-            v-model="formAdditional.supplier"
+            v-model="formAddDelivery.supplier"
             :options="suppliersList"
             :virtualScrollerOptions="{ itemSize: 38 }"
             filter
             dataKey="suppcode"
+            optionValue="suppcode"
             optionLabel="suppname"
             class="w-full"
           />
@@ -694,19 +680,35 @@
         <div class="field">
           <div class="flex align-content-center">
             <label>Fund source</label>
+            <span class="ml-2 text-error">*</span>
           </div>
-          <InputText
-            v-model="formAdditional.fsName"
-            readonly
+          <Dropdown
+            required="true"
+            v-model="formAddDelivery.fund_source"
+            :options="fundSourceList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
+            filter
+            dataKey="chrgcode"
+            optionValue="chrgcode"
+            optionLabel="chrgdesc"
+            class="w-full"
           />
         </div>
         <div class="field">
           <div class="flex align-content-center">
             <label>Item</label>
+            <span class="ml-2 text-error">*</span>
           </div>
-          <InputText
-            v-model="formAdditional.cl2desc"
-            readonly
+          <Dropdown
+            required="true"
+            v-model="formAddDelivery.cl2comb"
+            :options="itemsList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
+            filter
+            dataKey="cl2comb"
+            optionValue="cl2comb"
+            optionLabel="cl2desc"
+            class="w-full"
           />
         </div>
         <div class="field">
@@ -1498,6 +1500,9 @@ export default {
       }),
       formAddDelivery: this.$inertia.form({
         ris_no: null,
+        supplier: null,
+        fund_source: null,
+        cl2comb: null,
       }),
       formBrand: this.$inertia.form({
         id: null,
