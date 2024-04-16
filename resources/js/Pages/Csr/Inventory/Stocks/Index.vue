@@ -712,36 +712,27 @@
           />
         </div>
         <div class="field">
-          <div class="">
-            <label>Unit</label>
-          </div>
-          <InputText
-            id="unit"
-            v-model.trim="formAdditional.uomdesc"
-            readonly
-          />
-        </div>
-        <div class="field">
           <div class="flex align-content-center">
             <label>Brand</label>
             <span class="ml-2 text-error">*</span>
           </div>
           <Dropdown
             required="true"
-            v-model="formAdditional.brand"
+            v-model="formAddDelivery.brand"
             :options="brandDropDownList"
             :virtualScrollerOptions="{ itemSize: 38 }"
             filter
             dataKey="id"
+            optionValue="id"
             optionLabel="name"
             class="w-full mb-3"
           />
         </div>
-        <div class="field flex flex-row justify-space-between">
+        <div class="field flex flex-row justify-content-between">
           <div>
             <label for="manufactured_date">Manufactured date</label>
             <Calendar
-              v-model="formAdditional.manufactured_date"
+              v-model="formAddDelivery.manufactured_date"
               dateFormat="mm-dd-yy"
               showIcon
               showButtonBar
@@ -750,12 +741,10 @@
             />
           </div>
 
-          <div class="mx-2"></div>
-
           <div>
             <label for="delivered_date">Delivered date</label>
             <Calendar
-              v-model="formAdditional.delivered_date"
+              v-model="formAddDelivery.delivered_date"
               dateFormat="mm-dd-yy"
               showIcon
               showButtonBar
@@ -771,7 +760,7 @@
           </div>
           <Calendar
             required="true"
-            v-model="formAdditional.expiration_date"
+            v-model="formAddDelivery.expiration_date"
             dateFormat="mm-dd-yy"
             showIcon
             showButtonBar
@@ -783,10 +772,11 @@
         <div class="field">
           <div class="flex align-content-center">
             <label>Quantity</label>
+            <span class="ml-2 text-error">*</span>
           </div>
           <InputNumber
             required="true"
-            v-model.trim="formAdditional.quantity"
+            v-model.trim="formAddDelivery.quantity"
             autofocus
             inputId="integeronly"
             readonly
@@ -796,17 +786,15 @@
           <div>
             <div class="flex align-content-center">
               <label>Acquisition price</label>
+              <span class="ml-2 text-error">*</span>
             </div>
             <InputNumber
               required="true"
-              v-model.trim="formAdditional.acquisitionPrice"
+              v-model.trim="formAddDelivery.acquisitionPrice"
               autofocus
               :maxFractionDigits="2"
-              readonly
             />
           </div>
-
-          <div class="mx-2"></div>
 
           <div>
             <div class="flex align-content-center">
@@ -816,7 +804,7 @@
             <InputText
               required="true"
               type="number"
-              v-model.trim="formAdditional.markupPercentage"
+              v-model.trim="formAddDelivery.markupPercentage"
               autofocus
               @keydown="restrictNonNumeric"
             />
@@ -825,6 +813,7 @@
         <div class="field">
           <div class="flex align-content-center">
             <label>Selling price</label>
+            <span class="ml-2 text-error">*</span>
           </div>
           <InputNumber
             required="true"
@@ -1503,6 +1492,13 @@ export default {
         supplier: null,
         fund_source: null,
         cl2comb: null,
+        brand: null,
+        manufactured_date: null,
+        delivered_date: null,
+        expiration_date: null,
+        quantity: null,
+        acquisitionPrice: null,
+        markupPercentage: null,
       }),
       formBrand: this.$inertia.form({
         id: null,
