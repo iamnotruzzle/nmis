@@ -6,8 +6,8 @@
 // https://github.com/primefaces/primevue-sass-theme/tree/main/themes
 // @import 'primevue/resources/themes/lara-dark-indigo/theme.css'; // default theme
 
-// @import 'primevue/resources/themes/aura-light-green/theme.css'; // light theme
-@import 'primevue/resources/themes/aura-dark-green/theme.css'; // dark theme
+@import 'primevue/resources/themes/aura-light-indigo/theme.css'; // light theme
+// @import 'primevue/resources/themes/aura-dark-indigo/theme.css'; // dark theme
 @import '~primevue/resources/primevue.min.css'; // core css
 @import '~primeicons/primeicons.css'; // icons
 @import '~primeflex/primeflex.min.css'; // flex
@@ -21,10 +21,10 @@
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
 
-*::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.68);
-  outline: 1px solid rgba(0, 0, 0, 0.68);
-}
+// *::-webkit-scrollbar-thumb {
+//   background-color: rgba(0, 0, 0, 0.68);
+//   outline: 1px solid rgba(0, 0, 0, 0.68);
+// }
 
 .layout-sidebar::-webkit-scrollbar,
 .layout-sidebar::-webkit-scrollbar-track,

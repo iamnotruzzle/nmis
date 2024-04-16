@@ -1,11 +1,56 @@
 // Suggested location to add your overrides so that migration would be easy by just updating the SASS folder in the future
 
-.text-error {
-  color: #ff4032;
-}
-
 // .layout-sidebar,
 // .layout-topbar {
 //   //   background-color: #5a57ff;
 //   //   color: white;
 // }
+
+.text-error {
+  color: #ff4032;
+}
+
+.p-component {
+  font-weight: 500;
+}
+
+.layout-sidebar {
+  font-weight: 500;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border: 1px solid rgb(207, 205, 205);
+}
+
+body {
+  background-color: #f0f1fb;
+}
+
+// round scrollbar
+/* For webkit browsers */
+::-webkit-scrollbar {
+  width: 12px; /* Width of the scrollbar */
+  height: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Color of the scrollbar track */
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #6366f1; /* Color of the scrollbar handle */
+  border-radius: 10px; /* Roundness of the scrollbar handle */
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #4548f2; /* Color of the scrollbar handle on hover */
+}
+// end round scrollbar
