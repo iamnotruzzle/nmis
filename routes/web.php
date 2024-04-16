@@ -34,7 +34,7 @@ use App\Http\Controllers\Wards\Dashboard\DashboardController as WardDashboardCon
 use App\Http\Controllers\Wards\Patients\PatientChargeController;
 use App\Http\Controllers\Wards\Patients\WardPatientsController;
 use App\Http\Controllers\Wards\Reports\ReportController;
-use App\Http\Controllers\Wards\RequestMeds\RequestStocksController;
+use App\Http\Controllers\Wards\RequestMeds\RequestMedsController;
 use App\Http\Controllers\Wards\RequestStocks\RequestStocksController;
 use App\Http\Controllers\Wards\RequestStocks\WardsStocksLogs\WardsStocksLogsController;
 use App\Http\Controllers\Wards\RequestTankStocks\RequestTankStocksController;
