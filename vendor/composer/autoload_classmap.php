@@ -59,7 +59,7 @@ return array(
     'App\\Http\\Controllers\\Wards\\Reports\\ReportController' => $baseDir . '/app/Http/Controllers/Wards/Reports/ReportController.php',
     'App\\Http\\Controllers\\Wards\\RequestMeds\\RequestStocksController' => $baseDir . '/app/Http/Controllers/Wards/RequestMeds/RequestStocksController.php',
     'App\\Http\\Controllers\\Wards\\RequestStocks\\RequestStocksController' => $baseDir . '/app/Http/Controllers/Wards/RequestStocks/RequestStocksController.php',
-    'App\\Http\\Controllers\\Wards\\RequestStocks\\WardsStocksLogs\\WardsStocksLogsController' => $baseDir . '/app/Http/Controllers/Wards/RequestStocks/WardsStocksLogs/WardsStocksLogsController.php',
+    'App\\Http\\Controllers\\Wards\\RequestStocks\\RequestStocksLogs\\RequestStocksLogsController' => $baseDir . '/app/Http/Controllers/Wards/RequestStocks/RequestStocksLogs/RequestStocksLogsController.php',
     'App\\Http\\Controllers\\Wards\\RequestTankStocks\\RequestTankStocksController' => $baseDir . '/app/Http/Controllers/Wards/RequestTankStocks/RequestTankStocksController.php',
     'App\\Http\\Controllers\\Wards\\Tanks\\TankStocks\\WardTankStocksController' => $baseDir . '/app/Http/Controllers/Wards/Tanks/TankStocks/WardTankStocksController.php',
     'App\\Http\\Controllers\\Wards\\TransferStock\\TransferStockController' => $baseDir . '/app/Http/Controllers/Wards/TransferStock/TransferStockController.php',

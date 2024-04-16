@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Wards\RequestStocks\WardsStocksLogs;
+namespace App\Http\Controllers\Wards\RequestStocks\RequestStocksLogs;
 
 use App\Http\Controllers\Controller;
 use App\Models\WardsStocksMedSupp;
@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
-class WardsStocksLogsController extends Controller
+class RequestStocksLogsController extends Controller
 {
     public function index()
     {

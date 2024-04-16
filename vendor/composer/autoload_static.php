@@ -738,7 +738,7 @@ class ComposerStaticInita35f14ec21fb126801fb4364978bffb6
         'App\\Http\\Controllers\\Wards\\Reports\\ReportController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/Reports/ReportController.php',
         'App\\Http\\Controllers\\Wards\\RequestMeds\\RequestStocksController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/RequestMeds/RequestStocksController.php',
         'App\\Http\\Controllers\\Wards\\RequestStocks\\RequestStocksController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/RequestStocks/RequestStocksController.php',
-        'App\\Http\\Controllers\\Wards\\RequestStocks\\WardsStocksLogs\\WardsStocksLogsController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/RequestStocks/WardsStocksLogs/WardsStocksLogsController.php',
+        'App\\Http\\Controllers\\Wards\\RequestStocks\\RequestStocksLogs\\RequestStocksLogsController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/RequestStocks/RequestStocksLogs/RequestStocksLogsController.php',
         'App\\Http\\Controllers\\Wards\\RequestTankStocks\\RequestTankStocksController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/RequestTankStocks/RequestTankStocksController.php',
         'App\\Http\\Controllers\\Wards\\Tanks\\TankStocks\\WardTankStocksController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/Tanks/TankStocks/WardTankStocksController.php',
         'App\\Http\\Controllers\\Wards\\TransferStock\\TransferStockController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/TransferStock/TransferStockController.php',

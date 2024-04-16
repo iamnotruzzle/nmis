@@ -36,7 +36,7 @@ use App\Http\Controllers\Wards\Patients\WardPatientsController;
 use App\Http\Controllers\Wards\Reports\ReportController;
 use App\Http\Controllers\Wards\RequestMeds\RequestMedsController;
 use App\Http\Controllers\Wards\RequestStocks\RequestStocksController;
-use App\Http\Controllers\Wards\RequestStocks\WardsStocksLogs\WardsStocksLogsController;
+use App\Http\Controllers\Wards\RequestStocks\RequestStocksLogs\RequestStocksLogsController;
 use App\Http\Controllers\Wards\RequestTankStocks\RequestTankStocksController;
 use App\Http\Controllers\Wards\Tanks\TankStocks\WardTankStocksController;
 use App\Http\Controllers\Wards\TransferStock\TransferStockController;
@@ -125,7 +125,7 @@ Route::middleware(['web', 'auth', 'verified'])->group(
 
         Route::resource('wardspatients', WardPatientsController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('patientcharge', PatientChargeController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
-        Route::resource('wardsstockslogs', WardsStocksLogsController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('wardsstockslogs', RequestStocksLogsController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
 
         Route::resource('transferstock', TransferStockController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         Route::put('transferstock', [TransferStockController::class, 'updatetransferstatus', 'designation_ward'])->name('transferstock.updatetransferstatus');
