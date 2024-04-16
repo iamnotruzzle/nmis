@@ -168,6 +168,7 @@
             optionLabel="name"
             optionValue="catID"
             class="w-full"
+            autofocus
           />
           <small
             class="text-error"
@@ -183,7 +184,6 @@
             id="Description"
             v-model.trim="form.description"
             required="true"
-            autofocus
             :class="{ 'p-invalid': form.description == '' }"
             @keyup.enter="submit"
           />
