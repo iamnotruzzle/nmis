@@ -41,10 +41,16 @@
                   />
                 </div>
               </div>
-              <Button
-                label="Import delivery"
-                @click="openImportDeliveryDialog"
-              />
+              <div>
+                <Button
+                  label="Import delivery"
+                  @click="openImportDeliveryDialog"
+                />
+                <Button
+                  label="Add delivery"
+                  @click="openAddDeliveryDialog"
+                />
+              </div>
             </div>
           </div>
         </template>
@@ -302,7 +308,7 @@
         </template>
       </DataTable>
 
-      <!-- create delivery details dialog -->
+      <!-- import delivery dialog -->
       <Dialog
         v-model:visible="importDeliveryDialog"
         :modal="true"
@@ -313,14 +319,6 @@
       >
         <template #header>
           <div class="text-primary text-xl font-bold">IMPORT DELIVERY</div>
-          <!-- <div class="field">
-            <label>RIS no.</label>
-            <InputText
-              v-model.trim="form.ris_no"
-              autofocus
-              @keyup.enter="fillDeliveriesContainer"
-            />
-          </div> -->
         </template>
 
         <div class="flex flex-row justify-content-between overflow-hidden">
@@ -617,6 +615,220 @@
               </Column>
             </DataTable>
           </div>
+        </div>
+
+        <template #footer>
+          <Button
+            label="Cancel"
+            icon="pi pi-times"
+            severity="danger"
+            text
+            @click="cancel"
+          />
+          <Button
+            label="Save"
+            icon="pi pi-check"
+            text
+            type="submit"
+            :disabled="formAdditional.processing || deliveryDetails.length == 0"
+            @click="submit"
+          />
+        </template>
+      </Dialog>
+
+      <!-- add deliveries manually -->
+      <Dialog
+        v-model:visible="addDeliveryDialog"
+        :modal="true"
+        class="p-fluid overflow-hidden"
+        :style="{ width: '450px' }"
+        @hide="clickOutsideDialog"
+        :draggable="false"
+      >
+        <template #header>
+          <div class="text-primary text-xl font-bold">ADD DELIVERY</div>
+        </template>
+
+        <div class="field">
+          <div class="flex justify-content-between align-items-center">
+            <label>RIS no.</label>
+            <Button
+              icon="pi pi-refresh"
+              severity="success"
+              text
+              rounded
+              aria-label="Cancel"
+              class="p-0 m-0"
+              @click="resetDeliveryDialog"
+            />
+          </div>
+          <InputText
+            v-model.trim="form.searchRis"
+            autofocus
+            @keyup.enter="fillDeliveriesContainer"
+            :readonly="disableSearchRisInput == true"
+          />
+          <small
+            v-if="deliveryExist == true"
+            class="text-error text-lg font-semibold"
+          >
+            Delivery already exist
+          </small>
+        </div>
+        <div class="field">
+          <div class="flex align-content-center">
+            <label>Supplier</label>
+            <span class="ml-2 text-error">*</span>
+          </div>
+          <Dropdown
+            required="true"
+            v-model="formAdditional.supplier"
+            :options="suppliersList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
+            filter
+            dataKey="suppcode"
+            optionLabel="suppname"
+            class="w-full"
+          />
+        </div>
+        <div class="field">
+          <div class="flex align-content-center">
+            <label>Fund source</label>
+          </div>
+          <InputText
+            v-model="formAdditional.fsName"
+            readonly
+          />
+        </div>
+        <div class="field">
+          <div class="flex align-content-center">
+            <label>Item</label>
+          </div>
+          <InputText
+            v-model="formAdditional.cl2desc"
+            readonly
+          />
+        </div>
+        <div class="field">
+          <div class="">
+            <label>Unit</label>
+          </div>
+          <InputText
+            id="unit"
+            v-model.trim="formAdditional.uomdesc"
+            readonly
+          />
+        </div>
+        <div class="field">
+          <div class="flex align-content-center">
+            <label>Brand</label>
+            <span class="ml-2 text-error">*</span>
+          </div>
+          <Dropdown
+            required="true"
+            v-model="formAdditional.brand"
+            :options="brandDropDownList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
+            filter
+            dataKey="id"
+            optionLabel="name"
+            class="w-full mb-3"
+          />
+        </div>
+        <div class="field flex flex-row justify-space-between">
+          <div>
+            <label for="manufactured_date">Manufactured date</label>
+            <Calendar
+              v-model="formAdditional.manufactured_date"
+              dateFormat="mm-dd-yy"
+              showIcon
+              showButtonBar
+              :manualInput="false"
+              :hideOnDateTimeSelect="true"
+            />
+          </div>
+
+          <div class="mx-2"></div>
+
+          <div>
+            <label for="delivered_date">Delivered date</label>
+            <Calendar
+              v-model="formAdditional.delivered_date"
+              dateFormat="mm-dd-yy"
+              showIcon
+              showButtonBar
+              :manualInput="false"
+              :hideOnDateTimeSelect="true"
+            />
+          </div>
+        </div>
+        <div class="field">
+          <div class="flex align-content-center">
+            <label>Expiration date</label>
+            <span class="ml-2 text-error">*</span>
+          </div>
+          <Calendar
+            required="true"
+            v-model="formAdditional.expiration_date"
+            dateFormat="mm-dd-yy"
+            showIcon
+            showButtonBar
+            :manualInput="false"
+            :minDate="minimumDate"
+            :hideOnDateTimeSelect="true"
+          />
+        </div>
+        <div class="field">
+          <div class="flex align-content-center">
+            <label>Quantity</label>
+          </div>
+          <InputNumber
+            required="true"
+            v-model.trim="formAdditional.quantity"
+            autofocus
+            inputId="integeronly"
+            readonly
+          />
+        </div>
+        <div class="field flex justify-content-between">
+          <div>
+            <div class="flex align-content-center">
+              <label>Acquisition price</label>
+            </div>
+            <InputNumber
+              required="true"
+              v-model.trim="formAdditional.acquisitionPrice"
+              autofocus
+              :maxFractionDigits="2"
+              readonly
+            />
+          </div>
+
+          <div class="mx-2"></div>
+
+          <div>
+            <div class="flex align-content-center">
+              <label>Markup price (%)</label>
+              <span class="ml-2 text-error">*</span>
+            </div>
+            <InputText
+              required="true"
+              type="number"
+              v-model.trim="formAdditional.markupPercentage"
+              autofocus
+              @keydown="restrictNonNumeric"
+            />
+          </div>
+        </div>
+        <div class="field">
+          <div class="flex align-content-center">
+            <label>Selling price</label>
+          </div>
+          <InputNumber
+            required="true"
+            v-model="roundedSellingPrice"
+            readonly
+          />
         </div>
 
         <template #footer>
@@ -1162,6 +1374,7 @@ export default {
       isUpdate: false,
       isUpdateBrand: false,
       importDeliveryDialog: false,
+      addDeliveryDialog: false,
       updateStockDialog: false,
       createBrandDialog: false,
       deleteBrandDialog: false,
@@ -1282,6 +1495,9 @@ export default {
         expiration_date: null,
         remarks: null,
         delivery_list: [],
+      }),
+      formAddDelivery: this.$inertia.form({
+        ris_no: null,
       }),
       formBrand: this.$inertia.form({
         id: null,
@@ -1651,6 +1867,11 @@ export default {
       this.stockId = null;
       this.importDeliveryDialog = true;
     },
+    openAddDeliveryDialog() {
+      this.formAddDelivery.clearErrors();
+      this.formAddDelivery.reset();
+      this.addDeliveryDialog = true;
+    },
     // emit close dialog
     clickOutsideDialog() {
       this.$emit(
@@ -1674,7 +1895,9 @@ export default {
         this.formAdditional.clearErrors(),
         this.formAdditional.reset(),
         this.formBrand.clearErrors(),
-        this.formBrand.reset()
+        this.formBrand.reset(),
+        this.formAddDelivery.clearErrors(),
+        this.formAddDelivery.reset()
       );
     },
     editItem(item) {
@@ -1841,6 +2064,7 @@ export default {
       this.isUpdate = false;
       this.isUpdateBrand = false;
       this.importDeliveryDialog = false;
+      this.addDeliveryDialog = false;
       this.createBrandDialog = false;
       this.disableSearchRisInput = false;
       this.form.reset();
@@ -1849,6 +2073,8 @@ export default {
       this.formAdditional.clearErrors();
       this.formBrand.reset();
       this.formBrand.clearErrors();
+      this.formAddDelivery.reset();
+      this.formAddDelivery.clearErrors();
       this.stocksList = [];
       this.storeStocksInContainer();
     },
