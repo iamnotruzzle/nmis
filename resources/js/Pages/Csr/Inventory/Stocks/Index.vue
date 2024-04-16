@@ -777,7 +777,6 @@
           <InputNumber
             required="true"
             v-model.trim="formAddDelivery.quantity"
-            autofocus
             inputId="integeronly"
             readonly
           />
@@ -788,11 +787,11 @@
               <label>Acquisition price</label>
               <span class="ml-2 text-error">*</span>
             </div>
-            <InputNumber
+            <InputText
               required="true"
+              type="number"
               v-model.trim="formAddDelivery.acquisitionPrice"
-              autofocus
-              :maxFractionDigits="2"
+              @keydown="restrictNonNumeric"
             />
           </div>
 
@@ -805,7 +804,6 @@
               required="true"
               type="number"
               v-model.trim="formAddDelivery.markupPercentage"
-              autofocus
               @keydown="restrictNonNumeric"
             />
           </div>
@@ -815,10 +813,11 @@
             <label>Selling price</label>
             <span class="ml-2 text-error">*</span>
           </div>
-          <InputNumber
+          <InputText
             required="true"
-            v-model="roundedSellingPrice"
-            readonly
+            type="number"
+            v-model.trim="formAddDelivery.sellingPrice"
+            @keydown="restrictNonNumeric"
           />
         </div>
 
@@ -1499,6 +1498,7 @@ export default {
         quantity: null,
         acquisitionPrice: null,
         markupPercentage: null,
+        sellingPrice: null,
       }),
       formBrand: this.$inertia.form({
         id: null,
