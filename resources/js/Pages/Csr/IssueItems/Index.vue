@@ -27,6 +27,8 @@
       >
         <Toast />
 
+        <div class="text-xl text-900 font-bold text-primary">REQUESTS</div>
+
         <DataTable
           class="p-datatable-sm"
           v-model:expandedRows="expandedRow"
@@ -42,12 +44,10 @@
           @page="onPage($event)"
           dataKey="id"
           filterDisplay="row"
-          showGridlines
           :loading="loading"
         >
           <template #header>
-            <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-              <span class="text-xl text-900 font-bold text-primary">REQUESTS</span>
+            <div class="flex flex-wrap align-items-center justify-content-end gap-2">
               <div>
                 <div class="p-inputgroup">
                   <span class="p-inputgroup-addon">
@@ -244,6 +244,7 @@
                 removableSort
                 :rows="7"
                 :value="slotProps.data.request_stocks_details"
+                showGridlines
               >
                 <template #header>
                   <div class="flex flex-wrap align-items-center justify-content-between gap-2">
@@ -1092,7 +1093,7 @@ input[type='number'] {
   padding: 0.5rem 1rem;
   border: 1px solid #818cf8;
   background-color: #818cf8;
-  /* color: #fff; */
+  color: #fff !important;
   text-decoration: none;
   text-align: center;
   /* border-radius: 4px; */
