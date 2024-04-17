@@ -35,17 +35,40 @@
 //   background-color: #1a272f;
 // }
 
-body {
-  background-color: #eff1fb;
-}
+// body {
+//   background-color: #eff1fb;
+// }
 
-.p-datatable {
-  border: 2px solid #cbd5e1;
-}
+// .p-datatable {
+//   border: 2px solid #cbd5e1;
+// }
 
 table tr:hover {
-  background-color: #818cf8;
+  background-color: #3f51f4;
   color: white;
+}
+
+.button-link-current {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border: 1px solid #6574fc;
+  background-color: #818cf8;
+  color: #fff !important;
+  text-decoration: none;
+  text-align: center;
+  /* border-radius: 4px; */
+  transition: background-color 0.3s ease;
+}
+.button-link {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border: 1px solid #818cf8;
+  /* background-color: #818cf8; */
+  color: #818cf8 !important;
+  text-decoration: none;
+  text-align: center;
+  /* border-radius: 4px; */
+  transition: background-color 0.3s ease;
 }
 
 // .layout-topbar,
