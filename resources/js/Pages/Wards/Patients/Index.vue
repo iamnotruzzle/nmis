@@ -3,7 +3,8 @@
     <Head title="NMIS - Patients" />
 
     <div class="card">
-      <!-- v-model:filters="filters" -->
+      <span class="text-xl text-900 font-bold text-primary">NO. OF PATIENTS: {{ patientsList.length }}</span>
+
       <DataTable
         class="p-datatable-sm"
         v-model:filters="filters"
@@ -20,9 +21,7 @@
         showGridlines
       >
         <template #header>
-          <div class="flex flex-wrap align-items-center justify-content-between">
-            <span class="text-xl text-900 font-bold text-primary">NO. OF PATIENTS: {{ patientsList.length }}</span>
-
+          <div class="flex flex-wrap align-items-center justify-content-end">
             <!-- <div>
               <v-icon
                 name="ri-user-shared-fill"

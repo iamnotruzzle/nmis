@@ -33,11 +33,9 @@
         style="border-top-left-radius: 0; border-top-right-radius: 0"
       >
         <Toast />
-        <!--
-            data table sort order
-            asc = 1
-            desc =-1
-        -->
+
+        <span class="text-xl text-900 font-bold text-primary">PENDING STOCKS</span>
+
         <DataTable
           class="p-datatable-sm"
           v-model:expandedRows="expandedRow"
@@ -57,8 +55,7 @@
           :loading="loading"
         >
           <template #header>
-            <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-              <span class="text-xl text-900 font-bold text-primary">PENDING STOCKS</span>
+            <div class="flex flex-wrap align-items-center justify-content-end gap-2">
               <div class="flex">
                 <div class="mr-2">
                   <div class="p-inputgroup">
@@ -854,6 +851,8 @@
 
       <div class="card">
         <!-- current ward stocks -->
+        <span class="text-xl text-900 font-bold text-primary">CURRENT STOCKS</span>
+
         <DataTable
           class="p-datatable-sm"
           dataKey="id"
@@ -869,9 +868,7 @@
           :loading="loading"
         >
           <template #header>
-            <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-              <span class="text-xl text-900 font-bold text-primary">CURRENT STOCKS</span>
-
+            <div class="flex flex-wrap align-items-center justify-content-end gap-2">
               <div class="flex">
                 <div class="mr-2">
                   <div class="p-inputgroup">

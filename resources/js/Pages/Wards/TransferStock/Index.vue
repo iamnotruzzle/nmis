@@ -5,6 +5,8 @@
     <div class="card">
       <Toast />
 
+      <span class="text-xl text-900 font-bold text-primary">CURRENT STOCKS</span>
+
       <!-- ward stocks -->
       <DataTable
         class="p-datatable-sm"
@@ -22,9 +24,7 @@
         :loading="loading"
       >
         <template #header>
-          <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold text-primary">CURRENT STOCKS</span>
-
+          <div class="flex flex-wrap align-items-center justify-content-end gap-2">
             <div class="flex">
               <div class="mr-2">
                 <div class="p-inputgroup">
