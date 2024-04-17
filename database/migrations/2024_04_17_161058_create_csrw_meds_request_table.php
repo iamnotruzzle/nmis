@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCsrwMedRequestTable extends Migration
+class CreateCsrwMedsRequestTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateCsrwMedRequestTable extends Migration
      */
     public function up()
     {
-        Schema::create('csrw_med_request', function (Blueprint $table) {
+        Schema::create('csrw_meds_request', function (Blueprint $table) {
             $table->id();
             $table->dateTime('dmdprdte');
             $table->string('dmdcomb')->nullable();
@@ -36,6 +36,6 @@ class CreateCsrwMedRequestTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('csrw_med_request');
+        Schema::dropIfExists('csrw_meds_request');
     }
 }
