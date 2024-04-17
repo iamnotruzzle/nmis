@@ -1092,7 +1092,7 @@ input[type='number'] {
   padding: 0.5rem 1rem;
   border: 1px solid #818cf8;
   background-color: #818cf8;
-  color: #fff;
+  /* color: #fff; */
   text-decoration: none;
   text-align: center;
   /* border-radius: 4px; */
@@ -1103,7 +1103,7 @@ input[type='number'] {
   padding: 0.5rem 1rem;
   border: 1px solid #818cf8;
   /* background-color: #818cf8; */
-  color: #fff;
+  color: #818cf8 !important;
   text-decoration: none;
   text-align: center;
   /* border-radius: 4px; */
@@ -1115,5 +1115,6 @@ input[type='number'] {
 }
 .button-link:hover {
   background-color: #5561d7;
+  color: #fff !important;
 }
 </style>
