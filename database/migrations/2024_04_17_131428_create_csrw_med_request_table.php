@@ -23,6 +23,7 @@ class CreateCsrwMedRequestTable extends Migration
             $table->integer('approved_qty')->nullable();
             $table->dateTime('expiration_date');
             $table->string('wardcode');
+            $table->string('status');
             $table->text('remarks')->nullable();
             $table->timestamps();
         });

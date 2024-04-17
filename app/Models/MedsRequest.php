@@ -20,6 +20,7 @@ class MedsRequest extends Model
         'approved_qty',
         'expiration_date',
         'wardcode',
+        'status',
         'remarks',
     ];
 }

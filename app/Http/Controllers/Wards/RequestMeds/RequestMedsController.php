@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Wards\RequestMeds;
 
 use App\Http\Controllers\Controller;
 use App\Models\FundSource;
+use App\Models\MedsRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -30,9 +31,12 @@ class RequestMedsController extends Controller
 
         $fundSource = FundSource::get(['id', 'fsid', 'fsName', 'cluster_code']);
 
+        $medsRequest = MedsRequest::paginate(10);
+
         return Inertia::render('Wards/MedicineStocks/Index', [
             'medicines' => $medicines,
             'fundSource' => $fundSource,
+            'medsRequest' => $medsRequest,
         ]);
     }
 

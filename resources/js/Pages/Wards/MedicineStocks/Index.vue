@@ -69,7 +69,7 @@
                   </div>
                 </div>
                 <Button
-                  label="Request stocks"
+                  label="Request medicine"
                   icon="pi pi-plus"
                   iconPos="right"
                   @click="openCreateRequestStocksDialog"
@@ -83,14 +83,14 @@
           />
           <template #empty> No requested stock found. </template>
           <template #loading> Loading requested stock data. Please wait. </template>
-          <Column
-            header="CREATED AT"
+          <!-- <Column
+            header="DMDPRDTE"
             filterField="created_at"
             style="width: 20%"
             :showFilterMenu="false"
           >
             <template #body="{ data }">
-              {{ tzone(data.created_at) }}
+              {{ tzone(data.dmdprdte) }}
             </template>
             <template #filter="{}">
               <Calendar
@@ -113,7 +113,7 @@
                 :hideOnDateTimeSelect="true"
               />
             </template>
-          </Column>
+          </Column> -->
           <Column
             field="status"
             header="STATUS"
@@ -149,55 +149,6 @@
             </template>
           </Column>
           <Column
-            field="requested_by"
-            header="REQUESTED BY"
-            style="width: 30%"
-          >
-            <template #body="{ data }">
-              <div class="flex flex-row align-items-center">
-                <img
-                  v-if="data.requested_by_image != null"
-                  :src="`storage/${data.requested_by_image}`"
-                  class="w-3rem h-3rem rounded-card"
-                />
-                <img
-                  v-else
-                  src="images/no_profile.png"
-                  class="w-3rem h-3rem rounded-card"
-                />
-
-                <span class="font-semibold text-xl pl-3">
-                  {{ data.requested_by }}
-                </span>
-              </div>
-            </template>
-          </Column>
-          <Column
-            field="approved_by"
-            header="APPROVED BY"
-            style="width: 30%"
-          >
-            <template #body="{ data }">
-              <div class="flex flex-row align-items-center">
-                <img
-                  v-if="data.approved_by_image != null"
-                  :src="`storage/${data.approved_by_image}`"
-                  class="w-3rem h-3rem rounded-card"
-                />
-
-                <img
-                  v-if="data.approved_by != null && data.approved_by_image == null"
-                  src="images/no_profile.png"
-                  class="w-3rem h-3rem rounded-card"
-                />
-
-                <span class="font-semibold text-xl pl-3">
-                  {{ data.approved_by }}
-                </span>
-              </div>
-            </template>
-          </Column>
-          <Column
             header="ACTION"
             style="width: 5%"
           >
@@ -210,14 +161,6 @@
                   @click="editRequestedStock(slotProps.data)"
                 ></v-icon>
 
-                <!-- <Button
-              v-if="slotProps.data.status == 'PENDING'"
-              icon="fc fc-cancel"
-              rounded
-              text
-              severity="danger"
-              @click="confirmCancelItem(slotProps.data)"
-            /> -->
                 <v-icon
                   v-if="slotProps.data.status == 'PENDING' || slotProps.data.status == 'ACKNOWLEDGED'"
                   name="fc-cancel"
@@ -227,7 +170,7 @@
               </div>
             </template>
           </Column>
-          <template #expansion="slotProps">
+          <!-- <template #expansion="slotProps">
             <div class="p-3">
               <h5 class="text-cyan-500 hover:text-cyan-700">ITEMS</h5>
               <DataTable
@@ -257,7 +200,7 @@
                 ></Column>
               </DataTable>
             </div>
-          </template>
+          </template> -->
         </DataTable>
 
         <!-- @hide="clickOutsideDialog" -->
@@ -688,6 +631,7 @@ export default {
     requestedStocks: Object,
     currentWardStocks: Object,
     fundSource: Object,
+    medsRequest: Object,
   },
   data() {
     return {
@@ -711,6 +655,7 @@ export default {
       to: null,
       stockBalanceDeclared: false,
       medicinesList: [],
+      medsRequestList: [],
       requestStockList: [],
       currentWardStocksList: [],
       // stock list details
@@ -751,9 +696,9 @@ export default {
   },
   // created will be initialize before mounted
   created() {
-    // this.totalRecords = this.requestedStocks.total;
-    // this.params.page = this.requestedStocks.current_page;
-    // this.rows = this.requestedStocks.per_page;
+    this.totalRecords = this.medsRequest.total;
+    this.params.page = this.medsRequest.current_page;
+    this.rows = this.medsRequest.per_page;
   },
   mounted() {
     this.storeFundSourceInContainer();
@@ -769,6 +714,22 @@ export default {
     },
   },
   methods: {
+    storeMedsRequestInContainer() {
+      this.medsRequest.forEach((e) => {
+        this.medsRequestList.push({
+          dmdprdte: e.dmdprdte,
+          dmdcomb: e.dmdcomb,
+          dmdctr: e.dmdctr,
+          selling_price: e.selling_price,
+          requested_qty: e.requested_qty,
+          approved_qty: e.approved_qty,
+          expiration_date: e.expiration_date,
+          wardcode: e.wardcode,
+          status: e.status,
+          remarks: e.remarks,
+        });
+      });
+    },
     storeFundSourceInContainer() {
       this.fundSource.forEach((e) => {
         this.fundSourceList.push({
@@ -793,45 +754,45 @@ export default {
     // use storeRequestedStocksInContainer() function so that every time you make
     // server request such as POST, the data in the table
     // is updated
-    storeRequestedStocksInContainer() {
-      this.requestStockList = []; // reset
+    // storeRequestedStocksInContainer() {
+    //   this.requestStockList = []; // reset
 
-      this.requestedStocks.data.forEach((e) => {
-        this.requestStockList.push({
-          id: e.id,
-          status: e.status,
-          requested_by: e.requested_by_details.firstname + ' ' + e.requested_by_details.lastname,
-          requested_by_image: e.requested_by_details.user_account.image,
-          approved_by:
-            e.approved_by_details != null
-              ? e.approved_by_details.firstname + ' ' + e.approved_by_details.lastname
-              : null,
-          approved_by_image: e.approved_by_details != null ? e.approved_by_details.user_account.image : null,
-          created_at: e.created_at,
-          request_stocks_details: e.request_stocks_details,
-        });
-      });
-    },
+    //   this.requestedStocks.data.forEach((e) => {
+    //     this.requestStockList.push({
+    //       id: e.id,
+    //       status: e.status,
+    //       requested_by: e.requested_by_details.firstname + ' ' + e.requested_by_details.lastname,
+    //       requested_by_image: e.requested_by_details.user_account.image,
+    //       approved_by:
+    //         e.approved_by_details != null
+    //           ? e.approved_by_details.firstname + ' ' + e.approved_by_details.lastname
+    //           : null,
+    //       approved_by_image: e.approved_by_details != null ? e.approved_by_details.user_account.image : null,
+    //       created_at: e.created_at,
+    //       request_stocks_details: e.request_stocks_details,
+    //     });
+    //   });
+    // },
     // store current stocks
-    storeCurrentWardStocksInContainer() {
-      this.currentWardStocksList = []; // reset
+    // storeCurrentWardStocksInContainer() {
+    //   this.currentWardStocksList = []; // reset
 
-      moment.suppressDeprecationWarnings = true;
+    //   moment.suppressDeprecationWarnings = true;
 
-      this.currentWardStocks.forEach((e) => {
-        let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
+    //   this.currentWardStocks.forEach((e) => {
+    //     let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
 
-        this.currentWardStocksList.push({
-          from: e.from,
-          ward_stock_id: e.id,
-          cl2comb: e.item_details.cl2comb,
-          item: e.item_details.cl2desc,
-          unit: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomdesc,
-          quantity: e.quantity,
-          expiration_date: expiration_date.toString(),
-        });
-      });
-    },
+    //     this.currentWardStocksList.push({
+    //       from: e.from,
+    //       ward_stock_id: e.id,
+    //       cl2comb: e.item_details.cl2comb,
+    //       item: e.item_details.cl2desc,
+    //       unit: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomdesc,
+    //       quantity: e.quantity,
+    //       expiration_date: expiration_date.toString(),
+    //     });
+    //   });
+    // },
     tzone(date) {
       if (date == null || date == '') {
         return null;
