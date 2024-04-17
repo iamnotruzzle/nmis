@@ -19,7 +19,7 @@
 // }
 
 // table {
-//   border-collapse: collapse;
+//   //   border-collapse: collapse;
 // }
 
 // th,
@@ -27,30 +27,23 @@
 //   border: 1px solid rgb(207, 205, 205);
 // }
 
-// body {
-//   background-color: #eaeaf0;
+// .p-component {
+//   background-color: #152024;
 // }
 
-// // round scrollbar
-// /* For webkit browsers */
-// ::-webkit-scrollbar {
-//   width: 12px; /* Width of the scrollbar */
-//   height: 6px;
+// .card {
+//   background-color: #1a272f;
 // }
 
-// /* Track */
-// ::-webkit-scrollbar-track {
-//   background: #f1f1f1; /* Color of the scrollbar track */
+body {
+  background-color: #f5f5f5;
+}
+
+// .layout-topbar,
+// .layout-sidebar {
+//   background-color: #f5f5f5;
 // }
 
-// /* Handle */
-// ::-webkit-scrollbar-thumb {
-//   background: #6366f1; /* Color of the scrollbar handle */
-//   border-radius: 10px; /* Roundness of the scrollbar handle */
+// .card {
+//   background-color: #232323;
 // }
-
-// /* Handle on hover */
-// ::-webkit-scrollbar-thumb:hover {
-//   background: #4548f2; /* Color of the scrollbar handle on hover */
-// }
-// // end round scrollbar
