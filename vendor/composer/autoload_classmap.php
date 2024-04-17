@@ -96,6 +96,7 @@ return array(
     'App\\Models\\LocationStockBalance' => $baseDir . '/app/Models/LocationStockBalance.php',
     'App\\Models\\LocationTankStockBalance' => $baseDir . '/app/Models/LocationTankStockBalance.php',
     'App\\Models\\LoginHistory' => $baseDir . '/app/Models/LoginHistory.php',
+    'App\\Models\\MedsRequest' => $baseDir . '/app/Models/MedsRequest.php',
     'App\\Models\\Miscellaneous' => $baseDir . '/app/Models/Miscellaneous.php',
     'App\\Models\\Patient' => $baseDir . '/app/Models/Patient.php',
     'App\\Models\\PatientAccount' => $baseDir . '/app/Models/PatientAccount.php',

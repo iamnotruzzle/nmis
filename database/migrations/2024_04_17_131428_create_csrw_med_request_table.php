@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCsrwMedsRequestTable extends Migration
+class CreateCsrwMedRequestTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,17 @@ class CreateCsrwMedsRequestTable extends Migration
      */
     public function up()
     {
-        Schema::create('csrw_meds_request', function (Blueprint $table) {
+        Schema::create('csrw_med_request', function (Blueprint $table) {
             $table->id();
             $table->dateTime('dmdprdte');
-            $table->string('dmdcomb');
+            $table->string('dmdcomb')->nullable();
             $table->string('dmdctr');
             $table->decimal('selling_price', $precision = 8, $scale = 2)->nullable();
             $table->integer('requested_qty');
             $table->integer('approved_qty')->nullable();
             $table->dateTime('expiration_date');
             $table->string('wardcode');
-            $table->text('remarks');
+            $table->text('remarks')->nullable();
             $table->timestamps();
         });
     }
@@ -35,6 +35,6 @@ class CreateCsrwMedsRequestTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('csrw_meds_request');
+        Schema::dropIfExists('csrw_med_request');
     }
 }
