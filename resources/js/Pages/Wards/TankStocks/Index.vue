@@ -2,36 +2,31 @@
   <app-layout>
     <Head title="NMIS - Stocks" />
 
+    <div class="mb-1">
+      <Link
+        href="requeststocks"
+        class="button-link mr-2"
+      >
+        OTHER ITEMS
+      </Link>
+
+      <Link
+        href="requestmedsstocks"
+        class="button-link mr-2"
+      >
+        MEDICINE
+      </Link>
+
+      <Link
+        href="requesttankstocks"
+        class="button-link-current mr-2"
+      >
+        TANKS
+      </Link>
+    </div>
+
     <div class="card">
       <Toast />
-      <!--
-            data table sort order
-            asc = 1
-            desc =-1
-        -->
-
-      <div class="mb-2">
-        <Link
-          href="requeststocks"
-          class="text-2xl my-link"
-        >
-          OTHER ITEMS
-        </Link>
-
-        <Link
-          href="requestmedsstocks"
-          class="text-2xl my-link"
-        >
-          MEDICINE
-        </Link>
-
-        <Link
-          href="requesttankstocks"
-          class="text-2xl border-bottom-2 font-semibold"
-        >
-          TANKS
-        </Link>
-      </div>
 
       <DataTable
         class="p-datatable-sm"
@@ -265,126 +260,6 @@
             </DataTable>
           </div>
         </template>
-      </DataTable>
-
-      <!-- current ward stocks -->
-      <DataTable
-        class="p-datatable-sm mt-8"
-        dataKey="id"
-        v-model:filters="currentWardStocksFilter"
-        :value="currentWardStocksList"
-        paginator
-        :rows="10"
-        :rowsPerPageOptions="[10, 30, 50]"
-        removableSort
-        sortField="itemDesc"
-        :sortOrder="1"
-        filterDisplay="row"
-        showGridlines
-        :loading="loading"
-      >
-        <template #header>
-          <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold text-primary">CURRENT STOCKS</span>
-
-            <div class="flex">
-              <div class="mr-2">
-                <div class="p-inputgroup">
-                  <span class="p-inputgroup-addon">
-                    <i class="pi pi-search"></i>
-                  </span>
-                  <InputText
-                    id="searchInput"
-                    v-model="currentWardStocksFilter['global'].value"
-                    placeholder="Search item"
-                  />
-                </div>
-              </div>
-
-              <Button
-                label="Consignment"
-                icon="pi pi-plus"
-                iconPos="right"
-                @click="openConsignmentDialog"
-              />
-            </div>
-          </div>
-        </template>
-        <template #empty> No item found. </template>
-        <template #loading> Loading item data. Please wait. </template>
-        <Column
-          field="from"
-          header="FROM"
-          sortable
-        >
-        </Column>
-        <Column
-          field="itemDesc"
-          header="ITEM"
-          sortable
-        >
-          <template #body="{ data }">
-            {{ data.itemDesc }}
-          </template>
-        </Column>
-        <Column
-          field="quantity"
-          header="QUANTITY"
-          sortable
-        >
-          <template #body="{ data }">
-            {{ data.quantity }}
-          </template>
-        </Column>
-        <Column
-          field="received_date"
-          header="RECEIVED DATE"
-          sortable
-        >
-          <template #body="{ data }">
-            {{ tzone2(data.received_date) }}
-          </template>
-        </Column>
-        <Column
-          field="uomdesc"
-          header="UNIT"
-          sortable
-        >
-          <template #body="{ data }">
-            {{ data.uomdesc }}
-          </template>
-        </Column>
-        <Column header="ACTION">
-          <template #body="slotProps">
-            <div class="flex justify-content-center">
-              <Button
-                rounded
-                text
-                severity="warning"
-                @click="editWardStocks(slotProps.data)"
-              >
-                <template #default="">
-                  <v-icon
-                    name="pr-pencil"
-                    class="text-yellow-500"
-                  ></v-icon>
-                </template>
-              </Button>
-              <Button
-                rounded
-                text
-                @click="openConvertDialog(slotProps.data)"
-              >
-                <template #default="">
-                  <v-icon
-                    name="si-convertio"
-                    class="text-blue-500"
-                  ></v-icon>
-                </template>
-              </Button>
-            </div>
-          </template>
-        </Column>
       </DataTable>
 
       <!-- @hide="clickOutsideDialog" -->
@@ -857,6 +732,128 @@
           </Button>
         </template>
       </Dialog>
+    </div>
+
+    <div class="card">
+      <!-- current ward stocks -->
+      <DataTable
+        class="p-datatable-sm"
+        dataKey="id"
+        v-model:filters="currentWardStocksFilter"
+        :value="currentWardStocksList"
+        paginator
+        :rows="10"
+        :rowsPerPageOptions="[10, 30, 50]"
+        removableSort
+        sortField="itemDesc"
+        :sortOrder="1"
+        filterDisplay="row"
+        showGridlines
+        :loading="loading"
+      >
+        <template #header>
+          <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+            <span class="text-xl text-900 font-bold text-primary">CURRENT STOCKS</span>
+
+            <div class="flex">
+              <div class="mr-2">
+                <div class="p-inputgroup">
+                  <span class="p-inputgroup-addon">
+                    <i class="pi pi-search"></i>
+                  </span>
+                  <InputText
+                    id="searchInput"
+                    v-model="currentWardStocksFilter['global'].value"
+                    placeholder="Search item"
+                  />
+                </div>
+              </div>
+
+              <Button
+                label="Consignment"
+                icon="pi pi-plus"
+                iconPos="right"
+                @click="openConsignmentDialog"
+              />
+            </div>
+          </div>
+        </template>
+        <template #empty> No item found. </template>
+        <template #loading> Loading item data. Please wait. </template>
+        <Column
+          field="from"
+          header="FROM"
+          sortable
+        >
+        </Column>
+        <Column
+          field="itemDesc"
+          header="ITEM"
+          sortable
+        >
+          <template #body="{ data }">
+            {{ data.itemDesc }}
+          </template>
+        </Column>
+        <Column
+          field="quantity"
+          header="QUANTITY"
+          sortable
+        >
+          <template #body="{ data }">
+            {{ data.quantity }}
+          </template>
+        </Column>
+        <Column
+          field="received_date"
+          header="RECEIVED DATE"
+          sortable
+        >
+          <template #body="{ data }">
+            {{ tzone2(data.received_date) }}
+          </template>
+        </Column>
+        <Column
+          field="uomdesc"
+          header="UNIT"
+          sortable
+        >
+          <template #body="{ data }">
+            {{ data.uomdesc }}
+          </template>
+        </Column>
+        <Column header="ACTION">
+          <template #body="slotProps">
+            <div class="flex justify-content-center">
+              <Button
+                rounded
+                text
+                severity="warning"
+                @click="editWardStocks(slotProps.data)"
+              >
+                <template #default="">
+                  <v-icon
+                    name="pr-pencil"
+                    class="text-yellow-500"
+                  ></v-icon>
+                </template>
+              </Button>
+              <Button
+                rounded
+                text
+                @click="openConvertDialog(slotProps.data)"
+              >
+                <template #default="">
+                  <v-icon
+                    name="si-convertio"
+                    class="text-blue-500"
+                  ></v-icon>
+                </template>
+              </Button>
+            </div>
+          </template>
+        </Column>
+      </DataTable>
     </div>
   </app-layout>
 </template>
@@ -1569,5 +1566,35 @@ input[type='number'] {
 .my-link:hover {
   opacity: 1; /* Adjust the opacity value as needed */
   border-bottom-style: solid;
+}
+
+.button-link-current {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border: 1px solid #818cf8;
+  background-color: #818cf8;
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+.button-link {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border: 1px solid #818cf8;
+  /* background-color: #818cf8; */
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.button-link-current:hover {
+  background-color: #5561d7;
+}
+.button-link:hover {
+  background-color: #5561d7;
 }
 </style>
