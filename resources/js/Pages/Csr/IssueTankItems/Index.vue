@@ -2,440 +2,447 @@
   <app-layout>
     <Head title="NMIS - RIS" />
 
-    <div class="card">
-      <Toast />
-
-      <div class="mb-2">
+    <div>
+      <div>
         <Link
           href="issueitems"
-          class="text-2xl mr-2 my-link"
+          class="button-link"
         >
           DRUG AND MEDS
         </Link>
 
         <Link
           href="issuetankitems"
-          class="text-2xl border-bottom-2 font-semibold"
+          class="button-link-current bar"
         >
           TANKS
         </Link>
       </div>
 
-      <DataTable
-        class="p-datatable-sm"
-        v-model:expandedRows="expandedRow"
-        v-model:filters="filters"
-        :value="requestStockList"
-        selectionMode="single"
-        lazy
-        paginator
-        removableSort
-        :rows="rows"
-        ref="dt"
-        :totalRecords="totalRecords"
-        @page="onPage($event)"
-        dataKey="id"
-        filterDisplay="row"
-        showGridlines
-        :loading="loading"
+      <div style="background-color: #818cf8; width: 100%; height: 4px"></div>
+
+      <div
+        class="card"
+        style="border-top-left-radius: 0; border-top-right-radius: 0"
       >
-        <template #header>
-          <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold text-primary">REQUESTS</span>
-            <div>
-              <div class="p-inputgroup">
-                <span class="p-inputgroup-addon">
-                  <i class="pi pi-search"></i>
-                </span>
-                <InputText
-                  id="searchInput"
-                  v-model="search"
-                  placeholder="Search requested at"
-                />
+        <Toast />
+
+        <DataTable
+          class="p-datatable-sm"
+          v-model:expandedRows="expandedRow"
+          v-model:filters="filters"
+          :value="requestStockList"
+          selectionMode="single"
+          lazy
+          paginator
+          removableSort
+          :rows="rows"
+          ref="dt"
+          :totalRecords="totalRecords"
+          @page="onPage($event)"
+          dataKey="id"
+          filterDisplay="row"
+          showGridlines
+          :loading="loading"
+        >
+          <template #header>
+            <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+              <span class="text-xl text-900 font-bold text-primary">REQUESTS</span>
+              <div>
+                <div class="p-inputgroup">
+                  <span class="p-inputgroup-addon">
+                    <i class="pi pi-search"></i>
+                  </span>
+                  <InputText
+                    id="searchInput"
+                    v-model="search"
+                    placeholder="Search requested at"
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        </template>
-        <Column expander />
-        <template #empty> No requested stock found. </template>
-        <template #loading> Loading requested stock data. Please wait. </template>
-        <Column
-          header="CREATED AT"
-          filterField="created_at"
-          style="width: 20%"
-          :showFilterMenu="false"
-        >
-          <template #body="{ data }">
-            {{ tzone(data.created_at) }}
           </template>
-          <template #filter="{}">
-            <Calendar
-              v-model="from"
-              dateFormat="mm-dd-yy"
-              placeholder="FROM"
-              showIcon
-              showButtonBar
-              :manualInput="false"
-              :hideOnDateTimeSelect="true"
-            />
-            <div class="mt-2"></div>
-            <Calendar
-              v-model="to"
-              dateFormat="mm-dd-yy"
-              placeholder="TO"
-              showIcon
-              showButtonBar
-              :manualInput="false"
-              :hideOnDateTimeSelect="true"
-            />
-          </template>
-        </Column>
-        <Column
-          field="status"
-          header="STATUS"
-          filterField="status"
-          style="width: 10%"
-          :showFilterMenu="false"
-        >
-          <template #body="{ data }">
-            <div class="text-center">
-              <Tag
-                v-if="data.status == 'PENDING'"
-                :value="data.status"
-                class="bg-orange-400 text-gray-900"
+          <Column expander />
+          <template #empty> No requested stock found. </template>
+          <template #loading> Loading requested stock data. Please wait. </template>
+          <Column
+            header="CREATED AT"
+            filterField="created_at"
+            style="width: 20%"
+            :showFilterMenu="false"
+          >
+            <template #body="{ data }">
+              {{ tzone(data.created_at) }}
+            </template>
+            <template #filter="{}">
+              <Calendar
+                v-model="from"
+                dateFormat="mm-dd-yy"
+                placeholder="FROM"
+                showIcon
+                showButtonBar
+                :manualInput="false"
+                :hideOnDateTimeSelect="true"
               />
-              <Tag
-                v-if="data.status == 'ACKNOWLEDGED'"
-                :value="data.status"
-                class="bg-yellow-400 text-gray-900"
+              <div class="mt-2"></div>
+              <Calendar
+                v-model="to"
+                dateFormat="mm-dd-yy"
+                placeholder="TO"
+                showIcon
+                showButtonBar
+                :manualInput="false"
+                :hideOnDateTimeSelect="true"
               />
-              <Tag
-                v-if="data.status == 'FILLED'"
-                :value="data.status"
-                class="bg-blue-400"
+            </template>
+          </Column>
+          <Column
+            field="status"
+            header="STATUS"
+            filterField="status"
+            style="width: 10%"
+            :showFilterMenu="false"
+          >
+            <template #body="{ data }">
+              <div class="text-center">
+                <Tag
+                  v-if="data.status == 'PENDING'"
+                  :value="data.status"
+                  class="bg-orange-400 text-gray-900"
+                />
+                <Tag
+                  v-if="data.status == 'ACKNOWLEDGED'"
+                  :value="data.status"
+                  class="bg-yellow-400 text-gray-900"
+                />
+                <Tag
+                  v-if="data.status == 'FILLED'"
+                  :value="data.status"
+                  class="bg-blue-400"
+                />
+                <Tag
+                  v-if="data.status == 'RECEIVED'"
+                  :value="data.status"
+                  class="bg-green-400 text-gray-900"
+                />
+                <Tag
+                  v-if="data.status == 'CANCELLED'"
+                  :value="data.status"
+                  style="background-color: rgb(239, 42, 42); color: rgb(253, 249, 249)"
+                />
+              </div>
+            </template>
+            <template #filter="{}">
+              <Dropdown
+                v-model="selectedStatus"
+                :options="status"
+                optionLabel="name"
+                optionValue="code"
+                placeholder="NO FILTER"
+                class="w-full"
               />
-              <Tag
-                v-if="data.status == 'RECEIVED'"
-                :value="data.status"
-                class="bg-green-400 text-gray-900"
-              />
-              <Tag
-                v-if="data.status == 'CANCELLED'"
-                :value="data.status"
-                style="background-color: rgb(239, 42, 42); color: rgb(253, 249, 249)"
-              />
-            </div>
-          </template>
-          <template #filter="{}">
-            <Dropdown
-              v-model="selectedStatus"
-              :options="status"
-              optionLabel="name"
-              optionValue="code"
-              placeholder="NO FILTER"
-              class="w-full"
-            />
-          </template>
-        </Column>
-        <Column
-          field="requested_by"
-          header="PENDING BY"
-          style="width: 20%"
-        >
-          <template #body="{ data }">
-            <div class="flex flex-row align-items-center">
-              <img
-                v-if="data.requested_by_image != null"
-                :src="`storage/${data.requested_by_image}`"
-                class="w-3rem h-3rem rounded-card"
-              />
-              <img
-                v-else
-                src="images/no_profile.png"
-                class="w-3rem h-3rem rounded-card"
-              />
+            </template>
+          </Column>
+          <Column
+            field="requested_by"
+            header="PENDING BY"
+            style="width: 20%"
+          >
+            <template #body="{ data }">
+              <div class="flex flex-row align-items-center">
+                <img
+                  v-if="data.requested_by_image != null"
+                  :src="`storage/${data.requested_by_image}`"
+                  class="w-3rem h-3rem rounded-card"
+                />
+                <img
+                  v-else
+                  src="images/no_profile.png"
+                  class="w-3rem h-3rem rounded-card"
+                />
 
-              <span class="font-semibold text-xl pl-3">
-                {{ data.requested_by }}
-              </span>
-            </div>
-          </template>
-        </Column>
-        <Column
-          field="approved_by"
-          header="APPROVED BY"
-          style="width: 20%"
-        >
-          <template #body="{ data }">
-            <div class="flex flex-row align-items-center">
-              <img
-                v-if="data.approved_by_image != null"
-                :src="`storage/${data.approved_by_image}`"
-                class="w-3rem h-3rem rounded-card"
-              />
+                <span class="font-semibold text-xl pl-3">
+                  {{ data.requested_by }}
+                </span>
+              </div>
+            </template>
+          </Column>
+          <Column
+            field="approved_by"
+            header="APPROVED BY"
+            style="width: 20%"
+          >
+            <template #body="{ data }">
+              <div class="flex flex-row align-items-center">
+                <img
+                  v-if="data.approved_by_image != null"
+                  :src="`storage/${data.approved_by_image}`"
+                  class="w-3rem h-3rem rounded-card"
+                />
 
-              <img
-                v-if="data.approved_by != null && data.approved_by_image == null"
-                src="images/no_profile.png"
-                class="w-3rem h-3rem rounded-card"
-              />
+                <img
+                  v-if="data.approved_by != null && data.approved_by_image == null"
+                  src="images/no_profile.png"
+                  class="w-3rem h-3rem rounded-card"
+                />
 
-              <span class="font-semibold text-xl pl-3">
-                {{ data.approved_by }}
-              </span>
+                <span class="font-semibold text-xl pl-3">
+                  {{ data.approved_by }}
+                </span>
+              </div>
+            </template>
+          </Column>
+          <Column
+            field="requested_at"
+            header="PENDING AT"
+            style="width: 20%"
+          >
+            <template #body="{ data }">
+              {{ data.requested_at }}
+            </template>
+          </Column>
+          <Column
+            header="ACTION"
+            style="width: 10%"
+          >
+            <template #body="slotProps">
+              <div class="text-center">
+                <Button
+                  v-if="slotProps.data.status == 'PENDING'"
+                  icon="pi pi-check"
+                  class="mr-1"
+                  rounded
+                  text
+                  severity="success"
+                  @click="editStatus(slotProps.data)"
+                />
+                <Button
+                  v-if="slotProps.data.status == 'ACKNOWLEDGED'"
+                  icon="pi pi-plus"
+                  class="mr-1"
+                  rounded
+                  text
+                  severity="primary"
+                  @click="openCreateRequestStocksDialog(slotProps.data)"
+                />
+                <Button
+                  v-if="slotProps.data.status == 'FILLED'"
+                  icon="pi pi-pencil"
+                  class="mr-1"
+                  rounded
+                  text
+                  severity="warning"
+                  @click="editRequestedStock(slotProps.data)"
+                />
+              </div>
+            </template>
+          </Column>
+          <template #expansion="slotProps">
+            <div class="p-3">
+              <DataTable
+                paginator
+                showGridlines
+                removableSort
+                :rows="7"
+                :value="slotProps.data.request_stocks_details"
+              >
+                <template #header>
+                  <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+                    <span class="text-primary">PENDING ITEMS</span>
+                    <div class="flex flex-row align-items-center">
+                      <a
+                        v-if="slotProps.data.status != 'PENDING'"
+                        :href="`issuetankitems/issued?from=${params.from}&to=${params.to}
+                      &id=${(params.id = slotProps.data.id)}`"
+                        target="_blank"
+                        class="mr-3"
+                      >
+                        <i
+                          class="pi pi-download"
+                          :style="{ color: 'green', 'font-size': '1.2rem' }"
+                        ></i>
+                      </a>
+                    </div>
+                  </div>
+                </template>
+                <Column
+                  field="item"
+                  header="ITEM"
+                  style="width: 50%"
+                >
+                  <template #body="{ data }">
+                    {{ getTankDesc(data) }}
+                    <!-- {{ data.itemcode }} -->
+                  </template>
+                </Column>
+                <Column
+                  field="requested_qty"
+                  header="PENDING QTY"
+                  style="text-align: right; width: 20%"
+                >
+                </Column>
+                <Column
+                  field="approved_qty"
+                  header="APPROVED QTY"
+                  style="text-align: right; width: 20%"
+                ></Column>
+                <Column
+                  field="remarks"
+                  header="REMARKS"
+                  style="width: 10%"
+                ></Column>
+              </DataTable>
             </div>
           </template>
-        </Column>
-        <Column
-          field="requested_at"
-          header="PENDING AT"
-          style="width: 20%"
+        </DataTable>
+
+        <!-- @hide="clickOutsideDialog" -->
+        <!-- create & edit dialog -->
+        <Dialog
+          v-model:visible="createRequestStocksDialog"
+          :modal="true"
+          class="p-fluid"
+          showGridlines
+          @hide="whenDialogIsHidden"
         >
-          <template #body="{ data }">
-            {{ data.requested_at }}
+          <template #header>
+            <div class="text-primary text-xl font-bold">REQUESTED STOCKS</div>
           </template>
-        </Column>
-        <Column
-          header="ACTION"
-          style="width: 10%"
-        >
-          <template #body="slotProps">
-            <div class="text-center">
-              <Button
-                v-if="slotProps.data.status == 'PENDING'"
-                icon="pi pi-check"
-                class="mr-1"
-                rounded
-                text
-                severity="success"
-                @click="editStatus(slotProps.data)"
-              />
-              <Button
-                v-if="slotProps.data.status == 'ACKNOWLEDGED'"
-                icon="pi pi-plus"
-                class="mr-1"
-                rounded
-                text
-                severity="primary"
-                @click="openCreateRequestStocksDialog(slotProps.data)"
-              />
-              <Button
-                v-if="slotProps.data.status == 'FILLED'"
-                icon="pi pi-pencil"
-                class="mr-1"
-                rounded
-                text
-                severity="warning"
-                @click="editRequestedStock(slotProps.data)"
-              />
-            </div>
-          </template>
-        </Column>
-        <template #expansion="slotProps">
-          <div class="p-3">
+          <div class="field">
             <DataTable
+              v-model:filters="requestStockListDetailsFilter"
+              :globalFilterFields="['itemDesc']"
+              :value="requestStockListDetails"
+              class="p-datatable-sm"
               paginator
               showGridlines
               removableSort
               :rows="7"
-              :value="slotProps.data.request_stocks_details"
             >
               <template #header>
-                <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-                  <span class="text-primary">PENDING ITEMS</span>
-                  <div class="flex flex-row align-items-center">
-                    <a
-                      v-if="slotProps.data.status != 'PENDING'"
-                      :href="`issuetankitems/issued?from=${params.from}&to=${params.to}
-                      &id=${(params.id = slotProps.data.id)}`"
-                      target="_blank"
-                      class="mr-3"
-                    >
-                      <i
-                        class="pi pi-download"
-                        :style="{ color: 'green', 'font-size': '1.2rem' }"
-                      ></i>
-                    </a>
+                <div>
+                  <div class="mr-2">
+                    <div class="p-inputgroup">
+                      <span class="p-inputgroup-addon">
+                        <i class="pi pi-search"></i>
+                      </span>
+                      <InputText
+                        id="searchInput"
+                        v-model="requestStockListDetailsFilter['global'].value"
+                        placeholder="Search item"
+                      />
+                    </div>
                   </div>
                 </div>
               </template>
               <Column
-                field="item"
-                header="ITEM"
+                field="itemDesc"
+                header="PENDING ITEM"
                 style="width: 50%"
-              >
-                <template #body="{ data }">
-                  {{ getTankDesc(data) }}
-                  <!-- {{ data.itemcode }} -->
-                </template>
-              </Column>
+                sortable
+              ></Column>
               <Column
                 field="requested_qty"
                 header="PENDING QTY"
-                style="text-align: right; width: 20%"
-              >
-              </Column>
+                style="text-align: right; width: 15%"
+              ></Column>
               <Column
                 field="approved_qty"
                 header="APPROVED QTY"
-                style="text-align: right; width: 20%"
-              ></Column>
+                style="text-align: right; width: 15%"
+              >
+                <template #body="slotProps">
+                  <InputNumber
+                    id="quantity"
+                    v-model.trim="slotProps.data.approved_qty"
+                    required="true"
+                    autofocus
+                    @keyup.enter="submit"
+                    inputId="integeronly"
+                  />
+                </template>
+              </Column>
               <Column
                 field="remarks"
-                header="REMARKS"
-                style="width: 10%"
-              ></Column>
+                header="REMARKS (OPTIONAL)"
+                style="width: 20%"
+              >
+                <template #body="slotProps">
+                  <Textarea
+                    v-model.trim="slotProps.data.remarks"
+                    rows="2"
+                    cols="30"
+                  />
+                </template>
+              </Column>
             </DataTable>
           </div>
-        </template>
-      </DataTable>
 
-      <!-- @hide="clickOutsideDialog" -->
-      <!-- create & edit dialog -->
-      <Dialog
-        v-model:visible="createRequestStocksDialog"
-        :modal="true"
-        class="p-fluid"
-        showGridlines
-        @hide="whenDialogIsHidden"
-      >
-        <template #header>
-          <div class="text-primary text-xl font-bold">REQUESTED STOCKS</div>
-        </template>
-        <div class="field">
-          <DataTable
-            v-model:filters="requestStockListDetailsFilter"
-            :globalFilterFields="['itemDesc']"
-            :value="requestStockListDetails"
-            class="p-datatable-sm"
-            paginator
-            showGridlines
-            removableSort
-            :rows="7"
-          >
-            <template #header>
-              <div>
-                <div class="mr-2">
-                  <div class="p-inputgroup">
-                    <span class="p-inputgroup-addon">
-                      <i class="pi pi-search"></i>
-                    </span>
-                    <InputText
-                      id="searchInput"
-                      v-model="requestStockListDetailsFilter['global'].value"
-                      placeholder="Search item"
-                    />
-                  </div>
-                </div>
-              </div>
-            </template>
-            <Column
-              field="itemDesc"
-              header="PENDING ITEM"
-              style="width: 50%"
-              sortable
-            ></Column>
-            <Column
-              field="requested_qty"
-              header="PENDING QTY"
-              style="text-align: right; width: 15%"
-            ></Column>
-            <Column
-              field="approved_qty"
-              header="APPROVED QTY"
-              style="text-align: right; width: 15%"
-            >
-              <template #body="slotProps">
-                <InputNumber
-                  id="quantity"
-                  v-model.trim="slotProps.data.approved_qty"
-                  required="true"
-                  autofocus
-                  @keyup.enter="submit"
-                  inputId="integeronly"
-                />
-              </template>
-            </Column>
-            <Column
-              field="remarks"
-              header="REMARKS (OPTIONAL)"
-              style="width: 20%"
-            >
-              <template #body="slotProps">
-                <Textarea
-                  v-model.trim="slotProps.data.remarks"
-                  rows="2"
-                  cols="30"
-                />
-              </template>
-            </Column>
-          </DataTable>
-        </div>
+          <template #footer>
+            <Button
+              label="Cancel"
+              icon="pi pi-times"
+              severity="danger"
+              text
+              @click="cancel"
+            />
+            <Button
+              v-if="isUpdate == true"
+              label="Update"
+              icon="pi pi-check"
+              severity="warning"
+              text
+              type="submit"
+              :disabled="form.processing"
+              @click="submit"
+            />
+            <Button
+              v-else
+              label="Save"
+              icon="pi pi-check"
+              text
+              type="submit"
+              :disabled="form.processing"
+              @click="submit"
+            />
+          </template>
+        </Dialog>
 
-        <template #footer>
-          <Button
-            label="Cancel"
-            icon="pi pi-times"
-            severity="danger"
-            text
-            @click="cancel"
-          />
-          <Button
-            v-if="isUpdate == true"
-            label="Update"
-            icon="pi pi-check"
-            severity="warning"
-            text
-            type="submit"
-            :disabled="form.processing"
-            @click="submit"
-          />
-          <Button
-            v-else
-            label="Save"
-            icon="pi pi-check"
-            text
-            type="submit"
-            :disabled="form.processing"
-            @click="submit"
-          />
-        </template>
-      </Dialog>
-
-      <!-- edit status -->
-      <Dialog
-        v-model:visible="editStatusDialog"
-        :style="{ width: '450px' }"
-        header="Confirm"
-        :modal="true"
-        dismissableMask
-      >
-        <div class="flex align-items-center justify-content-center">
-          <i
-            class="pi pi-exclamation-triangle mr-3"
-            style="font-size: 2rem"
-          />
-          <span v-if="form">
-            Are you sure you want to <b>update</b> the status of this requested stocks to <b>ACKNOWLEDGED</b>?
-          </span>
-        </div>
-        <template #footer>
-          <Button
-            label="No"
-            icon="pi pi-times"
-            class="p-button-text"
-            @click="editStatusDialog = false"
-          />
-          <Button
-            label="Yes"
-            icon="pi pi-check"
-            severity="danger"
-            text
-            :disabled="formUpdateStatus.processing"
-            @click="updateStatus"
-          />
-        </template>
-      </Dialog>
+        <!-- edit status -->
+        <Dialog
+          v-model:visible="editStatusDialog"
+          :style="{ width: '450px' }"
+          header="Confirm"
+          :modal="true"
+          dismissableMask
+        >
+          <div class="flex align-items-center justify-content-center">
+            <i
+              class="pi pi-exclamation-triangle mr-3"
+              style="font-size: 2rem"
+            />
+            <span v-if="form">
+              Are you sure you want to <b>update</b> the status of this requested stocks to <b>ACKNOWLEDGED</b>?
+            </span>
+          </div>
+          <template #footer>
+            <Button
+              label="No"
+              icon="pi pi-times"
+              class="p-button-text"
+              @click="editStatusDialog = false"
+            />
+            <Button
+              label="Yes"
+              icon="pi pi-check"
+              severity="danger"
+              text
+              :disabled="formUpdateStatus.processing"
+              @click="updateStatus"
+            />
+          </template>
+        </Dialog>
+      </div>
     </div>
   </app-layout>
 </template>
@@ -960,5 +967,35 @@ input[type='number'] {
 .my-link:hover {
   opacity: 1; /* Adjust the opacity value as needed */
   border-bottom-style: solid;
+}
+
+.button-link-current {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border: 1px solid #818cf8;
+  background-color: #818cf8;
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  /* border-radius: 4px; */
+  transition: background-color 0.3s ease;
+}
+.button-link {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border: 1px solid #818cf8;
+  /* background-color: #818cf8; */
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  /* border-radius: 4px; */
+  transition: background-color 0.3s ease;
+}
+
+.button-link-current:hover {
+  background-color: #5561d7;
+}
+.button-link:hover {
+  background-color: #5561d7;
 }
 </style>
