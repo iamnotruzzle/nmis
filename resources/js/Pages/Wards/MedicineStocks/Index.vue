@@ -2,209 +2,215 @@
   <app-layout>
     <Head title="NMIS - Stocks" />
 
-    <div class="mb-1">
-      <Link
-        href="requeststocks"
-        class="button-link mr-2"
-      >
-        OTHER ITEMS
-      </Link>
+    <div>
+      <div class="">
+        <Link
+          href="requeststocks"
+          class="button-link"
+        >
+          OTHER ITEMS
+        </Link>
 
-      <Link
-        href="requestmedsstocks"
-        class="button-link-current mr-2"
-      >
-        MEDICINE
-      </Link>
+        <Link
+          href="requestmedsstocks"
+          class="button-link-current"
+        >
+          MEDICINE
+        </Link>
 
-      <Link
-        href="requesttankstocks"
-        class="button-link mr-2"
-      >
-        TANKS
-      </Link>
-    </div>
+        <Link
+          href="requesttankstocks"
+          class="button-link"
+        >
+          TANKS
+        </Link>
+      </div>
 
-    <div class="card">
-      <Toast />
+      <div style="background-color: #818cf8; width: 100%; height: 4px"></div>
 
-      <DataTable
-        class="p-datatable-sm"
-        v-model:expandedRows="expandedRow"
-        v-model:filters="filters"
-        :value="requestStockList"
-        selectionMode="single"
-        lazy
-        paginator
-        :rows="rows"
-        removableSort
-        ref="dt"
-        :totalRecords="totalRecords"
-        @page="onPage($event)"
-        dataKey="id"
-        filterDisplay="row"
-        showGridlines
-        :loading="loading"
+      <div
+        class="card"
+        style="border-top-left-radius: 0; border-top-right-radius: 0"
       >
-        <template #header>
-          <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold text-primary">PENDING STOCKS</span>
-            <div class="flex">
-              <div class="mr-2">
-                <div class="p-inputgroup">
-                  <span class="p-inputgroup-addon">
-                    <i class="pi pi-search"></i>
-                  </span>
-                  <InputText
-                    id="searchInput"
-                    v-model="search"
-                    placeholder="Search item"
-                  />
+        <Toast />
+
+        <DataTable
+          class="p-datatable-sm"
+          v-model:expandedRows="expandedRow"
+          v-model:filters="filters"
+          :value="requestStockList"
+          selectionMode="single"
+          lazy
+          paginator
+          :rows="rows"
+          removableSort
+          ref="dt"
+          :totalRecords="totalRecords"
+          @page="onPage($event)"
+          dataKey="id"
+          filterDisplay="row"
+          showGridlines
+          :loading="loading"
+        >
+          <template #header>
+            <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+              <span class="text-xl text-900 font-bold text-primary">PENDING STOCKS</span>
+              <div class="flex">
+                <div class="mr-2">
+                  <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon">
+                      <i class="pi pi-search"></i>
+                    </span>
+                    <InputText
+                      id="searchInput"
+                      v-model="search"
+                      placeholder="Search item"
+                    />
+                  </div>
                 </div>
+                <Button
+                  label="Request stocks"
+                  icon="pi pi-plus"
+                  iconPos="right"
+                  @click="openCreateRequestStocksDialog"
+                />
               </div>
-              <Button
-                label="Request stocks"
-                icon="pi pi-plus"
-                iconPos="right"
-                @click="openCreateRequestStocksDialog"
-              />
-            </div>
-          </div>
-        </template>
-        <Column
-          expander
-          style="width: 5%"
-        />
-        <template #empty> No requested stock found. </template>
-        <template #loading> Loading requested stock data. Please wait. </template>
-        <Column
-          header="CREATED AT"
-          filterField="created_at"
-          style="width: 20%"
-          :showFilterMenu="false"
-        >
-          <template #body="{ data }">
-            {{ tzone(data.created_at) }}
-          </template>
-          <template #filter="{}">
-            <Calendar
-              v-model="from"
-              dateFormat="mm-dd-yy"
-              placeholder="FROM"
-              showIcon
-              showButtonBar
-              :manualInput="false"
-              :hideOnDateTimeSelect="true"
-            />
-            <div class="mt-2"></div>
-            <Calendar
-              v-model="to"
-              dateFormat="mm-dd-yy"
-              placeholder="TO"
-              showIcon
-              showButtonBar
-              :manualInput="false"
-              :hideOnDateTimeSelect="true"
-            />
-          </template>
-        </Column>
-        <Column
-          field="status"
-          header="STATUS"
-          style="width: 10%"
-        >
-          <template #body="{ data }">
-            <div class="flex justify-content-center align-content-center">
-              <Tag
-                v-if="data.status == 'PENDING'"
-                :value="data.status"
-              />
-              <Tag
-                v-if="data.status == 'ACKNOWLEDGED'"
-                :value="data.status"
-                class="bg-yellow-400 text-gray-900"
-              />
-              <Tag
-                v-if="data.status == 'FILLED'"
-                :value="data.status"
-                class="bg-blue-400"
-              />
-              <Tag
-                v-if="data.status == 'RECEIVED'"
-                :value="data.status"
-                class="bg-green-400"
-              />
-              <Tag
-                v-if="data.status == 'CANCELLED'"
-                :value="data.status"
-                style="background-color: rgb(239, 42, 42); color: rgb(253, 249, 249)"
-              />
             </div>
           </template>
-        </Column>
-        <Column
-          field="requested_by"
-          header="REQUESTED BY"
-          style="width: 30%"
-        >
-          <template #body="{ data }">
-            <div class="flex flex-row align-items-center">
-              <img
-                v-if="data.requested_by_image != null"
-                :src="`storage/${data.requested_by_image}`"
-                class="w-3rem h-3rem rounded-card"
+          <Column
+            expander
+            style="width: 5%"
+          />
+          <template #empty> No requested stock found. </template>
+          <template #loading> Loading requested stock data. Please wait. </template>
+          <Column
+            header="CREATED AT"
+            filterField="created_at"
+            style="width: 20%"
+            :showFilterMenu="false"
+          >
+            <template #body="{ data }">
+              {{ tzone(data.created_at) }}
+            </template>
+            <template #filter="{}">
+              <Calendar
+                v-model="from"
+                dateFormat="mm-dd-yy"
+                placeholder="FROM"
+                showIcon
+                showButtonBar
+                :manualInput="false"
+                :hideOnDateTimeSelect="true"
               />
-              <img
-                v-else
-                src="images/no_profile.png"
-                class="w-3rem h-3rem rounded-card"
+              <div class="mt-2"></div>
+              <Calendar
+                v-model="to"
+                dateFormat="mm-dd-yy"
+                placeholder="TO"
+                showIcon
+                showButtonBar
+                :manualInput="false"
+                :hideOnDateTimeSelect="true"
               />
+            </template>
+          </Column>
+          <Column
+            field="status"
+            header="STATUS"
+            style="width: 10%"
+          >
+            <template #body="{ data }">
+              <div class="flex justify-content-center align-content-center">
+                <Tag
+                  v-if="data.status == 'PENDING'"
+                  :value="data.status"
+                />
+                <Tag
+                  v-if="data.status == 'ACKNOWLEDGED'"
+                  :value="data.status"
+                  class="bg-yellow-400 text-gray-900"
+                />
+                <Tag
+                  v-if="data.status == 'FILLED'"
+                  :value="data.status"
+                  class="bg-blue-400"
+                />
+                <Tag
+                  v-if="data.status == 'RECEIVED'"
+                  :value="data.status"
+                  class="bg-green-400"
+                />
+                <Tag
+                  v-if="data.status == 'CANCELLED'"
+                  :value="data.status"
+                  style="background-color: rgb(239, 42, 42); color: rgb(253, 249, 249)"
+                />
+              </div>
+            </template>
+          </Column>
+          <Column
+            field="requested_by"
+            header="REQUESTED BY"
+            style="width: 30%"
+          >
+            <template #body="{ data }">
+              <div class="flex flex-row align-items-center">
+                <img
+                  v-if="data.requested_by_image != null"
+                  :src="`storage/${data.requested_by_image}`"
+                  class="w-3rem h-3rem rounded-card"
+                />
+                <img
+                  v-else
+                  src="images/no_profile.png"
+                  class="w-3rem h-3rem rounded-card"
+                />
 
-              <span class="font-semibold text-xl pl-3">
-                {{ data.requested_by }}
-              </span>
-            </div>
-          </template>
-        </Column>
-        <Column
-          field="approved_by"
-          header="APPROVED BY"
-          style="width: 30%"
-        >
-          <template #body="{ data }">
-            <div class="flex flex-row align-items-center">
-              <img
-                v-if="data.approved_by_image != null"
-                :src="`storage/${data.approved_by_image}`"
-                class="w-3rem h-3rem rounded-card"
-              />
+                <span class="font-semibold text-xl pl-3">
+                  {{ data.requested_by }}
+                </span>
+              </div>
+            </template>
+          </Column>
+          <Column
+            field="approved_by"
+            header="APPROVED BY"
+            style="width: 30%"
+          >
+            <template #body="{ data }">
+              <div class="flex flex-row align-items-center">
+                <img
+                  v-if="data.approved_by_image != null"
+                  :src="`storage/${data.approved_by_image}`"
+                  class="w-3rem h-3rem rounded-card"
+                />
 
-              <img
-                v-if="data.approved_by != null && data.approved_by_image == null"
-                src="images/no_profile.png"
-                class="w-3rem h-3rem rounded-card"
-              />
+                <img
+                  v-if="data.approved_by != null && data.approved_by_image == null"
+                  src="images/no_profile.png"
+                  class="w-3rem h-3rem rounded-card"
+                />
 
-              <span class="font-semibold text-xl pl-3">
-                {{ data.approved_by }}
-              </span>
-            </div>
-          </template>
-        </Column>
-        <Column
-          header="ACTION"
-          style="width: 5%"
-        >
-          <template #body="slotProps">
-            <div class="flex justify-content-around align-content-center">
-              <v-icon
-                v-if="slotProps.data.status == 'PENDING'"
-                name="pr-pencil"
-                class="text-yellow-500 text-xl"
-                @click="editRequestedStock(slotProps.data)"
-              ></v-icon>
+                <span class="font-semibold text-xl pl-3">
+                  {{ data.approved_by }}
+                </span>
+              </div>
+            </template>
+          </Column>
+          <Column
+            header="ACTION"
+            style="width: 5%"
+          >
+            <template #body="slotProps">
+              <div class="flex justify-content-around align-content-center">
+                <v-icon
+                  v-if="slotProps.data.status == 'PENDING'"
+                  name="pr-pencil"
+                  class="text-yellow-500 text-xl"
+                  @click="editRequestedStock(slotProps.data)"
+                ></v-icon>
 
-              <!-- <Button
+                <!-- <Button
               v-if="slotProps.data.status == 'PENDING'"
               icon="fc fc-cancel"
               rounded
@@ -212,419 +218,420 @@
               severity="danger"
               @click="confirmCancelItem(slotProps.data)"
             /> -->
-              <v-icon
-                v-if="slotProps.data.status == 'PENDING' || slotProps.data.status == 'ACKNOWLEDGED'"
-                name="fc-cancel"
-                class="text-red-500 text-xl"
-                @click="confirmCancelItem(slotProps.data)"
-              ></v-icon>
+                <v-icon
+                  v-if="slotProps.data.status == 'PENDING' || slotProps.data.status == 'ACKNOWLEDGED'"
+                  name="fc-cancel"
+                  class="text-red-500 text-xl"
+                  @click="confirmCancelItem(slotProps.data)"
+                ></v-icon>
+              </div>
+            </template>
+          </Column>
+          <template #expansion="slotProps">
+            <div class="p-3">
+              <h5 class="text-cyan-500 hover:text-cyan-700">ITEMS</h5>
+              <DataTable
+                paginator
+                removableSort
+                :rows="7"
+                :value="slotProps.data.request_stocks_details"
+              >
+                <Column
+                  field="item"
+                  header="ITEM"
+                  style="width: 60%"
+                >
+                  <template #body="{ data }">
+                    {{ data.item_details.cl2desc }}
+                  </template>
+                </Column>
+                <Column
+                  field="requested_qty"
+                  header="PENDING QTY"
+                  style="width: 10%"
+                ></Column>
+                <Column
+                  field="approved_qty"
+                  header="APPROVED QTY"
+                  style="width: 30%"
+                ></Column>
+              </DataTable>
             </div>
           </template>
-        </Column>
-        <template #expansion="slotProps">
-          <div class="p-3">
-            <h5 class="text-cyan-500 hover:text-cyan-700">ITEMS</h5>
+        </DataTable>
+
+        <!-- @hide="clickOutsideDialog" -->
+        <!-- create & edit dialog -->
+        <Dialog
+          v-model:visible="createRequestStocksDialog"
+          :modal="true"
+          class="p-fluid w-5"
+          @hide="whenDialogIsHidden"
+        >
+          <template #header>
+            <div class="text-primary text-xl font-bold">REQUEST STOCK</div>
+          </template>
+          <div class="field">
+            <label>Item</label>
+            <Dropdown
+              required="true"
+              v-model="item"
+              :options="medicinesList"
+              :virtualScrollerOptions="{ itemSize: 38 }"
+              filter
+              optionLabel="cl2desc"
+              class="w-full mb-3"
+            />
+          </div>
+          <div class="field">
+            <label for="Item">Quantity</label>
+            <InputNumber
+              id="quantity"
+              v-model.trim="requested_qty"
+              required="true"
+              autofocus
+              :class="{ 'p-invalid': requested_qty == '' || item == null }"
+              @keyup.enter="fillRequestContainer"
+              inputId="integeronly"
+            />
+            <small
+              class="text-error"
+              v-if="itemNotSelected == true"
+            >
+              {{ itemNotSelectedMsg }}
+            </small>
+          </div>
+          <div class="field mt-4">
+            <label class="mr-2">Requested stock list</label>
+            <i
+              class="pi pi-shopping-cart text-blue-500"
+              style="font-size: 1.5rem"
+            />
             <DataTable
+              v-model:filters="requestStockListDetailsFilter"
+              :globalFilterFields="['cl2desc']"
+              :value="requestStockListDetails"
+              tableStyle="min-width: 50rem"
+              class="p-datatable-sm w-full"
               paginator
               removableSort
-              :rows="7"
-              :value="slotProps.data.request_stocks_details"
+              showGridlines
+              :rows="5"
             >
+              <template #header>
+                <div class="flex justify-content-end">
+                  <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon">
+                      <i class="pi pi-search"></i>
+                    </span>
+                    <InputText
+                      id="searchInput"
+                      v-model="requestStockListDetailsFilter['global'].value"
+                      placeholder="Search item"
+                    />
+                  </div>
+                </div>
+              </template>
               <Column
-                field="item"
-                header="ITEM"
-                style="width: 60%"
-              >
-                <template #body="{ data }">
-                  {{ data.item_details.cl2desc }}
-                </template>
-              </Column>
+                field="cl2desc"
+                header="PENDING ITEM"
+                style="width: 70%"
+                sortable
+              ></Column>
               <Column
                 field="requested_qty"
                 header="PENDING QTY"
-                style="width: 10%"
+                style="width: 20%"
+                sortable
               ></Column>
               <Column
-                field="approved_qty"
-                header="APPROVED QTY"
-                style="width: 30%"
-              ></Column>
+                header=""
+                style="width: 10%"
+              >
+                <template #body="slotProps">
+                  <Button
+                    icon="pi pi-times"
+                    rounded
+                    text
+                    severity="danger"
+                    @click="removeFromRequestContainer(slotProps.data)"
+                  />
+                </template>
+              </Column>
             </DataTable>
           </div>
-        </template>
-      </DataTable>
 
-      <!-- @hide="clickOutsideDialog" -->
-      <!-- create & edit dialog -->
-      <Dialog
-        v-model:visible="createRequestStocksDialog"
-        :modal="true"
-        class="p-fluid w-5"
-        @hide="whenDialogIsHidden"
-      >
-        <template #header>
-          <div class="text-primary text-xl font-bold">REQUEST STOCK</div>
-        </template>
-        <div class="field">
-          <label>Item</label>
-          <Dropdown
-            required="true"
-            v-model="item"
-            :options="medicinesList"
-            :virtualScrollerOptions="{ itemSize: 38 }"
-            filter
-            optionLabel="cl2desc"
-            class="w-full mb-3"
-          />
-        </div>
-        <div class="field">
-          <label for="Item">Quantity</label>
-          <InputNumber
-            id="quantity"
-            v-model.trim="requested_qty"
-            required="true"
-            autofocus
-            :class="{ 'p-invalid': requested_qty == '' || item == null }"
-            @keyup.enter="fillRequestContainer"
-            inputId="integeronly"
-          />
-          <small
-            class="text-error"
-            v-if="itemNotSelected == true"
+          <template #footer>
+            <Button
+              label="Cancel"
+              icon="pi pi-times"
+              severity="danger"
+              text
+              @click="cancel"
+            />
+            <Button
+              v-if="isUpdate == true"
+              label="Update"
+              icon="pi pi-check"
+              severity="warning"
+              text
+              type="submit"
+              :disabled="form.processing || requestStockListDetails == '' || requestStockListDetails == null"
+              @click="submit"
+            />
+            <Button
+              v-else
+              label="Save"
+              icon="pi pi-check"
+              text
+              type="submit"
+              :disabled="form.processing || requestStockListDetails == '' || requestStockListDetails == null"
+              @click="submit"
+            />
+          </template>
+        </Dialog>
+
+        <!-- Cancel confirmation dialog -->
+        <Dialog
+          v-model:visible="cancelItemDialog"
+          :style="{ width: '450px' }"
+          header="Confirm"
+          :modal="true"
+          dismissableMask
+        >
+          <div class="flex align-items-center justify-content-center">
+            <i
+              class="pi pi-exclamation-triangle mr-3"
+              style="font-size: 2rem"
+            />
+            <span v-if="form">Are you sure you want to cancel this request?</span>
+          </div>
+          <template #footer>
+            <Button
+              label="No"
+              icon="pi pi-times"
+              class="p-button-text"
+              @click="cancelItemDialog = false"
+            />
+            <Button
+              label="Yes"
+              icon="pi pi-check"
+              severity="danger"
+              text
+              :disabled="form.processing"
+              @click="cancelItem"
+            />
+          </template>
+        </Dialog>
+
+        <!-- update ward stock dialog -->
+        <Dialog
+          v-model:visible="editWardStocksDialog"
+          header="Update stock"
+          :modal="true"
+          class="p-fluid w-4"
+          @hide="whenDialogIsHidden"
+          dismissableMask
+        >
+          <div class="field">
+            <label for="item">Item</label>
+            <InputText
+              id="item"
+              v-model.trim="formWardStocks.item"
+              readonly
+              class="w-full"
+            />
+          </div>
+          <div class="field">
+            <label for="quantity">Deduct from Stock</label>
+            <InputText
+              id="quantity"
+              v-model.trim="formWardStocks.quantity"
+              autofocus
+              class="w-full"
+            />
+            <small
+              class="text-error"
+              v-if="Number(formWardStocks.current_quantity) < Number(formWardStocks.quantity)"
+            >
+              Input must be less than the current stock quantity.
+            </small>
+          </div>
+          <div class="field">
+            <label for="expiration_date">Expiration date</label>
+            <InputText
+              id="expiration_date"
+              v-model.trim="formWardStocks.expiration_date"
+              readonly
+              class="w-full"
+            />
+          </div>
+          <div class="field">
+            <label for="remarks">Remarks <span class="text-error">(Required)</span></label>
+            <TextArea
+              v-model.trim="formWardStocks.remarks"
+              rows="5"
+              autofocus
+              :class="{ 'p-invalid': formWardStocks.remarks == '' }"
+            />
+            <small
+              class="text-error"
+              v-if="formWardStocks.errors.remarks"
+            >
+              {{ formWardStocks.errors.remarks }}
+            </small>
+          </div>
+
+          <template #footer>
+            <Button
+              label="Cancel"
+              icon="pi pi-times"
+              severity="danger"
+              text
+              @click="cancel"
+            />
+
+            <Button
+              label="Update"
+              icon="pi pi-check"
+              severity="warning"
+              text
+              type="submit"
+              :disabled="
+                formWardStocks.processing ||
+                formWardStocks.quantity == null ||
+                formWardStocks.quantity == '' ||
+                formWardStocks.quantity == 0 ||
+                Number(formWardStocks.current_quantity) < Number(formWardStocks.quantity)
+              "
+              @click="submitEditWardStocks"
+            />
+          </template>
+        </Dialog>
+      </div>
+
+      <div class="card">
+        <!-- current ward stocks -->
+        <DataTable
+          class="p-datatable-sm"
+          dataKey="id"
+          v-model:filters="currentWardStocksFilter"
+          :value="currentWardStocksList"
+          paginator
+          :rows="10"
+          :rowsPerPageOptions="[10, 30, 50]"
+          removableSort
+          sortField="expiration_date"
+          :sortOrder="1"
+          showGridlines
+          :loading="loading"
+        >
+          <template #header>
+            <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+              <span class="text-xl text-900 font-bold text-primary">CURRENT STOCKS</span>
+
+              <div class="flex">
+                <div class="mr-2">
+                  <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon">
+                      <i class="pi pi-search"></i>
+                    </span>
+                    <InputText
+                      id="searchInput"
+                      v-model="currentWardStocksFilter['global'].value"
+                      placeholder="Search item"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </template>
+          <template #empty> No item found. </template>
+          <template #loading> Loading item data. Please wait. </template>
+          <Column
+            field="from"
+            header="FROM"
+            style="width: 20%"
+            sortable
           >
-            {{ itemNotSelectedMsg }}
-          </small>
-        </div>
-        <div class="field mt-4">
-          <label class="mr-2">Requested stock list</label>
-          <i
-            class="pi pi-shopping-cart text-blue-500"
-            style="font-size: 1.5rem"
-          />
-          <DataTable
-            v-model:filters="requestStockListDetailsFilter"
-            :globalFilterFields="['cl2desc']"
-            :value="requestStockListDetails"
-            tableStyle="min-width: 50rem"
-            class="p-datatable-sm w-full"
-            paginator
-            removableSort
-            showGridlines
-            :rows="5"
+          </Column>
+          <Column
+            field="item"
+            header="ITEM"
+            style="width: 30%"
+            sortable
           >
-            <template #header>
-              <div class="flex justify-content-end">
-                <div class="p-inputgroup">
-                  <span class="p-inputgroup-addon">
-                    <i class="pi pi-search"></i>
+            <template #body="{ data }">
+              {{ data.item }}
+            </template>
+          </Column>
+          <Column
+            field="unit"
+            header="UNIT"
+            style="width: 10%"
+            sortable
+          >
+          </Column>
+          <Column
+            field="quantity"
+            header="QUANTITY"
+            style="width: 5%"
+            sortable
+          >
+            <template #body="{ data }">
+              {{ data.quantity }}
+            </template>
+          </Column>
+          <Column
+            field="expiration_date"
+            header="EXPIRATION DATE"
+            style="width: 15%"
+            sortable
+          >
+            <template #body="{ data }">
+              <div class="flex flex-column">
+                <div>
+                  {{ tzone(data.expiration_date) }}
+                </div>
+
+                <div class="mays-2">
+                  <span
+                    :class="
+                      checkIfAboutToExpire(data.expiration_date) != 'Item has expired.'
+                        ? 'text-lg text-green-500'
+                        : 'text-lg text-error'
+                    "
+                  >
+                    {{ checkIfAboutToExpire(data.expiration_date) }}
                   </span>
-                  <InputText
-                    id="searchInput"
-                    v-model="requestStockListDetailsFilter['global'].value"
-                    placeholder="Search item"
-                  />
                 </div>
               </div>
             </template>
-            <Column
-              field="cl2desc"
-              header="PENDING ITEM"
-              style="width: 70%"
-              sortable
-            ></Column>
-            <Column
-              field="requested_qty"
-              header="PENDING QTY"
-              style="width: 20%"
-              sortable
-            ></Column>
-            <Column
-              header=""
-              style="width: 10%"
-            >
-              <template #body="slotProps">
+          </Column>
+          <Column
+            header="ACTION"
+            style="width: 10%"
+          >
+            <template #body="slotProps">
+              <div class="flex justify-content-center">
                 <Button
-                  icon="pi pi-times"
                   rounded
                   text
-                  severity="danger"
-                  @click="removeFromRequestContainer(slotProps.data)"
-                />
-              </template>
-            </Column>
-          </DataTable>
-        </div>
-
-        <template #footer>
-          <Button
-            label="Cancel"
-            icon="pi pi-times"
-            severity="danger"
-            text
-            @click="cancel"
-          />
-          <Button
-            v-if="isUpdate == true"
-            label="Update"
-            icon="pi pi-check"
-            severity="warning"
-            text
-            type="submit"
-            :disabled="form.processing || requestStockListDetails == '' || requestStockListDetails == null"
-            @click="submit"
-          />
-          <Button
-            v-else
-            label="Save"
-            icon="pi pi-check"
-            text
-            type="submit"
-            :disabled="form.processing || requestStockListDetails == '' || requestStockListDetails == null"
-            @click="submit"
-          />
-        </template>
-      </Dialog>
-
-      <!-- Cancel confirmation dialog -->
-      <Dialog
-        v-model:visible="cancelItemDialog"
-        :style="{ width: '450px' }"
-        header="Confirm"
-        :modal="true"
-        dismissableMask
-      >
-        <div class="flex align-items-center justify-content-center">
-          <i
-            class="pi pi-exclamation-triangle mr-3"
-            style="font-size: 2rem"
-          />
-          <span v-if="form">Are you sure you want to cancel this request?</span>
-        </div>
-        <template #footer>
-          <Button
-            label="No"
-            icon="pi pi-times"
-            class="p-button-text"
-            @click="cancelItemDialog = false"
-          />
-          <Button
-            label="Yes"
-            icon="pi pi-check"
-            severity="danger"
-            text
-            :disabled="form.processing"
-            @click="cancelItem"
-          />
-        </template>
-      </Dialog>
-
-      <!-- update ward stock dialog -->
-      <Dialog
-        v-model:visible="editWardStocksDialog"
-        header="Update stock"
-        :modal="true"
-        class="p-fluid w-4"
-        @hide="whenDialogIsHidden"
-        dismissableMask
-      >
-        <div class="field">
-          <label for="item">Item</label>
-          <InputText
-            id="item"
-            v-model.trim="formWardStocks.item"
-            readonly
-            class="w-full"
-          />
-        </div>
-        <div class="field">
-          <label for="quantity">Deduct from Stock</label>
-          <InputText
-            id="quantity"
-            v-model.trim="formWardStocks.quantity"
-            autofocus
-            class="w-full"
-          />
-          <small
-            class="text-error"
-            v-if="Number(formWardStocks.current_quantity) < Number(formWardStocks.quantity)"
-          >
-            Input must be less than the current stock quantity.
-          </small>
-        </div>
-        <div class="field">
-          <label for="expiration_date">Expiration date</label>
-          <InputText
-            id="expiration_date"
-            v-model.trim="formWardStocks.expiration_date"
-            readonly
-            class="w-full"
-          />
-        </div>
-        <div class="field">
-          <label for="remarks">Remarks <span class="text-error">(Required)</span></label>
-          <TextArea
-            v-model.trim="formWardStocks.remarks"
-            rows="5"
-            autofocus
-            :class="{ 'p-invalid': formWardStocks.remarks == '' }"
-          />
-          <small
-            class="text-error"
-            v-if="formWardStocks.errors.remarks"
-          >
-            {{ formWardStocks.errors.remarks }}
-          </small>
-        </div>
-
-        <template #footer>
-          <Button
-            label="Cancel"
-            icon="pi pi-times"
-            severity="danger"
-            text
-            @click="cancel"
-          />
-
-          <Button
-            label="Update"
-            icon="pi pi-check"
-            severity="warning"
-            text
-            type="submit"
-            :disabled="
-              formWardStocks.processing ||
-              formWardStocks.quantity == null ||
-              formWardStocks.quantity == '' ||
-              formWardStocks.quantity == 0 ||
-              Number(formWardStocks.current_quantity) < Number(formWardStocks.quantity)
-            "
-            @click="submitEditWardStocks"
-          />
-        </template>
-      </Dialog>
-    </div>
-
-    <div class="card">
-      <!-- current ward stocks -->
-      <DataTable
-        class="p-datatable-sm"
-        dataKey="id"
-        v-model:filters="currentWardStocksFilter"
-        :value="currentWardStocksList"
-        paginator
-        :rows="10"
-        :rowsPerPageOptions="[10, 30, 50]"
-        removableSort
-        sortField="expiration_date"
-        :sortOrder="1"
-        showGridlines
-        :loading="loading"
-      >
-        <template #header>
-          <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold text-primary">CURRENT STOCKS</span>
-
-            <div class="flex">
-              <div class="mr-2">
-                <div class="p-inputgroup">
-                  <span class="p-inputgroup-addon">
-                    <i class="pi pi-search"></i>
-                  </span>
-                  <InputText
-                    id="searchInput"
-                    v-model="currentWardStocksFilter['global'].value"
-                    placeholder="Search item"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </template>
-        <template #empty> No item found. </template>
-        <template #loading> Loading item data. Please wait. </template>
-        <Column
-          field="from"
-          header="FROM"
-          style="width: 20%"
-          sortable
-        >
-        </Column>
-        <Column
-          field="item"
-          header="ITEM"
-          style="width: 30%"
-          sortable
-        >
-          <template #body="{ data }">
-            {{ data.item }}
-          </template>
-        </Column>
-        <Column
-          field="unit"
-          header="UNIT"
-          style="width: 10%"
-          sortable
-        >
-        </Column>
-        <Column
-          field="quantity"
-          header="QUANTITY"
-          style="width: 5%"
-          sortable
-        >
-          <template #body="{ data }">
-            {{ data.quantity }}
-          </template>
-        </Column>
-        <Column
-          field="expiration_date"
-          header="EXPIRATION DATE"
-          style="width: 15%"
-          sortable
-        >
-          <template #body="{ data }">
-            <div class="flex flex-column">
-              <div>
-                {{ tzone(data.expiration_date) }}
-              </div>
-
-              <div class="mays-2">
-                <span
-                  :class="
-                    checkIfAboutToExpire(data.expiration_date) != 'Item has expired.'
-                      ? 'text-lg text-green-500'
-                      : 'text-lg text-error'
-                  "
+                  severity="warning"
+                  @click="editWardStocks(slotProps.data)"
                 >
-                  {{ checkIfAboutToExpire(data.expiration_date) }}
-                </span>
+                  <template #default="">
+                    <v-icon
+                      name="pr-pencil"
+                      class="text-yellow-500"
+                    ></v-icon>
+                  </template>
+                </Button>
               </div>
-            </div>
-          </template>
-        </Column>
-        <Column
-          header="ACTION"
-          style="width: 10%"
-        >
-          <template #body="slotProps">
-            <div class="flex justify-content-center">
-              <Button
-                rounded
-                text
-                severity="warning"
-                @click="editWardStocks(slotProps.data)"
-              >
-                <template #default="">
-                  <v-icon
-                    name="pr-pencil"
-                    class="text-yellow-500"
-                  ></v-icon>
-                </template>
-              </Button>
-            </div>
-          </template>
-        </Column>
-      </DataTable>
+            </template>
+          </Column>
+        </DataTable>
+      </div>
     </div>
   </app-layout>
 </template>
@@ -1160,7 +1167,7 @@ input[type='number'] {
   color: #fff;
   text-decoration: none;
   text-align: center;
-  border-radius: 4px;
+  /* border-radius: 4px; */
   transition: background-color 0.3s ease;
 }
 .button-link {
@@ -1171,7 +1178,7 @@ input[type='number'] {
   color: #fff;
   text-decoration: none;
   text-align: center;
-  border-radius: 4px;
+  /* border-radius: 4px; */
   transition: background-color 0.3s ease;
 }
 
