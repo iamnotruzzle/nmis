@@ -703,8 +703,8 @@ export default {
   mounted() {
     this.storeFundSourceInContainer();
     this.storeMedicinesInContainer();
-    this.storeRequestedStocksInContainer();
-    this.storeCurrentWardStocksInContainer();
+    // this.storeRequestedStocksInContainer();
+    // this.storeCurrentWardStocksInContainer();
 
     this.loading = false;
   },

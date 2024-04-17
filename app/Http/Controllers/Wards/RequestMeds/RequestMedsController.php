@@ -14,6 +14,7 @@ class RequestMedsController extends Controller
     public function index()
     {
         $medicines = [];
+
         $resultArray = DB::select(
             "SELECT dmdcomb, dmdctr, drug_concat
                 FROM hdmhdr
