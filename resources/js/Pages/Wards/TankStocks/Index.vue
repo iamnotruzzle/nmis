@@ -34,7 +34,7 @@
       >
         <Toast />
 
-        <span class="text-xl text-900 font-bold text-primary">PENDING STOCKS</span>
+        <span class="text-xl text-900 font-bold text-primary">REQUESTED STOCKS</span>
 
         <DataTable
           class="p-datatable-sm"
