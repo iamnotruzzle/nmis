@@ -55,6 +55,7 @@ return array(
     'App\\Http\\Controllers\\Wards\\Patients\\PatientChargeController' => $baseDir . '/app/Http/Controllers/Wards/Patients/PatientChargeController.php',
     'App\\Http\\Controllers\\Wards\\Patients\\WardPatientsController' => $baseDir . '/app/Http/Controllers/Wards/Patients/WardPatientsController.php',
     'App\\Http\\Controllers\\Wards\\Reports\\ReportController' => $baseDir . '/app/Http/Controllers/Wards/Reports/ReportController.php',
+    'App\\Http\\Controllers\\Wards\\RequestMeds\\RequestMedsController' => $baseDir . '/app/Http/Controllers/Wards/RequestMeds/RequestMedsController.php',
     'App\\Http\\Controllers\\Wards\\RequestStocks\\RequestStocksController' => $baseDir . '/app/Http/Controllers/Wards/RequestStocks/RequestStocksController.php',
     'App\\Http\\Controllers\\Wards\\RequestStocks\\RequestStocksLogs\\RequestStocksLogsController' => $baseDir . '/app/Http/Controllers/Wards/RequestStocks/RequestStocksLogs/RequestStocksLogsController.php',
     'App\\Http\\Controllers\\Wards\\RequestTankStocks\\RequestTankStocksController' => $baseDir . '/app/Http/Controllers/Wards/RequestTankStocks/RequestTankStocksController.php',

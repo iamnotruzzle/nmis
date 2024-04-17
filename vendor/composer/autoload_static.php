@@ -734,6 +734,7 @@ class ComposerStaticInita35f14ec21fb126801fb4364978bffb6
         'App\\Http\\Controllers\\Wards\\Patients\\PatientChargeController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/Patients/PatientChargeController.php',
         'App\\Http\\Controllers\\Wards\\Patients\\WardPatientsController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/Patients/WardPatientsController.php',
         'App\\Http\\Controllers\\Wards\\Reports\\ReportController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/Reports/ReportController.php',
+        'App\\Http\\Controllers\\Wards\\RequestMeds\\RequestMedsController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/RequestMeds/RequestMedsController.php',
         'App\\Http\\Controllers\\Wards\\RequestStocks\\RequestStocksController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/RequestStocks/RequestStocksController.php',
         'App\\Http\\Controllers\\Wards\\RequestStocks\\RequestStocksLogs\\RequestStocksLogsController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/RequestStocks/RequestStocksLogs/RequestStocksLogsController.php',
         'App\\Http\\Controllers\\Wards\\RequestTankStocks\\RequestTankStocksController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/RequestTankStocks/RequestTankStocksController.php',
