@@ -253,7 +253,7 @@
             />
             <DataTable
               v-model:filters="requestStockListDetailsFilter"
-              :globalFilterFields="['dmdcomb']"
+              :globalFilterFields="['name']"
               :value="requestStockListDetails"
               tableStyle="min-width: 50rem"
               class="p-datatable-sm w-full"
@@ -679,9 +679,6 @@ export default {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       form: this.$inertia.form({
-        request_stocks_id: null,
-        location: null,
-        requested_by: null,
         requestStockListDetails: [],
       }),
       formWardStocks: this.$inertia.form({
@@ -704,7 +701,7 @@ export default {
   mounted() {
     this.storeFundSourceInContainer();
     this.storeMedicinesInContainer();
-    this.storeMedRequestInContainer();
+    this.storeMedsRequestInContainer();
     // this.storeCurrentWardStocksInContainer();
 
     this.loading = false;
@@ -721,6 +718,7 @@ export default {
           dmdprdte: e.dmdprdte,
           dmdcomb: e.dmdcomb,
           dmdctr: e.dmdctr,
+          drug_concat: e.drug_concat,
           selling_price: e.selling_price,
           requested_qty: e.requested_qty,
           approved_qty: e.approved_qty,
@@ -730,6 +728,7 @@ export default {
           remarks: e.remarks,
         });
       });
+      console.log(this.medsRequestList);
     },
     storeFundSourceInContainer() {
       this.fundSource.forEach((e) => {
@@ -742,7 +741,7 @@ export default {
       });
     },
     storeMedicinesInContainer() {
-      console.log(this.medicines);
+      //   console.log(this.medicines);
       this.medicinesList = []; // reset
       this.medicines.forEach((e) => {
         this.medicinesList.push({
@@ -893,6 +892,7 @@ export default {
             this.itemNotSelectedMsg = null;
             this.requestStockListDetails.push({
               dmdcomb: this.item['dmdcomb'],
+              dmdctr: this.item['dmdctr'],
               name: this.item['name'],
               requested_qty: this.requested_qty,
             });
@@ -929,7 +929,6 @@ export default {
       }
 
       // setup location, requested by and requestStockListDetails before submitting
-      this.form.location = this.authWardcode.wardcode;
       this.form.requested_by = this.user.userDetail.employeeid;
       this.form.requestStockListDetails = this.requestStockListDetails;
 

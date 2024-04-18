@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCsrwMedsRequestTable extends Migration
+class CreateCsrwMedsRequest extends Migration
 {
     /**
      * Run the migrations.
@@ -15,13 +15,13 @@ class CreateCsrwMedsRequestTable extends Migration
     {
         Schema::create('csrw_meds_request', function (Blueprint $table) {
             $table->id();
-            $table->dateTime('dmdprdte');
+            $table->dateTime('dmdprdte')->nullable();
             $table->string('dmdcomb')->nullable();
-            $table->string('dmdctr');
+            $table->string('dmdctr')->nullable();
             $table->decimal('selling_price', $precision = 8, $scale = 2)->nullable();
             $table->integer('requested_qty');
             $table->integer('approved_qty')->nullable();
-            $table->dateTime('expiration_date');
+            $table->dateTime('expiration_date')->nullable();
             $table->string('wardcode');
             $table->string('status');
             $table->text('remarks')->nullable();
