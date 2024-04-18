@@ -1149,5 +1149,6 @@ input[type='number'] {
 }
 .button-link:hover {
   background-color: #5561d7;
+  color: white !important;
 }
 </style>
