@@ -49,7 +49,8 @@ class RequestMedsController extends Controller
                     request.expiration_date, request.status,
                     request.created_at
                 FROM csrw_meds_request as request
-                JOIN hdmhdr as meds ON meds.dmdcomb = request.dmdcomb"
+                JOIN hdmhdr as meds ON meds.dmdcomb = request.dmdcomb
+                WHERE request.wardcode = '$authWardcode->wardcode';"
         );
 
         // dd($medsRequest);
