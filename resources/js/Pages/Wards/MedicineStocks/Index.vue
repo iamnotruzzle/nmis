@@ -38,17 +38,12 @@
 
         <DataTable
           class="p-datatable-sm"
-          v-model:expandedRows="expandedRow"
           v-model:filters="filters"
-          :value="requestStockList"
+          :value="medsRequestList"
           selectionMode="single"
-          lazy
           paginator
-          :rows="rows"
+          :rows="10"
           removableSort
-          ref="dt"
-          :totalRecords="totalRecords"
-          @page="onPage($event)"
           dataKey="id"
           filterDisplay="row"
           showGridlines
@@ -78,10 +73,6 @@
               </div>
             </div>
           </template>
-          <Column
-            expander
-            style="width: 5%"
-          />
           <template #empty> No requested stock found. </template>
           <template #loading> Loading requested stock data. Please wait. </template>
           <!-- <Column
@@ -115,6 +106,26 @@
               />
             </template>
           </Column> -->
+          <Column
+            field="id"
+            header="ID"
+            style="width: 10%"
+          ></Column>
+          <Column
+            field="name"
+            header="ITEM"
+            style="width: 10%"
+          ></Column>
+          <Column
+            field="requested_qty"
+            header="REQUESTED QTY"
+            style="width: 10%"
+          ></Column>
+          <Column
+            field="approved_qty"
+            header="APPROVED QTY"
+            style="width: 10%"
+          ></Column>
           <Column
             field="status"
             header="STATUS"
@@ -171,37 +182,6 @@
               </div>
             </template>
           </Column>
-          <!-- <template #expansion="slotProps">
-            <div class="p-3">
-              <h5 class="text-cyan-500 hover:text-cyan-700">ITEMS</h5>
-              <DataTable
-                paginator
-                removableSort
-                :rows="7"
-                :value="slotProps.data.request_stocks_details"
-              >
-                <Column
-                  field="item"
-                  header="ITEM"
-                  style="width: 60%"
-                >
-                  <template #body="{ data }">
-                    {{ data.item_details.cl2desc }}
-                  </template>
-                </Column>
-                <Column
-                  field="requested_qty"
-                  header="PENDING QTY"
-                  style="width: 10%"
-                ></Column>
-                <Column
-                  field="approved_qty"
-                  header="APPROVED QTY"
-                  style="width: 30%"
-                ></Column>
-              </DataTable>
-            </div>
-          </template> -->
         </DataTable>
 
         <!-- @hide="clickOutsideDialog" -->
@@ -714,11 +694,14 @@ export default {
   methods: {
     storeMedsRequestInContainer() {
       this.medsRequest.forEach((e) => {
+        const removeUnderscore = e.drug_concat.replace(/_/g, '');
+
         this.medsRequestList.push({
+          id: e.id,
           dmdprdte: e.dmdprdte,
           dmdcomb: e.dmdcomb,
           dmdctr: e.dmdctr,
-          drug_concat: e.drug_concat,
+          name: removeUnderscore,
           selling_price: e.selling_price,
           requested_qty: e.requested_qty,
           approved_qty: e.approved_qty,

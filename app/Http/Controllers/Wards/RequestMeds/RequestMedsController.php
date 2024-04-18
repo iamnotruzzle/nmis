@@ -15,6 +15,13 @@ class RequestMedsController extends Controller
 {
     public function index()
     {
+        $authWardcode = DB::table('csrw_users')
+            ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
+            ->select('csrw_login_history.wardcode')
+            ->where('csrw_login_history.employeeid', Auth::user()->employeeid)
+            ->orderBy('csrw_login_history.created_at', 'desc')
+            ->first();
+
         $medicines = [];
 
         $resultArray = DB::select(
