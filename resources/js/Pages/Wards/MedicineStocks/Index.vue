@@ -41,12 +41,15 @@
           v-model:filters="filters"
           :value="medsRequestList"
           selectionMode="single"
+          rowGroupMode="subheader"
           paginator
           :rows="10"
           removableSort
           dataKey="id"
           filterDisplay="row"
           showGridlines
+          sortField="created_at"
+          :sortOrder="-1"
           :loading="loading"
         >
           <template #header>
@@ -59,7 +62,7 @@
                     </span>
                     <InputText
                       id="searchInput"
-                      v-model="search"
+                      v-model="filters['global'].value"
                       placeholder="Search item"
                     />
                   </div>
@@ -107,6 +110,15 @@
             </template>
           </Column> -->
           <Column
+            field="reference_id"
+            header="REFERENCE ID"
+            style="width: 10%"
+          >
+            <!-- <template #body="{ data }">
+              {{ data.charge_slip_no }}
+            </template> -->
+          </Column>
+          <Column
             field="id"
             header="ID"
             style="width: 10%"
@@ -130,6 +142,7 @@
             field="status"
             header="STATUS"
             style="width: 10%"
+            sortable
           >
             <template #body="{ data }">
               <div class="flex justify-content-center align-content-center">
@@ -698,6 +711,7 @@ export default {
 
         this.medsRequestList.push({
           id: e.id,
+          reference_id: e.reference_id,
           dmdprdte: e.dmdprdte,
           dmdcomb: e.dmdcomb,
           dmdctr: e.dmdctr,
@@ -709,6 +723,7 @@ export default {
           wardcode: e.wardcode,
           status: e.status,
           remarks: e.remarks,
+          created_at: e.created_at,
         });
       });
       console.log(this.medsRequestList);
@@ -810,21 +825,19 @@ export default {
       this.updateData();
     },
     updateData() {
-      //   this.loading = true;
-      //   this.$inertia.get('requeststocks', this.params, {
-      //     preserveState: true,
-      //     preserveScroll: true,
-      //     onFinish: (visit) => {
-      //       this.totalRecords = this.requestedStocks.total;
-      //       this.requestStockList = [];
-      //       this.currentWardStocksList = [];
-      //       this.expandedRow = [];
-      //       this.storeMedRequestInContainer();
-      //       this.storeCurrentWardStocksInContainer();
-      //       this.loading = false;
-      //       this.formUpdateStatus.reset();
-      //     },
-      //   });
+      this.$inertia.get('requestmedsstocks', this.params, {
+        preserveState: true,
+        preserveScroll: true,
+        onFinish: (visit) => {
+          // this.totalRecords = this.requestedStocks.total;
+
+          this.medsRequestList = [];
+          this.currentWardStocksList = [];
+          this.storeFundSourceInContainer();
+          this.storeMedicinesInContainer();
+          this.storeMedsRequestInContainer();
+        },
+      });
     },
     openCreateRequestStocksDialog() {
       this.isUpdate = false;

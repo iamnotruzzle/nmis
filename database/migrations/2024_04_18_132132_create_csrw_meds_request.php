@@ -15,6 +15,7 @@ class CreateCsrwMedsRequest extends Migration
     {
         Schema::create('csrw_meds_request', function (Blueprint $table) {
             $table->id();
+            $table->string('reference_id');
             $table->dateTime('dmdprdte')->nullable();
             $table->string('dmdcomb')->nullable();
             $table->string('dmdctr')->nullable();
