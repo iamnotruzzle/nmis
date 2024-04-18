@@ -774,6 +774,7 @@ export default {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       form: this.$inertia.form({
+        reference_id: null,
         requestStockListDetails: [],
       }),
       formWardStocks: this.$inertia.form({
@@ -1036,17 +1037,18 @@ export default {
       );
     },
     editRequestedStock(item) {
-      this.form.request_stocks_id = item.id;
+      console.log(item);
+      this.form.reference_id = item.reference_id;
 
       this.isUpdate = true;
       this.createRequestStocksDialog = true;
-      this.requestStockId = item.id;
+      this.requestStockId = item.reference_id;
 
-      item.request_stocks_details.forEach((e) => {
+      item.request_details.forEach((e) => {
         this.requestStockListDetails.push({
-          request_stocks_details_id: e.id,
+          id: e.id,
           dmdcomb: e.dmdcomb,
-          cl2desc: e.item_details.cl2desc,
+          name: e.name,
           requested_qty: e.requested_qty,
         });
       });
