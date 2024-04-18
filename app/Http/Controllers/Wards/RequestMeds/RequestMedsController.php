@@ -20,6 +20,7 @@ class RequestMedsController extends Controller
                 FROM hdmhdr
                 WHERE dmdstat = 'A'
                 AND drug_concat IS NOT NULL
+                AND exists (select * from [hospital].[dbo].[hgen] inner join [hospital].[dbo].[hdruggrp] on [hospital].[dbo].[hdruggrp].[gencode] = [hospital].[dbo].[hgen].[gencode] where [hospital].[dbo].[hdmhdr].[grpcode] = [hospital].[dbo].[hdruggrp].[grpcode])
                 ORDER BY drug_concat ASC;"
         );
         foreach ($resultArray as $result) {

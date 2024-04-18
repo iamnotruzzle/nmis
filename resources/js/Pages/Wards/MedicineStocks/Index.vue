@@ -223,7 +223,8 @@
               :options="medicinesList"
               :virtualScrollerOptions="{ itemSize: 38 }"
               filter
-              optionLabel="cl2desc"
+              optionValue="dmdcomb"
+              optionLabel="name"
               class="w-full mb-3"
             />
           </div>
@@ -704,7 +705,7 @@ export default {
   mounted() {
     this.storeFundSourceInContainer();
     this.storeMedicinesInContainer();
-    // this.storeRequestedStocksInContainer();
+    this.storeMedRequestInContainer();
     // this.storeCurrentWardStocksInContainer();
 
     this.loading = false;
@@ -742,38 +743,39 @@ export default {
       });
     },
     storeMedicinesInContainer() {
+      console.log(this.medicines);
       this.medicinesList = []; // reset
       this.medicines.forEach((e) => {
         this.medicinesList.push({
-          cl2comb: e.cl2comb,
-          cl2desc: e.cl2desc,
-          uomcode: e.unit == null ? null : e.unit.uomcode,
-          uomdesc: e.unit == null ? null : e.unit.uomdesc,
+          dmdcomb: e.dmdcomb,
+          dmdctr: e.dmdctr,
+          name: e.drug_concat.join(''),
         });
       });
     },
-    // use storeRequestedStocksInContainer() function so that every time you make
+    // use storeMedRequestInContainer() function so that every time you make
     // server request such as POST, the data in the table
     // is updated
-    // storeRequestedStocksInContainer() {
-    //   this.requestStockList = []; // reset
+    storeMedRequestInContainer() {
+      //   console.log(this.medsRequest);
+      this.requestStockList = []; // reset
 
-    //   this.requestedStocks.data.forEach((e) => {
-    //     this.requestStockList.push({
-    //       id: e.id,
-    //       status: e.status,
-    //       requested_by: e.requested_by_details.firstname + ' ' + e.requested_by_details.lastname,
-    //       requested_by_image: e.requested_by_details.user_account.image,
-    //       approved_by:
-    //         e.approved_by_details != null
-    //           ? e.approved_by_details.firstname + ' ' + e.approved_by_details.lastname
-    //           : null,
-    //       approved_by_image: e.approved_by_details != null ? e.approved_by_details.user_account.image : null,
-    //       created_at: e.created_at,
-    //       request_stocks_details: e.request_stocks_details,
-    //     });
-    //   });
-    // },
+      //   this.requestedStocks.data.forEach((e) => {
+      //     this.requestStockList.push({
+      //       id: e.id,
+      //       status: e.status,
+      //       requested_by: e.requested_by_details.firstname + ' ' + e.requested_by_details.lastname,
+      //       requested_by_image: e.requested_by_details.user_account.image,
+      //       approved_by:
+      //         e.approved_by_details != null
+      //           ? e.approved_by_details.firstname + ' ' + e.approved_by_details.lastname
+      //           : null,
+      //       approved_by_image: e.approved_by_details != null ? e.approved_by_details.user_account.image : null,
+      //       created_at: e.created_at,
+      //       request_stocks_details: e.request_stocks_details,
+      //     });
+      //   });
+    },
     // store current stocks
     // storeCurrentWardStocksInContainer() {
     //   this.currentWardStocksList = []; // reset
@@ -836,7 +838,7 @@ export default {
       //       this.requestStockList = [];
       //       this.currentWardStocksList = [];
       //       this.expandedRow = [];
-      //       this.storeRequestedStocksInContainer();
+      //       this.storeMedRequestInContainer();
       //       this.storeCurrentWardStocksInContainer();
       //       this.loading = false;
       //       this.formUpdateStatus.reset();
