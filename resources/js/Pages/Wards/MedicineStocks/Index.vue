@@ -40,12 +40,13 @@
           class="p-datatable-sm"
           v-model:filters="filters"
           :value="medsRequestList"
+          v-model:expandedRows="expandedRow"
           selectionMode="single"
           rowGroupMode="subheader"
           paginator
           :rows="10"
           removableSort
-          dataKey="id"
+          dataKey="reference_id"
           filterDisplay="row"
           showGridlines
           sortField="created_at"
@@ -78,6 +79,10 @@
           </template>
           <template #empty> No requested stock found. </template>
           <template #loading> Loading requested stock data. Please wait. </template>
+          <Column
+            expander
+            style="width: 5%"
+          />
           <!-- <Column
             header="DMDPRDTE"
             filterField="created_at"
@@ -114,11 +119,81 @@
             header="REFERENCE ID"
             style="width: 10%"
           >
-            <!-- <template #body="{ data }">
-              {{ data.charge_slip_no }}
-            </template> -->
           </Column>
           <Column
+            field="status"
+            header="STATUS"
+            style="width: 10%"
+          >
+            <template #body="{ data }">
+              <div class="flex justify-content-center align-content-center">
+                <Tag
+                  v-if="data.status == 'PENDING'"
+                  :value="data.status"
+                />
+                <Tag
+                  v-if="data.status == 'ACKNOWLEDGED'"
+                  :value="data.status"
+                  class="bg-yellow-400 text-gray-900"
+                />
+                <Tag
+                  v-if="data.status == 'FILLED'"
+                  :value="data.status"
+                  class="bg-blue-400"
+                />
+                <Tag
+                  v-if="data.status == 'RECEIVED'"
+                  :value="data.status"
+                  class="bg-green-400"
+                />
+                <Tag
+                  v-if="data.status == 'CANCELLED'"
+                  :value="data.status"
+                  style="background-color: rgb(239, 42, 42); color: rgb(253, 249, 249)"
+                />
+                <div>
+                  <i
+                    v-if="data.status == 'FILLED'"
+                    class="pi pi-check ml-3"
+                    style="color: skyblue"
+                    @click="editStatus(data)"
+                  ></i>
+                </div>
+              </div>
+            </template>
+          </Column>
+          <Column
+            header="CREATED AT"
+            filterField="created_at"
+            style="width: 20%"
+            :showFilterMenu="false"
+          >
+            <template #body="{ data }">
+              {{ tzone(data.created_at) }}
+            </template>
+            <template #filter="{}">
+              <Calendar
+                v-model="from"
+                dateFormat="mm-dd-yy"
+                placeholder="FROM"
+                showIcon
+                showButtonBar
+                :manualInput="false"
+                :hideOnDateTimeSelect="true"
+              />
+              <div class="mt-2"></div>
+              <Calendar
+                v-model="to"
+                dateFormat="mm-dd-yy"
+                placeholder="TO"
+                showIcon
+                showButtonBar
+                :manualInput="false"
+                :hideOnDateTimeSelect="true"
+              />
+            </template>
+          </Column>
+          <!-- <Column
             field="id"
             header="ID"
             style="width: 10%"
@@ -172,7 +247,7 @@
                 />
               </div>
             </template>
-          </Column>
+          </Column> -->
           <Column
             header="ACTION"
             style="width: 5%"
@@ -195,6 +270,33 @@
               </div>
             </template>
           </Column>
+          <template #expansion="slotProps">
+            <div class="p-3">
+              <h5 class="text-cyan-500 hover:text-cyan-700">ITEMS</h5>
+              <DataTable
+                paginator
+                removableSort
+                :rows="7"
+                :value="slotProps.data.request_details"
+              >
+                <Column
+                  field="name"
+                  header="ITEM"
+                  style="width: 60%"
+                ></Column>
+                <Column
+                  field="requested_qty"
+                  header="REQUESTED QTY"
+                  style="width: 10%"
+                ></Column>
+                <Column
+                  field="approved_qty"
+                  header="APPROVED QTY"
+                  style="width: 10%"
+                ></Column>
+              </DataTable>
+            </div>
+          </template>
         </DataTable>
 
         <!-- @hide="clickOutsideDialog" -->
@@ -706,27 +808,57 @@ export default {
   },
   methods: {
     storeMedsRequestInContainer() {
+      const referenceIdMap = {};
+
+      // Iterate through this.medsRequest
       this.medsRequest.forEach((e) => {
         const removeUnderscore = e.drug_concat.replace(/_/g, '');
 
-        this.medsRequestList.push({
-          id: e.id,
-          reference_id: e.reference_id,
-          dmdprdte: e.dmdprdte,
-          dmdcomb: e.dmdcomb,
-          dmdctr: e.dmdctr,
-          name: removeUnderscore,
-          selling_price: e.selling_price,
-          requested_qty: e.requested_qty,
-          approved_qty: e.approved_qty,
-          expiration_date: e.expiration_date,
-          wardcode: e.wardcode,
-          status: e.status,
-          remarks: e.remarks,
-          created_at: e.created_at,
-        });
+        // Check if the reference_id already exists in the map
+        if (referenceIdMap.hasOwnProperty(e.reference_id)) {
+          // If exists, push request_details into existing array
+          referenceIdMap[e.reference_id].request_details.push({
+            id: e.id,
+            dmdprdte: e.dmdprdte,
+            dmdcomb: e.dmdcomb,
+            dmdctr: e.dmdctr,
+            name: removeUnderscore,
+            selling_price: e.selling_price,
+            requested_qty: e.requested_qty,
+            approved_qty: e.approved_qty,
+            expiration_date: e.expiration_date,
+            wardcode: e.wardcode,
+            status: e.status,
+            remarks: e.remarks,
+          });
+        } else {
+          // If not exists, create a new object for that reference_id
+          referenceIdMap[e.reference_id] = {
+            reference_id: e.reference_id,
+            created_at: e.created_at,
+            status: e.status,
+            request_details: [
+              {
+                id: e.id,
+                dmdprdte: e.dmdprdte,
+                dmdcomb: e.dmdcomb,
+                dmdctr: e.dmdctr,
+                name: removeUnderscore,
+                selling_price: e.selling_price,
+                requested_qty: e.requested_qty,
+                approved_qty: e.approved_qty,
+                expiration_date: e.expiration_date,
+                wardcode: e.wardcode,
+                status: e.status,
+                remarks: e.remarks,
+              },
+            ],
+          };
+        }
       });
-      console.log(this.medsRequestList);
+
+      // Convert the object into an array of objects
+      this.medsRequestList = Object.values(referenceIdMap);
     },
     storeFundSourceInContainer() {
       this.fundSource.forEach((e) => {
