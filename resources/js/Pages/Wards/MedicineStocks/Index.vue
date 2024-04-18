@@ -223,7 +223,6 @@
               :options="medicinesList"
               :virtualScrollerOptions="{ itemSize: 38 }"
               filter
-              optionValue="dmdcomb"
               optionLabel="name"
               class="w-full mb-3"
             />
@@ -254,7 +253,7 @@
             />
             <DataTable
               v-model:filters="requestStockListDetailsFilter"
-              :globalFilterFields="['cl2desc']"
+              :globalFilterFields="['dmdcomb']"
               :value="requestStockListDetails"
               tableStyle="min-width: 50rem"
               class="p-datatable-sm w-full"
@@ -278,7 +277,7 @@
                 </div>
               </template>
               <Column
-                field="cl2desc"
+                field="name"
                 header="PENDING ITEM"
                 style="width: 70%"
                 sortable
@@ -885,15 +884,16 @@ export default {
           this.itemNotSelectedMsg = 'Please provide quantity.';
         } else {
           // check if item selected is already on the list
-          if (this.requestStockListDetails.some((e) => e.cl2comb === this.item['cl2comb'])) {
+          if (this.requestStockListDetails.some((e) => e.dmdcomb === this.item['dmdcomb'])) {
             this.itemNotSelected = true;
             this.itemNotSelectedMsg = 'Item is already on the list.';
           } else {
+            console.log(this.item);
             this.itemNotSelected = false;
             this.itemNotSelectedMsg = null;
             this.requestStockListDetails.push({
-              cl2comb: this.item['cl2comb'],
-              cl2desc: this.item['cl2desc'],
+              dmdcomb: this.item['dmdcomb'],
+              name: this.item['name'],
               requested_qty: this.requested_qty,
             });
           }
@@ -903,7 +903,7 @@ export default {
     },
     removeFromRequestContainer(item) {
       this.requestStockListDetails.splice(
-        this.requestStockListDetails.findIndex((e) => e.cl2comb === item.cl2comb),
+        this.requestStockListDetails.findIndex((e) => e.dmdcomb === item.dmdcomb),
         1
       );
     },
@@ -917,7 +917,7 @@ export default {
       item.request_stocks_details.forEach((e) => {
         this.requestStockListDetails.push({
           request_stocks_details_id: e.id,
-          cl2comb: e.cl2comb,
+          dmdcomb: e.dmdcomb,
           cl2desc: e.item_details.cl2desc,
           requested_qty: e.requested_qty,
         });
