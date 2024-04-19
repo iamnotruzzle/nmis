@@ -1067,7 +1067,6 @@ export default {
         this.form.put(route('requestmedsstocks.update', reference_id), {
           preserveScroll: true,
           onSuccess: () => {
-            this.requestStockId = null;
             this.createRequestStocksDialog = false;
             this.cancel();
             this.updateData();
@@ -1078,7 +1077,6 @@ export default {
         this.form.post(route('requestmedsstocks.store'), {
           preserveScroll: true,
           onSuccess: () => {
-            this.requestStockId = null;
             this.createRequestStocksDialog = false;
             this.cancel();
             this.updateData();
@@ -1088,19 +1086,17 @@ export default {
       }
     },
     confirmCancelItem(item) {
-      //   console.log(item);
-      this.requestStockId = item.id;
+      this.form.reference_id = item.reference_id;
       this.cancelItemDialog = true;
     },
     cancelItem() {
-      this.form.delete(route('requestmedsstocks.destroy', this.requestStockId), {
+      //   let reference_id = this.form.reference_id;
+
+      this.form.delete(route('requestmedsstocks.destroy', this.form.reference_id), {
         preserveScroll: true,
         onSuccess: () => {
-          this.requestStockList = [];
-          this.cancelItemDialog = false;
-          this.requestStockId = null;
-          this.form.clearErrors();
-          this.form.reset();
+          this.cancelItemDialog = true;
+          this.cancel();
           this.updateData();
           this.cancelledMsg();
         },

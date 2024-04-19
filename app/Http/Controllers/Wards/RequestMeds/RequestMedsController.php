@@ -160,8 +160,20 @@ class RequestMedsController extends Controller
         return Redirect::route('requestmedsstocks.index');
     }
 
-    public function destroy($id)
+    public function destroy(MedsRequest $requestmedsstock, Request $request)
     {
-        //
+        // dd($request);
+
+        $reference_id = $request->reference_id;
+
+        // delete request stock
+        // $requeststock->delete();
+
+        MedsRequest::where('reference_id', $reference_id)
+            ->update([
+                'status' => 'CANCELLED',
+            ]);
+
+        return Redirect::route('requestmedsstocks.index');
     }
 }
