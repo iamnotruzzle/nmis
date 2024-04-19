@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class WardsStocksMedSuppLogs extends Model
+class WardsStocksLogs extends Model
 {
     use HasFactory;
     protected $table = 'csrw_wards_stocks_logs';

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Wards\Consignment;
 
 use App\Http\Controllers\Controller;
-use App\Models\WardsStocksMedSupp;
-use App\Models\WardsStocksMedSuppLogs;
+use App\Models\WardsStocks;
+use App\Models\WardsStocksLogs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -31,7 +31,7 @@ class WardConsignmentController extends Controller
             'expiration_date' => 'required',
         ]);
 
-        $consignment = WardsStocksMedSupp::create([
+        $consignment = WardsStocks::create([
             'request_stocks_id' => null,
             'request_stocks_detail_id' => null,
             'stock_id' => null,
@@ -47,7 +47,7 @@ class WardConsignmentController extends Controller
             'expiration_date' => $request->expiration_date,
         ]);
 
-        $wardStockLogs = WardsStocksMedSuppLogs::create([
+        $wardStockLogs = WardsStocksLogs::create([
             'request_stocks_id' => null,
             'request_stocks_detail_id' => null,
             'stock_id' => null,

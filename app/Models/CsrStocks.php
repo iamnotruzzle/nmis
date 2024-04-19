@@ -61,7 +61,7 @@ class CsrStocks extends Model
 
     public function ward_stocks()
     {
-        return $this->hasOne(WardsStocksMedSupp::class, 'stock_id', 'id');
+        return $this->hasOne(WardsStocks::class, 'stock_id', 'id');
     }
 
     public function typeOfCharge()

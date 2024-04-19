@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCsrwMedsRequest extends Migration
+class CreateCsrwWardsMedsStocksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,19 @@ class CreateCsrwMedsRequest extends Migration
      */
     public function up()
     {
-        Schema::create('csrw_meds_request', function (Blueprint $table) {
+        Schema::create('csrw_wards_meds_stocks', function (Blueprint $table) {
             $table->id();
-            $table->string('reference_id');
+            $table->bigInteger('meds_request_id')->nullable();
+            $table->bigInteger('reference_id')->nullable();
             $table->dateTime('dmdprdte')->nullable();
             $table->string('dmdcomb')->nullable();
             $table->string('dmdctr')->nullable();
             $table->string('fsid')->nullable(); // fund source
             $table->decimal('selling_price', $precision = 8, $scale = 2)->nullable();
-            $table->integer('requested_qty');
+            $table->integer('requested_qty')->nullable();
             $table->integer('approved_qty')->nullable();
             $table->dateTime('expiration_date')->nullable();
-            $table->string('wardcode');
-            $table->string('status');
-            $table->text('remarks')->nullable();
+            $table->string('wardcode')->nullable();
             $table->timestamps();
         });
     }
@@ -38,6 +37,6 @@ class CreateCsrwMedsRequest extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('csrw_meds_request');
+        Schema::dropIfExists('csrw_wards_meds_stocks');
     }
 }

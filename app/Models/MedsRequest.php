@@ -18,6 +18,7 @@ class MedsRequest extends Model
         'dmdprdte',
         'dmdcomb',
         'dmdctr',
+        'fsid',
         'selling_price',
         'requested_qty',
         'approved_qty',

@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Wards\ConvertItem;
 
 use App\Http\Controllers\Controller;
 use App\Models\Item;
-use App\Models\WardsStocksMedSupp;
-use App\Models\WardsStocksMedSuppLogs;
+use App\Models\WardsStocks;
+use App\Models\WardsStocksLogs;
 use App\Rules\CsrStockBalanceNotDeclaredYetRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,7 +25,7 @@ class ConvertItemController extends Controller
 
         $entry_by = Auth::user()->employeeid;
 
-        $wardStock = WardsStocksMedSupp::where('id', $request->ward_stock_id)->first();
+        $wardStock = WardsStocks::where('id', $request->ward_stock_id)->first();
 
         // dd($e[0]);
         $request->validate(
@@ -43,7 +43,7 @@ class ConvertItemController extends Controller
 
         // dd($stockUomcode->uomcode);
 
-        $addConvertedStock = WardsStocksMedSupp::create([
+        $addConvertedStock = WardsStocks::create([
             'request_stocks_id' => null,
             'request_stocks_detail_id' => null,
             'stock_id' => null,
@@ -62,7 +62,7 @@ class ConvertItemController extends Controller
         ]);
 
 
-        $addConvertedStockLogs = WardsStocksMedSuppLogs::create([
+        $addConvertedStockLogs = WardsStocksLogs::create([
             'request_stocks_id' => null,
             'request_stocks_detail_id' => null,
             'stock_id' => null,

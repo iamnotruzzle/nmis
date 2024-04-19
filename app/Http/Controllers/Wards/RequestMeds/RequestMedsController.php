@@ -157,9 +157,30 @@ class RequestMedsController extends Controller
 
     public function updatedeliverystatus(MedsRequest $requestmedsstock, Request $request)
     {
-        // dd($request);
-
         $reference_id = $request->reference_id;
+
+        $requestedStocks = DB::select(
+            "SELECT request.reference_id, request.id, request.dmdprdte, meds.dmdcomb,
+                meds.dmdctr, meds.drug_concat, request.wardcode,
+                request.selling_price, request.requested_qty, request.approved_qty,
+                request.expiration_date, request.status, request.remarks,
+                request.created_at
+            FROM csrw_meds_request as request
+            JOIN hdmhdr as meds ON meds.dmdcomb = request.dmdcomb
+            WHERE request.reference_id = '$reference_id';"
+        );
+
+        dd($requestedStocks);
+
+        foreach ($requestedStocks as $item) {
+            MedsRequest::create([
+                'reference_id' => $reference_id,
+                'dmdcomb' => $item['dmdcomb'],
+                'dmdctr' => $item['dmdctr'],
+                'requested_qty' => $item['requested_qty'],
+                'wardcode' => $item['warcode'],
+            ]);
+        }
 
         // update status
         MedsRequest::where('reference_id', $reference_id)
