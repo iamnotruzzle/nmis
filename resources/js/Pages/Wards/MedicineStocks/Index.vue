@@ -1087,7 +1087,7 @@ export default {
       this.form.delete(route('requestmedsstocks.destroy', this.form.reference_id), {
         preserveScroll: true,
         onSuccess: () => {
-          this.cancelItemDialog = true;
+          this.cancelItemDialog = false;
           this.cancel();
           this.updateData();
           this.cancelledMsg();
