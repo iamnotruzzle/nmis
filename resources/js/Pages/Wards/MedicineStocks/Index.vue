@@ -130,26 +130,22 @@
                 <Tag
                   v-if="data.status == 'PENDING'"
                   :value="data.status"
-                />
-                <Tag
-                  v-if="data.status == 'ACKNOWLEDGED'"
-                  :value="data.status"
-                  class="bg-yellow-400 text-gray-900"
+                  severity="contrast"
                 />
                 <Tag
                   v-if="data.status == 'FILLED'"
                   :value="data.status"
-                  class="bg-blue-400"
+                  severity="info"
                 />
                 <Tag
                   v-if="data.status == 'RECEIVED'"
                   :value="data.status"
-                  class="bg-green-400"
+                  severity="success"
                 />
                 <Tag
                   v-if="data.status == 'CANCELLED'"
                   :value="data.status"
-                  style="background-color: rgb(239, 42, 42); color: rgb(253, 249, 249)"
+                  severity="danger"
                 />
                 <div>
                   <i
