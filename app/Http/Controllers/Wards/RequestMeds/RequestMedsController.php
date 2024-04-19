@@ -96,15 +96,10 @@ class RequestMedsController extends Controller
             ->where('csrw_login_history.employeeid', Auth::user()->employeeid)
             ->orderBy('csrw_login_history.created_at', 'desc')
             ->first();
-        // dd($authWardcode->wardcode);
-
-        // $requestStocks = MedsRequest::create([
-        //     'location' => $authWardcode->wardcode,
-        //     'status' => 'PENDING',
-        // ]);
-        // $requestStocksID = $requestStocks['id'];
 
         $requestStockListDetails = $request->requestStockListDetails;
+
+        // dd($requestStockListDetails);
 
         $reference_id = $this->generateReferenceId();
 

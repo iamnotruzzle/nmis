@@ -276,22 +276,26 @@
               <DataTable
                 paginator
                 removableSort
+                ref="id"
                 :rows="7"
                 :value="slotProps.data.request_details"
               >
                 <Column
                   field="name"
                   header="ITEM"
+                  sortable
                   style="width: 60%"
                 ></Column>
                 <Column
                   field="requested_qty"
                   header="REQUESTED QTY"
+                  sortable
                   style="width: 10%"
                 ></Column>
                 <Column
                   field="approved_qty"
                   header="APPROVED QTY"
+                  sortable
                   style="width: 10%"
                 ></Column>
               </DataTable>
@@ -817,21 +821,28 @@ export default {
 
         // Check if the reference_id already exists in the map
         if (referenceIdMap.hasOwnProperty(e.reference_id)) {
-          // If exists, push request_details into existing array
-          referenceIdMap[e.reference_id].request_details.push({
-            id: e.id,
-            dmdprdte: e.dmdprdte,
-            dmdcomb: e.dmdcomb,
-            dmdctr: e.dmdctr,
-            name: removeUnderscore,
-            selling_price: e.selling_price,
-            requested_qty: e.requested_qty,
-            approved_qty: e.approved_qty,
-            expiration_date: e.expiration_date,
-            wardcode: e.wardcode,
-            status: e.status,
-            remarks: e.remarks,
-          });
+          const existingRequestDetails = referenceIdMap[e.reference_id].request_details;
+
+          // Check if the current item already exists in the request_details array
+          const exists = existingRequestDetails.some((item) => item.id === e.id);
+
+          // If the item doesn't exist, add it to the request_details array
+          if (!exists) {
+            existingRequestDetails.push({
+              id: e.id,
+              dmdprdte: e.dmdprdte,
+              dmdcomb: e.dmdcomb,
+              dmdctr: e.dmdctr,
+              name: removeUnderscore,
+              selling_price: e.selling_price,
+              requested_qty: e.requested_qty,
+              approved_qty: e.approved_qty,
+              expiration_date: e.expiration_date,
+              wardcode: e.wardcode,
+              status: e.status,
+              remarks: e.remarks,
+            });
+          }
         } else {
           // If not exists, create a new object for that reference_id
           referenceIdMap[e.reference_id] = {
@@ -881,29 +892,6 @@ export default {
           name: e.drug_concat.join(''),
         });
       });
-    },
-    // use storeMedRequestInContainer() function so that every time you make
-    // server request such as POST, the data in the table
-    // is updated
-    storeMedRequestInContainer() {
-      //   console.log(this.medsRequest);
-      this.requestStockList = []; // reset
-
-      //   this.requestedStocks.data.forEach((e) => {
-      //     this.requestStockList.push({
-      //       id: e.id,
-      //       status: e.status,
-      //       requested_by: e.requested_by_details.firstname + ' ' + e.requested_by_details.lastname,
-      //       requested_by_image: e.requested_by_details.user_account.image,
-      //       approved_by:
-      //         e.approved_by_details != null
-      //           ? e.approved_by_details.firstname + ' ' + e.approved_by_details.lastname
-      //           : null,
-      //       approved_by_image: e.approved_by_details != null ? e.approved_by_details.user_account.image : null,
-      //       created_at: e.created_at,
-      //       request_stocks_details: e.request_stocks_details,
-      //     });
-      //   });
     },
     // store current stocks
     // storeCurrentWardStocksInContainer() {
