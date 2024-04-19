@@ -11,6 +11,8 @@ class MedsRequest extends Model
 
     protected $table = 'csrw_meds_request';
 
+    protected $primaryKey = 'reference_id';
+
     protected $fillable = [
         'reference_id',
         'dmdprdte',

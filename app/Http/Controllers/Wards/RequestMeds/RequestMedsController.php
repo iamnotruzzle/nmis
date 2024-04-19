@@ -125,9 +125,39 @@ class RequestMedsController extends Controller
         return Redirect::route('requestmedsstocks.index');
     }
 
-    public function update(Request $request, $id)
+    public function update(MedsRequest $requestmedsstock, Request $request)
     {
-        //
+        // dd($request);
+
+        $authWardcode = DB::table('csrw_users')
+            ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
+            ->select('csrw_login_history.wardcode')
+            ->where('csrw_login_history.employeeid', Auth::user()->employeeid)
+            ->orderBy('csrw_login_history.created_at', 'desc')
+            ->first();
+
+        $reference_id = $request->reference_id;
+        $requestStockListDetails = $request->requestStockListDetails;
+
+        // if the total count of the container is 0,
+        // delete both RequestStocks and RequestStocksDetails
+        if (count($request->requestStockListDetails) == 0) {
+            MedsRequest::where('id', $reference_id)->delete();
+        } else {
+            MedsRequest::where('reference_id', $reference_id)->delete();
+            foreach ($requestStockListDetails as $item) {
+                MedsRequest::create([
+                    'reference_id' => $reference_id,
+                    'dmdcomb' => $item['dmdcomb'],
+                    'dmdctr' => $item['dmdctr'],
+                    'requested_qty' => $item['requested_qty'],
+                    'wardcode' => $authWardcode->wardcode,
+                    'status' => 'PENDING',
+                ]);
+            }
+        }
+
+        return Redirect::route('requestmedsstocks.index');
     }
 
     public function destroy($id)

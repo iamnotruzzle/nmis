@@ -1016,7 +1016,7 @@ export default {
             this.itemNotSelected = true;
             this.itemNotSelectedMsg = 'Item is already on the list.';
           } else {
-            console.log(this.item);
+            // console.log(this.item);
             this.itemNotSelected = false;
             this.itemNotSelectedMsg = null;
             this.requestStockListDetails.push({
@@ -1037,7 +1037,7 @@ export default {
       );
     },
     editRequestedStock(item) {
-      console.log(item);
+      //   console.log(item);
       this.form.reference_id = item.reference_id;
 
       this.isUpdate = true;
@@ -1048,6 +1048,7 @@ export default {
         this.requestStockListDetails.push({
           id: e.id,
           dmdcomb: e.dmdcomb,
+          dmdctr: e.dmdctr,
           name: e.name,
           requested_qty: e.requested_qty,
         });
@@ -1058,12 +1059,12 @@ export default {
         return false;
       }
 
-      // setup location, requested by and requestStockListDetails before submitting
-      this.form.requested_by = this.user.userDetail.employeeid;
       this.form.requestStockListDetails = this.requestStockListDetails;
 
+      let reference_id = this.form.reference_id;
+
       if (this.isUpdate) {
-        this.form.put(route('requestmedsstocks.update', this.requestStockId), {
+        this.form.put(route('requestmedsstocks.update', reference_id), {
           preserveScroll: true,
           onSuccess: () => {
             this.requestStockId = null;
