@@ -119,6 +119,9 @@
             header="REFERENCE ID"
             style="width: 10%"
           >
+            <template #body="{ data }">
+              <span class="text-yellow-500">{{ data.reference_id }}</span>
+            </template>
           </Column>
           <Column
             field="status"
@@ -213,7 +216,7 @@
           </Column>
           <template #expansion="slotProps">
             <div class="p-3">
-              <h5 class="text-cyan-500 hover:text-cyan-700">ITEMS</h5>
+              <h5 class="text-green-500 0">LIST</h5>
               <DataTable
                 paginator
                 removableSort

@@ -239,7 +239,7 @@
           </Column>
           <template #expansion="slotProps">
             <div class="p-3">
-              <h5 class="text-cyan-500 hover:text-cyan-700">ITEMS</h5>
+              <h5 class="text-green-500">LIST</h5>
               <DataTable
                 paginator
                 removableSort
