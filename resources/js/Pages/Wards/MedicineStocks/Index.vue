@@ -48,7 +48,6 @@
           removableSort
           dataKey="reference_id"
           filterDisplay="row"
-          showGridlines
           sortField="created_at"
           :sortOrder="-1"
           :loading="loading"
@@ -129,7 +128,7 @@
             style="width: 10%"
           >
             <template #body="{ data }">
-              <div class="flex justify-content-center align-content-center">
+              <div class="flex justify-content-start align-content-center">
                 <Tag
                   v-if="data.status == 'PENDING'"
                   :value="data.status"
@@ -220,6 +219,7 @@
               <DataTable
                 paginator
                 removableSort
+                showGridlines
                 ref="id"
                 :rows="7"
                 :value="slotProps.data.request_details"

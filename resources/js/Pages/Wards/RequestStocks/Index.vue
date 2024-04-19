@@ -51,7 +51,6 @@
           @page="onPage($event)"
           dataKey="id"
           filterDisplay="row"
-          showGridlines
           :loading="loading"
         >
           <template #header>
@@ -121,7 +120,7 @@
             style="width: 10%"
           >
             <template #body="{ data }">
-              <div class="flex justify-content-center align-content-center">
+              <div class="flex justify-content-start align-content-center">
                 <Tag
                   v-if="data.status == 'PENDING'"
                   :value="data.status"
@@ -243,6 +242,7 @@
               <DataTable
                 paginator
                 removableSort
+                showGridlines
                 :rows="7"
                 :value="slotProps.data.request_stocks_details"
               >

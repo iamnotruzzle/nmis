@@ -51,7 +51,6 @@
           @page="onPage($event)"
           dataKey="id"
           filterDisplay="row"
-          showGridlines
           :loading="loading"
         >
           <template #header>
@@ -242,6 +241,7 @@
               <h5 class="text-green-500">LIST</h5>
               <DataTable
                 paginator
+                showGridlines
                 :rows="7"
                 :value="slotProps.data.request_stocks_details"
               >
