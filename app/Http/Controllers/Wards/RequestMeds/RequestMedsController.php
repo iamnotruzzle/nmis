@@ -155,6 +155,23 @@ class RequestMedsController extends Controller
         return Redirect::route('requestmedsstocks.index');
     }
 
+    public function updatedeliverystatus(MedsRequest $requestmedsstock, Request $request)
+    {
+        // dd($request);
+
+        $reference_id = $request->reference_id;
+
+        // update status
+        MedsRequest::where('reference_id', $reference_id)
+            ->update([
+                'status' => 'RECEIVED',
+            ]);
+
+        // TODO add function to insert the imte in csrw meds stocks based on the reference_id
+
+        return Redirect::route('requestmedsstocks.index');
+    }
+
     public function destroy(MedsRequest $requestmedsstock, Request $request)
     {
         // dd($request);

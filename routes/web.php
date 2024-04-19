@@ -106,6 +106,7 @@ Route::middleware(['web', 'auth', 'verified'])->group(
 
         // medicine supplies
         Route::resource('requestmedsstocks', RequestMedsController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
+        Route::put('requestmedsstocks', [RequestMedsController::class, 'updatedeliverystatus'])->name('requestmedsstocks.updatedeliverystatus');
         // end medicine supplies
 
         // tanks

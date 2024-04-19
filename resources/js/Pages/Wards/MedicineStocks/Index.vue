@@ -189,61 +189,6 @@
               />
             </template>
           </Column>
-          <!-- <Column
-            field="id"
-            header="ID"
-            style="width: 10%"
-          ></Column>
-          <Column
-            field="name"
-            header="ITEM"
-            style="width: 10%"
-          ></Column>
-          <Column
-            field="requested_qty"
-            header="REQUESTED QTY"
-            style="width: 10%"
-          ></Column>
-          <Column
-            field="approved_qty"
-            header="APPROVED QTY"
-            style="width: 10%"
-          ></Column>
-          <Column
-            field="status"
-            header="STATUS"
-            style="width: 10%"
-            sortable
-          >
-            <template #body="{ data }">
-              <div class="flex justify-content-center align-content-center">
-                <Tag
-                  v-if="data.status == 'PENDING'"
-                  :value="data.status"
-                />
-                <Tag
-                  v-if="data.status == 'ACKNOWLEDGED'"
-                  :value="data.status"
-                  class="bg-yellow-400 text-gray-900"
-                />
-                <Tag
-                  v-if="data.status == 'FILLED'"
-                  :value="data.status"
-                  class="bg-blue-400"
-                />
-                <Tag
-                  v-if="data.status == 'RECEIVED'"
-                  :value="data.status"
-                  class="bg-green-400"
-                />
-                <Tag
-                  v-if="data.status == 'CANCELLED'"
-                  :value="data.status"
-                  style="background-color: rgb(239, 42, 42); color: rgb(253, 249, 249)"
-                />
-              </div>
-            </template>
-          </Column> -->
           <Column
             header="ACTION"
             style="width: 5%"
@@ -547,6 +492,41 @@
             />
           </template>
         </Dialog>
+
+        <!-- edit status confirmation dialog -->
+        <Dialog
+          v-model:visible="editStatusDialog"
+          :style="{ width: '450px' }"
+          header="Confirm"
+          :modal="true"
+          dismissableMask
+        >
+          <div class="flex align-items-center justify-content-center">
+            <i
+              class="pi pi-exclamation-triangle mr-3"
+              style="font-size: 2rem"
+            />
+            <span v-if="form">
+              Are you sure you want to <b>update</b> the status of this requested stocks to <b>RECEIVED</b>?
+            </span>
+          </div>
+          <template #footer>
+            <Button
+              label="No"
+              icon="pi pi-times"
+              class="p-button-text"
+              @click="editStatusDialog = false"
+            />
+            <Button
+              label="Yes"
+              icon="pi pi-check"
+              severity="danger"
+              text
+              :disabled="formUpdateStatus.processing"
+              @click="updateStatus"
+            />
+          </template>
+        </Dialog>
       </div>
 
       <div class="card">
@@ -737,6 +717,7 @@ export default {
       totalRecords: null,
       rows: null,
       // end paginator
+      editStatusDialog: false,
       requestStockId: null,
       isUpdate: false,
       createRequestStocksDialog: false,
@@ -776,6 +757,10 @@ export default {
       form: this.$inertia.form({
         reference_id: null,
         requestStockListDetails: [],
+      }),
+      formUpdateStatus: this.$inertia.form({
+        reference_id: null,
+        status: null,
       }),
       formWardStocks: this.$inertia.form({
         ward_stock_id: null,
@@ -1038,6 +1023,26 @@ export default {
         });
       });
     },
+    editStatus(item) {
+      //   console.log(item);
+      this.editStatusDialog = true;
+      this.formUpdateStatus.reference_id = item.reference_id;
+      this.formUpdateStatus.status = 'RECEIVED';
+    },
+    updateStatus() {
+      //   console.log(item);
+      //   this.formUpdateStatus.status = item;
+
+      this.formUpdateStatus.put(route('requestmedsstocks.updatedeliverystatus', this.formUpdateStatus.reference_id), {
+        preserveScroll: true,
+        onSuccess: () => {
+          this.editStatusDialog = false;
+          this.cancel();
+          this.updateData();
+          this.updatedStatusMsg();
+        },
+      });
+    },
     submit() {
       if (this.form.processing) {
         return false;
@@ -1106,6 +1111,9 @@ export default {
     },
     cancelledMsg() {
       this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Stock request canceld', life: 3000 });
+    },
+    updatedStatusMsg() {
+      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Changed requested stocks status', life: 3000 });
     },
     getLocalDateString(utcStr) {
       const date = new Date(utcStr);
