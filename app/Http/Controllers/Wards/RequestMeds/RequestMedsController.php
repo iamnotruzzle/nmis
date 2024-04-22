@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Wards\RequestMeds;
 use App\Http\Controllers\Controller;
 use App\Models\FundSource;
 use App\Models\MedsRequest;
+use App\Models\WardsStocksMeds;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -170,15 +171,22 @@ class RequestMedsController extends Controller
             WHERE request.reference_id = '$reference_id';"
         );
 
-        dd($requestedStocks);
+        // dd($requestedStocks);
 
         foreach ($requestedStocks as $item) {
-            MedsRequest::create([
-                'reference_id' => $reference_id,
-                'dmdcomb' => $item['dmdcomb'],
-                'dmdctr' => $item['dmdctr'],
-                'requested_qty' => $item['requested_qty'],
-                'wardcode' => $item['warcode'],
+            // dd($item);
+            WardsStocksMeds::create([
+                'meds_request_id' => $item->id,
+                'reference_id' => $item->reference_id,
+                'dmdprdte' => $item->dmdprdte,
+                'dmdcomb' => $item->dmdcomb,
+                'dmdctr' => $item->dmdctr,
+                // 'fsid' => $item->fsid,
+                'fsid' => null,
+                'selling_price' => $item->selling_price,
+                'quantity' => $item->approved_qty,
+                'expiration_date' => $item->expiration_date,
+                'wardcode' => $item->wardcode,
             ]);
         }
 

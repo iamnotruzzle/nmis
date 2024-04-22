@@ -22,8 +22,7 @@ class CreateCsrwWardsMedsStocksTable extends Migration
             $table->string('dmdctr')->nullable();
             $table->string('fsid')->nullable(); // fund source
             $table->decimal('selling_price', $precision = 8, $scale = 2)->nullable();
-            $table->integer('requested_qty')->nullable();
-            $table->integer('approved_qty')->nullable();
+            $table->integer('quantity')->nullable();
             $table->dateTime('expiration_date')->nullable();
             $table->string('wardcode')->nullable();
             $table->timestamps();
