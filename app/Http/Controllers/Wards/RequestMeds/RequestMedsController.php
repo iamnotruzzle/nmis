@@ -45,7 +45,7 @@ class RequestMedsController extends Controller
 
         $medsRequest = DB::select(
             "SELECT request.reference_id, request.id, request.dmdprdte, meds.dmdcomb,
-                    meds.dmdctr, meds.drug_concat, request.wardcode,
+                    meds.dmdctr, request.fsid, meds.drug_concat, request.wardcode,
                     request.selling_price, request.requested_qty, request.approved_qty,
                     request.expiration_date, request.status,
                     request.created_at
@@ -174,7 +174,7 @@ class RequestMedsController extends Controller
         // dd($requestedStocks);
 
         foreach ($requestedStocks as $item) {
-            // dd($item);
+            dd($item);
             WardsStocksMeds::create([
                 'meds_request_id' => $item->id,
                 'reference_id' => $item->reference_id,
