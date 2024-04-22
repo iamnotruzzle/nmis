@@ -231,6 +231,12 @@
                   style="width: 60%"
                 ></Column>
                 <Column
+                  field="fsName"
+                  header="FUND SOURCE"
+                  sortable
+                  style="width: 60%"
+                ></Column>
+                <Column
                   field="requested_qty"
                   header="REQUESTED QTY"
                   sortable
@@ -345,92 +351,6 @@
                   />
                 </template>
               </Column>
-            </DataTable>
-          </div>
-
-          <template #footer>
-            <Button
-              label="Cancel"
-              icon="pi pi-times"
-              severity="danger"
-              text
-              @click="cancel"
-            />
-            <Button
-              v-if="isUpdate == true"
-              label="Update"
-              icon="pi pi-check"
-              severity="warning"
-              text
-              type="submit"
-              :disabled="form.processing || requestStockListDetails == '' || requestStockListDetails == null"
-              @click="submit"
-            />
-            <Button
-              v-else
-              label="Save"
-              icon="pi pi-check"
-              text
-              type="submit"
-              :disabled="form.processing || requestStockListDetails == '' || requestStockListDetails == null"
-              @click="submit"
-            />
-          </template>
-        </Dialog>
-
-        <!-- insert fund source -->
-        <Dialog
-          v-model:visible="insertFundSourceDialog"
-          :modal="true"
-          class="p-fluid w-5"
-          @hide="whenDialogIsHidden"
-        >
-          <!-- <template #header>
-            <div class="text-primary text-xl font-bold">REQUEST STOCK</div>
-          </template>
-            <label class="mr-2">Requested stock list</label>
-            <i
-              class="pi pi-shopping-cart text-blue-500"
-              style="font-size: 1.5rem"
-            /> -->
-          <div>
-            <DataTable
-              v-model:filters="requestStockListDetailsFilter"
-              :globalFilterFields="['name']"
-              :value="requestStockListDetails"
-              tableStyle="min-width: 50rem"
-              class="p-datatable-sm w-full"
-              paginator
-              removableSort
-              showGridlines
-              :rows="5"
-            >
-              <template #header>
-                <!-- <div class="flex justify-content-end">
-                  <div class="p-inputgroup">
-                    <span class="p-inputgroup-addon">
-                      <i class="pi pi-search"></i>
-                    </span>
-                    <InputText
-                      id="searchInput"
-                      v-model="requestStockListDetailsFilter['global'].value"
-                      placeholder="Search item"
-                    />
-                  </div>
-                </div> -->
-              </template>
-              <Column
-                field="name"
-                header="PENDING ITEM"
-                style="width: 70%"
-                sortable
-              ></Column>
-              <Column
-                field="requested_qty"
-                header="PENDING QTY"
-                style="width: 20%"
-                sortable
-              ></Column>
             </DataTable>
           </div>
 
@@ -906,6 +826,7 @@ export default {
               dmdcomb: e.dmdcomb,
               dmdctr: e.dmdctr,
               fsid: e.fsid,
+              fsName: e.fsName,
               name: removeUnderscore,
               selling_price: e.selling_price,
               requested_qty: e.requested_qty,
@@ -929,6 +850,7 @@ export default {
                 dmdcomb: e.dmdcomb,
                 dmdctr: e.dmdctr,
                 fsid: e.fsid,
+                fsName: e.fsName,
                 name: removeUnderscore,
                 selling_price: e.selling_price,
                 requested_qty: e.requested_qty,

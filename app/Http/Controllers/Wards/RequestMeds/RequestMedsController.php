@@ -45,12 +45,13 @@ class RequestMedsController extends Controller
 
         $medsRequest = DB::select(
             "SELECT request.reference_id, request.id, request.dmdprdte, meds.dmdcomb,
-                    meds.dmdctr, request.fsid, meds.drug_concat, request.wardcode,
+                    meds.dmdctr, request.fsid, fs.fsName, meds.drug_concat, request.wardcode,
                     request.selling_price, request.requested_qty, request.approved_qty,
                     request.expiration_date, request.status,
                     request.created_at
                 FROM csrw_meds_request as request
                 JOIN hdmhdr as meds ON meds.dmdcomb = request.dmdcomb
+                LEFT JOIN csrw_fund_source as fs ON fs.fsid = request.fsid
                 WHERE request.wardcode = '$authWardcode->wardcode';"
         );
 
