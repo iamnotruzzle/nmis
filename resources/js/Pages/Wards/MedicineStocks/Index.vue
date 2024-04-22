@@ -217,6 +217,9 @@
             <div class="p-3">
               <h5 class="text-green-500 0">LIST</h5>
               <DataTable
+                v-model:editingRows="editingRows"
+                editMode="row"
+                @row-edit-save="onRowEditSave"
                 paginator
                 removableSort
                 showGridlines
@@ -235,7 +238,27 @@
                   header="FUND SOURCE"
                   sortable
                   style="width: 60%"
-                ></Column>
+                >
+                  <!-- <template #body="{ data }">
+                    <span v-if="data.fsName != null">
+                      {{ data.fsName }}
+                    </span>
+                    <span v-else> s </span>
+                  </template> -->
+                  <template #editor="{ data, field }">
+                    <!-- <InputText v-model="data[field]" /> -->
+
+                    <Dropdown
+                      required="true"
+                      v-model="data[field]"
+                      :options="fundSourceList"
+                      :virtualScrollerOptions="{ itemSize: 38 }"
+                      filter
+                      optionLabel="fsName"
+                      class="w-full mb-3"
+                    />
+                  </template>
+                </Column>
                 <Column
                   field="requested_qty"
                   header="REQUESTED QTY"
@@ -247,6 +270,11 @@
                   header="APPROVED QTY"
                   sortable
                   style="width: 10%"
+                ></Column>
+                <Column
+                  :rowEditor="true"
+                  style="width: 10%; min-width: 8rem"
+                  bodyStyle="text-align:center"
                 ></Column>
               </DataTable>
             </div>
@@ -720,6 +748,9 @@ export default {
   },
   data() {
     return {
+      editingRows: [],
+
+      //
       expandedRow: [],
       // paginator
       loading: false,
@@ -804,6 +835,12 @@ export default {
     },
   },
   methods: {
+    onRowEditSave(event) {
+      console.log(event);
+      let { newData, index } = event;
+
+      this.products[index] = newData;
+    },
     storeMedsRequestInContainer() {
       const referenceIdMap = {};
 
@@ -871,10 +908,8 @@ export default {
     storeFundSourceInContainer() {
       this.fundSource.forEach((e) => {
         this.fundSourceList.push({
-          chrgcode: e.fsid,
-          chrgdesc: e.fsName,
-          bentypcod: null,
-          chrgtable: null,
+          fsId: e.fsid,
+          fsName: e.fsName,
         });
       });
     },
