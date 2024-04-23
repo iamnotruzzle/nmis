@@ -217,9 +217,6 @@
             <div class="p-3">
               <h5 class="text-green-500 0">LIST</h5>
               <DataTable
-                v-model:editingRows="editingRows"
-                editMode="row"
-                @row-edit-save="onRowEditSave"
                 paginator
                 removableSort
                 showGridlines
@@ -239,25 +236,15 @@
                   sortable
                   style="width: 60%"
                 >
-                  <!-- <template #body="{ data }">
-                    <span v-if="data.fsName != null">
-                      {{ data.fsName }}
-                    </span>
-                    <span v-else> s </span>
-                  </template> -->
-                  <template #editor="{ data, field }">
-                    <!-- <InputText v-model="data[field]" /> -->
-
-                    <Dropdown
-                      required="true"
-                      v-model="selectedFundSource"
-                      :options="fundSourceList"
-                      :virtualScrollerOptions="{ itemSize: 38 }"
-                      filter
-                      optionValue="fsId"
-                      optionLabel="fsName"
-                      class="w-full mb-3"
-                    />
+                  <template #body="slotProps">
+                    <div class="flex align-items-center">
+                      <span>{{ slotProps.data.fsName }}</span>
+                      <v-icon
+                        name="pr-pencil"
+                        class="text-yellow-500 text-xl ml-2 cursor-pointer"
+                        @click="openUpdateFundSource(slotProps.data)"
+                      />
+                    </div>
                   </template>
                 </Column>
                 <Column
@@ -272,15 +259,45 @@
                   sortable
                   style="width: 10%"
                 ></Column>
-                <Column
-                  :rowEditor="true"
-                  style="width: 10%; min-width: 8rem; text-color: green"
-                  bodyStyle="text-align:center"
-                ></Column>
               </DataTable>
             </div>
           </template>
         </DataTable>
+
+        <!-- dialog to update fund source -->
+        <Dialog
+          v-model:visible="openFundSourceDialog"
+          :modal="true"
+          class="p-fluid w-3"
+          @hide="whenDialogIsHidden"
+        >
+          <template #header>
+            <div class="text-primary text-xl font-bold">UPDATE FUND SOURCE</div>
+          </template>
+
+          <label for="role">Fund source</label>
+          <Dropdown
+            required="true"
+            v-model="selectedFundSource"
+            :options="fundSourceList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
+            filter
+            optionValue="fsId"
+            optionLabel="fsName"
+            class="w-full"
+          />
+
+          <template #footer>
+            <Button
+              label="Save"
+              icon="pi pi-check"
+              text
+              type="submit"
+              :disabled="formUpdateFundSource.processing"
+              @click="submitUpdateFundSource"
+            />
+          </template>
+        </Dialog>
 
         <!-- @hide="clickOutsideDialog" -->
         <!-- create & edit dialog -->
@@ -752,6 +769,8 @@ export default {
     return {
       editingRows: [],
       selectedFundSource: null,
+      openFundSourceDialog: false,
+
       //
       expandedRow: [],
       // paginator
@@ -841,10 +860,14 @@ export default {
     },
   },
   methods: {
-    onRowEditSave(event) {
-      console.log(event.data);
+    openUpdateFundSource(item) {
+      //   console.log(item);
+      this.selectedFundSource = Number(item.fsId);
+      this.formUpdateFundSource.itemId = item.id;
 
-      this.formUpdateFundSource.itemId = event.data.id;
+      this.openFundSourceDialog = true;
+    },
+    submitUpdateFundSource() {
       this.formUpdateFundSource.fsId = this.selectedFundSource;
 
       this.formUpdateFundSource.post(route('updatereqmedsfs.store'), {
@@ -853,6 +876,8 @@ export default {
           this.cancel();
           this.updateData();
           this.updatedFundSource();
+          this.openFundSourceDialog = false;
+          this.selectedFundSource = null;
         },
       });
     },

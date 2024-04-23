@@ -11,7 +11,7 @@ class UpdateRequestedMedsFSController extends Controller
 {
     public function store(Request $request)
     {
-        // dd($request->fsId);
+        // dd($request);
 
 
         MedsRequest::where('id', $request->itemId)
