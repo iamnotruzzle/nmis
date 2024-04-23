@@ -250,10 +250,11 @@
 
                     <Dropdown
                       required="true"
-                      v-model="data[field]"
+                      v-model="selectedFundSource"
                       :options="fundSourceList"
                       :virtualScrollerOptions="{ itemSize: 38 }"
                       filter
+                      optionValue="fsId"
                       optionLabel="fsName"
                       class="w-full mb-3"
                     />
@@ -273,7 +274,7 @@
                 ></Column>
                 <Column
                   :rowEditor="true"
-                  style="width: 10%; min-width: 8rem"
+                  style="width: 10%; min-width: 8rem; text-color: green"
                   bodyStyle="text-align:center"
                 ></Column>
               </DataTable>
@@ -715,6 +716,7 @@ import Tag from 'primevue/tag';
 import moment from 'moment';
 import NProgress from 'nprogress';
 import Echo from 'laravel-echo';
+import axios from 'axios';
 import { Link } from '@inertiajs/vue3';
 
 export default {
@@ -749,7 +751,7 @@ export default {
   data() {
     return {
       editingRows: [],
-
+      selectedFundSource: null,
       //
       expandedRow: [],
       // paginator
@@ -812,6 +814,10 @@ export default {
         expiration_date: null,
         remarks: null,
       }),
+      formUpdateFundSource: this.$inertia.form({
+        itemId: null,
+        fsId: null,
+      }),
       targetItemDesc: null,
     };
   },
@@ -836,10 +842,19 @@ export default {
   },
   methods: {
     onRowEditSave(event) {
-      console.log(event);
-      let { newData, index } = event;
+      console.log(event.data);
 
-      this.products[index] = newData;
+      this.formUpdateFundSource.itemId = event.data.id;
+      this.formUpdateFundSource.fsId = this.selectedFundSource;
+
+      this.formUpdateFundSource.post(route('updatereqmedsfs.store'), {
+        preserveScroll: true,
+        onSuccess: () => {
+          this.cancel();
+          this.updateData();
+          this.updatedFundSource();
+        },
+      });
     },
     storeMedsRequestInContainer() {
       const referenceIdMap = {};
@@ -1177,6 +1192,9 @@ export default {
     },
     updatedStatusMsg() {
       this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Changed requested stocks status', life: 3000 });
+    },
+    updatedFundSource() {
+      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Item fund source updated', life: 3000 });
     },
     getLocalDateString(utcStr) {
       const date = new Date(utcStr);
