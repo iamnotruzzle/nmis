@@ -82,6 +82,16 @@
             field="fsName"
             header="FUND SOURCE"
           >
+            <template #body="slotProps">
+              <span v-if="slotProps.data.fsid != null">{{ slotProps.data.fsName }}</span>
+              <Button
+                v-else
+                label="Fund source"
+                icon="pi pi-plus"
+                iconPos="right"
+                @click="openUpdateFundSource(slotProps.data)"
+              ></Button>
+            </template>
           </Column>
           <Column
             field="name"
@@ -827,7 +837,7 @@ export default {
   },
   methods: {
     openUpdateFundSource(item) {
-      //   console.log(item);
+      console.log(item);
       this.selectedFundSource = Number(item.fsId);
       this.formUpdateFundSource.itemId = item.id;
 
@@ -848,7 +858,7 @@ export default {
       });
     },
     storeMedsRequestInContainer() {
-      console.log(this.medsRequest);
+      //   console.log(this.medsRequest);
 
       // Iterate through this.medsRequest
       this.medsRequest.forEach((e) => {
@@ -1024,22 +1034,22 @@ export default {
       );
     },
     editRequestedStock(item) {
-      //   console.log(item);
+      console.log(item);
       this.form.reference_id = item.reference_id;
 
       this.isUpdate = true;
       this.createRequestStocksDialog = true;
       this.requestStockId = item.reference_id;
 
-      item.request_details.forEach((e) => {
-        this.requestStockListDetails.push({
-          id: e.id,
-          dmdcomb: e.dmdcomb,
-          dmdctr: e.dmdctr,
-          name: e.name,
-          requested_qty: e.requested_qty,
-        });
-      });
+      //   item.request_details.forEach((e) => {
+      //     this.requestStockListDetails.push({
+      //       id: e.id,
+      //       dmdcomb: e.dmdcomb,
+      //       dmdctr: e.dmdctr,
+      //       name: e.name,
+      //       requested_qty: e.requested_qty,
+      //     });
+      //   });
     },
     editStatus(item) {
       console.log(item);
