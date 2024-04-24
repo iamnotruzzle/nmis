@@ -41,7 +41,7 @@
           rowGroupMode="subheader"
           groupRowsBy="reference_id"
           sortField="created_at"
-          :sortOrder="1"
+          :sortOrder="-1"
           sortMode="single"
           removableSort
           paginator
