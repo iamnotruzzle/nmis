@@ -40,9 +40,10 @@
           :value="medsRequestList"
           rowGroupMode="subheader"
           groupRowsBy="reference_id"
-          sortMode="single"
-          sortField="reference_id"
+          sortField="created_at"
           :sortOrder="1"
+          sortMode="single"
+          removableSort
           paginator
           showGridlines
           :rows="10"
