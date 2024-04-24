@@ -78,19 +78,26 @@
             header="REFERENCE ID"
           >
           </Column>
-          <Column
-            field="fsName"
-            header="FUND SOURCE"
-          >
+          <Column header="FUND SOURCE">
             <template #body="slotProps">
-              <span v-if="slotProps.data.fsid != null">{{ slotProps.data.fsName }}</span>
-              <Button
-                v-else
-                label="Fund source"
-                icon="pi pi-plus"
-                iconPos="right"
-                @click="openUpdateFundSource(slotProps.data)"
-              ></Button>
+              <div class="flex flex-row align-items-center">
+                <span>{{ slotProps.data.fsName }}</span>
+                <Button
+                  v-if="slotProps.data.fsid == null"
+                  icon="pi pi-plus"
+                  iconPos="right"
+                  label="Fund source"
+                  @click="openUpdateFundSource(slotProps.data)"
+                ></Button>
+                <Button
+                  v-if="slotProps.data.status != 'RECEIVED' && slotProps.data.fsid != null"
+                  icon="pi pi-refresh"
+                  rounded
+                  severity="warning"
+                  text
+                  @click="openUpdateFundSource(slotProps.data)"
+                ></Button>
+              </div>
             </template>
           </Column>
           <Column
@@ -234,7 +241,7 @@
           </Column>
           <template #groupheader="slotProps">
             <div class="bg-primary-reverse py-3">
-              <span class="mr-2">CHARGE SLIP #: </span>
+              <span class="mr-2">REFERENCE ID: </span>
               <span>{{ slotProps.data.reference_id }}</span>
             </div>
           </template>
