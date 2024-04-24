@@ -37,20 +37,15 @@
         <span class="text-xl text-900 font-bold text-primary">REQUESTED STOCKS</span>
 
         <DataTable
-          class="p-datatable-sm"
-          v-model:filters="filters"
           :value="medsRequestList"
-          v-model:expandedRows="expandedRow"
-          selectionMode="single"
           rowGroupMode="subheader"
+          groupRowsBy="reference_id"
+          sortMode="single"
+          sortField="reference_id"
+          :sortOrder="1"
           paginator
+          showGridlines
           :rows="10"
-          removableSort
-          dataKey="reference_id"
-          filterDisplay="row"
-          sortField="created_at"
-          :sortOrder="-1"
-          :loading="loading"
         >
           <template #header>
             <div class="flex flex-wrap align-items-center justify-content-end gap-2">
@@ -79,53 +74,33 @@
           <template #empty> No requested stock found. </template>
           <template #loading> Loading requested stock data. Please wait. </template>
           <Column
-            expander
-            style="width: 5%"
-          />
-          <!-- <Column
-            header="DMDPRDTE"
-            filterField="created_at"
-            style="width: 20%"
-            :showFilterMenu="false"
-          >
-            <template #body="{ data }">
-              {{ tzone(data.dmdprdte) }}
-            </template>
-            <template #filter="{}">
-              <Calendar
-                v-model="from"
-                dateFormat="mm-dd-yy"
-                placeholder="FROM"
-                showIcon
-                showButtonBar
-                :manualInput="false"
-                :hideOnDateTimeSelect="true"
-              />
-              <div class="mt-2"></div>
-              <Calendar
-                v-model="to"
-                dateFormat="mm-dd-yy"
-                placeholder="TO"
-                showIcon
-                showButtonBar
-                :manualInput="false"
-                :hideOnDateTimeSelect="true"
-              />
-            </template>
-          </Column> -->
-          <Column
             field="reference_id"
             header="REFERENCE ID"
-            style="width: 10%"
           >
-            <template #body="{ data }">
-              <span class="text-yellow-500">{{ data.reference_id }}</span>
-            </template>
+          </Column>
+          <Column
+            field="fsName"
+            header="FUND SOURCE"
+          >
+          </Column>
+          <Column
+            field="name"
+            header="ITEM"
+          >
+          </Column>
+          <Column
+            field="requested_qty"
+            header="REQUESTED QTY."
+          >
+          </Column>
+          <Column
+            field="approved_qty"
+            header="APPROVED QTY."
+          >
           </Column>
           <Column
             field="status"
             header="STATUS"
-            style="width: 10%"
           >
             <template #body="{ data }">
               <div class="flex justify-content-start align-content-center">
@@ -161,9 +136,38 @@
             </template>
           </Column>
           <Column
-            header="CREATED AT"
+            filterField="expiration_date"
+            header="EXP. DATE"
+            :showFilterMenu="false"
+          >
+            <template #body="{ data }">
+              {{ tzone(data.expiration_date) }}
+            </template>
+            <template #filter="{}">
+              <Calendar
+                v-model="from"
+                dateFormat="mm-dd-yy"
+                placeholder="FROM"
+                showIcon
+                showButtonBar
+                :manualInput="false"
+                :hideOnDateTimeSelect="true"
+              />
+              <div class="mt-2"></div>
+              <Calendar
+                v-model="to"
+                dateFormat="mm-dd-yy"
+                placeholder="TO"
+                showIcon
+                showButtonBar
+                :manualInput="false"
+                :hideOnDateTimeSelect="true"
+              />
+            </template>
+          </Column>
+          <Column
+            header="REQUESTED AT"
             filterField="created_at"
-            style="width: 20%"
             :showFilterMenu="false"
           >
             <template #body="{ data }">
@@ -192,6 +196,11 @@
             </template>
           </Column>
           <Column
+            field="remarks"
+            header="REMARKS"
+          >
+          </Column>
+          <Column
             header="ACTION"
             style="width: 5%"
           >
@@ -213,53 +222,10 @@
               </div>
             </template>
           </Column>
-          <template #expansion="slotProps">
-            <div class="p-3">
-              <h5 class="text-green-500 0">LIST</h5>
-              <DataTable
-                paginator
-                removableSort
-                showGridlines
-                ref="id"
-                :rows="7"
-                :value="slotProps.data.request_details"
-              >
-                <Column
-                  field="name"
-                  header="ITEM"
-                  sortable
-                  style="width: 60%"
-                ></Column>
-                <Column
-                  field="fsName"
-                  header="FUND SOURCE"
-                  sortable
-                  style="width: 60%"
-                >
-                  <template #body="slotProps">
-                    <div class="flex align-items-center">
-                      <span>{{ slotProps.data.fsName }}</span>
-                      <v-icon
-                        name="pr-pencil"
-                        class="text-yellow-500 text-xl ml-2 cursor-pointer"
-                        @click="openUpdateFundSource(slotProps.data)"
-                      />
-                    </div>
-                  </template>
-                </Column>
-                <Column
-                  field="requested_qty"
-                  header="REQUESTED QTY"
-                  sortable
-                  style="width: 10%"
-                ></Column>
-                <Column
-                  field="approved_qty"
-                  header="APPROVED QTY"
-                  sortable
-                  style="width: 10%"
-                ></Column>
-              </DataTable>
+          <template #groupheader="slotProps">
+            <div class="bg-primary-reverse py-3">
+              <span class="mr-2">CHARGE SLIP #: </span>
+              <span>{{ slotProps.data.reference_id }}</span>
             </div>
           </template>
         </DataTable>
@@ -882,68 +848,30 @@ export default {
       });
     },
     storeMedsRequestInContainer() {
-      const referenceIdMap = {};
+      console.log(this.medsRequest);
 
       // Iterate through this.medsRequest
       this.medsRequest.forEach((e) => {
         const removeUnderscore = e.drug_concat.replace(/_/g, '');
-
-        // Check if the reference_id already exists in the map
-        if (referenceIdMap.hasOwnProperty(e.reference_id)) {
-          const existingRequestDetails = referenceIdMap[e.reference_id].request_details;
-
-          // Check if the current item already exists in the request_details array
-          const exists = existingRequestDetails.some((item) => item.id === e.id);
-
-          // If the item doesn't exist, add it to the request_details array
-          if (!exists) {
-            existingRequestDetails.push({
-              id: e.id,
-              dmdprdte: e.dmdprdte,
-              dmdcomb: e.dmdcomb,
-              dmdctr: e.dmdctr,
-              fsid: e.fsid,
-              fsName: e.fsName,
-              name: removeUnderscore,
-              selling_price: e.selling_price,
-              requested_qty: e.requested_qty,
-              approved_qty: e.approved_qty,
-              expiration_date: e.expiration_date,
-              wardcode: e.wardcode,
-              status: e.status,
-              remarks: e.remarks,
-            });
-          }
-        } else {
-          // If not exists, create a new object for that reference_id
-          referenceIdMap[e.reference_id] = {
-            reference_id: e.reference_id,
-            created_at: e.created_at,
-            status: e.status,
-            request_details: [
-              {
-                id: e.id,
-                dmdprdte: e.dmdprdte,
-                dmdcomb: e.dmdcomb,
-                dmdctr: e.dmdctr,
-                fsid: e.fsid,
-                fsName: e.fsName,
-                name: removeUnderscore,
-                selling_price: e.selling_price,
-                requested_qty: e.requested_qty,
-                approved_qty: e.approved_qty,
-                expiration_date: e.expiration_date,
-                wardcode: e.wardcode,
-                status: e.status,
-                remarks: e.remarks,
-              },
-            ],
-          };
-        }
+        this.medsRequestList.push({
+          id: e.id,
+          reference_id: e.reference_id,
+          dmdprdte: e.dmdprdte,
+          dmdcomb: e.dmdcomb,
+          dmdctr: e.dmdctr,
+          fsid: e.fsid,
+          fsName: e.fsName,
+          name: removeUnderscore,
+          selling_price: e.selling_price,
+          requested_qty: e.requested_qty,
+          approved_qty: e.approved_qty,
+          expiration_date: e.expiration_date,
+          wardcode: e.wardcode,
+          status: e.status,
+          created_at: e.created_at,
+          remarks: e.remarks,
+        });
       });
-
-      // Convert the object into an array of objects
-      this.medsRequestList = Object.values(referenceIdMap);
     },
     storeFundSourceInContainer() {
       this.fundSource.forEach((e) => {
