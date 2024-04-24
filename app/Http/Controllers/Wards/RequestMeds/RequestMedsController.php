@@ -126,33 +126,18 @@ class RequestMedsController extends Controller
     {
         // dd($request);
 
-        $authWardcode = DB::table('csrw_users')
-            ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
-            ->select('csrw_login_history.wardcode')
-            ->where('csrw_login_history.employeeid', Auth::user()->employeeid)
-            ->orderBy('csrw_login_history.created_at', 'desc')
-            ->first();
+        // $authWardcode = DB::table('csrw_users')
+        //     ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
+        //     ->select('csrw_login_history.wardcode')
+        //     ->where('csrw_login_history.employeeid', Auth::user()->employeeid)
+        //     ->orderBy('csrw_login_history.created_at', 'desc')
+        //     ->first();
 
-        $reference_id = $request->reference_id;
-        $requestStockListDetails = $request->requestStockListDetails;
-
-        // if the total count of the container is 0,
-        // delete both RequestStocks and RequestStocksDetails
-        if (count($request->requestStockListDetails) == 0) {
-            MedsRequest::where('id', $reference_id)->delete();
-        } else {
-            MedsRequest::where('reference_id', $reference_id)->delete();
-            foreach ($requestStockListDetails as $item) {
-                MedsRequest::create([
-                    'reference_id' => $reference_id,
-                    'dmdcomb' => $item['dmdcomb'],
-                    'dmdctr' => $item['dmdctr'],
-                    'requested_qty' => $item['requested_qty'],
-                    'wardcode' => $authWardcode->wardcode,
-                    'status' => 'PENDING',
-                ]);
-            }
-        }
+        MedsRequest::where('id', $request->id)
+            ->update([
+                'requested_qty' => $request->requested_qty,
+                'remarks' => $request->remarks,
+            ]);
 
         return Redirect::route('requestmedsstocks.index');
     }

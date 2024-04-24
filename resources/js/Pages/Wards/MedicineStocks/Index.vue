@@ -414,6 +414,71 @@
           </template>
         </Dialog>
 
+        <!-- edit requested item -->
+        <Dialog
+          v-model:visible="editRequestedItem"
+          :modal="true"
+          class="p-fluid w-5"
+          @hide="whenDialogIsHidden"
+        >
+          <template #header>
+            <div class="text-primary text-xl font-bold">UPDATE REQUESTED STOCK</div>
+          </template>
+          <div class="field">
+            <label>Item</label>
+            <Dropdown
+              required="true"
+              v-model="form.dmdcomb"
+              :options="medicinesList"
+              :virtualScrollerOptions="{ itemSize: 38 }"
+              filter
+              optionValue="dmdcomb"
+              optionLabel="name"
+              class="w-full mb-3"
+            />
+          </div>
+          <div class="field">
+            <label for="Item">Quantity</label>
+            <InputNumber
+              id="quantity"
+              v-model="form.requested_qty"
+              required="true"
+              autofocus
+              :class="{ 'p-invalid': form.requested_qty == '' || form.dmdcomb == null }"
+              @keyup.enter="fillRequestContainer"
+              inputId="integeronly"
+            />
+          </div>
+          <div class="field">
+            <div class="flex flex-column">
+              <label>Remarks</label>
+              <TextArea
+                v-model.trim="form.remarks"
+                rows="5"
+              />
+            </div>
+          </div>
+          <template #footer>
+            <Button
+              label="Cancel"
+              icon="pi pi-times"
+              severity="danger"
+              text
+              @click="cancel"
+            />
+            <Button
+              label="Update"
+              icon="pi pi-check"
+              severity="warning"
+              text
+              type="submit"
+              :disabled="form.processing"
+              @click="submit"
+            />
+            <!-- form.remarks == null || form.requested_qty == null || form.dmdcomb == null -->
+          </template>
+        </Dialog>
+
         <!-- Cancel confirmation dialog -->
         <Dialog
           v-model:visible="cancelItemDialog"
@@ -766,6 +831,7 @@ export default {
       requestStockId: null,
       isUpdate: false,
       createRequestStocksDialog: false,
+      editRequestedItem: false,
       editWardStocksDialog: false,
       cancelItemDialog: false,
       insertFundSourceDialog: false,
@@ -804,6 +870,11 @@ export default {
       form: this.$inertia.form({
         reference_id: null,
         requestStockListDetails: [],
+
+        id: null,
+        dmdcomb: null,
+        requested_qty: null,
+        remarks: null,
       }),
       formUpdateStatus: this.$inertia.form({
         reference_id: null,
@@ -844,6 +915,16 @@ export default {
     },
   },
   methods: {
+    editRequestedStock(item) {
+      console.log(item);
+
+      this.isUpdate = true;
+      this.form.id = item.id;
+      this.form.dmdcomb = item.dmdcomb;
+      this.form.requested_qty = Number(item.requested_qty);
+
+      this.editRequestedItem = true;
+    },
     openUpdateFundSource(item) {
       console.log(item);
       this.selectedFundSource = Number(item.fsId);
@@ -910,26 +991,6 @@ export default {
         });
       });
     },
-    // store current stocks
-    // storeCurrentWardStocksInContainer() {
-    //   this.currentWardStocksList = []; // reset
-
-    //   moment.suppressDeprecationWarnings = true;
-
-    //   this.currentWardStocks.forEach((e) => {
-    //     let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
-
-    //     this.currentWardStocksList.push({
-    //       from: e.from,
-    //       ward_stock_id: e.id,
-    //       cl2comb: e.item_details.cl2comb,
-    //       item: e.item_details.cl2desc,
-    //       unit: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomdesc,
-    //       quantity: e.quantity,
-    //       expiration_date: expiration_date.toString(),
-    //     });
-    //   });
-    // },
     tzone(date) {
       if (date == null || date == '') {
         return null;
@@ -1041,24 +1102,6 @@ export default {
         1
       );
     },
-    editRequestedStock(item) {
-      console.log(item);
-      this.form.reference_id = item.reference_id;
-
-      this.isUpdate = true;
-      this.createRequestStocksDialog = true;
-      this.requestStockId = item.reference_id;
-
-      //   item.request_details.forEach((e) => {
-      //     this.requestStockListDetails.push({
-      //       id: e.id,
-      //       dmdcomb: e.dmdcomb,
-      //       dmdctr: e.dmdctr,
-      //       name: e.name,
-      //       requested_qty: e.requested_qty,
-      //     });
-      //   });
-    },
     editStatus(item) {
       console.log(item);
 
@@ -1100,12 +1143,15 @@ export default {
       this.form.requestStockListDetails = this.requestStockListDetails;
 
       let reference_id = this.form.reference_id;
+      let e = this.form.id;
+
+      console.log('form', this.form);
 
       if (this.isUpdate) {
-        this.form.put(route('requestmedsstocks.update', reference_id), {
+        this.form.put(route('requestmedsstocks.update', e), {
           preserveScroll: true,
           onSuccess: () => {
-            this.createRequestStocksDialog = false;
+            this.editRequestedItem = false;
             this.cancel();
             this.updateData();
             this.updatedMsg();
