@@ -225,18 +225,18 @@
             <template #body="slotProps">
               <div class="flex justify-content-around align-content-center">
                 <v-icon
-                  v-if="slotProps.data.status == 'PENDING'"
+                  v-if="slotProps.data.status == 'PENDING' || slotProps.data.status == 'FILLED'"
                   name="pr-pencil"
                   class="text-yellow-500 text-xl cursor-pointer"
                   @click="editRequestedStock(slotProps.data)"
                 ></v-icon>
 
-                <v-icon
+                <!-- <v-icon
                   v-if="slotProps.data.status == 'PENDING' || slotProps.data.status == 'ACKNOWLEDGED'"
                   name="fc-cancel"
                   class="text-red-500 text-xl cursor-pointer"
                   @click="confirmCancelItem(slotProps.data)"
-                ></v-icon>
+                ></v-icon> -->
               </div>
             </template>
           </Column>
