@@ -225,7 +225,7 @@
             <template #body="slotProps">
               <div class="flex justify-content-around align-content-center">
                 <v-icon
-                  v-if="slotProps.data.status == 'PENDING' || slotProps.data.status == 'FILLED'"
+                  v-if="slotProps.data.status == 'PENDING'"
                   name="pr-pencil"
                   class="text-yellow-500 text-xl cursor-pointer"
                   @click="editRequestedStock(slotProps.data)"
