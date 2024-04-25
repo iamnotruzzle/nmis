@@ -81,7 +81,7 @@
           </Column>
           <Column header="FUND SOURCE">
             <template #body="slotProps">
-              <div class="flex flex-row align-items-center">
+              <div class="flex flex-row align-items-center justify-content-between">
                 <span>{{ slotProps.data.fsName }}</span>
                 <Button
                   v-if="slotProps.data.fsid == null"
@@ -284,7 +284,7 @@
         </Dialog>
 
         <!-- @hide="clickOutsideDialog" -->
-        <!-- create & edit dialog -->
+        <!-- create -->
         <Dialog
           v-model:visible="createRequestStocksDialog"
           :modal="true"
