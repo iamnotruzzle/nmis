@@ -64,11 +64,11 @@ class CsrStocksControllers extends Controller
         );
         //  ORDER BY medsupply.expiration_date ASC;"
 
-        $totalStocks = CsrStocks::with('itemDetail')
-            ->where('expiration_date', '>', Carbon::now()->setTimezone('Asia/Manila'))
-            ->groupBy('cl2comb')
-            ->select('cl2comb', DB::raw('SUM(quantity) as total_quantity'))
-            ->get();
+        // $totalStocks = CsrStocks::with('itemDetail')
+        //     ->where('expiration_date', '>', Carbon::now()->setTimezone('Asia/Manila'))
+        //     ->groupBy('cl2comb')
+        //     ->select('cl2comb', DB::raw('SUM(quantity) as total_quantity'))
+        //     ->get();
 
         // brands
         $brands = Brand::get();
@@ -85,7 +85,7 @@ class CsrStocksControllers extends Controller
             'items' => $items,
             'stocks' => $stocks,
             'brands' => $brands,
-            'totalStocks' => $totalStocks,
+            // 'totalStocks' => $totalStocks,
             'typeOfCharge' => $typeOfCharge,
             'fundSource' => $fundSource,
             'suppliers' => $suppliers,

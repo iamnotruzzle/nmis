@@ -1480,7 +1480,6 @@ export default {
         uomcode: null,
         uomdesc: null,
         brand: null,
-        cl2desc: null,
         quantity: null,
         acquisition_price: null,
         mark_up: null,
@@ -1619,6 +1618,7 @@ export default {
     },
   },
   mounted() {
+    console.log(this.items);
     this.setMinimumDate();
     this.storeFundSourceInContainer();
     this.storeItemsInContainer();
@@ -1842,13 +1842,13 @@ export default {
       });
     },
     storeTotalStocksInContainer() {
-      this.totalStocks.forEach((e) => {
-        this.totalStocksList.push({
-          cl2comb: e.cl2comb,
-          cl2desc: e.item_detail.cl2desc.trim(),
-          total_quantity: e.total_quantity,
-        });
-      });
+      //   this.totalStocks.forEach((e) => {
+      //     this.totalStocksList.push({
+      //       cl2comb: e.cl2comb,
+      //       cl2desc: e.item_detail.cl2desc.trim(),
+      //       total_quantity: e.total_quantity,
+      //     });
+      //   });
     },
     updateData() {
       this.$inertia.get('csrstocks', this.params, {

@@ -34,13 +34,11 @@ use App\Http\Controllers\Wards\Dashboard\DashboardController as WardDashboardCon
 use App\Http\Controllers\Wards\Patients\PatientChargeController;
 use App\Http\Controllers\Wards\Patients\WardPatientsController;
 use App\Http\Controllers\Wards\Reports\ReportController;
-use App\Http\Controllers\Wards\RequestMeds\RequestMedsController;
 use App\Http\Controllers\Wards\RequestStocks\RequestStocksController;
 use App\Http\Controllers\Wards\RequestStocks\RequestStocksLogs\RequestStocksLogsController;
 use App\Http\Controllers\Wards\RequestTankStocks\RequestTankStocksController;
 use App\Http\Controllers\Wards\Tanks\TankStocks\WardTankStocksController;
 use App\Http\Controllers\Wards\TransferStock\TransferStockController;
-use App\Http\Controllers\Wards\UpdateRequestedMedsFS\UpdateRequestedMedsFSController;
 use App\Http\Controllers\Wards\WardsManualReport\WardsManualReportController;
 use App\Models\CsrStocks;
 use App\Models\Location;
@@ -106,9 +104,9 @@ Route::middleware(['web', 'auth', 'verified'])->group(
         // end non-medicine supplies
 
         // medicine supplies
-        Route::resource('requestmedsstocks', RequestMedsController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
-        Route::put('requestmedsstocks', [RequestMedsController::class, 'updatedeliverystatus'])->name('requestmedsstocks.updatedeliverystatus');
-        Route::resource('updatereqmedsfs', UpdateRequestedMedsFSController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
+        // Route::resource('requestmedsstocks', RequestMedsController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
+        // Route::put('requestmedsstocks', [RequestMedsController::class, 'updatedeliverystatus'])->name('requestmedsstocks.updatedeliverystatus');
+        // Route::resource('updatereqmedsfs', UpdateRequestedMedsFSController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         // end medicine supplies
 
         // tanks

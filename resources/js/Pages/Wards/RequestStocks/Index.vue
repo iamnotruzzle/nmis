@@ -11,12 +11,12 @@
           OTHER ITEMS
         </Link>
 
-        <Link
+        <!-- <Link
           href="requestmedsstocks"
           class="button-link"
         >
           MEDICINE
-        </Link>
+        </Link> -->
 
         <Link
           href="requesttankstocks"
