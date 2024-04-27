@@ -21,8 +21,6 @@
         sortMode="single"
         rowGroupMode="subheader"
         groupRowsBy="ris_no"
-        sortField="expiration_date"
-        :sortOrder="1"
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">

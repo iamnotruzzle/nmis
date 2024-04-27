@@ -37,29 +37,29 @@ class CsrStocksControllers extends Controller
         );
 
         $stocks = DB::select(
-            "SELECT medsupply.id, medsupply.ris_no,
-                medsupply.suppcode, supplier.suppname,
+            "SELECT stock.id, stock.ris_no,
+                stock.suppcode, supplier.suppname,
                 typeOfCharge.chrgcode as codeFromHCharge, typeOfCharge.chrgdesc as descFromHCharge,
                 fundSource.fsid as codeFromFundSource, fundSource.fsName as descFromFundSource,
-                medsupply.cl2comb, item.cl2desc, medsupply.acquisition_price, medsupply.mark_up, medsupply.selling_price,
+                stock.cl2comb, item.cl2desc, stock.acquisition_price, stock.mark_up, stock.selling_price,
                 unit.uomcode, unit.uomdesc,
                 brand.id as brand_id, brand.[name] as brand_name,
-                medsupply.quantity,
+                stock.quantity,
                 reoder_level.normal_stock as normal_stock, reoder_level.alert_stock, reoder_level.critical_stock,
-                medsupply.manufactured_date, medsupply.delivered_date, expiration_date
-            FROM csrw_csr_stocks as medsupply
-            JOIN hclass2 as item ON medsupply.cl2comb = item.cl2comb
-            JOIN huom as unit ON medsupply.uomcode = unit.uomcode
-            JOIN hsupplier as supplier ON medsupply.suppcode = supplier.suppcode
-            JOIN csrw_brands as brand ON medsupply.brand = brand.id
-            LEFT JOIN hcharge as typeOfCharge ON medsupply.chrgcode = typeOfCharge.chrgcode
-            LEFT JOIN csrw_fund_source as fundSource ON medsupply.chrgcode = fundSource.fsid
+                stock.manufactured_date, stock.delivered_date, expiration_date
+            FROM csrw_csr_stocks as stock
+            JOIN hclass2 as item ON stock.cl2comb = item.cl2comb
+            JOIN huom as unit ON stock.uomcode = unit.uomcode
+            JOIN hsupplier as supplier ON stock.suppcode = supplier.suppcode
+            JOIN csrw_brands as brand ON stock.brand = brand.id
+            LEFT JOIN hcharge as typeOfCharge ON stock.chrgcode = typeOfCharge.chrgcode
+            LEFT JOIN csrw_fund_source as fundSource ON stock.chrgcode = fundSource.fsid
             LEFT JOIN (
                 SELECT TOP 1 r.cl2comb, r.normal_stock as normal_stock, r.alert_stock, r.critical_stock
                 FROM csrw_item_reorder_level as r
                 ORDER BY r.created_at DESC
-            ) as reoder_level ON medsupply.cl2comb = reoder_level.cl2comb
-            ORDER BY medsupply.ris_no ASC;"
+            ) as reoder_level ON stock.cl2comb = reoder_level.cl2comb
+            ORDER BY stock.created_at ASC;"
 
         );
         //  ORDER BY medsupply.expiration_date ASC;"
