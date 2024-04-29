@@ -79,8 +79,7 @@ class ItemController extends Controller
                 OR r.location = 'ADMIN'
                 ORDER BY r.created_at DESC
             ) as reoder_level ON item.cl2comb = reoder_level.cl2comb
-            WHERE item.cl2comb LIKE '%1000-%'
-            --AND item.cl2desc LIKE '%test test test test test%'
+            WHERE item.catid IS NOT NULL
             ORDER BY item.cl2desc ASC;"
         );
 
