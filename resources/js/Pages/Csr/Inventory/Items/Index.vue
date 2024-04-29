@@ -844,6 +844,7 @@ export default {
         preserveState: true,
         preserveScroll: true,
         onFinish: (visit) => {
+          this.totalRecords = this.items.total;
           this.itemsList = [];
           this.expandedRow = [];
           this.storeItemInContainer();
