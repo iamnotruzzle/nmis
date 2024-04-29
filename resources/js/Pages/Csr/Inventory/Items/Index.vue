@@ -604,6 +604,7 @@ export default {
 
   // created will be initialize before mounted
   mounted() {
+    console.log(this.items);
     this.storeCl1combsInContainer();
     this.storeItemInContainer();
     this.storeUnitsInContainer();
@@ -651,7 +652,7 @@ export default {
     // server request such as POST, the data in the table
     // is updated
     storeItemInContainer() {
-      this.items.forEach((e) => {
+      this.items.data.forEach((e) => {
         const existingItemIndex = this.itemsList.findIndex((item) => item.cl2comb === e.cl2comb);
 
         if (existingItemIndex === -1) {

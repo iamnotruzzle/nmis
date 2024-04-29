@@ -59,29 +59,61 @@ class ItemController extends Controller
         //     ORDER BY item.cl2desc ASC;"
         // );
 
-        $items = DB::select(
-            "SELECT item.cl2comb, item.cl2code, main_category.categoryname as main_category,  category.cl1comb as cl1comb,
-                category.cl1desc as sub_category, item.catID, item.cl2desc as item,
-                csr_stock.id as price_id, csr_stock.acquisition_price, csr_stock.mark_up, csr_stock.selling_price,
-                unit.uomcode, unit.uomdesc as unit,
-                reoder_level.normal_stock as normal_stock, reoder_level.alert_stock, reoder_level.critical_stock,
-                item.cl2stat
-            FROM hclass2 item
-            JOIN huom as unit ON item.uomcode = unit.uomcode
-            JOIN hclass1 as category ON item.cl1comb = category.cl1comb
-            LEFT JOIN csrw_item_prices as price ON item.cl2comb = price.cl2comb
-            LEFT JOIN csrw_csr_stocks as csr_stock ON csr_stock.cl2comb = item.cl2comb
-            JOIN csrw_pims_categories as main_category ON item.catID = main_category.catID
-            LEFT JOIN (
-                SELECT TOP 1 r.cl2comb, r.normal_stock as normal_stock, r.alert_stock, r.critical_stock
-                FROM csrw_item_reorder_level as r
-                WHERE r.location = 'CSR'
-                OR r.location = 'ADMIN'
-                ORDER BY r.created_at DESC
-            ) as reoder_level ON item.cl2comb = reoder_level.cl2comb
-            WHERE item.catid IS NOT NULL
-            ORDER BY item.cl2desc ASC;"
-        );
+        // $items = DB::select(
+        //     "SELECT item.cl2comb, item.cl2code, main_category.categoryname as main_category,  category.cl1comb as cl1comb,
+        //         category.cl1desc as sub_category, item.catID, item.cl2desc as item,
+        //         csr_stock.id as price_id, csr_stock.acquisition_price, csr_stock.mark_up, csr_stock.selling_price,
+        //         unit.uomcode, unit.uomdesc as unit,
+        //         reoder_level.normal_stock as normal_stock, reoder_level.alert_stock, reoder_level.critical_stock,
+        //         item.cl2stat
+        //     FROM hclass2 item
+        //     JOIN huom as unit ON item.uomcode = unit.uomcode
+        //     JOIN hclass1 as category ON item.cl1comb = category.cl1comb
+        //     LEFT JOIN csrw_item_prices as price ON item.cl2comb = price.cl2comb
+        //     LEFT JOIN csrw_csr_stocks as csr_stock ON csr_stock.cl2comb = item.cl2comb
+        //     JOIN csrw_pims_categories as main_category ON item.catID = main_category.catID
+        //     LEFT JOIN (
+        //         SELECT TOP 1 r.cl2comb, r.normal_stock as normal_stock, r.alert_stock, r.critical_stock
+        //         FROM csrw_item_reorder_level as r
+        //         WHERE r.location = 'CSR'
+        //         OR r.location = 'ADMIN'
+        //         ORDER BY r.created_at DESC
+        //     ) as reoder_level ON item.cl2comb = reoder_level.cl2comb
+        //     WHERE item.catid IS NOT NULL
+        //     ORDER BY item.cl2desc ASC;"
+        // );
+
+        $items = DB::table('hclass2 as item')
+            ->join('huom as unit', 'item.uomcode', '=', 'unit.uomcode')
+            ->join('hclass1 as category', 'item.cl1comb', '=', 'category.cl1comb')
+            ->leftJoin('csrw_item_prices as price', 'item.cl2comb', '=', 'price.cl2comb')
+            ->leftJoin('csrw_csr_stocks as csr_stock', 'csr_stock.cl2comb', '=', 'item.cl2comb')
+            ->join('csrw_pims_categories as main_category', 'item.catID', '=', 'main_category.catID')
+            ->leftJoin(DB::raw('(SELECT TOP 1 r.cl2comb, r.normal_stock as normal_stock, r.alert_stock, r.critical_stock
+                        FROM csrw_item_reorder_level as r
+                        ORDER BY r.created_at DESC) as reorder_level'), 'item.cl2comb', '=', 'reorder_level.cl2comb')
+            ->select(
+                'item.cl2comb',
+                'item.cl2code',
+                'main_category.categoryname as main_category',
+                'category.cl1comb as cl1comb',
+                'category.cl1desc as sub_category',
+                'item.catID',
+                'item.cl2desc as item',
+                'csr_stock.id as price_id',
+                'csr_stock.acquisition_price',
+                'csr_stock.mark_up',
+                'csr_stock.selling_price',
+                'unit.uomcode',
+                'unit.uomdesc as unit',
+                'reorder_level.normal_stock as normal_stock',
+                'reorder_level.alert_stock',
+                'reorder_level.critical_stock',
+                'item.cl2stat'
+            )
+            ->whereNotNull('item.catid')
+            ->orderBy('item.cl2desc', 'ASC')
+            ->paginate(20);
 
         // dd($items);
 
