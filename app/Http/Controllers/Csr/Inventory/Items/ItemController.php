@@ -23,6 +23,8 @@ class ItemController extends Controller
         $catID = $request->catID; // main category
         $cl1desc = $request->cl1desc; // sub category
 
+        $search = $request->search;
+
         $cl1combs = Category::where('cl1stat', 'A')
             ->where('ptcode', '1000')
             ->orderBy('cl1comb', 'ASC')
@@ -112,6 +114,7 @@ class ItemController extends Controller
                 'item.cl2stat'
             )
             ->whereNotNull('item.catid')
+            ->whereRaw("LOWER(item.cl2desc) LIKE ?", ["%" . strtolower($search) . "%"])
             ->orderBy('item.cl2desc', 'ASC')
             ->paginate(20);
 

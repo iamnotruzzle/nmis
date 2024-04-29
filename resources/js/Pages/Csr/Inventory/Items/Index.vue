@@ -8,7 +8,6 @@
       <DataTable
         class="p-datatable-sm"
         v-model:expandedRows="expandedRow"
-        v-model:filters="filters"
         :value="itemsList"
         paginator
         lazy
@@ -20,7 +19,6 @@
         sortField="cl2desc"
         :sortOrder="1"
         removableSort
-        :globalFilterFields="['cl1comb', 'cl2desc', 'cl2stat']"
         showGridlines
       >
         <template #header>
@@ -34,7 +32,7 @@
                   </span>
                   <InputText
                     id="searchInput"
-                    v-model="filters['global'].value"
+                    v-model="search"
                     placeholder="Search item"
                   />
                 </div>
@@ -60,7 +58,7 @@
           <template #body="{ data }">
             {{ data.mainCategory }}
           </template>
-          <template #filter="{ filterModel, filterCallback }">
+          <!-- <template #filter="{ filterModel, filterCallback }">
             <Dropdown
               v-model="filterModel.value"
               :options="mainCategoryFilter"
@@ -70,7 +68,7 @@
               placeholder="NO FILTER"
               class="w-full"
             />
-          </template>
+          </template> -->
         </Column>
         <Column
           field="cl1comb"
@@ -157,7 +155,7 @@
               />
             </div>
           </template>
-          <template #filter="{ filterModel, filterCallback }">
+          <!-- <template #filter="{ filterModel, filterCallback }">
             <Dropdown
               v-model="filterModel.value"
               :options="statusFilter"
@@ -167,7 +165,7 @@
               placeholder="NO FILTER"
               class="w-full"
             />
-          </template>
+          </template> -->
         </Column>
         <Column
           header="ACTION"
@@ -520,6 +518,7 @@ export default {
       rows: null,
       params: {},
       // end paginator
+      search: null,
       // data table expand
       expandedRow: [],
       // end data table expand
@@ -929,6 +928,34 @@ export default {
     updatedMsg() {
       this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Item updated', life: 3000 });
     },
+  },
+  watch: {
+    search: function (val, oldVal) {
+      this.params.search = val;
+      this.updateData();
+    },
+    // from: function (val) {
+    //   if (val != null) {
+    //     let from = moment(val).format('LL');
+    //     // console.log('from', from);
+    //     this.params.from = from;
+    //   } else {
+    //     this.params.from = null;
+    //     this.from = null;
+    //   }
+    //   this.updateData();
+    // },
+    // to: function (val) {
+    //   if (val != null) {
+    //     let to = moment(val).format('LL');
+    //     // console.log('to', to);
+    //     this.params.to = to;
+    //   } else {
+    //     this.params.to = null;
+    //     this.to = null;
+    //   }
+    //   this.updateData();
+    // },
   },
 };
 </script>
