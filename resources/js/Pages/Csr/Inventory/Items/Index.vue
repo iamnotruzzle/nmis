@@ -172,14 +172,24 @@
           style="width: 5%"
         >
           <template #body="slotProps">
-            <Button
-              icon="pi pi-pencil"
-              class="mr-1"
-              rounded
-              text
-              severity="warning"
-              @click="editItem(slotProps.data)"
-            />
+            <div class="flex flex-row justify-content-between align-content-around">
+              <Button
+                icon="pi pi-pencil"
+                class=""
+                rounded
+                text
+                severity="warning"
+                @click="editItem(slotProps.data)"
+              />
+              <Button
+                icon="pi pi-pencil"
+                class=""
+                rounded
+                text
+                severity="error"
+                @click="convertItem(slotProps.data)"
+              />
+            </div>
           </template>
         </Column>
         <template #expansion="slotProps">
@@ -294,8 +304,8 @@
             :options="cl1combsList"
             :virtualScrollerOptions="{ itemSize: 38 }"
             filter
-            optionLabel="cl1comb"
             optionValue="cl1comb"
+            optionLabel="cl1desc"
             class="w-full mb-3"
             :class="{ 'p-invalid': form.cl1comb == '' }"
           />
@@ -850,6 +860,9 @@ export default {
       this.form.unit = item.uomcode;
       this.form.cl2stat = item.cl2stat;
       this.form.mainCategory = item.catID;
+    },
+    convertItem(item) {
+      console.log(item);
     },
     submit() {
       if (this.form.processing) {
