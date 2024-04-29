@@ -11,8 +11,10 @@
         v-model:filters="filters"
         :value="itemsList"
         paginator
-        :rows="20"
-        :rowsPerPageOptions="[20, 30, 40]"
+        lazy
+        :rows="rows"
+        :totalRecords="totalRecords"
+        @page="onPage($event)"
         dataKey="cl2comb"
         filterDisplay="row"
         sortField="cl2desc"
@@ -512,6 +514,12 @@ export default {
   },
   data() {
     return {
+      // paginator
+      loading: false,
+      totalRecords: null,
+      rows: null,
+      params: {},
+      // end paginator
       // data table expand
       expandedRow: [],
       // end data table expand
@@ -601,7 +609,12 @@ export default {
       }),
     };
   },
-
+  // created will be initialize before mounted
+  created() {
+    this.totalRecords = this.items.total;
+    this.params.page = this.items.current_page;
+    this.rows = this.items.per_page;
+  },
   // created will be initialize before mounted
   mounted() {
     console.log(this.items);
@@ -623,6 +636,10 @@ export default {
   methods: {
     tzone(date) {
       return moment.tz(date, 'Asia/Manila').format('L');
+    },
+    onPage(event) {
+      this.params.page = event.page + 1;
+      this.updateData();
     },
     storePimsCategoryInContainer() {
       this.pimsCategory.forEach((e) => {
