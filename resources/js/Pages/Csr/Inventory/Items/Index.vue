@@ -495,13 +495,8 @@
             required="true"
             autofocus
             :class="{ 'p-invalid': formConvert.cl2desc == '' }"
+            @keyup.enter="submitConvert"
           />
-          <small
-            class="text-error"
-            v-if="formConvert.errors.cl2desc"
-          >
-            {{ formConvert.errors.cl2desc }}
-          </small>
         </div>
         <div class="field">
           <label for="unit">Unit</label>
@@ -516,11 +511,6 @@
             class="w-full mb-3"
             :class="{ 'p-invalid': formConvert.cl1comb == '' }"
           />
-          <small
-            class="text-error"
-            v-if="formConvert.errors.unit"
-          >
-          </small>
         </div>
         <!-- <div class="field">
           <label>Normal stock</label>
@@ -603,7 +593,7 @@
             text
             type="submit"
             :disabled="formConvert.processing || formConvert.cl2desc == null || formConvert.cl2desc == ''"
-            @click="submit"
+            @click="submitConvert"
           />
         </template>
       </Dialog>
@@ -631,6 +621,7 @@ import Textarea from 'primevue/textarea';
 import InputNumber from 'primevue/inputnumber';
 import Tag from 'primevue/tag';
 import moment from 'moment';
+import axios from 'axios';
 import { use } from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
 import { LineChart } from 'echarts/charts';
@@ -773,9 +764,9 @@ export default {
         unit: null,
         cl2stat: null,
         mainCategory: null,
-        normal_stock: null,
-        critical_stock: null,
-        alert_stock: null,
+        // normal_stock: null,
+        // critical_stock: null,
+        // alert_stock: null,
         location: null,
         selectedMainCat: null,
         selectedSubCategory: null,
@@ -1069,12 +1060,12 @@ export default {
       this.formConvert.cl1comb = item.cl1comb;
       this.formConvert.cl2code = item.cl2code;
       this.formConvert.cl2desc = item.cl2desc;
-      this.formConvert.normal_stock = item.normal_stock;
-      this.formConvert.alert_stock = item.alert_stock;
-      this.formConvert.critical_stock = item.critical_stock;
+      //   this.formConvert.normal_stock = item.normal_stock;
+      //   this.formConvert.alert_stock = item.alert_stock;
+      //   this.formConvert.critical_stock = item.critical_stock;
       this.formConvert.unit = item.uomcode;
       this.formConvert.cl2stat = item.cl2stat;
-      this.formConvert.mainCategory = item.catID;
+      this.formConvert.mainCategory = Number(item.catID);
       this.formConvert.selectedMainCat = item.mainCategory;
       this.formConvert.selectedSubCategory = item.subCategory;
     },
@@ -1111,20 +1102,29 @@ export default {
       //   console.log(this.$page.props.errors);
     },
     submitConvert() {
-      if (this.formConvert.processing || this.formConvert.cl2desc == null || this.formConvert.cl2desc == '') {
-        return false;
-      }
+      //   if (this.formConvert.processing || this.formConvert.cl2desc == null || this.formConvert.cl2desc == '') {
+      //     return false;
+      //   }
 
-      this.form.location = this.authLocation.location.wardcode;
+      this.formConvert.location = this.authLocation.location.wardcode;
 
-      this.form.post(route('items.store'), {
+      //   console.log('formConvert', this.formConvert);
+
+      this.formConvert.post(route('csrconvert.store'), {
         preserveScroll: true,
         onSuccess: () => {
-          this.itemId = null;
-          this.createItemDialog = false;
+          console.log('DONE');
+          this.convertDialog = false;
           this.cancel();
           this.updateData();
           this.createdMsg();
+        },
+        onError: (error) => {
+          console.log(error);
+          //   this.convertDialog = false;
+          //   this.cancel();
+          //   this.updateData();
+          //   this.createdMsg();
         },
       });
 
