@@ -268,7 +268,7 @@
         </template>
       </DataTable>
 
-      <!-- create & edit dialog -->
+      <!-- edit dialog -->
       <Dialog
         v-model:visible="createItemDialog"
         :style="{ width: '450px' }"
@@ -460,6 +460,153 @@
           />
         </template>
       </Dialog>
+
+      <!-- convert dialog -->
+      <Dialog
+        v-model:visible="convertDialog"
+        :style="{ width: '450px' }"
+        :modal="true"
+        class="p-fluid"
+        @hide="clickOutsideDialog"
+        dismissableMask
+      >
+        <template #header>
+          <div class="text-primary text-xl font-bold">CONVERT</div>
+        </template>
+        <div class="field">
+          <label for="mainCategory">Main category</label>
+          <InputText
+            v-model="formConvert.selectedMainCat"
+            readonly
+          />
+        </div>
+        <div class="field">
+          <label for="cl1comb">Sub-Category</label>
+          <InputText
+            v-model="formConvert.selectedSubCategory"
+            readonly
+          />
+        </div>
+        <div class="field">
+          <label>Description</label>
+          <InputText
+            id="Description"
+            v-model.trim="formConvert.cl2desc"
+            required="true"
+            autofocus
+            :class="{ 'p-invalid': formConvert.cl2desc == '' }"
+          />
+          <small
+            class="text-error"
+            v-if="formConvert.errors.cl2desc"
+          >
+            {{ formConvert.errors.cl2desc }}
+          </small>
+        </div>
+        <div class="field">
+          <label for="unit">Unit</label>
+          <Dropdown
+            v-model.trim="formConvert.unit"
+            required="true"
+            :options="unitsList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
+            filter
+            optionLabel="uomdesc"
+            optionValue="uomcode"
+            class="w-full mb-3"
+            :class="{ 'p-invalid': formConvert.cl1comb == '' }"
+          />
+          <small
+            class="text-error"
+            v-if="formConvert.errors.unit"
+          >
+          </small>
+        </div>
+        <!-- <div class="field">
+          <label>Normal stock</label>
+          <InputNumber
+            id="Normal stock"
+            v-model.trim="form.normal_stock"
+            required="true"
+            :class="{ 'p-invalid': form.normal_stock == '' }"
+            @keyup.enter="submit"
+            inputId="integeronly"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.normal_stock"
+          >
+            {{ form.errors.normal_stock }}
+          </small>
+        </div> -->
+        <!-- <div class="field">
+          <label>Alert stock</label>
+          <InputNumber
+            id="Alert stock"
+            v-model.trim="form.alert_stock"
+            required="true"
+            :class="{ 'p-invalid': form.alert_stock == '' }"
+            @keyup.enter="submit"
+            inputId="integeronly"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.alert_stock"
+          >
+            {{ form.errors.alert_stock }}
+          </small>
+        </div> -->
+        <!-- <div class="field">
+          <label>Critical stock</label>
+          <InputNumber
+            id="Critical stock"
+            v-model.trim="form.critical_stock"
+            required="true"
+            :class="{ 'p-invalid': form.critical_stock == '' }"
+            @keyup.enter="submit"
+            inputId="integeronly"
+          />
+          <small
+            class="text-error"
+            v-if="form.errors.critical_stock"
+          >
+            {{ form.errors.critical_stock }}
+          </small>
+        </div> -->
+        <div class="field">
+          <label for="cl2stat">Status</label>
+          <Dropdown
+            v-model="formConvert.cl2stat"
+            :options="cl2stats"
+            optionLabel="name"
+            optionValue="value"
+            class="w-full"
+          />
+          <small
+            class="text-error"
+            v-if="formConvert.errors.cl2stat"
+          >
+            {{ formConvert.errors.cl2stat }}
+          </small>
+        </div>
+        <template #footer>
+          <Button
+            label="Cancel"
+            icon="pi pi-times"
+            severity="danger"
+            text
+            @click="cancel"
+          />
+          <Button
+            label="Convert"
+            icon="pi pi-check"
+            text
+            type="submit"
+            :disabled="formConvert.processing || formConvert.cl2desc == null || formConvert.cl2desc == ''"
+            @click="submit"
+          />
+        </template>
+      </Dialog>
     </div>
   </app-layout>
 </template>
@@ -539,6 +686,7 @@ export default {
       itemId: null,
       isUpdate: false,
       createItemDialog: false,
+      convertDialog: false,
       dateFilter: 'this year',
       selectedStatus: null,
       statusFilter: [
@@ -603,6 +751,21 @@ export default {
         },
       ],
       form: this.$inertia.form({
+        cl2comb: null,
+        cl1comb: null,
+        cl2code: null,
+        cl2desc: null,
+        unit: null,
+        cl2stat: null,
+        mainCategory: null,
+        normal_stock: null,
+        critical_stock: null,
+        alert_stock: null,
+        location: null,
+        selectedMainCat: null,
+        selectedSubCategory: null,
+      }),
+      formConvert: this.$inertia.form({
         cl2comb: null,
         cl1comb: null,
         cl2code: null,
@@ -872,10 +1035,16 @@ export default {
     },
     // emit close dialog
     clickOutsideDialog() {
-      this.$emit('hide', (this.itemId = null), (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
+      this.$emit(
+        'hide',
+        (this.itemId = null),
+        (this.isUpdate = false),
+        this.form.clearErrors(),
+        this.form.reset(),
+        this.formConvert.reset()
+      );
     },
     editItem(item) {
-      console.log(item);
       this.isUpdate = true;
       this.createItemDialog = true;
       this.itemId = item.cl2comb;
@@ -894,6 +1063,20 @@ export default {
     },
     convertItem(item) {
       console.log(item);
+
+      this.convertDialog = true;
+      this.formConvert.cl2comb = item.cl2comb;
+      this.formConvert.cl1comb = item.cl1comb;
+      this.formConvert.cl2code = item.cl2code;
+      this.formConvert.cl2desc = item.cl2desc;
+      this.formConvert.normal_stock = item.normal_stock;
+      this.formConvert.alert_stock = item.alert_stock;
+      this.formConvert.critical_stock = item.critical_stock;
+      this.formConvert.unit = item.uomcode;
+      this.formConvert.cl2stat = item.cl2stat;
+      this.formConvert.mainCategory = item.catID;
+      this.formConvert.selectedMainCat = item.mainCategory;
+      this.formConvert.selectedSubCategory = item.subCategory;
     },
     submit() {
       if (this.form.processing) {
@@ -927,12 +1110,35 @@ export default {
       }
       //   console.log(this.$page.props.errors);
     },
+    submitConvert() {
+      if (this.formConvert.processing || this.formConvert.cl2desc == null || this.formConvert.cl2desc == '') {
+        return false;
+      }
+
+      this.form.location = this.authLocation.location.wardcode;
+
+      this.form.post(route('items.store'), {
+        preserveScroll: true,
+        onSuccess: () => {
+          this.itemId = null;
+          this.createItemDialog = false;
+          this.cancel();
+          this.updateData();
+          this.createdMsg();
+        },
+      });
+
+      //   console.log(this.$page.props.errors);
+    },
     cancel() {
       this.itemId = null;
       this.isUpdate = false;
       this.createItemDialog = false;
+      this.convertDialog = false;
       this.form.reset();
       this.form.clearErrors();
+      this.formConvert.reset();
+      this.formConvert.clearErrors();
       this.itemsList = [];
       this.storeItemInContainer();
     },
