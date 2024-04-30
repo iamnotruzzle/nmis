@@ -177,18 +177,19 @@
                 icon="pi pi-pencil"
                 class=""
                 rounded
-                text
                 severity="warning"
                 @click="editItem(slotProps.data)"
               />
               <Button
-                icon="pi pi-pencil"
                 class=""
                 rounded
-                text
-                severity="error"
+                severity="info"
                 @click="convertItem(slotProps.data)"
-              />
+              >
+                <template #icon>
+                  <v-icon name="bi-arrow-left-right"></v-icon>
+                </template>
+              </Button>
             </div>
           </template>
         </Column>

@@ -40,6 +40,7 @@ import {
   OiArrowSwitch,
   GiRun,
   RiUserSharedFill,
+  BiArrowLeftRight,
 } from 'oh-vue-icons/icons';
 addIcons(
   CoChartLine,
@@ -64,7 +65,8 @@ addIcons(
   BiJournalCheck,
   OiArrowSwitch,
   GiRun,
-  RiUserSharedFill
+  RiUserSharedFill,
+  BiArrowLeftRight
 );
 
 moment.tz.setDefault('Asia/Manila');
