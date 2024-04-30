@@ -335,7 +335,6 @@
             v-model.trim="form.cl2desc"
             required="true"
             readonly
-            autofocus
             :class="{ 'p-invalid': form.cl2desc == '' }"
             @keyup.enter="submit"
           />
@@ -371,7 +370,6 @@
             id="Normal stock"
             v-model.trim="form.normal_stock"
             required="true"
-            autofocus
             :class="{ 'p-invalid': form.normal_stock == '' }"
             @keyup.enter="submit"
             inputId="integeronly"
@@ -389,7 +387,6 @@
             id="Alert stock"
             v-model.trim="form.alert_stock"
             required="true"
-            autofocus
             :class="{ 'p-invalid': form.alert_stock == '' }"
             @keyup.enter="submit"
             inputId="integeronly"
@@ -407,7 +404,6 @@
             id="Critical stock"
             v-model.trim="form.critical_stock"
             required="true"
-            autofocus
             :class="{ 'p-invalid': form.critical_stock == '' }"
             @keyup.enter="submit"
             inputId="integeronly"
