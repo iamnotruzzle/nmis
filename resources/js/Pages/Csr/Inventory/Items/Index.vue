@@ -37,12 +37,12 @@
                   />
                 </div>
               </div>
-              <Button
+              <!-- <Button
                 label="Add item"
                 icon="pi pi-plus"
                 iconPos="right"
                 @click="openCreateItemDialog"
-              />
+              /> -->
             </div>
           </div>
         </template>
@@ -279,7 +279,7 @@
         </template>
         <div class="field">
           <label for="mainCategory">Main category</label>
-          <Dropdown
+          <!-- <Dropdown
             v-model.trim="form.mainCategory"
             required="true"
             :options="pimsCategoryList"
@@ -289,6 +289,11 @@
             optionValue="catID"
             class="w-full mb-3"
             :class="{ 'p-invalid': form.cl1comb == '' }"
+            :disabled="true"
+          /> -->
+          <InputText
+            v-model="form.selectedMainCat"
+            readonly
           />
           <small
             class="text-error"
@@ -298,7 +303,7 @@
         </div>
         <div class="field">
           <label for="cl1comb">Sub-Category</label>
-          <Dropdown
+          <!-- <Dropdown
             v-model.trim="form.cl1comb"
             required="true"
             :options="cl1combsList"
@@ -308,6 +313,10 @@
             optionLabel="cl1desc"
             class="w-full mb-3"
             :class="{ 'p-invalid': form.cl1comb == '' }"
+          /> -->
+          <InputText
+            v-model="form.selectedSubCategory"
+            readonly
           />
           <small
             class="text-error"
@@ -322,6 +331,7 @@
             id="Description"
             v-model.trim="form.cl2desc"
             required="true"
+            readonly
             autofocus
             :class="{ 'p-invalid': form.cl2desc == '' }"
             @keyup.enter="submit"
@@ -605,6 +615,8 @@ export default {
         critical_stock: null,
         alert_stock: null,
         location: null,
+        selectedMainCat: null,
+        selectedSubCategory: null,
       }),
     };
   },
@@ -616,7 +628,7 @@ export default {
   },
   // created will be initialize before mounted
   mounted() {
-    console.log(this.items);
+    // console.log(this.items);
     this.storeCl1combsInContainer();
     this.storeItemInContainer();
     this.storeUnitsInContainer();
@@ -864,7 +876,7 @@ export default {
       this.$emit('hide', (this.itemId = null), (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
     },
     editItem(item) {
-      //   console.log(item);
+      console.log(item);
       this.isUpdate = true;
       this.createItemDialog = true;
       this.itemId = item.cl2comb;
@@ -878,6 +890,8 @@ export default {
       this.form.unit = item.uomcode;
       this.form.cl2stat = item.cl2stat;
       this.form.mainCategory = item.catID;
+      this.form.selectedMainCat = item.mainCategory;
+      this.form.selectedSubCategory = item.subCategory;
     },
     convertItem(item) {
       console.log(item);
