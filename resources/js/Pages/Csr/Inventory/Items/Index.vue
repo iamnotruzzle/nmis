@@ -1053,7 +1053,7 @@ export default {
       this.form.selectedSubCategory = item.subCategory;
     },
     convertItem(item) {
-      console.log(item);
+      //   console.log(item);
 
       this.convertDialog = true;
       this.formConvert.cl2comb = item.cl2comb;
@@ -1113,7 +1113,7 @@ export default {
       this.formConvert.post(route('csrconvert.store'), {
         preserveScroll: true,
         onSuccess: () => {
-          console.log('DONE');
+          //   console.log('DONE');
           this.convertDialog = false;
           this.cancel();
           this.updateData();
