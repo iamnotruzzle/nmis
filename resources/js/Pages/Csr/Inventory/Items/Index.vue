@@ -174,16 +174,18 @@
           <template #body="slotProps">
             <div class="flex flex-row justify-content-between align-content-around">
               <Button
+                v-tooltip.top="'Update'"
                 icon="pi pi-pencil"
-                class=""
+                class="mr-2"
                 rounded
                 severity="warning"
                 @click="editItem(slotProps.data)"
               />
               <Button
+                v-tooltip.top="'Convert'"
                 class=""
                 rounded
-                severity="info"
+                severity="success"
                 @click="convertItem(slotProps.data)"
               >
                 <template #icon>

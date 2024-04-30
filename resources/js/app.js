@@ -3,6 +3,7 @@ import { createInertiaApp } from '@inertiajs/vue3';
 import PrimeVue from 'primevue/config';
 import ToastService from 'primevue/toastservice';
 import moment from 'moment-timezone';
+import Tooltip from 'primevue/tooltip';
 
 import Echo from 'laravel-echo';
 
@@ -83,6 +84,7 @@ createInertiaApp({
       .use(plugin)
       .use(PrimeVue, { ripple: true })
       .use(ToastService)
+      .directive('tooltip', Tooltip)
       .component('v-icon', OhVueIcon)
       .mixin({ methods: { route } })
       .mount(el);
