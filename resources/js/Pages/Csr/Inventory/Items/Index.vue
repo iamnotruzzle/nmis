@@ -931,7 +931,7 @@ export default {
             prices: [
               {
                 price_id: e.price_id,
-                //   acquisition_price: e.acquisition_price,
+                // acquisition_price: e.acquisition_price,
                 // mark_up: e.mark_up,
                 selling_price: e.selling_price,
                 created_at: e.price_created_at,
