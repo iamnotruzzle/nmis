@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ItemPrices;
 use App\Models\UnitOfMeasurement;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
 class ItemPriceController extends Controller
@@ -16,7 +17,7 @@ class ItemPriceController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request);
+        $user = Auth::user();
 
         $request->validate([
             'selling_price' => 'required|numeric|min:0',
@@ -25,7 +26,7 @@ class ItemPriceController extends Controller
         $itemPrices = ItemPrices::create([
             'cl2comb' => $request->cl2comb,
             'selling_price' => $request->selling_price,
-            'entry_by' => $request->entry_by,
+            'entry_by' => $user->employeeid,
         ]);
 
         return Redirect::route('items.index');

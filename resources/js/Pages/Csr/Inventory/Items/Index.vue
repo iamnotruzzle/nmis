@@ -212,10 +212,20 @@
                 removableSort
               >
                 <template #header>
-                  <div class="w-full">
+                  <div class="w-full flex flex-row justify-content-between">
                     <div class="text-lg font-bold my-3">
                       Prices for <span class="text-primary">[ {{ slotProps.data.cl2desc }} ]</span>
                     </div>
+
+                    <!-- @click="openAddDeliveryDialog" -->
+                    <Button
+                      class="ml-2"
+                      label="Add price"
+                      severity="success"
+                      icon="pi pi-plus"
+                      iconPos="right"
+                      @click="openPriceDialog(slotProps.data)"
+                    />
                   </div>
                 </template>
                 <Column
@@ -601,6 +611,49 @@
           />
         </template>
       </Dialog>
+
+      <!-- price dialog -->
+      <Dialog
+        v-model:visible="priceDialog"
+        :style="{ width: '450px' }"
+        :modal="true"
+        class="p-fluid"
+        @hide="clickOutsideDialog"
+        dismissableMask
+      >
+        <template #header>
+          <div class="text-primary text-xl font-bold">PRICE</div>
+        </template>
+        <div class="field">
+          <label>Selling price</label>
+          <InputText
+            id="Price"
+            v-model.trim="formPrice.selling_price"
+            required="true"
+            autofocus
+            :class="{ 'p-invalid': formPrice.selling_price == '' }"
+            @keyup.enter="submitPrice"
+          />
+        </div>
+
+        <template #footer>
+          <Button
+            label="Cancel"
+            icon="pi pi-times"
+            severity="danger"
+            text
+            @click="cancel"
+          />
+          <Button
+            label="Convert"
+            icon="pi pi-check"
+            text
+            type="submit"
+            :disabled="formPrice.processing || formPrice.selling_price == null"
+            @click="submitPrice"
+          />
+        </template>
+      </Dialog>
     </div>
   </app-layout>
 </template>
@@ -774,6 +827,13 @@ export default {
         location: null,
         selectedMainCat: null,
         selectedSubCategory: null,
+      }),
+      priceDialog: false,
+      formPrice: this.$inertia.form({
+        id: null,
+        cl2comb: null,
+        selling_price: null,
+        entry_by: null,
       }),
     };
   },
@@ -1038,6 +1098,11 @@ export default {
       this.itemId = null;
       this.createItemDialog = true;
     },
+    openPriceDialog(item) {
+      console.log(item);
+      this.formPrice.cl2comb = item.cl2comb;
+      this.priceDialog = true;
+    },
     // emit close dialog
     clickOutsideDialog() {
       this.$emit(
@@ -1046,7 +1111,8 @@ export default {
         (this.isUpdate = false),
         this.form.clearErrors(),
         this.form.reset(),
-        this.formConvert.reset()
+        this.formConvert.reset(),
+        (this.priceDialog = false)
       );
     },
     editItem(item) {
@@ -1144,20 +1210,42 @@ export default {
 
       //   console.log(this.$page.props.errors);
     },
+    submitPrice() {
+      if (this.formPrice.processing || this.formPrice.selling_price == null || this.formConvert.cl2desc == '') {
+        return false;
+      }
+
+      this.formPrice.post(route('itemprices.store'), {
+        preserveScroll: true,
+        onSuccess: () => {
+          //   console.log('DONE');
+          this.convertDialog = false;
+          this.cancel();
+          this.updateData();
+          this.createdPriceMsg();
+        },
+      });
+    },
     cancel() {
       this.itemId = null;
       this.isUpdate = false;
       this.createItemDialog = false;
       this.convertDialog = false;
+      this.priceDialog = false;
       this.form.reset();
       this.form.clearErrors();
       this.formConvert.reset();
       this.formConvert.clearErrors();
+      this.formPrice.reset();
+      this.formPrice.clearErrors();
       this.itemsList = [];
       this.storeItemInContainer();
     },
     createdMsg() {
       this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Item created', life: 3000 });
+    },
+    createdPriceMsg() {
+      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Item price created', life: 3000 });
     },
     updatedMsg() {
       this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Item updated', life: 3000 });
