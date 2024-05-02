@@ -22,7 +22,7 @@ class ManualAddStocksController extends Controller
         // dd($unit->uomcode);
 
         $stock = CsrStocks::create([
-            'ris_no' => $request->risid,
+            'ris_no' => $request->ris_no,
             'cl2comb' => $request->cl2comb,
             'uomcode' => $unit->uomcode,
             'suppcode' => $request->supplier,
