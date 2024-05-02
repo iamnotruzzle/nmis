@@ -94,6 +94,9 @@ class ItemController extends Controller
                             FROM csrw_item_reorder_level as r
                             ORDER BY r.created_at DESC) as reorder_level'), 'item.cl2comb', '=', 'reorder_level.cl2comb')
             ->where('item.cl2comb', 'like', '%1000-%')
+            ->whereRaw("LOWER(item.cl2desc) LIKE ?", ["%" . strtolower($search) . "%"])
+            ->whereRaw("LOWER(item.cl2stat) LIKE ?", ["%" . strtolower($status) . "%"])
+            ->whereRaw("LOWER(main_category.categoryname) LIKE ?", ["%" . strtolower($maincat) . "%"])
             ->orderBy('item.cl2desc', 'ASC')
             ->paginate(20);
 
