@@ -72,7 +72,7 @@ class ItemController extends Controller
                 'item.catID',
                 'item.cl2desc as item',
                 'price.id as price_id',
-                'price.selling_price as price',
+                'price.selling_price as selling_price',
                 'price.entry_by',
                 'employee.firstname as entry_by_firstname',
                 'employee.middlename as entry_by_middlename',

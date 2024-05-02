@@ -209,6 +209,8 @@
                 showGridlines
                 :value="slotProps.data.prices"
                 size="small"
+                sortField="created_at"
+                :sortOrder="-1"
                 removableSort
               >
                 <template #header>
@@ -228,19 +230,19 @@
                     />
                   </div>
                 </template>
-                <Column
+                <!-- <Column
                   field="acquisition_price"
                   header="ACQUISITION PRICE"
                   style="width: 20%"
                 >
-                </Column>
-                <Column
+                </Column> -->
+                <!-- <Column
                   field="mark_up"
                   header="MARKUP"
                   style="width: 20%"
                 >
                   <template #body="{ data }"> {{ data.mark_up }}% </template>
-                </Column>
+                </Column> -->
                 <Column
                   field="selling_price"
                   header="SELLING PRICE"
@@ -845,7 +847,7 @@ export default {
   },
   // created will be initialize before mounted
   mounted() {
-    // console.log(this.items);
+    console.log(this.items);
     this.storeCl1combsInContainer();
     this.storeItemInContainer();
     this.storeUnitsInContainer();
@@ -926,32 +928,25 @@ export default {
             normal_stock: e.normal_stock,
             alert_stock: e.alert_stock,
             critical_stock: e.critical_stock,
-            prices:
-              e.acquisition_price == null
-                ? []
-                : [
-                    {
-                      price_id: e.price_id,
-                      acquisition_price: e.acquisition_price,
-                      mark_up: e.mark_up,
-                      selling_price: e.selling_price,
-                      created_at: e.price_created_at,
-                    },
-                  ],
+            prices: [
+              {
+                price_id: e.price_id,
+                //   acquisition_price: e.acquisition_price,
+                // mark_up: e.mark_up,
+                selling_price: e.selling_price,
+                created_at: e.price_created_at,
+              },
+            ],
           });
         } else {
           // Item already exists, insert the prices into the existing item's prices array
-          if (e.acquisition_price == null) {
-            this.itemsList[existingItemIndex].prices.push([]);
-          } else {
-            this.itemsList[existingItemIndex].prices.push({
-              price_id: e.price_id,
-              acquisition_price: e.acquisition_price,
-              mark_up: e.mark_up,
-              selling_price: e.selling_price,
-              created_at: e.price_created_at,
-            });
-          }
+          this.itemsList[existingItemIndex].prices.push({
+            price_id: e.price_id,
+            // acquisition_price: e.acquisition_price,
+            // mark_up: e.mark_up,
+            selling_price: e.selling_price,
+            created_at: e.price_created_at,
+          });
         }
       });
     },
