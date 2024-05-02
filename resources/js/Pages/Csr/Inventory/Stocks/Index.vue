@@ -1627,7 +1627,7 @@ export default {
     },
   },
   mounted() {
-    console.log(this.items);
+    // console.log(this.items);
     this.setMinimumDate();
     this.storeFundSourceInContainer();
     this.storeItemsInContainer();
@@ -1943,7 +1943,7 @@ export default {
       if (this.deliveryExist != true && this.form.searchRis != null && this.form.searchRis != '') {
         try {
           const response = await axios.post('csrstocks', this.form);
-          console.log(response.data); // Log the response data if needed
+          //   console.log(response.data); // Log the response data if needed
 
           let sanitizedData = response.data;
 
