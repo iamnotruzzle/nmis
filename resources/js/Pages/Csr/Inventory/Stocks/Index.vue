@@ -781,7 +781,6 @@
             required="true"
             v-model.trim="formAddDelivery.quantity"
             inputId="integeronly"
-            readonly
           />
         </div>
         <div class="field flex justify-content-between">
@@ -837,7 +836,7 @@
             icon="pi pi-check"
             text
             type="submit"
-            :disabled="formAdditional.processing || deliveryDetails.length == 0"
+            :disabled="formAdditional.processing"
             @click="submit"
           />
         </template>
