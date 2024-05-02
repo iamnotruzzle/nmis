@@ -836,8 +836,20 @@
             icon="pi pi-check"
             text
             type="submit"
-            :disabled="formAdditional.processing"
-            @click="submit"
+            :disabled="
+              formAddDelivery.processing ||
+              formAddDelivery.ris_no == null ||
+              formAddDelivery.supplier == null ||
+              formAddDelivery.fund_source == null ||
+              formAddDelivery.cl2comb == null ||
+              formAddDelivery.brand == null ||
+              formAddDelivery.expiration_date == null ||
+              formAddDelivery.quantity == null ||
+              formAddDelivery.acquisitionPrice == null ||
+              formAddDelivery.markupPercentage == null ||
+              formAddDelivery.sellingPrice == null
+            "
+            @click="submitAddDelivery"
           />
         </template>
       </Dialog>
@@ -2061,6 +2073,33 @@ export default {
           });
         }
       }
+    },
+    submitAddDelivery() {
+      if (
+        this.formAddDelivery.processing ||
+        this.formAddDelivery.ris_no == null ||
+        this.formAddDelivery.supplier == null ||
+        this.formAddDelivery.fund_source == null ||
+        this.formAddDelivery.cl2comb == null ||
+        this.formAddDelivery.brand == null ||
+        this.formAddDelivery.expiration_date == null ||
+        this.formAddDelivery.quantity == null ||
+        this.formAddDelivery.acquisitionPrice == null ||
+        this.formAddDelivery.markupPercentage == null ||
+        this.formAddDelivery.sellingPrice == null
+      ) {
+        return false;
+      }
+
+      this.formAddDelivery.post(route('csrmanualadd.store'), {
+        preserveScroll: true,
+        onSuccess: () => {
+          this.addDeliveryDialog = false;
+          this.cancel();
+          this.updateData();
+          this.createdMsg();
+        },
+      });
     },
     cancel() {
       this.stockId = null;

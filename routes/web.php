@@ -16,6 +16,7 @@ use App\Http\Controllers\Csr\CsrManualReport\CsrManualReportController;
 use App\Http\Controllers\Csr\Inventory\CsrConvertItem\CsrConvertItemController;
 use App\Http\Controllers\Csr\IssueTankItems\IssueTankItemsController;
 use App\Http\Controllers\Csr\Reports\ReportsController;
+use App\Http\Controllers\Csr\Utility\ManualAddStocks\ManualAddStocksController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\LocationStockBalance\LocationStockBalanceController;
 use App\Http\Controllers\LocationTankStockBalance\LocationTankStockBalanceController;
@@ -80,6 +81,7 @@ Route::middleware(['web', 'auth', 'verified'])->group(
         Route::resource('brands', BrandController::class)->middleware(['verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('csrconvert', CsrConvertItemController::class)->middleware(['verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('csrstocks', CsrStocksControllers::class)->middleware(['verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('csrmanualadd', ManualAddStocksController::class)->middleware(['verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('issueitems', IssueItemController::class)->middleware(['verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
         Route::get('issueitems/issued/', [IssuedItemsReportController::class, 'export']);
         Route::put('issueitems', [IssueItemController::class, 'acknowledgedrequest'])->name('issueitems.acknowledgedrequest');
