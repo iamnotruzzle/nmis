@@ -18,7 +18,6 @@
         filterDisplay="row"
         sortField="cl2desc"
         :sortOrder="1"
-        removableSort
         showGridlines
       >
         <template #header>
@@ -58,17 +57,17 @@
           <template #body="{ data }">
             {{ data.mainCategory }}
           </template>
-          <!-- <template #filter="{ filterModel, filterCallback }">
+          <template #filter="">
             <Dropdown
-              v-model="filterModel.value"
+              v-model="maincat"
               :options="mainCategoryFilter"
-              @change="filterCallback()"
               optionLabel="name"
               optionValue="code"
               placeholder="NO FILTER"
+              :showClear="true"
               class="w-full"
             />
-          </template> -->
+          </template>
         </Column>
         <Column
           field="cl1comb"
@@ -93,8 +92,6 @@
           field="cl2desc"
           header="DESCRIPTION"
           style="width: 30%"
-          sortable
-          removableSort
         >
           <template #body="{ data }">
             {{ data.cl2desc }}
@@ -155,17 +152,24 @@
               />
             </div>
           </template>
-          <!-- <template #filter="{ filterModel, filterCallback }">
+          <template #filter="">
             <Dropdown
-              v-model="filterModel.value"
+              v-model="status"
               :options="statusFilter"
-              @change="filterCallback()"
+              :showClear="true"
               optionLabel="name"
               optionValue="code"
               placeholder="NO FILTER"
               class="w-full"
-            />
-          </template> -->
+            >
+              <template #option="slotProps">
+                <Tag
+                  :value="slotProps.option.name"
+                  :severity="statusSeverity(slotProps.option)"
+                />
+              </template>
+            </Dropdown>
+          </template>
         </Column>
         <Column
           header="ACTION"
@@ -679,12 +683,12 @@ export default {
       createItemDialog: false,
       convertDialog: false,
       dateFilter: 'this year',
-      selectedStatus: null,
+      status: null,
       statusFilter: [
         { name: 'Active', code: 'A' },
         { name: 'Inactive', code: 'I' },
       ],
-      selectedCatID: null,
+      maincat: null,
       mainCategoryFilter: [
         { name: 'Accountable forms', code: 'Accountable forms' },
         { name: 'Drugs and medicines', code: 'Drugs and medicines' },
@@ -798,6 +802,16 @@ export default {
     },
   },
   methods: {
+    statusSeverity(status) {
+      //   console.log(status);
+      switch (status.code) {
+        case 'I':
+          return 'danger';
+
+        case 'A':
+          return 'success';
+      }
+    },
     tzone(date) {
       return moment.tz(date, 'Asia/Manila').format('L');
     },
@@ -1152,6 +1166,14 @@ export default {
   watch: {
     search: function (val, oldVal) {
       this.params.search = val;
+      this.updateData();
+    },
+    status: function (val, oldVal) {
+      this.params.status = val;
+      this.updateData();
+    },
+    maincat: function (val, oldVal) {
+      this.params.maincat = val;
       this.updateData();
     },
     // from: function (val) {

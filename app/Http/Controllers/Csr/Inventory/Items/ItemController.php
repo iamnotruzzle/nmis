@@ -20,8 +20,8 @@ class ItemController extends Controller
 {
     public function index(Request $request)
     {
-        $catID = $request->catID; // main category
-        $cl1desc = $request->cl1desc; // sub category
+        $status = $request->status; // stat
+        $maincat = $request->maincat; // main category
 
         $search = $request->search;
 
@@ -115,6 +115,8 @@ class ItemController extends Controller
             )
             ->whereNotNull('item.catid')
             ->whereRaw("LOWER(item.cl2desc) LIKE ?", ["%" . strtolower($search) . "%"])
+            ->whereRaw("LOWER(item.cl2stat) LIKE ?", ["%" . strtolower($status) . "%"])
+            ->whereRaw("LOWER(main_category.categoryname) LIKE ?", ["%" . strtolower($maincat) . "%"])
             ->orderBy('item.cl2desc', 'ASC')
             ->paginate(20);
 
