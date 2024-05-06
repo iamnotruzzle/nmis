@@ -14,11 +14,10 @@ class CsrItemConversion extends Model
     protected $fillable = [
         'csr_stock_id',
         'ris_no',
+        'chrgcode',
         'cl2comb_before',
-        'uomcode_before',
         'quantity_before',
         'cl2comb_after',
-        'uomcode_after',
         'quantity_after',
         'brand',
         'suppcode',

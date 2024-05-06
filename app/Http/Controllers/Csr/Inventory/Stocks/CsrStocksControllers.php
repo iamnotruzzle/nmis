@@ -73,6 +73,11 @@ class CsrStocksControllers extends Controller
             "
         );
 
+        $convertedItems = DB::select(
+            "SELECT cl2comb, cl2desc, uomcode FROM hclass2 WHERE cl2desc LIKE '(piece)%';"
+        );
+        // dd($convertedItems);
+
         // brands
         $brands = Brand::get();
 
@@ -92,6 +97,7 @@ class CsrStocksControllers extends Controller
             'typeOfCharge' => $typeOfCharge,
             'fundSource' => $fundSource,
             'suppliers' => $suppliers,
+            'convertedItems' => $convertedItems,
         ]);
     }
 

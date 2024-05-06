@@ -17,11 +17,10 @@ class CreateCsrwCsrItemConversionTable extends Migration
             $table->id();
             $table->string('csr_stock_id');
             $table->string('ris_no');
+            $table->string('chrgcode')->nullable();
             $table->string('cl2comb_before');
-            $table->string('uomcode_before');
             $table->integer('quantity_before');
             $table->string('cl2comb_after');
-            $table->string('uomcode_after');
             $table->integer('quantity_after');
             $table->bigInteger('brand')->nullable();
             $table->string('suppcode')->nullable();

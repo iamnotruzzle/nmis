@@ -289,15 +289,27 @@
           style="width: 5%"
         >
           <template #body="slotProps">
-            <div class="flex flex-row m-0 p-0">
+            <div class="flex flex-row justify-content-between align-content-around">
               <Button
+                v-tooltip.top="'Update'"
                 icon="pi pi-pencil"
-                class="mr-1"
+                class="mr-2"
                 rounded
                 text
                 severity="warning"
                 @click="editItem(slotProps.data)"
               />
+              <Button
+                v-tooltip.top="'Convert'"
+                class=""
+                rounded
+                severity="success"
+                @click="convertItem(slotProps.data)"
+              >
+                <template #icon>
+                  <v-icon name="bi-arrow-left-right"></v-icon>
+                </template>
+              </Button>
             </div>
           </template>
         </Column>
@@ -1164,6 +1176,72 @@
         </template>
       </Dialog>
       <!-- end brand -->
+
+      <!-- convert dialog -->
+      <Dialog
+        v-model:visible="convertDialog"
+        :style="{ width: '550px' }"
+        :modal="true"
+        class="p-fluid"
+        @hide="clickOutsideDialog"
+        dismissableMask
+      >
+        <template #header>
+          <div class="text-primary text-xl font-bold">CONVERT</div>
+        </template>
+        <div class="field">
+          <div class="flex align-content-center">
+            <label>Item</label>
+          </div>
+          <InputText
+            v-model.trim="formConvert.cl2desc_before"
+            readonly
+          />
+        </div>
+        <div class="field">
+          <div class="flex align-content-center">
+            <label>Convert to</label>
+          </div>
+          <Dropdown
+            v-model.trim="formConvert.cl2comb_after"
+            required="true"
+            :options="convertedItemsList"
+            :virtualScrollerOptions="{ itemSize: 48 }"
+            filter
+            optionLabel="cl2desc"
+            class="w-full mb-3"
+            :class="{ 'p-invalid': formConvert.cl1comb == '' }"
+          />
+        </div>
+        <div class="field">
+          <div class="flex align-content-center">
+            <label>Quantity</label>
+          </div>
+          <InputText
+            id="quantity"
+            type="number"
+            v-model.trim="formConvert.quantity_after"
+            @keydown="restrictNonNumericAndPeriod"
+          />
+        </div>
+        <template #footer>
+          <!-- <Button
+            label="Cancel"
+            icon="pi pi-times"
+            severity="danger"
+            text
+            @click="cancel"
+          />
+          <Button
+            label="Convert"
+            icon="pi pi-check"
+            text
+            type="submit"
+            :disabled="formConvert.processing || formConvert.cl2desc == null || formConvert.cl2desc == ''"
+            @click="submitConvert"
+          /> -->
+        </template>
+      </Dialog>
     </div>
 
     <div class="card">
@@ -1370,6 +1448,7 @@ export default {
     typeOfCharge: Object,
     fundSource: Object,
     suppliers: Object,
+    convertedItems: Object,
   },
   data() {
     return {
@@ -1383,6 +1462,7 @@ export default {
       createBrandDialog: false,
       deleteBrandDialog: false,
       deliveryExist: false,
+      convertDialog: false,
       params: {},
       search: '',
       // manufactured date
@@ -1446,6 +1526,7 @@ export default {
       stocksList: [],
       totalStocksList: [],
       suppliersList: [],
+      convertedItemsList: [],
       filters: {
         global: {
           value: null,
@@ -1517,6 +1598,21 @@ export default {
         id: null,
         name: null,
         status: null,
+      }),
+      formConvert: this.$inertia.form({
+        csr_stock_id: null,
+        ris_no: null,
+        chrgcode: null,
+        cl2comb_before: null,
+        cl2desc_before: null,
+        quantity_before: null,
+        cl2comb_after: null,
+        quantity_after: null,
+        brand: null,
+        suppcode: null,
+        manufactured_date: null,
+        delivered_date: null,
+        expiration_date: null,
       }),
       brandStatus: [
         {
@@ -1627,7 +1723,7 @@ export default {
     },
   },
   mounted() {
-    // console.log(this.items);
+    // console.log(this.convertedItems);
     this.setMinimumDate();
     this.storeFundSourceInContainer();
     this.storeItemsInContainer();
@@ -1636,6 +1732,7 @@ export default {
     this.storeActiveBrandsInContainer();
     this.storeTotalStocksInContainer();
     this.storeSuppliersInContainer();
+    this.storeConvertedItemsInContainer();
 
     // Add event listener to the document
     document.addEventListener('keydown', this.handleKeyPress);
@@ -1821,6 +1918,15 @@ export default {
         });
       });
     },
+    storeConvertedItemsInContainer() {
+      this.convertedItems.forEach((e) => {
+        this.convertedItemsList.push({
+          cl2comb: e.cl2comb,
+          cl2desc: e.cl2desc,
+          uomcode: e.uomcode,
+        });
+      });
+    },
     storeFundSourceInContainer() {
       this.typeOfCharge.forEach((e) => {
         this.fundSourceList.push({
@@ -1979,6 +2085,54 @@ export default {
           // Handle error
         }
       }
+    },
+    convertItem(item) {
+      console.log(item);
+
+      //    csr_stock_id: null,
+      //     ris_no: null,
+      //     cl2comb_before: null,
+      //     cl2desc_before: null,
+      //     cl2comb: null,
+      //     quantity: null,
+      //     brand: null,
+      //     suppcode: null,
+      //     manufactured_date: null,
+      //     delivered_date: null,
+      //     expiration_date: null,
+
+      this.convertDialog = true;
+      this.formConvert.cl2comb_before = item.cl2comb;
+      this.formConvert.cl2desc_before = item.cl2desc;
+      this.formConvert.quantity_before = item.quantity;
+
+      this.formConvert.csr_stock_id = item.id;
+      this.formConvert.ris_no = item.ris_no;
+      this.formConvert.chrgcode = item.chrgcode;
+      this.formConvert.brand = item.brand_id;
+      this.formConvert.suppcode = item.suppcode;
+      this.formConvert.manufactured_date = item.manufactured_date;
+      this.formConvert.delivered_date = item.delivered_date;
+      this.formConvert.expiration_date = item.expiration_date;
+    },
+    submitConvert() {
+      //   //   if (this.formConvert.processing || this.formConvert.cl2desc == null || this.formConvert.cl2desc == '') {
+      //   //     return false;
+      //   //   }
+      //   this.formConvert.location = this.authLocation.location.wardcode;
+      //   this.formConvert.post(route('csrconvert.store'), {
+      //     preserveScroll: true,
+      //     onSuccess: () => {
+      //       //   console.log('DONE');
+      //       this.convertDialog = false;
+      //       this.cancel();
+      //       this.updateData();
+      //       this.createdMsg();
+      //     },
+      //     onError: (error) => {
+      //       console.log(error);
+      //     },
+      //   });
     },
     onRowClick(e) {
       //   console.log(e.data);
