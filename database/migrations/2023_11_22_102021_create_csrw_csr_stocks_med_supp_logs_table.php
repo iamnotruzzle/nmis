@@ -15,7 +15,6 @@ class CreateCsrwCsrStocksMedSuppLogsTable extends Migration
             $table->string('cl2comb');
             $table->string('uomcode')->nullable();
             $table->string('suppcode')->nullable();
-            $table->bigInteger('brand')->nullable();
             $table->decimal('acquisition_price', $precision = 8, $scale = 2)->nullable();
             $table->integer('mark_up')->nullable();
             $table->decimal('selling_price', $precision = 8, $scale = 2)->nullable();

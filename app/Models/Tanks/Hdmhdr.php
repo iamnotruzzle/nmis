@@ -26,7 +26,6 @@ class Hdmhdr extends Model
         'dmdlock',
         'dmdupsw',
         'dmddtmd',
-        'brandname',
         'atcode',
         'dmdnnostp',
         'dmdclaimno',

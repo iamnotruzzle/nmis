@@ -21,7 +21,6 @@ class CreateCsrwWardsStocksMedSuppTable extends Migration
             $table->string('location');
             $table->string('cl2comb');
             $table->string('uomcode')->nullable();
-            $table->bigInteger('brand')->nullable();
             $table->string('chrgcode')->nullable();
             $table->integer('quantity');
             $table->bigInteger('converted_from_ward_stock_id')->nullable();

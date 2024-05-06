@@ -40,7 +40,6 @@ class CsrItemConversionController extends Controller
             'quantity_before' => $request->quantity_before,
             'cl2comb_after' => $request->cl2comb_after,
             'quantity_after' => $request->quantity_after,
-            'brand' => $request->brand,
             'suppcode' => $request->suppcode,
             'manufactured_date' => $request->manufactured_date,
             'delivered_date' => $request->delivered_date,

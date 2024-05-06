@@ -33,7 +33,7 @@ class RequestStocksDetails extends Model
 
     public function stocks()
     {
-        return $this->hasMany(CsrStocks::class, 'cl2comb', 'cl2comb')->with(['brandDetail:id,name', 'ward_stocks'])
+        return $this->hasMany(CsrStocks::class, 'cl2comb', 'cl2comb')->with(['ward_stocks'])
             ->whereDate('expiration_date', '>', Carbon::today());
     }
 

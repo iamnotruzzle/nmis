@@ -18,7 +18,6 @@ class CreateCsrwPatientChargeLogsTable extends Migration
             $table->string('enccode')->nullable();
             $table->string('acctno')->nullable();
             $table->bigInteger('ward_stocks_id')->nullable();
-            $table->bigInteger('brand')->nullable();
             $table->string('itemcode')->nullable();
             $table->string('from')->nullable();
             $table->dateTime('manufactured_date')->nullable();

@@ -17,7 +17,6 @@ class CsrStocksLogs extends Model
         'cl2comb',
         'uomcode',
         'suppcode',
-        'brand',
         'chrgcode',
         'prev_qty',
         'new_qty',

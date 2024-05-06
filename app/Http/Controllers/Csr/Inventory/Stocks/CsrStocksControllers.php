@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Csr\Inventory\Stocks;
 
 use App\Http\Controllers\Controller;
-use App\Models\Brand;
 use App\Models\CsrStocks;
 use App\Models\CsrStocksLogs;
 use App\Models\FundSource;
@@ -43,7 +42,6 @@ class CsrStocksControllers extends Controller
                 fundSource.fsid as codeFromFundSource, fundSource.fsName as descFromFundSource,
                 stock.cl2comb, item.cl2desc, stock.acquisition_price, stock.mark_up, stock.selling_price,
                 unit.uomcode, unit.uomdesc,
-                brand.id as brand_id, brand.[name] as brand_name,
                 stock.quantity,
                 reoder_level.normal_stock as normal_stock, reoder_level.alert_stock, reoder_level.critical_stock,
                 stock.manufactured_date, stock.delivered_date, expiration_date
@@ -51,7 +49,6 @@ class CsrStocksControllers extends Controller
             JOIN hclass2 as item ON stock.cl2comb = item.cl2comb
             JOIN huom as unit ON stock.uomcode = unit.uomcode
             JOIN hsupplier as supplier ON stock.suppcode = supplier.suppcode
-            JOIN csrw_brands as brand ON stock.brand = brand.id
             LEFT JOIN hcharge as typeOfCharge ON stock.chrgcode = typeOfCharge.chrgcode
             LEFT JOIN csrw_fund_source as fundSource ON stock.chrgcode = fundSource.fsid
             LEFT JOIN (
@@ -88,9 +85,6 @@ class CsrStocksControllers extends Controller
         );
         // dd($convertedItems);
 
-        // brands
-        $brands = Brand::get();
-
         $fundSource = FundSource::get(['id', 'fsid', 'fsName', 'cluster_code']);
 
         $typeOfCharge = TypeOfCharge::where('chrgstat', 'A')
@@ -102,7 +96,6 @@ class CsrStocksControllers extends Controller
         return Inertia::render('Csr/Inventory/Stocks/Index', [
             'items' => $items,
             'stocks' => $stocks,
-            'brands' => $brands,
             'totalDeliveries' => $totalDeliveries,
             'typeOfCharge' => $typeOfCharge,
             'fundSource' => $fundSource,
@@ -197,7 +190,6 @@ class CsrStocksControllers extends Controller
                     'cl2comb' => $r['cl2comb'],
                     'uomcode' => $r['uomcode'],
                     'suppcode' => $r['supplier']['suppcode'],
-                    'brand' => $r['brand']['id'],
                     'chrgcode' => $r['fsid'],
                     'quantity' => $r['releaseqty'],
                     'manufactured_date' => $r['manufactured_date'],
@@ -215,7 +207,6 @@ class CsrStocksControllers extends Controller
                     'cl2comb' => $r['cl2comb'],
                     'uomcode' => $r['uomcode'],
                     'suppcode' => $r['supplier']['suppcode'],
-                    'brand' => $r['brand']['id'],
                     'chrgcode' => $r['fsid'],
                     'prev_qty' => 0,
                     'new_qty' => $r['releaseqty'],
@@ -259,7 +250,6 @@ class CsrStocksControllers extends Controller
 
         $updated = $csrstock->update([
             'suppcode' => $request->suppcode,
-            'brand' => $request->brand,
             'quantity' => $request->quantity,
             'manufactured_date' => $request->manufactured_date,
             'delivered_date' => $request->delivered_date,
@@ -275,7 +265,6 @@ class CsrStocksControllers extends Controller
             'cl2comb' => $prevStockDetails->cl2comb,
             'uomcode' => $prevStockDetails->uomcode,
             'suppcode' => $prevStockDetails->suppcode,
-            'brand' => $prevStockDetails->brand,
             'chrgcode' => $prevStockDetails->chrgcode,
             'prev_qty' => $prevStockDetails->quantity,
             'new_qty' => $request->quantity,
@@ -311,7 +300,6 @@ class CsrStocksControllers extends Controller
         //     'chrgcode' => $prevStockDetails->chrgcode,
         //     'cl2comb' => $prevStockDetails->cl2comb,
         //     'uomcode' => $prevStockDetails->uomcode,
-        //     'brand' => $prevStockDetails->brand,
         //     'prev_qty' => $prevStockDetails->quantity,
         //     'new_qty' => $prevStockDetails->quantity,
         //     'manufactured_date' => $prevStockDetails->manufactured_date,

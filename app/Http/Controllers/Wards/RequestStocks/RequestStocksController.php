@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Wards\RequestStocks;
 
 use App\Events\RequestStock;
 use App\Http\Controllers\Controller;
-use App\Models\Brand;
 use App\Models\FundSource;
 use App\Models\Item;
 use App\Models\RequestStocks;
@@ -72,7 +71,7 @@ class RequestStocksController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        $currentWardStocks = WardsStocks::with(['item_details:cl2comb,cl2desc', 'brand_details:id,name', 'request_stocks', 'unit_of_measurement:uomcode,uomdesc'])
+        $currentWardStocks = WardsStocks::with(['item_details:cl2comb,cl2desc', 'request_stocks', 'unit_of_measurement:uomcode,uomdesc'])
             ->where('location', $authWardcode->wardcode)
             ->where('quantity', '!=', 0)
             ->whereHas(
@@ -82,13 +81,11 @@ class RequestStocksController extends Controller
                 }
             )
             ->get();
-        $currentWardStocks2 = WardsStocks::with(['item_details:cl2comb,cl2desc', 'brand_details:id,name', 'request_stocks', 'unit_of_measurement:uomcode,uomdesc'])
+        $currentWardStocks2 = WardsStocks::with(['item_details:cl2comb,cl2desc', 'request_stocks', 'unit_of_measurement:uomcode,uomdesc'])
             ->where('request_stocks_id', null)
             ->where('location', $authWardcode->wardcode)
             ->where('quantity', '!=', 0)
             ->get();
-
-        $brands = Brand::get();
 
         $fundSource = FundSource::get(['id', 'fsid', 'fsName', 'cluster_code']);
 
@@ -102,7 +99,6 @@ class RequestStocksController extends Controller
             'authWardcode' => $authWardcode,
             'currentWardStocks' => $currentWardStocks,
             'currentWardStocks2' => $currentWardStocks2,
-            'brands' => $brands,
             'typeOfCharge' => $typeOfCharge,
             'fundSource' => $fundSource,
         ]);

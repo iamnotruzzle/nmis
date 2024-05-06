@@ -25,7 +25,7 @@ class TransferStockController extends Controller
             ->orderBy('csrw_login_history.created_at', 'desc')
             ->first();
 
-        $wardStocks = WardsStocks::with(['item_details:cl2comb,cl2desc', 'brand_details:id,name', 'request_stocks'])
+        $wardStocks = WardsStocks::with(['item_details:cl2comb,cl2desc', 'request_stocks'])
             ->where('quantity', '!=', 0)
             ->where('location', '=', $authWardcode->wardcode)
             ->whereHas('request_stocks', function ($query) {
@@ -35,7 +35,7 @@ class TransferStockController extends Controller
             ->get();
         // dd($wardStocks);
 
-        $wardStocksConsignments = WardsStocks::with(['item_details:cl2comb,cl2desc', 'brand_details:id,name'])
+        $wardStocksConsignments = WardsStocks::with(['item_details:cl2comb,cl2desc'])
             ->where(
                 'quantity',
                 '!=',
@@ -148,7 +148,6 @@ class TransferStockController extends Controller
             'stock_id' => $wardStock->stock_id,
             'location' => $authWardcode->wardcode,
             'cl2comb' => $wardStock->cl2comb,
-            'brand' => $wardStock->brand,
             'chrgcode' => $wardStock->chrgcode,
             'quantity' => $transferredStock->quantity,
             'uomcode' => $wardStock->uomcode,

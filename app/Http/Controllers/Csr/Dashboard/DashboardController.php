@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Csr\Dashboard;
 
 use App\Http\Controllers\Controller;
-use App\Models\Brand;
 use App\Models\CsrStocks;
 use App\Models\CsrStocksLogs;
 use App\Models\FundSource;
@@ -53,7 +52,6 @@ class DashboardController extends Controller
     //         'ris_no' => 'required',
     //         'fund_source' => 'required',
     //         'cl2comb' => 'required',
-    //         'brand' => 'required',
     //         'quantity' => 'required|numeric|min:0',
     //         'delivered_date' => 'required',
     //         'expiration_date' => 'required',
@@ -68,7 +66,6 @@ class DashboardController extends Controller
     //         'chrgcode' => $request->fund_source,
     //         'cl2comb' => $request->cl2comb,
     //         'uomcode' => $request->uomcode,
-    //         'brand' => $request->brand,
     //         'quantity' => $request->quantity,
     //         'manufactured_date' => $request->manufactured_date == null ? null : Carbon::parse($request->manufactured_date)->setTimezone('Asia/Manila'),
     //         'delivered_date' => $request->delivered_date == null ? null : Carbon::parse($request->delivered_date)->setTimezone('Asia/Manila'),
@@ -82,7 +79,6 @@ class DashboardController extends Controller
     //         'chrgcode' => $prevStockDetails->chrgcode,
     //         'cl2comb' => $prevStockDetails->cl2comb,
     //         'uomcode' => $prevStockDetails->uomcode,
-    //         'brand' => $prevStockDetails->brand,
     //         'prev_qty' => $prevStockDetails->quantity,
     //         'new_qty' => $request->quantity,
     //         'manufactured_date' => $prevStockDetails->manufactured_date,
@@ -115,7 +111,6 @@ class DashboardController extends Controller
     //         'chrgcode' => $prevStockDetails->chrgcode,
     //         'cl2comb' => $prevStockDetails->cl2comb,
     //         'uomcode' => $prevStockDetails->uomcode,
-    //         'brand' => $prevStockDetails->brand,
     //         'prev_qty' => $prevStockDetails->quantity,
     //         'new_qty' => $prevStockDetails->quantity,
     //         'manufactured_date' => $prevStockDetails->manufactured_date,

@@ -89,6 +89,6 @@ class PatientCharge extends Model
 
     public function patientChargeLogs()
     {
-        return $this->hasMany(PatientChargeLogs::class, ['enccode', 'pcchrgdte', 'itemcode'], ['enccode', 'pcchrgdte', 'itemcode'])->with('brand_details:id,name');
+        return $this->hasMany(PatientChargeLogs::class, ['enccode', 'pcchrgdte', 'itemcode'], ['enccode', 'pcchrgdte', 'itemcode']);
     }
 }

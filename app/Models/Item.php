@@ -34,7 +34,6 @@ class Item extends Model
         'curcode1',
         'uomcode1',
         'cl2ctr',
-        'brandname',
         'stockbal',
         'pharmaceutical',
         'baldteasof',

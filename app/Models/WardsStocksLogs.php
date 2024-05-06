@@ -18,7 +18,6 @@ class WardsStocksLogs extends Model
         'location',
         'cl2comb',
         'uomcode',
-        'brand',
         'chrgcode',
         'prev_qty',
         'new_qty',

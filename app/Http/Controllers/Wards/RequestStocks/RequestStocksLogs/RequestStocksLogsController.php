@@ -39,7 +39,6 @@ class RequestStocksLogsController extends Controller
             'location' => $prevStockDetails->location,
             'cl2comb' => $prevStockDetails->cl2comb,
             'uomcode' => $prevStockDetails->uomcode,
-            'brand' => $prevStockDetails->brand,
             'chrgcode' => $prevStockDetails->chrgcode,
             'prev_qty' => $request->current_quantity,
             'new_qty' => $request->quantity,

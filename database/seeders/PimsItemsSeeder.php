@@ -107,7 +107,6 @@ class PimsItemsSeeder extends Seeder
                         'curcode1' => NULL,
                         'uomcode1' => NULL,
                         'cl2ctr' => NULL,
-                        'brandname' => NULL,
                         'stockbal' => 0.00,
                         'pharmaceutical' => NULL,
                         'baldteasof' => Carbon::now(),

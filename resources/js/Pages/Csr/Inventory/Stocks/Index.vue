@@ -94,12 +94,6 @@
         >
         </Column>
         <Column
-          field="brand_name"
-          header="BRAND"
-          style="width: 5%"
-        >
-        </Column>
-        <Column
           field="quantity"
           header="QTY"
           sortable
@@ -411,22 +405,6 @@
                 readonly
               />
             </div>
-            <div class="field">
-              <div class="flex align-content-center">
-                <label>Brand</label>
-                <span class="ml-2 text-error">*</span>
-              </div>
-              <Dropdown
-                required="true"
-                v-model="formAdditional.brand"
-                :options="brandDropDownList"
-                :virtualScrollerOptions="{ itemSize: 38 }"
-                filter
-                dataKey="id"
-                optionLabel="name"
-                class="w-full mb-3"
-              />
-            </div>
             <div class="field flex flex-row justify-space-between">
               <div>
                 <label for="manufactured_date">Manufactured date</label>
@@ -569,11 +547,6 @@
               <Column
                 field="uomdesc"
                 header="UNIT"
-              >
-              </Column>
-              <Column
-                field="brandName"
-                header="BRAND"
               >
               </Column>
               <Column
@@ -727,23 +700,6 @@
             class="w-full"
           />
         </div>
-        <div class="field">
-          <div class="flex align-content-center">
-            <label>Brand</label>
-            <span class="ml-2 text-error">*</span>
-          </div>
-          <Dropdown
-            required="true"
-            v-model="formAddDelivery.brand"
-            :options="brandDropDownList"
-            :virtualScrollerOptions="{ itemSize: 38 }"
-            filter
-            dataKey="id"
-            optionValue="id"
-            optionLabel="name"
-            class="w-full mb-3"
-          />
-        </div>
         <div class="field flex flex-row justify-content-between">
           <div>
             <label for="manufactured_date">Manufactured date</label>
@@ -855,7 +811,6 @@
               formAddDelivery.supplier == null ||
               formAddDelivery.fund_source == null ||
               formAddDelivery.cl2comb == null ||
-              formAddDelivery.brand == null ||
               formAddDelivery.expiration_date == null ||
               formAddDelivery.quantity == null ||
               formAddDelivery.acquisitionPrice == null ||
@@ -945,24 +900,6 @@
                 id="unit"
                 v-model.trim="form.uomdesc"
                 readonly
-              />
-            </div>
-            <div class="field">
-              <div class="flex align-content-center">
-                <label>Brand</label>
-                <span class="ml-2 text-error">*</span>
-              </div>
-              <Dropdown
-                required="true"
-                v-model="form.brand"
-                :options="brandDropDownList"
-                :virtualScrollerOptions="{ itemSize: 38 }"
-                filter
-                dataKey="id"
-                optionLabel="name"
-                optionValue="id"
-                class="w-full mb-3"
-                :class="{ 'p-invalid': form.brand == '' }"
               />
             </div>
             <div class="field">
@@ -1101,83 +1038,6 @@
         </template>
       </Dialog>
 
-      <!-- create & edit brand dialog -->
-      <Dialog
-        v-model:visible="createBrandDialog"
-        :style="{ width: '450px' }"
-        :modal="true"
-        class="p-fluid"
-        @hide="clickOutsideDialog"
-        dismissableMask
-      >
-        <template #header>
-          <div class="text-primary text-xl font-bold">STOCK DETAIL</div>
-        </template>
-        <div class="field">
-          <label for="brand_name">Brand name</label>
-          <InputText
-            id="brand_name"
-            v-model.trim="formBrand.name"
-            required="true"
-            autofocus
-            :class="{ 'p-invalid': formBrand.name == '' }"
-          />
-          <small
-            class="text-error"
-            v-if="formBrand.errors.name"
-          >
-            {{ formBrand.errors.name }}
-          </small>
-        </div>
-
-        <div class="field">
-          <label for="status">Status</label>
-          <Dropdown
-            v-model="formBrand.status"
-            :options="brandStatus"
-            optionLabel="name"
-            optionValue="value"
-            class="w-full md:w-14rem"
-          />
-          <small
-            class="text-error"
-            v-if="formBrand.errors.status"
-          >
-            {{ formBrand.errors.status }}
-          </small>
-        </div>
-
-        <template #footer>
-          <Button
-            label="Cancel"
-            icon="pi pi-times"
-            severity="danger"
-            text
-            @click="cancel"
-          />
-          <Button
-            v-if="isUpdateBrand == true"
-            label="Update"
-            icon="pi pi-check"
-            severity="warning"
-            text
-            type="submit"
-            :disabled="formBrand.processing"
-            @click="submitBrand"
-          />
-          <Button
-            v-else
-            label="Save"
-            icon="pi pi-check"
-            text
-            type="submit"
-            :disabled="formBrand.processing"
-            @click="submitBrand"
-          />
-        </template>
-      </Dialog>
-      <!-- end brand -->
-
       <!-- convert dialog -->
       <Dialog
         v-model:visible="convertDialog"
@@ -1255,96 +1115,6 @@
 
     <div class="card">
       <div class="grid">
-        <!-- brand -->
-        <DataTable
-          class="p-datatable-sm sm:col-12 md:col-6"
-          dataKey="id"
-          v-model:filters="brandFilters"
-          :value="brandsList"
-          paginator
-          :rows="10"
-          :rowsPerPageOptions="[10, 20, 30]"
-          removableSort
-          sortField="name"
-          :sortOrder="1"
-          showGridlines
-        >
-          <template #header>
-            <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-              <span class="text-xl text-900 font-bold text-primary">BRANDS</span>
-
-              <div class="flex">
-                <div class="mr-2">
-                  <div class="p-inputgroup">
-                    <span class="p-inputgroup-addon">
-                      <i class="pi pi-search"></i>
-                    </span>
-                    <InputText
-                      v-model="brandFilters['global'].value"
-                      placeholder="Search brand"
-                    />
-                  </div>
-                </div>
-                <Button
-                  label="Add brand"
-                  icon="pi pi-plus"
-                  iconPos="right"
-                  @click="openCreateBrandDialog"
-                />
-              </div>
-            </div>
-          </template>
-          <template #empty> No brand found. </template>
-          <template #loading> Loading brand data. Please wait. </template>
-          <Column
-            field="name"
-            header="NAME"
-            sortable
-            style="width: 70%"
-          >
-            <template #body="{ data }">
-              {{ data.name }}
-            </template>
-          </Column>
-          <Column
-            field="status"
-            header="STATUS"
-            sortable
-            style="width: 15%"
-          >
-            <template #body="{ data }">
-              <div class="flex justify-content-center">
-                <Tag
-                  v-if="data.status == 'A'"
-                  value="ACTIVE"
-                  severity="success"
-                />
-                <Tag
-                  v-else
-                  value="INACTIVE"
-                  severity="danger"
-                />
-              </div>
-            </template>
-          </Column>
-          <Column
-            header="ACTION"
-            style="width: 15%"
-          >
-            <template #body="slotProps">
-              <Button
-                v-if="slotProps.data.name != 'NO BRAND'"
-                icon="pi pi-pencil"
-                class="mr-1"
-                rounded
-                text
-                severity="warning"
-                @click="editBrand(slotProps.data)"
-              />
-            </template>
-          </Column>
-        </DataTable>
-
         <!-- total stocks -->
         <DataTable
           class="p-datatable-sm sm:col-12 md:col-6"
@@ -1546,7 +1316,6 @@ export default {
   props: {
     items: Object,
     stocks: Object,
-    brands: Object,
     totalDeliveries: Object,
     typeOfCharge: Object,
     fundSource: Object,
@@ -1559,12 +1328,9 @@ export default {
       minimumDate: null,
       stockId: null,
       isUpdate: false,
-      isUpdateBrand: false,
       importDeliveryDialog: false,
       addDeliveryDialog: false,
       updateStockDialog: false,
-      createBrandDialog: false,
-      deleteBrandDialog: false,
       deliveryExist: false,
       convertDialog: false,
       params: {},
@@ -1586,7 +1352,6 @@ export default {
       item: null,
       itemsList: [],
       supplier: null,
-      brand: null,
       selectedFundSource: null,
       selectedItemsUomCode: null,
       selectedItemsUomDesc: null,
@@ -1608,8 +1373,6 @@ export default {
         ris_no: null,
         supplier: null,
         supplierName: null,
-        brand: null,
-        brandName: null,
         fsId: null,
         fsName: null,
         cl2comb: null,
@@ -1626,8 +1389,6 @@ export default {
         deliveryDetails: null,
       }),
       // end data when clicking row to populate form
-      brandsList: [],
-      brandDropDownList: [],
       stocksList: [],
       totalDeliveriesList: [],
       suppliersList: [],
@@ -1643,9 +1404,6 @@ export default {
         chrgdesc: { value: null, matchMode: FilterMatchMode.CONTAINS },
         stock_lvl: { value: null, matchMode: FilterMatchMode.EQUALS },
         expiration: { from: null, to: null },
-      },
-      brandFilters: {
-        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       totalDeliveriesFilters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -1677,7 +1435,6 @@ export default {
         cl2desc: null,
         uomcode: null,
         uomdesc: null,
-        brand: null,
         quantity: null,
         acquisition_price: null,
         mark_up: null,
@@ -1693,7 +1450,6 @@ export default {
         supplier: null,
         fund_source: null,
         cl2comb: null,
-        brand: null,
         manufactured_date: null,
         delivered_date: null,
         expiration_date: null,
@@ -1701,11 +1457,6 @@ export default {
         acquisitionPrice: null,
         markupPercentage: null,
         sellingPrice: null,
-      }),
-      formBrand: this.$inertia.form({
-        id: null,
-        name: null,
-        status: null,
       }),
       formConvert: this.$inertia.form({
         csr_stock_id: null,
@@ -1716,22 +1467,11 @@ export default {
         quantity_before: null,
         cl2comb_after: null,
         quantity_after: null,
-        brand: null,
         suppcode: null,
         manufactured_date: null,
         delivered_date: null,
         expiration_date: null,
       }),
-      brandStatus: [
-        {
-          name: 'ACTIVE',
-          value: 'A',
-        },
-        {
-          name: 'INACTIVE',
-          value: 'I',
-        },
-      ],
       stockLvlFilter: [
         {
           name: 'NORMAL',
@@ -1836,8 +1576,6 @@ export default {
     this.storeFundSourceInContainer();
     this.storeItemsInContainer();
     this.storeStocksInContainer();
-    this.storeBrandsInContainer();
-    this.storeActiveBrandsInContainer();
     this.storeTotalStocksInContainer();
     this.storeSuppliersInContainer();
     this.storeConvertedItemsInContainer();
@@ -1854,9 +1592,7 @@ export default {
     resetDeliveryDialog() {
       this.disableSearchRisInput = false;
       this.isUpdate = false;
-      this.isUpdateBrand = false;
       this.item = null;
-      this.brand = null;
       this.supplier = null;
       this.selectedFundSource = null;
       this.selectedItemsUomCode = null;
@@ -1870,8 +1606,6 @@ export default {
       this.form.reset();
       this.formAdditional.clearErrors();
       this.formAdditional.reset();
-      this.formBrand.clearErrors();
-      this.formBrand.reset();
     },
     handleKeyPress(event) {
       // Check if Ctrl key is pressed and key is 'd'
@@ -2003,8 +1737,6 @@ export default {
           cl2desc: e.cl2desc,
           uomcode: e.uomcode == null ? null : e.uomcode,
           uomdesc: e.uomcode == null ? null : e.uomdesc,
-          brand_id: e.brand_id,
-          brand_name: e.brand_name,
           quantity: Number(e.quantity),
           acquisition_price: e.acquisition_price,
           mark_up: e.mark_up,
@@ -2096,12 +1828,8 @@ export default {
         preserveScroll: true,
         onFinish: (visit) => {
           this.stocksList = [];
-          this.brandsList = [];
           this.totalDeliveriesList = [];
-          this.brandDropDownList = [];
           this.storeStocksInContainer();
-          this.storeBrandsInContainer();
-          this.storeActiveBrandsInContainer();
           this.storeTotalStocksInContainer();
         },
       });
@@ -2124,9 +1852,7 @@ export default {
         'hide',
         (this.disableSearchRisInput = false),
         (this.isUpdate = false),
-        (this.isUpdateBrand = false),
         (this.item = null),
-        (this.brand = null),
         (this.supplier = null),
         (this.selectedFundSource = null),
         (this.selectedItemsUomCode = null),
@@ -2140,8 +1866,6 @@ export default {
         this.form.reset(),
         this.formAdditional.clearErrors(),
         this.formAdditional.reset(),
-        this.formBrand.clearErrors(),
-        this.formBrand.reset(),
         this.formConvert.reset(),
         this.formConvert.clearErrors(),
         this.formAddDelivery.clearErrors(),
@@ -2161,7 +1885,6 @@ export default {
       this.form.uomcode = item.uomcode;
       this.form.cl2desc = item.cl2desc;
       this.form.uomdesc = item.uomdesc;
-      this.form.brand = Number(item.brand_id);
       this.form.quantity = item.quantity;
       this.form.acquisition_price = item.acquisition_price;
       this.form.mark_up = item.mark_up;
@@ -2187,8 +1910,6 @@ export default {
                 risid: e.risid,
                 cl2comb: e.cl2comb,
                 cl2desc: e.cl2desc,
-                brand: null,
-                brandName: null,
                 supplier: null,
                 supplierName: null,
                 fsid: e.fundSourceId,
@@ -2224,7 +1945,6 @@ export default {
       this.formConvert.csr_stock_id = item.id;
       this.formConvert.ris_no = item.ris_no;
       this.formConvert.chrgcode = item.chrgcode;
-      this.formConvert.brand = item.brand_id;
       this.formConvert.suppcode = item.suppcode;
       this.formConvert.manufactured_date = item.manufactured_date;
       this.formConvert.delivered_date = item.delivered_date;
@@ -2265,7 +1985,6 @@ export default {
       this.formAdditional.cl2desc = e.data.cl2desc;
       this.formAdditional.uomcode = e.data.uomcode;
       this.formAdditional.uomdesc = e.data.uomdesc;
-      this.formAdditional.brandId = null;
       this.formAdditional.quantity = Number(e.data.releaseqty);
       this.formAdditional.manufactured_date = e.data.manufactured_date;
       this.formAdditional.delivered_date = e.data.delivered_date;
@@ -2282,7 +2001,6 @@ export default {
           // only update property if none on the properties is null
           if (
             e.supplier == null ||
-            e.brand == null ||
             e.markupPercentage == null ||
             e.sellingPrice == null ||
             e.expiration_date == null ||
@@ -2290,8 +2008,6 @@ export default {
           ) {
             e.supplier = this.formAdditional.supplier;
             e.supplierName = this.formAdditional.supplier == null ? null : this.formAdditional.supplier.suppname;
-            e.brand = this.formAdditional.brand;
-            e.brandName = this.formAdditional.brand == null ? null : this.formAdditional.brand.name;
             e.markupPercentage = this.formAdditional.markupPercentage;
             e.sellingPrice = this.formAdditional.calculatedSellingPrice;
             e.manufactured_date = this.formAdditional.manufactured_date;
@@ -2317,7 +2033,7 @@ export default {
       this.formAdditional.deliveryDetails = this.deliveryDetails;
 
       const isEmpty = this.deliveryDetails.some((item) => {
-        return !item.supplier || !item.brand || !item.expiration_date;
+        return !item.supplier || !item.expiration_date;
       });
 
       this.form.stock_id = this.stockId;
@@ -2355,7 +2071,6 @@ export default {
         this.formAddDelivery.supplier == null ||
         this.formAddDelivery.fund_source == null ||
         this.formAddDelivery.cl2comb == null ||
-        this.formAddDelivery.brand == null ||
         this.formAddDelivery.expiration_date == null ||
         this.formAddDelivery.quantity == null ||
         this.formAddDelivery.acquisitionPrice == null ||
@@ -2379,10 +2094,8 @@ export default {
       this.convertDialog = false;
       this.stockId = null;
       this.isUpdate = false;
-      this.isUpdateBrand = false;
       this.importDeliveryDialog = false;
       this.addDeliveryDialog = false;
-      this.createBrandDialog = false;
       this.disableSearchRisInput = false;
       this.form.reset();
       this.form.clearErrors();
@@ -2390,8 +2103,6 @@ export default {
       this.formAdditional.clearErrors();
       this.formConvert.reset();
       this.formConvert.clearErrors();
-      this.formBrand.reset();
-      this.formBrand.clearErrors();
       this.formAddDelivery.reset();
       this.formAddDelivery.clearErrors();
       this.stocksList = [];
@@ -2406,70 +2117,6 @@ export default {
     updateRisNo() {
       this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'RIS NO. updated', life: 3000 });
     },
-    // brand
-    storeBrandsInContainer() {
-      this.brands.forEach((e) => {
-        this.brandsList.push({
-          id: e.id,
-          name: e.name,
-          status: e.status,
-        });
-      });
-    },
-    // filtered list for dropdown, only show brand that is active
-    storeActiveBrandsInContainer() {
-      this.brandDropDownList = this.brands.filter((item) => item.status === 'A');
-    },
-    openCreateBrandDialog() {
-      this.isUpdateBrand = false;
-      this.formBrand.clearErrors();
-      this.formBrand.reset();
-      this.createBrandDialog = true;
-    },
-    editBrand(brand) {
-      this.isUpdateBrand = true;
-      this.createBrandDialog = true;
-      this.formBrand.id = brand.id;
-      this.formBrand.name = brand.name;
-      this.formBrand.status = brand.status;
-    },
-    submitBrand() {
-      if (this.formBrand.processing) {
-        return false;
-      }
-
-      if (this.isUpdateBrand) {
-        this.formBrand.put(route('brands.update', this.formBrand.id), {
-          preserveScroll: true,
-          onSuccess: () => {
-            this.createBrandDialog = false;
-            this.cancel();
-            this.updateData();
-            this.updatedBrandMessage();
-          },
-        });
-      } else {
-        this.formBrand.post(route('brands.store'), {
-          preserveScroll: true,
-          onSuccess: () => {
-            this.createBrandDialog = false;
-            this.cancel();
-            this.updateData();
-            this.createdBrandMessage();
-          },
-        });
-      }
-    },
-    createdBrandMessage() {
-      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Brand created', life: 3000 });
-    },
-    updatedBrandMessage() {
-      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Brand updated', life: 3000 });
-    },
-    deleteBrandMessage() {
-      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Brand deleted', life: 3000 });
-    },
-    // end brand
   },
   watch: {
     item: function (val) {

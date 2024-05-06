@@ -22,7 +22,6 @@ class CsrStocks extends Model
         'cl2comb',
         'uomcode',
         'suppcode',
-        'brand',
         'chrgcode',
         'quantity',
         'converted_quantity',
@@ -43,11 +42,6 @@ class CsrStocks extends Model
     public function item_details()
     {
         return $this->hasOne(Item::class, 'cl2comb', 'cl2comb');
-    }
-
-    public function brandDetail()
-    {
-        return $this->hasOne(Brand::class, 'id', 'brand');
     }
 
     public function supplierDetail()

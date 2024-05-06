@@ -24,7 +24,6 @@ class PatientChargeLogs extends Model
         'enccode',
         'acctno',
         'ward_stocks_id',
-        'brand',
         'itemcode',
         'from',
         'manufactured_date',
@@ -42,10 +41,5 @@ class PatientChargeLogs extends Model
     public function patientCharge()
     {
         return $this->belongsTo(PatientCharge::class, ['enccode', 'pcchrgdte', 'itemcode'], ['enccode', 'pcchrgdte', 'itemcode']);
-    }
-
-    public function brand_details()
-    {
-        return $this->hasOne(Brand::class, 'id', 'brand');
     }
 }

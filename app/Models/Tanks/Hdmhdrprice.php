@@ -25,7 +25,6 @@ class Hdmhdrprice extends Model
         'dmselprice',
         'stockbal',
         'expdate',
-        'brandname',
         'stock_id',
     ];
 }

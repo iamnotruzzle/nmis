@@ -24,7 +24,6 @@ class WardConsignmentController extends Controller
 
         $request->validate([
             'fund_source' => 'required',
-            'brand' => 'required',
             'cl2comb' => 'required',
             'quantity' => 'required',
             'delivered_date' => 'required',
@@ -36,7 +35,6 @@ class WardConsignmentController extends Controller
             'request_stocks_detail_id' => null,
             'stock_id' => null,
             'location' => $request->authLocation,
-            'brand' => $request->brand,
             'cl2comb' => $request->cl2comb,
             'uomcode' => $request->uomcode,
             'chrgcode' => $request->fund_source,
@@ -54,7 +52,6 @@ class WardConsignmentController extends Controller
             'location' => $request->authLocation,
             'cl2comb' => $request->cl2comb,
             'uomcode' => $request->uomcode,
-            'brand' => $request->brand,
             'chrgcode' => $request->fund_source,
             'prev_qty' => 0,
             'new_qty' => $request->quantity,

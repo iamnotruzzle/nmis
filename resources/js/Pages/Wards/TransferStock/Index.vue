@@ -56,12 +56,6 @@
         >
         </Column>
         <Column
-          field="brand_name"
-          header="BRAND"
-          style="width: 20%"
-        >
-        </Column>
-        <Column
           field="quantity"
           header="QUANTITY"
           sortable
@@ -135,12 +129,6 @@
               field="item"
               header="ITEM"
               style="width: 30%"
-            >
-            </Column>
-            <Column
-              field="brand"
-              header="BRAND"
-              style="width: 20%"
             >
             </Column>
             <Column
@@ -224,12 +212,6 @@
               field="item"
               header="ITEM"
               style="width: 30%"
-            >
-            </Column>
-            <Column
-              field="brand"
-              header="BRAND"
-              style="width: 20%"
             >
             </Column>
             <Column
@@ -539,7 +521,6 @@ export default {
         ward_stock_id: null,
         to: null,
         requested_by: null,
-        brand: null,
         cl2comb: null,
         cl2desc: null,
         quantity: null,
@@ -614,7 +595,6 @@ export default {
           if (e.from == this.authWardcode.wardcode) {
             this.transferredStocksList.push({
               id: e.id,
-              brand: e.ward_stock.brand_details.name,
               item: e.ward_stock.item_details.cl2desc,
               quantity: e.quantity,
               expiration_date: expiration_date,
@@ -627,7 +607,6 @@ export default {
           if (e.to == this.authWardcode.wardcode) {
             this.toReceiveList.push({
               id: e.id,
-              brand: e.ward_stock.brand_details.name,
               item: e.ward_stock.item_details.cl2desc,
               quantity: e.quantity,
               expiration_date: expiration_date,
@@ -639,7 +618,6 @@ export default {
       } else {
         this.transferredStocksList.push({
           id: null,
-          brand: null,
           item: null,
           quantity: null,
           expiration_date: null,
@@ -654,8 +632,6 @@ export default {
         this.wardStocksList.push({
           ward_stock_id: e.id,
           from: e.from,
-          brand_id: e.brand_details.id,
-          brand_name: e.brand_details.name,
           cl2comb: e.item_details.cl2comb,
           cl2desc: e.item_details.cl2desc,
           quantity: e.quantity,
@@ -669,8 +645,6 @@ export default {
         this.wardStocksList.push({
           ward_stock_id: e.id,
           from: e.from,
-          brand_id: e.brand_details.id,
-          brand_name: e.brand_details.name,
           cl2comb: e.item_details.cl2comb,
           cl2desc: e.item_details.cl2desc,
           quantity: e.quantity,

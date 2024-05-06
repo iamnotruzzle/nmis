@@ -448,7 +448,7 @@
           <div class="field">
             <DataTable
               v-model:filters="issuedItemsFilter"
-              :globalFilterFields="['brand', 'cl2desc']"
+              :globalFilterFields="['cl2desc']"
               :value="issuedItemList"
               class="p-datatable-sm w-full"
               paginator
@@ -470,11 +470,6 @@
                   </div>
                 </div>
               </template>
-              <Column
-                field="brand"
-                header="BRAND"
-                sortable
-              ></Column>
               <Column
                 field="cl2desc"
                 header="ITEM"
@@ -724,7 +719,6 @@ export default {
         item.stocks.forEach((e) => {
           if (e.ward_stocks != null) {
             this.issuedItemList.push({
-              brand: e.brand_detail.name,
               cl2desc: item.item_details.cl2desc,
               quantity: e.ward_stocks.quantity,
               expiration_date: e.ward_stocks.expiration_date,

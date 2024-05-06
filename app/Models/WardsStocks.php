@@ -21,7 +21,6 @@ class WardsStocks extends Model
         'location',
         'cl2comb',
         'uomcode',
-        'brand',
         'chrgcode',
         'quantity',
         'converted_quantity',
@@ -61,11 +60,6 @@ class WardsStocks extends Model
     public function prices()
     {
         return $this->hasMany(ItemPrices::class, 'cl2comb', 'cl2comb')->orderBy('created_at', 'DESC');
-    }
-
-    public function brand_details()
-    {
-        return $this->hasOne(Brand::class, 'id', 'brand');
     }
 
     public function typeOfCharge()
