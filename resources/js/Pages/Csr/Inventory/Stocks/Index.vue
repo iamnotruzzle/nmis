@@ -1404,7 +1404,7 @@
 
         <!-- total total converted items  -->
         <DataTable
-          class="p-datatable-sm sm:col-12 md:col-6"
+          class="p-datatable-sm"
           dataKey="id"
           v-model:filters="totalConvertedItemsFilters"
           :value="totalConvertedItemsList"
