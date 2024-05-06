@@ -1114,158 +1114,161 @@
     </div>
 
     <div class="card">
-      <div class="grid">
-        <!-- total stocks -->
-        <DataTable
-          class="p-datatable-sm sm:col-12 md:col-6"
-          dataKey="id"
-          v-model:filters="totalDeliveriesFilters"
-          :value="totalDeliveriesList"
-          paginator
-          :rows="10"
-          :rowsPerPageOptions="[10, 20, 30]"
-          removableSort
-          sortField="name"
-          :sortOrder="1"
-          showGridlines
-        >
-          <template #header>
-            <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-              <span class="text-xl text-900 font-bold text-primary">TOTAL DELIVERIES</span>
+      <TabView>
+        <TabPanel header="TOTAL DELIVERIES">
+          <!-- total stocks -->
+          <DataTable
+            class="p-datatable-sm"
+            dataKey="id"
+            v-model:filters="totalDeliveriesFilters"
+            :value="totalDeliveriesList"
+            paginator
+            :rows="10"
+            :rowsPerPageOptions="[10, 20, 30]"
+            removableSort
+            sortField="name"
+            :sortOrder="1"
+            showGridlines
+          >
+            <template #header>
+              <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+                <span class="text-xl text-900 font-bold text-primary">TOTAL DELIVERIES</span>
 
-              <div class="flex">
-                <div class="mr-2">
-                  <div class="p-inputgroup">
-                    <span class="p-inputgroup-addon">
-                      <i class="pi pi-search"></i>
-                    </span>
-                    <InputText
-                      v-model="totalDeliveriesFilters['global'].value"
-                      placeholder="Search item"
-                    />
+                <div class="flex">
+                  <div class="mr-2">
+                    <div class="p-inputgroup">
+                      <span class="p-inputgroup-addon">
+                        <i class="pi pi-search"></i>
+                      </span>
+                      <InputText
+                        v-model="totalDeliveriesFilters['global'].value"
+                        placeholder="Search item"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </template>
-          <template #empty> No item found. </template>
-          <template #loading> Loading item data. Please wait. </template>
-          <Column
-            field="cl2desc"
-            header="ITEM"
-            sortable
-            style="width: 90%"
-          >
-            <template #body="{ data }">
-              {{ data.cl2desc }}
             </template>
-          </Column>
-          <Column
-            field="total_quantity"
-            header="QTY"
-            sortable
-            style="width: 10%"
+            <template #empty> No item found. </template>
+            <template #loading> Loading item data. Please wait. </template>
+            <Column
+              field="cl2desc"
+              header="ITEM"
+              sortable
+              style="width: 90%"
+            >
+              <template #body="{ data }">
+                {{ data.cl2desc }}
+              </template>
+            </Column>
+            <Column
+              field="total_quantity"
+              header="QTY"
+              sortable
+              style="width: 10%"
+            >
+              <template #body="{ data }">
+                {{ data.total_quantity }}
+              </template>
+            </Column>
+          </DataTable>
+        </TabPanel>
+        <TabPanel header="TOTAL CONVERTED ITEMS">
+          <!-- total total converted items  -->
+          <DataTable
+            class="p-datatable-sm"
+            dataKey="id"
+            v-model:filters="totalConvertedItemsFilters"
+            :value="totalConvertedItemsList"
+            paginator
+            :rows="10"
+            :rowsPerPageOptions="[10, 20, 30]"
+            removableSort
+            sortField="name"
+            :sortOrder="1"
+            showGridlines
           >
-            <template #body="{ data }">
-              {{ data.total_quantity }}
-            </template>
-          </Column>
-        </DataTable>
+            <template #header>
+              <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+                <span class="text-xl font-bold text-primary">TOTAL CONVERTED ITEMS</span>
 
-        <!-- total total converted items  -->
-        <DataTable
-          class="p-datatable-sm sm:col-12 md:col-6"
-          dataKey="id"
-          v-model:filters="totalConvertedItemsFilters"
-          :value="totalConvertedItemsList"
-          paginator
-          :rows="10"
-          :rowsPerPageOptions="[10, 20, 30]"
-          removableSort
-          sortField="name"
-          :sortOrder="1"
-          showGridlines
-        >
-          <template #header>
-            <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-              <span class="text-xl text-green-500 font-bold">TOTAL CONVERTED ITEMS</span>
-
-              <div class="flex">
-                <div class="mr-2">
-                  <div class="p-inputgroup">
-                    <span class="p-inputgroup-addon">
-                      <i class="pi pi-search"></i>
-                    </span>
-                    <InputText
-                      v-model="totalConvertedItemsFilters['global'].value"
-                      placeholder="Search item"
-                    />
+                <div class="flex">
+                  <div class="mr-2">
+                    <div class="p-inputgroup">
+                      <span class="p-inputgroup-addon">
+                        <i class="pi pi-search"></i>
+                      </span>
+                      <InputText
+                        v-model="totalConvertedItemsFilters['global'].value"
+                        placeholder="Search item"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </template>
-          <template #empty> No item found. </template>
-          <template #loading> Loading item data. Please wait. </template>
-          <Column
-            field="ris_no"
-            header="RIS NO."
-          >
-          </Column>
-          <Column
-            field="fsName"
-            header="FUND SOURCE"
-            sortable
-          >
-          </Column>
-          <Column
-            field="cl2desc"
-            header="ITEM"
-            sortable
-          >
-            <!-- <template #body="{ data }">
+            </template>
+            <template #empty> No item found. </template>
+            <template #loading> Loading item data. Please wait. </template>
+            <Column
+              field="ris_no"
+              header="RIS NO."
+            >
+            </Column>
+            <Column
+              field="fsName"
+              header="FUND SOURCE"
+              sortable
+            >
+            </Column>
+            <Column
+              field="cl2desc"
+              header="ITEM"
+              sortable
+            >
+              <!-- <template #body="{ data }">
               {{ data.cl2desc }}
             </template> -->
-          </Column>
-          <Column
-            field="quantity_after"
-            header="QTY"
-            sortable
-          >
-          </Column>
-          <Column
-            field="expiration_date"
-            header="EXP. DATE"
-            sortable
-          >
-            <template #body="{ data }">
-              <div class="flex flex-column">
-                <div>
-                  {{ tzone(data.expiration_date) }}
-                </div>
+            </Column>
+            <Column
+              field="quantity_after"
+              header="QTY"
+              sortable
+            >
+            </Column>
+            <Column
+              field="expiration_date"
+              header="EXP. DATE"
+              sortable
+            >
+              <template #body="{ data }">
+                <div class="flex flex-column">
+                  <div>
+                    {{ tzone(data.expiration_date) }}
+                  </div>
 
-                <div class="mays-2">
-                  <span
-                    :class="
-                      checkIfAboutToExpire(data.expiration_date) != 'Item has expired.'
-                        ? 'text-lg text-green-500'
-                        : 'text-lg text-error'
-                    "
-                  >
-                    {{ checkIfAboutToExpire(data.expiration_date) }}
-                  </span>
+                  <div class="mays-2">
+                    <span
+                      :class="
+                        checkIfAboutToExpire(data.expiration_date) != 'Item has expired.'
+                          ? 'text-lg text-green-500'
+                          : 'text-lg text-error'
+                      "
+                    >
+                      {{ checkIfAboutToExpire(data.expiration_date) }}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </template>
-          </Column>
-          <Column
-            field="converted_by"
-            header="CONV. BY"
-            sortable
-          >
-          </Column>
-        </DataTable>
-      </div>
+              </template>
+            </Column>
+            <Column
+              field="converted_by"
+              header="CONV. BY"
+              sortable
+            >
+            </Column>
+          </DataTable>
+        </TabPanel>
+      </TabView>
     </div>
   </app-layout>
 </template>
@@ -1289,6 +1292,8 @@ import AutoComplete from 'primevue/autocomplete';
 import InputNumber from 'primevue/inputnumber';
 import Tag from 'primevue/tag';
 import Textarea from 'primevue/textarea';
+import TabView from 'primevue/tabview';
+import TabPanel from 'primevue/tabpanel';
 import axios from 'axios';
 
 import moment, { now } from 'moment';
@@ -1312,6 +1317,8 @@ export default {
     Tag,
     Textarea,
     InputNumber,
+    TabView,
+    TabPanel,
   },
   props: {
     items: Object,
@@ -1748,6 +1755,7 @@ export default {
           manufactured_date: e.manufactured_date === null ? '' : e.manufactured_date,
           delivered_date: e.delivered_date === null ? '' : e.delivered_date,
           expiration_date: expirationDate, // Assign expirationDate to expiration_date field
+          converted: e.converted,
         });
       });
     },
@@ -1829,8 +1837,18 @@ export default {
         onFinish: (visit) => {
           this.stocksList = [];
           this.totalDeliveriesList = [];
+          this.fundSourceList = [];
+          this.itemsList = [];
+          this.suppliersList = [];
+          this.convertedItemsList = [];
+          this.totalConvertedItemsList = [];
+          this.storeFundSourceInContainer();
+          this.storeItemsInContainer();
           this.storeStocksInContainer();
           this.storeTotalStocksInContainer();
+          this.storeSuppliersInContainer();
+          this.storeConvertedItemsInContainer();
+          this.storeTotalConvertedItemsInContainer();
         },
       });
     },
@@ -1967,7 +1985,7 @@ export default {
           this.convertDialog = false;
           this.cancel();
           this.updateData();
-          this.createdMsg();
+          this.itemConverted();
         },
         onError: (error) => {
           console.log(error);
@@ -2110,6 +2128,9 @@ export default {
     },
     createdMsg() {
       this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Delivery created', life: 3000 });
+    },
+    itemConverted() {
+      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Item converted', life: 3000 });
     },
     updatedMsg() {
       this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Delivery updated', life: 3000 });

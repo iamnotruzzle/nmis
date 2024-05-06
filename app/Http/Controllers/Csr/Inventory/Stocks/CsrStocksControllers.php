@@ -44,7 +44,7 @@ class CsrStocksControllers extends Controller
                 unit.uomcode, unit.uomdesc,
                 stock.quantity,
                 reoder_level.normal_stock as normal_stock, reoder_level.alert_stock, reoder_level.critical_stock,
-                stock.manufactured_date, stock.delivered_date, expiration_date
+                stock.manufactured_date, stock.delivered_date, expiration_date, stock.converted
             FROM csrw_csr_stocks as stock
             JOIN hclass2 as item ON stock.cl2comb = item.cl2comb
             JOIN huom as unit ON stock.uomcode = unit.uomcode
