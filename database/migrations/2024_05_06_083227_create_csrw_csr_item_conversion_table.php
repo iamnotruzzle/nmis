@@ -27,6 +27,7 @@ class CreateCsrwCsrItemConversionTable extends Migration
             $table->dateTime('manufactured_date')->nullable();
             $table->dateTime('delivered_date')->nullable();
             $table->dateTime('expiration_date');
+            $table->string('converted_by');
             $table->timestamps();
         });
     }

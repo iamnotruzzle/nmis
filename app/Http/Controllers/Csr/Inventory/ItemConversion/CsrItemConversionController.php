@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Csr\Inventory\ItemConversion;
 
 use App\Http\Controllers\Controller;
+use App\Models\CsrItemConversion;
+use App\Models\CsrStocks;
+use App\Models\CsrStocksLogs;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CsrItemConversionController extends Controller
 {
@@ -14,7 +18,37 @@ class CsrItemConversionController extends Controller
 
     public function store(Request $request)
     {
-        //
+        // dd($request);
+
+        $entry_by = Auth::user()->employeeid;
+
+        $updated = CsrStocks::where('id', $request->csr_stock_id)
+            ->update([
+                'converted' => 'y',
+            ]);
+
+        $updated = CsrStocksLogs::where('stock_id', $request->csr_stock_id)
+            ->update([
+                'converted' => 'y',
+            ]);
+
+        $convertedItem = CsrItemConversion::create([
+            'csr_stock_id' => $request->csr_stock_id,
+            'ris_no' => $request->ris_no,
+            'chrgcode' => $request->chrgcode,
+            'cl2comb_before' => $request->cl2comb_before,
+            'quantity_before' => $request->quantity_before,
+            'cl2comb_after' => $request->cl2comb_after,
+            'quantity_after' => $request->quantity_after,
+            'brand' => $request->brand,
+            'suppcode' => $request->suppcode,
+            'manufactured_date' => $request->manufactured_date,
+            'delivered_date' => $request->delivered_date,
+            'expiration_date' => $request->expiration_date,
+            'converted_by' => $entry_by,
+        ]);
+
+        return redirect()->back();
     }
 
     public function update(Request $request, $id)

@@ -1209,6 +1209,7 @@
             :virtualScrollerOptions="{ itemSize: 48 }"
             filter
             optionLabel="cl2desc"
+            optionValue="cl2comb"
             class="w-full mb-3"
             :class="{ 'p-invalid': formConvert.cl1comb == '' }"
           />
@@ -1220,12 +1221,14 @@
           <InputText
             id="quantity"
             type="number"
-            v-model.trim="formConvert.quantity_after"
+            v-model="formConvert.quantity_after"
             @keydown="restrictNonNumericAndPeriod"
+            autofocus
+            @keyup.enter="submitConvert"
           />
         </div>
         <template #footer>
-          <!-- <Button
+          <Button
             label="Cancel"
             icon="pi pi-times"
             severity="danger"
@@ -1237,9 +1240,14 @@
             icon="pi pi-check"
             text
             type="submit"
-            :disabled="formConvert.processing || formConvert.cl2desc == null || formConvert.cl2desc == ''"
+            :disabled="
+              formConvert.processing ||
+              formConvert.cl2comb_after == null ||
+              formConvert.quantity_after == '' ||
+              this.formConvert.quantity_after == null
+            "
             @click="submitConvert"
-          /> -->
+          />
         </template>
       </Dialog>
     </div>
@@ -2017,6 +2025,8 @@ export default {
         this.formAdditional.reset(),
         this.formBrand.clearErrors(),
         this.formBrand.reset(),
+        this.formConvert.reset(),
+        this.formConvert.clearErrors(),
         this.formAddDelivery.clearErrors(),
         this.formAddDelivery.reset()
       );
@@ -2089,18 +2099,6 @@ export default {
     convertItem(item) {
       console.log(item);
 
-      //    csr_stock_id: null,
-      //     ris_no: null,
-      //     cl2comb_before: null,
-      //     cl2desc_before: null,
-      //     cl2comb: null,
-      //     quantity: null,
-      //     brand: null,
-      //     suppcode: null,
-      //     manufactured_date: null,
-      //     delivered_date: null,
-      //     expiration_date: null,
-
       this.convertDialog = true;
       this.formConvert.cl2comb_before = item.cl2comb;
       this.formConvert.cl2desc_before = item.cl2desc;
@@ -2116,23 +2114,28 @@ export default {
       this.formConvert.expiration_date = item.expiration_date;
     },
     submitConvert() {
-      //   //   if (this.formConvert.processing || this.formConvert.cl2desc == null || this.formConvert.cl2desc == '') {
-      //   //     return false;
-      //   //   }
-      //   this.formConvert.location = this.authLocation.location.wardcode;
-      //   this.formConvert.post(route('csrconvert.store'), {
-      //     preserveScroll: true,
-      //     onSuccess: () => {
-      //       //   console.log('DONE');
-      //       this.convertDialog = false;
-      //       this.cancel();
-      //       this.updateData();
-      //       this.createdMsg();
-      //     },
-      //     onError: (error) => {
-      //       console.log(error);
-      //     },
-      //   });
+      if (
+        this.formConvert.processing ||
+        this.formConvert.cl2comb_after == null ||
+        this.formConvert.quantity_after == '' ||
+        this.formConvert.quantity_after == null
+      ) {
+        return false;
+      }
+
+      this.formConvert.post(route('csrconvertdelivery.store'), {
+        preserveScroll: true,
+        onSuccess: () => {
+          //   console.log('DONE');
+          this.convertDialog = false;
+          this.cancel();
+          this.updateData();
+          this.createdMsg();
+        },
+        onError: (error) => {
+          console.log(error);
+        },
+      });
     },
     onRowClick(e) {
       //   console.log(e.data);
@@ -2256,6 +2259,7 @@ export default {
       });
     },
     cancel() {
+      this.convertDialog = false;
       this.stockId = null;
       this.isUpdate = false;
       this.isUpdateBrand = false;
@@ -2267,6 +2271,8 @@ export default {
       this.form.clearErrors();
       this.formAdditional.reset();
       this.formAdditional.clearErrors();
+      this.formConvert.reset();
+      this.formConvert.clearErrors();
       this.formBrand.reset();
       this.formBrand.clearErrors();
       this.formAddDelivery.reset();

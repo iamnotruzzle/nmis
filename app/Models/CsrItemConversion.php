@@ -24,5 +24,6 @@ class CsrItemConversion extends Model
         'manufactured_date',
         'delivered_date',
         'expiration_date',
+        'converted_by',
     ];
 }

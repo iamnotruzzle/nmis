@@ -31,7 +31,8 @@ class CsrStocks extends Model
         'expiration_date',
         'acquisition_price',
         'mark_up',
-        'selling_price'
+        'selling_price',
+        'converted'
     ];
 
     public function itemDetail()

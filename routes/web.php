@@ -14,6 +14,7 @@ use App\Http\Controllers\Csr\IssueItems\ExportIssuedItems\ExportIssuedItemsContr
 use App\Http\Controllers\Csr\IssueItems\IssueItemController;
 use App\Http\Controllers\Csr\CsrManualReport\CsrManualReportController;
 use App\Http\Controllers\Csr\Inventory\CsrConvertItem\CsrConvertItemController;
+use App\Http\Controllers\Csr\Inventory\ItemConversion\CsrItemConversionController;
 use App\Http\Controllers\Csr\IssueTankItems\IssueTankItemsController;
 use App\Http\Controllers\Csr\Reports\ReportsController;
 use App\Http\Controllers\Csr\Utility\ManualAddStocks\ManualAddStocksController;
@@ -79,7 +80,8 @@ Route::middleware(['web', 'auth', 'verified'])->group(
         Route::resource('items', ItemController::class)->middleware(['verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('itemprices', ItemPriceController::class)->middleware(['verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('brands', BrandController::class)->middleware(['verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
-        Route::resource('csrconvert', CsrConvertItemController::class)->middleware(['verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('csrconvertitem', CsrConvertItemController::class)->middleware(['verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('csrconvertdelivery', CsrItemConversionController::class)->middleware(['verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('csrstocks', CsrStocksControllers::class)->middleware(['verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('csrmanualadd', ManualAddStocksController::class)->middleware(['verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('issueitems', IssueItemController::class)->middleware(['verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);

@@ -195,6 +195,7 @@ class CsrStocksControllers extends Controller
                     'acquisition_price' => $r['unitprice'],
                     'mark_up' => $r['markupPercentage'],
                     'selling_price' => $r['sellingPrice'],
+                    'converted' => 'n',
                 ]);
 
                 $stockLog = CsrStocksLogs::create([
@@ -217,6 +218,7 @@ class CsrStocksControllers extends Controller
                     'mark_up' => $r['markupPercentage'],
                     'selling_price' => $r['sellingPrice'],
                     'entry_by' => $entry_by,
+                    'converted' => 'n',
                 ]);
 
                 // $itemPrices = ItemPrices::create([
