@@ -1348,8 +1348,8 @@
         <DataTable
           class="p-datatable-sm sm:col-12 md:col-6"
           dataKey="id"
-          v-model:filters="totalStocksFilters"
-          :value="totalStocksList"
+          v-model:filters="totalDeliveriesFilters"
+          :value="totalDeliveriesList"
           paginator
           :rows="10"
           :rowsPerPageOptions="[10, 20, 30]"
@@ -1360,7 +1360,7 @@
         >
           <template #header>
             <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-              <span class="text-xl text-900 font-bold text-primary">TOTAL STOCKS</span>
+              <span class="text-xl text-900 font-bold text-primary">TOTAL DELIVERIES</span>
 
               <div class="flex">
                 <div class="mr-2">
@@ -1369,7 +1369,7 @@
                       <i class="pi pi-search"></i>
                     </span>
                     <InputText
-                      v-model="totalStocksFilters['global'].value"
+                      v-model="totalDeliveriesFilters['global'].value"
                       placeholder="Search item"
                     />
                   </div>
@@ -1398,6 +1398,100 @@
             <template #body="{ data }">
               {{ data.total_quantity }}
             </template>
+          </Column>
+        </DataTable>
+
+        <!-- total total converted items  -->
+        <DataTable
+          class="p-datatable-sm sm:col-12 md:col-6"
+          dataKey="id"
+          v-model:filters="totalConvertedItemsFilters"
+          :value="totalConvertedItemsList"
+          paginator
+          :rows="10"
+          :rowsPerPageOptions="[10, 20, 30]"
+          removableSort
+          sortField="name"
+          :sortOrder="1"
+          showGridlines
+        >
+          <template #header>
+            <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+              <span class="text-xl text-green-500 font-bold">TOTAL CONVERTED ITEMS</span>
+
+              <div class="flex">
+                <div class="mr-2">
+                  <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon">
+                      <i class="pi pi-search"></i>
+                    </span>
+                    <InputText
+                      v-model="totalConvertedItemsFilters['global'].value"
+                      placeholder="Search item"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </template>
+          <template #empty> No item found. </template>
+          <template #loading> Loading item data. Please wait. </template>
+          <Column
+            field="ris_no"
+            header="RIS NO."
+          >
+          </Column>
+          <Column
+            field="fsName"
+            header="FUND SOURCE"
+            sortable
+          >
+          </Column>
+          <Column
+            field="cl2desc"
+            header="ITEM"
+            sortable
+          >
+            <!-- <template #body="{ data }">
+              {{ data.cl2desc }}
+            </template> -->
+          </Column>
+          <Column
+            field="quantity_after"
+            header="QTY"
+            sortable
+          >
+          </Column>
+          <Column
+            field="expiration_date"
+            header="EXP. DATE"
+            sortable
+          >
+            <template #body="{ data }">
+              <div class="flex flex-column">
+                <div>
+                  {{ tzone(data.expiration_date) }}
+                </div>
+
+                <div class="mays-2">
+                  <span
+                    :class="
+                      checkIfAboutToExpire(data.expiration_date) != 'Item has expired.'
+                        ? 'text-lg text-green-500'
+                        : 'text-lg text-error'
+                    "
+                  >
+                    {{ checkIfAboutToExpire(data.expiration_date) }}
+                  </span>
+                </div>
+              </div>
+            </template>
+          </Column>
+          <Column
+            field="converted_by"
+            header="CONV. BY"
+            sortable
+          >
           </Column>
         </DataTable>
       </div>
@@ -1452,11 +1546,12 @@ export default {
     items: Object,
     stocks: Object,
     brands: Object,
-    totalStocks: Object,
+    totalDeliveries: Object,
     typeOfCharge: Object,
     fundSource: Object,
     suppliers: Object,
     convertedItems: Object,
+    totalConvertedItems: Object,
   },
   data() {
     return {
@@ -1483,6 +1578,7 @@ export default {
       from_ed: null,
       to_ed: null,
       fundSourceList: [],
+      totalConvertedItemsList: [],
       // -----------------
       disableSearchRisInput: false,
       itemNotSelected: false,
@@ -1532,7 +1628,7 @@ export default {
       brandsList: [],
       brandDropDownList: [],
       stocksList: [],
-      totalStocksList: [],
+      totalDeliveriesList: [],
       suppliersList: [],
       convertedItemsList: [],
       filters: {
@@ -1550,7 +1646,10 @@ export default {
       brandFilters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
-      totalStocksFilters: {
+      totalDeliveriesFilters: {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      },
+      totalConvertedItemsFilters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       cl1stats: [
@@ -1741,6 +1840,7 @@ export default {
     this.storeTotalStocksInContainer();
     this.storeSuppliersInContainer();
     this.storeConvertedItemsInContainer();
+    this.storeTotalConvertedItemsInContainer();
 
     // Add event listener to the document
     document.addEventListener('keydown', this.handleKeyPress);
@@ -1926,6 +2026,22 @@ export default {
         });
       });
     },
+    storeTotalConvertedItemsInContainer() {
+      this.totalConvertedItems.forEach((e) => {
+        this.totalConvertedItemsList.push({
+          id: e.id,
+          ris_no: e.ris_no,
+          fsName: e.fsName,
+          cl2comb_after: e.cl2comb_after,
+          cl2desc: e.cl2desc,
+          quantity_after: e.quantity_after,
+          expiration_date: e.expiration_date,
+          converted_by: e.firstname.trim() + ' ' + e.lastname.trim(),
+        });
+      });
+
+      console.log(this.totalConvertedItemsList);
+    },
     storeConvertedItemsInContainer() {
       this.convertedItems.forEach((e) => {
         this.convertedItemsList.push({
@@ -1965,8 +2081,8 @@ export default {
       });
     },
     storeTotalStocksInContainer() {
-      this.totalStocks.forEach((e) => {
-        this.totalStocksList.push({
+      this.totalDeliveries.forEach((e) => {
+        this.totalDeliveriesList.push({
           cl2comb: e.cl2comb,
           cl2desc: e.cl2desc.trim(),
           total_quantity: e.total_quantity,
@@ -1980,7 +2096,7 @@ export default {
         onFinish: (visit) => {
           this.stocksList = [];
           this.brandsList = [];
-          this.totalStocksList = [];
+          this.totalDeliveriesList = [];
           this.brandDropDownList = [];
           this.storeStocksInContainer();
           this.storeBrandsInContainer();

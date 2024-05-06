@@ -64,12 +64,22 @@ class CsrStocksControllers extends Controller
         );
         //  ORDER BY medsupply.expiration_date ASC;"
 
-        $totalStocks = DB::select(
+        $totalDeliveries = DB::select(
             "SELECT item.cl2comb, item.cl2desc,  SUM(stock.quantity) as total_quantity
                 FROM csrw_csr_stocks as stock
                 JOIN hclass2 as item ON item.cl2comb = stock.cl2comb
                 WHERE stock.quantity > 0
                 GROUP BY item.cl2comb, item.cl2desc;
+            "
+        );
+
+        $totalConvertedItems = DB::select(
+            "SELECT converted.id, converted.ris_no, fund_source.fsName, converted.cl2comb_after, item.cl2desc, converted.quantity_after, converted.expiration_date, employee.firstname, employee.lastname
+                FROM csrw_csr_item_conversion as converted
+                JOIN hclass2 as item ON item.cl2comb = converted.cl2comb_after
+                JOIN huom as uom ON uom.uomcode = item.uomcode
+                JOIN hpersonal as employee ON employee.employeeid = converted.converted_by
+                JOIN csrw_fund_source as fund_source ON fund_source.fsid = converted.chrgcode;
             "
         );
 
@@ -93,11 +103,12 @@ class CsrStocksControllers extends Controller
             'items' => $items,
             'stocks' => $stocks,
             'brands' => $brands,
-            'totalStocks' => $totalStocks,
+            'totalDeliveries' => $totalDeliveries,
             'typeOfCharge' => $typeOfCharge,
             'fundSource' => $fundSource,
             'suppliers' => $suppliers,
             'convertedItems' => $convertedItems,
+            'totalConvertedItems' => $totalConvertedItems,
         ]);
     }
 
