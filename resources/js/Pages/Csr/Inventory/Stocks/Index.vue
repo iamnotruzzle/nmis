@@ -300,6 +300,7 @@
                 @click="editItem(slotProps.data)"
               />
               <Button
+                v-if="slotProps.data.converted == 'n'"
                 v-tooltip.top="'Convert'"
                 class=""
                 rounded
