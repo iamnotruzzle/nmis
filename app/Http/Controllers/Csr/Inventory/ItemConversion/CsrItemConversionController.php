@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Csr\Inventory\ItemConversion;
 
 use App\Http\Controllers\Controller;
 use App\Models\CsrItemConversion;
+use App\Models\CsrItemConvertionLogs;
 use App\Models\CsrStocks;
 use App\Models\CsrStocksLogs;
 use Illuminate\Http\Request;
@@ -45,6 +46,24 @@ class CsrItemConversionController extends Controller
             'delivered_date' => $request->delivered_date,
             'expiration_date' => $request->expiration_date,
             'converted_by' => $entry_by,
+        ]);
+
+        $convertedItemLog = CsrItemConvertionLogs::create([
+            'csr_stock_id' => $request->csr_stock_id,
+            'ris_no' => $request->ris_no,
+            'chrgcode' => $request->chrgcode,
+            'cl2comb_before' => $request->cl2comb_before,
+            'quantity_before' => $request->quantity_before,
+            'cl2comb_after' => $request->cl2comb_after,
+            'prev_qty' => 0,
+            'new_qty' => $request->quantity_after,
+            'suppcode' => $request->suppcode,
+            'manufactured_date' => $request->manufactured_date,
+            'delivered_date' => $request->delivered_date,
+            'expiration_date' => $request->expiration_date,
+            'action' => 'CONVERTED ITEM',
+            'remarks' => '',
+            'entry_by' => $entry_by,
         ]);
 
         return redirect()->back();
