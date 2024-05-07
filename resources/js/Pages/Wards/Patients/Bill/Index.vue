@@ -150,7 +150,9 @@
               </div>
             </template>
             <template #footer>
-              <div class="text-right text-2xl text-green-600 font-bold">Total: ₱ {{ totalAmount.toFixed(2) }}</div>
+              <div class="text-right text-2xl text-green-600 font-bold">
+                Total: ₱ {{ toFixedWithoutRounding(totalAmount) }}
+              </div>
             </template>
           </DataTable>
 
@@ -618,6 +620,11 @@ export default {
       this.billList.forEach((item) => {
         this.totalAmount += Number(item.amount);
       });
+    },
+    toFixedWithoutRounding(number) {
+      const factor = Math.pow(10, 2);
+      const truncated = Math.floor(number * factor) / factor;
+      return truncated.toFixed(2);
     },
     storeBillsInContainer() {
       this.bills.forEach((e) => {
