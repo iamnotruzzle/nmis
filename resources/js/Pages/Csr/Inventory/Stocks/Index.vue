@@ -1173,7 +1173,12 @@
             </Column>
           </DataTable>
         </TabPanel>
-        <TabPanel header="TOTAL CONVERTED ITEMS">
+        <TabPanel>
+          <template #header>
+            <div class="flex align-items-center gap-2">
+              <span class="font-bold white-space-nowrap text-green-500">TOTAL CONVERTED ITEMS</span>
+            </div>
+          </template>
           <!-- total total converted items  -->
           <DataTable
             class="p-datatable-sm"
@@ -1190,7 +1195,7 @@
           >
             <template #header>
               <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-                <span class="text-xl font-bold text-primary">TOTAL CONVERTED ITEMS</span>
+                <span class="text-xl font-bold text-green-500">TOTAL CONVERTED ITEMS</span>
 
                 <div class="flex">
                   <div class="mr-2">
