@@ -285,6 +285,7 @@
           <template #body="slotProps">
             <div class="flex flex-row justify-content-between align-content-around">
               <Button
+                v-if="slotProps.data.converted == 'n'"
                 v-tooltip.top="'Update'"
                 icon="pi pi-pencil"
                 class="mr-2"
@@ -1266,6 +1267,35 @@
               sortable
             >
             </Column>
+            <Column
+              header="ACTION"
+              style="width: 5%"
+            >
+              <template #body="slotProps">
+                <div class="flex flex-row justify-content-between align-content-around">
+                  <Button
+                    v-tooltip.top="'Update'"
+                    icon="pi pi-pencil"
+                    class="mr-2"
+                    rounded
+                    text
+                    severity="warning"
+                    @click="editConvertedItem(slotProps.data)"
+                  />
+                  <!-- <Button
+                    v-tooltip.top="'Convert'"
+                    class=""
+                    rounded
+                    severity="success"
+                    @click="convertItem(slotProps.data)"
+                  >
+                    <template #icon>
+                      <v-icon name="bi-arrow-left-right"></v-icon>
+                    </template>
+                  </Button> -->
+                </div>
+              </template>
+            </Column>
           </DataTable>
         </TabPanel>
       </TabView>
@@ -1370,6 +1400,7 @@ export default {
       acquisitionPrice: 0,
       markupPercentage: 0,
       localSellingPrice: 0,
+      editConvertedItemIsUpdate: false,
       //   sellingPrice: null,
       deliveryDetailsFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -1466,6 +1497,7 @@ export default {
         sellingPrice: null,
       }),
       formConvert: this.$inertia.form({
+        id: null,
         csr_stock_id: null,
         ris_no: null,
         chrgcode: null,
@@ -1781,7 +1813,7 @@ export default {
         });
       });
 
-      console.log(this.totalConvertedItemsList);
+      //   console.log(this.totalConvertedItemsList);
     },
     storeConvertedItemsInContainer() {
       this.convertedItems.forEach((e) => {
@@ -1890,6 +1922,18 @@ export default {
         this.formAddDelivery.reset()
       );
     },
+    editConvertedItem(item) {
+      console.log(item);
+
+      this.editConvertedItemIsUpdate = true;
+      this.convertDialog = true;
+
+      this.formConvert.id = item.id;
+
+      this.formConvert.cl2comb_before = item.cl2comb_after;
+      this.formConvert.cl2desc_before = item.cl2desc;
+      this.formConvert.quantity_after = item.quantity_after;
+    },
     editItem(item) {
       //   console.log(item);
       this.isUpdate = true;
@@ -1953,7 +1997,7 @@ export default {
       }
     },
     convertItem(item) {
-      console.log(item);
+      //   console.log(item);
 
       this.convertDialog = true;
       this.formConvert.cl2comb_before = item.cl2comb;
@@ -1978,19 +2022,35 @@ export default {
         return false;
       }
 
-      this.formConvert.post(route('csrconvertdelivery.store'), {
-        preserveScroll: true,
-        onSuccess: () => {
-          //   console.log('DONE');
-          this.convertDialog = false;
-          this.cancel();
-          this.updateData();
-          this.itemConverted();
-        },
-        onError: (error) => {
-          console.log(error);
-        },
-      });
+      if (this.editConvertedItemIsUpdate) {
+        this.formConvert.put(route('csrconvertdelivery.update', this.formConvert.id), {
+          preserveScroll: true,
+          onSuccess: () => {
+            //   console.log('DONE');
+            this.convertDialog = false;
+            this.cancel();
+            this.updateData();
+            this.itemConverted();
+          },
+          onError: (error) => {
+            console.log(error);
+          },
+        });
+      } else {
+        this.formConvert.post(route('csrconvertdelivery.store'), {
+          preserveScroll: true,
+          onSuccess: () => {
+            //   console.log('DONE');
+            this.convertDialog = false;
+            this.cancel();
+            this.updateData();
+            this.itemConverted();
+          },
+          onError: (error) => {
+            console.log(error);
+          },
+        });
+      }
     },
     onRowClick(e) {
       //   console.log(e.data);

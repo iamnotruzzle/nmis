@@ -5,13 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CsrItemConvertionLogs extends Model
+class CsrItemConversionLogs extends Model
 {
     use HasFactory;
 
     protected $table = 'csrw_csr_item_conversion_logs';
 
     protected $fillable = [
+        'item_conversion_id',
         'csr_stock_id',
         'ris_no',
         'chrgcode',

@@ -15,7 +15,8 @@ class CreateCsrwCsrItemConversionLogsTable extends Migration
     {
         Schema::create('csrw_csr_item_conversion_logs', function (Blueprint $table) {
             $table->id();
-            $table->string('csr_stock_id');
+            $table->bigInteger('item_conversion_id');
+            $table->bigInteger('csr_stock_id');
             $table->string('ris_no');
             $table->string('chrgcode')->nullable();
             $table->string('cl2comb_before');
