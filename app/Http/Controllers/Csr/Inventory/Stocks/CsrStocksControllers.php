@@ -125,7 +125,7 @@ class CsrStocksControllers extends Controller
                     JOIN tbl_ris as ris ON ris.risid = ris_rel.risid
                     JOIN tbl_fund_source as fs ON fs.fsid = ris_rel.fsid
                     WHERE  ris.officeID = 37
-                    AND ris_rel.risid = ?
+                    AND ris.risno = ?
                     ORDER BY item.description ASC;",
                 [$request->searchRis]
             );
