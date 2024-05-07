@@ -26,6 +26,7 @@ class CsrItemConvertionLogs extends Model
         'expiration_date',
         'action',
         'remarks',
-        'entry_by',
+        'converted_by',
+        'updated_by',
     ];
 }

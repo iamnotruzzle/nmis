@@ -29,7 +29,8 @@ class CreateCsrwCsrItemConversionLogsTable extends Migration
             $table->dateTime('expiration_date');
             $table->string('action');
             $table->string('remarks')->nullable();
-            $table->string('entry_by');
+            $table->string('converted_by');
+            $table->string('updated_by')->nullable();
             $table->timestamps();
         });
     }

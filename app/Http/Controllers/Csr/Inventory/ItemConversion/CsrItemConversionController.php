@@ -21,7 +21,7 @@ class CsrItemConversionController extends Controller
     {
         // dd($request);
 
-        $entry_by = Auth::user()->employeeid;
+        $converted_by = Auth::user()->employeeid;
 
         $updated = CsrStocks::where('id', $request->csr_stock_id)
             ->update([
@@ -45,7 +45,7 @@ class CsrItemConversionController extends Controller
             'manufactured_date' => $request->manufactured_date,
             'delivered_date' => $request->delivered_date,
             'expiration_date' => $request->expiration_date,
-            'converted_by' => $entry_by,
+            'converted_by' => $converted_by,
         ]);
 
         $convertedItemLog = CsrItemConvertionLogs::create([
@@ -63,7 +63,7 @@ class CsrItemConversionController extends Controller
             'expiration_date' => $request->expiration_date,
             'action' => 'CONVERTED ITEM',
             'remarks' => '',
-            'entry_by' => $entry_by,
+            'converted_by' => $converted_by,
         ]);
 
         return redirect()->back();
