@@ -150,7 +150,7 @@
               </div>
             </template>
             <template #footer>
-              <div class="text-right text-2xl text-green-600 font-bold">Total: ₱ {{ totalAmount }}</div>
+              <div class="text-right text-2xl text-green-600 font-bold">Total: ₱ {{ totalAmount.toFixed(2) }}</div>
             </template>
           </DataTable>
 
