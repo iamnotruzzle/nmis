@@ -36,12 +36,10 @@ class RequestStocksController extends Controller
             ->first();
 
         $items = DB::select(
-            "SELECT hclass2.cl2comb as cl2comb, hclass2.cl2desc as cl2desc, huom.uomcode as uomcode, huom.uomdesc as uomdesc FROM hclass2
-                JOIN huom ON hclass2.uomcode = huom.uomcode
-                WHERE hclass2.catID IS NOT NULL
-                AND hclass2.catID != 9
-                AND hclass2.cl2stat = 'A'
-                ORDER BY hclass2.cl2desc ASC;
+            "SELECT item.cl2comb, item.cl2desc, item.uomcode, uom.uomdesc
+                FROM hclass2 as item
+                JOIN huom as uom ON uom.uomcode = item.uomcode
+                WHERE item.cl2desc LIKE '(piece)%';
             ",
         );
 

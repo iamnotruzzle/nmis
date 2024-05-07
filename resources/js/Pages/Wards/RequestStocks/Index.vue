@@ -1159,8 +1159,8 @@ export default {
         this.itemsList.push({
           cl2comb: e.cl2comb,
           cl2desc: e.cl2desc,
-          uomcode: e.unit == null ? null : e.unit.uomcode,
-          uomdesc: e.unit == null ? null : e.unit.uomdesc,
+          uomcode: e.uomcode,
+          uomdesc: e.uomdesc,
         });
       });
     },
