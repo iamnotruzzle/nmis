@@ -290,7 +290,6 @@
                 icon="pi pi-pencil"
                 class="mr-2"
                 rounded
-                text
                 severity="warning"
                 @click="editItem(slotProps.data)"
               />
@@ -1272,13 +1271,12 @@
               style="width: 5%"
             >
               <template #body="slotProps">
-                <div class="flex flex-row justify-content-between align-content-around">
+                <div class="flex flex-row justify-content-center align-content-around">
                   <Button
                     v-tooltip.top="'Update'"
                     icon="pi pi-pencil"
                     class="mr-2"
                     rounded
-                    text
                     severity="warning"
                     @click="editConvertedItem(slotProps.data)"
                   />
