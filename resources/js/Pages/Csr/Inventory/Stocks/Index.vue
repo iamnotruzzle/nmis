@@ -1105,7 +1105,7 @@
               formConvert.processing ||
               formConvert.cl2comb_after == null ||
               formConvert.quantity_after == '' ||
-              this.formConvert.quantity_after == null
+              formConvert.quantity_after == null
             "
             @click="submitConvert"
           />
@@ -1815,8 +1815,6 @@ export default {
           converted_by: e.firstname.trim() + ' ' + e.lastname.trim(),
         });
       });
-
-      //   console.log(this.totalConvertedItemsList);
     },
     storeConvertedItemsInContainer() {
       this.convertedItems.forEach((e) => {
