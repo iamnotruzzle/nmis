@@ -248,7 +248,8 @@
                   style="width: 20%"
                 >
                   <template #body="{ data }">
-                    {{ tzone(data.created_at) }}
+                    <span v-if="data.created_at == null"></span>
+                    <span v-else> {{ tzone(data.created_at) }}</span>
                   </template>
                 </Column>
               </DataTable>
