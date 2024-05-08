@@ -32,8 +32,7 @@ class ManualAddStocksController extends Controller
             'delivered_date' => $request->delivered_date,
             'expiration_date' => $request->expiration_date,
             'acquisition_price' => $request->acquisitionPrice,
-            'mark_up' => $request->markupPercentage,
-            'selling_price' => $request->sellingPrice,
+            'converted' => 'n',
         ]);
 
         return redirect()->back();

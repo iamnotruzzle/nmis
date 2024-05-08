@@ -29,8 +29,6 @@ class CsrStocks extends Model
         'delivered_date',
         'expiration_date',
         'acquisition_price',
-        'mark_up',
-        'selling_price',
         'converted'
     ];
 

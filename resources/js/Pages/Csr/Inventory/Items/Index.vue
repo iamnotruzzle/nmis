@@ -236,19 +236,11 @@
                   style="width: 20%"
                 >
                 </Column> -->
-                <!-- <Column
-                  field="mark_up"
-                  header="MARKUP"
-                  style="width: 20%"
-                >
-                  <template #body="{ data }"> {{ data.mark_up }}% </template>
-                </Column> -->
                 <Column
                   field="selling_price"
                   header="SELLING PRICE"
                   style="width: 20%"
                 >
-                  <!-- <template #body="{ data }"> {{ data.mark_up }}% </template> -->
                 </Column>
                 <Column
                   field="created_at"
@@ -932,7 +924,6 @@ export default {
               {
                 price_id: e.price_id,
                 // acquisition_price: e.acquisition_price,
-                // mark_up: e.mark_up,
                 selling_price: e.selling_price,
                 created_at: e.price_created_at,
               },
@@ -943,7 +934,6 @@ export default {
           this.itemsList[existingItemIndex].prices.push({
             price_id: e.price_id,
             // acquisition_price: e.acquisition_price,
-            // mark_up: e.mark_up,
             selling_price: e.selling_price,
             created_at: e.price_created_at,
           });

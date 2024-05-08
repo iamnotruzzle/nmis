@@ -40,7 +40,7 @@ class CsrStocksControllers extends Controller
                 stock.suppcode, supplier.suppname,
                 typeOfCharge.chrgcode as codeFromHCharge, typeOfCharge.chrgdesc as descFromHCharge,
                 fundSource.fsid as codeFromFundSource, fundSource.fsName as descFromFundSource,
-                stock.cl2comb, item.cl2desc, stock.acquisition_price, stock.mark_up, stock.selling_price,
+                stock.cl2comb, item.cl2desc, stock.acquisition_price,
                 unit.uomcode, unit.uomdesc,
                 stock.quantity,
                 reoder_level.normal_stock as normal_stock, reoder_level.alert_stock, reoder_level.critical_stock,
@@ -196,8 +196,6 @@ class CsrStocksControllers extends Controller
                     'delivered_date' => $r['delivered_date'],
                     'expiration_date' => $r['expiration_date'],
                     'acquisition_price' => $r['unitprice'],
-                    'mark_up' => $r['markupPercentage'],
-                    'selling_price' => $r['sellingPrice'],
                     'converted' => 'n',
                 ]);
 
@@ -217,15 +215,12 @@ class CsrStocksControllers extends Controller
                     'action' => 'ADDED DELIVERY',
                     'remarks' => '',
                     'acquisition_price' => $r['unitprice'],
-                    'mark_up' => $r['markupPercentage'],
-                    'selling_price' => $r['sellingPrice'],
                     'entry_by' => $entry_by,
                     'converted' => 'n',
                 ]);
 
                 // $itemPrices = ItemPrices::create([
                 //     'cl2comb' => $request->cl2comb,
-                //     'selling_price' => $request->selling_price,
                 //     'entry_by' => $request->entry_by,
                 // ]);
             }
@@ -241,7 +236,6 @@ class CsrStocksControllers extends Controller
 
         $request->validate([
             'suppcode' => 'required',
-            'mark_up' => 'required',
             'expiration_date' => 'required',
             'remarks' => 'required'
         ]);
@@ -254,8 +248,6 @@ class CsrStocksControllers extends Controller
             'manufactured_date' => $request->manufactured_date,
             'delivered_date' => $request->delivered_date,
             'expiration_date' => $request->expiration_date,
-            'mark_up' => $request->mark_up,
-            'selling_price' => $request->selling_price,
             'remarks' => $request->remarks,
         ]);
 
@@ -273,8 +265,6 @@ class CsrStocksControllers extends Controller
             'expiration_date' => $request->expiration_date,
             'action' => 'UPDATE DELIVERY',
             'remarks' => $request->remarks,
-            'mark_up' => $request->mark_up,
-            'selling_price' => $request->selling_price,
             'entry_by' => $entry_by,
         ]);
 

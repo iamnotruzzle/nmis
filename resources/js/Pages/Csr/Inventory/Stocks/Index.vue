@@ -145,18 +145,6 @@
         >
         </Column>
         <Column
-          field="mark_up"
-          header="MARK UP"
-          style="width: 5%"
-        >
-        </Column>
-        <Column
-          field="selling_price"
-          header="SELLING PRICE"
-          style="width: 5%"
-        >
-        </Column>
-        <Column
           field="stock_lvl"
           header="STOCK LVL."
           :showFilterMenu="false"
@@ -460,45 +448,19 @@
                 readonly
               />
             </div>
-            <div class="field flex justify-content-between">
+            <div class="field">
               <div>
                 <div class="flex align-content-center">
                   <label>Acquisition price</label>
                 </div>
                 <InputNumber
-                  required="true"
+                  class="w-full"
                   v-model.trim="formAdditional.acquisitionPrice"
                   autofocus
                   :maxFractionDigits="2"
                   readonly
                 />
               </div>
-
-              <div class="mx-2"></div>
-
-              <div>
-                <div class="flex align-content-center">
-                  <label>Markup price (%)</label>
-                  <span class="ml-2 text-error">*</span>
-                </div>
-                <InputText
-                  required="true"
-                  type="number"
-                  v-model.trim="formAdditional.markupPercentage"
-                  autofocus
-                  @keydown="restrictNonNumeric"
-                />
-              </div>
-            </div>
-            <div class="field">
-              <div class="flex align-content-center">
-                <label>Selling price</label>
-              </div>
-              <InputNumber
-                required="true"
-                v-model="roundedSellingPrice"
-                readonly
-              />
             </div>
           </div>
           <div class="border-1 mx-4"></div>
@@ -562,16 +524,6 @@
               <Column
                 field="unitprice"
                 header="ACQUISITION PRICE"
-              >
-              </Column>
-              <Column
-                field="markupPercentage"
-                header="MARK UP PERCENTAGE"
-              >
-              </Column>
-              <Column
-                field="sellingPrice"
-                header="SELLING PRICE"
               >
               </Column>
               <Column
@@ -765,31 +717,6 @@
               @keydown="restrictNonNumeric"
             />
           </div>
-
-          <div>
-            <div class="flex align-content-center">
-              <label>Markup price (%)</label>
-              <span class="ml-2 text-error">*</span>
-            </div>
-            <InputText
-              required="true"
-              type="number"
-              v-model.trim="formAddDelivery.markupPercentage"
-              @keydown="restrictNonNumeric"
-            />
-          </div>
-        </div>
-        <div class="field">
-          <div class="flex align-content-center">
-            <label>Selling price</label>
-            <span class="ml-2 text-error">*</span>
-          </div>
-          <InputText
-            required="true"
-            type="number"
-            v-model.trim="formAddDelivery.sellingPrice"
-            @keydown="restrictNonNumeric"
-          />
         </div>
 
         <template #footer>
@@ -813,9 +740,7 @@
               formAddDelivery.cl2comb == null ||
               formAddDelivery.expiration_date == null ||
               formAddDelivery.quantity == null ||
-              formAddDelivery.acquisitionPrice == null ||
-              formAddDelivery.markupPercentage == null ||
-              formAddDelivery.sellingPrice == null
+              formAddDelivery.acquisitionPrice == null
             "
             @click="submitAddDelivery"
           />
@@ -969,32 +894,6 @@
               </div>
               <InputText
                 v-model="form.acquisition_price"
-                readonly
-              />
-            </div>
-            <div class="field">
-              <div class="flex align-content-center">
-                <label>Markup (%)</label>
-              </div>
-              <InputText
-                autofocus
-                type="number"
-                v-model.trim="form.mark_up"
-                @keydown="restrictNonNumeric"
-              />
-              <small
-                class="text-error"
-                v-if="form.errors.mark_up"
-              >
-                Markup is required.
-              </small>
-            </div>
-            <div class="field">
-              <div class="flex align-content-center">
-                <label>Selling price</label>
-              </div>
-              <InputText
-                v-model="onUpdateRoundedSellingPrice"
                 readonly
               />
             </div>
@@ -1401,10 +1300,7 @@ export default {
       delivered_date: null,
       expiration_date: null,
       acquisitionPrice: 0,
-      markupPercentage: 0,
-      localSellingPrice: 0,
       editConvertedItemIsUpdate: false,
-      //   sellingPrice: null,
       deliveryDetailsFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
@@ -1424,8 +1320,6 @@ export default {
         delivered_date: null,
         expiration_date: null,
         acquisitionPrice: null,
-        markupPercentage: 0,
-        calculatedSellingPrice: null,
         quantity: null,
         deliveryDetails: null,
       }),
@@ -1478,8 +1372,6 @@ export default {
         uomdesc: null,
         quantity: null,
         acquisition_price: null,
-        mark_up: null,
-        selling_price: null,
         manufactured_date: null,
         delivered_date: null,
         expiration_date: null,
@@ -1496,8 +1388,6 @@ export default {
         expiration_date: null,
         quantity: null,
         acquisitionPrice: null,
-        markupPercentage: null,
-        sellingPrice: null,
       }),
       formConvert: this.$inertia.form({
         id: null,
@@ -1568,48 +1458,6 @@ export default {
       }
 
       return filtered;
-    },
-    sellingPrice() {
-      return this.formAdditional.acquisitionPrice * (1 + this.formAdditional.markupPercentage / 100);
-    },
-    roundedSellingPrice() {
-      let sellingPrice = this.sellingPrice;
-
-      // Round to the nearest 0.25, 0.50, or 0.75
-      if (sellingPrice % 1 < 0.25) {
-        this.formAdditional.calculatedSellingPrice = Math.floor(sellingPrice) + 0.25;
-        return Math.floor(sellingPrice) + 0.25;
-      } else if (sellingPrice % 1 >= 0.25 && sellingPrice % 1 < 0.5) {
-        this.formAdditional.calculatedSellingPrice = Math.floor(sellingPrice) + 0.5;
-        return Math.floor(sellingPrice) + 0.5;
-      } else if (sellingPrice % 1 >= 0.5 && sellingPrice % 1 < 0.75) {
-        this.formAdditional.calculatedSellingPrice = Math.floor(sellingPrice) + 0.75;
-        return Math.floor(sellingPrice) + 0.75;
-      } else {
-        this.formAdditional.calculatedSellingPrice = Math.ceil(sellingPrice);
-        return Math.ceil(sellingPrice);
-      }
-    },
-    onUpdateSellingPrice() {
-      return this.form.acquisition_price * (1 + this.form.mark_up / 100);
-    },
-    onUpdateRoundedSellingPrice() {
-      let onUpdateSellingPrice = this.onUpdateSellingPrice;
-
-      // Round to the nearest 0.25, 0.50, or 0.75
-      if (onUpdateSellingPrice % 1 < 0.25) {
-        this.form.selling_price = Math.floor(onUpdateSellingPrice) + 0.25;
-        return Math.floor(onUpdateSellingPrice) + 0.25;
-      } else if (onUpdateSellingPrice % 1 >= 0.25 && onUpdateSellingPrice % 1 < 0.5) {
-        this.form.selling_price = Math.floor(onUpdateSellingPrice) + 0.5;
-        return Math.floor(onUpdateSellingPrice) + 0.5;
-      } else if (onUpdateSellingPrice % 1 >= 0.5 && onUpdateSellingPrice % 1 < 0.75) {
-        this.form.selling_price = Math.floor(onUpdateSellingPrice) + 0.75;
-        return Math.floor(onUpdateSellingPrice) + 0.75;
-      } else {
-        this.form.selling_price = Math.ceil(onUpdateSellingPrice);
-        return Math.ceil(onUpdateSellingPrice);
-      }
     },
   },
   mounted() {
@@ -1701,9 +1549,6 @@ export default {
         event.preventDefault();
       }
     },
-    updateLocalSellingPrice() {
-      this.localSellingPrice = this.roundedSellingPrice;
-    },
     tzone(date) {
       if (date == null || date == '') {
         return null;
@@ -1781,8 +1626,6 @@ export default {
           uomdesc: e.uomcode == null ? null : e.uomdesc,
           quantity: Number(e.quantity),
           acquisition_price: e.acquisition_price,
-          mark_up: e.mark_up,
-          selling_price: e.selling_price,
           normal_stock: e.normal_stock == null ? 'N/A' : Number(e.normal_stock),
           alert_stock: e.alert_stock == null ? 'N/A' : Number(e.alert_stock),
           critical_stock: e.critical_stock == null ? 'N/A' : Number(e.critical_stock),
@@ -1950,8 +1793,6 @@ export default {
       this.form.uomdesc = item.uomdesc;
       this.form.quantity = item.quantity;
       this.form.acquisition_price = item.acquisition_price;
-      this.form.mark_up = item.mark_up;
-      this.form.selling_price = item.selling_price;
       this.form.manufactured_date = item.manufactured_date;
       this.form.delivered_date = item.delivered_date;
       this.form.expiration_date = item.expiration_date;
@@ -1980,8 +1821,6 @@ export default {
                 uomcode: e.uomcode,
                 uomdesc: e.uomdesc,
                 unitprice: e.unitprice,
-                markupPercentage: null,
-                sellingPrice: null,
                 releaseqty: Number(e.releaseqty),
                 manufactured_date: null,
                 delivered_date: null,
@@ -2078,21 +1917,12 @@ export default {
           this.formAdditional.quantity == e.releaseqty
         ) {
           // only update property if none on the properties is null
-          if (
-            e.supplier == null ||
-            e.markupPercentage == null ||
-            e.sellingPrice == null ||
-            e.expiration_date == null ||
-            e.markupPercentage != this.formAdditional.markupPercentage
-          ) {
+          if (e.supplier == null || e.expiration_date == null) {
             e.supplier = this.formAdditional.supplier;
             e.supplierName = this.formAdditional.supplier == null ? null : this.formAdditional.supplier.suppname;
-            e.markupPercentage = this.formAdditional.markupPercentage;
-            e.sellingPrice = this.formAdditional.calculatedSellingPrice;
             e.manufactured_date = this.formAdditional.manufactured_date;
             e.delivered_date = this.formAdditional.delivered_date;
             e.expiration_date = this.formAdditional.expiration_date;
-            e.sellingPrice = this.formAdditional.calculatedSellingPrice;
             e.releaseqty = this.formAdditional.quantity;
           }
         }
@@ -2152,9 +1982,7 @@ export default {
         this.formAddDelivery.cl2comb == null ||
         this.formAddDelivery.expiration_date == null ||
         this.formAddDelivery.quantity == null ||
-        this.formAddDelivery.acquisitionPrice == null ||
-        this.formAddDelivery.markupPercentage == null ||
-        this.formAddDelivery.sellingPrice == null
+        this.formAddDelivery.acquisitionPrice == null
       ) {
         return false;
       }

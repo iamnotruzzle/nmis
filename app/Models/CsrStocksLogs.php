@@ -27,8 +27,6 @@ class CsrStocksLogs extends Model
         'remarks',
         'entry_by',
         'acquisition_price',
-        'mark_up',
-        'selling_price',
         'converted'
     ];
 }
