@@ -62,7 +62,7 @@ class DashboardController extends Controller
 
     //     $updated = $csrstock->update([
     //         'ris_no' => $request->ris_no,
-    //         'suppcode' => $request->suppcode,
+    //         'supplierID' => $request->supplierID,
     //         'chrgcode' => $request->fund_source,
     //         'cl2comb' => $request->cl2comb,
     //         'uomcode' => $request->uomcode,
@@ -75,7 +75,7 @@ class DashboardController extends Controller
     //     $stockLogs = CsrStocksLogs::create([
     //         'stock_id' => $prevStockDetails->id,
     //         'ris_no' => $prevStockDetails->ris_no,
-    //         'suppcode' => $prevStockDetails->suppcode,
+    //         'supplierID' => $prevStockDetails->supplierID,
     //         'chrgcode' => $prevStockDetails->chrgcode,
     //         'cl2comb' => $prevStockDetails->cl2comb,
     //         'uomcode' => $prevStockDetails->uomcode,
@@ -107,7 +107,7 @@ class DashboardController extends Controller
     //     $stockLogs = CsrStocksLogs::create([
     //         'stock_id' => $prevStockDetails->id,
     //         'ris_no' => $prevStockDetails->ris_no,
-    //         'suppcode' => $prevStockDetails->suppcode,
+    //         'supplierID' => $prevStockDetails->supplierID,
     //         'chrgcode' => $prevStockDetails->chrgcode,
     //         'cl2comb' => $prevStockDetails->cl2comb,
     //         'uomcode' => $prevStockDetails->uomcode,

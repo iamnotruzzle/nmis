@@ -10,13 +10,13 @@ class Supplier extends Model
     use HasFactory;
 
     protected $table = 'hsupplier';
-    protected $primaryKey = 'suppcode';
+    protected $primaryKey = 'supplierID';
     public $incrementing = false;
     // declare primary as string
     protected $keyType = 'string';
 
     protected $fillable = [
-        'suppcode',
+        'supplierID',
         'suppname',
         'suppaddr',
         'supptelno1',

@@ -57,7 +57,7 @@ class HandleInertiaRequests extends Middleware
                 return Location::where('wardstat', 'A')->orderBy('wardname', 'ASC')->get();
             },
             // 'suppliers' => function () {
-            //     return Supplier::where('suppstat', 'A')->orderBy('suppname', 'ASC')->get(['suppcode', 'suppname', 'suppstat']);
+            //     return Supplier::where('suppstat', 'A')->orderBy('suppname', 'ASC')->get(['supplierID', 'suppname', 'suppstat']);
             // },
             'auth.user.permissions' => function () use ($request) {
                 return ($request->user() ? $request->user()->getAllPermissions()->pluck('name') : null);

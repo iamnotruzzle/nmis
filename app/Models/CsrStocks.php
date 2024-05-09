@@ -21,7 +21,7 @@ class CsrStocks extends Model
         'ris_no',
         'cl2comb',
         'uomcode',
-        'suppcode',
+        'supplierID',
         'chrgcode',
         'quantity',
         'converted_quantity',
@@ -44,7 +44,7 @@ class CsrStocks extends Model
 
     public function supplierDetail()
     {
-        return $this->hasOne(Supplier::class, 'suppcode', 'suppcode');
+        return $this->hasOne(Supplier::class, 'supplierID', 'supplierID');
     }
 
     public function stockLogs()

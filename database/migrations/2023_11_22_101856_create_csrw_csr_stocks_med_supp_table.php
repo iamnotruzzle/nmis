@@ -13,7 +13,7 @@ class CreateCsrwCsrStocksMedSuppTable extends Migration
             $table->string('ris_no')->nullable();
             $table->string('cl2comb');
             $table->string('uomcode')->nullable();
-            $table->string('suppcode')->nullable();
+            $table->bigInteger('supplierID')->nullable();
             $table->decimal('acquisition_price', $precision = 8, $scale = 2)->nullable();
             $table->string('chrgcode')->nullable();
             $table->integer('quantity');

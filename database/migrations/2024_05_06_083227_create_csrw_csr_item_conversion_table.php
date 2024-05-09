@@ -22,7 +22,7 @@ class CreateCsrwCsrItemConversionTable extends Migration
             $table->integer('quantity_before');
             $table->string('cl2comb_after');
             $table->integer('quantity_after');
-            $table->string('suppcode')->nullable();
+            $table->bigInteger('supplierID')->nullable();
             $table->dateTime('manufactured_date')->nullable();
             $table->dateTime('delivered_date')->nullable();
             $table->dateTime('expiration_date');

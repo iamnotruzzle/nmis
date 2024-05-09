@@ -19,7 +19,7 @@ class CsrItemConversion extends Model
         'quantity_before',
         'cl2comb_after',
         'quantity_after',
-        'suppcode',
+        'supplierID',
         'manufactured_date',
         'delivered_date',
         'expiration_date',

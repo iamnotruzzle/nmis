@@ -24,7 +24,7 @@ class CreateCsrwCsrItemConversionLogsTable extends Migration
             $table->string('cl2comb_after');
             $table->integer('prev_qty')->nullable();
             $table->integer('new_qty')->nullable();
-            $table->string('suppcode')->nullable();
+            $table->bigInteger('supplierID')->nullable();
             $table->dateTime('manufactured_date')->nullable();
             $table->dateTime('delivered_date')->nullable();
             $table->dateTime('expiration_date');

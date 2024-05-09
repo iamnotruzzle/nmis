@@ -360,7 +360,7 @@
                 :options="suppliersList"
                 :virtualScrollerOptions="{ itemSize: 38 }"
                 filter
-                dataKey="suppcode"
+                dataKey="supplierID"
                 optionLabel="suppname"
                 class="w-full"
               />
@@ -626,8 +626,8 @@
             :options="suppliersList"
             :virtualScrollerOptions="{ itemSize: 38 }"
             filter
-            dataKey="suppcode"
-            optionValue="suppcode"
+            dataKey="supplierID"
+            optionValue="supplierID"
             optionLabel="suppname"
             class="w-full"
           />
@@ -796,19 +796,19 @@
               </div>
               <Dropdown
                 required="true"
-                v-model="form.suppcode"
+                v-model="form.supplierID"
                 :options="suppliersList"
                 :virtualScrollerOptions="{ itemSize: 38 }"
                 filter
-                dataKey="suppcode"
+                dataKey="supplierID"
                 optionLabel="suppname"
-                optionValue="suppcode"
+                optionValue="supplierID"
                 class="w-full"
-                :class="{ 'p-invalid': form.suppcode == '' }"
+                :class="{ 'p-invalid': form.supplierID == '' }"
               />
               <small
                 class="text-error"
-                v-if="form.errors.suppcode"
+                v-if="form.errors.supplierID"
               >
                 Supplier is required.
               </small>
@@ -1380,7 +1380,7 @@ export default {
 
         stock_id: null,
         ris_no: null,
-        suppcode: null,
+        supplierID: null,
         fund_source: null,
         chrgdesc: null,
         cl2comb: null,
@@ -1417,7 +1417,7 @@ export default {
         quantity_before: null,
         cl2comb_after: null,
         quantity_after: null,
-        suppcode: null,
+        supplierID: null,
         manufactured_date: null,
         delivered_date: null,
         expiration_date: null,
@@ -1658,7 +1658,7 @@ export default {
         this.stocksList.push({
           id: e.id,
           ris_no: e.ris_no,
-          suppcode: e.suppcode,
+          supplierID: e.supplierID,
           suppname: e.suppname,
           chrgcode: e.codeFromHCharge === null ? e.codeFromFundSource : e.codeFromHCharge,
           chrgdesc: e.codeFromHCharge === null ? e.descFromFundSource : e.descFromHCharge,
@@ -1682,7 +1682,7 @@ export default {
     storeSuppliersInContainer() {
       this.suppliers.forEach((e) => {
         this.suppliersList.push({
-          suppcode: e.suppcode,
+          supplierID: e.supplierID,
           suppname: e.suppname,
         });
       });
@@ -1826,7 +1826,7 @@ export default {
       this.updateStockDialog = true;
       this.stockId = item.id;
       this.form.ris_no = item.ris_no;
-      this.form.suppcode = item.suppcode;
+      this.form.supplierID = item.supplierID;
       this.form.fund_source = item.chrgcode;
       this.form.chrgdesc = item.chrgdesc;
       this.form.cl2comb = item.cl2comb;
@@ -1889,7 +1889,7 @@ export default {
       this.formConvert.csr_stock_id = item.id;
       this.formConvert.ris_no = item.ris_no;
       this.formConvert.chrgcode = item.chrgcode;
-      this.formConvert.suppcode = item.suppcode;
+      this.formConvert.supplierID = item.supplierID;
       this.formConvert.manufactured_date = item.manufactured_date;
       this.formConvert.delivered_date = item.delivered_date;
       this.formConvert.expiration_date = item.expiration_date;
@@ -1937,7 +1937,7 @@ export default {
     onRowClick(e) {
       //   console.log(e.data);
       this.formAdditional.ris_no = e.data.risid;
-      this.formAdditional.suppcode = e.data.supplierId;
+      this.formAdditional.supplierID = e.data.supplierId;
       this.formAdditional.suppname = e.data.supplierName;
       this.formAdditional.fsId = e.data.fsid;
       this.formAdditional.fsName = e.data.fundSourceName;

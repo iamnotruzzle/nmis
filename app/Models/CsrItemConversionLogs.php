@@ -21,7 +21,7 @@ class CsrItemConversionLogs extends Model
         'cl2comb_after',
         'prev_qty',
         'new_qty',
-        'suppcode',
+        'supplierID',
         'manufactured_date',
         'delivered_date',
         'expiration_date',

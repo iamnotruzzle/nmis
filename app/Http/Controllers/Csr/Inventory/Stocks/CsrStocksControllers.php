@@ -8,6 +8,7 @@ use App\Models\CsrStocksLogs;
 use App\Models\FundSource;
 use App\Models\Item;
 use App\Models\ItemPrices;
+use App\Models\PimsSupplier;
 use App\Models\Supplier;
 use App\Models\TypeOfCharge;
 use Carbon\Carbon;
@@ -37,7 +38,7 @@ class CsrStocksControllers extends Controller
 
         $stocks = DB::select(
             "SELECT stock.id, stock.ris_no,
-                stock.suppcode, supplier.suppname,
+                stock.supplierID, supplier.suppname,
                 typeOfCharge.chrgcode as codeFromHCharge, typeOfCharge.chrgdesc as descFromHCharge,
                 fundSource.fsid as codeFromFundSource, fundSource.fsName as descFromFundSource,
                 stock.cl2comb, item.cl2desc, stock.acquisition_price,
@@ -48,7 +49,7 @@ class CsrStocksControllers extends Controller
             FROM csrw_csr_stocks as stock
             JOIN hclass2 as item ON stock.cl2comb = item.cl2comb
             JOIN huom as unit ON stock.uomcode = unit.uomcode
-            JOIN hsupplier as supplier ON stock.suppcode = supplier.suppcode
+            JOIN csrw_suppliers as supplier ON stock.supplierID = supplier.supplierID
             LEFT JOIN hcharge as typeOfCharge ON stock.chrgcode = typeOfCharge.chrgcode
             LEFT JOIN csrw_fund_source as fundSource ON stock.chrgcode = fundSource.fsid
             LEFT JOIN (
@@ -91,7 +92,7 @@ class CsrStocksControllers extends Controller
             ->where('chrgtable', 'NONDR')
             ->get(['chrgcode', 'chrgdesc', 'bentypcod', 'chrgtable']);
 
-        $suppliers = Supplier::where('suppstat', 'A')->orderBy('suppname', 'ASC')->get(['suppcode', 'suppname', 'suppstat']);
+        $suppliers = PimsSupplier::where('status', 'A')->orderBy('suppname', 'ASC')->get();
 
         return Inertia::render('Csr/Inventory/Stocks/Index', [
             'items' => $items,
@@ -184,12 +185,12 @@ class CsrStocksControllers extends Controller
             // dd($entry_by);
 
             foreach ($deliveryDetails as $r) {
-                // dd($r['supplier']['suppcode']);
+                // dd($r['supplier']['supplierID']);
                 $stock = CsrStocks::create([
                     'ris_no' => $r['risid'],
                     'cl2comb' => $r['cl2comb'],
                     'uomcode' => $r['uomcode'],
-                    'suppcode' => $r['supplier']['suppcode'],
+                    'supplierID' => $r['supplier']['supplierID'],
                     'chrgcode' => $r['fsid'],
                     'quantity' => $r['releaseqty'],
                     'manufactured_date' => $r['manufactured_date'],
@@ -204,7 +205,7 @@ class CsrStocksControllers extends Controller
                     'ris_no' => $r['risid'],
                     'cl2comb' => $r['cl2comb'],
                     'uomcode' => $r['uomcode'],
-                    'suppcode' => $r['supplier']['suppcode'],
+                    'supplierID' => $r['supplier']['supplierID'],
                     'chrgcode' => $r['fsid'],
                     'prev_qty' => 0,
                     'new_qty' => $r['releaseqty'],
@@ -235,7 +236,7 @@ class CsrStocksControllers extends Controller
         $entry_by = Auth::user()->employeeid;
 
         $request->validate([
-            'suppcode' => 'required',
+            'supplierID' => 'required',
             'expiration_date' => 'required',
             'remarks' => 'required'
         ]);
@@ -243,7 +244,7 @@ class CsrStocksControllers extends Controller
         $prevStockDetails = CsrStocks::where('id', $csrstock->id)->first();
 
         $updated = $csrstock->update([
-            'suppcode' => $request->suppcode,
+            'supplierID' => $request->supplierID,
             'quantity' => $request->quantity,
             'manufactured_date' => $request->manufactured_date,
             'delivered_date' => $request->delivered_date,
@@ -256,7 +257,7 @@ class CsrStocksControllers extends Controller
             'ris_no' => $prevStockDetails->ris_no,
             'cl2comb' => $prevStockDetails->cl2comb,
             'uomcode' => $prevStockDetails->uomcode,
-            'suppcode' => $prevStockDetails->suppcode,
+            'supplierID' => $prevStockDetails->supplierID,
             'chrgcode' => $prevStockDetails->chrgcode,
             'prev_qty' => $prevStockDetails->quantity,
             'new_qty' => $request->quantity,
@@ -286,7 +287,7 @@ class CsrStocksControllers extends Controller
         // $stockLogs = CsrStocksLogs::create([
         //     'stock_id' => $prevStockDetails->id,
         //     'ris_no' => $prevStockDetails->ris_no,
-        //     'suppcode' => $prevStockDetails->suppcode,
+        //     'supplierID' => $prevStockDetails->supplierID,
         //     'chrgcode' => $prevStockDetails->chrgcode,
         //     'cl2comb' => $prevStockDetails->cl2comb,
         //     'uomcode' => $prevStockDetails->uomcode,

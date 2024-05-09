@@ -25,7 +25,7 @@ class ManualAddStocksController extends Controller
             'ris_no' => $request->ris_no,
             'cl2comb' => $request->cl2comb,
             'uomcode' => $unit->uomcode,
-            'suppcode' => $request->supplier,
+            'supplierID' => $request->supplier,
             'chrgcode' => $request->fund_source,
             'quantity' => $request->quantity,
             'manufactured_date' => $request->manufactured_date,

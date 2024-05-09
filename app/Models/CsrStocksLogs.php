@@ -16,7 +16,7 @@ class CsrStocksLogs extends Model
         'ris_no',
         'cl2comb',
         'uomcode',
-        'suppcode',
+        'supplierID',
         'chrgcode',
         'prev_qty',
         'new_qty',
