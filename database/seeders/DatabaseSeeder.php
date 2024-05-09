@@ -16,7 +16,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleAndPermissionSeeder::class,
             FundSourceSeeder::class,
-            PimsCategorySeeder::class
+            PimsCategorySeeder::class,
+            SuppliersListSeeder::class
         ]);
     }
 }
