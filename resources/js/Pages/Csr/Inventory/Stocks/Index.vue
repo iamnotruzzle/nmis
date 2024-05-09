@@ -592,12 +592,34 @@
         </template>
 
         <div class="field">
+          <div class="flex align-items-center">
+            <label class="mr-2 font-semibold text-lg"> GENERATE RIS NO.: </label>
+
+            <input
+              v-model="formAddDelivery.generateRisNo"
+              type="checkbox"
+              class="text-primary temp-ris-no"
+              :style="{ width: '25px', height: '25px', 'font-size': '20px' }"
+              cursor-pointer
+            />
+
+            <!-- <Checkbox
+              id="tempRisNo"
+              v-model="formAddDelivery.generateRisNo"
+              :binary="true"
+              :style="{ width: '40px', height: '40px', 'font-size': '20px' }"
+            >
+            </Checkbox> -->
+          </div>
+        </div>
+        <div class="field">
           <div class="flex align-content-center">
             <label>RIS no.</label>
             <span class="ml-2 text-error">*</span>
           </div>
           <InputText
             v-model.trim="formAddDelivery.ris_no"
+            :readonly="generatedRisNo"
             autofocus
           />
         </div>
@@ -1226,6 +1248,7 @@ import Tag from 'primevue/tag';
 import Textarea from 'primevue/textarea';
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
+import Checkbox from 'primevue/checkbox';
 import axios from 'axios';
 
 import moment, { now } from 'moment';
@@ -1251,6 +1274,7 @@ export default {
     InputNumber,
     TabView,
     TabPanel,
+    Checkbox,
   },
   props: {
     items: Object,
@@ -1301,6 +1325,7 @@ export default {
       expiration_date: null,
       acquisitionPrice: 0,
       editConvertedItemIsUpdate: false,
+      generatedRisNo: false,
       deliveryDetailsFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
@@ -1379,6 +1404,7 @@ export default {
         delivery_list: [],
       }),
       formAddDelivery: this.$inertia.form({
+        generateRisNo: false,
         ris_no: null,
         supplier: null,
         fund_source: null,
@@ -1470,6 +1496,7 @@ export default {
     this.storeSuppliersInContainer();
     this.storeConvertedItemsInContainer();
     this.storeTotalConvertedItemsInContainer();
+    // this.generateTempRisNo();
 
     // Add event listener to the document
     document.addEventListener('keydown', this.handleKeyPress);
@@ -1479,6 +1506,29 @@ export default {
     document.removeEventListener('keydown', this.handleKeyPress);
   },
   methods: {
+    generateTempRisNo() {
+      // Get the current year
+      const currentYear = new Date().getFullYear();
+
+      // Extract the last two digits of the year (YY format)
+      const yearDigits = String(currentYear).slice(-2);
+
+      // Generate random numbers for the XXX part (3 digits)
+      const randomPart1 = Math.floor(Math.random() * 1000)
+        .toString()
+        .padStart(3, '0');
+
+      // Generate random numbers for the XXXXX part (5 digits)
+      const randomPart2 = Math.floor(Math.random() * 100000)
+        .toString()
+        .padStart(5, '0');
+
+      // Create the final formatted string
+      const randomNumber = `${yearDigits}-${randomPart1}-${randomPart2}T`;
+
+      this.formAddDelivery.ris_no = randomNumber;
+      //   console.log(randomNumber);
+    },
     resetDeliveryDialog() {
       this.disableSearchRisInput = false;
       this.isUpdate = false;
@@ -1767,7 +1817,7 @@ export default {
       );
     },
     editConvertedItem(item) {
-      console.log(item);
+      //   console.log(item);
 
       this.editConvertedItemIsUpdate = true;
       this.convertDialog = true;
@@ -2039,11 +2089,22 @@ export default {
         this.selectedItemsUomDesc = null;
       }
     },
+    'formAddDelivery.generateRisNo': function (val) {
+      //   console.log(val);
+
+      if (val == true) {
+        this.generateTempRisNo();
+        this.generatedRisNo = true;
+      } else {
+        this.formAddDelivery.ris_no = null;
+        this.generatedRisNo = false;
+      }
+    },
   },
 };
 </script>
 
-<style>
+<style scoped>
 /* Remove arrow for input type number */
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
@@ -2059,6 +2120,10 @@ input[type='number'] {
 /* END Remove arrow for input type number */
 
 .p-datatable .p-datatable-tbody > tr:hover {
+  cursor: pointer;
+}
+
+.temp-ris-no {
   cursor: pointer;
 }
 </style>
