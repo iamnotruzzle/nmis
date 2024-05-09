@@ -593,7 +593,7 @@
 
         <div class="field">
           <div class="flex align-items-center">
-            <label class="mr-2 font-semibold text-lg"> GENERATE RIS NO.: </label>
+            <label class="mr-2 font-semibold text-xl"> GENERATE RIS NO.: </label>
 
             <input
               v-model="formAddDelivery.generateRisNo"
@@ -602,14 +602,6 @@
               :style="{ width: '25px', height: '25px', 'font-size': '20px' }"
               cursor-pointer
             />
-
-            <!-- <Checkbox
-              id="tempRisNo"
-              v-model="formAddDelivery.generateRisNo"
-              :binary="true"
-              :style="{ width: '40px', height: '40px', 'font-size': '20px' }"
-            >
-            </Checkbox> -->
           </div>
         </div>
         <div class="field">

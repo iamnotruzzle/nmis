@@ -1,0 +1,3797 @@
+[
+	{
+		"supplierID" : 356,
+		"suppname" : "\r\nFUJIFILM PHILIPPINES, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 443,
+		"suppname" : " OCTAGON COMPUTER SUPERSTORE ",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 2,
+		"suppname" : "021JCR Medical Supplies",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 401,
+		"suppname" : "2MG INCORPORATED",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 623,
+		"suppname" : "3 AND 1 GENERAL MERCHANDISE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 234,
+		"suppname" : "3 As OFFICE SUPPLIES AND EQUIPMENT TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 666,
+		"suppname" : "3BMA REFRIGERATION & AIRCONDITIONING SERVICES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 672,
+		"suppname" : "3YM TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 476,
+		"suppname" : "888 BATAC COMMERCIAL",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 561,
+		"suppname" : "8th CORE TECHNOLOGIES CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 747,
+		"suppname" : "A LIST EVENTS MANAGEMENT SERVICES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 613,
+		"suppname" : "A.C.E.P. MEDICAL SUPPLIES TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 3,
+		"suppname" : "ABACUS BOOK AND CARD CORP.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 571,
+		"suppname" : "ABACUS BOOKS & CARD CORP.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 711,
+		"suppname" : "ABENSON VENTURES, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 605,
+		"suppname" : "Abigail Balicat",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 560,
+		"suppname" : "ABIGAIL V. RACUYA",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 4,
+		"suppname" : "ABM-A BUILDER MARKETING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 420,
+		"suppname" : "ACCENT MICRO TECHNOLOGIES, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 328,
+		"suppname" : "ACE HARDWARE PHIL. INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 648,
+		"suppname" : "ACE HARDWARE PHILIPPINES INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 170,
+		"suppname" : "ACE HARDWARE PHILIPPINES, INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 334,
+		"suppname" : "ACE HARDWARE PHILIPPINES, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 452,
+		"suppname" : "ACEZ INSTRUMENTS PHILIPPINES CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 431,
+		"suppname" : "ADOLAVNI DAMIANA MAGPILY",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 385,
+		"suppname" : "AEON WORLD GROUP CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 360,
+		"suppname" : "AGI CAPITAL VENTURES, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 5,
+		"suppname" : "AGUA VISIONS TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 611,
+		"suppname" : "AIDA MICHELLE DUMBRIQUE, ET.AL",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 169,
+		"suppname" : "AL-SHAR HARDWARE, GLASS ALUMINUM AND GENERAL MERCHANDISE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 480,
+		"suppname" : "ALCAPORT TRADE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 6,
+		"suppname" : "ALCON LABORATORIES (PHIL.), INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 706,
+		"suppname" : "ALELI JOY'S INABEL WOVEN CLOTH DEALER",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 543,
+		"suppname" : "ALLAN FELIZAR",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 514,
+		"suppname" : "ALLIANZ PLATFORM OF MEDICAL INTEGRATOR PHILS. CORP.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 7,
+		"suppname" : "ALLIED HOSPITAL SUPPLY INTERNATIONAL CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 8,
+		"suppname" : "ALMIGHTY MEDICAL SUPPLY",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 318,
+		"suppname" : "ALSHAR ALUMINUM, GLASS & ROOFING SUPPLY *T",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 479,
+		"suppname" : "ALVIN CLOYD DAKIS",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 306,
+		"suppname" : "AMBICA INTERNATIONAL CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 9,
+		"suppname" : "AMG REFRIGERATION AND AIRCON CENTER",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 10,
+		"suppname" : "AMIANAN HARDWARE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 690,
+		"suppname" : "AMICI RESORT HOTEL",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 504,
+		"suppname" : "AMJAIEA ENTERPRISE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 700,
+		"suppname" : "ANDOR GRAPHICS PHOTOGRAPHY STUDIO",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 568,
+		"suppname" : "ANGELICA MARIE G. BONIFACIO",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 740,
+		"suppname" : "ANGELITA'S SOUVENIR SHOP",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 602,
+		"suppname" : "ANNE MARGARETTE PARAISO",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 314,
+		"suppname" : "ANSON MARKETING AND COMMERCIAL INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 527,
+		"suppname" : "APPLIED PHARMACEUTICAL DISTRIBUTION INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 403,
+		"suppname" : "AQUA-MAX MED, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 741,
+		"suppname" : "ARDORLEX Ã¢â‚¬â€œ REVVITY JOINT VENTURE ",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 177,
+		"suppname" : "ARDORLEX, INC. - PERKIN ELMER - JOINT VENTURE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 231,
+		"suppname" : "ARGO DISTRIBUTORS INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 390,
+		"suppname" : "ARGO LABS PHARMA AND MEDICAL SUPPLIES DISTRIBUTION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 389,
+		"suppname" : "ARJAY C. TAVARA",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 671,
+		"suppname" : "ARJELON ENTERPRISES AND TRADING CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 675,
+		"suppname" : "ARUGAAN DAY CARE FOR BREASTFEEDING BABIES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 11,
+		"suppname" : "ASCENDANT GLOBAL INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 596,
+		"suppname" : "ASIAN MEDICAL DISTRIBUTOR, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 260,
+		"suppname" : "ASIAN PEARL CONSTRUCTION AND DEVELOPMENT CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 319,
+		"suppname" : "ASSOCIATION OF GOVERNMENT INTERNAL AUDITORS INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 365,
+		"suppname" : "ASSOCIATION OF HEALTH ADMINISTRATORS IN THE PHILIPPINES GOVERNMENT SERVICE, INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 417,
+		"suppname" : "ASSOCIATION OF PHILIPPINE MEDICAL COLLEGES FOUNDATION, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 12,
+		"suppname" : "ASSURANCE CONTROLS TECHNOLOGIES CO., INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 335,
+		"suppname" : "ASTROPHIL TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 205,
+		"suppname" : "ASYA MEDIKA, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 344,
+		"suppname" : "AZITSOROG INCORPORATED",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 13,
+		"suppname" : "B. BRAUN AVITUM PHILIPPINES, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 559,
+		"suppname" : "BACARRA ZANJERA IRRIGATORS MULTI-PORPOSE COOPERATIVE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 341,
+		"suppname" : "BACNAT MEAT STAND",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 599,
+		"suppname" : "BACS CONSTRUCTION SERVICES AND ENGINEERING CONSULTANCY",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 14,
+		"suppname" : "BAN BEE COMMERCIAL CO., INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 736,
+		"suppname" : "BASEMED KARE, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 645,
+		"suppname" : "BATAAN MANUFACTURING CO., INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 502,
+		"suppname" : "BAYER PHILIPPINES INCORPORATED",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 295,
+		"suppname" : "BDSCIENTIA MEDICAL AND DIAGNOSTIC SUPPLIES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 587,
+		"suppname" : "BEAU ESSENCE HEALTH AND BEAUTY INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 436,
+		"suppname" : "BELLAGIO HILLS HOTEL AND RESTAURANT",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 178,
+		"suppname" : "BELMAN LABORATORIES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 751,
+		"suppname" : "BENCHMARK ELECTRICAL AND COOLING SOLUTIONS INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 15,
+		"suppname" : "BEROVAN MARKETING, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 378,
+		"suppname" : "BEST CHOICE ENTERPRISES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 737,
+		"suppname" : "BIGDYX CIVIL ENGINEERING SERVICES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 323,
+		"suppname" : "BIO-DENT MEDICAL EQUIPMENT TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 291,
+		"suppname" : "BIOCARE LIFESCIENCES INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 348,
+		"suppname" : "BIOMEDICAL INSTRUMENTATION & TECHNOLOGY SOLUTIONS CO. LTD.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 728,
+		"suppname" : "BIOPEAK ENTERPRISES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 400,
+		"suppname" : "BIOSITE MEDICAL INSTRUMENTS",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 496,
+		"suppname" : "BITS-BIOMEDICAL INSTRUMENTATION & TECHNOLOGY SOLUTIONS CO. LTD.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 16,
+		"suppname" : "BLIMS FINE FURNITURE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 347,
+		"suppname" : "BLUE SKY TRADING CO., INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 179,
+		"suppname" : "BNAR ENTERPRISES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 650,
+		"suppname" : "BOGIL ISLA INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 308,
+		"suppname" : "BOTIKA NI JULIA",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 238,
+		"suppname" : "BRADY PHARMA INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 17,
+		"suppname" : "BRAVO TECH TRADING & ENGINEERING SERVICES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 500,
+		"suppname" : "BUREAU OF TREASURY",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 535,
+		"suppname" : "BUSILAC BUILDERS, INCORPORATED ",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 562,
+		"suppname" : "C.A. CHABBY CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 442,
+		"suppname" : "C.E. PADILLA CONSTRUCTION INCORPORATED",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 18,
+		"suppname" : "CAIZHER JHON GENERAL MERCHANDISE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 19,
+		"suppname" : "CALOOCAN GAS CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 275,
+		"suppname" : "CANOMED CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 455,
+		"suppname" : "CAPACUAN MULTI-PURPOSE COOPERATIVE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 588,
+		"suppname" : "CAPITAL MEDICAL SUPPLIES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 229,
+		"suppname" : "CAREPLUS PHARMA AND MEDICAL SUPPLIES DISTRIBUTION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 223,
+		"suppname" : "CARL ZEISS PHILIPPINES PTE. LTD.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 661,
+		"suppname" : "CARLO SANTI ALBANO",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 493,
+		"suppname" : "CARLO SANTI ALBANO ET. AL",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 488,
+		"suppname" : "CARRYBOY PHILS., INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 725,
+		"suppname" : "CCS BIOMEDICAL TRADING CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 419,
+		"suppname" : "CELSO B. LIGSAY",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 369,
+		"suppname" : "CELSO B. LIGSAY, ET. AL.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 738,
+		"suppname" : "CENTILE PSYCHOLOGICAL ASSESSMENT SERVICES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 528,
+		"suppname" : "CENTRAL BOOK SUPPLY INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 193,
+		"suppname" : "CENTRO-MED ENTERPRISES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 194,
+		"suppname" : "CENTRO-MED ENTERPRISES",
+		"status" : "I"
+	},
+	{
+		"supplierID" : 752,
+		"suppname" : "CHANNELPRINTS",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 695,
+		"suppname" : "CHARITOO'S ARTS AND DESIGNS ONLINE STORE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 637,
+		"suppname" : "CHARO G. GALANG, ET.AL.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 20,
+		"suppname" : "CHEMLINE SCIENTIFIC CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 754,
+		"suppname" : "CHEMVALLEY RESOURCES, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 21,
+		"suppname" : "CHIYAN GENERAL MERCHANDISE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 22,
+		"suppname" : "CHOY'S HOUSEHOLD WARES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 678,
+		"suppname" : "Christian Neil Tanagon",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 446,
+		"suppname" : "CHRISTOPHER T. RAVAL",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 622,
+		"suppname" : "Christy Amor A. Viloria",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 352,
+		"suppname" : "CIAVINMAR ENTERPRISES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 157,
+		"suppname" : "CISCO ENGINEERING INDUSTRIES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 473,
+		"suppname" : "CITY GOVERNMENT OF BATAC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 617,
+		"suppname" : "Claire Macugay",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 564,
+		"suppname" : "CLSU TRUST LIABILITY FUND",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 325,
+		"suppname" : "CM STAR CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 268,
+		"suppname" : "CM VARGAS ENTERPRISE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 339,
+		"suppname" : "CNCTECH INCORPORATED",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 330,
+		"suppname" : "COMMISSION ON AUDIT REGIONAL OFFICE I",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 702,
+		"suppname" : "COMPACT BUILDERS, INC. (CBI)",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 23,
+		"suppname" : "COMPLETE SOLUTION PHARMACY AND GENERAL MERCHANDISE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 207,
+		"suppname" : "CORBRIDGE GROUP PHILS. INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 293,
+		"suppname" : "COREIT COMPUTER CENTER",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 660,
+		"suppname" : "CREATIONS GRAPHIC PRINTING SERVICES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 24,
+		"suppname" : "CRED GENERAL TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 25,
+		"suppname" : "CROWN PRINTERS",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 264,
+		"suppname" : "CROWN PRINTING SERVICES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 465,
+		"suppname" : "CYA INDUSTRIES, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 470,
+		"suppname" : "D SUNNYSIDESHOP CONSUMER GOODS TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 230,
+		"suppname" : "D&R MICROMED SUPPLY INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 159,
+		"suppname" : "DACRISDEEK ENTERPRISES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 575,
+		"suppname" : "DAMATECH PRINTING SERVICE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 529,
+		"suppname" : "DAN & JADE'S WOODCRAFT",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 659,
+		"suppname" : "DANIEL-JOSHUA CATERING SERVICES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 428,
+		"suppname" : "DBK MEDICAL SUPPLIES, LTD. CO.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 520,
+		"suppname" : "DCI INTÃ¢â‚¬â„¢L IT SOLUTIONS & SERVICES CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 437,
+		"suppname" : "DCP-LC MEDICAL SUPPLY",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 409,
+		"suppname" : "DE GUZMAN MACHINE WORKS",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 555,
+		"suppname" : "DEBBIE ANNE M. GUILLERMO",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 324,
+		"suppname" : "DEGA INTERNATIONAL PHARMA CORP. (DEGA)",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 26,
+		"suppname" : "DELEX PHARMA INTERNATIONAL INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 511,
+		"suppname" : "DENNIS RUBIO",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 616,
+		"suppname" : "Dennison Catindig",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 399,
+		"suppname" : "Department of Health,Central Office",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 537,
+		"suppname" : "DETOXICARE PHILS. INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 709,
+		"suppname" : "DEUS ENTERPRISES CO.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 421,
+		"suppname" : "DEVELOPMENT ACADEMY OF THE PHILIPPINES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 290,
+		"suppname" : "DEX INTERNATIONAL CO.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 652,
+		"suppname" : "DIA ANGELA S. NOLASCO",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 628,
+		"suppname" : "DIADZE KRISTOPHER M. VIOLA ET. AL",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 627,
+		"suppname" : "DIADZE KRISTOPHER M. VIOLA ET. AL",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 705,
+		"suppname" : "DIAGNOSTIKA PILIPINAS, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 551,
+		"suppname" : "DIANA H. LAZO ET AL",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 697,
+		"suppname" : "DINA MAE DELA CRUZ ET.AL",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 407,
+		"suppname" : "DISTRIBUTION SOLUTIONS  PHILS. INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 27,
+		"suppname" : "DIVI MART CORP.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 651,
+		"suppname" : "DM BAYLON MANUFACTURING & INDUSTRIAL INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 755,
+		"suppname" : "DMD Graphic Design Services",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 609,
+		"suppname" : "DOH - CENTER FOR HEALTH DEVELOPMENT 1",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 600,
+		"suppname" : "DOMINGO A. CUANANG III, MD",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 495,
+		"suppname" : "DR. JENNIFER JOY SANTOS-RAYOS ET. AL",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 657,
+		"suppname" : "DR. MARIA BLANCA O. KUA",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 190,
+		"suppname" : "DRAGONTRADE CHEMICAL AND INDUSTRIAL CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 206,
+		"suppname" : "DRAKE MARKETING & EQUIPMENT CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 554,
+		"suppname" : "DRAKE MARKETING AND EQUIPMENT CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 556,
+		"suppname" : "DREAMAX INCORPORATED",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 199,
+		"suppname" : "DUBBEL MEDICAL CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 28,
+		"suppname" : "DYNAMED HEALTHCARE INCORPORATED",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 272,
+		"suppname" : "DYNASTY PHARMACEUTICALS",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 639,
+		"suppname" : "E-NOVATE TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 30,
+		"suppname" : "E-PRINT MASTER BUSINESS CENTER",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 34,
+		"suppname" : "E-SIGNS PRINTING SHOP",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 416,
+		"suppname" : "EAST AVENUE MEDICAL CENTER",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 280,
+		"suppname" : "EAST LANE CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 406,
+		"suppname" : "EC ZURIC BIOTHERAPIES, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 244,
+		"suppname" : "ECD ENTERPRISES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 392,
+		"suppname" : "ECF AUTO REPAIR SHOP",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 29,
+		"suppname" : "ECO ENTERPRISES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 647,
+		"suppname" : "EDITHAS GLASSWARE AND GENERAL MERCHANDISE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 466,
+		"suppname" : "EFLEDA SARAH V. MARDERS, RN, MAN",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 196,
+		"suppname" : "EIGRAM COMPUTER CENTER",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 459,
+		"suppname" : "EKF FRUITSTAND",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 248,
+		"suppname" : "EKF FRUITSTAND",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 149,
+		"suppname" : "ELJEN B. TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 499,
+		"suppname" : "EMC HARDWARE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 467,
+		"suppname" : "ENDOSOURCE ENTERPRISES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 180,
+		"suppname" : "ENDURE MEDICAL, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 373,
+		"suppname" : "Enhanced Recovery After Surgery (ERAS) Society Philippines, Inc",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 727,
+		"suppname" : "ENZED TRADE, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 386,
+		"suppname" : "EQ GAS STATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 450,
+		"suppname" : "EQUILAST INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 31,
+		"suppname" : "EQUILIFE MEDICAL EQUIPMENT, SUPPLIES & SERVICES, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 239,
+		"suppname" : "ERASTO FILMS",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 32,
+		"suppname" : "ESC MERCHANDISING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 33,
+		"suppname" : "ESCO PHILIPPINES INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 35,
+		"suppname" : "ESPHAR MEDICAL CENTER INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 345,
+		"suppname" : "ESTEBAN -CASTRO ELECTRONICS SUPPLY AND SERVICE CENTER",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 36,
+		"suppname" : "EUGENE'S ADVERTISING & GENERAL SERVICES & AMP; MERCHANDISE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 37,
+		"suppname" : "EURO-MED LABORATORIES PHIL., INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 161,
+		"suppname" : "EURO-PACIFIC HEALTH CARE DISTRIBUTOR, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 531,
+		"suppname" : "EuroBridge Builders",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 253,
+		"suppname" : "EUROLINK NETWORK INTERNATIONAL CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 307,
+		"suppname" : "EVERYDAY ENTERPRISE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 266,
+		"suppname" : "EXPRESSIONS STATIONERY SHOP INCORPORATED",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 601,
+		"suppname" : "EXUPERIO CALANTOC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 202,
+		"suppname" : "FAIRBRIGHT ENTERPRISES, INCORPORATED",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 38,
+		"suppname" : "FAS DIAGNOSTIC GROUP, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 653,
+		"suppname" : "FATIMA FLOJO, ET. AL.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 506,
+		"suppname" : "FEDERAL PHARMACEUTICALS INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 612,
+		"suppname" : "FELMA ANGELA TABANGAY",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 404,
+		"suppname" : "Fernando Medical Enterprises",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 460,
+		"suppname" : "FIA MEDICAL SUPPLY",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 468,
+		"suppname" : "FIRST DATACORP",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 163,
+		"suppname" : "FIRST PHILIPPINE SCALES, INCORPORATED ",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 296,
+		"suppname" : "FLOW HARMONIC COMMERCIAL, INC. ",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 294,
+		"suppname" : "FMMJ EATERY",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 746,
+		"suppname" : "FORT ILOCANDIA LAND DEVELOPMENT COMPANY LIMITED",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 633,
+		"suppname" : "FORT ILOCANDIA RESORT HOTEL",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 715,
+		"suppname" : "FORTUNE (HONG KONG) SEAFOOD RESTAURANT",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 630,
+		"suppname" : "Fred Ortal",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 39,
+		"suppname" : "FRESENIUS MEDICAL CARE PHILS., INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 624,
+		"suppname" : "G.C. MALACAS SURVEYING SERVICES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 573,
+		"suppname" : "Gaiselle F. Mabeza",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 734,
+		"suppname" : "GAOIRAN AUDIO MIX SOUNDS & LIGHTS",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 481,
+		"suppname" : "GARMAN BIOWASTE FABRICATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 361,
+		"suppname" : "GB DISTRIBUTORS, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 733,
+		"suppname" : "GCM PHARMACEUTICAL DEALER",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 547,
+		"suppname" : "GDA POWER RESOURCES, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 40,
+		"suppname" : "GENACE PHARMA DISTRIBUTOR",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 533,
+		"suppname" : "GENAMPLIFY TECHNOLOGIES INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 354,
+		"suppname" : "GENERAL ELECTRIC PHILIPPINES, INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 658,
+		"suppname" : "GEORGE CAMACHO ET. AL",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 41,
+		"suppname" : "GETZ BROS. PHILIPPINES, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 517,
+		"suppname" : "GILCOR PRINTING PRESS",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 453,
+		"suppname" : "GLEDCO MULTIPURPOSE COOPERATIVE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 478,
+		"suppname" : "GLOBAL MEDICAL SOLUTIONS, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 42,
+		"suppname" : "GLOBO ASIATICO ENTERPRISES, INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 638,
+		"suppname" : "GOLD MENDOZA",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 43,
+		"suppname" : "GOLDQUEST BIOTECHNOLOGIES, INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 730,
+		"suppname" : "GOOD LIFE MEDICAL AND VASCULAR DISTRIBUTION CO., INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 445,
+		"suppname" : "GOODFELLOW PHARMA CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 707,
+		"suppname" : "GOPHERTECH CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 219,
+		"suppname" : "GOSHEN MEDICAL SUPPLIES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 297,
+		"suppname" : "GOVERNMENT FINANCIAL MANAGEMENT INNOVATORS CIRCLE ( GFMIC), INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 396,
+		"suppname" : "GOVERNMENT SERVICE INSURANCE SYSTEM",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 164,
+		"suppname" : "GRACE AIRCON SERVICES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 743,
+		"suppname" : "GRACE WATER ENTERPRISES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 718,
+		"suppname" : "GRANVILLE SUPPLYCHAIN MANAGEMENT CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 44,
+		"suppname" : "GREAT RECONSTRUCTION SURGICALS INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 418,
+		"suppname" : "GREENSUN AUTOMOTIVE ENTERPRISES, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 45,
+		"suppname" : "GUERRERO GRACE PRINTING PRESS",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 371,
+		"suppname" : "GUILLERMO L. MANALO III",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 305,
+		"suppname" : "H.A. PERALTA MEAT STAND",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 641,
+		"suppname" : "HALLEN TAWALI",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 591,
+		"suppname" : "HDR Plastic Manufacturing Corporation",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 670,
+		"suppname" : "Health Facilities and Services Regulatory Bureau",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 143,
+		"suppname" : "HEALTH OPTIONS ENTERPRISES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 46,
+		"suppname" : "HEALTHSOLUTIONS ENTERPRISES INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 241,
+		"suppname" : "HEALTHWORLD INTERNATIONAL PHILIPPINES, CORP.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 759,
+		"suppname" : "Helande Kidney Care Inc.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 489,
+		"suppname" : "HERSHEY M. ANGELES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 47,
+		"suppname" : "HI-FACTOR IONTECH DIGITAL INDUSTRIES CORP.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 153,
+		"suppname" : "HYUNDAI CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 53,
+		"suppname" : "I-SENZ MEDICAL INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 48,
+		"suppname" : "I.T. EASY SOFTWARE SOLUTIONS INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 430,
+		"suppname" : "ICARE LIFE MEDICAL DEVICES, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 213,
+		"suppname" : "IDS MEDICAL SYSTEMS PHILIPPINES, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 49,
+		"suppname" : "ILOCANDIA ONE VENTURES PHILS. INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 257,
+		"suppname" : "ILOCOS NORTE ELECTRIC COOPERATIVE, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 701,
+		"suppname" : "ILOCOS NORTE PROVINCIAL JAIL",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 699,
+		"suppname" : "IMISTEEL STORAGE RACK TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 461,
+		"suppname" : "IMPEXCOS CO.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 181,
+		"suppname" : "INDOPLAS PHILIPPINES, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 757,
+		"suppname" : "INFOWORX, INC. DOING BUSINESS UNDER THE NAME AND STYLE OF PCWORKX",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 346,
+		"suppname" : "INHAIL TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 522,
+		"suppname" : "INKLINE OFFICE SOLUTIONS, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 50,
+		"suppname" : "INNER CIRCLE GENERAL MERCHANDISE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 51,
+		"suppname" : "INNERCORE HEALTHCARE ENT., INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 52,
+		"suppname" : "INNOGEN PHARMACEUTICALS, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 210,
+		"suppname" : "INNOVE COMMUNICATIONS, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 408,
+		"suppname" : "Institute for Solidarity in Asia (ISA)",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 433,
+		"suppname" : "INSTITUTE FOR SOLIDARITY IN ASIA, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 676,
+		"suppname" : "INTELLIGENT OPEN SYSTEMS INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 167,
+		"suppname" : "IPSOLUTIONS INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 168,
+		"suppname" : "IPSOLUTIONS INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 643,
+		"suppname" : "J. ALMONTE CATERING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 197,
+		"suppname" : "J.T. CORNERSTONE TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 463,
+		"suppname" : "JAGAS MEDICADENTA CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 684,
+		"suppname" : "Jaime Charlie C. Viernes",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 518,
+		"suppname" : "JAMAICA VIEN P. ORTAL",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 662,
+		"suppname" : "JAMES GADDAO",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 631,
+		"suppname" : "JAMES S. MARDERS",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 607,
+		"suppname" : "JAVENE JOSEPH PEDRO",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 606,
+		"suppname" : "JAVENE JOSEPH PEDRO",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 608,
+		"suppname" : "JAVENE JOSEPH PEDRO",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 54,
+		"suppname" : "JAYYAM ENTERPRISES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 55,
+		"suppname" : "JAZZ COMPUTER CENTER",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 327,
+		"suppname" : "JCP CONSTRUCTION SUPPLY",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 693,
+		"suppname" : "JEIZEL AIRA R. BATARA",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 712,
+		"suppname" : "JERBSAN FIRE FIGHTING EQUIPMENT TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 381,
+		"suppname" : "JEROME CLARK CID",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 515,
+		"suppname" : "JEROME CLARK CID , ET AL",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 375,
+		"suppname" : "JEROME SADIAN",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 615,
+		"suppname" : "Jessamine Alejo",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 685,
+		"suppname" : "JETHRO RAMOCITO PATOC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 233,
+		"suppname" : "JGT HAEMODYNAMICS TRADING CORP.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 374,
+		"suppname" : "JHARA TOMAS",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 494,
+		"suppname" : "JHOAN T. GALANO",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 469,
+		"suppname" : "JIJ MEDICAL SUPPLIES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 474,
+		"suppname" : "JJC-MED CALIBRATION MEDICAL EQUIPMENT REPAIR AND MAINTENANCE SERVICES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 56,
+		"suppname" : "JKM INFINEON TECHNOLOGIES CORP.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 313,
+		"suppname" : "JNS AIRCONDITIONING TRADING AND SERVICES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 570,
+		"suppname" : "JNS COOLING SYSTEMS ELECTRICAL SERVICES AND SUPPLIES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 655,
+		"suppname" : "Joenathan Jones Pacol",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 546,
+		"suppname" : "JOHANN LORENZ RIBAC, ET.AL.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 585,
+		"suppname" : "JOHANNA  P. VILLALON",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 569,
+		"suppname" : "JOHN HENRY CAR CARE CENTER",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 626,
+		"suppname" : "JOHN LAWRENCE CARIAZO ET. AL.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 578,
+		"suppname" : "John Mark Maruquin",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 287,
+		"suppname" : "JOHN-HENRY CAR CARE CENTER",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 57,
+		"suppname" : "JOKARI ENTERPRISES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 58,
+		"suppname" : "JONIKI FARM AND LIVESTOCKS",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 763,
+		"suppname" : "JORENZ APPLIANCE CENTER CO.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 654,
+		"suppname" : "JOSE B. OROSA III, MD",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 221,
+		"suppname" : "JOSHUA AND CALEB GENERAL MERCHANDISE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 640,
+		"suppname" : "JOSHUA IMMANUEL BERINGUELA",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 303,
+		"suppname" : "JOSMEF ENTERPRISES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 501,
+		"suppname" : "JP ENVIRONMENT CONSULTANCY SERVICES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 247,
+		"suppname" : "JR RIGONAN STORE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 447,
+		"suppname" : "JRS BUSINESS CORPORATION (JRS)",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 665,
+		"suppname" : "JULYNE BACENA ET. AL",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 745,
+		"suppname" : "JUNIPER 3 PROCUREMENT CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 59,
+		"suppname" : "KAI'S TRADING & SERVICES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 454,
+		"suppname" : "KAREN GAPET SARI-SARI STORE AND VEGETABLES STAND",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 410,
+		"suppname" : "KAREN INTERNATIONAL INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 530,
+		"suppname" : "KATHLEEN GIZELLE ALFONSO",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 60,
+		"suppname" : "KAUFMANN PHARMA INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 145,
+		"suppname" : "KAUFMANN PHARMA INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 491,
+		"suppname" : "KEITH ANDRE JOKICO",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 298,
+		"suppname" : "KEL'S PHARMACEUTICALS",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 301,
+		"suppname" : "KING OF KINGS. TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 387,
+		"suppname" : "KINGSLAND SHELL SERVICE STATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 732,
+		"suppname" : "KINMED HEALTHCARE TRADING CORP.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 208,
+		"suppname" : "KINOVETT SCIENTIFIC SOLUTIONS CO.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 61,
+		"suppname" : "KITCH SKUL GENERAL MERCHANDISE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 567,
+		"suppname" : "KRYSTEL R. CABEBE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 340,
+		"suppname" : "KYLLEDMED MEDICAL EQUIPMENT AND SUPPLIES TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 236,
+		"suppname" : "LABELMEN ENTERPRISES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 271,
+		"suppname" : "LABIG LUTONG BAHAY",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 304,
+		"suppname" : "Labmate Pharma, Inc.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 485,
+		"suppname" : "LABOTECH TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 182,
+		"suppname" : "LABTRADERS, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 395,
+		"suppname" : "LAND TRANSPORTATION OFFICE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 545,
+		"suppname" : "LAOAG ASTRONIC AUTO SUPPLY",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 487,
+		"suppname" : "LAOAG ASTRONIC AUTO SUPPLY",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 329,
+		"suppname" : "LAOAG MOTION HARDWARE & ELECTRICAL SUPPLY",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 62,
+		"suppname" : "LAOAG NEW INDIA DEPARTMENT STORE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 151,
+		"suppname" : "LAOAG NEWTON CONSTRUCTION SUPPLY",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 432,
+		"suppname" : "LAOAG SO LA HOTEL INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 265,
+		"suppname" : "LARA-GABRIEL CAFETERIA",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 351,
+		"suppname" : "LASERVIEW TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 331,
+		"suppname" : "LBC EXPRESS INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 572,
+		"suppname" : "LC - MOTION HARDWARE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 284,
+		"suppname" : "LC FLOWER SHOP",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 444,
+		"suppname" : "LEEPE OUTSOURCING CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 414,
+		"suppname" : "LEFORT MEDICAL TRADING CORP.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 642,
+		"suppname" : "LENOX HOTEL",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 552,
+		"suppname" : "LEONARD BRYAN ATUAN",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 277,
+		"suppname" : "LEVINS INTERNATIONAL CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 687,
+		"suppname" : "LEVINS INTERNATIONAL CORPORATION, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 557,
+		"suppname" : "LGM BIOMED ENTERPRISES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 592,
+		"suppname" : "LIEZEL S. ALBANO, ET. AL.,",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 576,
+		"suppname" : "Life Source  Enterprises",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 63,
+		"suppname" : "LIFELINE DIAGNOSTICS SUPPLIES, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 644,
+		"suppname" : "LIFETIME ADVANCE LASER TECHNOLOGY INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 449,
+		"suppname" : "LM PERSONALIZED SHIRT PRINTING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 722,
+		"suppname" : "LMB ELECTRONICS AND GENERAL MERCHANDISE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 708,
+		"suppname" : "LORENZ TEES PRINTS & SOUVENIRS",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 632,
+		"suppname" : "LOS ANGELES CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 614,
+		"suppname" : "Lovly Kristel Garcia",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 64,
+		"suppname" : "LPG HOUSEHOLD & INDUSTRIAL GASES CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 544,
+		"suppname" : "LUCKY LECHON",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 508,
+		"suppname" : "LUNARMED PHARMA TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 667,
+		"suppname" : "LUXENBERG MARKETING, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 246,
+		"suppname" : "LUZON QUICK-SERVE TRADING CORP.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 664,
+		"suppname" : "MA. CEASARIA R. CARAANG",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 539,
+		"suppname" : "MA. CHRISTINE G. DUMALO",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 472,
+		"suppname" : "MA. CHRISTINE G. DUMLAO",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 65,
+		"suppname" : "MACARE MEDICALS INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 227,
+		"suppname" : "MACROLOGIC DIVERSIFIED TECHNOLOGIES INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 66,
+		"suppname" : "MACROPHARMA CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 464,
+		"suppname" : "MADELYN Q. YAPO",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 172,
+		"suppname" : "MALABED-TOLEDO MEAT STAND",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 67,
+		"suppname" : "MANHATTAN MARKETING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 215,
+		"suppname" : "MANILA HEALTHTEK INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 610,
+		"suppname" : "Manolito L . Diculen et. al",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 183,
+		"suppname" : "MARCBURG PHILIPPINES INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 579,
+		"suppname" : "Maria Antonette Tagudin",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 696,
+		"suppname" : "MARIA CECILIA L. AGUINALDO",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 589,
+		"suppname" : "MARIA ELOISA SACRO, ET. AL.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 380,
+		"suppname" : "MARIANO MARCOS MEMORIAL HOSPITAL AND MEDICAL CENTER",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 451,
+		"suppname" : "MARIANO MARCOS STATE UNIVERSITY",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 68,
+		"suppname" : "MARIANO MARCOS STATE UNIVERSITY MARKETING CENTER",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 282,
+		"suppname" : "MARIKEN WEIDA CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 521,
+		"suppname" : "MARK JOSEPH FAGARANG",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 507,
+		"suppname" : "MARVIN P. BATTAD",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 565,
+		"suppname" : "MARYLYN TARIGA",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 228,
+		"suppname" : "MAXIMUM SOLUTIONS CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 625,
+		"suppname" : "MAY VILLE A. DUMLAO",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 200,
+		"suppname" : "MDRX ENTERPRISE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 525,
+		"suppname" : "MED-CONDIS SUPPLY PHILIPPINES, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 72,
+		"suppname" : "MED-LINE DISTRIBUTOR",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 243,
+		"suppname" : "MEDCORE ENTERPRISE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 429,
+		"suppname" : "MEDEQUAL SYSTEMS AND SUPPLIES, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 477,
+		"suppname" : "MEDEV MEDICAL DEVICES CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 372,
+		"suppname" : "MEDICA VENTURES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 69,
+		"suppname" : "MEDICAL CENTER TRADING CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 532,
+		"suppname" : "MEDICAL TEST SYSTEMS INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 663,
+		"suppname" : "MEDICAL TRENDS AND TECHNOLOGIES, INC. ",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 218,
+		"suppname" : "MEDICOTEK, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 154,
+		"suppname" : "MEDILIGHT INCORPORATED",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 70,
+		"suppname" : "MEDILINES DISTRIBUTORS INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 146,
+		"suppname" : "MEDINFINITY INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 71,
+		"suppname" : "MEDISAFE PHILIPPINES, INCORPORATED",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 402,
+		"suppname" : "MEDMASTER, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 441,
+		"suppname" : "MEI KRIEZL V. ULIT",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 484,
+		"suppname" : "MERCY LENN A. ARZADON",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 475,
+		"suppname" : "MERIJR ENTERPRISES INCORPORATED",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 364,
+		"suppname" : "MERIT STAINLESS STEEL, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 256,
+		"suppname" : "METPHIL MEDICAL COMPANY",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 73,
+		"suppname" : "METRO DRUG INC - INTERPHARMA MANAGEMENT CORPORATION-Joint Venture",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 74,
+		"suppname" : "METRO DRUG, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 75,
+		"suppname" : "METRO DRUG, INC.-INTERPHARMA HOLDINGS AND MANAGEMENT CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 548,
+		"suppname" : "METRO ILOCOS APPLIANCE INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 311,
+		"suppname" : "MGSD AUTO SUPPLY",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 76,
+		"suppname" : "MICEL CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 483,
+		"suppname" : "MICHAEL MARTIN BACCAY",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 320,
+		"suppname" : "MICRO-BIOLOGICAL LABORATORY, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 204,
+		"suppname" : "MICRODATA SYSTEMS AND MANAGEMENT, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 486,
+		"suppname" : "MISTERPOSITEEV",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 435,
+		"suppname" : "MOC OPTOMEDIC, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 550,
+		"suppname" : "MOLAVE TRADING INCORPORATED",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 216,
+		"suppname" : "MR. KOOL-IT AIRCON AND REF TRADING PARTS AND SERVICES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 77,
+		"suppname" : "MRL CYBERTEC CORP.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 742,
+		"suppname" : "MT. ZION SCIENTIFIC, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 427,
+		"suppname" : "MTC CONSTRUCTION SERVICES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 188,
+		"suppname" : "MTC OPTO-MEDIC, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 524,
+		"suppname" : "MTTS ENTERPRISES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 235,
+		"suppname" : "MULTI-ELECTRIC SYSTEMS, INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 581,
+		"suppname" : "MUNDLIE AND KELLIE GENERAL MERCHANDISE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 184,
+		"suppname" : "MUREX DIAGNOSTIC PRODUCTS SPECIALISTS",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 756,
+		"suppname" : "Music Match Lights & Sounds",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 302,
+		"suppname" : "MV RAM TRADING COMPANY, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 250,
+		"suppname" : "Myrna's Fish Stand",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 78,
+		"suppname" : "N. CORPUZ ENT. INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 79,
+		"suppname" : "N.B.P. TRADING AND SERVICES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 310,
+		"suppname" : "NAGASE PHLIPPINES CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 603,
+		"suppname" : "NAGBACALAN LOOMWEAVERS MULTI-PURPOSE COOPERATIVE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 80,
+		"suppname" : "NATIONAL FOOD AUTHORITY",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 81,
+		"suppname" : "NATIONAL PRINTING OFFICE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 584,
+		"suppname" : "NATIONAL TELECOMMUNICATIONS COMMISSION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 583,
+		"suppname" : "NATIONAL TELECOMMUNICATIONS COMMISSION-REGION 1",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 82,
+		"suppname" : "NATUS MEDICAL INCORPORATED",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 357,
+		"suppname" : "NCO GENERAL MERCHANDISE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 83,
+		"suppname" : "NEED INK SALES AND SERVICES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 509,
+		"suppname" : "NET Q COMPUTER SERVICES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 377,
+		"suppname" : "NEUROSPINE TECHNOLOGY TRADING CORP.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 279,
+		"suppname" : "NEUROSPINE TECHNOLOGY TRADING CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 542,
+		"suppname" : "NEW COLOSSAL TRUCK AND INDUSTRIAL PARTS CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 84,
+		"suppname" : "NEW INDIA DEPARTMENT STORE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 458,
+		"suppname" : "NEW JAVIER TRADING CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 165,
+		"suppname" : "NEW JOM AUTO PARTS AND GENERAL MERCHANDISE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 85,
+		"suppname" : "NEW LAOAG AUTO SUPPLY",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 717,
+		"suppname" : "NEW LAOAG BAZAR",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 86,
+		"suppname" : "NEW USD AUTO PARTS AND GENERAL MERCHANDISE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 189,
+		"suppname" : "NEW VERTEXT HANDY PHONES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 87,
+		"suppname" : "NEWBORN SCREENING CENTER-NORTHERN LUZON",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 422,
+		"suppname" : "NEXUS ELECTRICAL NETWORK SOLUTIONS CORP.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 300,
+		"suppname" : "NH ROVI'S GENERAL MERCHANDISE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 593,
+		"suppname" : "NIVLA SURGICAL SUPPLIES TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 388,
+		"suppname" : "NOEL V. CABANATAN",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 716,
+		"suppname" : "NORTHERN HERITAGE BUSINESS VENTURES INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 88,
+		"suppname" : "NORTHERN LUZON DRUG CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 217,
+		"suppname" : "NORTHPOINT COMPUTER TECHNOLOGY CENTER",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 89,
+		"suppname" : "NORTHQUAD TRADE EMPIRE INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 523,
+		"suppname" : "NORTHVIEW HOTEL",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 692,
+		"suppname" : "Novalein Diana B. Goyen",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 338,
+		"suppname" : "NOVEAULAB ASIA CORP.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 90,
+		"suppname" : "NOVELTY ENTERPRISES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 91,
+		"suppname" : "NPK MEDICAL TRADING INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 760,
+		"suppname" : "NRAM CONSUMER GOODS TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 413,
+		"suppname" : "NSGB BOOKS TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 152,
+		"suppname" : "NTR ELECTRICAL REFRGERATION & AIRCONDITION SERVICES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 598,
+		"suppname" : "NUOVOTEC INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 713,
+		"suppname" : "NUPON TECHNOLOGY PHILIPPINES CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 668,
+		"suppname" : "NUTRIDENSE FOOD MANUFACTURING CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 714,
+		"suppname" : "NUTRITION AND DIETETICS SERVICE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 316,
+		"suppname" : "OBF HEALTHCARE PLUS INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 92,
+		"suppname" : "OCTAGON COMPUTER SUPERSTORE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 212,
+		"suppname" : "ODIE'S ADVERTISING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 411,
+		"suppname" : "OFC I.T. SOLUTIONS & TECHNOLOGIES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 162,
+		"suppname" : "OFFICE WAREHOUSE, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 686,
+		"suppname" : "OJM AUTO PARTS & ACC TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 497,
+		"suppname" : "OLTEN INSTRUMENTS PHILS., CORP.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 383,
+		"suppname" : "OMNIBUS BIO-MEDICAL SYSTEMS, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 534,
+		"suppname" : "ONE THAT LOVE TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 93,
+		"suppname" : "ONICARE PHARMA TRADING & GENERAL MERCHANDISE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 355,
+		"suppname" : "Organization Profile\r\n \r\n \r\n \r\n \t\r\n \r\n \r\n \r\n \r\n \r\n \r\nBack\t\r\n \r\n \r\n \r\nFUJIFILM PHILIPPINES, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 724,
+		"suppname" : "Oro Oxygen Corporation",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 267,
+		"suppname" : "ORTEC PLUS MEDITRADE CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 292,
+		"suppname" : "ORTHO MEDICS 168 ENTERPRISES COMPANY",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 698,
+		"suppname" : "ORTHOFIX MEDICAL SUPPLY TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 333,
+		"suppname" : "OTSUKA (PHILIPPINES) PHARMACEUTICAL, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 94,
+		"suppname" : "OXFORD DISTRIBUTIONS, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 405,
+		"suppname" : "P AND P MEDICAL SUPPLIES AND GENERAL MERCHANDISE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 691,
+		"suppname" : "P. ARZADON MACHINE WORKS & AUTOMOTIVE REPAIR SHOP",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 597,
+		"suppname" : "P.L. JUAN CONSTRUCTION INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 750,
+		"suppname" : "P2RO Inc.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 276,
+		"suppname" : "PACIFIC SURGICAL INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 312,
+		"suppname" : "PALMER-ASIA INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 174,
+		"suppname" : "PAN APPLIANCE CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 160,
+		"suppname" : "PANAMED PHILIPPINES, INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 166,
+		"suppname" : "PANDAYAN BOOKSHOP, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 739,
+		"suppname" : "PANDAYAN SUPERSTORES, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 148,
+		"suppname" : "PARAMOUNT OPHTHALMICS CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 232,
+		"suppname" : "PARTNERS CHOICEMED INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 604,
+		"suppname" : "PARTY CHARACTERS ENTERPRISE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 173,
+		"suppname" : "PASCUA ELECTRONICS",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 95,
+		"suppname" : "PATIENT CARE CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 526,
+		"suppname" : "PATRICIA ZENAIDA F. CAJIGAL, MD",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 456,
+		"suppname" : "PAUL ARVIN INOVEJAS",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 457,
+		"suppname" : "PAUL ARVIN INOVEJAS, ET.AL.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 321,
+		"suppname" : "PBT TECHNOLOGY SOLUTIONS INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 394,
+		"suppname" : "PC CHAIN SUPERSTORE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 191,
+		"suppname" : "PENTACORE MEDICAL ENTERPRISES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 594,
+		"suppname" : "PERFECT RAIN WATER REFILLING CENTER",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 762,
+		"suppname" : "PERIDOT'S MEDICAL SUPPLIES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 261,
+		"suppname" : "PERKINELMER - ARDORLEX JVA",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 96,
+		"suppname" : "PERKINELMER INSTRUMENTS (PHILIPPINES) CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 343,
+		"suppname" : "PH GLOBAL JET EXPRESS,INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 97,
+		"suppname" : "PHARMA 518 INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 618,
+		"suppname" : "PHARMASAYO DRUGSTORE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 98,
+		"suppname" : "PHIL PHARMAWEALTH, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 720,
+		"suppname" : "PHILASER MARKETING CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 99,
+		"suppname" : "PHILCARE PHARMA INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 100,
+		"suppname" : "PHILCOPY CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 171,
+		"suppname" : "PHILFOAM FURNISHING INDUSTRIES INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 101,
+		"suppname" : "PHILIPPINE DUPLICATORS, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 370,
+		"suppname" : "PHILIPPINE HEALTH INSURANCE CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 358,
+		"suppname" : "PHILIPPINE HEART CENTER",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 342,
+		"suppname" : "PHILIPPINE HOSPITAL ASSOCIATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 263,
+		"suppname" : "PHILIPPINE INSTITUTE OF TRADITIONAL AND ALTERNATIVE HEALTH CARE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 519,
+		"suppname" : "PHILIPPINE NUCLEAR RESEARCH INSTITUTE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 426,
+		"suppname" : "PHILIPPINE OBSTERRICAL AND GYNECOLOGICAL SOCIETY",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 735,
+		"suppname" : "PHILIPPINE PHARMA PROCUREMENT INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 434,
+		"suppname" : "Philippine Society of Gen Surgeons Inc.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 353,
+		"suppname" : "PHILIPS PHILIPPINES, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 359,
+		"suppname" : "PHP MEDICAL DISTRIBUTORS INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 332,
+		"suppname" : "PHP MEDICAL DISTRIBUTORS, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 270,
+		"suppname" : "PIK A BUN SNACK HAUS",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 252,
+		"suppname" : "PLDT INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 254,
+		"suppname" : "Powerlift Elevator & Escalator Corp.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 367,
+		"suppname" : "PRECIOUS PRINCE ENTERPRISES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 102,
+		"suppname" : "PREVENTIVE MEDICINE FOUNDATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 214,
+		"suppname" : "PRIME ESSENTIALS MANUFACTURING AND TRADING COMPANY",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 286,
+		"suppname" : "PRIME MEDIX ENTERPRISES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 103,
+		"suppname" : "PRIMEFIL PSYCHOLOGICAL SERVICES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 681,
+		"suppname" : "PRINCESS GIBBY JOY LACAMBRA",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 104,
+		"suppname" : "PROCUREMENT SERVICE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 283,
+		"suppname" : "Professional Regulation Commission",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 412,
+		"suppname" : "PROGRESSIVE MEDICAL CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 749,
+		"suppname" : "PROKORA NETWORK SOLUTIONS INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 673,
+		"suppname" : "PROLIFE HEALTHCARE SYSTEM CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 258,
+		"suppname" : "PRONET SYSTEMS INTEGRATED NETWORK SOLUTION INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 224,
+		"suppname" : "PROWEALTH INDUSTRIES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 366,
+		"suppname" : "PROXIMATECH SOLUTIONS COMPANY",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 220,
+		"suppname" : "PS-DBM",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 105,
+		"suppname" : "PSY SYSTEMS AND INNOVATION, OPC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 299,
+		"suppname" : "PSYCHOLOGICAL RESOURCES CENTER INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 574,
+		"suppname" : "PUNGTILAN CATERING SERVICES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 106,
+		"suppname" : "PUREGOLD PRICE CLUB INC",
+		"status" : "I"
+	},
+	{
+		"supplierID" : 326,
+		"suppname" : "PUREGOLD PRICE CLUB INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 368,
+		"suppname" : "QUALIFIRST HEALTH, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 674,
+		"suppname" : "QUALITY MEDICAL TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 689,
+		"suppname" : "QUBIX INTERNET CAFE & PRINTING SERVICES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 273,
+		"suppname" : "QUERIDO S PLASTICWARES & GEN. MERCHANDISE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 195,
+		"suppname" : "QUINTA MEDICA HEALTHCARE, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 682,
+		"suppname" : "R&J ELECTRONIC EQUIPMENT TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 259,
+		"suppname" : "R.R. ENCABO CONTRUCTORS INCORPORATED/BUSILAC BUILDERS, INCORPORATED JOINT VENTURE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 384,
+		"suppname" : "RACHEL JALOG",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 580,
+		"suppname" : "RADIO-ONCO SUPPLIER INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 490,
+		"suppname" : "RAE'S MEATSHOP",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 269,
+		"suppname" : "RAIN-ASTRID BUILDERS CORP.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 107,
+		"suppname" : "RAINPHIL INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 187,
+		"suppname" : "RAN GASOLINE STATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 679,
+		"suppname" : "RAY VINCENT F. FORMOSO, ET. AL.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 415,
+		"suppname" : "RAYNHAM MEDICAL EQUIPMENTS TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 108,
+		"suppname" : "RBC-MDC CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 498,
+		"suppname" : "RBGM MEDICAL EXPRESS SALES INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 109,
+		"suppname" : "RBGM MEDICAL EXPRESS SALES, INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 704,
+		"suppname" : "RBMB MEDICAL SUPPLIES ENTERPISES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 336,
+		"suppname" : "RC PRIME ENTERPRISES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 505,
+		"suppname" : "RCJ OFFICE SUPPLIES & EQUIPMENT TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 680,
+		"suppname" : "REA ANGELI TUNAC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 688,
+		"suppname" : "REM CITIMED PHARMA DISTRIBUTOR",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 558,
+		"suppname" : "REMEDIOS MANGOBA",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 142,
+		"suppname" : "RESPICARE ENTERPISES, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 726,
+		"suppname" : "REVVITY PHILIPPINES, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 110,
+		"suppname" : "RG MEDITRON INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 251,
+		"suppname" : "Rica's Fish Stand",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 376,
+		"suppname" : "RICH-CARDIO MEDICAL SUPPLIES INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 541,
+		"suppname" : "RICHMOND JEFVEEMAR Q. RUMBAOA ET. AL.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 379,
+		"suppname" : "RITCHELLE O. LORENZO",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 503,
+		"suppname" : "RITCHELLE O. LORENZO, ET. AL.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 185,
+		"suppname" : "RITEGROUP, INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 111,
+		"suppname" : "RKT MARKETING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 112,
+		"suppname" : "RMG HOSPITAL SUPPLY, INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 309,
+		"suppname" : "ROBENJ BIOMEDICAL EQUIPMENT SERVICES AND TECHNOLOGY CORP.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 317,
+		"suppname" : "ROBINSONS APPLIANCES CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 113,
+		"suppname" : "ROBINSONS HANDYMAN, INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 669,
+		"suppname" : "ROBINSONS LAND CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 201,
+		"suppname" : "ROBINSONS SUPERMARKET CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 337,
+		"suppname" : "ROCHE PHILIPPINES INC. ",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 549,
+		"suppname" : "ROMEL RASOS, MD",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 391,
+		"suppname" : "ROMULO VENUS JR.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 382,
+		"suppname" : "RONALD A. BENSAN, ET. AL.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 440,
+		"suppname" : "RONALYN R. TAGUDIN-TABUR",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 566,
+		"suppname" : "ROWENA DELA CRUZ, ET. AL.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 363,
+		"suppname" : "ROYCE MOTOR CENTER, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 322,
+		"suppname" : "RPD CHEM ENTERPRISES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 510,
+		"suppname" : "RUTAQUIO MEDICAL SUPPLIES TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 209,
+		"suppname" : "RV OFFICE SUPPLIES AND EQUIPMENT TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 462,
+		"suppname" : "SAFETY CENTER COMPANY, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 439,
+		"suppname" : "SAHAR INTERNATIONAL TRADING INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 114,
+		"suppname" : "SALVATERA MEAT STAND",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 536,
+		"suppname" : "SAM REFRIGERATION AND AIR-CONDITIONING REPAIR SHOP",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 729,
+		"suppname" : "SANATEC MARKETING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 115,
+		"suppname" : "SANDOVAL DISTRIBUTORS, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 116,
+		"suppname" : "SANFORD MARKETING CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 538,
+		"suppname" : "SANFORD MARKETING CORPORATION ",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 117,
+		"suppname" : "SAVIOUR MEDEVICES, INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 118,
+		"suppname" : "SCIENTIFIC BIOTECH SPECIALTIES INCORPORATED",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 274,
+		"suppname" : "SDB EVERMART",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 424,
+		"suppname" : "SELGAE PHARMA AND MEDICAL SUPPLIES TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 119,
+		"suppname" : "SENSORMEDICS ENTERPRISES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 120,
+		"suppname" : "SERVICA MEDICA ENTERPRISES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 278,
+		"suppname" : "SERVO-TREAT PHILIPPINES INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 619,
+		"suppname" : "SHIELD DRUGSTORE AND MEDIMARKETING CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 635,
+		"suppname" : "SHIERA MAGNE D. MANUEL",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 240,
+		"suppname" : "SIEMENS HEALTHCARE, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 281,
+		"suppname" : "SIGMATECH INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 121,
+		"suppname" : "SILICON VALLEY COMPUTER GROUP PHILS. INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 582,
+		"suppname" : "SJRAHON DESIGN AND BUILDERS",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 237,
+		"suppname" : "SMART COMMUNICATIONS, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 425,
+		"suppname" : "SOCOTEC CERTIFICATION PHILIPPINES, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 122,
+		"suppname" : "SONCHEL PHARMA DISTRIBUTORS",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 423,
+		"suppname" : "SOTERA PHARMA INCORPORATED",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 362,
+		"suppname" : "SOUTHSIDE BIOMEDICAL SALES AND SERVICES CO. LTD.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 721,
+		"suppname" : "SPOCARE PROSTHETICS AND ORTHOTICS SERVICES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 482,
+		"suppname" : "ST. PHILOMENA MERCHANDISING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 147,
+		"suppname" : "ST. RUIZ AGRO FARM SUPPLY & GENERAL MERCHANDISE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 123,
+		"suppname" : "STA. ANA ENTERPRISES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 124,
+		"suppname" : "STERILAB CO.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 125,
+		"suppname" : "STLM CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 553,
+		"suppname" : "STROKE SOCIETY OF THE PHILIPPINES, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 448,
+		"suppname" : "SUPER SHOPPING MARKET, INC. - CAINTA",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 646,
+		"suppname" : "SURGICO PHILS., INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 629,
+		"suppname" : "SVT MEDITECH CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 126,
+		"suppname" : "SWAB GENERAL MERCHANDISE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 761,
+		"suppname" : "Sy Medical Trading Corporation",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 577,
+		"suppname" : "TECHNOMED INTERNATIONAL INCORPORATED",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 516,
+		"suppname" : "TEDDY VILLANUEVA",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 590,
+		"suppname" : "TENNESSEE R. HUYABAN",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 198,
+		"suppname" : "TG SCIENTIFIC EQUIPMENT CORP.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 649,
+		"suppname" : "THADDEUS C. AVILES, ET. AL",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 127,
+		"suppname" : "THE NEW LAOAG AUTO SUPPLY",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 128,
+		"suppname" : "THE PHARMEDIC CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 350,
+		"suppname" : "The Philippine Board of Ophthalmology, Inc",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 262,
+		"suppname" : "THE PROCUREMENT SERVICE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 710,
+		"suppname" : "THE PUREFOODS - HORMEL COMPANY, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 397,
+		"suppname" : "THE UP MEDICAL FOUNDATION,INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 683,
+		"suppname" : "THRICIA BLESS S. VENTURA",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 129,
+		"suppname" : "TIMMY PHARMA AND MEDICAL TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 513,
+		"suppname" : "TITAN TRADING CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 288,
+		"suppname" : "TIU MJ TEK DISTRIBUTOR",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 285,
+		"suppname" : "TOP OPHTHALMIC PRODUCTS & SERVICES CORP.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 656,
+		"suppname" : "TOTAL ORTHO MEDICAL SUPPLIES SOLUTION, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 155,
+		"suppname" : "TOWER MEDICAL DISTRIBUTING CO., INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 156,
+		"suppname" : "TOWER MEDICAL DISTRIBUTING CO., INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 130,
+		"suppname" : "TOWER NJ PRINTNOOK",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 226,
+		"suppname" : "TRANSWORLD TIRE AND AUTO SUPPLY CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 744,
+		"suppname" : "TREASURE-TROVE RESORT",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 471,
+		"suppname" : "TREVOR INTERNATIONAL TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 131,
+		"suppname" : "TRI-P FUEL AND OIL DISTRIBUTOR",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 132,
+		"suppname" : "TRIPLE CROWN CONSTRUCTION SUPPLY AND GENERAL MERCHANDISE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 719,
+		"suppname" : "TROIKAA PHARMACEUTICALS PHILIPPINES, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 753,
+		"suppname" : "TWOSTAR PHARMACEUTICAL TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 634,
+		"suppname" : "U-BIX CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 242,
+		"suppname" : "UGALE CONSTRUCTION, SUPPLY AND SERVICES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 703,
+		"suppname" : "ULY TECH TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 731,
+		"suppname" : "UNDECIM MEDICAL SUPPLIES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 175,
+		"suppname" : "UNILAB INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 133,
+		"suppname" : "UNITED LABORATORIES, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 134,
+		"suppname" : "UNIVERSAL COMMERCIAL CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 621,
+		"suppname" : "UP-MANILA NSRC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 586,
+		"suppname" : "UP-TOWN INDUSTRIAL SALES, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 398,
+		"suppname" : "UPM TRUST AND LIABILITY FUND",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 192,
+		"suppname" : "UPM-INSTITUTE OF HUMAN GENETICS",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 135,
+		"suppname" : "URBAN PROGRESS DISTRIBUTIONS CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 245,
+		"suppname" : "VALLERY ENTERPRISES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 512,
+		"suppname" : "VALOR HEALTH PHARMA, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 136,
+		"suppname" : "VANGUARD ASSESSMENTS AND BEHAVIORAL DYNAMICS INTERNATIONAL CORP.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 289,
+		"suppname" : "VARIANCE TRADING CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 748,
+		"suppname" : "Various Supplier",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 144,
+		"suppname" : "VAXSHOT PHARMACEUTICAL PRODUCTS TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 137,
+		"suppname" : "VB-4 MEDICAL SUPPLIES & EQUIPMENT TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 315,
+		"suppname" : "VCD Construction",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 540,
+		"suppname" : "VENIZ HOTEL CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 393,
+		"suppname" : "VISTA PHARMA, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 563,
+		"suppname" : "Vitaline Healthcare, Inc.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 138,
+		"suppname" : "VIZCARRA PHARMACEUTICAL INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 158,
+		"suppname" : "VIZCARRA PHARMACEUTICAL, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 349,
+		"suppname" : "VR ELECTRICAL TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 225,
+		"suppname" : "VVH CONSTRUCTION CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 758,
+		"suppname" : "WATER WAY MARKETING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 139,
+		"suppname" : "WELLNESS PRO INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 636,
+		"suppname" : "WESLEY DIGAP",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 620,
+		"suppname" : "WFM ENTERPRISES CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 249,
+		"suppname" : "WHIP N CREAM BAKESHOP",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 492,
+		"suppname" : "WIDUS HOTEL AND CASINO",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 438,
+		"suppname" : "WILCON DEPOT INC",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 150,
+		"suppname" : "WILCON DEPOT INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 723,
+		"suppname" : "WINBACK MEDICAL SUPPLIES",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 595,
+		"suppname" : "WIRLEY DAVIONDYLL G. VALDEZ",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 677,
+		"suppname" : "WISENHEIMER TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 186,
+		"suppname" : "ZAFIRE DISTRIBUTORS, INC.",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 694,
+		"suppname" : "ZIRCON PHARMA",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 222,
+		"suppname" : "ZJC FIREFIGHTING EQUIPMENT TRADING",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 140,
+		"suppname" : "ZUELLIG PHARMA CORPORATION",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 255,
+		"suppname" : "ZUELLIG PHARMA CORPORATION - INTERPHIL LABORATORIES, INC. JOINT VENTURE",
+		"status" : "A"
+	},
+	{
+		"supplierID" : 141,
+		"suppname" : "ZYRE PHARMACEUTICALS CORPORATION",
+		"status" : "A"
+	}
+]
