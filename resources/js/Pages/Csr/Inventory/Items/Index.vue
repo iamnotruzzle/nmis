@@ -230,15 +230,15 @@
                     />
                   </div>
                 </template>
-                <!-- <Column
-                  field="acquisition_price"
-                  header="ACQUISITION PRICE"
-                  style="width: 20%"
-                >
-                </Column> -->
                 <Column
                   field="selling_price"
                   header="SELLING PRICE"
+                  style="width: 20%"
+                >
+                </Column>
+                <Column
+                  field="entry_by"
+                  header="ENTRY BY"
                   style="width: 20%"
                 >
                 </Column>
@@ -924,8 +924,8 @@ export default {
             prices: [
               {
                 price_id: e.price_id,
-                // acquisition_price: e.acquisition_price,
                 selling_price: e.selling_price,
+                entry_by: e.entry_by_firstname == null ? null : e.entry_by_firstname + ' ' + e.entry_by_lastname,
                 created_at: e.price_created_at,
               },
             ],
