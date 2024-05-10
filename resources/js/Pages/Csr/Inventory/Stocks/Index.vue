@@ -1810,7 +1810,10 @@ export default {
       );
     },
     editConvertedItem(item) {
-      //   console.log(item);
+      console.log(item);
+
+      let itemCl2comb = this.extractCl2comb(item.cl2comb_after);
+      this.updateConvertedIemListBasedOnCl1comb(itemCl2comb);
 
       this.editConvertedItemIsUpdate = true;
       this.convertDialog = true;
