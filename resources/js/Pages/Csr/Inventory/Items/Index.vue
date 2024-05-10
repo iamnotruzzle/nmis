@@ -840,7 +840,7 @@ export default {
   },
   // created will be initialize before mounted
   mounted() {
-    console.log(this.items);
+    // console.log(this.items);
     this.storeCl1combsInContainer();
     this.storeItemInContainer();
     this.storeUnitsInContainer();
@@ -934,8 +934,8 @@ export default {
           // Item already exists, insert the prices into the existing item's prices array
           this.itemsList[existingItemIndex].prices.push({
             price_id: e.price_id,
-            // acquisition_price: e.acquisition_price,
             selling_price: e.selling_price,
+            entry_by: e.entry_by_firstname == null ? null : e.entry_by_firstname + ' ' + e.entry_by_lastname,
             created_at: e.price_created_at,
           });
         }
