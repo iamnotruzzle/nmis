@@ -1486,7 +1486,7 @@ export default {
     this.storeStocksInContainer();
     this.storeTotalStocksInContainer();
     this.storeSuppliersInContainer();
-    this.storeConvertedItemsInContainer();
+    // this.storeConvertedItemsInContainer();
     this.storeTotalConvertedItemsInContainer();
     // this.generateTempRisNo();
 
@@ -1701,16 +1701,16 @@ export default {
         });
       });
     },
-    storeConvertedItemsInContainer() {
-      this.convertedItems.forEach((e) => {
-        this.convertedItemsList.push({
-          cl1comb: e.cl1comb,
-          cl2comb: e.cl2comb,
-          cl2desc: e.cl2desc,
-          uomcode: e.uomcode,
-        });
-      });
-    },
+    // storeConvertedItemsInContainer() {
+    //   this.convertedItems.forEach((e) => {
+    //     this.convertedItemsList.push({
+    //       cl1comb: e.cl1comb,
+    //       cl2comb: e.cl2comb,
+    //       cl2desc: e.cl2desc,
+    //       uomcode: e.uomcode,
+    //     });
+    //   });
+    // },
     storeFundSourceInContainer() {
       this.typeOfCharge.forEach((e) => {
         this.fundSourceList.push({
@@ -1766,7 +1766,7 @@ export default {
           this.storeStocksInContainer();
           this.storeTotalStocksInContainer();
           this.storeSuppliersInContainer();
-          this.storeConvertedItemsInContainer();
+          //   this.storeConvertedItemsInContainer();
           this.storeTotalConvertedItemsInContainer();
         },
       });
