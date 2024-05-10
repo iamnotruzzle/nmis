@@ -123,7 +123,7 @@
             />
           </template>
         </Column>
-        <Column
+        <!-- <Column
           header="ACTION"
           style="width: 30%"
         >
@@ -137,15 +137,15 @@
               @click="editSubCategory(slotProps.data)"
             />
 
-            <!-- <Button
+            <Button
               icon="pi pi-trash"
               rounded
               text
               severity="danger"
               @click="confirmDeleteCategory(slotProps.data)"
-            /> -->
+            />
           </template>
-        </Column>
+        </Column> -->
       </DataTable>
 
       <Dialog
