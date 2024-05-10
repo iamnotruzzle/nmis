@@ -82,7 +82,7 @@ class CsrStocksControllers extends Controller
         );
 
         $convertedItems = DB::select(
-            "SELECT cl2comb, cl2desc, uomcode FROM hclass2 WHERE cl2desc LIKE '(piece)%';"
+            "SELECT cl1comb, cl2comb, cl2desc, uomcode FROM hclass2 ORDER BY cl2desc ASC;"
         );
         // dd($convertedItems);
 

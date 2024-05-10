@@ -954,7 +954,7 @@
       <!-- convert dialog -->
       <Dialog
         v-model:visible="convertDialog"
-        :style="{ width: '550px' }"
+        :style="{ width: '650px' }"
         :modal="true"
         class="p-fluid"
         @hide="clickOutsideDialog"
@@ -1704,6 +1704,7 @@ export default {
     storeConvertedItemsInContainer() {
       this.convertedItems.forEach((e) => {
         this.convertedItemsList.push({
+          cl1comb: e.cl1comb,
           cl2comb: e.cl2comb,
           cl2desc: e.cl2desc,
           uomcode: e.uomcode,
@@ -1878,8 +1879,43 @@ export default {
         }
       }
     },
+    extractCl2comb(str) {
+      //   const firstDashIndex = str.indexOf('-');
+      //   const secondDashIndex = str.indexOf('-', firstDashIndex + 1);
+      //   return str.substring(0, secondDashIndex + 1);
+
+      // Find the index of the first occurrence of '-'
+      const firstDashIndex = str.indexOf('-');
+
+      // Find the index of the second occurrence of '-' starting from the position after the first occurrence
+      const secondDashIndex = str.indexOf('-', firstDashIndex + 1);
+
+      // Extract the substring from the start of the string until the position of the second '-'
+      return str.substring(0, secondDashIndex);
+    },
+    updateConvertedIemListBasedOnCl1comb(itemCl2comb) {
+      // reset list
+      this.convertedItemsList = [];
+
+      // Modify the forEach loop to apply the extraction and push items based on the extracted result
+      this.convertedItems.forEach((e) => {
+        // Conditionally push the item into the new list based on the extracted result
+        if (itemCl2comb === e.cl1comb) {
+          // Adjust the condition as needed
+          this.convertedItemsList.push({
+            cl1comb: e.cl1comb,
+            cl2comb: e.cl2comb,
+            cl2desc: e.cl2desc,
+            uomcode: e.uomcode,
+          });
+        }
+      });
+    },
     convertItem(item) {
       //   console.log(item);
+
+      let itemCl2comb = this.extractCl2comb(item.cl2comb);
+      this.updateConvertedIemListBasedOnCl1comb(itemCl2comb);
 
       this.convertDialog = true;
       this.formConvert.cl2comb_before = item.cl2comb;
