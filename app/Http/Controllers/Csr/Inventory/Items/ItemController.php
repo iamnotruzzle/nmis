@@ -98,47 +98,8 @@ class ItemController extends Controller
             ->whereRaw("LOWER(item.cl2stat) LIKE ?", ["%" . strtolower($status) . "%"])
             ->whereRaw("LOWER(main_category.categoryname) LIKE ?", ["%" . strtolower($maincat) . "%"])
             ->orderBy('item.cl2desc', 'ASC')
-            ->paginate(20);
+            ->paginate(10);
 
-
-
-        // dd($items);
-
-        // $items = DB::table('hclass2 as item')
-        //     ->join('huom as unit', 'item.uomcode', '=', 'unit.uomcode')
-        //     ->join('hclass1 as category', 'item.cl1comb', '=', 'category.cl1comb')
-        //     ->leftJoin('csrw_item_prices as price', 'item.cl2comb', '=', 'price.cl2comb')
-        //     ->leftJoin('csrw_csr_stocks as csr_stock', 'csr_stock.cl2comb', '=', 'item.cl2comb')
-        //     ->join('csrw_pims_categories as main_category', 'item.catID', '=', 'main_category.catID')
-        //     ->leftJoin(DB::raw('(SELECT TOP 1 r.cl2comb, r.normal_stock as normal_stock, r.alert_stock, r.critical_stock
-        //                 FROM csrw_item_reorder_level as r
-        //                 ORDER BY r.created_at DESC) as reorder_level'), 'item.cl2comb', '=', 'reorder_level.cl2comb')
-        //     ->select(
-        //         'item.cl2comb',
-        //         'item.cl2code',
-        //         'main_category.categoryname as main_category',
-        //         'category.cl1comb as cl1comb',
-        //         'category.cl1desc as sub_category',
-        //         'item.catID',
-        //         'item.cl2desc as item',
-        //         'csr_stock.id as price_id',
-        //         'csr_stock.acquisition_price',
-        //         'csr_stock.mark_up',
-        //         'csr_stock.selling_price',
-        //         'unit.uomcode',
-        //         'unit.uomdesc as unit',
-        //         'reorder_level.normal_stock as normal_stock',
-        //         'reorder_level.alert_stock',
-        //         'reorder_level.critical_stock',
-        //         'item.cl2stat'
-        //     )
-        //     ->whereNotNull('item.catid')
-        //     ->whereRaw("LOWER(item.cl2desc) LIKE ?", ["%" . strtolower($search) . "%"])
-        //     ->whereRaw("LOWER(item.cl2stat) LIKE ?", ["%" . strtolower($status) . "%"])
-        //     ->whereRaw("LOWER(main_category.categoryname) LIKE ?", ["%" . strtolower($maincat) . "%"])
-        //     ->orderBy('item.cl2desc', 'ASC')
-        //     ->paginate(20);
-        // dd($items);
 
         return Inertia::render('Csr/Inventory/Items/Index', [
             'cl1combs' => $cl1combs,
