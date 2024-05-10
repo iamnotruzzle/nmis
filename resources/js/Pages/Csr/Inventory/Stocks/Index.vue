@@ -1854,7 +1854,7 @@ export default {
             // conditions make it so that items are not entered twice
             if (sanitizedData.length != this.deliveryDetails.length) {
               this.deliveryDetails.push({
-                risid: e.risid,
+                risno: e.risno,
                 cl2comb: e.cl2comb,
                 cl2desc: e.cl2desc,
                 supplier: null,
@@ -1972,7 +1972,7 @@ export default {
     },
     onRowClick(e) {
       //   console.log(e.data);
-      this.formAdditional.ris_no = e.data.risid;
+      this.formAdditional.ris_no = e.data.risno;
       this.formAdditional.supplierID = e.data.supplierId;
       this.formAdditional.suppname = e.data.supplierName;
       this.formAdditional.fsId = e.data.fsid;
@@ -1990,7 +1990,7 @@ export default {
     updateNewDetailsToDeliveryDets() {
       this.deliveryDetails.forEach((e) => {
         if (
-          this.formAdditional.ris_no == e.risid &&
+          this.formAdditional.ris_no == e.risno &&
           this.formAdditional.cl2comb == e.cl2comb &&
           this.formAdditional.quantity == e.releaseqty
         ) {

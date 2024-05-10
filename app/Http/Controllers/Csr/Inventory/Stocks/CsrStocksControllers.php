@@ -117,7 +117,7 @@ class CsrStocksControllers extends Controller
             $result = array();
 
             $pims = DB::connection('pims')->select(
-                "SELECT ris_rel.risid,
+                "SELECT ris_rel.risid, ris.risno,
                 ris_rel.itemid, item.description,
                 ris_rel.fsid as fs_id, fs.fsName,
                 ris_rel.releaseqty, ris_rel.unitprice
@@ -130,7 +130,7 @@ class CsrStocksControllers extends Controller
                     ORDER BY item.description ASC;",
                 [$request->searchRis]
             );
-            // ddd($pims);
+            // dd($pims);
 
             $items = DB::select(
                 "SELECT * FROM hclass2
@@ -160,7 +160,7 @@ class CsrStocksControllers extends Controller
                     foreach ($units as $unit) {
                         if ($unit->uomcode == $matchedItem->uomcode) {
                             $result[] = [
-                                'risid' => $pim->risid,
+                                'risno' => $pim->risno,
                                 'cl2comb' => $matchedItem->cl2comb,
                                 'cl2desc' => $matchedItem->cl2desc,
                                 'fundSourceId' => $pim->fs_id,
@@ -187,7 +187,7 @@ class CsrStocksControllers extends Controller
             foreach ($deliveryDetails as $r) {
                 // dd($r['supplier']['supplierID']);
                 $stock = CsrStocks::create([
-                    'ris_no' => $r['risid'],
+                    'ris_no' => $r['risno'],
                     'cl2comb' => $r['cl2comb'],
                     'uomcode' => $r['uomcode'],
                     'supplierID' => $r['supplier']['supplierID'],
@@ -202,7 +202,7 @@ class CsrStocksControllers extends Controller
 
                 $stockLog = CsrStocksLogs::create([
                     'stock_id' => $stock->id,
-                    'ris_no' => $r['risid'],
+                    'ris_no' => $r['risno'],
                     'cl2comb' => $r['cl2comb'],
                     'uomcode' => $r['uomcode'],
                     'supplierID' => $r['supplier']['supplierID'],
