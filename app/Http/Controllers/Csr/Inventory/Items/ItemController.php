@@ -36,32 +36,6 @@ class ItemController extends Controller
 
         $pimsCategory = PimsCategory::orderBy('categoryname', 'ASC')->get(['id', 'catID', 'categoryname']);
 
-        // $items = DB::select(
-        //     "SELECT item.cl2comb, item.cl2code, main_category.categoryname as main_category,  category.cl1comb as cl1comb,
-        //         category.cl1desc as sub_category, item.catID, item.cl2desc as item,
-        //         price.id as price_id, price.selling_price as price, price.entry_by, employee.firstname as entry_by_firstname, employee.middlename as entry_by_middlename, employee.lastname as entry_by_lastname, price.created_at as price_created_at,
-        //         unit.uomcode, unit.uomdesc as unit,
-        //         reoder_level.normal_stock as normal_stock, reoder_level.alert_stock, reoder_level.critical_stock,
-        //         item.cl2stat
-        //     FROM hclass2 item
-        //     JOIN huom as unit ON item.uomcode = unit.uomcode
-        //     JOIN hclass1 as category ON item.cl1comb = category.cl1comb
-        //     LEFT JOIN csrw_item_prices as price  ON item.cl2comb = price.cl2comb
-        //     JOIN csrw_pims_categories as main_category ON item.catID = main_category.catID
-        //     LEFT JOIN hpersonal as employee ON price.entry_by = employee.employeeid
-        //     LEFT JOIN (
-        //         SELECT TOP 1 r.cl2comb, r.normal_stock as normal_stock, r.alert_stock, r.critical_stock
-        //         FROM csrw_item_reorder_level as r
-        //         WHERE r.location = 'CSR'
-        //         OR r.location = 'ADMIN'
-        //         ORDER BY r.created_at DESC
-        //     ) as reoder_level ON item.cl2comb = reoder_level.cl2comb
-        //     WHERE item.cl2comb LIKE '%1000-%'
-        //     --AND item.cl2desc LIKE '%test test test test test%'
-        //     ORDER BY item.cl2desc ASC;"
-        // );
-
-
         $items = DB::table('hclass2 as item')
             ->select(
                 'item.cl2comb',
