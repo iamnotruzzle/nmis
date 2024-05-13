@@ -50,7 +50,6 @@
           field="mainCategory"
           header="MAIN CATEGORY"
           :showFilterMenu="false"
-          style="width: 10%"
         >
           <template #body="{ data }">
             {{ data.mainCategory }}
@@ -70,7 +69,6 @@
           field="subCategory"
           header="SUB-CATEGORY"
           :showFilterMenu="false"
-          style="width: 20%"
         >
           <template #body="{ data }">
             {{ data.subCategory }}
@@ -85,10 +83,7 @@
             {{ data.cl2desc }}
           </template>
         </Column>
-        <Column
-          header="UNIT"
-          style="width: 5%"
-        >
+        <Column header="UNIT">
           <template #body="{ data }">
             {{ data.uomdesc }}
           </template>
@@ -96,8 +91,8 @@
         <Column
           field="cl2stat"
           header="STATUS"
-          style="width: 5%"
           :showFilterMenu="false"
+          style="width: 5%"
         >
           <template #body="{ data }">
             <div class="text-center">
