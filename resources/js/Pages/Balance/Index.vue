@@ -8,7 +8,7 @@
     >
       <Toast />
 
-      <div class="mb-2">
+      <!-- <div class="mb-2">
         <Link
           href="stockbal"
           class="text-2xl border-bottom-2 mr-2 font-semibold"
@@ -22,7 +22,7 @@
         >
           TANKS
         </Link>
-      </div>
+      </div> -->
 
       <DataTable
         class="p-datatable-sm"
