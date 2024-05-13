@@ -3,7 +3,7 @@
     <Head title="NMIS - RIS" />
 
     <div>
-      <div>
+      <!-- <div>
         <Link
           href="issueitems"
           class="button-link-current bar"
@@ -19,7 +19,7 @@
         </Link>
       </div>
 
-      <div style="background-color: #818cf8; width: 100%; height: 4px"></div>
+      <div style="background-color: #818cf8; width: 100%; height: 4px"></div> -->
 
       <div
         class="card"
