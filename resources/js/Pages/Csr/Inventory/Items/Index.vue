@@ -66,15 +66,6 @@
             />
           </template>
         </Column>
-        <!-- <Column
-          field="cl1comb"
-          header="SUB-CATEGORY ID"
-          style="width: 10%"
-        >
-          <template #body="{ data }">
-            {{ data.cl1comb }}
-          </template>
-        </Column> -->
         <Column
           field="subCategory"
           header="SUB-CATEGORY"
@@ -122,15 +113,14 @@
               />
             </div>
           </template>
-          <template #filter="">
+          <template #filter="{ filterModel, filterCallback }">
             <Dropdown
-              v-model="status"
+              v-model="filterModel.value"
               :options="statusFilter"
-              :showClear="true"
+              @change="filterCallback()"
               optionLabel="name"
               optionValue="code"
               placeholder="NO FILTER"
-              class="w-full"
             >
               <template #option="slotProps">
                 <Tag
@@ -750,7 +740,7 @@ export default {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
         // cl1comb: { value: null, matchMode: FilterMatchMode.CONTAINS },
         // cl2desc: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        // cl2stat: { value: null, matchMode: FilterMatchMode.EQUALS },
+        cl2stat: { value: null, matchMode: FilterMatchMode.EQUALS },
         mainCategory: { value: null, matchMode: FilterMatchMode.EQUALS },
       },
       cl2stats: [

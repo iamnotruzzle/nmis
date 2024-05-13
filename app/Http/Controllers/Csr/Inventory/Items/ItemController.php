@@ -76,9 +76,8 @@ class ItemController extends Controller
             JOIN
                 csrw_pims_categories AS main_category ON item.catID = main_category.catID
             WHERE
-                item.cl2comb LIKE '%1000-%';"
+                item.cl2comb LIKE '%1000-%'"
         );
-
 
         // query for item prices
         // query for csrw_item_reorder_level
