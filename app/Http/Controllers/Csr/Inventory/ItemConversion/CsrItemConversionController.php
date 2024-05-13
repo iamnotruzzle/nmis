@@ -29,44 +29,80 @@ class CsrItemConversionController extends Controller
                 'converted' => 'y',
             ]);
 
-        $updated = CsrStocksLogs::where('stock_id', $request->csr_stock_id)
+        $updatedLogs = CsrStocksLogs::where('stock_id', $request->csr_stock_id)
             ->update([
                 'converted' => 'y',
             ]);
 
-        $convertedItem = CsrItemConversion::create([
-            'csr_stock_id' => $request->csr_stock_id,
-            'ris_no' => $request->ris_no,
-            'chrgcode' => $request->chrgcode,
-            'cl2comb_before' => $request->cl2comb_before,
-            'quantity_before' => $request->quantity_before,
-            'cl2comb_after' => $request->cl2comb_after,
-            'quantity_after' => $request->quantity_after,
-            'supplierID' => $request->supplierID,
-            'manufactured_date' => $request->manufactured_date,
-            'delivered_date' => $request->delivered_date,
-            'expiration_date' => $request->expiration_date,
-            'converted_by' => $converted_by,
-        ]);
+        if ($request->cl2comb_after == null) {
+            $convertedItem = CsrItemConversion::create([
+                'csr_stock_id' => $request->csr_stock_id,
+                'ris_no' => $request->ris_no,
+                'chrgcode' => $request->chrgcode,
+                'cl2comb_before' => $request->cl2comb_before,
+                'quantity_before' => $request->quantity_before,
+                'cl2comb_after' => $request->cl2comb_before,
+                'quantity_after' => $request->quantity_after,
+                'supplierID' => $request->supplierID,
+                'manufactured_date' => $request->manufactured_date,
+                'delivered_date' => $request->delivered_date,
+                'expiration_date' => $request->expiration_date,
+                'converted_by' => $converted_by,
+            ]);
 
-        $convertedItemLog = CsrItemConversionLogs::create([
-            'item_conversion_id' => $convertedItem->id,
-            'csr_stock_id' => $request->csr_stock_id,
-            'ris_no' => $request->ris_no,
-            'chrgcode' => $request->chrgcode,
-            'cl2comb_before' => $request->cl2comb_before,
-            'quantity_before' => $request->quantity_before,
-            'cl2comb_after' => $request->cl2comb_after,
-            'prev_qty' => 0,
-            'new_qty' => $request->quantity_after,
-            'supplierID' => $request->supplierID,
-            'manufactured_date' => $request->manufactured_date,
-            'delivered_date' => $request->delivered_date,
-            'expiration_date' => $request->expiration_date,
-            'action' => 'CONVERTED ITEM',
-            'remarks' => '',
-            'converted_by' => $converted_by,
-        ]);
+            $convertedItemLog = CsrItemConversionLogs::create([
+                'item_conversion_id' => $convertedItem->id,
+                'csr_stock_id' => $request->csr_stock_id,
+                'ris_no' => $request->ris_no,
+                'chrgcode' => $request->chrgcode,
+                'cl2comb_before' => $request->cl2comb_before,
+                'quantity_before' => $request->quantity_before,
+                'cl2comb_after' => $request->cl2comb_before,
+                'prev_qty' => 0,
+                'new_qty' => $request->quantity_after,
+                'supplierID' => $request->supplierID,
+                'manufactured_date' => $request->manufactured_date,
+                'delivered_date' => $request->delivered_date,
+                'expiration_date' => $request->expiration_date,
+                'action' => 'CONVERTED ITEM',
+                'remarks' => '',
+                'converted_by' => $converted_by,
+            ]);
+        } else {
+            $convertedItem = CsrItemConversion::create([
+                'csr_stock_id' => $request->csr_stock_id,
+                'ris_no' => $request->ris_no,
+                'chrgcode' => $request->chrgcode,
+                'cl2comb_before' => $request->cl2comb_before,
+                'quantity_before' => $request->quantity_before,
+                'cl2comb_after' => $request->cl2comb_after,
+                'quantity_after' => $request->quantity_after,
+                'supplierID' => $request->supplierID,
+                'manufactured_date' => $request->manufactured_date,
+                'delivered_date' => $request->delivered_date,
+                'expiration_date' => $request->expiration_date,
+                'converted_by' => $converted_by,
+            ]);
+
+            $convertedItemLog = CsrItemConversionLogs::create([
+                'item_conversion_id' => $convertedItem->id,
+                'csr_stock_id' => $request->csr_stock_id,
+                'ris_no' => $request->ris_no,
+                'chrgcode' => $request->chrgcode,
+                'cl2comb_before' => $request->cl2comb_before,
+                'quantity_before' => $request->quantity_before,
+                'cl2comb_after' => $request->cl2comb_after,
+                'prev_qty' => 0,
+                'new_qty' => $request->quantity_after,
+                'supplierID' => $request->supplierID,
+                'manufactured_date' => $request->manufactured_date,
+                'delivered_date' => $request->delivered_date,
+                'expiration_date' => $request->expiration_date,
+                'action' => 'CONVERTED ITEM',
+                'remarks' => '',
+                'converted_by' => $converted_by,
+            ]);
+        }
 
         return redirect()->back();
     }

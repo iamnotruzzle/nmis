@@ -974,7 +974,7 @@
         </div>
         <div class="field">
           <div class="flex align-content-center">
-            <label>Convert to</label>
+            <label>Convert to <label class="text-yellow-500">(optional)</label></label>
           </div>
           <Dropdown
             v-model.trim="formConvert.cl2comb_after"
@@ -1014,12 +1014,7 @@
             icon="pi pi-check"
             text
             type="submit"
-            :disabled="
-              formConvert.processing ||
-              formConvert.cl2comb_after == null ||
-              formConvert.quantity_after == '' ||
-              formConvert.quantity_after == null
-            "
+            :disabled="formConvert.processing || formConvert.quantity_after == '' || formConvert.quantity_after == null"
             @click="submitConvert"
           />
         </template>
@@ -1936,7 +1931,6 @@ export default {
     submitConvert() {
       if (
         this.formConvert.processing ||
-        this.formConvert.cl2comb_after == null ||
         this.formConvert.quantity_after == '' ||
         this.formConvert.quantity_after == null
       ) {
@@ -2085,6 +2079,7 @@ export default {
       this.importDeliveryDialog = false;
       this.addDeliveryDialog = false;
       this.disableSearchRisInput = false;
+      this.updateStockDialog = false;
       this.form.reset();
       this.form.clearErrors();
       this.formAdditional.reset();
