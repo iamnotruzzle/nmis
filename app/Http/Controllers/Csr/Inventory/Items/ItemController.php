@@ -36,43 +36,52 @@ class ItemController extends Controller
 
         $pimsCategory = PimsCategory::orderBy('categoryname', 'ASC')->get(['id', 'catID', 'categoryname']);
 
-        $items = DB::table('hclass2 as item')
-            ->select(
-                'item.cl2comb',
-                'item.cl2code',
-                'main_category.categoryname as main_category',
-                'category.cl1comb as cl1comb',
-                'category.cl1desc as sub_category',
-                'item.catID',
-                'item.cl2desc as item',
-                'price.id as price_id',
-                'price.selling_price as selling_price',
-                'price.entry_by',
-                'employee.firstname as entry_by_firstname',
-                'employee.middlename as entry_by_middlename',
-                'employee.lastname as entry_by_lastname',
-                'price.created_at as price_created_at',
-                'unit.uomcode',
-                'unit.uomdesc as unit',
-                'reorder_level.normal_stock as normal_stock',
-                'reorder_level.alert_stock',
-                'reorder_level.critical_stock',
-                'item.cl2stat'
-            )
-            ->join('huom as unit', 'item.uomcode', '=', 'unit.uomcode')
-            ->join('hclass1 as category', 'item.cl1comb', '=', 'category.cl1comb')
-            ->leftJoin('csrw_item_prices as price', 'item.cl2comb', '=', 'price.cl2comb')
-            ->join('csrw_pims_categories as main_category', 'item.catID', '=', 'main_category.catID')
-            ->leftJoin('hpersonal as employee', 'price.entry_by', '=', 'employee.employeeid')
-            ->leftJoin(DB::raw('(SELECT TOP 1 r.cl2comb, r.normal_stock as normal_stock, r.alert_stock, r.critical_stock
-                            FROM csrw_item_reorder_level as r
-                            ORDER BY r.created_at DESC) as reorder_level'), 'item.cl2comb', '=', 'reorder_level.cl2comb')
-            ->where('item.cl2comb', 'like', '%1000-%')
-            ->whereRaw("LOWER(item.cl2desc) LIKE ?", ["%" . strtolower($search) . "%"])
-            ->whereRaw("LOWER(item.cl2stat) LIKE ?", ["%" . strtolower($status) . "%"])
-            ->whereRaw("LOWER(main_category.categoryname) LIKE ?", ["%" . strtolower($maincat) . "%"])
-            ->orderBy('item.cl2desc', 'ASC')
-            ->paginate(10);
+        // $items = DB::table('hclass2 as item')
+        //     ->select(
+        //         'item.cl2comb',
+        //         'item.cl2code',
+        //         'main_category.categoryname as main_category',
+        //         'category.cl1comb as cl1comb',
+        //         'category.cl1desc as sub_category',
+        //         'item.catID',
+        //         'item.cl2desc as item',
+        //         'unit.uomcode',
+        //         'unit.uomdesc as unit',
+        //         'item.cl2stat'
+        //     )
+        //     ->join('huom as unit', 'item.uomcode', '=', 'unit.uomcode')
+        //     ->join('hclass1 as category', 'item.cl1comb', '=', 'category.cl1comb')
+        //     ->join('csrw_pims_categories as main_category', 'item.catID', '=', 'main_category.catID')
+        //     ->where('item.cl2comb', 'like', '%1000-%')
+        //     ->paginate(10);
+
+        $items = DB::select(
+            "SELECT
+                item.cl2comb,
+                item.cl2code,
+                main_category.categoryname AS main_category,
+                category.cl1comb AS cl1comb,
+                category.cl1desc AS sub_category,
+                item.catID,
+                item.cl2desc AS item,
+                unit.uomcode,
+                unit.uomdesc AS unit,
+                item.cl2stat
+            FROM
+                hclass2 AS item
+            JOIN
+                huom AS unit ON item.uomcode = unit.uomcode
+            JOIN
+                hclass1 AS category ON item.cl1comb = category.cl1comb
+            JOIN
+                csrw_pims_categories AS main_category ON item.catID = main_category.catID
+            WHERE
+                item.cl2comb LIKE '%1000-%';"
+        );
+
+
+        // query for item prices
+        // query for csrw_item_reorder_level
 
 
         return Inertia::render('Csr/Inventory/Items/Index', [

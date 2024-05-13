@@ -7,13 +7,11 @@
 
       <DataTable
         class="p-datatable-sm"
+        v-model:filters="filters"
         v-model:expandedRows="expandedRow"
         :value="itemsList"
         paginator
-        lazy
-        :rows="rows"
-        :totalRecords="totalRecords"
-        @page="onPage($event)"
+        :rows="20"
         dataKey="cl2comb"
         filterDisplay="row"
         sortField="cl2desc"
@@ -57,15 +55,14 @@
           <template #body="{ data }">
             {{ data.mainCategory }}
           </template>
-          <template #filter="">
+          <template #filter="{ filterModel, filterCallback }">
             <Dropdown
-              v-model="maincat"
-              :options="mainCategoryFilter"
-              optionLabel="name"
-              optionValue="code"
+              v-model="filterModel.value"
+              :options="pimsCategoryList"
+              @change="filterCallback()"
+              optionLabel="categoryname"
+              optionValue="categoryname"
               placeholder="NO FILTER"
-              :showClear="true"
-              class="w-full"
             />
           </template>
         </Column>
@@ -95,33 +92,6 @@
         >
           <template #body="{ data }">
             {{ data.cl2desc }}
-          </template>
-        </Column>
-        <Column
-          field="normal_stock"
-          header="NORMAL STOCK"
-          style="text-align: right; width: 5%"
-        >
-          <template #body="{ data }">
-            {{ data.normal_stock }}
-          </template>
-        </Column>
-        <Column
-          field="alert_stock"
-          header="ALERT STOCK"
-          style="text-align: right; width: 5%"
-        >
-          <template #body="{ data }">
-            {{ data.alert_stock }}
-          </template>
-        </Column>
-        <Column
-          field="critical_stock"
-          header="CRITICAL STOCK"
-          style="text-align: right; width: 5%"
-        >
-          <template #body="{ data }">
-            {{ data.critical_stock }}
           </template>
         </Column>
         <Column
@@ -242,7 +212,7 @@
                   style="width: 20%"
                 >
                 </Column>
-                <Column
+                <!-- <Column
                   field="created_at"
                   header="CREATED AT"
                   style="width: 20%"
@@ -251,7 +221,7 @@
                     <span v-if="data.created_at == null"></span>
                     <span v-else> {{ tzone(data.created_at) }}</span>
                   </template>
-                </Column>
+                </Column> -->
               </DataTable>
 
               <div class="w-11 flex flex-column">
@@ -707,7 +677,7 @@ export default {
     cl1combs: Array,
     pimsCategory: Array,
     units: Array,
-    items: Object,
+    items: Array,
   },
   data() {
     return {
@@ -778,9 +748,9 @@ export default {
       unitsList: [],
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        cl1comb: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        cl2desc: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        cl2stat: { value: null, matchMode: FilterMatchMode.EQUALS },
+        // cl1comb: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        // cl2desc: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        // cl2stat: { value: null, matchMode: FilterMatchMode.EQUALS },
         mainCategory: { value: null, matchMode: FilterMatchMode.EQUALS },
       },
       cl2stats: [
@@ -833,11 +803,11 @@ export default {
     };
   },
   // created will be initialize before mounted
-  created() {
-    this.totalRecords = this.items.total;
-    this.params.page = this.items.current_page;
-    this.rows = this.items.per_page;
-  },
+  //   created() {
+  //     this.totalRecords = this.items.total;
+  //     this.params.page = this.items.current_page;
+  //     this.rows = this.items.per_page;
+  //   },
   // created will be initialize before mounted
   mounted() {
     // console.log(this.items);
@@ -902,43 +872,28 @@ export default {
     // server request such as POST, the data in the table
     // is updated
     storeItemInContainer() {
-      this.items.data.forEach((e) => {
-        const existingItemIndex = this.itemsList.findIndex((item) => item.cl2comb === e.cl2comb);
-
-        if (existingItemIndex === -1) {
-          // Item does not exist, add a new object to the itemsList
-          this.itemsList.push({
-            cl2comb: e.cl2comb,
-            catID: e.catID,
-            mainCategory: e.main_category,
-            cl1comb: e.cl1comb,
-            subCategory: e.sub_category == '' || e.sub_category == null ? null : e.sub_category,
-            cl2code: e.cl2code,
-            cl2desc: e.item,
-            uomcode: e.uomcode,
-            uomdesc: e.unit,
-            cl2stat: e.cl2stat,
-            normal_stock: e.normal_stock,
-            alert_stock: e.alert_stock,
-            critical_stock: e.critical_stock,
-            prices: [
-              {
-                price_id: e.price_id,
-                selling_price: e.selling_price,
-                entry_by: e.entry_by_firstname == null ? null : e.entry_by_firstname + ' ' + e.entry_by_lastname,
-                created_at: e.price_created_at,
-              },
-            ],
-          });
-        } else {
-          // Item already exists, insert the prices into the existing item's prices array
-          this.itemsList[existingItemIndex].prices.push({
-            price_id: e.price_id,
-            selling_price: e.selling_price,
-            entry_by: e.entry_by_firstname == null ? null : e.entry_by_firstname + ' ' + e.entry_by_lastname,
-            created_at: e.price_created_at,
-          });
-        }
+      this.items.forEach((e) => {
+        // Item does not exist, add a new object to the itemsList
+        this.itemsList.push({
+          cl2comb: e.cl2comb,
+          catID: e.catID,
+          mainCategory: e.main_category,
+          cl1comb: e.cl1comb,
+          subCategory: e.sub_category,
+          cl2code: e.cl2code,
+          cl2desc: e.item,
+          uomcode: e.uomcode,
+          uomdesc: e.unit,
+          cl2stat: e.cl2stat,
+          prices: [
+            {
+              price_id: 1,
+              selling_price: 1,
+              entry_by: 'test entry by',
+              //   created_at: new Date(),
+            },
+          ],
+        });
       });
     },
     priceChangesOptions(data) {
@@ -1238,38 +1193,16 @@ export default {
     },
   },
   watch: {
-    search: function (val, oldVal) {
-      this.params.search = val;
-      this.updateData();
-    },
-    status: function (val, oldVal) {
-      this.params.status = val;
-      this.updateData();
-    },
-    maincat: function (val, oldVal) {
-      this.params.maincat = val;
-      this.updateData();
-    },
-    // from: function (val) {
-    //   if (val != null) {
-    //     let from = moment(val).format('LL');
-    //     // console.log('from', from);
-    //     this.params.from = from;
-    //   } else {
-    //     this.params.from = null;
-    //     this.from = null;
-    //   }
+    // search: function (val, oldVal) {
+    //   this.params.search = val;
     //   this.updateData();
     // },
-    // to: function (val) {
-    //   if (val != null) {
-    //     let to = moment(val).format('LL');
-    //     // console.log('to', to);
-    //     this.params.to = to;
-    //   } else {
-    //     this.params.to = null;
-    //     this.to = null;
-    //   }
+    // status: function (val, oldVal) {
+    //   this.params.status = val;
+    //   this.updateData();
+    // },
+    // maincat: function (val, oldVal) {
+    //   this.params.maincat = val;
     //   this.updateData();
     // },
   },
