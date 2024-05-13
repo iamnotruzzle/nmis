@@ -27,8 +27,6 @@
       >
         <Toast />
 
-        <div class="text-xl text-900 font-bold text-primary">REQUESTS</div>
-
         <DataTable
           class="p-datatable-sm"
           v-model:expandedRows="expandedRow"
@@ -47,17 +45,20 @@
           :loading="loading"
         >
           <template #header>
-            <div class="flex flex-wrap align-items-center justify-content-end gap-2">
-              <div>
-                <div class="p-inputgroup">
-                  <span class="p-inputgroup-addon">
-                    <i class="pi pi-search"></i>
-                  </span>
-                  <InputText
-                    id="searchInput"
-                    v-model="search"
-                    placeholder="Search requested at"
-                  />
+            <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+              <span class="text-xl text-900 font-bold text-primary">REQUESTS</span>
+              <div class="flex">
+                <div class="mr-2">
+                  <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon">
+                      <i class="pi pi-search"></i>
+                    </span>
+                    <InputText
+                      id="searchInput"
+                      v-model="search"
+                      placeholder="Search requested at"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
