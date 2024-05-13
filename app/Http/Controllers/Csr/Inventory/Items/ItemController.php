@@ -76,7 +76,17 @@ class ItemController extends Controller
             JOIN
                 csrw_pims_categories AS main_category ON item.catID = main_category.catID
             WHERE
-                item.cl2comb LIKE '%1000-%'"
+                item.catID IS NOT NULL
+            AND
+                item.catID = 1"
+        );
+        // dd($items);
+
+        // $prices = [];
+        $prices = DB::select(
+            "SELECT price.id, price.cl2comb, price.selling_price, emp.firstname, emp.lastname, price.created_at
+                FROM csrw_item_prices as price
+                JOIN hpersonal as emp ON emp.employeeid = price.entry_by;"
         );
 
         // query for item prices
@@ -88,6 +98,7 @@ class ItemController extends Controller
             'pimsCategory' => $pimsCategory,
             'items' => $items,
             'units' => $units,
+            'prices' => $prices,
         ]);
     }
 

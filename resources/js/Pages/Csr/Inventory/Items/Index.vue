@@ -197,7 +197,7 @@
                   style="width: 20%"
                 >
                 </Column>
-                <!-- <Column
+                <Column
                   field="created_at"
                   header="CREATED AT"
                   style="width: 20%"
@@ -206,7 +206,7 @@
                     <span v-if="data.created_at == null"></span>
                     <span v-else> {{ tzone(data.created_at) }}</span>
                   </template>
-                </Column> -->
+                </Column>
               </DataTable>
 
               <div class="w-11 flex flex-column">
@@ -663,6 +663,7 @@ export default {
     pimsCategory: Array,
     units: Array,
     items: Array,
+    prices: Array,
   },
   data() {
     return {
@@ -857,28 +858,50 @@ export default {
     // server request such as POST, the data in the table
     // is updated
     storeItemInContainer() {
-      this.items.forEach((e) => {
-        // Item does not exist, add a new object to the itemsList
-        this.itemsList.push({
-          cl2comb: e.cl2comb,
-          catID: e.catID,
-          mainCategory: e.main_category,
-          cl1comb: e.cl1comb,
-          subCategory: e.sub_category,
-          cl2code: e.cl2code,
-          cl2desc: e.item,
-          uomcode: e.uomcode,
-          uomdesc: e.unit,
-          cl2stat: e.cl2stat,
-          prices: [
-            {
-              price_id: 1,
-              selling_price: 1,
-              entry_by: 'test entry by',
-              //   created_at: new Date(),
-            },
-          ],
-        });
+      // Loop through each item in this.items
+      this.items.forEach((item) => {
+        // Find corresponding item in itemsList based on cl2comb
+        const matchingItem = this.itemsList.find((listItem) => listItem.cl2comb === item.cl2comb);
+
+        if (matchingItem) {
+          // If a matching item is found, iterate through prices array
+          this.prices.forEach((price) => {
+            // Check if price.cl2comb matches with matchingItem.cl2comb
+            if (price.cl2comb === matchingItem.cl2comb) {
+              // Push the price object into the prices array of matchingItem
+              matchingItem.prices.push({
+                id: price.id,
+                cl2comb: price.cl2comb,
+                selling_price: price.selling_price,
+                entry_by: price.entry_by,
+                created_at: price.created_at,
+              });
+            }
+          });
+        } else {
+          // If no matching item is found, create a new item in itemsList with prices array
+          this.itemsList.push({
+            cl2comb: item.cl2comb,
+            catID: item.catID,
+            mainCategory: item.main_category,
+            cl1comb: item.cl1comb,
+            subCategory: item.sub_category,
+            cl2code: item.cl2code,
+            cl2desc: item.item,
+            uomcode: item.uomcode,
+            uomdesc: item.unit,
+            cl2stat: item.cl2stat,
+            prices: this.prices
+              .filter((price) => price.cl2comb === item.cl2comb)
+              .map((filteredPrice) => ({
+                id: filteredPrice.id,
+                cl2comb: filteredPrice.cl2comb,
+                selling_price: filteredPrice.selling_price,
+                entry_by: filteredPrice.firstname + ' ' + filteredPrice.lastname,
+                created_at: filteredPrice.created_at,
+              })),
+          });
+        }
       });
     },
     priceChangesOptions(data) {
