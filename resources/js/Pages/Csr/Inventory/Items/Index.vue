@@ -69,7 +69,7 @@
             />
           </template>
         </Column>
-        <Column
+        <!-- <Column
           field="cl1comb"
           header="SUB-CATEGORY ID"
           style="width: 10%"
@@ -77,7 +77,7 @@
           <template #body="{ data }">
             {{ data.cl1comb }}
           </template>
-        </Column>
+        </Column> -->
         <Column
           field="subCategory"
           header="SUB-CATEGORY"
