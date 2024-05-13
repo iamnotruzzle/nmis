@@ -29,7 +29,7 @@
                   </span>
                   <InputText
                     id="searchInput"
-                    v-model="search"
+                    v-model="filters['global'].value"
                     placeholder="Search item"
                   />
                 </div>
