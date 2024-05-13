@@ -76,8 +76,6 @@ class ItemController extends Controller
             JOIN
                 csrw_pims_categories AS main_category ON item.catID = main_category.catID
             WHERE
-                item.catID IS NOT NULL
-            AND
                 item.catID = 1"
         );
         // dd($items);
