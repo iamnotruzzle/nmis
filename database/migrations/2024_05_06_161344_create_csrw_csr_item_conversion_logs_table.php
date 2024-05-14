@@ -19,9 +19,9 @@ class CreateCsrwCsrItemConversionLogsTable extends Migration
             $table->bigInteger('csr_stock_id');
             $table->string('ris_no');
             $table->string('chrgcode')->nullable();
-            $table->string('cl2comb_before');
+            $table->string('cl2comb_before')->nullable();
             $table->integer('quantity_before');
-            $table->string('cl2comb_after');
+            $table->string('cl2comb_after')->nullable();
             $table->integer('prev_qty')->nullable();
             $table->integer('new_qty')->nullable();
             $table->bigInteger('supplierID')->nullable();

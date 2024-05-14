@@ -18,9 +18,9 @@ class CreateCsrwCsrItemConversionTable extends Migration
             $table->string('csr_stock_id');
             $table->string('ris_no');
             $table->string('chrgcode')->nullable();
-            $table->string('cl2comb_before');
+            $table->string('cl2comb_before')->nullable();
             $table->integer('quantity_before');
-            $table->string('cl2comb_after');
+            $table->string('cl2comb_after')->nullable();
             $table->integer('quantity_after');
             $table->bigInteger('supplierID')->nullable();
             $table->dateTime('manufactured_date')->nullable();
