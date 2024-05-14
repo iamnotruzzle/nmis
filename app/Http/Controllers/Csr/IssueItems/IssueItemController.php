@@ -35,9 +35,12 @@ class IssueItemController extends Controller
             ->orderBy('csrw_login_history.created_at', 'desc')
             ->first();
 
-        $items = Item::where('cl2stat', 'A')
-            ->orderBy('cl2desc', 'ASC')
-            ->get(['cl2comb', 'cl2desc']);
+        $items = DB::select(
+            "SELECT converted.cl2comb_after as cl2comb, item.cl2desc, item.uomcode
+                FROM csrw_csr_item_conversion as converted
+                JOIN hclass2 as item ON item.cl2comb = converted.cl2comb_after
+                WHERE converted.quantity_after != converted.total_issued_qty;"
+        );
 
         $requestedStocks = RequestStocks::with([
             'requested_at_details:wardcode,wardname',
@@ -88,6 +91,8 @@ class IssueItemController extends Controller
 
     public function store(Request $request)
     {
+        dd($request);
+
         $requestStocksID = $request->request_stocks_id;
 
         $requestStocksContainer = $request->requestStockListDetails;

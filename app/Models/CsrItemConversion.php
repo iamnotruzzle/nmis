@@ -27,4 +27,9 @@ class CsrItemConversion extends Model
         'converted_by',
         'updated_by',
     ];
+
+    public function ward_stocks()
+    {
+        return $this->hasOne(WardsStocks::class, 'id', 'csr_stock_id');
+    }
 }

@@ -580,7 +580,7 @@ export default {
   },
   props: {
     authWardcode: Object,
-    items: Object,
+    items: Array,
     requestedStocks: Object,
   },
   data() {
@@ -769,7 +769,7 @@ export default {
       });
     },
     openCreateRequestStocksDialog(item) {
-      //   console.log(item);
+      //   console.log(item.request_stocks_details);
       this.form.clearErrors();
       this.form.reset();
       this.form.request_stocks_id = item.id;
@@ -779,6 +779,7 @@ export default {
       this.requestStockId = item.id;
 
       item.request_stocks_details.forEach((e) => {
+        console.log(e.item_conversion[0].quantity_after);
         this.requestStockListDetails.push({
           request_stocks_details_id: e.id,
           cl2comb: e.cl2comb,
@@ -786,8 +787,8 @@ export default {
           requested_qty: e.requested_qty,
           approved_qty: e.approved_qty,
           remarks: e.remarks,
-          stock_qty: e.stocks.reduce((accumulator, object) => {
-            return Number(accumulator) + Number(object.quantity);
+          stock_qty: e.item_conversion.reduce((accumulator, object) => {
+            return Number(accumulator) + Number(object.quantity_after);
           }, 0),
         });
       });
