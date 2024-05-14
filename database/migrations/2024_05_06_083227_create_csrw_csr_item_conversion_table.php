@@ -22,6 +22,7 @@ class CreateCsrwCsrItemConversionTable extends Migration
             $table->integer('quantity_before');
             $table->string('cl2comb_after')->nullable();
             $table->integer('quantity_after');
+            $table->integer('total_issued_qty')->default(0);
             $table->bigInteger('supplierID')->nullable();
             $table->dateTime('manufactured_date')->nullable();
             $table->dateTime('delivered_date')->nullable();

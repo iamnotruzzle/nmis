@@ -35,13 +35,22 @@ class RequestStocksController extends Controller
             ->orderBy('csrw_login_history.created_at', 'desc')
             ->first();
 
+        // $items = DB::select(
+        //     "SELECT item.cl2comb, item.cl2desc, item.uomcode, uom.uomdesc
+        //         FROM hclass2 as item
+        //         JOIN huom as uom ON uom.uomcode = item.uomcode
+        //         WHERE item.cl2desc LIKE '(piece)%';
+        //     ",
+        // );
+
+        // available items only show if quantity_after == total_issued_qty
         $items = DB::select(
-            "SELECT item.cl2comb, item.cl2desc, item.uomcode, uom.uomdesc
-                FROM hclass2 as item
-                JOIN huom as uom ON uom.uomcode = item.uomcode
-                WHERE item.cl2desc LIKE '(piece)%';
-            ",
+            "SELECT converted.cl2comb_after, item.cl2desc, item.uomcode
+                FROM csrw_csr_item_conversion as converted
+                JOIN hclass2 as item ON item.cl2comb = converted.cl2comb_after
+                WHERE converted.quantity_after != converted.total_issued_qty;"
         );
+        // dd($items);
 
         $requestedStocks = RequestStocks::with(['requested_at_details', 'requested_by_details', 'approved_by_details', 'request_stocks_details.item_details'])
             ->where('location', '=', $authWardcode->wardcode)

@@ -3,20 +3,13 @@
     <Head title="NMIS - Stocks" />
 
     <div>
-      <div class="">
+      <!-- <div class="">
         <Link
           href="requeststocks"
           class="button-link-current bar"
         >
           OTHER ITEMS
         </Link>
-
-        <!-- <Link
-          href="requestmedsstocks"
-          class="button-link"
-        >
-          MEDICINE
-        </Link> -->
 
         <Link
           href="requesttankstocks"
@@ -26,7 +19,7 @@
         </Link>
       </div>
 
-      <div style="background-color: #818cf8; width: 100%; height: 4px"></div>
+      <div style="background-color: #818cf8; width: 100%; height: 4px"></div> -->
 
       <div
         class="card"
@@ -282,7 +275,7 @@
             <div class="text-primary text-xl font-bold">REQUEST STOCK</div>
           </template>
           <div class="field">
-            <label>Item</label>
+            <label>Available items</label>
             <Dropdown
               required="true"
               v-model="item"
