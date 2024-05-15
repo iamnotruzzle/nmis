@@ -145,6 +145,8 @@ class IssueItemController extends Controller
                     $row = CsrItemConversion::where('id', $stock->id)->first();
                     $row_to_change_status = RequestStocksDetails::where('id', $rsc['request_stocks_details_id'])->first();
 
+                    $item = Item::where('cl2comb', $row->cl2comb_after)->first();
+
                     $issueditem = WardsStocks::create([
                         'request_stocks_id' => $row_to_change_status->request_stocks_id,
                         'request_stocks_detail_id' => $row_to_change_status->id,
@@ -152,7 +154,7 @@ class IssueItemController extends Controller
                         'location' => $location->location,
                         'chrgcode' => $row->chrgcode,
                         'cl2comb' => $row_to_change_status->cl2comb,
-                        'uomcode' => $row->uomcode,
+                        'uomcode' => $item->uomcode,
                         'ris_no' => $row->ris_no,
                         'quantity' => $remaining_qty_to_be_issued,
                         'from' => 'CSR',
@@ -180,6 +182,8 @@ class IssueItemController extends Controller
                     $row = CsrItemConversion::where('id', $stock->id)->first();
                     $row_to_change_status = RequestStocksDetails::where('id', $rsc['request_stocks_details_id'])->first();
 
+                    $item = Item::where('cl2comb', $row->cl2comb_after)->first();
+
                     $issueditem = WardsStocks::create([
                         'request_stocks_id' => $row_to_change_status->request_stocks_id,
                         'request_stocks_detail_id' => $row_to_change_status->id,
@@ -187,7 +191,7 @@ class IssueItemController extends Controller
                         'location' => $location->location,
                         'chrgcode' => $row->chrgcode,
                         'cl2comb' => $row_to_change_status->cl2comb,
-                        'uomcode' => $row->uomcode,
+                        'uomcode' => $item->uomcode,
                         'ris_no' => $row->ris_no,
                         'quantity' => $row->quantity_after,
                         'from' => 'CSR',
@@ -311,6 +315,8 @@ class IssueItemController extends Controller
                     $row = CsrItemConversion::where('id', $stock->id)->first();
                     $row_to_change_status = RequestStocksDetails::where('id', $rsc['request_stocks_details_id'])->first();
 
+                    $item = Item::where('cl2comb', $row->cl2comb_after)->first();
+
                     $issueditem = WardsStocks::create([
                         'request_stocks_id' => $row_to_change_status->request_stocks_id,
                         'request_stocks_detail_id' => $row_to_change_status->id,
@@ -318,7 +324,7 @@ class IssueItemController extends Controller
                         'location' => $location->location,
                         'chrgcode' => $row->chrgcode,
                         'cl2comb' => $row_to_change_status->cl2comb,
-                        'uomcode' => $row->uomcode,
+                        'uomcode' => $item->uomcode,
                         'ris_no' => $row->ris_no,
                         'quantity' => $remaining_qty_to_be_issued,
                         'from' => 'CSR',
@@ -346,6 +352,8 @@ class IssueItemController extends Controller
                     $row = CsrItemConversion::where('id', $stock->id)->first();
                     $row_to_change_status = RequestStocksDetails::where('id', $rsc['request_stocks_details_id'])->first();
 
+                    $item = Item::where('cl2comb', $row->cl2comb_after)->first();
+
                     $issueditem = WardsStocks::create([
                         'request_stocks_id' => $row_to_change_status->request_stocks_id,
                         'request_stocks_detail_id' => $row_to_change_status->id,
@@ -353,7 +361,7 @@ class IssueItemController extends Controller
                         'location' => $location->location,
                         'chrgcode' => $row->chrgcode,
                         'cl2comb' => $row_to_change_status->cl2comb,
-                        'uomcode' => $row->uomcode,
+                        'uomcode' => $item->uomcode,
                         'ris_no' => $row->ris_no,
                         'quantity' => $row->quantity_after,
                         'from' => 'CSR',
