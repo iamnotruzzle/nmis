@@ -205,8 +205,7 @@
                 class="text-error text-xl font-semibold"
                 v-if="stockBalanceDeclared != false"
               >
-                {{ getTankDesc($page.props.errors['itemsToBillList.0.itemCode']) }} stock balance has not yet been
-                declared.
+                {{ $page.props.errors['itemsToBillList.0.itemCode'] }} stock balance has not yet been declared.
               </p>
               <!-- <p
               class="text-error text-xl font-semibold"
@@ -500,7 +499,7 @@ export default {
     bills: Object,
     medicalSupplies: Object,
     misc: Object,
-    tankList: Object,
+    // tankList: Object,
   },
   data() {
     return {
@@ -630,42 +629,8 @@ export default {
       this.bills.forEach((e) => {
         // console.log(e);
 
-        // only push item when chargcode are drug and meds oxygen, compressed air and carbon dioxide
-        if (e.type_of_charge_code == 'DRUMD') {
-          const matchingTank = this.tankList.find((x) => e.itemcode === x.itemcode);
-
-          if (e.itemcode == matchingTank.itemcode && e.uomcode == matchingTank.unitcode) {
-            this.billList.push({
-              uid: ++this.uid,
-              charge_slip_no: e.charge_slip_no,
-              type_of_charge_code: e.type_of_charge_code,
-              type_of_charge_description: e.type_of_charge_description,
-              // item: e.type_of_charge.chrgdesc,
-              item:
-                matchingTank.gendesc +
-                ' ' +
-                matchingTank.dmdnost +
-                ' ' +
-                matchingTank.stredesc +
-                ' ' +
-                matchingTank.formdesc +
-                ' ' +
-                matchingTank.rtedesc,
-              charge_log_id: e.charge_log_id,
-              charge_log_ward_stocks_id: e.charge_log_ward_stocks_id,
-              charge_log_quantity: e.charge_log_quantity,
-              itemcode: e.itemcode,
-              quantity: Math.trunc(e.quantity),
-              // price: e.pchrgup,
-              price: Math.round(e.price * 100) / 100,
-              amount: (Math.trunc(e.quantity) * Math.round(e.price * 100)) / 100,
-              charge_date: e.charge_date,
-              //   patient_charge_logs: e.patient_charge_logs.length == 0 ? null : e.patient_charge_logs,
-            });
-          }
-        }
         // only push item when chargcode are medical supplies or misc
-        else if (e.type_of_charge_code == 'MISC' || e.type_of_charge_code == 'DRUMN') {
+        if (e.type_of_charge_code == 'MISC' || e.type_of_charge_code == 'DRUMN') {
           this.billList.push({
             uid: ++this.uid,
             charge_slip_no: e.charge_slip_no,
@@ -735,29 +700,6 @@ export default {
           unit: misc.uomcode == null ? null : misc.uomcode,
           quantity: 99999,
           price: misc.hmamt,
-        });
-      });
-
-      // oxygen, compressed air, carbon dioxide
-      this.tankList.forEach((tank) => {
-        this.itemList.push({
-          typeOfCharge: 'DRUMD',
-          itemCode: tank.itemcode,
-          itemDesc:
-            tank.gendesc +
-            ' ' +
-            tank.dmdnost +
-            // ' ' +
-            // tank.dmdnnostp +
-            ' ' +
-            tank.stredesc +
-            ' ' +
-            tank.formdesc +
-            ' ' +
-            tank.rtedesc,
-          unit: tank.unitcode,
-          quantity: 99999,
-          price: tank.price,
         });
       });
 
@@ -903,32 +845,32 @@ export default {
       });
       //   console.log(this.$page.props.errors);
     },
-    getTankDesc(item) {
-      //   console.log(item);
-      const matchingMedSupply = this.$page.pplies.find((x) => item === x.cl2comb);
-      const matchingTank = this.tankList.find((x) => item === x.itemcode);
-      //   console.log(matchingMedSupply);
+    // getTankDesc(item) {
+    //   //   console.log(item);
+    //   const matchingMedSupply = this.$page.pplies.find((x) => item === x.cl2comb);
+    //   const matchingTank = this.tankList.find((x) => item === x.itemcode);
+    //   //   console.log(matchingMedSupply);
 
-      if (matchingMedSupply != null) {
-        return matchingMedSupply.cl2desc;
-      } else if (matchingTank != null) {
-        return (
-          matchingTank.gendesc +
-          ' ' +
-          matchingTank.dmdnost +
-          //   ' ' +
-          //   matchingTank.dmdnnostp +
-          ' ' +
-          matchingTank.stredesc +
-          ' ' +
-          matchingTank.formdesc +
-          ' ' +
-          matchingTank.rtedesc
-        );
-      } else {
-        return null;
-      }
-    },
+    //   if (matchingMedSupply != null) {
+    //     return matchingMedSupply.cl2desc;
+    //   } else if (matchingTank != null) {
+    //     return (
+    //       matchingTank.gendesc +
+    //       ' ' +
+    //       matchingTank.dmdnost +
+    //       //   ' ' +
+    //       //   matchingTank.dmdnnostp +
+    //       ' ' +
+    //       matchingTank.stredesc +
+    //       ' ' +
+    //       matchingTank.formdesc +
+    //       ' ' +
+    //       matchingTank.rtedesc
+    //     );
+    //   } else {
+    //     return null;
+    //   }
+    // },
     editItem(e) {
       console.log('charge', e);
 
