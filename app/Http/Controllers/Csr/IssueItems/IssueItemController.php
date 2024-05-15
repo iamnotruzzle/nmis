@@ -321,12 +321,6 @@ class IssueItemController extends Controller
                         ->update([
                             'quantity' => $newStockQty,
                         ]);
-
-                    // RequestStocks::where('id', $requestStocksID)
-                    //     ->update([
-                    //         'status' => 'FILLED',
-                    //         'approved_by' => $request->approved_by,
-                    //     ]);
                 } else {
                     $remaining_qty_to_be_issued = $remaining_qty_to_be_issued - $stock->quantity;
 
@@ -353,12 +347,6 @@ class IssueItemController extends Controller
                         ->update([
                             'quantity' => 0,
                         ]);
-
-                    // RequestStocks::where('id', $requestStocksID)
-                    //     ->update([
-                    //         'status' => 'FILLED',
-                    //         'approved_by' => $request->approved_by,
-                    //     ]);
                 }
             }
         }
