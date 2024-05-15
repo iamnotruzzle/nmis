@@ -380,7 +380,7 @@
                 style="text-align: right; width: 10%"
               >
                 <template #body="slotProps">
-                  <InputNumber
+                  <InputText
                     id="quantity"
                     v-model.trim="slotProps.data.approved_qty"
                     required="true"
@@ -865,11 +865,11 @@ export default {
           staticApproved_qty: e.approved_qty,
           stock_w_approved:
             Number(e.approved_qty) +
-            e.stocks.reduce((accumulator, object) => {
-              return Number(accumulator) + Number(object.quantity);
+            e.item_conversion.reduce((accumulator, object) => {
+              return Number(accumulator) + Number(object.quantity_after);
             }, 0),
-          stock_qty: e.stocks.reduce((accumulator, object) => {
-            return Number(accumulator) + Number(object.quantity);
+          stock_qty: e.item_conversion.reduce((accumulator, object) => {
+            return Number(accumulator) + Number(object.quantity_after);
           }, 0),
           remarks: e.remarks,
         });
