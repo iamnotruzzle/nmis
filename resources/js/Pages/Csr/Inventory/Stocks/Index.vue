@@ -432,7 +432,6 @@
                 showIcon
                 showButtonBar
                 :manualInput="false"
-                :minDate="minimumDate"
                 :hideOnDateTimeSelect="true"
               />
             </div>
@@ -703,7 +702,6 @@
             showIcon
             showButtonBar
             :manualInput="false"
-            :minDate="minimumDate"
             :hideOnDateTimeSelect="true"
           />
         </div>
@@ -889,7 +887,6 @@
                 showIcon
                 showButtonBar
                 :manualInput="false"
-                :minDate="minimumDate"
                 :hideOnDateTimeSelect="true"
               />
               <small
