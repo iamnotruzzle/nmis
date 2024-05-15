@@ -80,6 +80,7 @@ class CsrStocksControllers extends Controller
                 JOIN csrw_fund_source as fund_source ON fund_source.fsid = converted.chrgcode;
             "
         );
+        // dd($totalConvertedItems);
 
         $convertedItems = DB::select(
             "SELECT cl1comb, cl2comb, cl2desc, uomcode FROM hclass2 ORDER BY cl2desc ASC;"
