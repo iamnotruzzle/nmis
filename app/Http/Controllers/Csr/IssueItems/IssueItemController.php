@@ -189,7 +189,7 @@ class IssueItemController extends Controller
                         'cl2comb' => $row_to_change_status->cl2comb,
                         'uomcode' => $row->uomcode,
                         'ris_no' => $row->ris_no,
-                        'quantity' => $row->quantity,
+                        'quantity' => $row->quantity_after,
                         'from' => 'CSR',
                         'manufactured_date' => $row->manufactured_date,
                         'delivered_date' => $row->delivered_date,
