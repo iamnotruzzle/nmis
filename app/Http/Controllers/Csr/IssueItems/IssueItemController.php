@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Csr\IssueItems;
 
 use App\Events\ItemIssued;
 use App\Http\Controllers\Controller;
+use App\Models\CsrItemConversion;
 use App\Models\CsrStocks;
 use App\Models\Item;
 use App\Models\RequestStocks;
@@ -91,7 +92,7 @@ class IssueItemController extends Controller
 
     public function store(Request $request)
     {
-        dd($request);
+        // dd($request);
 
         $requestStocksID = $request->request_stocks_id;
 
@@ -121,9 +122,9 @@ class IssueItemController extends Controller
             ]);
 
             // check current stock of the item
-            $current_stock = CsrStocks::where('cl2comb', $rsc['cl2comb'])
+            $current_stock = CsrItemConversion::where('cl2comb_after', $rsc['cl2comb'])
                 ->whereDate('expiration_date', '>', Carbon::today())
-                ->sum('quantity');
+                ->sum('quantity_after');
 
             // check the current value of issued_qty after the loop
             $remaining_qty_to_be_issued = $rsc['approved_qty'];
@@ -133,15 +134,15 @@ class IssueItemController extends Controller
             while ($remaining_qty_to_be_issued > 0) {
 
                 // get the the specific item that is first to expire and quantity != 0
-                $stock = CsrStocks::where('cl2comb', $rsc['cl2comb'])
-                    ->where('quantity', '!=', 0)
+                $stock = CsrItemConversion::where('cl2comb_after', $rsc['cl2comb'])
+                    ->where('quantity_after', '!=', 0)
                     ->whereDate('expiration_date', '>', Carbon::today())
                     ->orderBy('expiration_date')
                     ->first();
 
                 // execute if block when condition is met then do the while loop again
-                if ($stock->quantity >= $remaining_qty_to_be_issued) {
-                    $row = CsrStocks::where('id', $stock->id)->first();
+                if ($stock->quantity_after >= $remaining_qty_to_be_issued) {
+                    $row = CsrItemConversion::where('id', $stock->id)->first();
                     $row_to_change_status = RequestStocksDetails::where('id', $rsc['request_stocks_details_id'])->first();
 
                     $issueditem = WardsStocks::create([
@@ -160,12 +161,12 @@ class IssueItemController extends Controller
                         'expiration_date' => $row->expiration_date,
                     ]);
 
-                    $newStockQty = $row->quantity - $remaining_qty_to_be_issued;
+                    $newStockQty = $row->quantity_after - $remaining_qty_to_be_issued;
                     $remaining_qty_to_be_issued = 0;
 
                     $row::where('id', $stock->id)
                         ->update([
-                            'quantity' => $newStockQty,
+                            'quantity_after' => $newStockQty,
                         ]);
 
                     RequestStocks::where('id', $requestStocksID)
@@ -174,9 +175,9 @@ class IssueItemController extends Controller
                             'approved_by' => $request->approved_by,
                         ]);
                 } else {
-                    $remaining_qty_to_be_issued = $remaining_qty_to_be_issued - $stock->quantity;
+                    $remaining_qty_to_be_issued = $remaining_qty_to_be_issued - $stock->quantity_after;
 
-                    $row = CsrStocks::where('id', $stock->id)->first();
+                    $row = CsrItemConversion::where('id', $stock->id)->first();
                     $row_to_change_status = RequestStocksDetails::where('id', $rsc['request_stocks_details_id'])->first();
 
                     $issueditem = WardsStocks::create([
@@ -197,7 +198,7 @@ class IssueItemController extends Controller
 
                     $row::where('id', $stock->id)
                         ->update([
-                            'quantity' => 0,
+                            'quantity_after' => 0,
                         ]);
 
                     RequestStocks::where('id', $requestStocksID)
