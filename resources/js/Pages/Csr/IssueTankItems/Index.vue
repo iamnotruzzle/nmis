@@ -352,7 +352,7 @@
                 style="text-align: right; width: 15%"
               >
                 <template #body="slotProps">
-                  <InputNumber
+                  <InputText
                     id="quantity"
                     v-model.trim="slotProps.data.approved_qty"
                     required="true"

@@ -208,7 +208,7 @@
         </div>
         <div class="field">
           <label>Ending balance</label>
-          <InputNumber
+          <InputText
             v-model.trim="form.ending_balance"
             required="true"
             autofocus
@@ -224,7 +224,7 @@
         </div>
         <div class="field">
           <label>Starting balance</label>
-          <InputNumber
+          <InputText
             v-model.trim="form.beginning_balance"
             required="true"
             autofocus

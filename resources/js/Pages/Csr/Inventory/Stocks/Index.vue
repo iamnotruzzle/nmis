@@ -439,7 +439,7 @@
               <div class="flex align-content-center">
                 <label>Quantity</label>
               </div>
-              <InputNumber
+              <InputText
                 required="true"
                 v-model.trim="formAdditional.quantity"
                 autofocus
@@ -452,7 +452,7 @@
                 <div class="flex align-content-center">
                   <label>Acquisition price</label>
                 </div>
-                <InputNumber
+                <InputText
                   class="w-full"
                   v-model.trim="formAdditional.acquisitionPrice"
                   autofocus
@@ -710,7 +710,7 @@
             <label>Quantity</label>
             <span class="ml-2 text-error">*</span>
           </div>
-          <InputNumber
+          <InputText
             required="true"
             v-model.trim="formAddDelivery.quantity"
             inputId="integeronly"

@@ -278,7 +278,7 @@
         </div>
         <div class="field">
           <label for="quantity">Quantity</label>
-          <InputNumber
+          <InputText
             id="quantity"
             v-model.number="form.quantity"
             class="w-full"

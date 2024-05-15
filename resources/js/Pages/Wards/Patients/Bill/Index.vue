@@ -181,7 +181,7 @@
             </div>
             <div class="field">
               <label for="Item">Quantity</label>
-              <InputNumber
+              <InputText
                 id="quantity"
                 v-model.trim="qtyToCharge"
                 required="true"
@@ -339,7 +339,7 @@
               >
                 Qty to return
               </label>
-              <InputNumber
+              <InputText
                 id="quantity"
                 v-model.trim="form.upd_QtyToReturn"
                 required="true"

@@ -330,7 +330,7 @@
         </div>
         <div class="field">
           <label>Normal stock</label>
-          <InputNumber
+          <InputText
             id="Normal stock"
             v-model.trim="form.normal_stock"
             required="true"
@@ -347,7 +347,7 @@
         </div>
         <div class="field">
           <label>Alert stock</label>
-          <InputNumber
+          <InputText
             id="Alert stock"
             v-model.trim="form.alert_stock"
             required="true"
@@ -364,7 +364,7 @@
         </div>
         <div class="field">
           <label>Critical stock</label>
-          <InputNumber
+          <InputText
             id="Critical stock"
             v-model.trim="form.critical_stock"
             required="true"
@@ -478,7 +478,7 @@
         </div>
         <!-- <div class="field">
           <label>Normal stock</label>
-          <InputNumber
+          <InputText
             id="Normal stock"
             v-model.trim="form.normal_stock"
             required="true"
@@ -495,7 +495,7 @@
         </div> -->
         <!-- <div class="field">
           <label>Alert stock</label>
-          <InputNumber
+          <InputText
             id="Alert stock"
             v-model.trim="form.alert_stock"
             required="true"
@@ -512,7 +512,7 @@
         </div> -->
         <!-- <div class="field">
           <label>Critical stock</label>
-          <InputNumber
+          <InputText
             id="Critical stock"
             v-model.trim="form.critical_stock"
             required="true"

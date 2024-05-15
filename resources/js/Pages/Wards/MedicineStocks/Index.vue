@@ -308,7 +308,7 @@
           </div>
           <div class="field">
             <label for="Item">Quantity</label>
-            <InputNumber
+            <InputText
               id="quantity"
               v-model.trim="requested_qty"
               required="true"
@@ -439,7 +439,7 @@
           </div>
           <div class="field">
             <label for="Item">Quantity</label>
-            <InputNumber
+            <InputText
               id="quantity"
               v-model="form.requested_qty"
               required="true"

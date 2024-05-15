@@ -294,7 +294,7 @@
           </div>
           <div class="field">
             <label for="Item">Quantity</label>
-            <InputNumber
+            <InputText
               id="quantity"
               v-model.trim="requested_qty"
               required="true"
@@ -570,7 +570,7 @@
           </div>
           <div class="field">
             <label for="Item">Quantity</label>
-            <InputNumber
+            <InputText
               id="quantity"
               v-model.trim="formConsignment.quantity"
               required="true"
@@ -648,7 +648,7 @@
 
               <div class="p-field flex flex-column">
                 <label for="qty_to_convert">QUANTITY TO CONVERT</label>
-                <InputNumber
+                <InputText
                   id="qty_to_convert"
                   v-model.trim="formConvertItem.qty_to_convert"
                   required="true"
@@ -697,7 +697,7 @@
 
               <div class="p-field flex flex-column">
                 <label for="qty_after">EQUIVALENT QUANTITY</label>
-                <InputNumber
+                <InputText
                   id="qty_after"
                   v-model.trim="formConvertItem.equivalent_quantity"
                   required="true"
