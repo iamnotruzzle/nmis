@@ -58,36 +58,8 @@ class RoleAndPermissionSeeder extends Seeder
         //     'remember_token' => Str::random(10),
         // ]);
 
-        // sir edu/edward
-        $csr = User::factory()->create([
-            // 'firstName' => 'super',
-            // 'middleName' => null,
-            // 'lastName' => 'admin',
-            // 'suffix' => null,
-            'employeeid' => '2011-136',
-            // 'email' => 'sa@sa.com',
-            'image' => null,
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'designation' => 'csr',
-            'remember_token' => Str::random(10),
-        ]);
-
         // sir jud
-        $wards1 = User::factory()->create([
-            // 'firstName' => 'super',
-            // 'middleName' => null,
-            // 'lastName' => 'admin',
-            // 'suffix' => null,
-            'employeeid' => '002022',
-            // 'email' => 'sa@sa.com',
-            'image' => null,
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'designation' => 'csr',
-            'remember_token' => Str::random(10),
-        ]);
-
-        // sir chris
-        $wards2 = User::factory()->create([
+        $csr = User::factory()->create([
             // 'firstName' => 'super',
             // 'middleName' => null,
             // 'lastName' => 'admin',
@@ -100,13 +72,13 @@ class RoleAndPermissionSeeder extends Seeder
             'remember_token' => Str::random(10),
         ]);
 
-        // test account
-        $test = User::factory()->create([
+        // sir chris
+        $wards1 = User::factory()->create([
             // 'firstName' => 'super',
             // 'middleName' => null,
             // 'lastName' => 'admin',
             // 'suffix' => null,
-            'employeeid' => '000-093',
+            'employeeid' => '002022',
             // 'email' => 'sa@sa.com',
             'image' => null,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
@@ -141,8 +113,6 @@ class RoleAndPermissionSeeder extends Seeder
         $superAdminUser->assignRole($superAdminRole);
         $csr->assignRole($adminRole);
         $wards1->assignRole($adminRole);
-        $wards2->assignRole($adminRole);
-        $test->assignRole($adminRole);
 
 
         // assign role to the created super-admin user

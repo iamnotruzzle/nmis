@@ -20,7 +20,7 @@ class PimsItemsSeeder extends Seeder
     public function run()
     {
         // $categories = item column is null, ' ' or '.', the item column will be equal to its description column
-        $categories = File::get('database/data/pims_items.json');
+        $categories = File::get('database/data/pims_items_medical_supplies.json');
         $data = json_decode($categories);
 
         // normalized and duplicate items are remove
