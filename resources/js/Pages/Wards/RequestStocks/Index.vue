@@ -1585,6 +1585,7 @@ export default {
     },
     'formConsignment.cl2comb': function (val) {
       this.selectedItemsUomDesc = null;
+      console.log(this.itemsList);
 
       this.itemsList.forEach((e) => {
         if (e.cl2comb == val) {
