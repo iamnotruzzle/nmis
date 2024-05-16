@@ -12,7 +12,6 @@ use App\Models\PimsSupplier;
 use App\Models\Supplier;
 use App\Models\TypeOfCharge;
 use Carbon\Carbon;
-// use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -60,7 +59,6 @@ class CsrStocksControllers extends Controller
             ORDER BY stock.created_at ASC;"
 
         );
-        //  ORDER BY medsupply.expiration_date ASC;"
 
         $totalDeliveries = DB::select(
             "SELECT item.cl2comb, item.cl2desc,  SUM(stock.quantity) as total_quantity
@@ -80,12 +78,10 @@ class CsrStocksControllers extends Controller
                 JOIN csrw_fund_source as fund_source ON fund_source.fsid = converted.chrgcode;
             "
         );
-        // dd($totalConvertedItems);
 
         $convertedItems = DB::select(
             "SELECT cl1comb, cl2comb, cl2desc, uomcode FROM hclass2 ORDER BY cl2desc ASC;"
         );
-        // dd($convertedItems);
 
         $fundSource = FundSource::get(['id', 'fsid', 'fsName', 'cluster_code']);
 
@@ -131,7 +127,6 @@ class CsrStocksControllers extends Controller
                     ORDER BY item.description ASC;",
                 [$request->searchRis]
             );
-            // dd($pims);
 
             $items = DB::select(
                 "SELECT * FROM hclass2
@@ -173,7 +168,6 @@ class CsrStocksControllers extends Controller
                             ];
                         }
                     }
-                    // dd($result);
                 }
             }
 
@@ -183,10 +177,7 @@ class CsrStocksControllers extends Controller
 
             $entry_by = Auth::user()->employeeid;
 
-            // dd($entry_by);
-
             foreach ($deliveryDetails as $r) {
-                // dd($r['supplier']['supplierID']);
                 $stock = CsrStocks::create([
                     'ris_no' => $r['risno'],
                     'cl2comb' => $r['cl2comb'],
@@ -220,11 +211,6 @@ class CsrStocksControllers extends Controller
                     'entry_by' => $entry_by,
                     'converted' => 'n',
                 ]);
-
-                // $itemPrices = ItemPrices::create([
-                //     'cl2comb' => $request->cl2comb,
-                //     'entry_by' => $request->entry_by,
-                // ]);
             }
 
             return redirect()->back();

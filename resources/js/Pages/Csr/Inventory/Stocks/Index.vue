@@ -1802,7 +1802,7 @@ export default {
       );
     },
     editConvertedItem(item) {
-      console.log(item);
+      //   console.log(item);
 
       let itemCl2comb = this.extractCl2comb(item.cl2comb_after);
       this.updateConvertedIemListBasedOnCl1comb(itemCl2comb);
@@ -1844,6 +1844,7 @@ export default {
           //   console.log(response.data); // Log the response data if needed
 
           let sanitizedData = response.data;
+          //   console.log(response);
 
           sanitizedData.forEach((e) => {
             // conditions make it so that items are not entered twice
