@@ -1008,7 +1008,7 @@ export default {
     requestedStocks: Object,
     currentWardStocks: Object,
     currentWardStocks2: Object,
-    typeOfCharge: Object,
+    // typeOfCharge: Object,
     fundSource: Object,
   },
   data() {
@@ -1128,14 +1128,14 @@ export default {
   },
   methods: {
     storeFundSourceInContainer() {
-      this.typeOfCharge.forEach((e) => {
-        this.fundSourceList.push({
-          chrgcode: e.chrgcode,
-          chrgdesc: e.chrgdesc,
-          bentypcod: e.bentypcod,
-          chrgtable: e.chrgtable,
-        });
-      });
+      //   this.typeOfCharge.forEach((e) => {
+      //     this.fundSourceList.push({
+      //       chrgcode: e.chrgcode,
+      //       chrgdesc: e.chrgdesc,
+      //       bentypcod: e.bentypcod,
+      //       chrgtable: e.chrgtable,
+      //     });
+      //   });
 
       this.fundSource.forEach((e) => {
         this.fundSourceList.push({

@@ -94,11 +94,12 @@ class RequestStocksController extends Controller
             ->where('quantity', '!=', 0)
             ->get();
 
-        $fundSource = FundSource::get(['id', 'fsid', 'fsName', 'cluster_code']);
+        $fundSource = FundSource::orderBy('fsName')
+            ->get(['id', 'fsid', 'fsName', 'cluster_code']);
 
-        $typeOfCharge = TypeOfCharge::where('chrgstat', 'A')
-            ->where('chrgtable', 'NONDR')
-            ->get(['chrgcode', 'chrgdesc', 'bentypcod', 'chrgtable']);
+        // $typeOfCharge = TypeOfCharge::where('chrgstat', 'A')
+        //     ->where('chrgtable', 'NONDR')
+        //     ->get(['chrgcode', 'chrgdesc', 'bentypcod', 'chrgtable']);
 
         return Inertia::render('Wards/RequestStocks/Index', [
             'items' => $items,
@@ -106,7 +107,7 @@ class RequestStocksController extends Controller
             'authWardcode' => $authWardcode,
             'currentWardStocks' => $currentWardStocks,
             'currentWardStocks2' => $currentWardStocks2,
-            'typeOfCharge' => $typeOfCharge,
+            // 'typeOfCharge' => $typeOfCharge,
             'fundSource' => $fundSource,
         ]);
     }

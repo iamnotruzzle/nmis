@@ -83,11 +83,12 @@ class CsrStocksControllers extends Controller
             "SELECT cl1comb, cl2comb, cl2desc, uomcode FROM hclass2 ORDER BY cl2desc ASC;"
         );
 
-        $fundSource = FundSource::get(['id', 'fsid', 'fsName', 'cluster_code']);
+        $fundSource = FundSource::orderBy('fsName')
+            ->get(['id', 'fsid', 'fsName', 'cluster_code']);
 
-        $typeOfCharge = TypeOfCharge::where('chrgstat', 'A')
-            ->where('chrgtable', 'NONDR')
-            ->get(['chrgcode', 'chrgdesc', 'bentypcod', 'chrgtable']);
+        // $typeOfCharge = TypeOfCharge::where('chrgstat', 'A')
+        //     ->where('chrgtable', 'NONDR')
+        //     ->get(['chrgcode', 'chrgdesc', 'bentypcod', 'chrgtable']);
 
         $suppliers = PimsSupplier::where('status', 'A')->orderBy('suppname', 'ASC')->get();
 
@@ -95,7 +96,7 @@ class CsrStocksControllers extends Controller
             'items' => $items,
             'stocks' => $stocks,
             'totalDeliveries' => $totalDeliveries,
-            'typeOfCharge' => $typeOfCharge,
+            // 'typeOfCharge' => $typeOfCharge,
             'fundSource' => $fundSource,
             'suppliers' => $suppliers,
             'convertedItems' => $convertedItems,
