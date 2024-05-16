@@ -58,7 +58,7 @@ class RoleAndPermissionSeeder extends Seeder
         //     'remember_token' => Str::random(10),
         // ]);
 
-        // sir jud
+        // sir chris
         $csr = User::factory()->create([
             // 'firstName' => 'super',
             // 'middleName' => null,
@@ -72,7 +72,7 @@ class RoleAndPermissionSeeder extends Seeder
             'remember_token' => Str::random(10),
         ]);
 
-        // sir chris
+        // sir jude
         $wards1 = User::factory()->create([
             // 'firstName' => 'super',
             // 'middleName' => null,
