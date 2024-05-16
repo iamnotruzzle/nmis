@@ -737,7 +737,7 @@
             icon="pi pi-times"
             severity="danger"
             text
-            @click="cancel"
+            @click="clickOutsideDialog"
           />
           <Button
             label="Save"
@@ -1782,6 +1782,7 @@ export default {
         (this.disableSearchRisInput = false),
         (this.isUpdate = false),
         (this.item = null),
+        (this.addDeliveryDialog = false),
         (this.supplier = null),
         (this.selectedFundSource = null),
         (this.selectedItemsUomCode = null),
@@ -2063,7 +2064,7 @@ export default {
       this.formAddDelivery.post(route('csrmanualadd.store'), {
         preserveScroll: true,
         onSuccess: () => {
-          this.addDeliveryDialog = false;
+          //   this.addDeliveryDialog = false;
           this.cancel();
           this.updateData();
           this.createdMsg();
@@ -2075,7 +2076,6 @@ export default {
       this.stockId = null;
       this.isUpdate = false;
       this.importDeliveryDialog = false;
-      this.addDeliveryDialog = false;
       this.disableSearchRisInput = false;
       this.updateStockDialog = false;
       this.form.reset();
