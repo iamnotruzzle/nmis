@@ -1434,6 +1434,7 @@ export default {
         this.formConsignment.expiration_date != null ||
         this.formConsignment.expiration_date != ''
       ) {
+        console.log('success');
         this.formConsignment.post(route('consignment.store'), {
           preserveScroll: true,
           onSuccess: () => {

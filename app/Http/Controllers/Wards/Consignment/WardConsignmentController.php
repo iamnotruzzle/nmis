@@ -26,7 +26,7 @@ class WardConsignmentController extends Controller
             'fund_source' => 'required',
             'cl2comb' => 'required',
             'quantity' => 'required',
-            'delivered_date' => 'required',
+            // 'delivered_date' => 'required',
             'expiration_date' => 'required',
         ]);
 
@@ -44,6 +44,7 @@ class WardConsignmentController extends Controller
             'delivered_date' => $request->delivered_date,
             'expiration_date' => $request->expiration_date,
         ]);
+        // dd($consignment);
 
         $wardStockLogs = WardsStocksLogs::create([
             'request_stocks_id' => null,
