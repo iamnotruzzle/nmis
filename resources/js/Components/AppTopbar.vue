@@ -4,7 +4,13 @@
       href="/"
       class="layout-topbar-logo"
     >
-      NMIS
+      <div class="flex justify-items-center align-items-center">
+        <img
+          src="images/hosp_logo.png"
+          alt="Image"
+        />
+        <span>NURSE MANAGEMENT INFORMATION SYSTEM</span>
+      </div>
     </Link>
     <!--  -->
     <button
