@@ -45,11 +45,11 @@ class RequestStocksController extends Controller
 
         // available items only show if quantity_after == total_issued_qty
         $items = DB::select(
-            "SELECT DISTINCT converted.cl2comb_after as cl2comb, item.cl2desc, item.uomcode, uom.uomdesc
-                FROM csrw_csr_item_conversion as converted
-                JOIN hclass2 as item ON item.cl2comb = converted.cl2comb_after
+            "SELECT item.cl2comb, item.cl2desc, item.uomcode, uom.uomdesc
+                FROM hclass2 as item
                 JOIN huom as uom ON uom.uomcode = item.uomcode
-                WHERE converted.quantity_after != converted.total_issued_qty;"
+                AND catID = 1
+                ORDER BY item.cl2desc ASC;"
         );
         // dd($items);
 

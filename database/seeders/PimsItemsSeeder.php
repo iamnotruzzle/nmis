@@ -96,7 +96,7 @@ class PimsItemsSeeder extends Seeder
                         'stkno' => '',
                         'cl2desc' => $obj->description, // Assuming description is provided in $data
                         'cl2retprc' => 0.00,
-                        'uomcode' => 'PC',
+                        'uomcode' => 'box',
                         'cl2dteas' => Carbon::now(),
                         'cl2stat' => $obj->status == 'C' ? 'I' : $obj->status,
                         'cl2lock' => 'N',
