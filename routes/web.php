@@ -94,7 +94,7 @@ Route::middleware(['web', 'auth', 'verified'])->group(
         // Route::resource('csrmanualreports', CsrManualReportController::class)->middleware(['verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
         Route::get('csrstocks/export/', [CsrStocksReportController::class, 'export']);
         // Route::get('csrmanualreports/export/', [CsrManualReportExportController::class, 'export']);
-        Route::resource('stockbal', LocationStockBalanceController::class)->middleware(['verified'])->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('stockbal', LocationStockBalanceController::class)->middleware(['verified', 'designation_ward', 'designation_admin'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('tankstockbal', LocationTankStockBalanceController::class)->middleware(['verified'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('risdetails', CsrDashboardController::class)->middleware(['verified', 'designation_csr_or_admin'])->only(['index', 'show']);
         // end csr routes
