@@ -499,7 +499,6 @@ export default {
     bills: Object,
     medicalSupplies: Object,
     misc: Object,
-    // tankList: Object,
   },
   data() {
     return {
@@ -845,32 +844,6 @@ export default {
       });
       //   console.log(this.$page.props.errors);
     },
-    // getTankDesc(item) {
-    //   //   console.log(item);
-    //   const matchingMedSupply = this.$page.pplies.find((x) => item === x.cl2comb);
-    //   const matchingTank = this.tankList.find((x) => item === x.itemcode);
-    //   //   console.log(matchingMedSupply);
-
-    //   if (matchingMedSupply != null) {
-    //     return matchingMedSupply.cl2desc;
-    //   } else if (matchingTank != null) {
-    //     return (
-    //       matchingTank.gendesc +
-    //       ' ' +
-    //       matchingTank.dmdnost +
-    //       //   ' ' +
-    //       //   matchingTank.dmdnnostp +
-    //       ' ' +
-    //       matchingTank.stredesc +
-    //       ' ' +
-    //       matchingTank.formdesc +
-    //       ' ' +
-    //       matchingTank.rtedesc
-    //     );
-    //   } else {
-    //     return null;
-    //   }
-    // },
     editItem(e) {
       console.log('charge', e);
 

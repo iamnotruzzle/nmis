@@ -4,7 +4,6 @@ namespace App\Models;
 
 
 use App\Models\Item;
-use App\Models\Tanks\Hdmhdr;
 use Awobaz\Compoships\Compoships;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -75,16 +74,6 @@ class PatientCharge extends Model
     {
         // return $this->hasOne(Miscellaneous::class, 'hmcode', 'itemcode')->with(['unit']);
         return $this->hasOne(Miscellaneous::class, 'hmcode', 'itemcode');
-    }
-
-    public function tank()
-    {
-        $h = new Hdmhdr();
-
-        $dmdcomb = $h->dmdcomb . '' . $h->dmdctr;
-
-        // ['dmdcomb', 'dmdctr'],
-        return $this->hasOne(Hdmhdr::class, $h->dmdcomb . '' . $h->dmdctr, 'itemcode')->with(['hdruggrp', 'hstre', 'hform', 'hroute']);
     }
 
     public function patientChargeLogs()

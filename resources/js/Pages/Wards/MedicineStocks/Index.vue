@@ -17,13 +17,6 @@
         >
           MEDICINE
         </Link>
-
-        <Link
-          href="requesttankstocks"
-          class="button-link"
-        >
-          TANKS
-        </Link>
       </div>
 
       <div style="background-color: #818cf8; width: 100%; height: 4px"></div>

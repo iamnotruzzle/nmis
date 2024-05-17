@@ -8,22 +8,6 @@
     >
       <Toast />
 
-      <!-- <div class="mb-2">
-        <Link
-          href="stockbal"
-          class="text-2xl border-bottom-2 mr-2 font-semibold"
-        >
-          DRUG AND MEDS
-        </Link>
-
-        <Link
-          href="tankstockbal"
-          class="text-2xl my-link"
-        >
-          TANKS
-        </Link>
-      </div> -->
-
       <DataTable
         class="p-datatable-sm"
         v-model:filters="filters"
