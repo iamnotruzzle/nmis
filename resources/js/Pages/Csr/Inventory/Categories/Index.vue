@@ -54,7 +54,7 @@
         <Column
           field="cl1comb"
           header="ID"
-          style="width: 20%"
+          style="width: 5%"
         >
           <template #body="{ data }">
             {{ data.cl1comb }}
@@ -64,7 +64,7 @@
           field="categoryname"
           header="CATEGORY"
           :showFilterMenu="false"
-          style="width: 20%"
+          style="width: 5%"
         >
           <template #body="{ data }">
             {{ data.categoryname }}
@@ -95,7 +95,7 @@
           field="cl1stat"
           header="STATUS"
           :showFilterMenu="false"
-          style="width: 20%"
+          style="width: 5%"
         >
           <template #body="{ data }">
             <div class="text-center">
@@ -120,7 +120,14 @@
               optionValue="code"
               placeholder="NO FILTER"
               class="w-full"
-            />
+            >
+              <template #option="slotProps">
+                <Tag
+                  :value="slotProps.option.name"
+                  :severity="statusSeverity(slotProps.option)"
+                />
+              </template>
+            </Dropdown>
           </template>
         </Column>
         <!-- <Column
@@ -204,7 +211,14 @@
             optionLabel="name"
             optionValue="code"
             class="w-full"
-          />
+          >
+            <template #option="slotProps">
+              <Tag
+                :value="slotProps.option.name"
+                :severity="statusSeverity(slotProps.option)"
+              />
+            </template>
+          </Dropdown>
           <small
             class="text-error"
             v-if="form.errors.status"
@@ -382,6 +396,16 @@ export default {
     this.storeSubCategoryInContainer();
   },
   methods: {
+    statusSeverity(status) {
+      //   console.log(status);
+      switch (status.code) {
+        case 'I':
+          return 'danger';
+
+        case 'A':
+          return 'success';
+      }
+    },
     storeSubCategoryInContainer() {
       this.csrSuppliesSubCategoryList = []; // reset
 
