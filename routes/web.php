@@ -85,10 +85,6 @@ Route::middleware(['web', 'auth', 'verified'])->group(
         Route::resource('issueitems', IssueItemController::class)->middleware(['verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
         Route::get('issueitems/issued/', [IssuedItemsReportController::class, 'export']);
         Route::put('issueitems', [IssueItemController::class, 'acknowledgedrequest'])->name('issueitems.acknowledgedrequest');
-        // Issue tank items
-        Route::resource('issuetankitems', IssueTankItemsController::class)->middleware(['verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
-        Route::get('issuetankitems/issued/', [IssuedTankItemsReportController::class, 'export']);
-        Route::put('issuetankitems', [IssueTankItemsController::class, 'acknowledgedrequest'])->name('issuetankitems.acknowledgedrequest');
 
         Route::resource('csrreports', ReportsController::class)->middleware(['verified', 'designation_csr'])->only(['index']);
         // Route::resource('csrmanualreports', CsrManualReportController::class)->middleware(['verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
