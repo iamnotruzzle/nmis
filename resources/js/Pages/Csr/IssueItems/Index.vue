@@ -3,24 +3,6 @@
     <Head title="NMIS - RIS" />
 
     <div>
-      <!-- <div>
-        <Link
-          href="issueitems"
-          class="button-link-current bar"
-        >
-          DRUG AND MEDS
-        </Link>
-
-        <Link
-          href="issuetankitems"
-          class="button-link"
-        >
-          TANKS
-        </Link>
-      </div>
-
-      <div style="background-color: #818cf8; width: 100%; height: 4px"></div> -->
-
       <div
         class="card"
         style="border-top-left-radius: 0; border-top-right-radius: 0"
