@@ -761,7 +761,7 @@ export default {
       this.requestStockId = item.id;
 
       item.request_stocks_details.forEach((e) => {
-        console.log(e.item_conversion[0].quantity_after);
+        // console.log(e.item_conversion[0].quantity_after);
         this.requestStockListDetails.push({
           request_stocks_details_id: e.id,
           cl2comb: e.cl2comb,
