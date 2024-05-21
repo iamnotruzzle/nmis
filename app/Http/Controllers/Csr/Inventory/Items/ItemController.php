@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Csr\Inventory\Items;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Item;
-use App\Models\ItemReorderLevel;
 use App\Models\PimsCategory;
 use App\Models\UnitOfMeasurement;
 use Carbon\Carbon;
@@ -86,10 +85,6 @@ class ItemController extends Controller
                 FROM csrw_item_prices as price
                 JOIN hpersonal as emp ON emp.employeeid = price.entry_by;"
         );
-
-        // query for item prices
-        // query for csrw_item_reorder_level
-
 
         return Inertia::render('Csr/Inventory/Items/Index', [
             'cl1combs' => $cl1combs,
