@@ -329,57 +329,6 @@
           </small>
         </div>
         <div class="field">
-          <label>Normal stock</label>
-          <InputText
-            id="Normal stock"
-            v-model.trim="form.normal_stock"
-            required="true"
-            :class="{ 'p-invalid': form.normal_stock == '' }"
-            @keyup.enter="submit"
-            inputId="integeronly"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.normal_stock"
-          >
-            {{ form.errors.normal_stock }}
-          </small>
-        </div>
-        <div class="field">
-          <label>Alert stock</label>
-          <InputText
-            id="Alert stock"
-            v-model.trim="form.alert_stock"
-            required="true"
-            :class="{ 'p-invalid': form.alert_stock == '' }"
-            @keyup.enter="submit"
-            inputId="integeronly"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.alert_stock"
-          >
-            {{ form.errors.alert_stock }}
-          </small>
-        </div>
-        <div class="field">
-          <label>Critical stock</label>
-          <InputText
-            id="Critical stock"
-            v-model.trim="form.critical_stock"
-            required="true"
-            :class="{ 'p-invalid': form.critical_stock == '' }"
-            @keyup.enter="submit"
-            inputId="integeronly"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.critical_stock"
-          >
-            {{ form.errors.critical_stock }}
-          </small>
-        </div>
-        <div class="field">
           <label for="cl2stat">Status</label>
           <Dropdown
             v-model="form.cl2stat"
@@ -476,57 +425,6 @@
             :class="{ 'p-invalid': formConvert.cl1comb == '' }"
           />
         </div>
-        <!-- <div class="field">
-          <label>Normal stock</label>
-          <InputText
-            id="Normal stock"
-            v-model.trim="form.normal_stock"
-            required="true"
-            :class="{ 'p-invalid': form.normal_stock == '' }"
-            @keyup.enter="submit"
-            inputId="integeronly"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.normal_stock"
-          >
-            {{ form.errors.normal_stock }}
-          </small>
-        </div> -->
-        <!-- <div class="field">
-          <label>Alert stock</label>
-          <InputText
-            id="Alert stock"
-            v-model.trim="form.alert_stock"
-            required="true"
-            :class="{ 'p-invalid': form.alert_stock == '' }"
-            @keyup.enter="submit"
-            inputId="integeronly"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.alert_stock"
-          >
-            {{ form.errors.alert_stock }}
-          </small>
-        </div> -->
-        <!-- <div class="field">
-          <label>Critical stock</label>
-          <InputText
-            id="Critical stock"
-            v-model.trim="form.critical_stock"
-            required="true"
-            :class="{ 'p-invalid': form.critical_stock == '' }"
-            @keyup.enter="submit"
-            inputId="integeronly"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.critical_stock"
-          >
-            {{ form.errors.critical_stock }}
-          </small>
-        </div> -->
         <div class="field">
           <label for="cl2stat">Status</label>
           <Dropdown
@@ -576,12 +474,14 @@
         </template>
         <div class="field">
           <label>Selling price</label>
-          <InputText
+          <InputNumber
             id="Price"
-            v-model.trim="formPrice.selling_price"
+            v-model="formPrice.selling_price"
             required="true"
             autofocus
             :class="{ 'p-invalid': formPrice.selling_price == '' }"
+            :minFractionDigits="1"
+            :maxFractionDigits="2"
             @keyup.enter="submitPrice"
           />
         </div>
@@ -599,7 +499,7 @@
             icon="pi pi-check"
             text
             type="submit"
-            :disabled="formPrice.processing || formPrice.selling_price == null"
+            :disabled="formPrice.processing || formPrice.selling_price == null || formPrice.selling_price == ''"
             @click="submitPrice"
           />
         </template>
@@ -757,9 +657,6 @@ export default {
         unit: null,
         cl2stat: null,
         mainCategory: null,
-        normal_stock: null,
-        critical_stock: null,
-        alert_stock: null,
         location: null,
         selectedMainCat: null,
         selectedSubCategory: null,
@@ -772,9 +669,6 @@ export default {
         unit: null,
         cl2stat: null,
         mainCategory: null,
-        // normal_stock: null,
-        // critical_stock: null,
-        // alert_stock: null,
         location: null,
         selectedMainCat: null,
         selectedSubCategory: null,
@@ -813,6 +707,47 @@ export default {
     },
   },
   methods: {
+    restrictNonNumericAndPeriod(event) {
+      if (
+        [46, 8, 9, 27, 13].includes(event.keyCode) ||
+        // Allow: Ctrl+A, Command+A
+        (event.keyCode === 65 && (event.ctrlKey === true || event.metaKey === true)) ||
+        // Allow: Ctrl+C, Command+C
+        (event.keyCode === 67 && (event.ctrlKey === true || event.metaKey === true)) ||
+        // Allow: Ctrl+V, Command+V
+        (event.keyCode === 86 && (event.ctrlKey === true || event.metaKey === true)) ||
+        // Allow: Ctrl+X, Command+X
+        (event.keyCode === 88 && (event.ctrlKey === true || event.metaKey === true))
+      ) {
+        // Let it happen, don't do anything
+        return;
+      }
+      // Ensure that it is a number and stop the keypress
+      if ((event.shiftKey || event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105)) {
+        event.preventDefault();
+      }
+    },
+    restrictNonNumeric(event) {
+      // Allow: backspace, delete, tab, escape, enter, and . (for decimal point)
+      if (
+        [46, 8, 9, 27, 13, 110, 190].includes(event.keyCode) ||
+        // Allow: Ctrl+A, Command+A
+        (event.keyCode === 65 && (event.ctrlKey === true || event.metaKey === true)) ||
+        // Allow: Ctrl+C, Command+C
+        (event.keyCode === 67 && (event.ctrlKey === true || event.metaKey === true)) ||
+        // Allow: Ctrl+V, Command+V
+        (event.keyCode === 86 && (event.ctrlKey === true || event.metaKey === true)) ||
+        // Allow: Ctrl+X, Command+X
+        (event.keyCode === 88 && (event.ctrlKey === true || event.metaKey === true))
+      ) {
+        // Let it happen, don't do anything
+        return;
+      }
+      // Ensure that it is a number and stop the keypress
+      if ((event.shiftKey || event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105)) {
+        event.preventDefault();
+      }
+    },
     statusSeverity(status) {
       //   console.log(status);
       switch (status.code) {
@@ -1048,7 +983,7 @@ export default {
       this.createItemDialog = true;
     },
     openPriceDialog(item) {
-      console.log(item);
+      //   console.log(item);
       this.formPrice.cl2comb = item.cl2comb;
       this.priceDialog = true;
     },
@@ -1061,6 +996,9 @@ export default {
         this.form.clearErrors(),
         this.form.reset(),
         this.formConvert.reset(),
+        this.formConvert.clearErrors(),
+        this.formPrice.reset(),
+        this.formPrice.clearErrors(),
         (this.priceDialog = false)
       );
     },
@@ -1072,9 +1010,6 @@ export default {
       this.form.cl1comb = item.cl1comb;
       this.form.cl2code = item.cl2code;
       this.form.cl2desc = item.cl2desc;
-      this.form.normal_stock = item.normal_stock;
-      this.form.alert_stock = item.alert_stock;
-      this.form.critical_stock = item.critical_stock;
       this.form.unit = item.uomcode;
       this.form.cl2stat = item.cl2stat;
       this.form.mainCategory = item.catID;
@@ -1089,9 +1024,6 @@ export default {
       this.formConvert.cl1comb = item.cl1comb;
       this.formConvert.cl2code = item.cl2code;
       this.formConvert.cl2desc = item.cl2desc;
-      //   this.formConvert.normal_stock = item.normal_stock;
-      //   this.formConvert.alert_stock = item.alert_stock;
-      //   this.formConvert.critical_stock = item.critical_stock;
       this.formConvert.unit = item.uomcode;
       this.formConvert.cl2stat = item.cl2stat;
       this.formConvert.mainCategory = Number(item.catID);

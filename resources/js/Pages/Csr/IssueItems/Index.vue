@@ -364,10 +364,12 @@
                 <template #body="slotProps">
                   <InputText
                     id="quantity"
-                    v-model.trim="slotProps.data.approved_qty"
+                    v-model="slotProps.data.approved_qty"
                     required="true"
                     autofocus
                     @keyup.enter="submit"
+                    type="number"
+                    onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                     inputId="integeronly"
                   />
                 </template>
@@ -845,11 +847,12 @@ export default {
           requested_qty: e.requested_qty,
           approved_qty: e.approved_qty,
           staticApproved_qty: e.approved_qty,
-          stock_w_approved:
+          stock_w_approved: Number(
             Number(e.approved_qty) +
-            e.item_conversion.reduce((accumulator, object) => {
-              return Number(accumulator) + Number(object.quantity_after);
-            }, 0),
+              e.item_conversion.reduce((accumulator, object) => {
+                return Number(accumulator) + Number(object.quantity_after);
+              }, 0)
+          ),
           stock_qty: e.item_conversion.reduce((accumulator, object) => {
             return Number(accumulator) + Number(object.quantity_after);
           }, 0),

@@ -147,15 +147,6 @@ class ItemController extends Controller
             'catID' => $request->mainCategory,
         ]);
 
-        $itemReorderLevel = ItemReorderLevel::create([
-            'cl2comb' => $item->cl2comb,
-            'normal_stock' => $request->normal_stock,
-            'alert_stock' => $request->alert_stock,
-            'critical_stock' => $request->critical_stock,
-            'entry_by' => $request->entry_by,
-            'location' => $request->location,
-        ]);
-
         // dd($item);
 
         return Redirect::route('items.index');
@@ -179,15 +170,6 @@ class ItemController extends Controller
             'cl2desc' => trim($request->cl2desc), // item desc
             'uomcode' => $request->unit, // unit
             'cl2stat' => $request->cl2stat,
-        ]);
-
-        $itemReorderLevel = ItemReorderLevel::create([
-            'cl2comb' => trim($request->cl1comb) . '-' . trim($request->cl2code),
-            'normal_stock' => $request->normal_stock,
-            'alert_stock' => $request->alert_stock,
-            'critical_stock' => $request->critical_stock,
-            'entry_by' => $entry_by,
-            'location' => $request->location,
         ]);
 
         return Redirect::route('items.index');

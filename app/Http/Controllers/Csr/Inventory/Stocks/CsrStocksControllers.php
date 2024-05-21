@@ -43,7 +43,6 @@ class CsrStocksControllers extends Controller
                 stock.cl2comb, item.cl2desc, stock.acquisition_price,
                 unit.uomcode, unit.uomdesc,
                 stock.quantity,
-                reoder_level.normal_stock as normal_stock, reoder_level.alert_stock, reoder_level.critical_stock,
                 stock.manufactured_date, stock.delivered_date, expiration_date, stock.converted
             FROM csrw_csr_stocks as stock
             JOIN hclass2 as item ON stock.cl2comb = item.cl2comb
@@ -51,11 +50,6 @@ class CsrStocksControllers extends Controller
             JOIN csrw_suppliers as supplier ON stock.supplierID = supplier.supplierID
             LEFT JOIN hcharge as typeOfCharge ON stock.chrgcode = typeOfCharge.chrgcode
             LEFT JOIN csrw_fund_source as fundSource ON stock.chrgcode = fundSource.fsid
-            LEFT JOIN (
-                SELECT TOP 1 r.cl2comb, r.normal_stock as normal_stock, r.alert_stock, r.critical_stock
-                FROM csrw_item_reorder_level as r
-                ORDER BY r.created_at DESC
-            ) as reoder_level ON stock.cl2comb = reoder_level.cl2comb
             ORDER BY stock.created_at ASC;"
 
         );

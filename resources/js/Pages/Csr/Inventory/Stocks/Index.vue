@@ -99,104 +99,12 @@
           sortable
           style="width: 5%"
         >
-          <template #body="{ data }">
-            <div
-              v-if="data.normal_stock == null && data.alert_stock == null && data.critical_stock == null"
-              class="text-center"
-            >
-              <span>
-                {{ data.quantity }}
-              </span>
-            </div>
-            <div
-              v-else
-              class="text-center"
-            >
-              <span
-                v-if="data.quantity >= data.normal_stock || data.quantity > data.alert_stock"
-                class="text-green-500 font-bold"
-              >
-                {{ data.quantity }}
-              </span>
-              <span
-                v-else-if="data.quantity <= data.alert_stock && data.quantity > data.critical_stock"
-                class="text-yellow-500 font-bold"
-              >
-                {{ data.quantity }}
-              </span>
-              <span
-                v-else-if="data.quantity <= data.critical_stock && data.quantity != 0"
-                style="color: #c02422; font-weight: bold"
-              >
-                {{ data.quantity }}
-              </span>
-              <span
-                v-else
-                class="text-white font-bold"
-                >{{ data.quantity }}</span
-              >
-            </div>
-          </template>
         </Column>
         <Column
           field="acquisition_price"
           header="ACQ. PRICE"
           style="width: 5%"
         >
-        </Column>
-        <Column
-          field="stock_lvl"
-          header="STOCK LVL."
-          :showFilterMenu="false"
-          style="width: 5%"
-        >
-          <template #body="slotProps">
-            <div
-              v-if="slotProps.data.stock_lvl == 'N/A'"
-              class="flex justify-content-center"
-            >
-              <Tag
-                value="N/A"
-                severity="contrast"
-              />
-            </div>
-            <div
-              v-else
-              class="flex justify-content-center"
-            >
-              <Tag
-                v-if="slotProps.data.stock_lvl == 'NORMAL'"
-                value="NORMAL"
-                severity="success"
-              />
-              <Tag
-                v-else-if="slotProps.data.stock_lvl == 'ALERT'"
-                value="ALERT"
-                severity="warning"
-              />
-              <Tag
-                v-else-if="slotProps.data.stock_lvl == 'CRITICAL'"
-                value="CRITICAL"
-                severity="danger"
-              />
-              <Tag
-                v-else
-                value="OUTOFSTOCK"
-                severity="info"
-              />
-            </div>
-          </template>
-          <template #filter="{ filterModel, filterCallback }">
-            <Dropdown
-              v-model="filterModel.value"
-              :options="stockLvlFilter"
-              @change="filterCallback()"
-              optionLabel="name"
-              optionValue="code"
-              placeholder="NO FILTER"
-              class="w-full"
-            />
-          </template>
         </Column>
         <Column
           field="manufactured_date"
@@ -714,6 +622,7 @@
             required="true"
             v-model.trim="formAddDelivery.quantity"
             inputId="integeronly"
+            @keydown="restrictNonNumericAndPeriod"
           />
         </div>
         <div class="field flex justify-content-between">
@@ -1628,24 +1537,7 @@ export default {
     // server request such as POST, the data in the table
     // is updated
     storeStocksInContainer() {
-      let stock_lvl = null;
       this.stocks.forEach((e) => {
-        if (e.normal_stock == null) {
-          stock_lvl = 'N/A';
-        } else if (Number(e.quantity) >= Number(e.normal_stock)) {
-          stock_lvl = 'NORMAL';
-        } else if (
-          Number(e.alert_stock) >= Number(e.quantity) &&
-          Number(e.quantity) <= Number(e.normal_stock) &&
-          Number(e.quantity) > Number(e.critical_stock)
-        ) {
-          stock_lvl = 'ALERT';
-        } else if (Number(e.critical_stock) >= Number(e.quantity) && Number(e.quantity) > 0) {
-          stock_lvl = 'CRITICAL';
-        } else if (Number(e.quantity) == 0) {
-          stock_lvl = 'OUTOFSTOCK';
-        }
-
         const expirationDate = e.expiration_date === null ? null : new Date(e.expiration_date); // Convert expiration_date to Date object
         this.stocksList.push({
           id: e.id,
@@ -1660,10 +1552,6 @@ export default {
           uomdesc: e.uomcode == null ? null : e.uomdesc,
           quantity: Number(e.quantity),
           acquisition_price: e.acquisition_price,
-          normal_stock: e.normal_stock == null ? 'N/A' : Number(e.normal_stock),
-          alert_stock: e.alert_stock == null ? 'N/A' : Number(e.alert_stock),
-          critical_stock: e.critical_stock == null ? 'N/A' : Number(e.critical_stock),
-          stock_lvl: stock_lvl,
           manufactured_date: e.manufactured_date === null ? '' : e.manufactured_date,
           delivered_date: e.delivered_date === null ? '' : e.delivered_date,
           expiration_date: expirationDate, // Assign expirationDate to expiration_date field
