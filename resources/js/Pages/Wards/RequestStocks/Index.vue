@@ -272,12 +272,11 @@
             <label for="Item">Quantity</label>
             <InputText
               id="quantity"
-              v-model.trim="requested_qty"
-              required="true"
-              autofocus
+              type="number"
+              v-model="requested_qty"
               :class="{ 'p-invalid': requested_qty == '' || item == null }"
+              @keydown="restrictNonNumericAndPeriod"
               @keyup.enter="fillRequestContainer"
-              inputId="integeronly"
             />
             <small
               class="text-error"
@@ -728,11 +727,18 @@
           </div>
           <div class="field">
             <label for="quantity">Deduct from Stock</label>
-            <InputText
+            <!-- <InputText
               id="quantity"
               v-model.trim="formWardStocks.quantity"
               autofocus
               class="w-full"
+            /> -->
+
+            <InputText
+              id="quantity"
+              type="number"
+              v-model="formWardStocks.quantity"
+              @keydown="restrictNonNumericAndPeriod"
             />
             <small
               class="text-error"
@@ -1109,6 +1115,26 @@ export default {
     },
   },
   methods: {
+    restrictNonNumericAndPeriod(event) {
+      if (
+        [46, 8, 9, 27, 13].includes(event.keyCode) ||
+        // Allow: Ctrl+A, Command+A
+        (event.keyCode === 65 && (event.ctrlKey === true || event.metaKey === true)) ||
+        // Allow: Ctrl+C, Command+C
+        (event.keyCode === 67 && (event.ctrlKey === true || event.metaKey === true)) ||
+        // Allow: Ctrl+V, Command+V
+        (event.keyCode === 86 && (event.ctrlKey === true || event.metaKey === true)) ||
+        // Allow: Ctrl+X, Command+X
+        (event.keyCode === 88 && (event.ctrlKey === true || event.metaKey === true))
+      ) {
+        // Let it happen, don't do anything
+        return;
+      }
+      // Ensure that it is a number and stop the keypress
+      if ((event.shiftKey || event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105)) {
+        event.preventDefault();
+      }
+    },
     storeFundSourceInContainer() {
       //   this.typeOfCharge.forEach((e) => {
       //     this.fundSourceList.push({
