@@ -201,18 +201,19 @@
             <div class="field mt-4">
               <label class="mr-2 font-bold">ITEMS / SERVICES TO CHARGE</label>
 
-              <p
+              <!-- <p
                 class="text-error text-xl font-semibold"
                 v-if="stockBalanceDeclared != false"
               >
                 {{ $page.props.errors['itemsToBillList.0.itemCode'] }} stock balance has not yet been declared.
+              </p> -->
+
+              <p
+                class="text-error text-xl font-semibold"
+                v-if="stockBalanceDeclared != false"
+              >
+                [ {{ item.itemDesc }} ] stock balance has not yet been declared.
               </p>
-              <!-- <p
-              class="text-error text-xl font-semibold"
-              v-if="stockBalanceDeclared != false"
-            >
-              {{ $page.props.errors['itemsToBillList.0.itemCode'].toUpperCase() }}
-            </p> -->
 
               <DataTable
                 v-model:filters="itemsToBillFilter"
