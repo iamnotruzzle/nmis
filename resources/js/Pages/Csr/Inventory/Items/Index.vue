@@ -17,6 +17,7 @@
         sortField="cl2desc"
         :sortOrder="1"
         showGridlines
+        removableSort
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
@@ -50,6 +51,7 @@
           field="mainCategory"
           header="MAIN CATEGORY"
           :showFilterMenu="false"
+          style="width: 10%"
         >
           <template #body="{ data }">
             {{ data.mainCategory }}
@@ -69,6 +71,8 @@
           field="subCategory"
           header="SUB-CATEGORY"
           :showFilterMenu="false"
+          sortable
+          style="width: 15%"
         >
           <template #body="{ data }">
             {{ data.subCategory }}
@@ -77,13 +81,16 @@
         <Column
           field="cl2desc"
           header="DESCRIPTION"
-          style="width: 30%"
+          sortable
         >
           <template #body="{ data }">
             {{ data.cl2desc }}
           </template>
         </Column>
-        <Column header="UNIT">
+        <Column
+          header="UNIT"
+          style="width: 5%"
+        >
           <template #body="{ data }">
             {{ data.uomdesc }}
           </template>
@@ -92,7 +99,7 @@
           field="cl2stat"
           header="STATUS"
           :showFilterMenu="false"
-          style="width: 5%"
+          style="width: 2%"
         >
           <template #body="{ data }">
             <div class="text-center">
