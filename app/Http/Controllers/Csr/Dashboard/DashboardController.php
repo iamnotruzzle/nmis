@@ -26,7 +26,7 @@ class DashboardController extends Controller
         $completed_requests = RequestStocks::where('status', 'RECEIVED')->count();
 
         $about_to_expire = DB::select(
-            "SELECT conv.cl2comb_after as cl2comb, item.cl2desc, conv.expiration_date
+            "SELECT TOP 10 conv.cl2comb_after as cl2comb, item.cl2desc, conv.expiration_date
             FROM csrw_csr_item_conversion as conv
             JOIN hclass2 as item ON item.cl2comb = conv.cl2comb_after
             ORDER BY conv.expiration_date ASC"
