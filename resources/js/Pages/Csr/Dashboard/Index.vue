@@ -204,6 +204,7 @@ export default {
     };
   },
   mounted() {
+    // console.log(this.about_to_expire);
     this.storePendingRequests();
     this.storeCancelledRequests();
     this.storeCompletedRequests();
@@ -250,12 +251,12 @@ export default {
     storeAboutToExpiredInContainer() {
       this.about_to_expire_container = [];
 
-      //   this.about_to_expire.forEach((e) => {
-      //     this.about_to_expire_container.push({
-      //       item: e.item_detail.cl2desc,
-      //       expiration_date: e.expiration_date,
-      //     });
-      //   });
+      this.about_to_expire.forEach((e) => {
+        this.about_to_expire_container.push({
+          item: e.cl2desc,
+          expiration_date: e.expiration_date,
+        });
+      });
     },
   },
 };

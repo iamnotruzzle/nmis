@@ -25,8 +25,12 @@ class DashboardController extends Controller
         $cancelled_requests = RequestStocks::where('status', 'CANCELLED')->count();
         $completed_requests = RequestStocks::where('status', 'RECEIVED')->count();
 
-        $about_to_expire = CsrStocks::with('itemDetail:cl2comb,cl2desc')
-            ->orderBy('expiration_date', 'ASC')->limit(10)->get();
+        $about_to_expire = DB::select(
+            "SELECT conv.cl2comb_after as cl2comb, item.cl2desc, conv.expiration_date
+            FROM csrw_csr_item_conversion as conv
+            JOIN hclass2 as item ON item.cl2comb = conv.cl2comb_after
+            ORDER BY conv.expiration_date ASC"
+        );
 
         return Inertia::render('Csr/Dashboard/Index', [
             'pending_requests' => $pending_requests,
