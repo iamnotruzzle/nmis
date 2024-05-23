@@ -176,14 +176,13 @@
                 removableSort
               >
                 <template #header>
-                  <div class="w-full flex flex-row justify-content-between">
+                  <div class="w-full flex flex-row justify-content-start">
                     <div class="text-lg font-bold my-3">
                       Prices for <span class="text-primary">[ {{ slotProps.data.cl2desc }} ]</span>
                     </div>
-
-                    <!-- @click="openAddDeliveryDialog" -->
+                  </div>
+                  <div class="flex justify-content-end">
                     <Button
-                      class="ml-2"
                       label="Add price"
                       severity="success"
                       icon="pi pi-plus"
@@ -196,6 +195,7 @@
                   field="selling_price"
                   header="SELLING PRICE"
                   style="width: 20%"
+                  sortable
                 >
                 </Column>
                 <Column
