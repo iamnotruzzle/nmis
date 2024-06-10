@@ -114,7 +114,8 @@ class PimsItemsSeeder extends Seeder
                         'lot_no' => '',
                         'barcode' => NULL,
                         'rpoint' => NULL,
-                        'catID' => $obj->catid
+                        'catID' => $obj->catid,
+                        'itemcode' => $obj->itemcode
                     ]);
                 }
             }
