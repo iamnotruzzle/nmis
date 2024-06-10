@@ -105,12 +105,14 @@ class CsrStocksControllers extends Controller
 
     public function store(Request $request)
     {
+        // dd($request);
         if ($request->searchRis != null) {
             $result = array();
 
+            // sample RIS NO 24-05-0246
             $pims = DB::connection('pims')->select(
                 "SELECT ris_rel.risid, ris.risno,
-                ris_rel.itemid, item.description,
+                ris_rel.itemid, item.itemcode, item.description,
                 ris_rel.fsid as fs_id, fs.fsName,
                 ris_rel.releaseqty, ris_rel.unitprice
                     FROM tbl_ris_release as ris_rel
@@ -122,6 +124,7 @@ class CsrStocksControllers extends Controller
                     ORDER BY item.description ASC;",
                 [$request->searchRis]
             );
+            // dd($pims);
 
             $items = DB::select(
                 "SELECT * FROM hclass2
@@ -137,10 +140,20 @@ class CsrStocksControllers extends Controller
             foreach ($pims as $pim) {
                 $matchedItem = null;
 
+                // OLD ITEM MATCH CHECKER
+                // Loop through $items to find a match
+                // foreach ($items as $item) {
+                //     // Comparing the description and cl2desc
+                //     if ($pim->description == $item->cl2desc) {
+                //         $matchedItem = $item;
+                //         break;
+                //     }
+                // }
+
                 // Loop through $items to find a match
                 foreach ($items as $item) {
                     // Comparing the description and cl2desc
-                    if ($pim->description == $item->cl2desc) {
+                    if ($pim->itemcode == $item->itemcode) {
                         $matchedItem = $item;
                         break;
                     }
