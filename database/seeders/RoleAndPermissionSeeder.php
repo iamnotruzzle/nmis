@@ -58,13 +58,27 @@ class RoleAndPermissionSeeder extends Seeder
         //     'remember_token' => Str::random(10),
         // ]);
 
-        // sir chris
+        // sir edward
         $csr = User::factory()->create([
-            // 'firstName' => 'super',
-            // 'middleName' => null,
-            // 'lastName' => 'admin',
+            // 'firstName' => 'Edward',
+            // 'middleName' => Q.,
+            // 'lastName' => 'Ramirez',
             // 'suffix' => null,
-            'employeeid' => '002021',
+            'employeeid' => '2011-136',
+            // 'email' => 'sa@sa.com',
+            'image' => null,
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'designation' => 'csr',
+            'remember_token' => Str::random(10),
+        ]);
+
+        // sir david
+        $csr = User::factory()->create([
+            // 'firstName' => 'Edward',
+            // 'middleName' => Q.,
+            // 'lastName' => 'Ramirez',
+            // 'suffix' => null,
+            'employeeid' => '002175',
             // 'email' => 'sa@sa.com',
             'image' => null,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
@@ -79,6 +93,20 @@ class RoleAndPermissionSeeder extends Seeder
             // 'lastName' => 'admin',
             // 'suffix' => null,
             'employeeid' => '002022',
+            // 'email' => 'sa@sa.com',
+            'image' => null,
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'designation' => 'ward',
+            'remember_token' => Str::random(10),
+        ]);
+
+        // sir chris
+        $csr = User::factory()->create([
+            // 'firstName' => 'super',
+            // 'middleName' => null,
+            // 'lastName' => 'admin',
+            // 'suffix' => null,
+            'employeeid' => '002021',
             // 'email' => 'sa@sa.com',
             'image' => null,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
