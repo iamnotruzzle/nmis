@@ -59,7 +59,7 @@ class RoleAndPermissionSeeder extends Seeder
         // ]);
 
         // sir edward
-        $csr = User::factory()->create([
+        $edu = User::factory()->create([
             // 'firstName' => 'Edward',
             // 'middleName' => Q.,
             // 'lastName' => 'Ramirez',
@@ -73,7 +73,7 @@ class RoleAndPermissionSeeder extends Seeder
         ]);
 
         // sir david
-        $csr = User::factory()->create([
+        $david = User::factory()->create([
             // 'firstName' => 'Edward',
             // 'middleName' => Q.,
             // 'lastName' => 'Ramirez',
@@ -87,7 +87,7 @@ class RoleAndPermissionSeeder extends Seeder
         ]);
 
         // sir jude
-        $wards1 = User::factory()->create([
+        $jude = User::factory()->create([
             // 'firstName' => 'super',
             // 'middleName' => null,
             // 'lastName' => 'admin',
@@ -101,7 +101,7 @@ class RoleAndPermissionSeeder extends Seeder
         ]);
 
         // sir chris
-        $csr = User::factory()->create([
+        $chris = User::factory()->create([
             // 'firstName' => 'super',
             // 'middleName' => null,
             // 'lastName' => 'admin',
@@ -139,8 +139,10 @@ class RoleAndPermissionSeeder extends Seeder
         // ]);
 
         $superAdminUser->assignRole($superAdminRole);
-        $csr->assignRole($adminRole);
-        $wards1->assignRole($adminRole);
+        $edu->assignRole($adminRole);
+        $david->assignRole($adminRole);
+        $jude->assignRole($adminRole);
+        $chris->assignRole($adminRole);
 
 
         // assign role to the created super-admin user
