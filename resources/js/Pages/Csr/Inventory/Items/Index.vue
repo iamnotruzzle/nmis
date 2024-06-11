@@ -35,12 +35,13 @@
                   />
                 </div>
               </div>
-              <!-- <Button
+              <Button
+                v-if="$page.props.auth.user.roles[0] == 'super-admin'"
                 label="Add item"
                 icon="pi pi-plus"
                 iconPos="right"
                 @click="openCreateItemDialog"
-              /> -->
+              />
             </div>
           </div>
         </template>
@@ -253,7 +254,7 @@
         </template>
         <div class="field">
           <label for="mainCategory">Main category</label>
-          <!-- <Dropdown
+          <Dropdown
             v-model.trim="form.mainCategory"
             required="true"
             :options="pimsCategoryList"
@@ -263,12 +264,11 @@
             optionValue="catID"
             class="w-full mb-3"
             :class="{ 'p-invalid': form.cl1comb == '' }"
-            :disabled="true"
-          /> -->
-          <InputText
+          />
+          <!-- <InputText
             v-model="form.selectedMainCat"
             readonly
-          />
+          /> -->
           <small
             class="text-error"
             v-if="form.errors.unit"
@@ -277,7 +277,7 @@
         </div>
         <div class="field">
           <label for="cl1comb">Sub-Category</label>
-          <!-- <Dropdown
+          <Dropdown
             v-model.trim="form.cl1comb"
             required="true"
             :options="cl1combsList"
@@ -287,11 +287,11 @@
             optionLabel="cl1desc"
             class="w-full mb-3"
             :class="{ 'p-invalid': form.cl1comb == '' }"
-          /> -->
-          <InputText
+          />
+          <!-- <InputText
             v-model="form.selectedSubCategory"
             readonly
-          />
+          /> -->
           <small
             class="text-error"
             v-if="form.errors.cl1comb"
@@ -300,12 +300,21 @@
           </small>
         </div>
         <div class="field">
+          <label>Item code</label>
+          <InputText v-model="form.itemcode" />
+          <small
+            class="text-error"
+            v-if="form.errors.itemcode"
+          >
+            {{ form.errors.itemcode }}
+          </small>
+        </div>
+        <div class="field">
           <label>Description</label>
           <InputText
             id="Description"
             v-model.trim="form.cl2desc"
             required="true"
-            readonly
             :class="{ 'p-invalid': form.cl2desc == '' }"
             @keyup.enter="submit"
           />
@@ -667,6 +676,7 @@ export default {
         location: null,
         selectedMainCat: null,
         selectedSubCategory: null,
+        itemcode: null,
       }),
       formConvert: this.$inertia.form({
         cl2comb: null,
@@ -697,13 +707,13 @@ export default {
   //   },
   // created will be initialize before mounted
   mounted() {
-    // console.log(this.items);
+    console.log(this.$page.props.auth.user.roles[0]);
     this.storeCl1combsInContainer();
     this.storeItemInContainer();
     this.storeUnitsInContainer();
     this.storePimsCategoryInContainer();
 
-    this.authLocation = this.$page.props.auth.user;
+    this.authLocation = this.$page.props;
     // console.log(this.authLocation.location.wardcode);
 
     this.loading = false;
@@ -786,6 +796,16 @@ export default {
           cl1comb: e.cl1comb,
           cl1desc: e.cl1desc,
         });
+      });
+      // sort
+      this.cl1combsList.sort((a, b) => {
+        if (a.cl1desc < b.cl1desc) {
+          return -1;
+        }
+        if (a.cl1desc > b.cl1desc) {
+          return 1;
+        }
+        return 0;
       });
     },
     storeUnitsInContainer() {

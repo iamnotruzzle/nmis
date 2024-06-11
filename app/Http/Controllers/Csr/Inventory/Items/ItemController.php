@@ -108,6 +108,7 @@ class ItemController extends Controller
 
         $request->validate([
             'cl1comb' => 'required',
+            'itemcode' => 'required:unique',
             'cl2desc' => 'required|max:255',
             'unit' => 'required',
             'cl2stat' => 'required|max:1',
@@ -140,6 +141,7 @@ class ItemController extends Controller
             'barcode' => NULL,
             'rpoint' => NULL,
             'catID' => $request->mainCategory,
+            'itemcode' => $request->itemcode,
         ]);
 
         // dd($item);
