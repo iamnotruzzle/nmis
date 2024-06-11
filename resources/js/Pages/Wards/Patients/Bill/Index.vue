@@ -600,12 +600,14 @@ export default {
         }
       }
 
+      //   console.log(total);
+
       //   total.toLocaleString('en-PH', {
       //     style: 'currency',
       //     currency: 'PHP',
       //   });
 
-      return total;
+      return total.toFixed(2);
     },
     tzone(date) {
       if (date == null) {
