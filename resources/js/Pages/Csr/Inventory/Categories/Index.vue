@@ -41,6 +41,7 @@
               </div>
 
               <Button
+                v-if="$page.props.auth.user.roles[0] == 'super-admin'"
                 label="Add sub-category"
                 icon="pi pi-plus"
                 iconPos="right"
