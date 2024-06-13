@@ -157,14 +157,14 @@
               <Button
                 v-tooltip.top="'Update'"
                 icon="pi pi-pencil"
-                class="mr-2"
                 rounded
                 severity="warning"
                 @click="editItem(slotProps.data)"
               />
               <Button
+                v-if="slotProps.data.uomcode == 'box'"
                 v-tooltip.top="'Convert'"
-                class=""
+                class="mx-2"
                 rounded
                 severity="success"
                 @click="convertItem(slotProps.data)"
@@ -173,6 +173,13 @@
                   <v-icon name="bi-arrow-left-right"></v-icon>
                 </template>
               </Button>
+              <Button
+                v-if="slotProps.data.uomcode != 'box'"
+                icon="pi pi-trash"
+                rounded
+                severity="danger"
+                @click="confirmDeleteItem(slotProps.data)"
+              />
             </div>
           </template>
         </Column>
@@ -534,6 +541,39 @@
           />
         </template>
       </Dialog>
+
+      <!-- Delete confirmation dialog -->
+      <Dialog
+        v-model:visible="deleteItemDialog"
+        :style="{ width: '450px' }"
+        header="Confirm"
+        :modal="true"
+        dismissableMask
+      >
+        <div class="flex align-items-center justify-content-center">
+          <i
+            class="pi pi-exclamation-triangle mr-3"
+            style="font-size: 2rem"
+          />
+          <span v-if="form">Are you sure you want to delete this item?</span>
+        </div>
+        <template #footer>
+          <Button
+            label="No"
+            icon="pi pi-times"
+            class="p-button-text"
+            @click="deleteItemDialog = false"
+          />
+          <Button
+            label="Yes"
+            icon="pi pi-check"
+            severity="danger"
+            text
+            :disabled="form.processing"
+            @click="deleteItem"
+          />
+        </template>
+      </Dialog>
     </div>
   </app-layout>
 </template>
@@ -600,6 +640,7 @@ export default {
       // paginator
       loading: false,
       totalRecords: null,
+      deleteItemDialog: false,
       rows: null,
       params: {},
       // end paginator
@@ -1017,6 +1058,21 @@ export default {
         },
       });
     },
+    confirmDeleteItem(item) {
+      console.log(item.cl2comb);
+      this.form.cl2comb = item.cl2comb;
+      //   this.itemId = item.id;
+      this.deleteItemDialog = true;
+    },
+    deleteItem() {
+      this.form.delete(route('items.destroy', this.form.cl2comb), {
+        preserveScroll: true,
+        onSuccess: () => {
+          this.updateData();
+          this.deleteItemDialog = false;
+        },
+      });
+    },
     openCreateItemDialog() {
       this.isUpdate = false;
       this.form.clearErrors();
@@ -1155,6 +1211,7 @@ export default {
       this.createItemDialog = false;
       this.convertDialog = false;
       this.priceDialog = false;
+      this.deleteItemDialog = false;
       this.form.reset();
       this.form.clearErrors();
       this.formConvert.reset();
