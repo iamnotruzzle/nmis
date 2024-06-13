@@ -7,6 +7,7 @@ use App\Models\CsrItemConversion;
 use App\Models\CsrItemConversionLogs;
 use App\Models\CsrStocks;
 use App\Models\CsrStocksLogs;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -44,9 +45,9 @@ class CsrItemConversionController extends Controller
                 'cl2comb_after' => $request->cl2comb_before,
                 'quantity_after' => $request->quantity_after,
                 'supplierID' => $request->supplierID,
-                'manufactured_date' => $request->manufactured_date,
-                'delivered_date' => $request->delivered_date,
-                'expiration_date' => $request->expiration_date,
+                'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
+                'delivered_date' =>  Carbon::parse($request->delivered_date)->format('Y-m-d H:i:s.v'),
+                'expiration_date' =>  Carbon::parse($request->expiration_date)->format('Y-m-d H:i:s.v'),
                 'converted_by' => $converted_by,
             ]);
 
@@ -61,9 +62,9 @@ class CsrItemConversionController extends Controller
                 'prev_qty' => 0,
                 'new_qty' => $request->quantity_after,
                 'supplierID' => $request->supplierID,
-                'manufactured_date' => $request->manufactured_date,
-                'delivered_date' => $request->delivered_date,
-                'expiration_date' => $request->expiration_date,
+                'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
+                'delivered_date' =>  Carbon::parse($request->delivered_date)->format('Y-m-d H:i:s.v'),
+                'expiration_date' =>  Carbon::parse($request->expiration_date)->format('Y-m-d H:i:s.v'),
                 'action' => 'CONVERTED ITEM',
                 'remarks' => '',
                 'converted_by' => $converted_by,
@@ -78,9 +79,9 @@ class CsrItemConversionController extends Controller
                 'cl2comb_after' => $request->cl2comb_after,
                 'quantity_after' => $request->quantity_after,
                 'supplierID' => $request->supplierID,
-                'manufactured_date' => $request->manufactured_date,
-                'delivered_date' => $request->delivered_date,
-                'expiration_date' => $request->expiration_date,
+                'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
+                'delivered_date' =>  Carbon::parse($request->delivered_date)->format('Y-m-d H:i:s.v'),
+                'expiration_date' =>  Carbon::parse($request->expiration_date)->format('Y-m-d H:i:s.v'),
                 'converted_by' => $converted_by,
             ]);
 
@@ -95,9 +96,9 @@ class CsrItemConversionController extends Controller
                 'prev_qty' => 0,
                 'new_qty' => $request->quantity_after,
                 'supplierID' => $request->supplierID,
-                'manufactured_date' => $request->manufactured_date,
-                'delivered_date' => $request->delivered_date,
-                'expiration_date' => $request->expiration_date,
+                'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
+                'delivered_date' =>  Carbon::parse($request->delivered_date)->format('Y-m-d H:i:s.v'),
+                'expiration_date' =>  Carbon::parse($request->expiration_date)->format('Y-m-d H:i:s.v'),
                 'action' => 'CONVERTED ITEM',
                 'remarks' => '',
                 'converted_by' => $converted_by,
@@ -137,9 +138,9 @@ class CsrItemConversionController extends Controller
             'prev_qty' => $convertedItem->new_qty,
             'new_qty' => $request->quantity_after,
             'supplierID' => $convertedItem->supplierID,
-            'manufactured_date' => $convertedItem->manufactured_date,
-            'delivered_date' => $convertedItem->delivered_date,
-            'expiration_date' => $convertedItem->expiration_date,
+            'manufactured_date' => Carbon::parse($convertedItem->manufactured_date)->format('Y-m-d H:i:s.v'),
+            'delivered_date' =>  Carbon::parse($convertedItem->delivered_date)->format('Y-m-d H:i:s.v'),
+            'expiration_date' =>  Carbon::parse($convertedItem->expiration_date)->format('Y-m-d H:i:s.v'),
             'action' => 'UPDATE ITEM',
             'remarks' => '', // todo
             'converted_by' => $convertedItem->converted_by,

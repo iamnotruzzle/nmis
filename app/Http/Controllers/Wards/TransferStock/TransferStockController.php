@@ -7,6 +7,7 @@ use App\Models\UserDetail;
 use App\Models\WardTransferStock;
 use Illuminate\Http\Request;
 use App\Models\WardsStocks;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -152,9 +153,9 @@ class TransferStockController extends Controller
             'quantity' => $transferredStock->quantity,
             'uomcode' => $wardStock->uomcode,
             'from' => $wardStock->from,
-            'manufactured_date' => $wardStock->manufactured_date,
-            'delivered_date' => $wardStock->delivered_date,
-            'expiration_date' => $wardStock->expiration_date,
+            'manufactured_date' => Carbon::parse($wardStock->manufactured_date)->format('Y-m-d H:i:s.v'),
+            'delivery_date' => Carbon::parse($wardStock->delivered_date)->format('Y-m-d H:i:s.v'),
+            'expiration_date' => Carbon::parse($wardStock->expiration_date)->format('Y-m-d H:i:s.v'),
         ]);
 
         return Redirect::route('transferstock.index');

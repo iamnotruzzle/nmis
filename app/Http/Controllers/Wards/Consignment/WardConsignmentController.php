@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Wards\Consignment;
 use App\Http\Controllers\Controller;
 use App\Models\WardsStocks;
 use App\Models\WardsStocksLogs;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -38,9 +39,9 @@ class WardConsignmentController extends Controller
             'chrgcode' => $request->fund_source,
             'quantity' => $request->quantity,
             'from' => 'CONSIGNMENT',
-            'manufactured_date' => $request->manufactured_date,
-            'delivered_date' => $request->delivered_date,
-            'expiration_date' => $request->expiration_date,
+            'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
+            'delivered_date' =>  Carbon::parse($request->delivered_date)->format('Y-m-d H:i:s.v'),
+            'expiration_date' =>  Carbon::parse($request->expiration_date)->format('Y-m-d H:i:s.v'),
         ]);
         // dd($consignment);
 
@@ -54,9 +55,9 @@ class WardConsignmentController extends Controller
             'chrgcode' => $request->fund_source,
             'prev_qty' => 0,
             'new_qty' => $request->quantity,
-            'manufactured_date' => $request->manufactured_date,
-            'delivered_date' => $request->delivered_date,
-            'expiration_date' => $request->expiration_date,
+            'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
+            'delivered_date' =>  Carbon::parse($request->delivered_date)->format('Y-m-d H:i:s.v'),
+            'expiration_date' =>  Carbon::parse($request->expiration_date)->format('Y-m-d H:i:s.v'),
             'action' => 'CREATE',
             'remarks' => null,
             'entry_by' => $entry_by,

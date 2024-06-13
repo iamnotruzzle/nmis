@@ -7,6 +7,7 @@ use App\Models\Item;
 use App\Models\WardsStocks;
 use App\Models\WardsStocksLogs;
 use App\Rules\CsrStockBalanceNotDeclaredYetRule;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -55,9 +56,9 @@ class ConvertItemController extends Controller
             'converted_from_ward_stock_id' => $wardStock->id,
             'from' => 'CSR',
             'is_converted' => 'y',
-            'manufactured_date' => $wardStock->manufactured_date,
-            'delivered_date' => $wardStock->delivered_date,
-            'expiration_date' => $wardStock->expiration_date,
+            'manufactured_date' => Carbon::parse($wardStock->manufactured_date)->format('Y-m-d H:i:s.v'),
+            'delivered_date' =>  Carbon::parse($wardStock->delivered_date)->format('Y-m-d H:i:s.v'),
+            'expiration_date' =>  Carbon::parse($wardStock->expiration_date)->format('Y-m-d H:i:s.v'),
         ]);
 
 
@@ -75,9 +76,9 @@ class ConvertItemController extends Controller
             'from' => $wardStock->from,
             'is_converted' => 'y',
             'action' => 'CONVERT ITEM',
-            'manufactured_date' => $wardStock->manufactured_date,
-            'delivered_date' => $wardStock->delivered_date,
-            'expiration_date' => $wardStock->expiration_date,
+            'manufactured_date' => Carbon::parse($wardStock->manufactured_date)->format('Y-m-d H:i:s.v'),
+            'delivered_date' =>  Carbon::parse($wardStock->delivered_date)->format('Y-m-d H:i:s.v'),
+            'expiration_date' =>  Carbon::parse($wardStock->expiration_date)->format('Y-m-d H:i:s.v'),
             'entry_by' => $entry_by,
         ]);
 

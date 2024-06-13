@@ -328,9 +328,12 @@ class IssueItemController extends Controller
                         'ris_no' => $row->ris_no,
                         'quantity' => $remaining_qty_to_be_issued,
                         'from' => 'CSR',
-                        'manufactured_date' => $row->manufactured_date,
-                        'delivered_date' => $row->delivered_date,
-                        'expiration_date' => $row->expiration_date,
+                        // 'manufactured_date' => $row->manufactured_date,
+                        // 'delivered_date' => $row->delivered_date,
+                        // 'expiration_date' => $row->expiration_date,
+                        'manufactured_date' => Carbon::parse($row->manufactured_date)->format('Y-m-d H:i:s.v'),
+                        'delivered_date' =>  Carbon::parse($row->delivered_date)->format('Y-m-d H:i:s.v'),
+                        'expiration_date' =>  Carbon::parse($row->expiration_date)->format('Y-m-d H:i:s.v'),
                     ]);
 
                     $newStockQty = $row->quantity_after - $remaining_qty_to_be_issued;
@@ -365,9 +368,9 @@ class IssueItemController extends Controller
                         'ris_no' => $row->ris_no,
                         'quantity' => $row->quantity_after,
                         'from' => 'CSR',
-                        'manufactured_date' => $row->manufactured_date,
-                        'delivered_date' => $row->delivered_date,
-                        'expiration_date' => $row->expiration_date,
+                        'manufactured_date' => Carbon::parse($row->manufactured_date)->format('Y-m-d H:i:s.v'),
+                        'delivered_date' =>  Carbon::parse($row->delivered_date)->format('Y-m-d H:i:s.v'),
+                        'expiration_date' =>  Carbon::parse($row->expiration_date)->format('Y-m-d H:i:s.v'),
                     ]);
 
                     $row::where('id', $stock->id)
