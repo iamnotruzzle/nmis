@@ -1077,7 +1077,7 @@ export default {
         return false;
       }
 
-      this.form.location = this.authLocation.location.wardcode;
+      //   this.form.location = this.authLocation.location.wardcode;
 
       if (this.isUpdate) {
         this.form.put(route('items.update', this.itemId), {
