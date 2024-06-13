@@ -27,9 +27,11 @@ class RequestStocksLogsController extends Controller
 
         $prevStockDetails = WardsStocks::where('id', $request->ward_stock_id)->first();
 
+        // dd($prevStockDetails);
+
         $updatedWardStock = WardsStocks::where('id', $request->ward_stock_id)
             ->update([
-                'quantity' => $request->quantity
+                'quantity' => $prevStockDetails->quantity - $request->quantity
             ]);
 
         $wardStockLogs = WardsStocksLogs::create([
