@@ -89,11 +89,25 @@
           </template>
         </Column>
         <Column
+          field="uomdesc"
           header="UNIT"
+          :showFilterMenu="false"
           style="width: 5%"
         >
           <template #body="{ data }">
             {{ data.uomdesc }}
+          </template>
+          <template #filter="{ filterModel, filterCallback }">
+            <Dropdown
+              v-model="filterModel.value"
+              :options="unitsList"
+              @change="filterCallback()"
+              :virtualScrollerOptions="{ itemSize: 38 }"
+              filter
+              optionLabel="uomdesc"
+              optionValue="uomdesc"
+              placeholder="NO FILTER"
+            />
           </template>
         </Column>
         <Column
@@ -654,6 +668,7 @@ export default {
         // cl2desc: { value: null, matchMode: FilterMatchMode.CONTAINS },
         cl2stat: { value: null, matchMode: FilterMatchMode.EQUALS },
         mainCategory: { value: null, matchMode: FilterMatchMode.EQUALS },
+        uomdesc: { value: null, matchMode: FilterMatchMode.EQUALS },
       },
       cl2stats: [
         {
@@ -1094,7 +1109,7 @@ export default {
       //     return false;
       //   }
 
-      this.formConvert.location = this.authLocation.location.wardcode;
+      //   this.formConvert.location = this.authLocation.location.wardcode;
 
       //   console.log('formConvert', this.formConvert);
 
