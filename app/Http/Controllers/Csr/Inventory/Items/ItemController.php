@@ -109,7 +109,7 @@ class ItemController extends Controller
         $request->validate([
             'cl1comb' => 'required',
             'itemcode' => 'required:unique',
-            'cl2desc' => 'required|max:255',
+            'cl2desc' => 'required',
             'unit' => 'required',
             'cl2stat' => 'required|max:1',
         ]);
@@ -155,7 +155,7 @@ class ItemController extends Controller
 
         $request->validate([
             'cl1comb' => 'required|max:20',
-            'cl2desc' => 'max:200',
+            'cl2desc' => 'required',
             'unit' => 'required',
             'cl2stat' => 'required|max:1',
         ]);
