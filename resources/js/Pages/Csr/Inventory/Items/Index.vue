@@ -157,6 +157,7 @@
               <Button
                 v-tooltip.top="'Update'"
                 icon="pi pi-pencil"
+                class="mr-2"
                 rounded
                 severity="warning"
                 @click="editItem(slotProps.data)"
@@ -164,7 +165,6 @@
               <Button
                 v-if="slotProps.data.uomcode == 'box'"
                 v-tooltip.top="'Convert'"
-                class="mx-2"
                 rounded
                 severity="success"
                 @click="convertItem(slotProps.data)"
