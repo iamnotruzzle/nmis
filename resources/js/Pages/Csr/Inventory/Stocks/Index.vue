@@ -369,6 +369,23 @@
                 />
               </div>
             </div>
+            <div class="field">
+              <div class="flex align-content-center">
+                <label>Converted item</label>
+                <span class="ml-2 text-error">*</span>
+              </div>
+              <Dropdown
+                required="true"
+                v-model="formAddDelivery.cl2comb"
+                :options="itemsList"
+                :virtualScrollerOptions="{ itemSize: 38 }"
+                filter
+                dataKey="cl2comb"
+                optionValue="cl2comb"
+                optionLabel="cl2desc"
+                class="w-full"
+              />
+            </div>
           </div>
           <div class="border-1 mx-4"></div>
           <!-- delivery list -->
@@ -1219,6 +1236,7 @@ export default {
       acquisitionPrice: 0,
       editConvertedItemIsUpdate: false,
       generatedRisNo: false,
+      convertedItemList: [],
       deliveryDetailsFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
@@ -1389,6 +1407,7 @@ export default {
     this.storeSuppliersInContainer();
     // this.storeConvertedItemsInContainer();
     this.storeTotalConvertedItemsInContainer();
+    this.storeConvertedItemsInContainer();
     // this.generateTempRisNo();
 
     // Add event listener to the document
@@ -1621,6 +1640,24 @@ export default {
         });
       });
     },
+    storeConvertedItemsInContainer() {
+      this.items.forEach((e) => {
+        this.convertedItemList.push({
+          cl1comb: e.cl1comb,
+          cl2comb: e.cl2comb,
+          cl2desc: e.cl2desc,
+          uomcode: e.uomcode == null ? null : e.uomcode,
+          uomdesc: e.uomdesc == null ? null : e.uomdesc,
+        });
+      });
+    },
+    findSimilarIds(targetId, arr) {
+      // Extract the prefix from the target ID
+      const prefix = targetId.split('-').slice(0, 2).join('-');
+
+      // Filter the array to find matching IDs
+      return arr.filter((obj) => obj.cl1comb && obj.cl1comb.startsWith(prefix) && obj.uomcode !== 'box');
+    },
     storeTotalStocksInContainer() {
       this.totalDeliveries.forEach((e) => {
         this.totalDeliveriesList.push({
@@ -1681,6 +1718,7 @@ export default {
         (this.manufactured_date = null),
         (this.delivered_date = null),
         (this.expiration_date = null),
+        this.storeConvertedItemsInContainer(),
         this.form.clearErrors(),
         this.form.reset(),
         this.formAdditional.clearErrors(),
@@ -1856,7 +1894,7 @@ export default {
       }
     },
     onRowClick(e) {
-      //   console.log(e.data);
+      console.log(e.data);
       this.formAdditional.ris_no = e.data.risno;
       this.formAdditional.supplierID = e.data.supplierId;
       this.formAdditional.suppname = e.data.supplierName;
@@ -1871,6 +1909,15 @@ export default {
       this.formAdditional.delivered_date = e.data.delivered_date;
       this.formAdditional.expiration_date = e.data.expiration_date;
       this.formAdditional.acquisitionPrice = Number(e.data.unitprice);
+
+      this.storeTotalConvertedItemsInContainer();
+
+      // Find similar IDs in array2
+      const similarObjects = this.findSimilarIds(e.data.cl2comb, this.convertedItemList);
+
+      // Log or handle the similar objects as needed
+      console.log('Similar objects:', similarObjects);
+      this.convertedItemsList = similarObjects;
     },
     updateNewDetailsToDeliveryDets() {
       this.deliveryDetails.forEach((e) => {
@@ -1975,6 +2022,7 @@ export default {
       this.formConvert.clearErrors();
       this.formAddDelivery.reset();
       this.formAddDelivery.clearErrors();
+      this.storeConvertedItemsInContainer();
       this.stocksList = [];
       this.storeStocksInContainer();
     },
