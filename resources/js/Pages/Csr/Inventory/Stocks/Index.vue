@@ -1406,7 +1406,6 @@ export default {
     this.storeTotalStocksInContainer();
     this.storeSuppliersInContainer();
     this.storeTotalConvertedItemsInContainer();
-    // this.storeConvertedItemsInContainer();
     // this.generateTempRisNo();
 
     // Add event listener to the document
@@ -1629,18 +1628,6 @@ export default {
         });
       });
     },
-    storeConvertedItemsInContainer() {
-      this.convertedItemList = [];
-      this.items.forEach((e) => {
-        this.convertedItemList.push({
-          cl1comb: e.cl1comb,
-          cl2comb: e.cl2comb,
-          cl2desc: e.cl2desc,
-          uomcode: e.uomcode == null ? null : e.uomcode,
-          uomdesc: e.uomdesc == null ? null : e.uomdesc,
-        });
-      });
-    },
     findSimilarIds(targetId, arr) {
       // Extract the prefix from the target ID
       const prefix = targetId.split('-').slice(0, 2).join('-');
@@ -1676,7 +1663,6 @@ export default {
           this.storeStocksInContainer();
           this.storeTotalStocksInContainer();
           this.storeSuppliersInContainer();
-          this.storeConvertedItemsInContainer();
           this.storeTotalConvertedItemsInContainer();
         },
       });
@@ -1710,7 +1696,6 @@ export default {
         (this.manufactured_date = null),
         (this.delivered_date = null),
         (this.expiration_date = null),
-        this.storeConvertedItemsInContainer(),
         this.form.clearErrors(),
         this.form.reset(),
         this.formAdditional.clearErrors(),
@@ -2014,7 +1999,6 @@ export default {
       this.formConvert.clearErrors();
       this.formAddDelivery.reset();
       this.formAddDelivery.clearErrors();
-      this.storeConvertedItemsInContainer();
       this.stocksList = [];
       this.storeStocksInContainer();
     },
