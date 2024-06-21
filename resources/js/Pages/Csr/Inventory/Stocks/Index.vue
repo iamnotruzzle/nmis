@@ -1406,7 +1406,7 @@ export default {
     this.storeTotalStocksInContainer();
     this.storeSuppliersInContainer();
     this.storeTotalConvertedItemsInContainer();
-    this.storeConvertedItemsInContainer();
+    // this.storeConvertedItemsInContainer();
     // this.generateTempRisNo();
 
     // Add event listener to the document
@@ -1646,7 +1646,9 @@ export default {
       const prefix = targetId.split('-').slice(0, 2).join('-');
 
       // Filter the array to find matching IDs
-      return arr.filter((obj) => obj.cl1comb && obj.cl1comb.startsWith(prefix) && obj.uomcode !== 'box');
+      this.convertedItemList = arr.filter(
+        (obj) => obj.cl1comb && obj.cl1comb.startsWith(prefix) && obj.uomcode !== 'box'
+      );
     },
     storeTotalStocksInContainer() {
       this.totalDeliveries.forEach((e) => {
@@ -1900,14 +1902,14 @@ export default {
       this.formAdditional.expiration_date = e.data.expiration_date;
       this.formAdditional.acquisitionPrice = Number(e.data.unitprice);
 
-      this.storeConvertedItemsInContainer();
+      //   this.storeConvertedItemsInContainer();
 
       // Find similar IDs in array2
-      const similarObjects = this.findSimilarIds(e.data.cl2comb, this.convertedItemList);
+      const similarObjects = this.findSimilarIds(e.data.cl2comb, this.itemsList);
 
       // Log or handle the similar objects as needed
-      console.log('Similar objects:', similarObjects);
-      this.convertedItemsList = similarObjects;
+      //   console.log('Similar objects:', similarObjects);
+      //   this.convertedItemsList = similarObjects;
     },
     updateNewDetailsToDeliveryDets() {
       this.deliveryDetails.forEach((e) => {
@@ -2039,6 +2041,12 @@ export default {
       } else {
         this.selectedItemsUomDesc = null;
       }
+    },
+    convertedItemsList: function (val) {
+      this.convertedItemsList = [];
+
+      this.convertedItemsList = val;
+      console.log(val);
     },
     'formAddDelivery.generateRisNo': function (val) {
       //   console.log(val);
