@@ -1613,6 +1613,7 @@ export default {
     storeItemsInContainer() {
       this.items.forEach((e) => {
         this.itemsList.push({
+          cl1comb: e.cl1comb,
           cl2comb: e.cl2comb,
           cl2desc: e.cl2desc,
           uomcode: e.uomcode == null ? null : e.uomcode,
