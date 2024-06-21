@@ -377,7 +377,7 @@
               <Dropdown
                 required="true"
                 v-model="formAddDelivery.cl2comb"
-                :options="itemsList"
+                :options="convertedItemList"
                 :virtualScrollerOptions="{ itemSize: 38 }"
                 filter
                 dataKey="cl2comb"
@@ -1405,7 +1405,6 @@ export default {
     this.storeStocksInContainer();
     this.storeTotalStocksInContainer();
     this.storeSuppliersInContainer();
-    // this.storeConvertedItemsInContainer();
     this.storeTotalConvertedItemsInContainer();
     this.storeConvertedItemsInContainer();
     // this.generateTempRisNo();
@@ -1600,16 +1599,6 @@ export default {
         });
       });
     },
-    // storeConvertedItemsInContainer() {
-    //   this.convertedItems.forEach((e) => {
-    //     this.convertedItemsList.push({
-    //       cl1comb: e.cl1comb,
-    //       cl2comb: e.cl2comb,
-    //       cl2desc: e.cl2desc,
-    //       uomcode: e.uomcode,
-    //     });
-    //   });
-    // },
     storeFundSourceInContainer() {
       //   this.typeOfCharge.forEach((e) => {
       //     this.fundSourceList.push({
@@ -1641,6 +1630,7 @@ export default {
       });
     },
     storeConvertedItemsInContainer() {
+      this.convertedItemList = [];
       this.items.forEach((e) => {
         this.convertedItemList.push({
           cl1comb: e.cl1comb,
@@ -1684,7 +1674,7 @@ export default {
           this.storeStocksInContainer();
           this.storeTotalStocksInContainer();
           this.storeSuppliersInContainer();
-          //   this.storeConvertedItemsInContainer();
+          this.storeConvertedItemsInContainer();
           this.storeTotalConvertedItemsInContainer();
         },
       });
@@ -1910,7 +1900,7 @@ export default {
       this.formAdditional.expiration_date = e.data.expiration_date;
       this.formAdditional.acquisitionPrice = Number(e.data.unitprice);
 
-      this.storeTotalConvertedItemsInContainer();
+      this.storeConvertedItemsInContainer();
 
       // Find similar IDs in array2
       const similarObjects = this.findSimilarIds(e.data.cl2comb, this.convertedItemList);
