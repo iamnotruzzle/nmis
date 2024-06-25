@@ -620,19 +620,10 @@
                   required="true"
                   autofocus
                   :class="{
-                    'p-invalid':
-                      formConvertItem.qty_to_convert == '' ||
-                      formConvertItem.qty_to_convert == null ||
-                      formConvertItem.qty_to_convert > oldQuantity,
+                    'p-invalid': formConvertItem.qty_to_convert == '' || formConvertItem.qty_to_convert == null,
                   }"
                   inputId="integeronly"
                 />
-                <span
-                  v-if="formConvertItem.qty_to_convert > oldQuantity"
-                  class="text-error"
-                >
-                  Current stock quantity is no enough.
-                </span>
               </div>
               <!-- Add more fields as needed -->
             </div>
@@ -694,8 +685,7 @@
                 formConvertItem.processing ||
                 formConvertItem.to == null ||
                 formConvertItem.qty_to_convert == null ||
-                formConvertItem.equivalent_quantity == null ||
-                formConvertItem.qty_to_convert > oldQuantity
+                formConvertItem.equivalent_quantity == null
               "
               @click="submitConvertItem"
             >
