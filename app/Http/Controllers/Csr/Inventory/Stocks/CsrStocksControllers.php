@@ -74,7 +74,10 @@ class CsrStocksControllers extends Controller
         );
 
         $convertedItems = DB::select(
-            "SELECT cl1comb, cl2comb, cl2desc, uomcode FROM hclass2 ORDER BY cl2desc ASC;"
+            "SELECT cl1comb, cl2comb, cl2desc, uomcode
+                FROM hclass2
+                WHERE uomcode != 'box'
+                ORDER BY cl2desc ASC;"
         );
 
         $fundSource = FundSource::orderBy('fsName')
