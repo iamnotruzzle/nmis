@@ -369,24 +369,42 @@
                 />
               </div>
             </div>
-            <div class="field">
-              <div class="flex align-content-center">
-                <label>Converted item</label>
-                <span class="ml-2 text-error">*</span>
+            <div class="field flex flex-row">
+              <div :style="{ width: '65%' }">
+                <div class="flex align-content-center">
+                  <label>Convert to</label>
+                  <span class="ml-2 text-error">*</span>
+                </div>
+                <Dropdown
+                  required="true"
+                  v-model="formAdditional.cl2comb_after"
+                  :options="convertedItemList"
+                  :virtualScrollerOptions="{ itemSize: 38 }"
+                  filter
+                  dataKey="cl2comb"
+                  optionValue="cl2comb"
+                  optionLabel="cl2desc"
+                  class="w-full"
+                />
               </div>
-              <Dropdown
-                required="true"
-                v-model="formAddDelivery.cl2comb"
-                :options="convertedItemList"
-                :virtualScrollerOptions="{ itemSize: 38 }"
-                filter
-                dataKey="cl2comb"
-                optionValue="cl2comb"
-                optionLabel="cl2desc"
-                class="w-full"
-              />
+              <div :style="{ width: '35%' }">
+                <div class="flex align-content-center">
+                  <label>Convert quantity</label>
+                  <span class="ml-2 text-error">*</span>
+                </div>
+                <InputText
+                  id="quantity"
+                  type="number"
+                  v-model="formAdditional.quantity_after"
+                  @keydown="restrictNonNumericAndPeriod"
+                  autofocus
+                  @keyup.enter="submitConvert"
+                  class="w-full"
+                />
+              </div>
             </div>
           </div>
+
           <div class="border-1 mx-4"></div>
           <!-- delivery list -->
           <div class="w-9">
@@ -1258,6 +1276,8 @@ export default {
         acquisitionPrice: null,
         quantity: null,
         deliveryDetails: null,
+        cl2comb_after: null,
+        quantity_after: null,
       }),
       // end data when clicking row to populate form
       stocksList: [],
@@ -1325,6 +1345,8 @@ export default {
         expiration_date: null,
         quantity: null,
         acquisitionPrice: null,
+        cl2comb_after: null,
+        quantity_after: null,
       }),
       formConvert: this.$inertia.form({
         id: null,
@@ -1873,7 +1895,7 @@ export default {
     onRowClick(e) {
       console.log(e.data);
       this.formAdditional.ris_no = e.data.risno;
-      this.formAdditional.supplierID = e.data.supplierId;
+      this.formAdditional.supplier = e.data.supplier;
       this.formAdditional.suppname = e.data.supplierName;
       this.formAdditional.fsId = e.data.fsid;
       this.formAdditional.fsName = e.data.fundSourceName;
@@ -1886,6 +1908,8 @@ export default {
       this.formAdditional.delivered_date = e.data.delivered_date;
       this.formAdditional.expiration_date = e.data.expiration_date;
       this.formAdditional.acquisitionPrice = Number(e.data.unitprice);
+      this.formAdditional.cl2comb_after = e.data.cl2comb_after;
+      this.formAdditional.quantity_after = e.data.quantity_after;
 
       //   this.storeConvertedItemsInContainer();
 
@@ -1904,14 +1928,16 @@ export default {
           this.formAdditional.quantity == e.releaseqty
         ) {
           // only update property if none on the properties is null
-          if (e.supplier == null || e.expiration_date == null) {
-            e.supplier = this.formAdditional.supplier;
-            e.supplierName = this.formAdditional.supplier == null ? null : this.formAdditional.supplier.suppname;
-            e.manufactured_date = this.formAdditional.manufactured_date;
-            e.delivered_date = this.formAdditional.delivered_date;
-            e.expiration_date = this.formAdditional.expiration_date;
-            e.releaseqty = this.formAdditional.quantity;
-          }
+          //   if (e.supplier == null || e.expiration_date == null) {
+          e.supplier = this.formAdditional.supplier;
+          e.supplierName = this.formAdditional.supplier == null ? null : this.formAdditional.supplier.suppname;
+          e.manufactured_date = this.formAdditional.manufactured_date;
+          e.delivered_date = this.formAdditional.delivered_date;
+          e.expiration_date = this.formAdditional.expiration_date;
+          e.releaseqty = this.formAdditional.quantity;
+          e.cl2comb_after = this.formAdditional.cl2comb_after;
+          e.quantity_after = this.formAdditional.quantity_after;
+          //   }
         }
       });
     },
