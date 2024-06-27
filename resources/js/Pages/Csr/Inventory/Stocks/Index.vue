@@ -264,7 +264,7 @@
               </div>
               <Dropdown
                 required="true"
-                v-model="formAdditional.supplier"
+                v-model="formImport.supplier"
                 :options="suppliersList"
                 :virtualScrollerOptions="{ itemSize: 38 }"
                 filter
@@ -278,7 +278,7 @@
                 <label>Fund source</label>
               </div>
               <InputText
-                v-model="formAdditional.fsName"
+                v-model="formImport.fsName"
                 readonly
               />
             </div>
@@ -287,7 +287,7 @@
                 <label>Item</label>
               </div>
               <InputText
-                v-model="formAdditional.cl2desc"
+                v-model="formImport.cl2desc"
                 readonly
               />
             </div>
@@ -297,7 +297,7 @@
               </div>
               <InputText
                 id="unit"
-                v-model.trim="formAdditional.uomdesc"
+                v-model.trim="formImport.uomdesc"
                 readonly
               />
             </div>
@@ -305,7 +305,7 @@
               <div>
                 <label for="manufactured_date">Manufactured date</label>
                 <Calendar
-                  v-model="formAdditional.manufactured_date"
+                  v-model="formImport.manufactured_date"
                   dateFormat="mm-dd-yy"
                   showIcon
                   showButtonBar
@@ -319,7 +319,7 @@
               <div>
                 <label for="delivered_date">Delivered date</label>
                 <Calendar
-                  v-model="formAdditional.delivered_date"
+                  v-model="formImport.delivered_date"
                   dateFormat="mm-dd-yy"
                   showIcon
                   showButtonBar
@@ -335,7 +335,7 @@
               </div>
               <Calendar
                 required="true"
-                v-model="formAdditional.expiration_date"
+                v-model="formImport.expiration_date"
                 dateFormat="mm-dd-yy"
                 showIcon
                 showButtonBar
@@ -349,7 +349,7 @@
               </div>
               <InputText
                 required="true"
-                v-model.trim="formAdditional.quantity"
+                v-model.trim="formImport.quantity"
                 autofocus
                 inputId="integeronly"
                 readonly
@@ -362,7 +362,7 @@
                 </div>
                 <InputText
                   class="w-full"
-                  v-model.trim="formAdditional.acquisitionPrice"
+                  v-model.trim="formImport.acquisitionPrice"
                   autofocus
                   :maxFractionDigits="2"
                   readonly
@@ -377,7 +377,7 @@
                 </div>
                 <Dropdown
                   required="true"
-                  v-model="formAdditional.cl2comb_after"
+                  v-model="formImport.cl2comb_after"
                   :options="convertedItemList"
                   :virtualScrollerOptions="{ itemSize: 38 }"
                   filter
@@ -395,7 +395,7 @@
                 <InputText
                   id="quantity"
                   type="number"
-                  v-model="formAdditional.quantity_after"
+                  v-model="formImport.quantity_after"
                   @keydown="restrictNonNumericAndPeriod"
                   autofocus
                   @keyup.enter="submitConvert"
@@ -514,7 +514,7 @@
             icon="pi pi-check"
             text
             type="submit"
-            :disabled="formAdditional.processing || deliveryDetails.length == 0"
+            :disabled="formImport.processing || deliveryDetails.length == 0"
             @click="submit"
           />
         </template>
@@ -1260,7 +1260,7 @@ export default {
       },
       // ------------------
       // data when clicking row to populate form
-      formAdditional: this.$inertia.form({
+      formImport: this.$inertia.form({
         ris_no: null,
         supplier: null,
         supplierName: null,
@@ -1476,8 +1476,8 @@ export default {
       this.expiration_date = null;
       this.form.clearErrors();
       this.form.reset();
-      this.formAdditional.clearErrors();
-      this.formAdditional.reset();
+      this.formImport.clearErrors();
+      this.formImport.reset();
     },
     handleKeyPress(event) {
       // Check if Ctrl key is pressed and key is 'd'
@@ -1720,8 +1720,8 @@ export default {
         (this.expiration_date = null),
         this.form.clearErrors(),
         this.form.reset(),
-        this.formAdditional.clearErrors(),
-        this.formAdditional.reset(),
+        this.formImport.clearErrors(),
+        this.formImport.reset(),
         this.formConvert.reset(),
         this.formConvert.clearErrors(),
         this.formAddDelivery.clearErrors(),
@@ -1894,22 +1894,22 @@ export default {
     },
     onRowClick(e) {
       console.log(e.data);
-      this.formAdditional.ris_no = e.data.risno;
-      this.formAdditional.supplier = e.data.supplier;
-      this.formAdditional.suppname = e.data.supplierName;
-      this.formAdditional.fsId = e.data.fsid;
-      this.formAdditional.fsName = e.data.fundSourceName;
-      this.formAdditional.cl2comb = e.data.cl2comb;
-      this.formAdditional.cl2desc = e.data.cl2desc;
-      this.formAdditional.uomcode = e.data.uomcode;
-      this.formAdditional.uomdesc = e.data.uomdesc;
-      this.formAdditional.quantity = Number(e.data.releaseqty);
-      this.formAdditional.manufactured_date = e.data.manufactured_date;
-      this.formAdditional.delivered_date = e.data.delivered_date;
-      this.formAdditional.expiration_date = e.data.expiration_date;
-      this.formAdditional.acquisitionPrice = Number(e.data.unitprice);
-      this.formAdditional.cl2comb_after = e.data.cl2comb_after;
-      this.formAdditional.quantity_after = e.data.quantity_after;
+      this.formImport.ris_no = e.data.risno;
+      this.formImport.supplier = e.data.supplier;
+      this.formImport.suppname = e.data.supplierName;
+      this.formImport.fsId = e.data.fsid;
+      this.formImport.fsName = e.data.fundSourceName;
+      this.formImport.cl2comb = e.data.cl2comb;
+      this.formImport.cl2desc = e.data.cl2desc;
+      this.formImport.uomcode = e.data.uomcode;
+      this.formImport.uomdesc = e.data.uomdesc;
+      this.formImport.quantity = Number(e.data.releaseqty);
+      this.formImport.manufactured_date = e.data.manufactured_date;
+      this.formImport.delivered_date = e.data.delivered_date;
+      this.formImport.expiration_date = e.data.expiration_date;
+      this.formImport.acquisitionPrice = Number(e.data.unitprice);
+      this.formImport.cl2comb_after = e.data.cl2comb_after;
+      this.formImport.quantity_after = e.data.quantity_after;
 
       //   this.storeConvertedItemsInContainer();
 
@@ -1923,20 +1923,20 @@ export default {
     updateNewDetailsToDeliveryDets() {
       this.deliveryDetails.forEach((e) => {
         if (
-          this.formAdditional.ris_no == e.risno &&
-          this.formAdditional.cl2comb == e.cl2comb &&
-          this.formAdditional.quantity == e.releaseqty
+          this.formImport.ris_no == e.risno &&
+          this.formImport.cl2comb == e.cl2comb &&
+          this.formImport.quantity == e.releaseqty
         ) {
           // only update property if none on the properties is null
           //   if (e.supplier == null || e.expiration_date == null) {
-          e.supplier = this.formAdditional.supplier;
-          e.supplierName = this.formAdditional.supplier == null ? null : this.formAdditional.supplier.suppname;
-          e.manufactured_date = this.formAdditional.manufactured_date;
-          e.delivered_date = this.formAdditional.delivered_date;
-          e.expiration_date = this.formAdditional.expiration_date;
-          e.releaseqty = this.formAdditional.quantity;
-          e.cl2comb_after = this.formAdditional.cl2comb_after;
-          e.quantity_after = this.formAdditional.quantity_after;
+          e.supplier = this.formImport.supplier;
+          e.supplierName = this.formImport.supplier == null ? null : this.formImport.supplier.suppname;
+          e.manufactured_date = this.formImport.manufactured_date;
+          e.delivered_date = this.formImport.delivered_date;
+          e.expiration_date = this.formImport.expiration_date;
+          e.releaseqty = this.formImport.quantity;
+          e.cl2comb_after = this.formImport.cl2comb_after;
+          e.quantity_after = this.formImport.quantity_after;
           //   }
         }
       });
@@ -1948,11 +1948,11 @@ export default {
       );
     },
     submit() {
-      if (this.form.processing && this.formAdditional.processing) {
+      if (this.form.processing && this.formImport.processing) {
         return false;
       }
 
-      this.formAdditional.deliveryDetails = this.deliveryDetails;
+      this.formImport.deliveryDetails = this.deliveryDetails;
 
       const isEmpty = this.deliveryDetails.some((item) => {
         return !item.supplier || !item.expiration_date;
@@ -1973,7 +1973,7 @@ export default {
         });
       } else {
         if (isEmpty != true) {
-          this.formAdditional.post(route('csrstocks.store'), {
+          this.formImport.post(route('csrstocks.store'), {
             preserveScroll: true,
             onSuccess: () => {
               this.stockId = null;
@@ -2019,8 +2019,8 @@ export default {
       this.updateStockDialog = false;
       this.form.reset();
       this.form.clearErrors();
-      this.formAdditional.reset();
-      this.formAdditional.clearErrors();
+      this.formImport.reset();
+      this.formImport.clearErrors();
       this.formConvert.reset();
       this.formConvert.clearErrors();
       this.formAddDelivery.reset();
