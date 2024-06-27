@@ -527,7 +527,7 @@
         class="p-fluid overflow-hidden"
         :style="{ width: '550px' }"
         @hide="clickOutsideDialog"
-        :draggable="false"
+        :draggable="true"
       >
         <template #header>
           <div class="text-primary text-xl font-bold">ADD DELIVERY</div>
@@ -660,7 +660,7 @@
             @keydown="restrictNonNumericAndPeriod"
           />
         </div>
-        <div class="field flex justify-content-between">
+        <div class="field w-6">
           <div>
             <div class="flex align-content-center">
               <label>Acquisition price</label>
@@ -671,6 +671,43 @@
               type="number"
               v-model.trim="formAddDelivery.acquisitionPrice"
               @keydown="restrictNonNumeric"
+            />
+          </div>
+        </div>
+        <div class="field flex flex-row">
+          <div
+            :style="{ width: '65%' }"
+            class="mr-2"
+          >
+            <div class="flex align-content-center">
+              <label>Convert to</label>
+              <span class="ml-2 text-error">*</span>
+            </div>
+            <Dropdown
+              required="true"
+              v-model="formAddDelivery.cl2comb_after"
+              :options="convertedItemList"
+              :virtualScrollerOptions="{ itemSize: 38 }"
+              filter
+              dataKey="cl2comb"
+              optionValue="cl2comb"
+              optionLabel="cl2desc"
+              class="w-full"
+            />
+          </div>
+          <div :style="{ width: '35%' }">
+            <div class="flex align-content-center">
+              <label>Convert quantity</label>
+              <span class="ml-2 text-error">*</span>
+            </div>
+            <InputText
+              id="quantity"
+              type="number"
+              v-model="formAddDelivery.quantity_after"
+              @keydown="restrictNonNumericAndPeriod"
+              autofocus
+              @keyup.enter="submitConvert"
+              class="w-full"
             />
           </div>
         </div>
