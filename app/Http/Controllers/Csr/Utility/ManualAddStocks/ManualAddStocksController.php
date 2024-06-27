@@ -40,7 +40,7 @@ class ManualAddStocksController extends Controller
             'delivered_date' => $delivered_date,
             'expiration_date' => $expiration_date,
             'acquisition_price' => $request->acquisitionPrice,
-            'converted' => 'n',
+            'converted' => 'y',
         ]);
 
         $convertedItem = CsrItemConversion::create([

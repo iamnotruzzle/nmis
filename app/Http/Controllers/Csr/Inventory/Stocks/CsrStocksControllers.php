@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Csr\Inventory\Stocks;
 
 use App\Http\Controllers\Controller;
 use App\Models\CsrItemConversion;
+use App\Models\CsrItemConversionLogs;
 use App\Models\CsrStocks;
 use App\Models\CsrStocksLogs;
 use App\Models\FundSource;
@@ -202,22 +203,7 @@ class CsrStocksControllers extends Controller
                     'delivered_date' => Carbon::parse($r['delivered_date'])->format('Y-m-d H:i:s.v'),
                     'expiration_date' => Carbon::parse($r['expiration_date'])->format('Y-m-d H:i:s.v'),
                     'acquisition_price' => $r['unitprice'],
-                    'converted' => 'n',
-                ]);
-
-                $convertedItem = CsrItemConversion::create([
-                    'csr_stock_id' => $stock->id,
-                    'ris_no' => $stock->ris_no,
-                    'chrgcode' => $stock->chrgcode,
-                    'cl2comb_before' => $stock->cl2comb,
-                    'quantity_before' => $stock->quantity,
-                    'cl2comb_after' => $r['cl2comb_after'],
-                    'quantity_after' => $r['quantity_after'],
-                    'supplierID' => $stock->supplierID,
-                    'manufactured_date' => Carbon::parse($stock->manufactured_date)->format('Y-m-d H:i:s.v'),
-                    'delivered_date' =>  Carbon::parse($stock->delivered_date)->format('Y-m-d H:i:s.v'),
-                    'expiration_date' =>  Carbon::parse($stock->expiration_date)->format('Y-m-d H:i:s.v'),
-                    'converted_by' => $entry_by,
+                    'converted' => 'y',
                 ]);
 
                 $stockLog = CsrStocksLogs::create([
@@ -238,6 +224,40 @@ class CsrStocksControllers extends Controller
                     'acquisition_price' => $r['unitprice'],
                     'entry_by' => $entry_by,
                     'converted' => 'n',
+                ]);
+
+                $convertedItem = CsrItemConversion::create([
+                    'csr_stock_id' => $stock->id,
+                    'ris_no' => $stock->ris_no,
+                    'chrgcode' => $stock->chrgcode,
+                    'cl2comb_before' => $stock->cl2comb,
+                    'quantity_before' => $stock->quantity,
+                    'cl2comb_after' => $r['cl2comb_after'],
+                    'quantity_after' => $r['quantity_after'],
+                    'supplierID' => $stock->supplierID,
+                    'manufactured_date' => Carbon::parse($stock->manufactured_date)->format('Y-m-d H:i:s.v'),
+                    'delivered_date' =>  Carbon::parse($stock->delivered_date)->format('Y-m-d H:i:s.v'),
+                    'expiration_date' =>  Carbon::parse($stock->expiration_date)->format('Y-m-d H:i:s.v'),
+                    'converted_by' => $entry_by,
+                ]);
+
+                $convertedItemLog = CsrItemConversionLogs::create([
+                    'item_conversion_id' => $convertedItem->id,
+                    'csr_stock_id' => $stock->id,
+                    'ris_no' => $stock->ris_no,
+                    'chrgcode' => $stock->chrgcode,
+                    'cl2comb_before' => $stock->cl2comb,
+                    'quantity_before' => $stock->quantity,
+                    'cl2comb_after' => $r['cl2comb_after'],
+                    'prev_qty' => 0,
+                    'new_qty' => $r['quantity_after'],
+                    'supplierID' => $stock->supplierID,
+                    'manufactured_date' => Carbon::parse($stock->manufactured_date)->format('Y-m-d H:i:s.v'),
+                    'delivered_date' =>  Carbon::parse($stock->delivered_date)->format('Y-m-d H:i:s.v'),
+                    'expiration_date' =>  Carbon::parse($stock->expiration_date)->format('Y-m-d H:i:s.v'),
+                    'action' => 'CONVERTED ITEM',
+                    'remarks' => '',
+                    'converted_by' => $entry_by,
                 ]);
             }
 
@@ -273,6 +293,7 @@ class CsrStocksControllers extends Controller
             'cl2comb' => $prevStockDetails->cl2comb,
             'uomcode' => $prevStockDetails->uomcode,
             'supplierID' => $prevStockDetails->supplierID,
+            'acquisition_price' => $prevStockDetails->acquisition_price,
             'chrgcode' => $prevStockDetails->chrgcode,
             'prev_qty' => $prevStockDetails->quantity,
             'new_qty' => $request->quantity,

@@ -179,9 +179,9 @@
           style="width: 5%"
         >
           <template #body="slotProps">
-            <div class="flex flex-row justify-content-between align-content-around">
+            <div class="flex flex-row justify-content-center align-content-around">
+              <!-- v-if="slotProps.data.converted == 'n'" -->
               <Button
-                v-if="slotProps.data.converted == 'n'"
                 v-tooltip.top="'Update'"
                 icon="pi pi-pencil"
                 class="mr-2"
@@ -189,18 +189,6 @@
                 severity="warning"
                 @click="editItem(slotProps.data)"
               />
-              <Button
-                v-if="slotProps.data.converted == 'n'"
-                v-tooltip.top="'Convert'"
-                class=""
-                rounded
-                severity="success"
-                @click="convertItem(slotProps.data)"
-              >
-                <template #icon>
-                  <v-icon name="bi-arrow-left-right"></v-icon>
-                </template>
-              </Button>
             </div>
           </template>
         </Column>
@@ -1172,17 +1160,6 @@
                     severity="warning"
                     @click="editConvertedItem(slotProps.data)"
                   />
-                  <!-- <Button
-                    v-tooltip.top="'Convert'"
-                    class=""
-                    rounded
-                    severity="success"
-                    @click="convertItem(slotProps.data)"
-                  >
-                    <template #icon>
-                      <v-icon name="bi-arrow-left-right"></v-icon>
-                    </template>
-                  </Button> -->
                 </div>
               </template>
             </Column>
