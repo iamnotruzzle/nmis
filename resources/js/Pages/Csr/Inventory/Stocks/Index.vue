@@ -2108,7 +2108,9 @@ export default {
     },
     'formAddDelivery.cl2comb': function (cl2comb) {
       // Find similar IDs in array2
-      const similarObjects = this.findSimilarIds(cl2comb, this.itemsList);
+      if (cl2comb != null) {
+        const similarObjects = this.findSimilarIds(cl2comb, this.itemsList);
+      }
     },
   },
 };
