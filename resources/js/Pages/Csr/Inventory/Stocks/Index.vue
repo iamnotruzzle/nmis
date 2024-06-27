@@ -398,7 +398,6 @@
                   v-model="formImport.quantity_after"
                   @keydown="restrictNonNumericAndPeriod"
                   autofocus
-                  @keyup.enter="submitConvert"
                   class="w-full"
                 />
               </div>
@@ -706,7 +705,7 @@
               v-model="formAddDelivery.quantity_after"
               @keydown="restrictNonNumericAndPeriod"
               autofocus
-              @keyup.enter="submitConvert"
+              @keyup.enter="submitAddDelivery"
               class="w-full"
             />
           </div>
@@ -733,7 +732,9 @@
               formAddDelivery.cl2comb == null ||
               formAddDelivery.expiration_date == null ||
               formAddDelivery.quantity == null ||
-              formAddDelivery.acquisitionPrice == null
+              formAddDelivery.acquisitionPrice == null ||
+              formAddDelivery.cl2comb_after == null ||
+              formAddDelivery.quantity_after == null
             "
             @click="submitAddDelivery"
           />
@@ -1992,7 +1993,7 @@ export default {
       this.formImport.deliveryDetails = this.deliveryDetails;
 
       const isEmpty = this.deliveryDetails.some((item) => {
-        return !item.supplier || !item.expiration_date;
+        return !item.supplier || !item.expiration_date || !item.cl2comb_after || !item.quantity_after;
       });
 
       this.form.stock_id = this.stockId;
@@ -2032,7 +2033,9 @@ export default {
         this.formAddDelivery.cl2comb == null ||
         this.formAddDelivery.expiration_date == null ||
         this.formAddDelivery.quantity == null ||
-        this.formAddDelivery.acquisitionPrice == null
+        this.formAddDelivery.acquisitionPrice == null ||
+        this.formAddDelivery.cl2comb_after == null ||
+        this.formAddDelivery.quantity_after == null
       ) {
         return false;
       }
