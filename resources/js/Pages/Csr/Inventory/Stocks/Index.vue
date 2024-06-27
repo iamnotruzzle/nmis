@@ -2106,6 +2106,10 @@ export default {
         this.generatedRisNo = false;
       }
     },
+    'formAddDelivery.cl2comb': function (cl2comb) {
+      // Find similar IDs in array2
+      const similarObjects = this.findSimilarIds(cl2comb, this.itemsList);
+    },
   },
 };
 </script>
