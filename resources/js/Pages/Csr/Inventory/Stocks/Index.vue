@@ -463,6 +463,14 @@
               >
               </Column>
               <Column
+                field="cl2comb_after"
+                header="CONVERTED TO"
+              >
+                <template #body="{ data }">
+                  {{ findItem(data.cl2comb_after) }}
+                </template>
+              </Column>
+              <Column
                 field="manufactured_date"
                 header="MFD. DATE"
               >
@@ -1666,6 +1674,15 @@ export default {
           uomdesc: e.uomdesc == null ? null : e.uomdesc,
         });
       });
+    },
+    findItem(e) {
+      const item = this.itemsList.find((item) => item.cl2comb === e);
+      //   return item.cl2desc;
+      if (item != null) {
+        return item.cl2desc;
+      } else {
+        return '';
+      }
     },
     findSimilarIds(targetId, arr) {
       // Extract the prefix from the target ID
