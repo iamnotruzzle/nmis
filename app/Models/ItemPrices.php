@@ -14,7 +14,7 @@ class ItemPrices extends Model
     protected $fillable = [
         'id',
         'cl2comb',
-        'selling_price',
+        'price_per_unit',
         'entry_by',
         'created_at'
     ];

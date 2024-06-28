@@ -29,7 +29,7 @@ class ReportsController extends Controller
                 clsb_csr.ending_balance as csr_ending_balance,
                 clsb_ward.beginning_balance as ward_beginning_balance,
                 clsb_ward.ending_balance as ward_ending_balance,
-                (SELECT TOP 1 selling_price FROM csrw_item_prices WHERE cl2comb = hclass2.cl2comb ORDER BY created_at DESC) as 'selling_price',
+                (SELECT TOP 1 price_per_unit FROM csrw_item_prices WHERE cl2comb = hclass2.cl2comb ORDER BY created_at DESC) as 'price_per_unit',
                 SUM(csrw_csr_stocks.quantity) as csr_quantity,
                 csrw_wards_stocks.wards_quantity,
                 csrw_wards_stocks.converted_quantity as converted_quantity,
@@ -76,7 +76,7 @@ class ReportsController extends Controller
                 clsb_csr.ending_balance as csr_ending_balance,
                 clsb_ward.beginning_balance as ward_beginning_balance,
                 clsb_ward.ending_balance as ward_ending_balance,
-                (SELECT TOP 1 selling_price FROM csrw_item_prices WHERE cl2comb = hclass2.cl2comb ORDER BY created_at DESC) as 'selling_price',
+                (SELECT TOP 1 price_per_unit FROM csrw_item_prices WHERE cl2comb = hclass2.cl2comb ORDER BY created_at DESC) as 'price_per_unit',
                 SUM(csrw_csr_stocks.quantity) as csr_quantity,
                 csrw_wards_stocks.wards_quantity,
                 csrw_wards_stocks.converted_quantity as converted_quantity,
@@ -120,23 +120,23 @@ class ReportsController extends Controller
             $reports[] = (object) [
                 'item_description' => $e->cl2desc,
                 'unit' => $e->uomdesc,
-                'unit_cost' => $e->selling_price,
+                'unit_cost' => $e->price_per_unit,
                 'csr_quantity' => $e->csr_beginning_balance, // csr starting balance
-                'csr_total_cost' => $e->csr_beginning_balance * $e->selling_price,
+                'csr_total_cost' => $e->csr_beginning_balance * $e->price_per_unit,
                 'ward_quantity' => $e->ward_beginning_balance, // ward starting balance
-                'ward_total_cost' => $e->ward_beginning_balance * $e->selling_price,
+                'ward_total_cost' => $e->ward_beginning_balance * $e->price_per_unit,
                 'total_beg_total_quantity' => $e->csr_beginning_balance + $e->ward_beginning_balance,
-                'total_beg_total_cost' => ($e->csr_beginning_balance + $e->ward_beginning_balance) * $e->selling_price,
+                'total_beg_total_cost' => ($e->csr_beginning_balance + $e->ward_beginning_balance) * $e->price_per_unit,
                 'supplies_issued_to_wards_quantity' => $e->wards_quantity + $e->consumption_quantity + $e->converted_quantity, // + converted quantity
-                'supplies_issued_to_wards_total_cost' => ($e->wards_quantity + $e->consumption_quantity) * $e->selling_price,
+                'supplies_issued_to_wards_total_cost' => ($e->wards_quantity + $e->consumption_quantity) * $e->price_per_unit,
                 'consumption_quantity' => $e->consumption_quantity,
                 'consumption_total_cost' => $e->consumption_total_cost,
                 'csr_quantity_ending_bal' => $e->csr_ending_balance, // csr ending balance
-                'csr_total_cost_ending_bal' => $e->csr_ending_balance * $e->selling_price,
+                'csr_total_cost_ending_bal' => $e->csr_ending_balance * $e->price_per_unit,
                 'ward_quantity_ending_bal' => $e->ward_ending_balance,
-                'ward_total_cost_ending_bal' => $e->ward_ending_balance * $e->selling_price, // ward ending balance
+                'ward_total_cost_ending_bal' => $e->ward_ending_balance * $e->price_per_unit, // ward ending balance
                 'total_end_total_quantity' => $e->csr_ending_balance + $e->ward_ending_balance,
-                'total_end_total_cost' => ($e->csr_ending_balance + $e->ward_ending_balance) * $e->selling_price,
+                'total_end_total_cost' => ($e->csr_ending_balance + $e->ward_ending_balance) * $e->price_per_unit,
             ];
         }
         // dd($reports);

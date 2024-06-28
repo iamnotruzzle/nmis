@@ -954,7 +954,7 @@ export default {
           fsid: e.fsid,
           fsName: e.fsName,
           name: removeUnderscore,
-          selling_price: e.selling_price,
+          price_per_unit: e.price_per_unit,
           requested_qty: e.requested_qty,
           approved_qty: e.approved_qty,
           expiration_date: e.expiration_date,

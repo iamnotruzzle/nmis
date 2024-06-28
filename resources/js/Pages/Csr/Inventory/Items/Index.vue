@@ -214,8 +214,8 @@
                   </div>
                 </template>
                 <Column
-                  field="selling_price"
-                  header="SELLING PRICE"
+                  field="price_per_unit"
+                  header="PRICE PER UNIT"
                   style="width: 20%"
                   sortable
                 >
@@ -510,13 +510,13 @@
           <div class="text-primary text-xl font-bold">PRICE</div>
         </template>
         <div class="field">
-          <label>Selling price</label>
+          <label>Price per unit</label>
           <InputNumber
             id="Price"
-            v-model="formPrice.selling_price"
+            v-model="formPrice.price_per_unit"
             required="true"
             autofocus
-            :class="{ 'p-invalid': formPrice.selling_price == '' }"
+            :class="{ 'p-invalid': formPrice.price_per_unit == '' }"
             :minFractionDigits="1"
             :maxFractionDigits="2"
             @keyup.enter="submitPrice"
@@ -536,7 +536,7 @@
             icon="pi pi-check"
             text
             type="submit"
-            :disabled="formPrice.processing || formPrice.selling_price == null || formPrice.selling_price == ''"
+            :disabled="formPrice.processing || formPrice.price_per_unit == null || formPrice.price_per_unit == ''"
             @click="submitPrice"
           />
         </template>
@@ -750,7 +750,7 @@ export default {
       formPrice: this.$inertia.form({
         id: null,
         cl2comb: null,
-        selling_price: null,
+        price_per_unit: null,
         entry_by: null,
       }),
     };
@@ -890,7 +890,7 @@ export default {
               matchingItem.prices.push({
                 id: price.id,
                 cl2comb: price.cl2comb,
-                selling_price: price.selling_price,
+                price_per_unit: price.price_per_unit,
                 entry_by: price.entry_by,
                 created_at: price.created_at,
               });
@@ -914,7 +914,7 @@ export default {
               .map((filteredPrice) => ({
                 id: filteredPrice.id,
                 cl2comb: filteredPrice.cl2comb,
-                selling_price: filteredPrice.selling_price,
+                price_per_unit: filteredPrice.price_per_unit,
                 entry_by: filteredPrice.firstname + ' ' + filteredPrice.lastname,
                 created_at: filteredPrice.created_at,
               })),
@@ -970,7 +970,7 @@ export default {
               // if created_ate is equal to yesterday
               if (moment(created_at).format('MM/DD/YYYY') === moment().subtract(1, 'days').format('MM/DD/YYYY')) {
                 option.xAxis.data.push(moment(e.created_at).format('YYYY-MM-DD, hh:mm'));
-                option.series[0].data.push(Number(e.selling_price).toFixed(2));
+                option.series[0].data.push(Number(e.price_per_unit).toFixed(2));
               }
             } else {
               option.xAxis.data.push(null);
@@ -985,7 +985,7 @@ export default {
               let today = moment().format('MM/DD/YYYY');
               if (moment(created_at).isSame(today)) {
                 option.xAxis.data.push(moment(e.created_at).format('YYYY-MM-DD, hh:mm'));
-                option.series[0].data.push(Number(e.selling_price).toFixed(2));
+                option.series[0].data.push(Number(e.price_per_unit).toFixed(2));
               }
             } else {
               option.xAxis.data.push(null);
@@ -999,7 +999,7 @@ export default {
               let created_at = moment(e.created_at).format('MM/DD/YYYY');
               if (moment(created_at).week() === moment().week()) {
                 option.xAxis.data.push(moment(e.created_at).format('YYYY-MM-DD, hh:mm'));
-                option.series[0].data.push(Number(e.selling_price).toFixed(2));
+                option.series[0].data.push(Number(e.price_per_unit).toFixed(2));
               }
             } else {
               option.xAxis.data.push(null);
@@ -1014,7 +1014,7 @@ export default {
               if (moment(created_at).month() === moment().month()) {
                 // option.xAxis.data.push(this.tzone(e.created_at));
                 option.xAxis.data.push(moment(e.created_at).format('YYYY-MM-DD, hh:mm'));
-                option.series[0].data.push(Number(e.selling_price).toFixed(2));
+                option.series[0].data.push(Number(e.price_per_unit).toFixed(2));
               }
             } else {
               option.xAxis.data.push(null);
@@ -1028,7 +1028,7 @@ export default {
               let created_at = moment(e.created_at).format('LL');
               if (moment(created_at).year() === moment().year()) {
                 option.xAxis.data.push(moment(e.created_at).format('YYYY-MM-DD, hh:mm'));
-                option.series[0].data.push(Number(e.selling_price).toFixed(2));
+                option.series[0].data.push(Number(e.price_per_unit).toFixed(2));
               }
             } else {
               option.xAxis.data.push(null);
@@ -1190,7 +1190,7 @@ export default {
       //   console.log(this.$page.props.errors);
     },
     submitPrice() {
-      if (this.formPrice.processing || this.formPrice.selling_price == null || this.formConvert.cl2desc == '') {
+      if (this.formPrice.processing || this.formPrice.price_per_unit == null || this.formConvert.cl2desc == '') {
         return false;
       }
 

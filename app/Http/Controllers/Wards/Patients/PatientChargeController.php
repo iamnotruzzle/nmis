@@ -56,7 +56,7 @@ class PatientChargeController extends Controller
                     hclass2.uomcode,
                     SUM(csrw_wards_stocks.quantity) as quantity,
                     (
-                        SELECT TOP 1 selling_price
+                        SELECT TOP 1 price_per_unit
                         FROM csrw_item_prices
                         WHERE cl2comb = csrw_wards_stocks.cl2comb
                         ORDER BY created_at DESC
@@ -77,7 +77,7 @@ class PatientChargeController extends Controller
                     hclass2.cl2desc,
                     hclass2.uomcode,
                     SUM(csrw_wards_stocks.quantity) as quantity,
-                    (SELECT TOP 1 selling_price FROM csrw_item_prices WHERE cl2comb = csrw_wards_stocks.cl2comb ORDER BY created_at DESC) as price
+                    (SELECT TOP 1 price_per_unit FROM csrw_item_prices WHERE cl2comb = csrw_wards_stocks.cl2comb ORDER BY created_at DESC) as price
                 FROM hclass2
                 JOIN csrw_wards_stocks ON csrw_wards_stocks.cl2comb = hclass2.cl2comb
                 WHERE csrw_wards_stocks.location = '" . $wardcode . "'

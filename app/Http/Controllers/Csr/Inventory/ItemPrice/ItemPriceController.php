@@ -20,12 +20,12 @@ class ItemPriceController extends Controller
         $user = Auth::user();
 
         $request->validate([
-            'selling_price' => 'required|numeric|min:0',
+            'price_per_unit' => 'required|numeric|min:0',
         ]);
 
         $itemPrices = ItemPrices::create([
             'cl2comb' => $request->cl2comb,
-            'selling_price' => $request->selling_price,
+            'price_per_unit' => $request->price_per_unit,
             'entry_by' => $user->employeeid,
         ]);
 
@@ -36,11 +36,11 @@ class ItemPriceController extends Controller
     {
         // dd($request);
         $request->validate([
-            'selling_price' => 'required|numeric|min:0',
+            'price_per_unit' => 'required|numeric|min:0',
         ]);
 
         $itemprice->update([
-            'selling_price' => $request->selling_price,
+            'price_per_unit' => $request->price_per_unit,
         ]);
 
         return Redirect::route('items.index');
