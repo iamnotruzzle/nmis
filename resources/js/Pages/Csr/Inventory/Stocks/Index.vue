@@ -277,7 +277,7 @@
               <Textarea
                 v-model="formImport.cl2desc"
                 readonly
-                rows="7"
+                rows="5"
                 class="w-full"
               />
             </div>
@@ -389,6 +389,20 @@
                   @keydown="restrictNonNumericAndPeriod"
                   autofocus
                   class="w-full"
+                />
+              </div>
+            </div>
+            <div class="field">
+              <div>
+                <div class="flex align-content-center">
+                  <label>Hospital price <span class="text-green-500">(70% markup price)</span></label>
+                </div>
+                <InputText
+                  class="w-full"
+                  v-model.trim="formImport.hospital_price"
+                  autofocus
+                  :maxFractionDigits="2"
+                  readonly
                 />
               </div>
             </div>
@@ -1303,6 +1317,7 @@ export default {
         deliveryDetails: null,
         cl2comb_after: null,
         quantity_after: null,
+        hospital_price: null,
       }),
       // end data when clicking row to populate form
       stocksList: [],
@@ -2110,6 +2125,13 @@ export default {
       if (cl2comb != null) {
         const similarObjects = this.findSimilarIds(cl2comb, this.itemsList);
       }
+    },
+    'formImport.acquisitionPrice': function (e) {
+      console.log(e);
+      this.formImport.hospital_price = e / 0.7 + e;
+      //   if (cl2comb != null) {
+      //     const similarObjects = this.findSimilarIds(cl2comb, this.itemsList);
+      //   }
     },
   },
 };
