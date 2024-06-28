@@ -16,7 +16,13 @@ class ItemPrices extends Model
         'cl2comb',
         'price_per_unit',
         'entry_by',
-        'created_at'
+        'created_at',
+        'acquisition_price',
+        'hospital_price',
+        'ris_no',
+        'acquisition_price',
+        'hospital_price',
+        'price_per_unit',
     ];
 
     public function userDetail()
