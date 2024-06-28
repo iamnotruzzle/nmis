@@ -274,9 +274,11 @@
               <div class="flex align-content-center">
                 <label>Item</label>
               </div>
-              <InputText
+              <Textarea
                 v-model="formImport.cl2desc"
                 readonly
+                rows="7"
+                class="w-full"
               />
             </div>
             <div class="field">
