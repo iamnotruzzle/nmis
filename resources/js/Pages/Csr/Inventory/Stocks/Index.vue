@@ -2128,10 +2128,22 @@ export default {
     },
     'formImport.acquisitionPrice': function (e) {
       console.log(e);
-      this.formImport.hospital_price = e / 0.7 + e;
+      let num = e * 0.7 + e;
       //   if (cl2comb != null) {
       //     const similarObjects = this.findSimilarIds(cl2comb, this.itemsList);
       //   }
+
+      //   this.formImport.hospital_price
+
+      let str = num.toString();
+      let index = str.indexOf('.');
+
+      // Check if there's a decimal point
+      if (index !== -1) {
+        this.formImport.hospital_price = str.slice(0, index + 3); // Include the decimal point and the next two digits
+      } else {
+        this.formImport.hospital_price = str + '.00'; // No decimal point means it's a whole number
+      }
     },
   },
 };
