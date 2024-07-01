@@ -140,8 +140,8 @@ class CsrItemConversionController extends Controller
             'manufactured_date' => Carbon::parse($convertedItem->manufactured_date)->format('Y-m-d H:i:s.v'),
             'delivered_date' =>  Carbon::parse($convertedItem->delivered_date)->format('Y-m-d H:i:s.v'),
             'expiration_date' =>  Carbon::parse($convertedItem->expiration_date)->format('Y-m-d H:i:s.v'),
-            'action' => 'UPDATE ITEM',
-            'remarks' => '', // todo
+            'action' => 'UPDATE QTY',
+            'remarks' => $request->remarks, // todo
             'converted_by' => $convertedItem->converted_by,
             'updated_by' => $updated_by,
         ]);

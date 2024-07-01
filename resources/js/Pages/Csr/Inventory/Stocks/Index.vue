@@ -992,7 +992,7 @@
         dismissableMask
       >
         <template #header>
-          <div class="text-primary text-xl font-bold">CONVERT</div>
+          <div class="text-primary text-xl font-bold">UPDATE CONVERTED ITEM</div>
         </template>
         <div class="field">
           <div class="flex align-content-center">
@@ -1018,6 +1018,23 @@
             @keyup.enter="submitConvert"
           />
         </div>
+        <div>
+          <div class="flex align-content-center">
+            <label>Remarks</label>
+            <span class="ml-2 text-error">*</span>
+          </div>
+          <Textarea
+            v-model.trim="formConvert.remarks"
+            rows="10"
+            class="w-full"
+          />
+          <small
+            class="text-error"
+            v-if="formConvert.errors.remarks"
+          >
+            {{ formConvert.errors.remarks }}
+          </small>
+        </div>
         <template #footer>
           <Button
             label="Cancel"
@@ -1031,7 +1048,13 @@
             icon="pi pi-check"
             text
             type="submit"
-            :disabled="formConvert.processing || formConvert.quantity_after == '' || formConvert.quantity_after == null"
+            :disabled="
+              formConvert.processing ||
+              formConvert.quantity_after == '' ||
+              formConvert.quantity_after == null ||
+              formConvert.remarks == '' ||
+              formConvert.remarks == null
+            "
             @click="submitConvert"
           />
         </template>
@@ -1431,6 +1454,7 @@ export default {
         manufactured_date: null,
         delivered_date: null,
         expiration_date: null,
+        remarks: null,
       }),
       stockLvlFilter: [
         {
@@ -1686,6 +1710,7 @@ export default {
           cl2comb_after: e.cl2comb_after,
           cl2desc_after: e.cl2desc_after,
           quantity_after: e.quantity_after,
+          acquisition_price: e.acquisition_price,
           expiration_date: e.expiration_date,
           converted_by: e.firstname.trim() + ' ' + e.lastname.trim(),
         });
@@ -1938,7 +1963,9 @@ export default {
       if (
         this.formConvert.processing ||
         this.formConvert.quantity_after == '' ||
-        this.formConvert.quantity_after == null
+        this.formConvert.quantity_after == null ||
+        this.formConvert.remarks == '' ||
+        this.formConvert.remarks == null
       ) {
         return false;
       }
