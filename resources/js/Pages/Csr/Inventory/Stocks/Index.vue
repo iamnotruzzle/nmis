@@ -985,7 +985,7 @@
       <!-- convert dialog -->
       <Dialog
         v-model:visible="convertDialog"
-        :style="{ width: '650px' }"
+        :style="{ width: '500px' }"
         :modal="true"
         class="p-fluid"
         @hide="clickOutsideDialog"
@@ -998,28 +998,14 @@
           <div class="flex align-content-center">
             <label>Item</label>
           </div>
-          <InputText
+          <Textarea
             v-model.trim="formConvert.cl2desc_before"
             readonly
+            rows="5"
+            class="w-full"
           />
         </div>
-        <div class="field">
-          <div class="flex align-content-center">
-            <label>Convert to <label class="text-yellow-500">(optional)</label></label>
-          </div>
-          <Dropdown
-            v-model.trim="formConvert.cl2comb_after"
-            required="true"
-            :options="convertedItemsList"
-            :virtualScrollerOptions="{ itemSize: 48 }"
-            filter
-            optionLabel="cl2desc"
-            optionValue="cl2comb"
-            class="w-full mb-3"
-            :class="{ 'p-invalid': formConvert.cl1comb == '' }"
-          />
-        </div>
-        <div class="field">
+        <div class="field w-4">
           <div class="flex align-content-center">
             <label>Quantity</label>
           </div>
@@ -1440,7 +1426,6 @@ export default {
         cl2comb_before: null,
         cl2desc_before: null,
         quantity_before: null,
-        cl2comb_after: null,
         quantity_after: null,
         supplierID: null,
         manufactured_date: null,
@@ -1824,7 +1809,7 @@ export default {
       );
     },
     editConvertedItem(item) {
-      //   console.log(item);
+      console.log(item);
 
       let itemCl2comb = this.extractCl2comb(item.cl2comb_after);
       this.updateConvertedIemListBasedOnCl1comb(itemCl2comb);
@@ -1834,6 +1819,7 @@ export default {
 
       this.formConvert.id = item.id;
 
+      this.formConvert.ris_no = item.ris_no;
       this.formConvert.cl2comb_before = item.cl2comb_after;
       this.formConvert.cl2desc_before = item.cl2desc_after;
       this.formConvert.quantity_after = item.quantity_after;

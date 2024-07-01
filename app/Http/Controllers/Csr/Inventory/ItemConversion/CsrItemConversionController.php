@@ -7,6 +7,7 @@ use App\Models\CsrItemConversion;
 use App\Models\CsrItemConversionLogs;
 use App\Models\CsrStocks;
 use App\Models\CsrStocksLogs;
+use App\Models\ItemPrices;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -120,12 +121,10 @@ class CsrItemConversionController extends Controller
 
         CsrItemConversion::where('id', $request->id)
             ->update([
-                'cl2comb_after' => $request->cl2comb_after == null ? $convertedItem->cl2comb_after : $request->cl2comb_after,
+                // 'cl2comb_after' => $request->cl2comb_after == null ? $convertedItem->cl2comb_after : $request->cl2comb_after,
                 'quantity_after' => $request->quantity_after,
                 'updated_by' => $updated_by,
             ]);
-
-        // dd($item);
 
         $convertedItemLog = CsrItemConversionLogs::create([
             'item_conversion_id' => $convertedItem->item_conversion_id,
@@ -134,7 +133,7 @@ class CsrItemConversionController extends Controller
             'chrgcode' => $convertedItem->chrgcode,
             'cl2comb_before' => $convertedItem->cl2comb_after,
             'quantity_before' => $convertedItem->new_qty,
-            'cl2comb_after' => $request->cl2comb_after == null ? $convertedItem->cl2comb_after : $request->cl2comb_after,
+            'cl2comb_after' => $convertedItem->cl2comb_after,
             'prev_qty' => $convertedItem->new_qty,
             'new_qty' => $request->quantity_after,
             'supplierID' => $convertedItem->supplierID,
