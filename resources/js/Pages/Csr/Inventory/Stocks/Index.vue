@@ -2220,7 +2220,7 @@ export default {
     },
     'formImport.acquisitionPrice': function (e) {
       let val = Number(e);
-      let hospital_price = val * 0.7 + val;
+      let hospital_price = val / 0.7;
 
       let str_hospital_price = hospital_price.toString();
       let index = str_hospital_price.indexOf('.');
@@ -2237,7 +2237,7 @@ export default {
       if (val == 0 || val == null) {
         this.formImport.price_per_unit = 0;
       } else {
-        let price_per_unit = val / this.formImport.hospital_price;
+        let price_per_unit = this.formImport.hospital_price / val;
 
         let str_price_per_unit = price_per_unit.toString();
         let index = str_price_per_unit.indexOf('.');
@@ -2252,7 +2252,7 @@ export default {
     },
     'formAddDelivery.acquisitionPrice': function (e) {
       let val = Number(e);
-      let hospital_price = val * 0.7 + val;
+      let hospital_price = val / 0.7;
 
       let str_hospital_price = hospital_price.toString();
       let index = str_hospital_price.indexOf('.');
@@ -2269,7 +2269,7 @@ export default {
       if (val == 0 || val == null) {
         this.formAddDelivery.price_per_unit = 0;
       } else {
-        let price_per_unit = val / this.formAddDelivery.hospital_price;
+        let price_per_unit = this.formAddDelivery.hospital_price / val;
 
         let str_price_per_unit = price_per_unit.toString();
         let index = str_price_per_unit.indexOf('.');
