@@ -219,6 +219,9 @@
                   style="width: 20%"
                   sortable
                 >
+                  <template #body="{ data }">
+                    <span class="text-green-500"> {{ data.price_per_unit }}</span>
+                  </template>
                 </Column>
                 <Column
                   field="entry_by"
@@ -763,7 +766,7 @@ export default {
   //   },
   // created will be initialize before mounted
   mounted() {
-    console.log(this.$page.props.auth.user.roles[0]);
+    // console.log(this.$page.props.auth.user.roles[0]);
     this.storeCl1combsInContainer();
     this.storeItemInContainer();
     this.storeUnitsInContainer();
@@ -878,9 +881,10 @@ export default {
     storeItemInContainer() {
       // Loop through each item in this.items
       this.items.forEach((item) => {
+        // console.log('items', this.items);
         // Find corresponding item in itemsList based on cl2comb
         const matchingItem = this.itemsList.find((listItem) => listItem.cl2comb === item.cl2comb);
-
+        console.log('match', matchingItem);
         if (matchingItem) {
           // If a matching item is found, iterate through prices array
           this.prices.forEach((price) => {
@@ -891,6 +895,9 @@ export default {
                 id: price.id,
                 cl2comb: price.cl2comb,
                 price_per_unit: price.price_per_unit,
+                ris_no: price.ris_no,
+                hospital_price: price.hospital_price,
+                acquisition_price: price.acquisition_price,
                 entry_by: price.entry_by,
                 created_at: price.created_at,
               });
@@ -915,6 +922,9 @@ export default {
                 id: filteredPrice.id,
                 cl2comb: filteredPrice.cl2comb,
                 price_per_unit: filteredPrice.price_per_unit,
+                ris_no: filteredPrice.ris_no,
+                acquisition_price: filteredPrice.acquisition_price,
+                hospital_price: filteredPrice.hospital_price,
                 entry_by: filteredPrice.firstname + ' ' + filteredPrice.lastname,
                 created_at: filteredPrice.created_at,
               })),

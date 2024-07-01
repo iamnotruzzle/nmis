@@ -65,15 +65,43 @@ class CsrStocksControllers extends Controller
             "
         );
 
+        // $totalConvertedItems = DB::select(
+        //     "SELECT converted.id, converted.ris_no, fund_source.fsName, converted.cl2comb_after, item.cl2desc, converted.quantity_after, converted.expiration_date, employee.firstname, employee.lastname
+        //         FROM csrw_csr_item_conversion as converted
+        //         JOIN hclass2 as item ON item.cl2comb = converted.cl2comb_after
+        //         JOIN huom as uom ON uom.uomcode = item.uomcode
+        //         JOIN hpersonal as employee ON employee.employeeid = converted.converted_by
+        //         JOIN csrw_fund_source as fund_source ON fund_source.fsid = converted.chrgcode;
+        //     "
+        // );
+
         $totalConvertedItems = DB::select(
-            "SELECT converted.id, converted.ris_no, fund_source.fsName, converted.cl2comb_after, item.cl2desc, converted.quantity_after, converted.expiration_date, employee.firstname, employee.lastname
-                FROM csrw_csr_item_conversion as converted
-                JOIN hclass2 as item ON item.cl2comb = converted.cl2comb_after
-                JOIN huom as uom ON uom.uomcode = item.uomcode
-                JOIN hpersonal as employee ON employee.employeeid = converted.converted_by
-                JOIN csrw_fund_source as fund_source ON fund_source.fsid = converted.chrgcode;
-            "
+            "SELECT
+                converted.id,
+                converted.ris_no,
+                fund_source.fsName,
+                converted.cl2comb_after,
+                item_after.cl2desc AS cl2desc_after,
+                converted.cl2comb_before,
+                item_before.cl2desc AS cl2desc_before,
+                converted.quantity_after,
+                converted.expiration_date,
+                employee.firstname,
+                employee.lastname
+            FROM
+                csrw_csr_item_conversion AS converted
+            JOIN
+                hclass2 AS item_after ON item_after.cl2comb = converted.cl2comb_after
+            JOIN
+                hclass2 AS item_before ON item_before.cl2comb = converted.cl2comb_before
+            JOIN
+                huom AS uom ON uom.uomcode = item_after.uomcode
+            JOIN
+                hpersonal AS employee ON employee.employeeid = converted.converted_by
+            JOIN
+                csrw_fund_source AS fund_source ON fund_source.fsid = converted.chrgcode;"
         );
+        // dd($totalConvertedItems);
 
         $convertedItems = DB::select(
             "SELECT cl1comb, cl2comb, cl2desc, uomcode
@@ -187,6 +215,7 @@ class CsrStocksControllers extends Controller
             return $result;
         } else {
             $deliveryDetails = $request->deliveryDetails;
+            // dd($deliveryDetails);
 
             $entry_by = Auth::user()->employeeid;
 
@@ -207,7 +236,7 @@ class CsrStocksControllers extends Controller
                 ]);
 
                 $itemPrices = ItemPrices::create([
-                    'cl2comb' => $r['cl2comb'],
+                    'cl2comb' => $r['cl2comb_after'],
                     'price_per_unit' => $r['price_per_unit'],
                     'entry_by' => $entry_by,
                     'ris_no' => $r['risno'],

@@ -204,16 +204,21 @@
       </DataTable>
 
       <!-- import delivery dialog -->
+      <!-- class="p-fluid w-11 overflow-hidden" -->
       <Dialog
         v-model:visible="importDeliveryDialog"
         :modal="true"
         class="p-fluid w-11 overflow-hidden"
-        :style="{ height: '90%' }"
+        :style="{ height: '95%' }"
         @hide="clickOutsideDialog"
         :draggable="false"
       >
         <template #header>
-          <div class="text-primary text-xl font-bold">IMPORT DELIVERY</div>
+          <!-- ("CTRL + D " to update an item in the list) -->
+          <div class="text-xl font-bold">
+            <span class="text-primary">IMPORT DELIVERY </span>
+            <span>("CTRL + D" to update an item in the list)</span>
+          </div>
         </template>
 
         <div class="flex flex-row justify-content-between overflow-hidden">
@@ -406,11 +411,25 @@
                 />
               </div>
             </div>
+            <div class="field">
+              <div>
+                <div class="flex align-content-center">
+                  <label>Price per unit <span class="text-blue-500">(Qty / Hospital price)</span></label>
+                </div>
+                <InputText
+                  class="w-full"
+                  v-model.trim="formImport.price_per_unit"
+                  autofocus
+                  :maxFractionDigits="2"
+                  readonly
+                />
+              </div>
+            </div>
           </div>
 
-          <div class="border-1 mx-4"></div>
+          <div class="border-1 mx-3"></div>
           <!-- delivery list -->
-          <div class="w-9">
+          <div class="w-11">
             <DataTable
               class="p-datatable-sm"
               v-model:filters="deliveryDetailsFilter"
@@ -472,6 +491,14 @@
               >
               </Column>
               <Column
+                field="hospital_price"
+                header="Hospital price"
+              >
+                <template #body="{ data }">
+                  <span class="text-green-500">{{ data.hospital_price }}</span>
+                </template>
+              </Column>
+              <Column
                 field="releaseqty"
                 header="QTY"
               >
@@ -482,6 +509,19 @@
               >
                 <template #body="{ data }">
                   {{ findItem(data.cl2comb_after) }}
+                </template>
+              </Column>
+              <Column
+                field="quantity_after"
+                header="Converted qty"
+              >
+              </Column>
+              <Column
+                field="price_per_unit"
+                header="Price per unit"
+              >
+                <template #body="{ data }">
+                  <span class="text-blue-500"> {{ data.price_per_unit }}</span>
                 </template>
               </Column>
               <Column
@@ -1125,17 +1165,20 @@
             >
             </Column>
             <Column
-              field="cl2desc"
-              header="ITEM"
+              field="cl2desc_before"
+              header="CONVERTED FROM"
               sortable
             >
-              <!-- <template #body="{ data }">
-              {{ data.cl2desc }}
-            </template> -->
+            </Column>
+            <Column
+              field="cl2desc_after"
+              header="CONVERTED TO"
+              sortable
+            >
             </Column>
             <Column
               field="quantity_after"
-              header="QTY"
+              header="CONVERTED QTY"
               sortable
             >
             </Column>
@@ -1318,6 +1361,7 @@ export default {
         cl2comb_after: null,
         quantity_after: null,
         hospital_price: null,
+        price_per_unit: null,
       }),
       // end data when clicking row to populate form
       stocksList: [],
@@ -1652,8 +1696,10 @@ export default {
           id: e.id,
           ris_no: e.ris_no,
           fsName: e.fsName,
+          cl2comb_before: e.cl2comb_before,
+          cl2desc_before: e.cl2desc_before,
           cl2comb_after: e.cl2comb_after,
-          cl2desc: e.cl2desc,
+          cl2desc_after: e.cl2desc_after,
           quantity_after: e.quantity_after,
           expiration_date: e.expiration_date,
           converted_by: e.firstname.trim() + ' ' + e.lastname.trim(),
@@ -1789,7 +1835,7 @@ export default {
       this.formConvert.id = item.id;
 
       this.formConvert.cl2comb_before = item.cl2comb_after;
-      this.formConvert.cl2desc_before = item.cl2desc;
+      this.formConvert.cl2desc_before = item.cl2desc_after;
       this.formConvert.quantity_after = item.quantity_after;
     },
     editItem(item) {
@@ -1942,7 +1988,7 @@ export default {
       }
     },
     onRowClick(e) {
-      console.log(e.data);
+      //   console.log(e.data);
       this.formImport.ris_no = e.data.risno;
       this.formImport.supplier = e.data.supplier;
       this.formImport.suppname = e.data.supplierName;
@@ -1986,6 +2032,8 @@ export default {
           e.releaseqty = this.formImport.quantity;
           e.cl2comb_after = this.formImport.cl2comb_after;
           e.quantity_after = this.formImport.quantity_after;
+          e.hospital_price = this.formImport.hospital_price;
+          e.price_per_unit = this.formImport.price_per_unit;
           //   }
         }
       });
@@ -2107,7 +2155,7 @@ export default {
       this.convertedItemsList = [];
 
       this.convertedItemsList = val;
-      console.log(val);
+      //   console.log(val);
     },
     'formAddDelivery.generateRisNo': function (val) {
       //   console.log(val);
@@ -2127,22 +2175,46 @@ export default {
       }
     },
     'formImport.acquisitionPrice': function (e) {
-      console.log(e);
-      let num = e * 0.7 + e;
-      //   if (cl2comb != null) {
-      //     const similarObjects = this.findSimilarIds(cl2comb, this.itemsList);
-      //   }
+      let hospital_price = e * 0.7 + e;
 
-      //   this.formImport.hospital_price
-
-      let str = num.toString();
-      let index = str.indexOf('.');
+      let str_hospital_price = hospital_price.toString();
+      let index = str_hospital_price.indexOf('.');
 
       // Check if there's a decimal point
       if (index !== -1) {
-        this.formImport.hospital_price = str.slice(0, index + 3); // Include the decimal point and the next two digits
+        this.formImport.hospital_price = str_hospital_price.slice(0, index + 3); // Include the decimal point and the next two digits
       } else {
-        this.formImport.hospital_price = str + '.00'; // No decimal point means it's a whole number
+        this.formImport.hospital_price = str_hospital_price + '.00'; // No decimal point means it's a whole number
+      }
+    },
+    'formImport.quantity_after': function (e) {
+      console.log(e);
+      //   let price_per_unit = e / this.formImport.hospital_price;
+
+      //   let str_price_per_unit = price_per_unit.toString();
+      //   let index = str_price_per_unit.indexOf('.');
+
+      //   // Check if there's a decimal point
+      //   if (index !== -1) {
+      //     this.formImport.price_per_unit = str_price_per_unit.slice(0, index + 3); // Include the decimal point and the next two digits
+      //   } else {
+      //     this.formImport.price_per_unit = str_price_per_unit + '.00'; // No decimal point means it's a whole number
+      //   }
+
+      if (e == 0 || e == null) {
+        this.formImport.price_per_unit = 0;
+      } else {
+        let price_per_unit = e / this.formImport.hospital_price;
+
+        let str_price_per_unit = price_per_unit.toString();
+        let index = str_price_per_unit.indexOf('.');
+
+        // Check if there's a decimal point
+        if (index !== -1) {
+          this.formImport.price_per_unit = str_price_per_unit.slice(0, index + 3); // Include the decimal point and the next two digits
+        } else {
+          this.formImport.price_per_unit = str_price_per_unit + '.00'; // No decimal point means it's a whole number
+        }
       }
     },
   },

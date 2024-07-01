@@ -81,10 +81,13 @@ class ItemController extends Controller
 
         // $prices = [];
         $prices = DB::select(
-            "SELECT price.id, price.cl2comb, price.price_per_unit, emp.firstname, emp.lastname, price.created_at
+            "SELECT price.id, price.cl2comb, price.price_per_unit, price.ris_no,
+                price.acquisition_price, price.hospital_price,
+                emp.firstname, emp.lastname, price.created_at
                 FROM csrw_item_prices as price
                 JOIN hpersonal as emp ON emp.employeeid = price.entry_by;"
         );
+        // dd($prices);
 
         return Inertia::render('Csr/Inventory/Items/Index', [
             'cl1combs' => $cl1combs,

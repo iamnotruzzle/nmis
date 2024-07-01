@@ -19,7 +19,7 @@ class ItemPrices extends Model
         'created_at',
         'acquisition_price',
         'hospital_price',
-        'csr_stock_id',
+        'ris_no',
         'acquisition_price',
         'hospital_price',
         'price_per_unit',
