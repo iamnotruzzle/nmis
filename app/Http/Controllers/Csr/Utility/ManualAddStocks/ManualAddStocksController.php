@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\CsrItemConversion;
 use App\Models\CsrStocks;
 use App\Models\Item;
+use App\Models\ItemPrices;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -41,6 +42,15 @@ class ManualAddStocksController extends Controller
             'expiration_date' => $expiration_date,
             'acquisition_price' => $request->acquisitionPrice,
             'converted' => 'y',
+        ]);
+
+        $itemPrices = ItemPrices::create([
+            'cl2comb' => $request->cl2comb_after,
+            'price_per_unit' => $request->price_per_unit,
+            'entry_by' => $entry_by,
+            'ris_no' => $request->ris_no,
+            'acquisition_price' => $request->acquisitionPrice,
+            'hospital_price' => $request->hospital_price,
         ]);
 
         $convertedItem = CsrItemConversion::create([
