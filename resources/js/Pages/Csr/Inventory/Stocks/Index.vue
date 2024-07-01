@@ -999,7 +999,7 @@
             <label>Item</label>
           </div>
           <Textarea
-            v-model.trim="formConvert.cl2desc_before"
+            v-model.trim="formUpdateConvert.cl2desc_before"
             readonly
             rows="5"
             class="w-full"
@@ -1012,10 +1012,10 @@
           <InputText
             id="quantity"
             type="number"
-            v-model="formConvert.quantity_after"
+            v-model="formUpdateConvert.quantity_after"
             @keydown="restrictNonNumericAndPeriod"
             autofocus
-            @keyup.enter="submitConvert"
+            @keyup.enter="submitUpdateConvert"
           />
         </div>
         <div>
@@ -1024,15 +1024,15 @@
             <span class="ml-2 text-error">*</span>
           </div>
           <Textarea
-            v-model.trim="formConvert.remarks"
+            v-model.trim="formUpdateConvert.remarks"
             rows="10"
             class="w-full"
           />
           <small
             class="text-error"
-            v-if="formConvert.errors.remarks"
+            v-if="formUpdateConvert.errors.remarks"
           >
-            {{ formConvert.errors.remarks }}
+            {{ formUpdateConvert.errors.remarks }}
           </small>
         </div>
         <template #footer>
@@ -1044,18 +1044,18 @@
             @click="cancel"
           />
           <Button
-            label="Convert"
+            label="Update"
             icon="pi pi-check"
             text
             type="submit"
             :disabled="
-              formConvert.processing ||
-              formConvert.quantity_after == '' ||
-              formConvert.quantity_after == null ||
-              formConvert.remarks == '' ||
-              formConvert.remarks == null
+              formUpdateConvert.processing ||
+              formUpdateConvert.quantity_after == '' ||
+              formUpdateConvert.quantity_after == null ||
+              formUpdateConvert.remarks == '' ||
+              formUpdateConvert.remarks == null
             "
-            @click="submitConvert"
+            @click="submitUpdateConvert"
           />
         </template>
       </Dialog>
@@ -1441,7 +1441,7 @@ export default {
         cl2comb_after: null,
         quantity_after: null,
       }),
-      formConvert: this.$inertia.form({
+      formUpdateConvert: this.$inertia.form({
         id: null,
         csr_stock_id: null,
         ris_no: null,
@@ -1827,8 +1827,8 @@ export default {
         this.form.reset(),
         this.formImport.clearErrors(),
         this.formImport.reset(),
-        this.formConvert.reset(),
-        this.formConvert.clearErrors(),
+        this.formUpdateConvert.reset(),
+        this.formUpdateConvert.clearErrors(),
         this.formAddDelivery.clearErrors(),
         this.formAddDelivery.reset()
       );
@@ -1842,12 +1842,12 @@ export default {
       this.editConvertedItemIsUpdate = true;
       this.convertDialog = true;
 
-      this.formConvert.id = item.id;
+      this.formUpdateConvert.id = item.id;
 
-      this.formConvert.ris_no = item.ris_no;
-      this.formConvert.cl2comb_before = item.cl2comb_after;
-      this.formConvert.cl2desc_before = item.cl2desc_after;
-      this.formConvert.quantity_after = item.quantity_after;
+      this.formUpdateConvert.ris_no = item.ris_no;
+      this.formUpdateConvert.cl2comb_before = item.cl2comb_after;
+      this.formUpdateConvert.cl2desc_before = item.cl2desc_after;
+      this.formUpdateConvert.quantity_after = item.quantity_after;
     },
     editItem(item) {
       //   console.log(item);
@@ -1947,31 +1947,31 @@ export default {
       this.updateConvertedIemListBasedOnCl1comb(itemCl2comb);
 
       this.convertDialog = true;
-      this.formConvert.cl2comb_before = item.cl2comb;
-      this.formConvert.cl2desc_before = item.cl2desc;
-      this.formConvert.quantity_before = item.quantity;
+      this.formUpdateConvert.cl2comb_before = item.cl2comb;
+      this.formUpdateConvert.cl2desc_before = item.cl2desc;
+      this.formUpdateConvert.quantity_before = item.quantity;
 
-      this.formConvert.csr_stock_id = item.id;
-      this.formConvert.ris_no = item.ris_no;
-      this.formConvert.chrgcode = item.chrgcode;
-      this.formConvert.supplierID = item.supplierID;
-      this.formConvert.manufactured_date = item.manufactured_date;
-      this.formConvert.delivered_date = item.delivered_date;
-      this.formConvert.expiration_date = item.expiration_date;
+      this.formUpdateConvert.csr_stock_id = item.id;
+      this.formUpdateConvert.ris_no = item.ris_no;
+      this.formUpdateConvert.chrgcode = item.chrgcode;
+      this.formUpdateConvert.supplierID = item.supplierID;
+      this.formUpdateConvert.manufactured_date = item.manufactured_date;
+      this.formUpdateConvert.delivered_date = item.delivered_date;
+      this.formUpdateConvert.expiration_date = item.expiration_date;
     },
-    submitConvert() {
+    submitUpdateConvert() {
       if (
-        this.formConvert.processing ||
-        this.formConvert.quantity_after == '' ||
-        this.formConvert.quantity_after == null ||
-        this.formConvert.remarks == '' ||
-        this.formConvert.remarks == null
+        this.formUpdateConvert.processing ||
+        this.formUpdateConvert.quantity_after == '' ||
+        this.formUpdateConvert.quantity_after == null ||
+        this.formUpdateConvert.remarks == '' ||
+        this.formUpdateConvert.remarks == null
       ) {
         return false;
       }
 
       if (this.editConvertedItemIsUpdate) {
-        this.formConvert.put(route('csrconvertdelivery.update', this.formConvert.id), {
+        this.formUpdateConvert.put(route('csrconvertdelivery.update', this.formUpdateConvert.id), {
           preserveScroll: true,
           onSuccess: () => {
             //   console.log('DONE');
@@ -1985,7 +1985,7 @@ export default {
           },
         });
       } else {
-        this.formConvert.post(route('csrconvertdelivery.store'), {
+        this.formUpdateConvert.post(route('csrconvertdelivery.store'), {
           preserveScroll: true,
           onSuccess: () => {
             //   console.log('DONE');
@@ -2133,8 +2133,8 @@ export default {
       this.form.clearErrors();
       this.formImport.reset();
       this.formImport.clearErrors();
-      this.formConvert.reset();
-      this.formConvert.clearErrors();
+      this.formUpdateConvert.reset();
+      this.formUpdateConvert.clearErrors();
       this.formAddDelivery.reset();
       this.formAddDelivery.clearErrors();
       this.stocksList = [];
