@@ -2218,69 +2218,141 @@ export default {
         const similarObjects = this.findSimilarIds(cl2comb, this.itemsList);
       }
     },
-    'formImport.acquisitionPrice': function (e) {
-      let val = Number(e);
-      let hospital_price = val / 0.7;
+    // 'formImport.acquisitionPrice': function (e) {
+    //   let val = Number(e);
+    //   let hospital_price = val / 0.7;
 
-      let str_hospital_price = hospital_price.toString();
-      let index = str_hospital_price.indexOf('.');
+    //   let str_hospital_price = hospital_price.toString();
+    //   let index = str_hospital_price.indexOf('.');
 
-      // Check if there's a decimal point
-      if (index !== -1) {
-        this.formImport.hospital_price = str_hospital_price.slice(0, index + 3); // Include the decimal point and the next two digits
-      } else {
-        this.formImport.hospital_price = str_hospital_price + '.00'; // No decimal point means it's a whole number
-      }
-    },
-    'formImport.quantity_after': function (e) {
-      let val = Number(e);
-      if (val == 0 || val == null) {
-        this.formImport.price_per_unit = 0;
-      } else {
-        let price_per_unit = this.formImport.hospital_price / val;
+    //   // Check if there's a decimal point
+    //   if (index !== -1) {
+    //     this.formImport.hospital_price = str_hospital_price.slice(0, index + 3); // Include the decimal point and the next two digits
+    //   } else {
+    //     this.formImport.hospital_price = str_hospital_price + '.00'; // No decimal point means it's a whole number
+    //   }
+    // },
+    // 'formImport.quantity_after': function (e) {
+    //   let val = Number(e);
+    //   if (val == 0 || val == null) {
+    //     this.formImport.price_per_unit = 0;
+    //   } else {
+    //     let price_per_unit = this.formImport.hospital_price / val;
 
-        let str_price_per_unit = price_per_unit.toString();
-        let index = str_price_per_unit.indexOf('.');
+    //     let str_price_per_unit = price_per_unit.toString();
+    //     let index = str_price_per_unit.indexOf('.');
 
+    //     // Check if there's a decimal point
+    //     if (index !== -1) {
+    //       this.formImport.price_per_unit = str_price_per_unit.slice(0, index + 3); // Include the decimal point and the next two digits
+    //     } else {
+    //       this.formImport.price_per_unit = str_price_per_unit + '.00'; // No decimal point means it's a whole number
+    //     }
+    //   }
+    // },
+    // 'formAddDelivery.acquisitionPrice': function (e) {
+    //   let val = Number(e);
+    //   let hospital_price = val / 0.7;
+
+    //   let str_hospital_price = hospital_price.toString();
+    //   let index = str_hospital_price.indexOf('.');
+
+    //   // Check if there's a decimal point
+    //   if (index !== -1) {
+    //     this.formAddDelivery.hospital_price = str_hospital_price.slice(0, index + 3); // Include the decimal point and the next two digits
+    //   } else {
+    //     this.formAddDelivery.hospital_price = str_hospital_price + '.00'; // No decimal point means it's a whole number
+    //   }
+    // },
+    // 'formAddDelivery.quantity_after': function (e) {
+    //   let val = Number(e);
+    //   if (val == 0 || val == null) {
+    //     this.formAddDelivery.price_per_unit = 0;
+    //   } else {
+    //     let price_per_unit = this.formAddDelivery.hospital_price / val;
+
+    //     let str_price_per_unit = price_per_unit.toString();
+    //     let index = str_price_per_unit.indexOf('.');
+
+    //     // Check if there's a decimal point
+    //     if (index !== -1) {
+    //       this.formAddDelivery.price_per_unit = str_price_per_unit.slice(0, index + 3); // Include the decimal point and the next two digits
+    //     } else {
+    //       this.formAddDelivery.price_per_unit = str_price_per_unit + '.00'; // No decimal point means it's a whole number
+    //     }
+    //   }
+    // },
+    formImport: {
+      handler(e) {
+        console.log('formImport:', e);
+
+        // acquisition price
+        let acquisitionPrice = Number(e.acquisitionPrice);
+        let hospital_price = acquisitionPrice / 0.7;
+        let str_hospital_price = hospital_price.toString();
+        let index = str_hospital_price.indexOf('.');
         // Check if there's a decimal point
         if (index !== -1) {
-          this.formImport.price_per_unit = str_price_per_unit.slice(0, index + 3); // Include the decimal point and the next two digits
+          this.formImport.hospital_price = str_hospital_price.slice(0, index + 3); // Include the decimal point and the next two digits
         } else {
-          this.formImport.price_per_unit = str_price_per_unit + '.00'; // No decimal point means it's a whole number
+          this.formImport.hospital_price = str_hospital_price + '.00'; // No decimal point means it's a whole number
         }
-      }
+
+        // quantity after
+        let quantity_after = Number(e.quantity_after);
+        if (quantity_after == 0 || quantity_after == null || isNaN(quantity_after)) {
+          this.formImport.price_per_unit = 0;
+        } else {
+          let price_per_unit = this.formImport.hospital_price / quantity_after;
+
+          let str_price_per_unit = price_per_unit.toString();
+          let index = str_price_per_unit.indexOf('.');
+
+          // Check if there's a decimal point
+          if (index !== -1) {
+            this.formImport.price_per_unit = str_price_per_unit.slice(0, index + 3); // Include the decimal point and the next two digits
+          } else {
+            this.formImport.price_per_unit = str_price_per_unit + '.00'; // No decimal point means it's a whole number
+          }
+        }
+      },
+      deep: true,
     },
-    'formAddDelivery.acquisitionPrice': function (e) {
-      let val = Number(e);
-      let hospital_price = val / 0.7;
+    formAddDelivery: {
+      handler(e) {
+        console.log('formAddDelivery:', e);
 
-      let str_hospital_price = hospital_price.toString();
-      let index = str_hospital_price.indexOf('.');
-
-      // Check if there's a decimal point
-      if (index !== -1) {
-        this.formAddDelivery.hospital_price = str_hospital_price.slice(0, index + 3); // Include the decimal point and the next two digits
-      } else {
-        this.formAddDelivery.hospital_price = str_hospital_price + '.00'; // No decimal point means it's a whole number
-      }
-    },
-    'formAddDelivery.quantity_after': function (e) {
-      let val = Number(e);
-      if (val == 0 || val == null) {
-        this.formAddDelivery.price_per_unit = 0;
-      } else {
-        let price_per_unit = this.formAddDelivery.hospital_price / val;
-
-        let str_price_per_unit = price_per_unit.toString();
-        let index = str_price_per_unit.indexOf('.');
-
+        // acquisition price
+        let acquisitionPrice = Number(e.acquisitionPrice);
+        let hospital_price = acquisitionPrice / 0.7;
+        let str_hospital_price = hospital_price.toString();
+        let index = str_hospital_price.indexOf('.');
         // Check if there's a decimal point
         if (index !== -1) {
-          this.formAddDelivery.price_per_unit = str_price_per_unit.slice(0, index + 3); // Include the decimal point and the next two digits
+          this.formAddDelivery.hospital_price = str_hospital_price.slice(0, index + 3); // Include the decimal point and the next two digits
         } else {
-          this.formAddDelivery.price_per_unit = str_price_per_unit + '.00'; // No decimal point means it's a whole number
+          this.formAddDelivery.hospital_price = str_hospital_price + '.00'; // No decimal point means it's a whole number
         }
-      }
+
+        // quantity after
+        let quantity_after = Number(e.quantity_after);
+        if (quantity_after == 0 || quantity_after == null) {
+          this.formAddDelivery.price_per_unit = 0;
+        } else {
+          let price_per_unit = this.formAddDelivery.hospital_price / quantity_after;
+
+          let str_price_per_unit = price_per_unit.toString();
+          let index = str_price_per_unit.indexOf('.');
+
+          // Check if there's a decimal point
+          if (index !== -1) {
+            this.formAddDelivery.price_per_unit = str_price_per_unit.slice(0, index + 3); // Include the decimal point and the next two digits
+          } else {
+            this.formAddDelivery.price_per_unit = str_price_per_unit + '.00'; // No decimal point means it's a whole number
+          }
+        }
+      },
+      deep: true,
     },
   },
 };
