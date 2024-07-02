@@ -2284,7 +2284,7 @@ export default {
     // },
     formImport: {
       handler(e) {
-        console.log('formImport:', e);
+        // console.log('formImport:', e);
 
         // acquisition price
         let acquisitionPrice = Number(e.acquisitionPrice);
@@ -2320,7 +2320,7 @@ export default {
     },
     formAddDelivery: {
       handler(e) {
-        console.log('formAddDelivery:', e);
+        // console.log('formAddDelivery:', e);
 
         // acquisition price
         let acquisitionPrice = Number(e.acquisitionPrice);
