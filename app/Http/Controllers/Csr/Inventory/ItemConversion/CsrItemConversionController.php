@@ -112,11 +112,9 @@ class CsrItemConversionController extends Controller
     public function update(CsrItemConversion $convertitem, Request $request)
     {
         $updated_by = Auth::user()->employeeid;
-
         // dd($request);
 
         $convertedItem = CsrItemConversionLogs::where('item_conversion_id', $request->id)->first();
-
         // dd($convertedItem);
 
         $item_price = ItemPrices::where('ris_no', $request->ris_no)
@@ -134,7 +132,12 @@ class CsrItemConversionController extends Controller
 
         $price_per_unit = $item_price->hospital_price / $request->quantity_after;
         $price_per_unit = number_format((float)$price_per_unit, 2, '.', '');
-        dd((float)$price_per_unit);
+
+        $update_item_price = ItemPrices::where('ris_no', $request->ris_no)
+            ->where('cl2comb', $request->cl2comb_before)
+            ->update([
+                'price_per_unit' => $price_per_unit,
+            ]);
 
         //////////////
         $convertedItemLog = CsrItemConversionLogs::create([
