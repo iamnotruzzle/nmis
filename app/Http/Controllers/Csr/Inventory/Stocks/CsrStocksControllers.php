@@ -79,6 +79,7 @@ class CsrStocksControllers extends Controller
             "SELECT
                 converted.id,
                 converted.ris_no,
+                fund_source.fsid,
                 fund_source.fsName,
                 converted.cl2comb_after,
                 item_after.cl2desc AS cl2desc_after,

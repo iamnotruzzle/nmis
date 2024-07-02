@@ -112,7 +112,7 @@ class CsrItemConversionController extends Controller
     public function update(CsrItemConversion $convertitem, Request $request)
     {
         $updated_by = Auth::user()->employeeid;
-        dd($request);
+        dd('TESTING');
 
         $convertedItem = CsrItemConversionLogs::where('item_conversion_id', $request->id)->first();
         // dd($convertedItem);

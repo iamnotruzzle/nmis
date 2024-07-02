@@ -174,24 +174,6 @@
             />
           </template>
         </Column>
-        <Column
-          header="ACTION"
-          style="width: 5%"
-        >
-          <template #body="slotProps">
-            <div class="flex flex-row justify-content-center align-content-around">
-              <!-- v-if="slotProps.data.converted == 'n'" -->
-              <Button
-                v-tooltip.top="'Update'"
-                icon="pi pi-pencil"
-                class="mr-2"
-                rounded
-                severity="warning"
-                @click="editItem(slotProps.data)"
-              />
-            </div>
-          </template>
-        </Column>
 
         <template #groupheader="slotProps">
           <div class="bg-primary-reverse py-2 flex align-items-center">
@@ -1044,7 +1026,6 @@
             v-model="formUpdateConvert.quantity_after"
             @keydown="restrictNonNumericAndPeriod"
             autofocus
-            @keyup.enter="submitUpdateConvert"
           />
         </div>
         <div>
@@ -1474,17 +1455,12 @@ export default {
       }),
       formUpdateConvert: this.$inertia.form({
         id: null,
-        csr_stock_id: null,
         ris_no: null,
         chrgcode: null,
         cl2comb_before: null,
         cl2desc_before: null,
         quantity_before: null,
         quantity_after: null,
-        supplierID: null,
-        manufactured_date: null,
-        delivered_date: null,
-        expiration_date: null,
         remarks: null,
       }),
       stockLvlFilter: [
@@ -1735,6 +1711,7 @@ export default {
         this.totalConvertedItemsList.push({
           id: e.id,
           ris_no: e.ris_no,
+          fsid: e.fsid,
           fsName: e.fsName,
           cl2comb_before: e.cl2comb_before,
           cl2desc_before: e.cl2desc_before,
@@ -1879,6 +1856,7 @@ export default {
       this.formUpdateConvert.cl2comb_before = item.cl2comb_after;
       this.formUpdateConvert.cl2desc_before = item.cl2desc_after;
       this.formUpdateConvert.quantity_after = item.quantity_after;
+      this.formUpdateConvert.chrgcode = item.fsid;
     },
     editItem(item) {
       //   console.log(item);
