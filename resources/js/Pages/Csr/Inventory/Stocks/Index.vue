@@ -2001,35 +2001,19 @@ export default {
         return false;
       }
 
-      if (this.editConvertedItemIsUpdate) {
-        this.formUpdateConvert.put(route('csrconvertdelivery.update', this.formUpdateConvert.id), {
-          preserveScroll: true,
-          onSuccess: () => {
-            //   console.log('DONE');
-            this.convertDialog = false;
-            this.cancel();
-            this.updateData();
-            this.itemConverted();
-          },
-          onError: (error) => {
-            console.log(error);
-          },
-        });
-      } else {
-        this.formUpdateConvert.post(route('csrconvertdelivery.store'), {
-          preserveScroll: true,
-          onSuccess: () => {
-            //   console.log('DONE');
-            this.convertDialog = false;
-            this.cancel();
-            this.updateData();
-            this.itemConverted();
-          },
-          onError: (error) => {
-            console.log(error);
-          },
-        });
-      }
+      this.formUpdateConvert.put(route('csrconvertdelivery.update', this.formUpdateConvert.id), {
+        preserveScroll: true,
+        onSuccess: () => {
+          //   console.log('DONE');
+          this.convertDialog = false;
+          this.cancel();
+          this.updateData();
+          this.itemConverted();
+        },
+        onError: (error) => {
+          console.log(error);
+        },
+      });
     },
     onRowClick(e) {
       //   console.log(e.data);

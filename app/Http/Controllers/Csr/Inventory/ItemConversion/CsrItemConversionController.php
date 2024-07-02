@@ -119,6 +119,12 @@ class CsrItemConversionController extends Controller
 
         // dd($convertedItem);
 
+        $item_price = ItemPrices::where('ris_no', $request->ris_no)
+            ->where('cl2comb', $request->cl2comb_before)
+            ->first();
+
+        // dd($item_price);
+
         CsrItemConversion::where('id', $request->id)
             ->update([
                 // 'cl2comb_after' => $request->cl2comb_after == null ? $convertedItem->cl2comb_after : $request->cl2comb_after,
@@ -126,6 +132,11 @@ class CsrItemConversionController extends Controller
                 'updated_by' => $updated_by,
             ]);
 
+        $price_per_unit = $item_price->hospital_price / $request->quantity_after;
+        $price_per_unit = number_format((float)$price_per_unit, 2, '.', '');
+        dd((float)$price_per_unit);
+
+        //////////////
         $convertedItemLog = CsrItemConversionLogs::create([
             'item_conversion_id' => $convertedItem->item_conversion_id,
             'csr_stock_id' => $convertedItem->csr_stock_id,
