@@ -1972,7 +1972,7 @@ export default {
       });
     },
     convertItem(item) {
-      //   console.log(item);
+      console.log(item);
 
       let itemCl2comb = this.extractCl2comb(item.cl2comb);
       this.updateConvertedIemListBasedOnCl1comb(itemCl2comb);
