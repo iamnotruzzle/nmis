@@ -173,16 +173,6 @@ class CsrStocksControllers extends Controller
             foreach ($pims as $pim) {
                 $matchedItem = null;
 
-                // OLD ITEM MATCH CHECKER
-                // Loop through $items to find a match
-                // foreach ($items as $item) {
-                //     // Comparing the description and cl2desc
-                //     if ($pim->description == $item->cl2desc) {
-                //         $matchedItem = $item;
-                //         break;
-                //     }
-                // }
-
                 // Loop through $items to find a match
                 foreach ($items as $item) {
                     // Comparing the description and cl2desc
