@@ -1154,22 +1154,16 @@
               style="width: 10%"
             >
               <template #body="slotProps">
-                <!-- <Button
-              icon="pi pi-pencil"
-              class="mr-1"
-              rounded
-              text
-              severity="warning"
-              @click="editItem(slotProps.data)"
-            />
-
-            <Button
-              icon="pi pi-trash"
-              rounded
-              text
-              severity="danger"
-              @click="confirmDeleteItem(slotProps.data)"
-            /> -->
+                <Button
+                  v-tooltip.top="'Convert'"
+                  rounded
+                  severity="warning"
+                  @click="convertItem(slotProps.data)"
+                >
+                  <template #icon>
+                    <v-icon name="bi-arrow-left-right"></v-icon>
+                  </template>
+                </Button>
               </template>
             </Column>
           </DataTable>
