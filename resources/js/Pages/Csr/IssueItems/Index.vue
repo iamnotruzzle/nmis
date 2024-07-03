@@ -245,7 +245,7 @@
                           :style="{ color: 'green', 'font-size': '1.2rem' }"
                         ></i>
                       </a>
-                      <Button
+                      <!-- <Button
                         v-if="slotProps.data.status != 'PENDING'"
                         icon="pi pi-book"
                         severity="success"
@@ -254,7 +254,7 @@
                         aria-label="export"
                         @click="viewIssuedItem(slotProps.data)"
                         size="large"
-                      />
+                      /> -->
                     </div>
                   </div>
                 </template>
@@ -699,10 +699,11 @@ export default {
       //   console.log(this.requestStockList);
     },
     viewIssuedItem(data) {
-      //   console.log(data);
+      //   console.log(data.request_stocks_details);
       data.request_stocks_details.forEach((item) => {
-        item.stocks.forEach((e) => {
-          if (e.ward_stocks != null) {
+        console.log(item);
+        item.forEach((e) => {
+          if (e != null) {
             this.issuedItemList.push({
               cl2desc: item.item_details.cl2desc,
               quantity: e.ward_stocks.quantity,
