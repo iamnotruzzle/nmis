@@ -37,9 +37,9 @@ class RequestStocksDetails extends Model
             ->whereDate('expiration_date', '>', Carbon::today());
     }
 
-    public function item_conversion()
+    public function issued_item()
     {
-        return $this->hasMany(CsrItemConversion::class, 'cl2comb_after', 'cl2comb')->with(['ward_stocks'])
+        return $this->hasMany(WardsStocks::class, 'cl2comb', 'cl2comb')->with(['item_details'])
             ->whereDate('expiration_date', '>', Carbon::today());
     }
 

@@ -245,7 +245,7 @@
                           :style="{ color: 'green', 'font-size': '1.2rem' }"
                         ></i>
                       </a>
-                      <!-- <Button
+                      <Button
                         v-if="slotProps.data.status != 'PENDING'"
                         icon="pi pi-book"
                         severity="success"
@@ -254,7 +254,7 @@
                         aria-label="export"
                         @click="viewIssuedItem(slotProps.data)"
                         size="large"
-                      /> -->
+                      />
                     </div>
                   </div>
                 </template>
@@ -679,6 +679,7 @@ export default {
     // server request such as POST, the data in the table
     // is updated
     storeRequestedStocksInContainer() {
+      //   console.log(this.requestedStocks.data);
       this.requestedStocks.data.forEach((e) => {
         this.requestStockList.push({
           id: e.id,
@@ -699,17 +700,17 @@ export default {
       //   console.log(this.requestStockList);
     },
     viewIssuedItem(data) {
-      //   console.log(data.request_stocks_details);
+      //   console.log(data);
       data.request_stocks_details.forEach((item) => {
-        console.log(item);
-        item.forEach((e) => {
-          if (e != null) {
-            this.issuedItemList.push({
-              cl2desc: item.item_details.cl2desc,
-              quantity: e.ward_stocks.quantity,
-              expiration_date: e.ward_stocks.expiration_date,
-            });
-          }
+        // console.log(item);
+        item.issued_item.forEach((e) => {
+          console.log(e);
+
+          this.issuedItemList.push({
+            cl2desc: e.item_details.cl2desc,
+            quantity: e.quantity,
+            expiration_date: e.expiration_date,
+          });
         });
       });
 
