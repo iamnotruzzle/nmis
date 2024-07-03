@@ -2264,7 +2264,7 @@ export default {
 
         // acquisition price
         let acquisitionPrice = Number(e.acquisitionPrice);
-        let hospital_price = acquisitionPrice / 0.7;
+        let hospital_price = (acquisitionPrice * this.formImport.quantity) / 0.7;
         let str_hospital_price = hospital_price.toString();
         let index = str_hospital_price.indexOf('.');
         // Check if there's a decimal point
@@ -2296,11 +2296,9 @@ export default {
     },
     formAddDelivery: {
       handler(e) {
-        // console.log('formAddDelivery:', e);
-
         // acquisition price
         let acquisitionPrice = Number(e.acquisitionPrice);
-        let hospital_price = acquisitionPrice / 0.7;
+        let hospital_price = (acquisitionPrice * this.formAddDelivery.quantity) / 0.7;
         let str_hospital_price = hospital_price.toString();
         let index = str_hospital_price.indexOf('.');
         // Check if there's a decimal point
