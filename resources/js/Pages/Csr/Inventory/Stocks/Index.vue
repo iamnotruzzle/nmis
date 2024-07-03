@@ -641,21 +641,12 @@
             class="w-full"
           />
         </div>
-        <div class="field">
-          <!-- <div>
-            <label for="manufactured_date">Manufactured date</label>
-            <Calendar
-              v-model="formAddDelivery.manufactured_date"
-              dateFormat="mm-dd-yy"
-              showIcon
-              showButtonBar
-              :manualInput="false"
-              :hideOnDateTimeSelect="true"
-            />
-          </div> -->
-
+        <div class="field flex flex-row justify-content-between">
           <div>
-            <label for="delivered_date">Delivered date</label>
+            <div class="flex align-content-center">
+              <label>Delivered date</label>
+              <span class="ml-2 text-error">*</span>
+            </div>
             <Calendar
               v-model="formAddDelivery.delivered_date"
               dateFormat="mm-dd-yy"
@@ -665,23 +656,34 @@
               :hideOnDateTimeSelect="true"
             />
           </div>
-        </div>
-        <div class="field">
-          <div class="flex align-content-center">
-            <label>Expiration date</label>
-            <span class="ml-2 text-error">*</span>
+          <div>
+            <div class="flex">
+              <label>Expiration date</label>
+              <span class="ml-2 text-error">*</span>
+            </div>
+            <div class="flex flex-row">
+              <Calendar
+                required="true"
+                v-model="formAddDelivery.expiration_date"
+                dateFormat="mm-dd-yy"
+                showIcon
+                showButtonBar
+                :manualInput="false"
+                :hideOnDateTimeSelect="true"
+                :disabled="maxDate"
+              />
+            </div>
+            <ToggleButton
+              v-model="maxDate"
+              onLabel="Fixed date"
+              offLabel="Custom date"
+              onIcon="pi pi-lock"
+              offIcon="pi pi-lock-open"
+            />
           </div>
-          <Calendar
-            required="true"
-            v-model="formAddDelivery.expiration_date"
-            dateFormat="mm-dd-yy"
-            showIcon
-            showButtonBar
-            :manualInput="false"
-            :hideOnDateTimeSelect="true"
-          />
         </div>
-        <div class="field">
+
+        <div class="field w-6">
           <div class="flex align-content-center">
             <label>Quantity</label>
             <span class="ml-2 text-error">*</span>
@@ -793,6 +795,7 @@
               formAddDelivery.supplier == null ||
               formAddDelivery.fund_source == null ||
               formAddDelivery.cl2comb == null ||
+              formAddDelivery.delivered_date == null ||
               formAddDelivery.expiration_date == null ||
               formAddDelivery.quantity == null ||
               formAddDelivery.acquisitionPrice == null ||
@@ -1278,6 +1281,7 @@ import Textarea from 'primevue/textarea';
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
 import Checkbox from 'primevue/checkbox';
+import ToggleButton from 'primevue/togglebutton';
 import axios from 'axios';
 
 import moment, { now } from 'moment';
@@ -1285,6 +1289,7 @@ import moment, { now } from 'moment';
 export default {
   components: {
     AppLayout,
+    ToggleButton,
     Head,
     InputText,
     Column,
@@ -1317,6 +1322,7 @@ export default {
   },
   data() {
     return {
+      maxDate: false,
       minimumDate: null,
       stockId: null,
       isUpdate: false,
@@ -2096,6 +2102,7 @@ export default {
         this.formAddDelivery.supplier == null ||
         this.formAddDelivery.fund_source == null ||
         this.formAddDelivery.cl2comb == null ||
+        this.formAddDelivery.delivered_date == null ||
         this.formAddDelivery.expiration_date == null ||
         this.formAddDelivery.quantity == null ||
         this.formAddDelivery.acquisitionPrice == null ||
@@ -2178,6 +2185,13 @@ export default {
       // Find similar IDs in array2
       if (cl2comb != null) {
         const similarObjects = this.findSimilarIds(cl2comb, this.itemsList);
+      }
+    },
+    maxDate: function (val) {
+      if (val == false) {
+        this.formAddDelivery.expiration_date = null;
+      } else {
+        this.formAddDelivery.expiration_date = new Date('9999-12-03');
       }
     },
     // 'formImport.acquisitionPrice': function (e) {
