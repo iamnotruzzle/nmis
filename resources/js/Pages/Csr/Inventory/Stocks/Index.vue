@@ -1112,20 +1112,64 @@
               field="cl2desc"
               header="ITEM"
               sortable
-              style="width: 90%"
+              style="width: 70%"
             >
               <template #body="{ data }">
                 {{ data.cl2desc }}
               </template>
             </Column>
             <Column
-              field="total_quantity"
+              field="quantity"
               header="QTY"
               sortable
               style="width: 10%"
             >
               <template #body="{ data }">
-                {{ data.total_quantity }}
+                {{ data.quantity }}
+              </template>
+            </Column>
+            <Column
+              header="EXP. DATE"
+              sortable
+              style="width: 10%"
+            >
+              <template #body="{ data }">
+                <div>{{ tzone(data.expiration_date) }}</div>
+
+                <div class="mays-2">
+                  <span
+                    :class="
+                      checkIfAboutToExpire(data.expiration_date) != 'Item has expired.'
+                        ? 'text-lg text-green-500'
+                        : 'text-lg text-error'
+                    "
+                  >
+                    {{ checkIfAboutToExpire(data.expiration_date) }}
+                  </span>
+                </div>
+              </template>
+            </Column>
+            <Column
+              header="ACTION"
+              style="width: 10%"
+            >
+              <template #body="slotProps">
+                <!-- <Button
+              icon="pi pi-pencil"
+              class="mr-1"
+              rounded
+              text
+              severity="warning"
+              @click="editItem(slotProps.data)"
+            />
+
+            <Button
+              icon="pi pi-trash"
+              rounded
+              text
+              severity="danger"
+              @click="confirmDeleteItem(slotProps.data)"
+            /> -->
               </template>
             </Column>
           </DataTable>
@@ -1779,7 +1823,8 @@ export default {
         this.totalDeliveriesList.push({
           cl2comb: e.cl2comb,
           cl2desc: e.cl2desc.trim(),
-          total_quantity: e.total_quantity,
+          quantity: e.quantity,
+          expiration_date: e.expiration_date,
         });
       });
     },

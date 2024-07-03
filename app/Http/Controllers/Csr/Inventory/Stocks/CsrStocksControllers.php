@@ -57,11 +57,10 @@ class CsrStocksControllers extends Controller
         );
 
         $totalDeliveries = DB::select(
-            "SELECT item.cl2comb, item.cl2desc,  SUM(stock.quantity) as total_quantity
+            "SELECT item.cl2comb, item.cl2desc,  stock.quantity, stock.expiration_date
                 FROM csrw_csr_stocks as stock
                 JOIN hclass2 as item ON item.cl2comb = stock.cl2comb
-                WHERE stock.quantity > 0
-                GROUP BY item.cl2comb, item.cl2desc;
+                WHERE stock.quantity > 0;
             "
         );
 
