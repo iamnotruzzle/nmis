@@ -44,29 +44,32 @@ class ManualAddStocksController extends Controller
             'converted' => 'y',
         ]);
 
-        $itemPrices = ItemPrices::create([
-            'cl2comb' => $request->cl2comb_after,
-            'price_per_unit' => $request->price_per_unit,
-            'entry_by' => $entry_by,
-            'ris_no' => $request->ris_no,
-            'acquisition_price' => $request->acquisitionPrice,
-            'hospital_price' => $request->hospital_price,
-        ]);
+        if ($request->cl2comb_after != null && $request->quantity_after != null) {
+            $itemPrices = ItemPrices::create([
+                'cl2comb' => $request->cl2comb_after,
+                'price_per_unit' => $request->price_per_unit,
+                'entry_by' => $entry_by,
+                'ris_no' => $request->ris_no,
+                'acquisition_price' => $request->acquisitionPrice,
+                'hospital_price' => $request->hospital_price,
+            ]);
 
-        $convertedItem = CsrItemConversion::create([
-            'csr_stock_id' => $stock->id,
-            'ris_no' => $stock->ris_no,
-            'chrgcode' => $stock->chrgcode,
-            'cl2comb_before' => $stock->cl2comb,
-            'quantity_before' => $stock->quantity,
-            'cl2comb_after' => $request->cl2comb_after,
-            'quantity_after' => $request->quantity_after,
-            'supplierID' => $stock->supplierID,
-            'manufactured_date' => Carbon::parse($stock->manufactured_date)->format('Y-m-d H:i:s.v'),
-            'delivered_date' =>  Carbon::parse($stock->delivered_date)->format('Y-m-d H:i:s.v'),
-            'expiration_date' =>  Carbon::parse($stock->expiration_date)->format('Y-m-d H:i:s.v'),
-            'converted_by' => $entry_by,
-        ]);
+
+            $convertedItem = CsrItemConversion::create([
+                'csr_stock_id' => $stock->id,
+                'ris_no' => $stock->ris_no,
+                'chrgcode' => $stock->chrgcode,
+                'cl2comb_before' => $stock->cl2comb,
+                'quantity_before' => $stock->quantity,
+                'cl2comb_after' => $request->cl2comb_after,
+                'quantity_after' => $request->quantity_after,
+                'supplierID' => $stock->supplierID,
+                'manufactured_date' => Carbon::parse($stock->manufactured_date)->format('Y-m-d H:i:s.v'),
+                'delivered_date' =>  Carbon::parse($stock->delivered_date)->format('Y-m-d H:i:s.v'),
+                'expiration_date' =>  Carbon::parse($stock->expiration_date)->format('Y-m-d H:i:s.v'),
+                'converted_by' => $entry_by,
+            ]);
+        }
 
         return redirect()->back();
     }

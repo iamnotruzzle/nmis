@@ -716,7 +716,6 @@
           >
             <div class="flex align-content-center">
               <label>Convert to</label>
-              <span class="ml-2 text-error">*</span>
             </div>
             <Dropdown
               required="true"
@@ -733,7 +732,6 @@
           <div :style="{ width: '35%' }">
             <div class="flex align-content-center">
               <label>Convert quantity</label>
-              <span class="ml-2 text-error">*</span>
             </div>
             <InputText
               id="quantity"
@@ -798,9 +796,7 @@
               formAddDelivery.delivered_date == null ||
               formAddDelivery.expiration_date == null ||
               formAddDelivery.quantity == null ||
-              formAddDelivery.acquisitionPrice == null ||
-              formAddDelivery.cl2comb_after == null ||
-              formAddDelivery.quantity_after == null
+              formAddDelivery.acquisitionPrice == null
             "
             @click="submitAddDelivery"
           />
@@ -2105,9 +2101,7 @@ export default {
         this.formAddDelivery.delivered_date == null ||
         this.formAddDelivery.expiration_date == null ||
         this.formAddDelivery.quantity == null ||
-        this.formAddDelivery.acquisitionPrice == null ||
-        this.formAddDelivery.cl2comb_after == null ||
-        this.formAddDelivery.quantity_after == null
+        this.formAddDelivery.acquisitionPrice == null
       ) {
         return false;
       }
