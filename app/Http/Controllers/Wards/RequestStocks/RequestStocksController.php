@@ -48,7 +48,8 @@ class RequestStocksController extends Controller
             "SELECT item.cl2comb, item.cl2desc, item.uomcode, uom.uomdesc
                 FROM hclass2 as item
                 JOIN huom as uom ON uom.uomcode = item.uomcode
-                AND catID = 1
+                WHERE item.catID = 1
+                AND item.uomcode != 'box'
                 ORDER BY item.cl2desc ASC;"
         );
         // dd($items);
