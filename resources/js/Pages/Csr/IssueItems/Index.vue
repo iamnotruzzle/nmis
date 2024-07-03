@@ -459,16 +459,19 @@
                 field="cl2desc"
                 header="ITEM"
                 sortable
+                style="width: 70%"
               ></Column>
               <Column
                 field="quantity"
                 header="QTY"
                 sortable
+                style="width: 10%"
               ></Column>
               <Column
                 field="expiration_date"
                 header="EXP. DATE"
                 sortable
+                style="width: 20%"
               >
                 <template #body="{ data }">
                   {{ tzone(data.expiration_date) }}

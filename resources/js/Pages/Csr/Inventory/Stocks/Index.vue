@@ -278,8 +278,8 @@
                 readonly
               />
             </div>
-            <div class="field flex flex-row justify-space-between">
-              <div>
+            <div class="field">
+              <!-- <div>
                 <label for="manufactured_date">Manufactured date</label>
                 <Calendar
                   v-model="formImport.manufactured_date"
@@ -291,7 +291,7 @@
                 />
               </div>
 
-              <div class="mx-2"></div>
+              <div class="mx-2"></div> -->
 
               <div>
                 <label for="delivered_date">Delivered date</label>
@@ -641,8 +641,8 @@
             class="w-full"
           />
         </div>
-        <div class="field flex flex-row justify-content-between">
-          <div>
+        <div class="field">
+          <!-- <div>
             <label for="manufactured_date">Manufactured date</label>
             <Calendar
               v-model="formAddDelivery.manufactured_date"
@@ -652,7 +652,7 @@
               :manualInput="false"
               :hideOnDateTimeSelect="true"
             />
-          </div>
+          </div> -->
 
           <div>
             <label for="delivered_date">Delivered date</label>
