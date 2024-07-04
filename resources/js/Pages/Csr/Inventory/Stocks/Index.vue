@@ -1206,7 +1206,7 @@
           </div>
           <Textarea
             v-model.trim="formConvertItem.remarks"
-            rows="10"
+            rows="5"
             class="w-full"
           />
           <small
