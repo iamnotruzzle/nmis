@@ -1023,6 +1023,7 @@
             id="quantity"
             type="number"
             v-model="formConvertItem.quantity_before"
+            autofocus
           />
         </div>
         <div class="field flex flex-row">
@@ -1054,7 +1055,6 @@
               type="number"
               v-model="formConvertItem.quantity_after"
               @keydown="restrictNonNumericAndPeriod"
-              autofocus
               class="w-full"
             />
           </div>
