@@ -56,25 +56,26 @@ class CsrStocksControllers extends Controller
 
         );
 
+        // $totalDeliveries = DB::select(
+        //     "SELECT stock.id, stock.ris_no, item.cl2comb, item.cl2desc, stock.supplierID,
+        //         stock.acquisition_price, stock.chrgcode, stock.quantity, stock.manufactured_date,
+        //         stock.delivered_date, stock.expiration_date
+        //         FROM csrw_csr_stocks as stock
+        //         JOIN hclass2 as item ON item.cl2comb = stock.cl2comb
+        //         WHERE stock.quantity > 0;
+        //     "
+        // );
+
         $totalDeliveries = DB::select(
             "SELECT stock.id, stock.ris_no, item.cl2comb, item.cl2desc, stock.supplierID,
-                stock.acquisition_price, stock.chrgcode, stock.quantity, stock.manufactured_date,
-                stock.delivered_date, stock.expiration_date
+                stock.acquisition_price, price.hospital_price, price.price_per_unit, stock.chrgcode, stock.quantity, stock.manufactured_date,
+                stock.delivered_date, stock.expiration_date, stock.converted
                 FROM csrw_csr_stocks as stock
                 JOIN hclass2 as item ON item.cl2comb = stock.cl2comb
+                LEFT JOIN csrw_item_prices as price ON price.cl2comb = stock.cl2comb
                 WHERE stock.quantity > 0;
             "
         );
-
-        // $totalConvertedItems = DB::select(
-        //     "SELECT converted.id, converted.ris_no, fund_source.fsName, converted.cl2comb_after, item.cl2desc, converted.quantity_after, converted.expiration_date, employee.firstname, employee.lastname
-        //         FROM csrw_csr_item_conversion as converted
-        //         JOIN hclass2 as item ON item.cl2comb = converted.cl2comb_after
-        //         JOIN huom as uom ON uom.uomcode = item.uomcode
-        //         JOIN hpersonal as employee ON employee.employeeid = converted.converted_by
-        //         JOIN csrw_fund_source as fund_source ON fund_source.fsid = converted.chrgcode;
-        //     "
-        // );
 
         $totalConvertedItems = DB::select(
             "SELECT
