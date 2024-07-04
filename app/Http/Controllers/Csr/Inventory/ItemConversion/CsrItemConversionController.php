@@ -22,7 +22,7 @@ class CsrItemConversionController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request);
+        dd($request);
 
         $converted_by = Auth::user()->employeeid;
 

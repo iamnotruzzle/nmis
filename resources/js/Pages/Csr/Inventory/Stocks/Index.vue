@@ -1225,12 +1225,14 @@
             @click="cancel"
           />
           <Button
-            label="Update"
+            label="Convert"
             icon="pi pi-check"
             text
             type="submit"
             :disabled="
               formConvertItem.processing ||
+              formConvertItem.cl2comb_after == '' ||
+              formConvertItem.cl2comb_after == null ||
               formConvertItem.quantity_after == '' ||
               formConvertItem.quantity_after == null ||
               formConvertItem.remarks == '' ||
@@ -2138,6 +2140,8 @@ export default {
     submitConvertItem() {
       if (
         this.formConvertItem.processing ||
+        this.formConvertItem.cl2comb_after == '' ||
+        this.formConvertItem.cl2comb_after == null ||
         this.formConvertItem.quantity_after == '' ||
         this.formConvertItem.quantity_after == null ||
         this.formConvertItem.remarks == '' ||
@@ -2146,19 +2150,47 @@ export default {
         return false;
       }
 
-      this.formConvertItem.put(route('csrconvertdelivery.update', this.formConvertItem.id), {
-        preserveScroll: true,
-        onSuccess: () => {
-          //   console.log('DONE');
-          this.convertDialog = false;
-          this.cancel();
-          this.updateData();
-          this.itemConverted();
-        },
-        onError: (error) => {
-          console.log(error);
-        },
-      });
+      if (this.isUpdate) {
+        console.log('Update mode');
+        // this.formConvertItem.put(route('csrconvertdelivery.update', this.formConvertItem.id), {
+        //   preserveScroll: true,
+        //   onSuccess: () => {
+        //     //   console.log('DONE');
+        //     this.convertDialog = false;
+        //     this.cancel();
+        //     this.updateData();
+        //     this.itemConverted();
+        //   },
+        //   onError: (error) => {
+        //     console.log(error);
+        //   },
+        // });
+      } else {
+        // this.formConvertItem.put(route('csrconvertdelivery.update', this.formConvertItem.id), {
+        //   preserveScroll: true,
+        //   onSuccess: () => {
+        //     //   console.log('DONE');
+        //     this.convertDialog = false;
+        //     this.cancel();
+        //     this.updateData();
+        //     this.itemConverted();
+        //   },
+        //   onError: (error) => {
+        //     console.log(error);
+        //   },
+        // });
+
+        this.formConvertItem.post(route('csrconvertdelivery.store'), {
+          preserveScroll: true,
+          onSuccess: () => {
+            this.itemId = null;
+            this.convertDialog = false;
+            this.cancel();
+            this.updateData();
+            this.createdMsg();
+          },
+        });
+      }
     },
     onRowClick(e) {
       //   console.log(e.data);
@@ -2350,6 +2382,40 @@ export default {
       } else {
         this.formAddDelivery.expiration_date = new Date('9999-12-03');
       }
+    },
+    formConvertItem: {
+      handler(e) {
+        // acquisition price
+        let acquisition_price = Number(e.acquisition_price);
+        let hospital_price = (acquisition_price * this.formConvertItem.quantity_before) / 0.7;
+        let str_hospital_price = hospital_price.toString();
+        let index = str_hospital_price.indexOf('.');
+        // Check if there's a decimal point
+        if (index !== -1) {
+          this.formConvertItem.hospital_price = str_hospital_price.slice(0, index + 3); // Include the decimal point and the next two digits
+        } else {
+          this.formConvertItem.hospital_price = str_hospital_price + '.00'; // No decimal point means it's a whole number
+        }
+
+        // quantity after
+        let quantity_after = Number(e.quantity_after);
+        if (quantity_after == 0 || quantity_after == null || isNaN(quantity_after)) {
+          this.formConvertItem.price_per_unit = 0;
+        } else {
+          let price_per_unit = this.formConvertItem.hospital_price / quantity_after;
+
+          let str_price_per_unit = price_per_unit.toString();
+          let index = str_price_per_unit.indexOf('.');
+
+          // Check if there's a decimal point
+          if (index !== -1) {
+            this.formConvertItem.price_per_unit = str_price_per_unit.slice(0, index + 3); // Include the decimal point and the next two digits
+          } else {
+            this.formConvertItem.price_per_unit = str_price_per_unit + '.00'; // No decimal point means it's a whole number
+          }
+        }
+      },
+      deep: true,
     },
     formImport: {
       handler(e) {
