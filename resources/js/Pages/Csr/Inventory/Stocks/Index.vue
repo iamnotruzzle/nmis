@@ -995,7 +995,7 @@
       <!-- convert dialog -->
       <Dialog
         v-model:visible="convertDialog"
-        :style="{ width: '500px' }"
+        :style="{ width: '550px' }"
         :modal="true"
         class="p-fluid"
         @hide="clickOutsideDialog"
@@ -1006,31 +1006,141 @@
         </template>
         <div class="field">
           <div class="flex align-content-center">
-            <label>Item</label>
-          </div>
-          <Textarea
-            v-model.trim="formConvertItem.cl2desc_before"
-            readonly
-            rows="5"
-            class="w-full"
-          />
-        </div>
-        <div class="field w-4">
-          <div class="flex align-content-center">
-            <label>Quantity</label>
+            <label>RIS no.</label>
+            <span class="ml-2 text-error">*</span>
           </div>
           <InputText
-            id="quantity"
-            type="number"
-            v-model="formConvertItem.quantity_before"
+            v-model.trim="formConvertItem.ris_no"
+            :readonly="generatedRisNo"
             autofocus
           />
         </div>
+        <div class="field">
+          <div class="flex align-content-center">
+            <label>Supplier</label>
+            <span class="ml-2 text-error">*</span>
+          </div>
+          <Dropdown
+            required="true"
+            v-model="formConvertItem.supplierID"
+            :options="suppliersList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
+            filter
+            dataKey="supplierID"
+            optionValue="supplierID"
+            optionLabel="suppname"
+            class="w-full"
+          />
+        </div>
+        <div class="field">
+          <div class="flex align-content-center">
+            <label>Fund source</label>
+            <span class="ml-2 text-error">*</span>
+          </div>
+          <Dropdown
+            required="true"
+            v-model="formConvertItem.chrgcode"
+            :options="fundSourceList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
+            filter
+            dataKey="chrgcode"
+            optionValue="chrgcode"
+            optionLabel="chrgdesc"
+            class="w-full"
+          />
+        </div>
+        <div class="field">
+          <div class="flex align-content-center">
+            <label>Item</label>
+            <span class="ml-2 text-error">*</span>
+          </div>
+          <Dropdown
+            required="true"
+            v-model="formConvertItem.cl2comb_before"
+            :options="itemsList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
+            filter
+            dataKey="cl2comb"
+            optionValue="cl2comb"
+            optionLabel="cl2desc"
+            class="w-full"
+          />
+        </div>
+        <div class="field flex flex-row justify-content-between">
+          <div>
+            <div class="flex align-content-center">
+              <label>Delivered date</label>
+              <span class="ml-2 text-error">*</span>
+            </div>
+            <Calendar
+              v-model="formConvertItem.delivered_date"
+              dateFormat="mm-dd-yy"
+              showIcon
+              showButtonBar
+              :manualInput="false"
+              :hideOnDateTimeSelect="true"
+            />
+          </div>
+          <div>
+            <div class="flex">
+              <label>Expiration date</label>
+              <span class="ml-2 text-error">*</span>
+            </div>
+            <div class="flex flex-row">
+              <Calendar
+                required="true"
+                v-model="formConvertItem.expiration_date"
+                dateFormat="mm-dd-yy"
+                showIcon
+                showButtonBar
+                :manualInput="false"
+                :hideOnDateTimeSelect="true"
+                :disabled="maxDate"
+              />
+            </div>
+            <ToggleButton
+              v-model="maxDate"
+              onLabel="Fixed date"
+              offLabel="Custom date"
+              onIcon="pi pi-lock"
+              offIcon="pi pi-lock-open"
+            />
+          </div>
+        </div>
+
+        <div class="field w-6">
+          <div class="flex align-content-center">
+            <label>Quantity</label>
+            <span class="ml-2 text-error">*</span>
+          </div>
+          <InputText
+            required="true"
+            v-model.trim="formConvertItem.quantity_before"
+            inputId="integeronly"
+            @keydown="restrictNonNumericAndPeriod"
+          />
+        </div>
+        <div class="field w-6">
+          <div>
+            <div class="flex align-content-center">
+              <label>Acquisition price</label>
+              <span class="ml-2 text-error">*</span>
+            </div>
+            <InputText
+              required="true"
+              type="number"
+              v-model.trim="formConvertItem.acquisition_price"
+              @keydown="restrictNonNumeric"
+            />
+          </div>
+        </div>
         <div class="field flex flex-row">
-          <div :style="{ width: '65%' }">
+          <div
+            :style="{ width: '65%' }"
+            class="mr-2"
+          >
             <div class="flex align-content-center">
               <label>Convert to</label>
-              <span class="ml-2 text-error">*</span>
             </div>
             <Dropdown
               required="true"
@@ -1044,18 +1154,47 @@
               class="w-full"
             />
           </div>
-          <div :style="{ width: '5%' }"></div>
-          <div :style="{ width: '30%' }">
+          <div :style="{ width: '35%' }">
             <div class="flex align-content-center">
               <label>Convert quantity</label>
-              <span class="ml-2 text-error">*</span>
             </div>
             <InputText
               id="quantity"
               type="number"
               v-model="formConvertItem.quantity_after"
               @keydown="restrictNonNumericAndPeriod"
+              autofocus
+              @keyup.enter="submitAddDelivery"
               class="w-full"
+            />
+          </div>
+        </div>
+
+        <div class="field">
+          <div>
+            <div class="flex align-content-center">
+              <label class="text-green-500">Hospital price </label>
+            </div>
+            <InputText
+              class="w-full"
+              v-model.trim="formConvertItem.hospital_price"
+              autofocus
+              :maxFractionDigits="2"
+              readonly
+            />
+          </div>
+        </div>
+        <div class="field">
+          <div>
+            <div class="flex align-content-center">
+              <label class="text-blue-500">Price per unit</label>
+            </div>
+            <InputText
+              class="w-full"
+              v-model.trim="formConvertItem.price_per_unit"
+              autofocus
+              :maxFractionDigits="2"
+              readonly
             />
           </div>
         </div>
@@ -1526,13 +1665,19 @@ export default {
         price_per_unit: null,
       }),
       formConvertItem: this.$inertia.form({
-        id: null,
+        stock_id: null,
         ris_no: null,
+        supplierID: null,
         chrgcode: null,
         cl2comb_before: null,
-        cl2desc_before: null,
+        delivered_date: null,
+        expiration_date: null,
         quantity_before: null,
+        acquisition_price: null,
+        cl2comb_after: null,
         quantity_after: null,
+        hospital_price: null,
+        price_per_unit: null,
         remarks: null,
       }),
       stockLvlFilter: [
@@ -1597,7 +1742,7 @@ export default {
     this.storeFundSourceInContainer();
     this.storeItemsInContainer();
     this.storeStocksInContainer();
-    this.storeTotalStocksInContainer();
+    this.storeTotalDeliveriesInContainer();
     this.storeSuppliersInContainer();
     this.storeTotalConvertedItemsInContainer();
     // this.generateTempRisNo();
@@ -1799,15 +1944,6 @@ export default {
       });
     },
     storeFundSourceInContainer() {
-      //   this.typeOfCharge.forEach((e) => {
-      //     this.fundSourceList.push({
-      //       chrgcode: e.chrgcode,
-      //       chrgdesc: e.chrgdesc,
-      //       bentypcod: e.bentypcod,
-      //       chrgtable: e.chrgtable,
-      //     });
-      //   });
-
       this.fundSource.forEach((e) => {
         this.fundSourceList.push({
           chrgcode: e.fsid,
@@ -1846,10 +1982,11 @@ export default {
         (obj) => obj.cl1comb && obj.cl1comb.startsWith(prefix) && obj.uomcode !== 'box'
       );
     },
-    storeTotalStocksInContainer() {
+    storeTotalDeliveriesInContainer() {
+      console.log(this.totalDeliveries);
       this.totalDeliveries.forEach((e) => {
         this.totalDeliveriesList.push({
-          id: e.id,
+          stock_id: e.stock_id,
           ris_no: e.ris_no,
           cl2comb: e.cl2comb,
           cl2desc: e.cl2desc.trim(),
@@ -1857,6 +1994,7 @@ export default {
           acquisition_price: e.acquisition_price,
           chrgcode: e.chrgcode,
           quantity: e.quantity,
+          delivered_date: e.delivered_date,
           expiration_date: e.expiration_date,
         });
       });
@@ -1876,7 +2014,7 @@ export default {
           this.storeFundSourceInContainer();
           this.storeItemsInContainer();
           this.storeStocksInContainer();
-          this.storeTotalStocksInContainer();
+          this.storeTotalDeliveriesInContainer();
           this.storeSuppliersInContainer();
           this.storeTotalConvertedItemsInContainer();
         },
@@ -1985,17 +2123,15 @@ export default {
 
       const similarObjects = this.findSimilarIds(item.cl2comb, this.itemsList);
 
-      this.formConvertItem.cl2comb_before = item.cl2comb;
-      this.formConvertItem.cl2desc_before = item.cl2desc;
-      this.formConvertItem.quantity_before = item.quantity;
-
-      this.formConvertItem.csr_stock_id = item.id;
+      this.formConvertItem.stock_id = item.stock_id;
       this.formConvertItem.ris_no = item.ris_no;
-      this.formConvertItem.chrgcode = item.chrgcode;
       this.formConvertItem.supplierID = item.supplierID;
-      this.formConvertItem.manufactured_date = item.manufactured_date;
+      this.formConvertItem.chrgcode = item.chrgcode;
+      this.formConvertItem.cl2comb_before = item.cl2comb;
       this.formConvertItem.delivered_date = item.delivered_date;
       this.formConvertItem.expiration_date = item.expiration_date;
+      this.formConvertItem.quantity_before = item.quantity;
+      this.formConvertItem.acquisition_price = item.acquisition_price;
 
       this.convertDialog = true;
     },

@@ -67,7 +67,7 @@ class CsrStocksControllers extends Controller
         // );
 
         $totalDeliveries = DB::select(
-            "SELECT stock.id, stock.ris_no, item.cl2comb, item.cl2desc, stock.supplierID,
+            "SELECT stock.id as stock_id, stock.ris_no, item.cl2comb, item.cl2desc, stock.supplierID,
                 stock.acquisition_price, price.hospital_price, price.price_per_unit, stock.chrgcode, stock.quantity, stock.manufactured_date,
                 stock.delivered_date, stock.expiration_date, stock.converted
                 FROM csrw_csr_stocks as stock
