@@ -227,14 +227,16 @@ class CsrStocksControllers extends Controller
                     'converted' => 'y',
                 ]);
 
-                $itemPrices = ItemPrices::create([
-                    'cl2comb' => $r['cl2comb_after'],
-                    'price_per_unit' => $r['price_per_unit'],
-                    'entry_by' => $entry_by,
-                    'ris_no' => $r['risno'],
-                    'acquisition_price' => $r['unitprice'],
-                    'hospital_price' => $r['hospital_price'],
-                ]);
+                if ($r['price_per_unit'] != null) {
+                    $itemPrices = ItemPrices::create([
+                        'cl2comb' => $r['cl2comb_after'],
+                        'price_per_unit' => $r['price_per_unit'],
+                        'entry_by' => $entry_by,
+                        'ris_no' => $r['risno'],
+                        'acquisition_price' => $r['unitprice'],
+                        'hospital_price' => $r['hospital_price'],
+                    ]);
+                }
 
                 $stockLog = CsrStocksLogs::create([
                     'stock_id' => $stock->id,

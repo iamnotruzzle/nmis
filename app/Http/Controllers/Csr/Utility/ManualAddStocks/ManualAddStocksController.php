@@ -45,15 +45,17 @@ class ManualAddStocksController extends Controller
         ]);
 
         if ($request->cl2comb_after != null && $request->quantity_after != null) {
-            $itemPrices = ItemPrices::create([
-                'cl2comb' => $request->cl2comb_after,
-                'price_per_unit' => $request->price_per_unit,
-                'entry_by' => $entry_by,
-                'ris_no' => $request->ris_no,
-                'acquisition_price' => $request->acquisitionPrice,
-                'hospital_price' => $request->hospital_price,
-            ]);
 
+            if ($request->price_per_unit != null) {
+                $itemPrices = ItemPrices::create([
+                    'cl2comb' => $request->cl2comb_after,
+                    'price_per_unit' => $request->price_per_unit,
+                    'entry_by' => $entry_by,
+                    'ris_no' => $request->ris_no,
+                    'acquisition_price' => $request->acquisitionPrice,
+                    'hospital_price' => $request->hospital_price,
+                ]);
+            }
 
             $convertedItem = CsrItemConversion::create([
                 'csr_stock_id' => $stock->id,

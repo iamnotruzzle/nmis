@@ -1981,10 +1981,9 @@ export default {
       }
     },
     convertItem(item) {
-      //   console.log('convert item', item);
+      console.log('convert item', item);
 
       const similarObjects = this.findSimilarIds(item.cl2comb, this.itemsList);
-      console.log(similarObjects);
 
       this.formConvertItem.cl2comb_before = item.cl2comb;
       this.formConvertItem.cl2desc_before = item.cl2desc;
@@ -2193,11 +2192,8 @@ export default {
       this.convertedItemsList = [];
 
       this.convertedItemsList = val;
-      console.log(val);
     },
     'formAddDelivery.generateRisNo': function (val) {
-      //   console.log(val);
-
       if (val == true) {
         this.generateTempRisNo();
         this.generatedRisNo = true;
@@ -2221,8 +2217,6 @@ export default {
     },
     formImport: {
       handler(e) {
-        // console.log('formImport:', e);
-
         // acquisition price
         let acquisitionPrice = Number(e.acquisitionPrice);
         let hospital_price = (acquisitionPrice * this.formImport.quantity) / 0.7;
