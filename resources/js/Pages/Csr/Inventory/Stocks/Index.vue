@@ -1023,7 +1023,6 @@
             id="quantity"
             type="number"
             v-model="formConvertItem.quantity_before"
-            readonly
           />
         </div>
         <div class="field flex flex-row">
