@@ -1097,7 +1097,7 @@
               formConvertItem.remarks == '' ||
               formConvertItem.remarks == null
             "
-            @click="submitUpdateConvert"
+            @click="submitConvertItem"
           />
         </template>
       </Dialog>
@@ -2000,7 +2000,7 @@ export default {
 
       this.convertDialog = true;
     },
-    submitUpdateConvert() {
+    submitConvertItem() {
       if (
         this.formConvertItem.processing ||
         this.formConvertItem.quantity_after == '' ||
