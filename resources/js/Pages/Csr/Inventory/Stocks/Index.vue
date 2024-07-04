@@ -1002,14 +1002,14 @@
         dismissableMask
       >
         <template #header>
-          <div class="text-primary text-xl font-bold">UPDATE CONVERTED ITEM</div>
+          <div class="text-primary text-xl font-bold">CONVERT ITEM</div>
         </template>
         <div class="field">
           <div class="flex align-content-center">
             <label>Item</label>
           </div>
           <Textarea
-            v-model.trim="formUpdateConvert.cl2desc_before"
+            v-model.trim="formConvertItem.cl2desc_before"
             readonly
             rows="5"
             class="w-full"
@@ -1022,26 +1022,60 @@
           <InputText
             id="quantity"
             type="number"
-            v-model="formUpdateConvert.quantity_after"
-            @keydown="restrictNonNumericAndPeriod"
-            autofocus
+            v-model="formConvertItem.quantity_before"
+            readonly
           />
         </div>
+        <div class="field flex flex-row">
+          <div :style="{ width: '65%' }">
+            <div class="flex align-content-center">
+              <label>Convert to</label>
+              <span class="ml-2 text-error">*</span>
+            </div>
+            <Dropdown
+              required="true"
+              v-model="formConvertItem.cl2comb_after"
+              :options="convertedItemList"
+              :virtualScrollerOptions="{ itemSize: 38 }"
+              filter
+              dataKey="cl2comb"
+              optionValue="cl2comb"
+              optionLabel="cl2desc"
+              class="w-full"
+            />
+          </div>
+          <div :style="{ width: '5%' }"></div>
+          <div :style="{ width: '30%' }">
+            <div class="flex align-content-center">
+              <label>Convert quantity</label>
+              <span class="ml-2 text-error">*</span>
+            </div>
+            <InputText
+              id="quantity"
+              type="number"
+              v-model="formConvertItem.quantity_after"
+              @keydown="restrictNonNumericAndPeriod"
+              autofocus
+              class="w-full"
+            />
+          </div>
+        </div>
+
         <div>
           <div class="flex align-content-center">
             <label>Remarks</label>
             <span class="ml-2 text-error">*</span>
           </div>
           <Textarea
-            v-model.trim="formUpdateConvert.remarks"
+            v-model.trim="formConvertItem.remarks"
             rows="10"
             class="w-full"
           />
           <small
             class="text-error"
-            v-if="formUpdateConvert.errors.remarks"
+            v-if="formConvertItem.errors.remarks"
           >
-            {{ formUpdateConvert.errors.remarks }}
+            {{ formConvertItem.errors.remarks }}
           </small>
         </div>
         <template #footer>
@@ -1058,11 +1092,11 @@
             text
             type="submit"
             :disabled="
-              formUpdateConvert.processing ||
-              formUpdateConvert.quantity_after == '' ||
-              formUpdateConvert.quantity_after == null ||
-              formUpdateConvert.remarks == '' ||
-              formUpdateConvert.remarks == null
+              formConvertItem.processing ||
+              formConvertItem.quantity_after == '' ||
+              formConvertItem.quantity_after == null ||
+              formConvertItem.remarks == '' ||
+              formConvertItem.remarks == null
             "
             @click="submitUpdateConvert"
           />
@@ -1275,14 +1309,14 @@
             >
               <template #body="slotProps">
                 <div class="flex flex-row justify-content-center align-content-around">
-                  <Button
+                  <!-- <Button
                     v-tooltip.top="'Update'"
                     icon="pi pi-pencil"
                     class="mr-2"
                     rounded
                     severity="warning"
                     @click="editConvertedItem(slotProps.data)"
-                  />
+                  /> -->
                 </div>
               </template>
             </Column>
@@ -1393,7 +1427,6 @@ export default {
       delivered_date: null,
       expiration_date: null,
       acquisitionPrice: 0,
-      editConvertedItemIsUpdate: false,
       generatedRisNo: false,
       convertedItemList: [],
       deliveryDetailsFilter: {
@@ -1493,7 +1526,7 @@ export default {
         hospital_price: null,
         price_per_unit: null,
       }),
-      formUpdateConvert: this.$inertia.form({
+      formConvertItem: this.$inertia.form({
         id: null,
         ris_no: null,
         chrgcode: null,
@@ -1759,6 +1792,8 @@ export default {
           cl2desc_after: e.cl2desc_after,
           quantity_after: e.quantity_after,
           acquisition_price: e.acquisition_price,
+          manufactured_date: e.manufactured_date,
+          delivered_date: e.delivered_date,
           expiration_date: e.expiration_date,
           converted_by: e.firstname.trim() + ' ' + e.lastname.trim(),
         });
@@ -1815,8 +1850,13 @@ export default {
     storeTotalStocksInContainer() {
       this.totalDeliveries.forEach((e) => {
         this.totalDeliveriesList.push({
+          id: e.id,
+          ris_no: e.ris_no,
           cl2comb: e.cl2comb,
           cl2desc: e.cl2desc.trim(),
+          supplierID: e.supplierID,
+          acquisition_price: e.acquisition_price,
+          chrgcode: e.chrgcode,
           quantity: e.quantity,
           expiration_date: e.expiration_date,
         });
@@ -1876,28 +1916,11 @@ export default {
         this.form.reset(),
         this.formImport.clearErrors(),
         this.formImport.reset(),
-        this.formUpdateConvert.reset(),
-        this.formUpdateConvert.clearErrors(),
+        this.formConvertItem.reset(),
+        this.formConvertItem.clearErrors(),
         this.formAddDelivery.clearErrors(),
         this.formAddDelivery.reset()
       );
-    },
-    editConvertedItem(item) {
-      console.log(item);
-
-      let itemCl2comb = this.extractCl2comb(item.cl2comb_after);
-      this.updateConvertedIemListBasedOnCl1comb(itemCl2comb);
-
-      this.editConvertedItemIsUpdate = true;
-      this.convertDialog = true;
-
-      this.formUpdateConvert.id = item.id;
-
-      this.formUpdateConvert.ris_no = item.ris_no;
-      this.formUpdateConvert.cl2comb_before = item.cl2comb_after;
-      this.formUpdateConvert.cl2desc_before = item.cl2desc_after;
-      this.formUpdateConvert.quantity_after = item.quantity_after;
-      this.formUpdateConvert.chrgcode = item.fsid;
     },
     editItem(item) {
       //   console.log(item);
@@ -1958,69 +1981,38 @@ export default {
         }
       }
     },
-    extractCl2comb(str) {
-      //   const firstDashIndex = str.indexOf('-');
-      //   const secondDashIndex = str.indexOf('-', firstDashIndex + 1);
-      //   return str.substring(0, secondDashIndex + 1);
-
-      // Find the index of the first occurrence of '-'
-      const firstDashIndex = str.indexOf('-');
-
-      // Find the index of the second occurrence of '-' starting from the position after the first occurrence
-      const secondDashIndex = str.indexOf('-', firstDashIndex + 1);
-
-      // Extract the substring from the start of the string until the position of the second '-'
-      return str.substring(0, secondDashIndex);
-    },
-    updateConvertedIemListBasedOnCl1comb(itemCl2comb) {
-      // reset list
-      this.convertedItemsList = [];
-
-      // Modify the forEach loop to apply the extraction and push items based on the extracted result
-      this.convertedItems.forEach((e) => {
-        // Conditionally push the item into the new list based on the extracted result
-        if (itemCl2comb === e.cl1comb) {
-          // Adjust the condition as needed
-          this.convertedItemsList.push({
-            cl1comb: e.cl1comb,
-            cl2comb: e.cl2comb,
-            cl2desc: e.cl2desc,
-            uomcode: e.uomcode,
-          });
-        }
-      });
-    },
     convertItem(item) {
-      console.log(item);
+      //   console.log('convert item', item);
 
-      let itemCl2comb = this.extractCl2comb(item.cl2comb);
-      this.updateConvertedIemListBasedOnCl1comb(itemCl2comb);
+      const similarObjects = this.findSimilarIds(item.cl2comb, this.itemsList);
+      console.log(similarObjects);
+
+      this.formConvertItem.cl2comb_before = item.cl2comb;
+      this.formConvertItem.cl2desc_before = item.cl2desc;
+      this.formConvertItem.quantity_before = item.quantity;
+
+      this.formConvertItem.csr_stock_id = item.id;
+      this.formConvertItem.ris_no = item.ris_no;
+      this.formConvertItem.chrgcode = item.chrgcode;
+      this.formConvertItem.supplierID = item.supplierID;
+      this.formConvertItem.manufactured_date = item.manufactured_date;
+      this.formConvertItem.delivered_date = item.delivered_date;
+      this.formConvertItem.expiration_date = item.expiration_date;
 
       this.convertDialog = true;
-      this.formUpdateConvert.cl2comb_before = item.cl2comb;
-      this.formUpdateConvert.cl2desc_before = item.cl2desc;
-      this.formUpdateConvert.quantity_before = item.quantity;
-
-      this.formUpdateConvert.csr_stock_id = item.id;
-      this.formUpdateConvert.ris_no = item.ris_no;
-      this.formUpdateConvert.chrgcode = item.chrgcode;
-      this.formUpdateConvert.supplierID = item.supplierID;
-      this.formUpdateConvert.manufactured_date = item.manufactured_date;
-      this.formUpdateConvert.delivered_date = item.delivered_date;
-      this.formUpdateConvert.expiration_date = item.expiration_date;
     },
     submitUpdateConvert() {
       if (
-        this.formUpdateConvert.processing ||
-        this.formUpdateConvert.quantity_after == '' ||
-        this.formUpdateConvert.quantity_after == null ||
-        this.formUpdateConvert.remarks == '' ||
-        this.formUpdateConvert.remarks == null
+        this.formConvertItem.processing ||
+        this.formConvertItem.quantity_after == '' ||
+        this.formConvertItem.quantity_after == null ||
+        this.formConvertItem.remarks == '' ||
+        this.formConvertItem.remarks == null
       ) {
         return false;
       }
 
-      this.formUpdateConvert.put(route('csrconvertdelivery.update', this.formUpdateConvert.id), {
+      this.formConvertItem.put(route('csrconvertdelivery.update', this.formConvertItem.id), {
         preserveScroll: true,
         onSuccess: () => {
           //   console.log('DONE');
@@ -2057,6 +2049,7 @@ export default {
 
       // Find similar IDs in array2
       const similarObjects = this.findSimilarIds(e.data.cl2comb, this.itemsList);
+      //   console.log(similarObjects);
 
       // Log or handle the similar objects as needed
       //   console.log('Similar objects:', similarObjects);
@@ -2166,8 +2159,8 @@ export default {
       this.form.clearErrors();
       this.formImport.reset();
       this.formImport.clearErrors();
-      this.formUpdateConvert.reset();
-      this.formUpdateConvert.clearErrors();
+      this.formConvertItem.reset();
+      this.formConvertItem.clearErrors();
       this.formAddDelivery.reset();
       this.formAddDelivery.clearErrors();
       this.stocksList = [];
@@ -2201,7 +2194,7 @@ export default {
       this.convertedItemsList = [];
 
       this.convertedItemsList = val;
-      //   console.log(val);
+      console.log(val);
     },
     'formAddDelivery.generateRisNo': function (val) {
       //   console.log(val);
@@ -2227,70 +2220,6 @@ export default {
         this.formAddDelivery.expiration_date = new Date('9999-12-03');
       }
     },
-    // 'formImport.acquisitionPrice': function (e) {
-    //   let val = Number(e);
-    //   let hospital_price = val / 0.7;
-
-    //   let str_hospital_price = hospital_price.toString();
-    //   let index = str_hospital_price.indexOf('.');
-
-    //   // Check if there's a decimal point
-    //   if (index !== -1) {
-    //     this.formImport.hospital_price = str_hospital_price.slice(0, index + 3); // Include the decimal point and the next two digits
-    //   } else {
-    //     this.formImport.hospital_price = str_hospital_price + '.00'; // No decimal point means it's a whole number
-    //   }
-    // },
-    // 'formImport.quantity_after': function (e) {
-    //   let val = Number(e);
-    //   if (val == 0 || val == null) {
-    //     this.formImport.price_per_unit = 0;
-    //   } else {
-    //     let price_per_unit = this.formImport.hospital_price / val;
-
-    //     let str_price_per_unit = price_per_unit.toString();
-    //     let index = str_price_per_unit.indexOf('.');
-
-    //     // Check if there's a decimal point
-    //     if (index !== -1) {
-    //       this.formImport.price_per_unit = str_price_per_unit.slice(0, index + 3); // Include the decimal point and the next two digits
-    //     } else {
-    //       this.formImport.price_per_unit = str_price_per_unit + '.00'; // No decimal point means it's a whole number
-    //     }
-    //   }
-    // },
-    // 'formAddDelivery.acquisitionPrice': function (e) {
-    //   let val = Number(e);
-    //   let hospital_price = val / 0.7;
-
-    //   let str_hospital_price = hospital_price.toString();
-    //   let index = str_hospital_price.indexOf('.');
-
-    //   // Check if there's a decimal point
-    //   if (index !== -1) {
-    //     this.formAddDelivery.hospital_price = str_hospital_price.slice(0, index + 3); // Include the decimal point and the next two digits
-    //   } else {
-    //     this.formAddDelivery.hospital_price = str_hospital_price + '.00'; // No decimal point means it's a whole number
-    //   }
-    // },
-    // 'formAddDelivery.quantity_after': function (e) {
-    //   let val = Number(e);
-    //   if (val == 0 || val == null) {
-    //     this.formAddDelivery.price_per_unit = 0;
-    //   } else {
-    //     let price_per_unit = this.formAddDelivery.hospital_price / val;
-
-    //     let str_price_per_unit = price_per_unit.toString();
-    //     let index = str_price_per_unit.indexOf('.');
-
-    //     // Check if there's a decimal point
-    //     if (index !== -1) {
-    //       this.formAddDelivery.price_per_unit = str_price_per_unit.slice(0, index + 3); // Include the decimal point and the next two digits
-    //     } else {
-    //       this.formAddDelivery.price_per_unit = str_price_per_unit + '.00'; // No decimal point means it's a whole number
-    //     }
-    //   }
-    // },
     formImport: {
       handler(e) {
         // console.log('formImport:', e);
