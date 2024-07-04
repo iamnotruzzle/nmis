@@ -1190,7 +1190,7 @@
                 <Button
                   v-tooltip.top="'Convert'"
                   rounded
-                  severity="warning"
+                  severity="info"
                   @click="convertItem(slotProps.data)"
                 >
                   <template #icon>
