@@ -998,8 +998,6 @@
         :style="{ width: '550px' }"
         :modal="true"
         class="p-fluid"
-        @hide="clickOutsideDialog"
-        dismissableMask
       >
         <template #header>
           <div class="text-primary text-xl font-bold">CONVERT ITEM</div>
