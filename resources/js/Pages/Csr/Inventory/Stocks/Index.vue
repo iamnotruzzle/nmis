@@ -998,6 +998,7 @@
         :style="{ width: '550px' }"
         :modal="true"
         class="p-fluid"
+        @hide="clickOutsideDialog"
       >
         <template #header>
           <div class="text-primary text-xl font-bold">CONVERT ITEM</div>
@@ -1327,6 +1328,7 @@
             >
               <template #body="slotProps">
                 <Button
+                  v-if="slotProps.data.converted == 'n'"
                   v-tooltip.top="'Convert'"
                   rounded
                   severity="info"
@@ -1996,6 +1998,7 @@ export default {
           quantity: e.quantity,
           delivered_date: e.delivered_date,
           expiration_date: e.expiration_date,
+          converted: e.converted,
         });
       });
     },
