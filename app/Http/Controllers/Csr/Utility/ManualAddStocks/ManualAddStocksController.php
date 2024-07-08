@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Csr\Utility\ManualAddStocks;
 use App\Http\Controllers\Controller;
 use App\Models\CsrItemConversion;
 use App\Models\CsrStocks;
+use App\Models\CsrStocksLogs;
 use App\Models\Item;
 use App\Models\ItemPrices;
 use Carbon\Carbon;
@@ -42,6 +43,25 @@ class ManualAddStocksController extends Controller
             'expiration_date' => $expiration_date,
             'acquisition_price' => $request->acquisitionPrice,
             'converted' => 'y',
+        ]);
+
+        $stockLog = CsrStocksLogs::create([
+            'stock_id' => $stock->id,
+            'ris_no' => $request->ris_no,
+            'cl2comb' => $request->cl2comb,
+            'uomcode' => $unit->uomcode,
+            'supplierID' => $request->supplier,
+            'chrgcode' => $request->fund_source,
+            'prev_qty' => 0,
+            'new_qty' => $request->quantity,
+            'manufactured_date' => $manufactured_date,
+            'delivered_date' => $delivered_date,
+            'expiration_date' => $expiration_date,
+            'action' => 'ADD DELIVERY',
+            'remarks' => '',
+            'acquisition_price' => $request->acquisitionPrice,
+            'entry_by' => $entry_by,
+            'converted' => 'n',
         ]);
 
         if ($request->cl2comb_after != null && $request->quantity_after != null) {
