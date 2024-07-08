@@ -1010,8 +1010,7 @@
           </div>
           <InputText
             v-model.trim="formConvertItem.ris_no"
-            :readonly="generatedRisNo"
-            autofocus
+            readonly
           />
         </div>
         <div class="field">
@@ -1029,6 +1028,7 @@
             optionValue="supplierID"
             optionLabel="suppname"
             class="w-full"
+            disabled
           />
         </div>
         <div class="field">
@@ -1046,6 +1046,7 @@
             optionValue="chrgcode"
             optionLabel="chrgdesc"
             class="w-full"
+            disabled
           />
         </div>
         <div class="field">
@@ -1063,6 +1064,7 @@
             optionValue="cl2comb"
             optionLabel="cl2desc"
             class="w-full"
+            disabled
           />
         </div>
         <div class="field flex flex-row justify-content-between">
@@ -1078,6 +1080,7 @@
               showButtonBar
               :manualInput="false"
               :hideOnDateTimeSelect="true"
+              readonly
             />
           </div>
           <div>
@@ -1095,15 +1098,16 @@
                 :manualInput="false"
                 :hideOnDateTimeSelect="true"
                 :disabled="maxDate"
+                readonly
               />
             </div>
-            <ToggleButton
+            <!-- <ToggleButton
               v-model="maxDate"
               onLabel="Fixed date"
               offLabel="Custom date"
               onIcon="pi pi-lock"
               offIcon="pi pi-lock-open"
-            />
+            /> -->
           </div>
         </div>
 
@@ -1117,6 +1121,7 @@
             v-model.trim="formConvertItem.quantity_before"
             inputId="integeronly"
             @keydown="restrictNonNumericAndPeriod"
+            readonly
           />
         </div>
         <div class="field w-6">
@@ -1130,6 +1135,7 @@
               type="number"
               v-model.trim="formConvertItem.acquisition_price"
               @keydown="restrictNonNumeric"
+              readonly
             />
           </div>
         </div>
