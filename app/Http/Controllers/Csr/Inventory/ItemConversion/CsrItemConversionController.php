@@ -23,39 +23,21 @@ class CsrItemConversionController extends Controller
 
     public function store(Request $request)
     {
-        dd($request);
+        // dd($request);
 
         $converted_by = Auth::user()->employeeid;
+
+        $unit = Item::where('cl2comb', $request->cl2comb)->first('uomcode');
 
         $updated = CsrStocks::where('id', $request->csr_stock_id)
             ->update([
                 'converted' => 'y',
             ]);
 
-        $updatedLogs = CsrStocksLogs::where('stock_id', $request->csr_stock_id)
+        $updatedLog = CsrStocksLogs::where('stock_id', $request->csr_stock_id)
             ->update([
                 'converted' => 'y',
             ]);
-
-        $unit = Item::where('cl2comb', $request->cl2comb)->first('uomcode');
-
-        $stockLog = CsrStocksLogs::create([
-            'stock_id' => $request->id,
-            'ris_no' => $request->ris_no,
-            'cl2comb' => $request->cl2comb,
-            'uomcode' => $unit->uomcode,
-            'supplierID' => $request->supplier,
-            'chrgcode' => $request->fund_source,
-            'prev_qty' => 0,
-            'new_qty' => $request->quantity,
-            'delivered_date' => $request->delivered_date,
-            'expiration_date' => $request->expiration_date,
-            'action' => 'CONVERT ITEM',
-            'remarks' => '',
-            'acquisition_price' => $request->acquisitionPrice,
-            'entry_by' => $converted_by,
-            'converted' => 'y',
-        ]);
 
         $convertedItem = CsrItemConversion::create([
             'csr_stock_id' => $request->csr_stock_id,
@@ -70,96 +52,37 @@ class CsrItemConversionController extends Controller
             'delivered_date' =>  Carbon::parse($request->delivered_date)->format('Y-m-d H:i:s.v'),
             'expiration_date' =>  Carbon::parse($request->expiration_date)->format('Y-m-d H:i:s.v'),
             'converted_by' => $converted_by,
+            'remarks' => $request->remarks,
         ]);
 
         $convertedItemLog = CsrItemConversionLogs::create([
             'item_conversion_id' => $convertedItem->id,
-            'csr_stock_id' => $request->csr_stock_id,
-            'ris_no' => $request->ris_no,
-            'chrgcode' => $request->chrgcode,
-            'cl2comb_before' => $request->cl2comb_before,
-            'quantity_before' => $request->quantity_before,
-            'cl2comb_after' => $request->cl2comb_after,
-            'prev_qty' => 0,
-            'new_qty' => $request->quantity_after,
-            'supplierID' => $request->supplierID,
-            'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
-            'delivered_date' =>  Carbon::parse($request->delivered_date)->format('Y-m-d H:i:s.v'),
-            'expiration_date' =>  Carbon::parse($request->expiration_date)->format('Y-m-d H:i:s.v'),
-            'action' => 'CONVERTED ITEM',
-            'remarks' => '',
+            'csr_stock_id' => $convertedItem->csr_stock_id,
+            'ris_no' => $convertedItem->ris_no,
+            'chrgcode' => $convertedItem->chrgcode,
+            'cl2comb_before' => $convertedItem->cl2comb_before,
+            'quantity_before' => $convertedItem->quantity_before,
+            'cl2comb_after' => $convertedItem->cl2comb_after,
+            'quantity_after' => $convertedItem->quantity_after,
+            'prev_qty' => $convertedItem->quantity_before,
+            'new_qty' => $convertedItem->quantity_after,
+            'supplierID' => $convertedItem->supplierID,
+            'manufactured_date' => Carbon::parse($convertedItem->manufactured_date)->format('Y-m-d H:i:s.v'),
+            'delivered_date' =>  Carbon::parse($convertedItem->delivered_date)->format('Y-m-d H:i:s.v'),
+            'expiration_date' =>  Carbon::parse($convertedItem->expiration_date)->format('Y-m-d H:i:s.v'),
             'converted_by' => $converted_by,
+            'action' => 'CONVERT ITEM',
+            'remarks' => $convertedItem->remarks,
         ]);
 
-        // if ($request->cl2comb_after == null) {
-        //     $convertedItem = CsrItemConversion::create([
-        //         'csr_stock_id' => $request->csr_stock_id,
-        //         'ris_no' => $request->ris_no,
-        //         'chrgcode' => $request->chrgcode,
-        //         'cl2comb_before' => $request->cl2comb_before,
-        //         'quantity_before' => $request->quantity_before,
-        //         'cl2comb_after' => $request->cl2comb_before,
-        //         'quantity_after' => $request->quantity_after,
-        //         'supplierID' => $request->supplierID,
-        //         'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
-        //         'delivered_date' =>  Carbon::parse($request->delivered_date)->format('Y-m-d H:i:s.v'),
-        //         'expiration_date' =>  Carbon::parse($request->expiration_date)->format('Y-m-d H:i:s.v'),
-        //         'converted_by' => $converted_by,
-        //     ]);
-
-        //     $convertedItemLog = CsrItemConversionLogs::create([
-        //         'item_conversion_id' => $convertedItem->id,
-        //         'csr_stock_id' => $request->csr_stock_id,
-        //         'ris_no' => $request->ris_no,
-        //         'chrgcode' => $request->chrgcode,
-        //         'cl2comb_before' => $request->cl2comb_before,
-        //         'quantity_before' => $request->quantity_before,
-        //         'cl2comb_after' => $request->cl2comb_before,
-        //         'prev_qty' => 0,
-        //         'new_qty' => $request->quantity_after,
-        //         'supplierID' => $request->supplierID,
-        //         'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
-        //         'delivered_date' =>  Carbon::parse($request->delivered_date)->format('Y-m-d H:i:s.v'),
-        //         'expiration_date' =>  Carbon::parse($request->expiration_date)->format('Y-m-d H:i:s.v'),
-        //         'action' => 'CONVERTED ITEM',
-        //         'remarks' => '',
-        //         'converted_by' => $converted_by,
-        //     ]);
-        // } else {
-        //     $convertedItem = CsrItemConversion::create([
-        //         'csr_stock_id' => $request->csr_stock_id,
-        //         'ris_no' => $request->ris_no,
-        //         'chrgcode' => $request->chrgcode,
-        //         'cl2comb_before' => $request->cl2comb_before,
-        //         'quantity_before' => $request->quantity_before,
-        //         'cl2comb_after' => $request->cl2comb_after,
-        //         'quantity_after' => $request->quantity_after,
-        //         'supplierID' => $request->supplierID,
-        //         'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
-        //         'delivered_date' =>  Carbon::parse($request->delivered_date)->format('Y-m-d H:i:s.v'),
-        //         'expiration_date' =>  Carbon::parse($request->expiration_date)->format('Y-m-d H:i:s.v'),
-        //         'converted_by' => $converted_by,
-        //     ]);
-
-        //     $convertedItemLog = CsrItemConversionLogs::create([
-        //         'item_conversion_id' => $convertedItem->id,
-        //         'csr_stock_id' => $request->csr_stock_id,
-        //         'ris_no' => $request->ris_no,
-        //         'chrgcode' => $request->chrgcode,
-        //         'cl2comb_before' => $request->cl2comb_before,
-        //         'quantity_before' => $request->quantity_before,
-        //         'cl2comb_after' => $request->cl2comb_after,
-        //         'prev_qty' => 0,
-        //         'new_qty' => $request->quantity_after,
-        //         'supplierID' => $request->supplierID,
-        //         'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
-        //         'delivered_date' =>  Carbon::parse($request->delivered_date)->format('Y-m-d H:i:s.v'),
-        //         'expiration_date' =>  Carbon::parse($request->expiration_date)->format('Y-m-d H:i:s.v'),
-        //         'action' => 'CONVERTED ITEM',
-        //         'remarks' => '',
-        //         'converted_by' => $converted_by,
-        //     ]);
-        // }
+        $itemPrices = ItemPrices::create([
+            'cl2comb' => $request->cl2comb_after,
+            'price_per_unit' => $request->price_per_unit,
+            'entry_by' => $converted_by,
+            'ris_no' => $request->ris_no,
+            'acquisition_price' => $request->acquisition_price,
+            'hospital_price' => $request->hospital_price,
+        ]);
 
         return redirect()->back();
     }
