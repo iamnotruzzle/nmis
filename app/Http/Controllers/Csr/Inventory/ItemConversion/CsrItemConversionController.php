@@ -7,6 +7,7 @@ use App\Models\CsrItemConversion;
 use App\Models\CsrItemConversionLogs;
 use App\Models\CsrStocks;
 use App\Models\CsrStocksLogs;
+use App\Models\Item;
 use App\Models\ItemPrices;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -35,6 +36,26 @@ class CsrItemConversionController extends Controller
             ->update([
                 'converted' => 'y',
             ]);
+
+        $unit = Item::where('cl2comb', $request->cl2comb)->first('uomcode');
+
+        $stockLog = CsrStocksLogs::create([
+            'stock_id' => $request->id,
+            'ris_no' => $request->ris_no,
+            'cl2comb' => $request->cl2comb,
+            'uomcode' => $unit->uomcode,
+            'supplierID' => $request->supplier,
+            'chrgcode' => $request->fund_source,
+            'prev_qty' => 0,
+            'new_qty' => $request->quantity,
+            'delivered_date' => $request->delivered_date,
+            'expiration_date' => $request->expiration_date,
+            'action' => 'CONVERT ITEM',
+            'remarks' => '',
+            'acquisition_price' => $request->acquisitionPrice,
+            'entry_by' => $converted_by,
+            'converted' => 'y',
+        ]);
 
         $convertedItem = CsrItemConversion::create([
             'csr_stock_id' => $request->csr_stock_id,

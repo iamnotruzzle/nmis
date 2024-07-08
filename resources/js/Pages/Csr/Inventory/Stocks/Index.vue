@@ -1080,7 +1080,7 @@
               showButtonBar
               :manualInput="false"
               :hideOnDateTimeSelect="true"
-              readonly
+              disabled
             />
           </div>
           <div>
@@ -1097,8 +1097,7 @@
                 showButtonBar
                 :manualInput="false"
                 :hideOnDateTimeSelect="true"
-                :disabled="maxDate"
-                readonly
+                disabled
               />
             </div>
             <!-- <ToggleButton
@@ -1673,7 +1672,7 @@ export default {
         price_per_unit: null,
       }),
       formConvertItem: this.$inertia.form({
-        stock_id: null,
+        csr_stock_id: null,
         ris_no: null,
         supplierID: null,
         chrgcode: null,
@@ -2132,7 +2131,7 @@ export default {
 
       const similarObjects = this.findSimilarIds(item.cl2comb, this.itemsList);
 
-      this.formConvertItem.stock_id = item.stock_id;
+      this.formConvertItem.csr_stock_id = item.stock_id;
       this.formConvertItem.ris_no = item.ris_no;
       this.formConvertItem.supplierID = item.supplierID;
       this.formConvertItem.chrgcode = item.chrgcode;

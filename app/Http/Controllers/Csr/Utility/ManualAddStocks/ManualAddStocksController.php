@@ -59,7 +59,7 @@ class ManualAddStocksController extends Controller
                 'manufactured_date' => $manufactured_date,
                 'delivered_date' => $delivered_date,
                 'expiration_date' => $expiration_date,
-                'action' => 'ADD DELIVERY',
+                'action' => 'ADD DELIVERY AND CONVERT ITEM',
                 'remarks' => '',
                 'acquisition_price' => $request->acquisitionPrice,
                 'entry_by' => $entry_by,
@@ -104,7 +104,7 @@ class ManualAddStocksController extends Controller
                 'manufactured_date' => Carbon::parse($convertedItem->manufactured_date)->format('Y-m-d H:i:s.v'),
                 'delivered_date' =>  Carbon::parse($convertedItem->delivered_date)->format('Y-m-d H:i:s.v'),
                 'expiration_date' =>  Carbon::parse($convertedItem->expiration_date)->format('Y-m-d H:i:s.v'),
-                'action' => 'ITEM CONVERTED',
+                'action' => 'CONVERT ITEM',
                 'remarks' => '',
                 'converted_by' => $entry_by,
             ]);
