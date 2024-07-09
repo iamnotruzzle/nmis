@@ -56,16 +56,6 @@ class CsrStocksControllers extends Controller
 
         );
 
-        // $totalDeliveries = DB::select(
-        //     "SELECT stock.id, stock.ris_no, item.cl2comb, item.cl2desc, stock.supplierID,
-        //         stock.acquisition_price, stock.chrgcode, stock.quantity, stock.manufactured_date,
-        //         stock.delivered_date, stock.expiration_date
-        //         FROM csrw_csr_stocks as stock
-        //         JOIN hclass2 as item ON item.cl2comb = stock.cl2comb
-        //         WHERE stock.quantity > 0;
-        //     "
-        // );
-
         $totalDeliveries = DB::select(
             "SELECT stock.id as stock_id, stock.ris_no, item.cl2comb, item.cl2desc, stock.supplierID,
                 stock.acquisition_price, price.hospital_price, price.price_per_unit, stock.chrgcode, stock.quantity, stock.manufactured_date,
@@ -104,7 +94,6 @@ class CsrStocksControllers extends Controller
             JOIN
                 csrw_fund_source AS fund_source ON fund_source.fsid = converted.chrgcode;"
         );
-        // dd($totalConvertedItems);
 
         $convertedItems = DB::select(
             "SELECT cl1comb, cl2comb, cl2desc, uomcode
@@ -116,17 +105,12 @@ class CsrStocksControllers extends Controller
         $fundSource = FundSource::orderBy('fsName')
             ->get(['id', 'fsid', 'fsName', 'cluster_code']);
 
-        // $typeOfCharge = TypeOfCharge::where('chrgstat', 'A')
-        //     ->where('chrgtable', 'NONDR')
-        //     ->get(['chrgcode', 'chrgdesc', 'bentypcod', 'chrgtable']);
-
         $suppliers = PimsSupplier::where('status', 'A')->orderBy('suppname', 'ASC')->get();
 
         return Inertia::render('Csr/Inventory/Stocks/Index', [
             'items' => $items,
             'stocks' => $stocks,
             'totalDeliveries' => $totalDeliveries,
-            // 'typeOfCharge' => $typeOfCharge,
             'fundSource' => $fundSource,
             'suppliers' => $suppliers,
             'convertedItems' => $convertedItems,
