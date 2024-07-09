@@ -78,6 +78,7 @@ class CsrStocksControllers extends Controller
                 converted.cl2comb_before,
                 item_before.cl2desc AS cl2desc_before,
                 converted.quantity_after,
+                converted.total_issued_qty,
                 converted.expiration_date,
                 employee.firstname,
                 employee.lastname

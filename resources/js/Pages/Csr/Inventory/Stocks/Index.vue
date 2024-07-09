@@ -2215,6 +2215,7 @@ export default {
           cl2comb_after: e.cl2comb_after,
           cl2desc_after: e.cl2desc_after,
           quantity_after: e.quantity_after,
+          total_issued_qty: e.total_issued_qty,
           acquisition_price: e.acquisition_price,
           manufactured_date: e.manufactured_date,
           delivered_date: e.delivered_date,
