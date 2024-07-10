@@ -360,6 +360,7 @@
                   :options="convertedItemList"
                   :virtualScrollerOptions="{ itemSize: 38 }"
                   filter
+                  showClear
                   dataKey="cl2comb"
                   optionValue="cl2comb"
                   optionLabel="cl2desc"
@@ -724,6 +725,7 @@
               :options="convertedItemList"
               :virtualScrollerOptions="{ itemSize: 38 }"
               filter
+              showClear
               dataKey="cl2comb"
               optionValue="cl2comb"
               optionLabel="cl2desc"
@@ -1153,6 +1155,7 @@
               :options="convertedItemList"
               :virtualScrollerOptions="{ itemSize: 38 }"
               filter
+              showClear
               dataKey="cl2comb"
               optionValue="cl2comb"
               optionLabel="cl2desc"
