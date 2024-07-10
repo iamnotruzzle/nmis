@@ -141,9 +141,44 @@ class CsrItemConversionController extends Controller
 
     public function destroy(CsrItemConversion $csrconvertdelivery)
     {
-        dd($csrconvertdelivery);
+        // dd($csrconvertdelivery);
+        $updated_by = Auth::user()->employeeid;
 
-        // $user->delete();
+        $log = CsrItemConversionLogs::where('item_conversion_id', $csrconvertdelivery->id)->first();
+        // dd($log);
+
+        if ($csrconvertdelivery->total_issued_qty == 0) {
+            $csrconvertdelivery->delete();
+
+            $convertedItemLog = CsrItemConversionLogs::create([
+                'item_conversion_id' => $log->item_conversion_id,
+                'csr_stock_id' => $log->csr_stock_id,
+                'ris_no' => $log->ris_no,
+                'chrgcode' => $log->chrgcode,
+                'cl2comb_before' => $log->cl2comb_before,
+                'quantity_before' => $log->quantity_before,
+                'cl2comb_after' => $log->cl2comb_after,
+                'prev_qty' => $log->prev_qty,
+                'new_qty' => $log->new_qty,
+                'supplierID' => $log->supplierID,
+                'manufactured_date' => $log->manufactured_date,
+                'delivered_date' => $log->delivered_date,
+                'expiration_date' => $log->expiration_date,
+                'action' => 'DELETED ITEM',
+                'remarks' => '',
+                'converted_by' => $log->converted_by,
+                'updated_by' => $updated_by
+            ]);
+
+            // UPDATE STOCK
+            CsrStocks::where('id', $log->csr_stock_id)
+                ->update(['converted' => 'n']);
+
+            // DELETE PRICE
+            ItemPrices::where('ris_no', $log->ris_no)
+                ->where('cl2comb', $log->cl2comb_after)
+                ->delete();
+        }
 
         return redirect()->back();
     }
