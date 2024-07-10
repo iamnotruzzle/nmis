@@ -139,8 +139,12 @@ class CsrItemConversionController extends Controller
         return redirect()->back();
     }
 
-    public function destroy($id)
+    public function destroy(CsrItemConversion $csrconvertdelivery)
     {
-        //
+        dd($csrconvertdelivery);
+
+        // $user->delete();
+
+        return redirect()->back();
     }
 }

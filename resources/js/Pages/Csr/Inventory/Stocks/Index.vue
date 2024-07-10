@@ -1502,6 +1502,41 @@
           />
         </template>
       </Dialog>
+
+      <!-- Delete confirmation dialog -->
+      <Dialog
+        v-model:visible="deleteConvertedItemDialog"
+        :style="{ width: '450px' }"
+        header="Confirm"
+        :modal="true"
+        dismissableMask
+      >
+        <div class="flex align-items-center justify-content-center">
+          <i
+            class="pi pi-exclamation-triangle mr-3"
+            style="font-size: 2rem"
+          />
+          <span class="">
+            Are you sure you want to delete <b>{{ formConvertItem.cl2desc_after }}? </b>
+          </span>
+        </div>
+        <template #footer>
+          <Button
+            label="No"
+            icon="pi pi-times"
+            class="p-button-text"
+            @click="deleteConvertedItemDialog = false"
+          />
+          <Button
+            label="Yes"
+            icon="pi pi-check"
+            severity="danger"
+            text
+            :disabled="form.processing"
+            @click="deleteConvertItem"
+          />
+        </template>
+      </Dialog>
     </div>
 
     <div class="card">
@@ -1718,6 +1753,14 @@
                     severity="warning"
                     @click="editConvertedItem(slotProps.data)"
                   />
+
+                  <Button
+                    v-tooltip.top="'Delete'"
+                    icon="pi pi-trash"
+                    rounded
+                    severity="danger"
+                    @click="openDeleteConvertedItemDialog(slotProps.data)"
+                  />
                 </div>
               </template>
             </Column>
@@ -1801,6 +1844,7 @@ export default {
       deliveryExist: false,
       convertDialog: false,
       editConvertedItemDialog: false,
+      deleteConvertedItemDialog: false,
       params: {},
       search: '',
       // manufactured date
@@ -2401,6 +2445,7 @@ export default {
         }
       }
     },
+
     convertItem(item) {
       console.log('convert item', item);
 
@@ -2471,7 +2516,6 @@ export default {
         this.formConvertItem.post(route('csrconvertdelivery.store'), {
           preserveScroll: true,
           onSuccess: () => {
-            this.itemId = null;
             this.convertDialog = false;
             this.cancel();
             this.updateData();
@@ -2479,6 +2523,24 @@ export default {
           },
         });
       }
+    },
+    openDeleteConvertedItemDialog(item) {
+      console.log(item);
+      this.formConvertItem.id = item.id;
+      this.formConvertItem.ris_no = item.ris_no;
+      this.formConvertItem.cl2desc_after = item.cl2desc_after;
+      this.deleteConvertedItemDialog = true;
+    },
+    deleteConvertItem() {
+      this.formConvertItem.delete(route('csrconvertdelivery.destroy', this.formConvertItem.id), {
+        preserveScroll: true,
+        onSuccess: () => {
+          this.deleteConvertedItemDialog = false;
+          this.cancel();
+          this.updateData();
+          this.deleteConvertedItemMsg();
+        },
+      });
     },
     onRowClick(e) {
       //   console.log(e.data);
@@ -2632,6 +2694,9 @@ export default {
     },
     updateRisNo() {
       this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'RIS NO. updated', life: 3000 });
+    },
+    deleteConvertedItemMsg() {
+      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Converted item deleted', life: 3000 });
     },
   },
   watch: {
