@@ -87,54 +87,12 @@ class CsrItemConversionController extends Controller
         return redirect()->back();
     }
 
-    public function update(CsrItemConversion $convertitem, Request $request)
+    public function update(CsrItemConversion $csrconvertdelivery, Request $request)
     {
+        dd($request);
         $updated_by = Auth::user()->employeeid;
-        dd('TESTING');
 
-        $convertedItem = CsrItemConversionLogs::where('item_conversion_id', $request->id)->first();
-        // dd($convertedItem);
-
-        $item_price = ItemPrices::where('ris_no', $request->ris_no)
-            ->where('cl2comb', $request->cl2comb_before)
-            ->first();
-
-        // dd($item_price);
-
-        CsrItemConversion::where('id', $request->id)
-            ->update([
-                // 'cl2comb_after' => $request->cl2comb_after == null ? $convertedItem->cl2comb_after : $request->cl2comb_after,
-                'quantity_after' => $request->quantity_after,
-                'updated_by' => $updated_by,
-            ]);
-
-        $price_per_unit = $item_price->hospital_price / $request->quantity_after;
-        $price_per_unit = number_format((float)$price_per_unit, 2, '.', '');
-
-        $update_item_price = ItemPrices::where('ris_no', $request->ris_no)
-            ->where('cl2comb', $request->cl2comb_before)
-            ->update([
-                'price_per_unit' => $price_per_unit,
-            ]);
-
-        //////////////
-        $convertedItemLog = CsrItemConversionLogs::create([
-            'ris_no' => $request->ris_no,
-            'chrgcode' => $convertedItem->chrgcode,
-            'cl2comb_before' => $request->cl2comb_after,
-            'quantity_before' => $convertedItem->new_qty,
-            'cl2comb_after' => $convertedItem->cl2comb_after,
-            'prev_qty' => $convertedItem->new_qty,
-            'new_qty' => $request->quantity_after,
-            'supplierID' => $convertedItem->supplierID,
-            'manufactured_date' => Carbon::parse($convertedItem->manufactured_date)->format('Y-m-d H:i:s.v'),
-            'delivered_date' =>  Carbon::parse($convertedItem->delivered_date)->format('Y-m-d H:i:s.v'),
-            'expiration_date' =>  Carbon::parse($convertedItem->expiration_date)->format('Y-m-d H:i:s.v'),
-            'action' => 'UPDATE QTY',
-            'remarks' => $request->remarks, // todo
-            'converted_by' => $convertedItem->converted_by,
-            'updated_by' => $updated_by,
-        ]);
+        // $convertedItem = CsrItemConversionLogs::where('item_conversion_id', $request->id)->first();
 
         return redirect()->back();
     }

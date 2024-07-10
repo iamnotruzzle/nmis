@@ -1257,224 +1257,38 @@
         @hide="clickOutsideDialog"
       >
         <template #header>
-          <div class="text-primary text-xl font-bold">UPDATE CONVERTED ITEM</div>
+          <div class="flex flex-column">
+            <div class="text-primary text-xl font-bold">UPDATE QUANTITY</div>
+            <div class="text-error text-xl font-bold mt-2">IMPORTANT!</div>
+            <div class="text-error text-lg font-semibold">
+              ONLY THE QUANTITY CAN BE MODIFIED. <span class="text-yellow-500">PRICE-RELATED</span> DATA REMAINS
+              UNCHANGED.
+            </div>
+          </div>
         </template>
         <div class="field">
-          <div class="flex align-content-center">
-            <label>RIS no.</label>
-            <span class="ml-2 text-error">*</span>
-          </div>
-          <InputText
-            v-model.trim="formConvertItem.ris_no"
-            readonly
-          />
-        </div>
-        <div class="field">
-          <div class="flex align-content-center">
-            <label>Supplier</label>
-            <span class="ml-2 text-error">*</span>
-          </div>
-          <Dropdown
-            required="true"
-            v-model="formConvertItem.supplierID"
-            :options="suppliersList"
-            :virtualScrollerOptions="{ itemSize: 38 }"
-            filter
-            dataKey="supplierID"
-            optionValue="supplierID"
-            optionLabel="suppname"
-            class="w-full"
-            disabled
-          />
-        </div>
-        <div class="field">
-          <div class="flex align-content-center">
-            <label>Fund source</label>
-            <span class="ml-2 text-error">*</span>
-          </div>
-          <Dropdown
-            required="true"
-            v-model="formConvertItem.chrgcode"
-            :options="fundSourceList"
-            :virtualScrollerOptions="{ itemSize: 38 }"
-            filter
-            dataKey="chrgcode"
-            optionValue="chrgcode"
-            optionLabel="chrgdesc"
-            class="w-full"
-            disabled
-          />
-        </div>
-        <div class="field">
-          <div class="flex align-content-center">
-            <label>Item</label>
-            <span class="ml-2 text-error">*</span>
-          </div>
-          <Dropdown
-            required="true"
-            v-model="formConvertItem.cl2comb_before"
-            :options="itemsList"
-            :virtualScrollerOptions="{ itemSize: 38 }"
-            filter
-            dataKey="cl2comb"
-            optionValue="cl2comb"
-            optionLabel="cl2desc"
-            class="w-full"
-            disabled
-          />
-        </div>
-        <div class="field flex flex-row justify-content-between">
-          <div>
-            <div class="flex align-content-center">
-              <label>Delivered date</label>
-              <span class="ml-2 text-error">*</span>
-            </div>
-            <Calendar
-              v-model="formConvertItem.delivered_date"
-              dateFormat="mm-dd-yy"
-              showIcon
-              showButtonBar
-              :manualInput="false"
-              :hideOnDateTimeSelect="true"
-              disabled
-            />
-          </div>
-          <div>
-            <div class="flex">
-              <label>Expiration date</label>
-              <span class="ml-2 text-error">*</span>
-            </div>
-            <div class="flex flex-row">
-              <Calendar
-                required="true"
-                v-model="formConvertItem.expiration_date"
-                dateFormat="mm-dd-yy"
-                showIcon
-                showButtonBar
-                :manualInput="false"
-                :hideOnDateTimeSelect="true"
-                disabled
-              />
-            </div>
-            <!-- <ToggleButton
-              v-model="maxDate"
-              onLabel="Fixed date"
-              offLabel="Custom date"
-              onIcon="pi pi-lock"
-              offIcon="pi pi-lock-open"
-            /> -->
-          </div>
-        </div>
-
-        <div class="field w-6">
           <div class="flex align-content-center">
             <label>Quantity</label>
             <span class="ml-2 text-error">*</span>
           </div>
           <InputText
             required="true"
-            v-model.trim="formConvertItem.quantity_before"
+            v-model.trim="formConvertItem.quantity_after"
             inputId="integeronly"
             @keydown="restrictNonNumericAndPeriod"
-            readonly
+            autofocus
           />
         </div>
-        <div class="field w-6">
-          <div>
-            <div class="flex align-content-center">
-              <label>Acquisition price</label>
-              <span class="ml-2 text-error">*</span>
-            </div>
-            <InputText
-              required="true"
-              type="number"
-              v-model.trim="formConvertItem.acquisition_price"
-              @keydown="restrictNonNumeric"
-              readonly
-            />
-          </div>
-        </div>
-        <div class="field flex flex-row">
-          <div
-            :style="{ width: '65%' }"
-            class="mr-2"
-          >
-            <div class="flex align-content-center">
-              <label>Convert to</label>
-            </div>
-            <Dropdown
-              required="true"
-              v-model="formConvertItem.cl2comb_after"
-              :options="convertedItemList"
-              :virtualScrollerOptions="{ itemSize: 38 }"
-              filter
-              dataKey="cl2comb"
-              optionValue="cl2comb"
-              optionLabel="cl2desc"
-              class="w-full"
-            />
-          </div>
-          <div :style="{ width: '35%' }">
-            <div class="flex align-content-center">
-              <label>Convert quantity</label>
-            </div>
-            <InputText
-              id="quantity"
-              type="number"
-              v-model="formConvertItem.quantity_after"
-              @keydown="restrictNonNumericAndPeriod"
-              autofocus
-              @keyup.enter="submitAddDelivery"
-              class="w-full"
-            />
-          </div>
-        </div>
-
         <div class="field">
-          <div>
-            <div class="flex align-content-center">
-              <label class="text-green-500">Hospital price </label>
-            </div>
-            <InputText
-              class="w-full"
-              v-model.trim="formConvertItem.hospital_price"
-              autofocus
-              :maxFractionDigits="2"
-              readonly
-            />
-          </div>
-        </div>
-        <div class="field">
-          <div>
-            <div class="flex align-content-center">
-              <label class="text-blue-500">Price per unit</label>
-            </div>
-            <InputText
-              class="w-full"
-              v-model.trim="formConvertItem.price_per_unit"
-              autofocus
-              :maxFractionDigits="2"
-              readonly
-            />
-          </div>
-        </div>
-
-        <div>
           <div class="flex align-content-center">
             <label>Remarks</label>
             <span class="ml-2 text-error">*</span>
           </div>
           <Textarea
             v-model.trim="formConvertItem.remarks"
-            rows="5"
+            rows="10"
             class="w-full"
           />
-          <small
-            class="text-error"
-            v-if="formConvertItem.errors.remarks"
-          >
-            {{ formConvertItem.errors.remarks }}
-          </small>
         </div>
         <template #footer>
           <Button
@@ -1491,14 +1305,12 @@
             type="submit"
             :disabled="
               formConvertItem.processing ||
-              formConvertItem.cl2comb_after == '' ||
-              formConvertItem.cl2comb_after == null ||
               formConvertItem.quantity_after == '' ||
               formConvertItem.quantity_after == null ||
               formConvertItem.remarks == '' ||
               formConvertItem.remarks == null
             "
-            @click="submitConvertItem"
+            @click="submitUpdateConvertItem"
           />
         </template>
       </Dialog>
@@ -1974,6 +1786,7 @@ export default {
         price_per_unit: null,
       }),
       formConvertItem: this.$inertia.form({
+        id: null,
         csr_stock_id: null,
         ris_no: null,
         supplierID: null,
@@ -2464,13 +2277,6 @@ export default {
 
       this.convertDialog = true;
     },
-    editConvertedItem(item) {
-      console.log('edit converted item', item);
-
-      const similarObjects = this.findSimilarIds(item.cl2comb_after, this.itemsList);
-
-      this.editConvertedItemDialog = true;
-    },
     submitConvertItem() {
       if (
         this.formConvertItem.processing ||
@@ -2484,46 +2290,36 @@ export default {
         return false;
       }
 
-      if (this.isUpdate) {
-        console.log('Update mode');
-        // this.formConvertItem.put(route('csrconvertdelivery.update', this.formConvertItem.id), {
-        //   preserveScroll: true,
-        //   onSuccess: () => {
-        //     //   console.log('DONE');
-        //     this.convertDialog = false;
-        //     this.cancel();
-        //     this.updateData();
-        //     this.itemConverted();
-        //   },
-        //   onError: (error) => {
-        //     console.log(error);
-        //   },
-        // });
-      } else {
-        // this.formConvertItem.put(route('csrconvertdelivery.update', this.formConvertItem.id), {
-        //   preserveScroll: true,
-        //   onSuccess: () => {
-        //     //   console.log('DONE');
-        //     this.convertDialog = false;
-        //     this.cancel();
-        //     this.updateData();
-        //     this.itemConverted();
-        //   },
-        //   onError: (error) => {
-        //     console.log(error);
-        //   },
-        // });
+      this.formConvertItem.post(route('csrconvertdelivery.store'), {
+        preserveScroll: true,
+        onSuccess: () => {
+          this.convertDialog = false;
+          this.cancel();
+          this.updateData();
+          this.createdMsg();
+        },
+      });
+    },
+    editConvertedItem(item) {
+      console.log('edit converted item', item);
 
-        this.formConvertItem.post(route('csrconvertdelivery.store'), {
-          preserveScroll: true,
-          onSuccess: () => {
-            this.convertDialog = false;
-            this.cancel();
-            this.updateData();
-            this.createdMsg();
-          },
-        });
-      }
+      this.formConvertItem.id = item.id;
+      this.formConvertItem.quantity_after = item.quantity_after;
+
+      this.editConvertedItemDialog = true;
+    },
+    submitUpdateConvertItem() {
+      console.log('submit update');
+
+      this.formConvertItem.put(route('csrconvertdelivery.update', this.formConvertItem.id), {
+        preserveScroll: true,
+        onSuccess: () => {
+          this.editConvertedItemDialog = true;
+          this.cancel();
+          this.updateData();
+          this.updateQuantity();
+        },
+      });
     },
     openDeleteConvertedItemDialog(item) {
       console.log(item);
@@ -2700,6 +2496,9 @@ export default {
     },
     updateRisNo() {
       this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'RIS NO. updated', life: 3000 });
+    },
+    updateQuantity() {
+      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Item quantity updated', life: 3000 });
     },
     deleteConvertedItemMsg() {
       this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Converted item deleted', life: 3000 });
