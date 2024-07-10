@@ -1532,7 +1532,7 @@
             icon="pi pi-check"
             severity="danger"
             text
-            :disabled="form.processing"
+            :disabled="formConvertItem.processing"
             @click="deleteConvertItem"
           />
         </template>
@@ -1755,6 +1755,7 @@
                   />
 
                   <Button
+                    v-if="slotProps.data.total_issued_qty == 0"
                     v-tooltip.top="'Delete'"
                     icon="pi pi-trash"
                     rounded
@@ -2529,9 +2530,14 @@ export default {
       this.formConvertItem.id = item.id;
       this.formConvertItem.ris_no = item.ris_no;
       this.formConvertItem.cl2desc_after = item.cl2desc_after;
+      //   this.formConvertItem.total_issued_qty = item.total_issued_qty;
       this.deleteConvertedItemDialog = true;
     },
     deleteConvertItem() {
+      if (this.formConvertItem.processing) {
+        return false;
+      }
+
       this.formConvertItem.delete(route('csrconvertdelivery.destroy', this.formConvertItem.id), {
         preserveScroll: true,
         onSuccess: () => {
