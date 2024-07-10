@@ -1352,6 +1352,41 @@
           />
         </template>
       </Dialog>
+
+      <!-- DELETE STOCK -->
+      <Dialog
+        v-model:visible="deleteStockDialog"
+        :style="{ width: '450px' }"
+        header="Confirm"
+        :modal="true"
+        dismissableMask
+      >
+        <div class="flex align-items-center justify-content-center">
+          <i
+            class="pi pi-exclamation-triangle mr-3"
+            style="font-size: 2rem"
+          />
+          <span class="">
+            Are you sure you want to delete <b class="text-yellow-500">{{ formDeleteStock.cl2desc }}? </b>
+          </span>
+        </div>
+        <template #footer>
+          <Button
+            label="No"
+            icon="pi pi-times"
+            class="p-button-text"
+            @click="deleteStockDialog = false"
+          />
+          <Button
+            label="Yes"
+            icon="pi pi-check"
+            severity="danger"
+            text
+            :disabled="formDeleteStock.processing"
+            @click="deleteStock"
+          />
+        </template>
+      </Dialog>
     </div>
 
     <div class="card">
@@ -1438,17 +1473,28 @@
               style="width: 10%"
             >
               <template #body="slotProps">
-                <Button
-                  v-if="slotProps.data.converted == 'n'"
-                  v-tooltip.top="'Convert'"
-                  rounded
-                  severity="info"
-                  @click="convertItem(slotProps.data)"
-                >
-                  <template #icon>
-                    <v-icon name="bi-arrow-left-right"></v-icon>
-                  </template>
-                </Button>
+                <div class="flex justify-content-between">
+                  <Button
+                    v-if="slotProps.data.converted == 'n'"
+                    v-tooltip.top="'Convert'"
+                    rounded
+                    severity="info"
+                    @click="convertItem(slotProps.data)"
+                  >
+                    <template #icon>
+                      <v-icon name="bi-arrow-left-right"></v-icon>
+                    </template>
+                  </Button>
+
+                  <Button
+                    v-if="slotProps.data.converted == 'n'"
+                    v-tooltip.top="'Delete'"
+                    icon="pi pi-trash"
+                    rounded
+                    severity="danger"
+                    @click="openDeleteStockDialog(slotProps.data)"
+                  />
+                </div>
               </template>
             </Column>
           </DataTable>
@@ -1661,6 +1707,7 @@ export default {
       convertDialog: false,
       editConvertedItemDialog: false,
       deleteConvertedItemDialog: false,
+      deleteStockDialog: false,
       params: {},
       search: '',
       // manufactured date
@@ -1772,6 +1819,10 @@ export default {
         price_per_unit: null,
       }),
       // end data when clicking row to populate form
+      formDeleteStock: this.$inertia.form({
+        stock_id: null,
+        cl2desc: null,
+      }),
       formAddDelivery: this.$inertia.form({
         generateRisNo: false,
         ris_no: null,
@@ -2125,7 +2176,6 @@ export default {
       );
     },
     storeTotalDeliveriesInContainer() {
-      console.log(this.totalDeliveries);
       this.totalDeliveries.forEach((e) => {
         this.totalDeliveriesList.push({
           stock_id: e.stock_id,
@@ -2264,8 +2314,6 @@ export default {
     },
 
     convertItem(item) {
-      console.log('convert item', item);
-
       const similarObjects = this.findSimilarIds(item.cl2comb, this.itemsList);
 
       this.formConvertItem.csr_stock_id = item.stock_id;
@@ -2304,16 +2352,12 @@ export default {
       });
     },
     editConvertedItem(item) {
-      console.log('edit converted item', item);
-
       this.formConvertItem.id = item.id;
       this.formConvertItem.quantity_after = item.quantity_after;
 
       this.editConvertedItemDialog = true;
     },
     submitUpdateConvertItem() {
-      console.log('submit update');
-
       this.formConvertItem.put(route('csrconvertdelivery.update', this.formConvertItem.id), {
         preserveScroll: true,
         onSuccess: () => {
@@ -2325,7 +2369,6 @@ export default {
       });
     },
     openDeleteConvertedItemDialog(item) {
-      console.log(item);
       this.formConvertItem.id = item.id;
       this.formConvertItem.ris_no = item.ris_no;
       this.formConvertItem.cl2desc_after = item.cl2desc_after;
@@ -2344,6 +2387,26 @@ export default {
           this.cancel();
           this.updateData();
           this.deleteConvertedItemMsg();
+        },
+      });
+    },
+    openDeleteStockDialog(item) {
+      this.formDeleteStock.stock_id = item.stock_id;
+      this.formDeleteStock.cl2desc = item.cl2desc;
+      this.deleteStockDialog = true;
+    },
+    deleteStock() {
+      if (this.formDeleteStock.processing) {
+        return false;
+      }
+
+      this.formDeleteStock.delete(route('csrstocks.destroy', this.formDeleteStock.stock_id), {
+        preserveScroll: true,
+        onSuccess: () => {
+          this.deleteStockDialog = false;
+          this.cancel();
+          this.updateData();
+          this.deleteStockMsg();
         },
       });
     },
@@ -2505,6 +2568,9 @@ export default {
     },
     deleteConvertedItemMsg() {
       this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Converted item deleted', life: 3000 });
+    },
+    deleteStockMsg() {
+      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Stock deleted', life: 3000 });
     },
   },
   watch: {

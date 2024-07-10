@@ -322,6 +322,8 @@ class CsrStocksControllers extends Controller
 
     public function update(CsrStocks $csrstock, Request $request)
     {
+        // dd($request);
+
         $entry_by = Auth::user()->employeeid;
 
         $request->validate([
@@ -364,33 +366,33 @@ class CsrStocksControllers extends Controller
 
     public function destroy(CsrStocks $csrstock, Request $request)
     {
-        // $request->validate([
-        //     'remarks' => 'required'
-        // ]);
+        // dd($request);
 
-        // $entry_by = Auth::user()->employeeid;
+        $prevStockDetails = CsrStocks::where('id', $request->stock_id)->first();
 
-        // $prevStockDetails = CsrStocks::where('id', $csrstock->id)->first();
+        CsrStocks::where('id', $request->stock_id)
+            ->delete();
 
-        // $csrstock->delete();
+        $entry_by = Auth::user()->employeeid;
 
-        // $stockLogs = CsrStocksLogs::create([
-        //     'stock_id' => $prevStockDetails->id,
-        //     'ris_no' => $prevStockDetails->ris_no,
-        //     'supplierID' => $prevStockDetails->supplierID,
-        //     'chrgcode' => $prevStockDetails->chrgcode,
-        //     'cl2comb' => $prevStockDetails->cl2comb,
-        //     'uomcode' => $prevStockDetails->uomcode,
-        //     'prev_qty' => $prevStockDetails->quantity,
-        //     'new_qty' => $prevStockDetails->quantity,
-        //     'manufactured_date' => $prevStockDetails->manufactured_date,
-        //     'delivered_date' => $prevStockDetails->delivered_date,
-        //     'expiration_date' => $prevStockDetails->expiration_date,
-        //     'action' => 'DELETE',
-        //     'remarks' => $request->remarks,
-        //     'entry_by' => $entry_by,
-        // ]);
+        $stockLog = CsrStocksLogs::create([
+            'stock_id' => $prevStockDetails->id,
+            'ris_no' => $prevStockDetails->ris_no,
+            'cl2comb' => $prevStockDetails->cl2comb,
+            'uomcode' => $prevStockDetails->uomcode,
+            'supplierID' => $prevStockDetails->supplierID,
+            'acquisition_price' => $prevStockDetails->acquisition_price,
+            'chrgcode' => $prevStockDetails->chrgcode,
+            'prev_qty' => $prevStockDetails->quantity,
+            'new_qty' => $prevStockDetails->quantity,
+            'manufactured_date' => Carbon::parse($prevStockDetails->manufactured_date)->format('Y-m-d H:i:s.v'),
+            'delivered_date' => Carbon::parse($prevStockDetails->delivered_date)->format('Y-m-d H:i:s.v'),
+            'expiration_date' => Carbon::parse($prevStockDetails->expiration_date)->format('Y-m-d H:i:s.v'),
+            'action' => 'DELETE DELIVERY',
+            'remarks' => '',
+            'entry_by' => $entry_by,
+        ]);
 
-        // return redirect()->back();
+        return redirect()->back();
     }
 }
