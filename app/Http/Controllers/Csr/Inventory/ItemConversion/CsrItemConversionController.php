@@ -89,8 +89,35 @@ class CsrItemConversionController extends Controller
 
     public function update(CsrItemConversion $csrconvertdelivery, Request $request)
     {
-        dd($request);
+        // dd($request);
         $updated_by = Auth::user()->employeeid;
+
+        $updated_item =  $csrconvertdelivery->update([
+            'quantity_after' => $request->quantity_after, // main category
+            'update_by' => $updated_by
+        ]);
+
+        $log = CsrItemConversionLogs::where('item_conversion_id', $request->id)->first();
+        // dd($log);
+        $convertedItemLog = CsrItemConversionLogs::create([
+            'item_conversion_id' => $log->item_conversion_id,
+            'csr_stock_id' => $log->csr_stock_id,
+            'ris_no' => $log->ris_no,
+            'chrgcode' => $log->chrgcode,
+            'cl2comb_before' => $log->cl2comb_after,
+            'quantity_before' => $log->new_qty,
+            'cl2comb_after' => $log->cl2comb_after,
+            'prev_qty' => $log->new_qty,
+            'new_qty' => $request->quantity_after,
+            'supplierID' => $log->supplierID,
+            'manufactured_date' => $log->manufactured_date,
+            'delivered_date' => $log->delivered_date,
+            'expiration_date' => $log->expiration_date,
+            'action' => 'UPDATE QUANTITY',
+            'remarks' => $request->remarks,
+            'converted_by' => $log->converted_by,
+            'updated_by' => $updated_by
+        ]);
 
         // $convertedItem = CsrItemConversionLogs::where('item_conversion_id', $request->id)->first();
 
