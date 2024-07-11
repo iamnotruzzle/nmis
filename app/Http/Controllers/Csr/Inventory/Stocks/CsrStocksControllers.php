@@ -214,17 +214,6 @@ class CsrStocksControllers extends Controller
                         'converted' => 'y',
                     ]);
 
-                    if ($r['price_per_unit'] != null) {
-                        $itemPrices = ItemPrices::create([
-                            'cl2comb' => $r['cl2comb_after'],
-                            'price_per_unit' => $r['price_per_unit'],
-                            'entry_by' => $entry_by,
-                            'ris_no' => $r['risno'],
-                            'acquisition_price' => $r['unitprice'],
-                            'hospital_price' => $r['hospital_price'],
-                        ]);
-                    }
-
                     $stockLog = CsrStocksLogs::create([
                         'stock_id' => $stock->id,
                         'ris_no' => $r['risno'],
@@ -259,6 +248,18 @@ class CsrStocksControllers extends Controller
                         'expiration_date' =>  Carbon::parse($stock->expiration_date)->format('Y-m-d H:i:s.v'),
                         'converted_by' => $entry_by,
                     ]);
+
+                    if ($r['price_per_unit'] != null) {
+                        $itemPrices = ItemPrices::create([
+                            'cl2comb' => $r['cl2comb_after'],
+                            'price_per_unit' => $r['price_per_unit'],
+                            'entry_by' => $entry_by,
+                            'ris_no' => $r['risno'],
+                            'acquisition_price' => $r['unitprice'],
+                            'hospital_price' => $r['hospital_price'],
+                            'item_conversion_id' => $convertedItem->id,
+                        ]);
+                    }
 
                     $convertedItemLog = CsrItemConversionLogs::create([
                         'item_conversion_id' => $convertedItem->id,
