@@ -66,15 +66,6 @@ class ManualAddStocksController extends Controller
                 'converted' => 'y',
             ]);
 
-            $itemPrices = ItemPrices::create([
-                'cl2comb' => $request->cl2comb_after,
-                'price_per_unit' => $request->price_per_unit,
-                'entry_by' => $entry_by,
-                'ris_no' => $request->ris_no,
-                'acquisition_price' => $request->acquisitionPrice,
-                'hospital_price' => $request->hospital_price,
-            ]);
-
             $convertedItem = CsrItemConversion::create([
                 'csr_stock_id' => $stock->id,
                 'ris_no' => $stock->ris_no,
@@ -88,6 +79,16 @@ class ManualAddStocksController extends Controller
                 'delivered_date' =>  Carbon::parse($stock->delivered_date)->format('Y-m-d H:i:s.v'),
                 'expiration_date' =>  Carbon::parse($stock->expiration_date)->format('Y-m-d H:i:s.v'),
                 'converted_by' => $entry_by,
+            ]);
+
+            $itemPrices = ItemPrices::create([
+                'cl2comb' => $request->cl2comb_after,
+                'price_per_unit' => $request->price_per_unit,
+                'entry_by' => $entry_by,
+                'ris_no' => $request->ris_no,
+                'acquisition_price' => $request->acquisitionPrice,
+                'hospital_price' => $request->hospital_price,
+                'item_conversion_id' => $convertedItem->id,
             ]);
 
             $convertedItemLog = CsrItemConversionLogs::create([
