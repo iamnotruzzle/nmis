@@ -23,7 +23,7 @@ class CsrItemConversionController extends Controller
 
     public function store(Request $request)
     {
-        dd($request);
+        // dd($request);
 
         $converted_by = Auth::user()->employeeid;
 
@@ -82,6 +82,7 @@ class CsrItemConversionController extends Controller
             'ris_no' => $request->ris_no,
             'acquisition_price' => $request->acquisition_price,
             'hospital_price' => $request->hospital_price,
+            'item_conversion_id' => $convertedItem->id,
         ]);
 
         return redirect()->back();
