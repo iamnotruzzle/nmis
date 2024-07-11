@@ -129,7 +129,7 @@ class CsrItemConversionController extends Controller
         // dd($csrconvertdelivery);
         $updated_by = Auth::user()->employeeid;
 
-        $log = CsrItemConversionLogs::where('item_conversion_id', $csrconvertdelivery->id)->first();
+        $log = CsrItemConversionLogs::where('item_conversion_id', $csrconvertdelivery->id)->latest()->first();
         // dd($log);
 
         if ($csrconvertdelivery->total_issued_qty == 0) {
