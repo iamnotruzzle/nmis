@@ -23,6 +23,7 @@ class ItemPrices extends Model
         'acquisition_price',
         'hospital_price',
         'price_per_unit',
+        'item_conversion_id'
     ];
 
     public function userDetail()
