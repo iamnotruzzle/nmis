@@ -248,6 +248,7 @@ class CsrStocksControllers extends Controller
                         'expiration_date' =>  Carbon::parse($stock->expiration_date)->format('Y-m-d H:i:s.v'),
                         'converted_by' => $entry_by,
                     ]);
+                    //
 
                     if ($r['price_per_unit'] != null) {
                         $itemPrices = ItemPrices::create([
