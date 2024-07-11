@@ -682,7 +682,7 @@ export default {
     // server request such as POST, the data in the table
     // is updated
     storeRequestedStocksInContainer() {
-      //   console.log(this.requestedStocks.data);
+      console.log(this.requestedStocks.data);
       this.requestedStocks.data.forEach((e) => {
         this.requestStockList.push({
           id: e.id,
@@ -768,7 +768,7 @@ export default {
       this.requestStockId = item.id;
 
       item.request_stocks_details.forEach((e) => {
-        // console.log(e.item_conversion[0].quantity_after);
+        console.log(e);
         this.requestStockListDetails.push({
           request_stocks_details_id: e.id,
           cl2comb: e.cl2comb,
@@ -776,7 +776,7 @@ export default {
           requested_qty: e.requested_qty,
           approved_qty: e.approved_qty,
           remarks: e.remarks,
-          stock_qty: e.item_conversion.reduce((accumulator, object) => {
+          stock_qty: e.converted_item.reduce((accumulator, object) => {
             return Number(accumulator) + Number(object.quantity_after);
           }, 0),
         });
@@ -854,11 +854,11 @@ export default {
           staticApproved_qty: e.approved_qty,
           stock_w_approved: Number(
             Number(e.approved_qty) +
-              e.item_conversion.reduce((accumulator, object) => {
+              e.converted_item.reduce((accumulator, object) => {
                 return Number(accumulator) + Number(object.quantity_after);
               }, 0)
           ),
-          stock_qty: e.item_conversion.reduce((accumulator, object) => {
+          stock_qty: e.converted_item.reduce((accumulator, object) => {
             return Number(accumulator) + Number(object.quantity_after);
           }, 0),
           remarks: e.remarks,

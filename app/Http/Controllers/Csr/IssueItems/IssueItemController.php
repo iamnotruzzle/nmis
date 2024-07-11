@@ -42,6 +42,7 @@ class IssueItemController extends Controller
                 JOIN hclass2 as item ON item.cl2comb = converted.cl2comb_after
                 WHERE converted.quantity_after != converted.total_issued_qty;"
         );
+        // dd($items);
 
         $requestedStocks = RequestStocks::with([
             'requested_at_details:wardcode,wardname',
@@ -81,6 +82,7 @@ class IssueItemController extends Controller
             )
             ->orderBy('created_at', 'desc')
             ->paginate(10);
+        // dd($requestedStocks);
 
 
         return Inertia::render('Csr/IssueItems/Index', [

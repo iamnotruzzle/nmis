@@ -37,6 +37,6 @@ class RequestStocks extends Model
 
     public function request_stocks_details()
     {
-        return $this->hasMany(RequestStocksDetails::class, 'request_stocks_id', 'id')->with(['issued_item']);
+        return $this->hasMany(RequestStocksDetails::class, 'request_stocks_id', 'id')->with(['issued_item', 'converted_item']);
     }
 }
