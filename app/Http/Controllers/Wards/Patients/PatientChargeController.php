@@ -49,6 +49,29 @@ class PatientChargeController extends Controller
 
         $wardcode = $authWardcode->wardcode;
 
+        // OLD stocksFromCsr
+        // $stocksFromCsr = DB::select(
+        //     "SELECT
+        //         hclass2.cl2comb,
+        //         hclass2.cl2desc,
+        //         hclass2.uomcode,
+        //         SUM(csrw_wards_stocks.quantity) as quantity,
+        //         (
+        //             SELECT TOP 1 price_per_unit
+        //             FROM csrw_item_prices
+        //             WHERE cl2comb = csrw_wards_stocks.cl2comb
+        //             ORDER BY created_at DESC
+        //         ) as price
+        //     FROM hclass2
+        //     JOIN csrw_wards_stocks ON csrw_wards_stocks.cl2comb = hclass2.cl2comb
+        //     JOIN csrw_request_stocks ON csrw_request_stocks.id = csrw_wards_stocks.request_stocks_id
+        //     WHERE csrw_wards_stocks.location = '4FSA'
+        //         AND csrw_wards_stocks.expiration_date > GETDATE()
+        //         AND csrw_request_stocks.status = 'RECEIVED'
+        //         AND (hclass2.catID = 1 OR hclass2.catID = 9)
+        //     GROUP BY hclass2.cl2comb, hclass2.cl2desc, hclass2.uomcode, csrw_wards_stocks.cl2comb;"
+        // );
+
         $stocksFromCsr = DB::select(
             "SELECT wards_stocks.id, item.cl2comb, item.cl2desc, item.uomcode, wards_stocks.quantity, price.price_per_unit as price
                 FROM hclass2 item
