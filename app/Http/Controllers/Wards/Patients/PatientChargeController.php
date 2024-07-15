@@ -109,6 +109,7 @@ class PatientChargeController extends Controller
 
         foreach ($stocksFromCsr as $s) {
             $medicalSupplies[] = (object) [
+                'id' => $s->id,
                 'cl2comb' => $s->cl2comb,
                 'cl2desc' => $s->cl2desc,
                 'uomcode' => $s->uomcode,
@@ -267,11 +268,18 @@ class PatientChargeController extends Controller
 
                     while ($remaining_qty_to_charge > 0) {
                         // check the current item that is going to expire and qty is 0
+                        // $wardStock = WardsStocks::where('cl2comb', $item['itemCode'])
+                        //     ->where('quantity', '!=', 0)
+                        //     ->where('location', $authWardcode->wardcode)
+                        //     ->where('expiration_date', '>', Carbon::today())
+                        //     ->orderBy('expiration_date', 'ASC')
+                        //     ->first(); // 10
+
+                        // remove stock based on ward stock item id
                         $wardStock = WardsStocks::where('cl2comb', $item['itemCode'])
                             ->where('quantity', '!=', 0)
                             ->where('location', $authWardcode->wardcode)
-                            ->where('expiration_date', '>', Carbon::today())
-                            ->orderBy('expiration_date', 'ASC')
+                            ->where('id', $item['id'])
                             ->first(); // 10
 
                         // execute if row selected qty is enough

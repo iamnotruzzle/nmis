@@ -658,7 +658,9 @@ export default {
     },
     storeMedicalSuppliesInContainer() {
       this.medicalSupplies.forEach((med) => {
+        // console.log('med', med);
         this.medicalSuppliesList.push({
+          id: med.id,
           cl2comb: med.cl2comb,
           cl2desc: med.cl2desc,
           uomcode: med.uomcode == null ? null : med.uomcode,
@@ -681,8 +683,10 @@ export default {
     storeItemsInContainer() {
       // medical supplies
       this.medicalSupplies.forEach((med) => {
+        console.log('med', med);
         if (med.price != null) {
           this.itemList.push({
+            id: med.id,
             typeOfCharge: 'DRUMN',
             itemCode: med.cl2comb,
             itemDesc: med.cl2desc,
@@ -696,6 +700,7 @@ export default {
       // misc
       this.misc.forEach((misc) => {
         this.itemList.push({
+          id: null,
           typeOfCharge: 'MISC',
           itemCode: misc.hmcode,
           itemDesc: misc.hmdesc,
@@ -735,7 +740,7 @@ export default {
       );
     },
     medicalSuppliesQtyValidation() {
-      // console.log(this.item);
+      console.log(this.item);
       // check if no selected item
       if (this.item.typeOfCharge == 'DRUMN' && Number(this.item.quantity) < Number(this.qtyToCharge)) {
         // check if item selected is already on the list
@@ -765,6 +770,7 @@ export default {
               this.itemNotSelected = false;
               this.itemNotSelectedMsg = null;
               this.itemsToBillList.push({
+                id: this.item['id'] != null ? this.item['id'] : null,
                 typeOfCharge: this.item['typeOfCharge'],
                 itemCode: this.item['itemCode'],
                 itemDesc: this.item['itemDesc'],
