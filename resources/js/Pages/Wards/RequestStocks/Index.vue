@@ -823,12 +823,12 @@
                     />
                   </div>
                 </div>
-                <Button
+                <!-- <Button
                   label="Consignment"
                   icon="pi pi-plus"
                   iconPos="right"
                   @click="openConsignmentDialog"
-                />
+                /> -->
               </div>
             </div>
           </template>

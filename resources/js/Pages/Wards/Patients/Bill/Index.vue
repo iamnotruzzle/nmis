@@ -445,6 +445,12 @@
             >
               <template #body="{ data }"> ₱ {{ data.price }} </template>
             </Column>
+            <Column
+              field="expiration_date"
+              header="EXP. DATE"
+            >
+              <template #body="{ data }">{{ tzone(data.expiration_date) }} </template>
+            </Column>
           </DataTable>
         </div>
       </div>
@@ -666,6 +672,7 @@ export default {
           uomcode: med.uomcode == null ? null : med.uomcode,
           quantity: med.quantity,
           price: med.price,
+          expiration_date: med.expiration_date,
         });
       });
     },

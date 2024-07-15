@@ -73,7 +73,7 @@ class PatientChargeController extends Controller
         // );
 
         $stocksFromCsr = DB::select(
-            "SELECT wards_stocks.id, item.cl2comb, item.cl2desc, item.uomcode, wards_stocks.quantity, price.price_per_unit as price
+            "SELECT wards_stocks.id, item.cl2comb, item.cl2desc, item.uomcode, wards_stocks.quantity, price.price_per_unit as price, wards_stocks.expiration_date
                 FROM hclass2 item
                 JOIN csrw_wards_stocks wards_stocks ON item.cl2comb = wards_stocks.cl2comb
                 JOIN csrw_csr_item_conversion converted_item ON wards_stocks.stock_id = converted_item.id
@@ -115,6 +115,7 @@ class PatientChargeController extends Controller
                 'uomcode' => $s->uomcode,
                 'quantity' => $s->quantity,
                 'price' => $s->price,
+                'expiration_date' => $s->expiration_date,
             ];
         }
 
@@ -182,16 +183,16 @@ class PatientChargeController extends Controller
 
         // dd($data->itemsToBillList);
 
-        foreach ($data->itemsToBillList as $e) {
-            // DRUGS AND MEDS
-            if ($e['typeOfCharge'] == 'DRUMN') {
-                $data->validate(
-                    [
-                        "itemsToBillList.*.itemCode" => ['required', new StockBalanceNotDeclaredYetRule($e['itemCode'])],
-                    ],
-                );
-            }
-        }
+        // foreach ($data->itemsToBillList as $e) {
+        //     // DRUGS AND MEDS
+        //     if ($e['typeOfCharge'] == 'DRUMN') {
+        //         $data->validate(
+        //             [
+        //                 "itemsToBillList.*.itemCode" => ['required', new StockBalanceNotDeclaredYetRule($e['itemCode'])],
+        //             ],
+        //         );
+        //     }
+        // }
 
         $entryby = Auth::user()->employeeid;
 
