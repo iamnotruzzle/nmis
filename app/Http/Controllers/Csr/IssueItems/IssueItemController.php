@@ -147,6 +147,11 @@ class IssueItemController extends Controller
                     $row = CsrItemConversion::where('id', $stock->id)->first();
                     $row_to_change_status = RequestStocksDetails::where('id', $rsc['request_stocks_details_id'])->first();
 
+                    // $row::where('id', $stock->id)
+                    //     ->update([
+                    //         'total_issued_qty' => (int)$row->total_issued_qty + (int)$remaining_qty_to_be_issued,
+                    //     ]);
+
                     $item = Item::where('cl2comb', $row->cl2comb_after)->first();
 
                     $issueditem = WardsStocks::create([
@@ -166,11 +171,14 @@ class IssueItemController extends Controller
                     ]);
 
                     $newStockQty = $row->quantity_after - $remaining_qty_to_be_issued;
+                    $issuedQty = $remaining_qty_to_be_issued;
                     $remaining_qty_to_be_issued = 0;
+
 
                     $row::where('id', $stock->id)
                         ->update([
                             'quantity_after' => $newStockQty,
+                            'total_issued_qty' => (int)$row->total_issued_qty + (int)$issuedQty,
                         ]);
 
                     RequestStocks::where('id', $requestStocksID)
@@ -180,6 +188,7 @@ class IssueItemController extends Controller
                         ]);
                 } else {
                     $remaining_qty_to_be_issued = $remaining_qty_to_be_issued - $stock->quantity_after;
+                    // dd($remaining_qty_to_be_issued);
 
                     $row = CsrItemConversion::where('id', $stock->id)->first();
                     $row_to_change_status = RequestStocksDetails::where('id', $rsc['request_stocks_details_id'])->first();
@@ -205,6 +214,7 @@ class IssueItemController extends Controller
                     $row::where('id', $stock->id)
                         ->update([
                             'quantity_after' => 0,
+                            'total_issued_qty' => $stock->quantity_after
                         ]);
 
                     RequestStocks::where('id', $requestStocksID)
@@ -229,6 +239,7 @@ class IssueItemController extends Controller
 
     public function update(RequestStocks $requeststock, Request $request)
     {
+        // dd($request);
         $requestStocksID = $request->request_stocks_id;
         // dd($requestStocksID);
         $requestStocksContainer = $request->requestStockListDetails;
@@ -251,6 +262,7 @@ class IssueItemController extends Controller
             // update the stocks quantity to it's original quantity
             $stock->update([
                 'quantity_after' => $stock->quantity_after + $ws['quantity'],
+                'total_issued_qty' => max(0, (int)$stock->total_issued_qty - (int)$ws['quantity']),
             ]);
 
             // delete the wards stock
@@ -339,11 +351,13 @@ class IssueItemController extends Controller
                     ]);
 
                     $newStockQty = $row->quantity_after - $remaining_qty_to_be_issued;
+                    $issuedQty = $remaining_qty_to_be_issued;
                     $remaining_qty_to_be_issued = 0;
 
                     $row::where('id', $stock->id)
                         ->update([
                             'quantity_after' => $newStockQty,
+                            'total_issued_qty' => (int)$row->total_issued_qty + (int)$issuedQty,
                         ]);
 
                     RequestStocks::where('id', $requestStocksID)
@@ -378,6 +392,7 @@ class IssueItemController extends Controller
                     $row::where('id', $stock->id)
                         ->update([
                             'quantity_after' => 0,
+                            'total_issued_qty' => $stock->quantity_after
                         ]);
 
                     RequestStocks::where('id', $requestStocksID)
