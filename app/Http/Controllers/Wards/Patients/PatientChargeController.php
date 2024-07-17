@@ -88,21 +88,42 @@ class PatientChargeController extends Controller
 
         $stocksConvertedAndConsignment = DB::select(
             "SELECT
-                    hclass2.cl2comb,
-                    hclass2.cl2desc,
-                    hclass2.uomcode,
-                    SUM(csrw_wards_stocks.quantity) as quantity,
-                    (SELECT TOP 1 price_per_unit FROM csrw_item_prices WHERE cl2comb = csrw_wards_stocks.cl2comb ORDER BY created_at DESC) as price
-                FROM hclass2
-                JOIN csrw_wards_stocks ON csrw_wards_stocks.cl2comb = hclass2.cl2comb
-                WHERE csrw_wards_stocks.location = '" . $wardcode . "'
-                    AND csrw_wards_stocks.expiration_date > GETDATE()
-                    AND (
-                        (csrw_wards_stocks.[from] = 'CSR' AND csrw_wards_stocks.is_converted = 'y')
-                        OR csrw_wards_stocks.[from] = 'CONSIGNMENT'
-                    )
-                GROUP BY hclass2.cl2comb, hclass2.cl2desc, hclass2.uomcode, csrw_wards_stocks.cl2comb;"
+                csrw_wards_stocks.id,
+                item.cl2comb,
+                item.cl2desc,
+                item.uomcode,
+                csrw_wards_stocks.quantity,
+                price.price_per_unit as price,
+                csrw_wards_stocks.expiration_date
+            FROM hclass2 as item
+            JOIN csrw_wards_stocks ON csrw_wards_stocks.cl2comb = item.cl2comb
+            JOIN csrw_item_prices as price ON item.cl2comb = price.cl2comb
+            WHERE csrw_wards_stocks.location = '" . $wardcode . "'
+                AND csrw_wards_stocks.expiration_date > GETDATE()
+                AND (
+                    (csrw_wards_stocks.[from] = 'CSR' AND csrw_wards_stocks.is_converted = 'y')
+                    OR csrw_wards_stocks.[from] = 'CONSIGNMENT'
+                );"
         );
+        // dd($stocksConvertedAndConsignment);
+
+        // $stocksConvertedAndConsignment = DB::select(
+        //     "SELECT
+        //             hclass2.cl2comb,
+        //             hclass2.cl2desc,
+        //             hclass2.uomcode,
+        //             SUM(csrw_wards_stocks.quantity) as quantity,
+        //             (SELECT TOP 1 price_per_unit FROM csrw_item_prices WHERE cl2comb = csrw_wards_stocks.cl2comb ORDER BY created_at DESC) as price
+        //         FROM hclass2
+        //         JOIN csrw_wards_stocks ON csrw_wards_stocks.cl2comb = hclass2.cl2comb
+        //         WHERE csrw_wards_stocks.location = '" . $wardcode . "'
+        //             AND csrw_wards_stocks.expiration_date > GETDATE()
+        //             AND (
+        //                 (csrw_wards_stocks.[from] = 'CSR' AND csrw_wards_stocks.is_converted = 'y')
+        //                 OR csrw_wards_stocks.[from] = 'CONSIGNMENT'
+        //             )
+        //         GROUP BY hclass2.cl2comb, hclass2.cl2desc, hclass2.uomcode, csrw_wards_stocks.cl2comb;"
+        // );
 
         // dd($stocksFromCsr);
         // dd($stocksConvertedAndConsignment);
@@ -121,11 +142,13 @@ class PatientChargeController extends Controller
 
         foreach ($stocksConvertedAndConsignment as $s) {
             $medicalSupplies[] = (object) [
+                'id' => $s->id,
                 'cl2comb' => $s->cl2comb,
                 'cl2desc' => $s->cl2desc,
                 'uomcode' => $s->uomcode,
                 'quantity' => $s->quantity,
                 'price' => $s->price,
+                'expiration_date' => $s->expiration_date,
             ];
         }
 
