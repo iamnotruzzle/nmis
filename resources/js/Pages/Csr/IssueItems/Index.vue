@@ -682,7 +682,7 @@ export default {
     // server request such as POST, the data in the table
     // is updated
     storeRequestedStocksInContainer() {
-      console.log(this.requestedStocks.data);
+      //   console.log(this.requestedStocks.data);
       this.requestedStocks.data.forEach((e) => {
         this.requestStockList.push({
           id: e.id,
@@ -707,7 +707,7 @@ export default {
       data.request_stocks_details.forEach((item) => {
         // console.log(item);
         item.issued_item.forEach((e) => {
-          console.log(e);
+          //   console.log(e);
 
           this.issuedItemList.push({
             cl2desc: e.item_details.cl2desc,
@@ -768,7 +768,7 @@ export default {
       this.requestStockId = item.id;
 
       item.request_stocks_details.forEach((e) => {
-        console.log(e);
+        // console.log(e);
         this.requestStockListDetails.push({
           request_stocks_details_id: e.id,
           cl2comb: e.cl2comb,

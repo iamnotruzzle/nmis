@@ -45,7 +45,7 @@ class RequestStocksDetails extends Model
 
     public function issued_item()
     {
-        return $this->hasMany(WardsStocks::class, 'cl2comb', 'cl2comb_after')->with(['item_details'])
+        return $this->hasMany(WardsStocks::class, 'cl2comb', 'cl2comb')->with(['item_details'])
             ->whereDate('expiration_date', '>', Carbon::today());
     }
 
