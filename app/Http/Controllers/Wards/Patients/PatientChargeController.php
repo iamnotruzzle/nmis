@@ -128,29 +128,66 @@ class PatientChargeController extends Controller
         // dd($stocksFromCsr);
         // dd($stocksConvertedAndConsignment);
 
+        // foreach ($stocksFromCsr as $s) {
+        //     $medicalSupplies[] = (object) [
+        //         'id' => $s->id,
+        //         'cl2comb' => $s->cl2comb,
+        //         'cl2desc' => $s->cl2desc,
+        //         'uomcode' => $s->uomcode,
+        //         'quantity' => $s->quantity,
+        //         'price' => $s->price,
+        //         'expiration_date' => $s->expiration_date,
+        //     ];
+        // }
+
+        // foreach ($stocksConvertedAndConsignment as $s) {
+        //     $medicalSupplies[] = (object) [
+        //         'id' => $s->id,
+        //         'cl2comb' => $s->cl2comb,
+        //         'cl2desc' => $s->cl2desc,
+        //         'uomcode' => $s->uomcode,
+        //         'quantity' => $s->quantity,
+        //         'price' => $s->price,
+        //         'expiration_date' => $s->expiration_date,
+        //     ];
+        // }
+
+        // set medicalSupplies value and remove duplicate id
+        $medicalSupplies = [];
+        $seenIds = [];
+
         foreach ($stocksFromCsr as $s) {
-            $medicalSupplies[] = (object) [
-                'id' => $s->id,
-                'cl2comb' => $s->cl2comb,
-                'cl2desc' => $s->cl2desc,
-                'uomcode' => $s->uomcode,
-                'quantity' => $s->quantity,
-                'price' => $s->price,
-                'expiration_date' => $s->expiration_date,
-            ];
+            if (!in_array($s->id, $seenIds)) {
+                $medicalSupplies[] = (object) [
+                    'id' => $s->id,
+                    'cl2comb' => $s->cl2comb,
+                    'cl2desc' => $s->cl2desc,
+                    'uomcode' => $s->uomcode,
+                    'quantity' => $s->quantity,
+                    'price' => $s->price,
+                    'expiration_date' => $s->expiration_date,
+                ];
+                $seenIds[] = $s->id;
+            }
         }
 
         foreach ($stocksConvertedAndConsignment as $s) {
-            $medicalSupplies[] = (object) [
-                'id' => $s->id,
-                'cl2comb' => $s->cl2comb,
-                'cl2desc' => $s->cl2desc,
-                'uomcode' => $s->uomcode,
-                'quantity' => $s->quantity,
-                'price' => $s->price,
-                'expiration_date' => $s->expiration_date,
-            ];
+            if (!in_array($s->id, $seenIds)) {
+                $medicalSupplies[] = (object) [
+                    'id' => $s->id,
+                    'cl2comb' => $s->cl2comb,
+                    'cl2desc' => $s->cl2desc,
+                    'uomcode' => $s->uomcode,
+                    'quantity' => $s->quantity,
+                    'price' => $s->price,
+                    'expiration_date' => $s->expiration_date,
+                ];
+                $seenIds[] = $s->id;
+            }
         }
+        // end set medicalSupplies value and remove duplicate id
+
+        // dd($medicalSupplies);
 
         // get miscellaneous / miscellaneous
         $misc = Miscellaneous::with('unit')
