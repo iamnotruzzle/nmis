@@ -520,7 +520,43 @@
             </small>
           </div>
           <div class="field">
-            <label for="manufactured_date">Manufactured date</label>
+            <div>
+              <div class="flex align-content-center">
+                <label>Acquisition price</label>
+              </div>
+              <InputText
+                class="w-full"
+                v-model.trim="formConsignment.acquisition_price"
+                :maxFractionDigits="2"
+              />
+            </div>
+          </div>
+          <div class="field">
+            <div>
+              <div class="flex align-content-center">
+                <label class="text-green-500">Hospital price</label>
+              </div>
+              <InputText
+                class="w-full"
+                v-model.trim="formConsignment.hospital_price"
+                :maxFractionDigits="2"
+              />
+            </div>
+          </div>
+          <div class="field">
+            <div>
+              <div class="flex align-content-center">
+                <label class="text-blue-500">Price per unit </label>
+              </div>
+              <InputText
+                class="w-full"
+                v-model.trim="formConsignment.price_per_unit"
+                :maxFractionDigits="2"
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label for="manufactured_date">Manufactured date (optional)</label>
             <Calendar
               v-model="formConsignment.manufactured_date"
               dateFormat="mm-dd-yy"
@@ -531,7 +567,7 @@
             />
           </div>
           <div class="field">
-            <label for="delivered_date">Delivered date</label>
+            <label for="delivered_date">Delivered date (optional)</label>
             <Calendar
               v-model="formConsignment.delivered_date"
               dateFormat="mm-dd-yy"
@@ -540,6 +576,12 @@
               :manualInput="false"
               :hideOnDateTimeSelect="true"
             />
+            <!-- <small
+              class="text-error"
+              v-if="formConsignment.errors.delivered_date"
+            >
+              {{ formConsignment.errors.delivered_date }}
+            </small> -->
           </div>
           <div class="field">
             <label for="expiration_date">Expiration date</label>
@@ -577,6 +619,9 @@
                 formConsignment.fund_source == null ||
                 formConsignment.cl2comb == null ||
                 formConsignment.quantity == null ||
+                formConsignment.acquisition_price == null ||
+                formConsignment.hospital_price == null ||
+                formConsignment.price_per_unit == null ||
                 formConsignment.expiration_date == null
               "
               @click="submitConsignment"
@@ -823,12 +868,12 @@
                     />
                   </div>
                 </div>
-                <!-- <Button
+                <Button
                   label="Consignment"
                   icon="pi pi-plus"
                   iconPos="right"
                   @click="openConsignmentDialog"
-                /> -->
+                />
               </div>
             </div>
           </template>
@@ -1051,6 +1096,9 @@ export default {
         cl2comb: null,
         uomcode: null,
         quantity: null,
+        acquisition_price: null,
+        hospital_price: null,
+        price_per_unit: null,
         manufactured_date: null,
         delivered_date: null,
         expiration_date: null,
