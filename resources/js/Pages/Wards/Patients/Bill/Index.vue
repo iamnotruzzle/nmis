@@ -160,7 +160,7 @@
           <Dialog
             v-model:visible="createBillDialog"
             :modal="true"
-            class="p-fluid w-5"
+            class="p-fluid w-10"
             @hide="whenDialogIsHidden"
           >
             <template #header>
