@@ -15,6 +15,7 @@ class WardsStocksLogs extends Model
         'request_stocks_id',
         'request_stocks_detail_id',
         'stock_id',
+        'ris_no',
         'location',
         'cl2comb',
         'uomcode',
