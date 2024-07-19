@@ -233,7 +233,7 @@
                   <div class="flex flex-wrap align-items-center justify-content-between gap-2">
                     <span class="text-primary">PENDING ITEMS</span>
                     <div class="flex flex-row align-items-center">
-                      <a
+                      <!-- <a
                         v-if="slotProps.data.status != 'PENDING'"
                         :href="`issueitems/issued?from=${params.from}&to=${params.to}
                       &id=${(params.id = slotProps.data.id)}`"
@@ -244,7 +244,7 @@
                           class="pi pi-download"
                           :style="{ color: 'green', 'font-size': '1.2rem' }"
                         ></i>
-                      </a>
+                      </a> -->
                       <Button
                         v-if="slotProps.data.status != 'PENDING'"
                         icon="pi pi-book"
