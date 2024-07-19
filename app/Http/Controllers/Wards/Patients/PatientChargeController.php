@@ -78,6 +78,7 @@ class PatientChargeController extends Controller
             JOIN csrw_item_prices as price ON csrw_wards_stocks.cl2comb = price.cl2comb
             WHERE csrw_wards_stocks.location = '" . $wardcode . "'
                 AND csrw_wards_stocks.ris_no = price.ris_no
+                AND csrw_wards_stocks.quantity > 0
                 AND csrw_wards_stocks.expiration_date > GETDATE();"
         );
 
