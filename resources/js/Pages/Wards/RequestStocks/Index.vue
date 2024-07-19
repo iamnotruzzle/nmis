@@ -747,7 +747,7 @@
           v-model:visible="editWardStocksDialog"
           header="Update stock"
           :modal="true"
-          class="p-fluid w-4"
+          class="p-fluid w-7"
           @hide="whenDialogIsHidden"
           dismissableMask
         >
