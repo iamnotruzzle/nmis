@@ -456,10 +456,16 @@
                 </div>
               </template>
               <Column
+                field="ris_no"
+                header="RIS NO."
+                sortable
+                style="width: 10%"
+              ></Column>
+              <Column
                 field="cl2desc"
                 header="ITEM"
                 sortable
-                style="width: 70%"
+                style="width: 60%"
               ></Column>
               <Column
                 field="quantity"
@@ -703,17 +709,20 @@ export default {
       //   console.log(this.requestStockList);
     },
     viewIssuedItem(data) {
-      //   console.log(data);
+      //   console.log('data', data.id);
       data.request_stocks_details.forEach((item) => {
-        // console.log(item);
-        item.issued_item.forEach((e) => {
-          //   console.log(e);
+        console.log('item', item);
 
-          this.issuedItemList.push({
-            cl2desc: e.item_details.cl2desc,
-            quantity: e.quantity,
-            expiration_date: e.expiration_date,
-          });
+        item.issued_item.forEach((e) => {
+          console.log(e);
+          if (data.id == e.request_stocks_id) {
+            this.issuedItemList.push({
+              ris_no: e.ris_no,
+              cl2desc: e.item_details.cl2desc,
+              quantity: e.quantity,
+              expiration_date: e.expiration_date,
+            });
+          }
         });
       });
 
