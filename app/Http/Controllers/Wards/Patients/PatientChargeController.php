@@ -121,6 +121,7 @@ class PatientChargeController extends Controller
                 $seenIds[] = $s->id;
             }
         }
+        // dd($medicalSupplies);
 
         // foreach ($stocksConvertedAndConsignment as $s) {
         //     if (!in_array($s->id, $seenIds)) {

@@ -675,6 +675,7 @@ export default {
           expiration_date: med.expiration_date,
         });
       });
+      console.log(this.medicalSuppliesList);
     },
     storeMiscInContainer() {
       this.misc.forEach((misc) => {

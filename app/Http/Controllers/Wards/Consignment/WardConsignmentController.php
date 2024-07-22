@@ -64,6 +64,7 @@ class WardConsignmentController extends Controller
         $consignment = WardsStocks::create([
             'request_stocks_id' => null,
             'request_stocks_detail_id' => null,
+            'ris_no' => $tempRisNo,
             'stock_id' => null,
             'location' => $request->authLocation,
             'cl2comb' => $request->cl2comb,
@@ -80,6 +81,7 @@ class WardConsignmentController extends Controller
         $wardStockLogs = WardsStocksLogs::create([
             'request_stocks_id' => null,
             'request_stocks_detail_id' => null,
+            'ris_no' => $tempRisNo,
             'stock_id' => null,
             'location' => $request->authLocation,
             'cl2comb' => $request->cl2comb,
