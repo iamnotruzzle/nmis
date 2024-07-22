@@ -190,20 +190,6 @@ class PatientChargeController extends Controller
     public function store(Request $request)
     {
         $data = $request;
-        // dd($data);
-
-        // dd($data->itemsToBillList);
-
-        // foreach ($data->itemsToBillList as $e) {
-        //     // DRUGS AND MEDS
-        //     if ($e['typeOfCharge'] == 'DRUMN') {
-        //         $data->validate(
-        //             [
-        //                 "itemsToBillList.*.itemCode" => ['required', new StockBalanceNotDeclaredYetRule($e['itemCode'])],
-        //             ],
-        //         );
-        //     }
-        // }
 
         $entryby = Auth::user()->employeeid;
 
@@ -279,14 +265,6 @@ class PatientChargeController extends Controller
                     $newStockQty = 0;
 
                     while ($remaining_qty_to_charge > 0) {
-                        // check the current item that is going to expire and qty is 0
-                        // $wardStock = WardsStocks::where('cl2comb', $item['itemCode'])
-                        //     ->where('quantity', '!=', 0)
-                        //     ->where('location', $authWardcode->wardcode)
-                        //     ->where('expiration_date', '>', Carbon::today())
-                        //     ->orderBy('expiration_date', 'ASC')
-                        //     ->first(); // 10
-
                         // remove stock based on ward stock item id
                         $wardStock = WardsStocks::where('cl2comb', $item['itemCode'])
                             ->where('quantity', '!=', 0)
