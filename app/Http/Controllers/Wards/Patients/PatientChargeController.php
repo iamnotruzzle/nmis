@@ -79,7 +79,8 @@ class PatientChargeController extends Controller
             WHERE csrw_wards_stocks.location = '" . $wardcode . "'
                 AND csrw_wards_stocks.ris_no = price.ris_no
                 AND csrw_wards_stocks.quantity > 0
-                AND csrw_wards_stocks.expiration_date > GETDATE();"
+                AND csrw_wards_stocks.expiration_date > GETDATE()
+            ORDER BY csrw_wards_stocks.expiration_date ASC;"
         );
 
         // $stocksConvertedAndConsignment = DB::select(
@@ -188,7 +189,6 @@ class PatientChargeController extends Controller
     public function store(Request $request)
     {
         $data = $request;
-
         // dd($data);
 
         // dd($data->itemsToBillList);
