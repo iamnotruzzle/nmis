@@ -770,6 +770,14 @@ export default {
         return;
       }
 
+      // Check if there are related items in the itemsToBillList
+      const relatedItemsExist = this.itemsToBillList.some((e) => e.itemCode === this.item['itemCode']);
+      if (relatedItemsExist) {
+        this.itemNotSelected = true;
+        this.itemNotSelectedMsg = 'Remove all related items first to update the quantity.';
+        return;
+      }
+
       let qtyRemaining = this.qtyToCharge;
       const newBillItems = [];
 
@@ -809,12 +817,13 @@ export default {
         this.itemNotSelected = true;
         this.itemNotSelectedMsg = 'Not enough quantity available.';
       } else {
+        // Ensure there are no items with the same names already in the list before pushing new items
+        this.itemsToBillList = this.itemsToBillList.filter((e) => e.itemCode !== this.item['itemCode']);
         this.itemsToBillList.push(...newBillItems);
         this.itemNotSelected = false;
         this.itemNotSelectedMsg = null;
       }
     },
-
     removeFromToBillContainer(item) {
       this.itemsToBillList.splice(
         this.itemsToBillList.findIndex((e) => e.itemCode === item.itemCode),
