@@ -694,7 +694,12 @@ export default {
         if (med.price != null) {
           if (combinedItems[med.cl2desc]) {
             combinedItems[med.cl2desc].totalQuantity += med.quantity;
-            combinedItems[med.cl2desc].prices.push({ id: med.id, price: med.price, quantity: med.quantity });
+            combinedItems[med.cl2desc].prices.push({
+              id: med.id,
+              price: med.price,
+              quantity: med.quantity,
+              expiryDate: med.expiryDate,
+            });
           } else {
             combinedItems[med.cl2desc] = {
               id: med.id, // Use the ID of the first encountered item
@@ -703,7 +708,7 @@ export default {
               itemDesc: med.cl2desc,
               unit: med.uomcode == null ? null : med.uomcode,
               totalQuantity: med.quantity,
-              prices: [{ id: med.id, price: med.price, quantity: med.quantity }],
+              prices: [{ id: med.id, price: med.price, quantity: med.quantity, expiryDate: med.expiryDate }],
             };
           }
         }
@@ -755,8 +760,8 @@ export default {
             let qtyRemaining = this.qtyToCharge;
             const newBillItems = [];
 
-            // Sort the prices array to charge the most expensive items first
-            this.item.prices.sort((a, b) => b.price - a.price);
+            // Sort the prices array to prioritize near-expiry items first
+            this.item.prices.sort((a, b) => new Date(a.expiryDate) - new Date(b.expiryDate));
 
             for (const priceInfo of this.item.prices) {
               if (qtyRemaining <= 0) break;
@@ -781,6 +786,7 @@ export default {
                   qtyToCharge,
                   price: priceInfo.price,
                   total: (priceInfo.price * qtyToCharge).toFixed(2),
+                  expiryDate: priceInfo.expiryDate, // Include expiry date if needed for further processing
                 });
               }
             }
