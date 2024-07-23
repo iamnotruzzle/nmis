@@ -745,84 +745,163 @@ export default {
     medicalSuppliesQtyValidation() {
       console.log(this.item);
 
-      // Check if an item is selected
-      if (this.item == null || this.item == '') {
-        this.itemNotSelected = true;
-        this.itemNotSelectedMsg = 'Item not selected.';
-        return;
-      }
+      if (this.item.typeOfCharge == 'DRUMN') {
+        // Check if an item is selected
+        if (this.item == null || this.item == '') {
+          this.itemNotSelected = true;
+          this.itemNotSelectedMsg = 'Item not selected.';
+          return;
+        }
 
-      // Check if a quantity to charge is provided
-      if (this.qtyToCharge == 0 || this.qtyToCharge == null || this.qtyToCharge == '') {
-        this.itemNotSelected = true;
-        this.itemNotSelectedMsg = 'Please provide quantity.';
-        return;
-      }
+        // Check if a quantity to charge is provided
+        if (this.qtyToCharge == 0 || this.qtyToCharge == null || this.qtyToCharge == '') {
+          this.itemNotSelected = true;
+          this.itemNotSelectedMsg = 'Please provide quantity.';
+          return;
+        }
 
-      // Calculate the total quantity already billed for this item
-      const totalBilledQty = this.itemsToBillList
-        .filter((e) => e.itemCode === this.item['itemCode'])
-        .reduce((sum, e) => sum + e.qtyToCharge, 0);
+        // Calculate the total quantity already billed for this item
+        const totalBilledQty = this.itemsToBillList
+          .filter((e) => e.itemCode === this.item['itemCode'])
+          .reduce((sum, e) => sum + e.qtyToCharge, 0);
 
-      // Check if adding the new quantity exceeds the total available quantity
-      if (totalBilledQty + this.qtyToCharge > this.item.totalQuantity) {
-        this.itemNotSelected = true;
-        this.itemNotSelectedMsg = 'Total quantity exceeds available stock.';
-        return;
-      }
+        // Check if adding the new quantity exceeds the total available quantity
+        if (totalBilledQty + this.qtyToCharge > this.item.totalQuantity) {
+          this.itemNotSelected = true;
+          this.itemNotSelectedMsg = 'Total quantity exceeds available stock.';
+          return;
+        }
 
-      // Check if there are related items in the itemsToBillList
-      const relatedItemsExist = this.itemsToBillList.some((e) => e.itemCode === this.item['itemCode']);
-      if (relatedItemsExist) {
-        this.itemNotSelected = true;
-        this.itemNotSelectedMsg = 'Remove all related items first to update the quantity.';
-        return;
-      }
+        // Check if there are related items in the itemsToBillList
+        const relatedItemsExist = this.itemsToBillList.some((e) => e.itemCode === this.item['itemCode']);
+        if (relatedItemsExist) {
+          this.itemNotSelected = true;
+          this.itemNotSelectedMsg = 'Remove all related items first to update the quantity.';
+          return;
+        }
 
-      let qtyRemaining = this.qtyToCharge;
-      const newBillItems = [];
+        let qtyRemaining = this.qtyToCharge;
+        const newBillItems = [];
 
-      // Sort the prices array to prioritize near-expiry items first
-      this.item.prices.sort((a, b) => new Date(a.expiryDate) - new Date(b.expiryDate));
+        // Sort the prices array to prioritize near-expiry items first
+        this.item.prices.sort((a, b) => new Date(a.expiryDate) - new Date(b.expiryDate));
 
-      for (const priceInfo of this.item.prices) {
-        if (qtyRemaining <= 0) break;
-        const qtyToCharge = Math.min(priceInfo.quantity, qtyRemaining);
-        qtyRemaining -= qtyToCharge;
+        for (const priceInfo of this.item.prices) {
+          if (qtyRemaining <= 0) break;
+          const qtyToCharge = Math.min(priceInfo.quantity, qtyRemaining);
+          qtyRemaining -= qtyToCharge;
 
-        const existingItem = this.itemsToBillList.find(
-          (e) => e.itemCode === this.item['itemCode'] && e.price === priceInfo.price
-        );
+          const existingItem = this.itemsToBillList.find(
+            (e) => e.itemCode === this.item['itemCode'] && e.price === priceInfo.price
+          );
 
-        if (existingItem) {
-          existingItem.qtyToCharge += qtyToCharge;
-          existingItem.total = (existingItem.price * existingItem.qtyToCharge).toFixed(2);
+          if (existingItem) {
+            existingItem.qtyToCharge += qtyToCharge;
+            existingItem.total = (existingItem.price * existingItem.qtyToCharge).toFixed(2);
+          } else {
+            newBillItems.push({
+              id: priceInfo.id, // Use the original ID from the prices array
+              typeOfCharge: this.item['typeOfCharge'],
+              itemCode: this.item['itemCode'],
+              itemDesc: this.item['itemDesc'],
+              unit: this.item['unit'],
+              currentStock: this.item['typeOfCharge'] == 'DRUMN' ? this.item['totalQuantity'] : 'Infinite',
+              qtyToCharge,
+              price: priceInfo.price,
+              total: (priceInfo.price * qtyToCharge).toFixed(2),
+              expiryDate: priceInfo.expiryDate, // Include expiry date if needed for further processing
+            });
+          }
+        }
+
+        // Handle case where not enough quantity was available
+        if (qtyRemaining > 0) {
+          this.itemNotSelected = true;
+          this.itemNotSelectedMsg = 'Not enough quantity available.';
         } else {
-          newBillItems.push({
-            id: priceInfo.id, // Use the original ID from the prices array
-            typeOfCharge: this.item['typeOfCharge'],
-            itemCode: this.item['itemCode'],
-            itemDesc: this.item['itemDesc'],
-            unit: this.item['unit'],
-            currentStock: this.item['typeOfCharge'] == 'DRUMN' ? this.item['totalQuantity'] : 'Infinite',
-            qtyToCharge,
-            price: priceInfo.price,
-            total: (priceInfo.price * qtyToCharge).toFixed(2),
-            expiryDate: priceInfo.expiryDate, // Include expiry date if needed for further processing
-          });
+          // Ensure there are no items with the same names already in the list before pushing new items
+          this.itemsToBillList = this.itemsToBillList.filter((e) => e.itemCode !== this.item['itemCode']);
+          this.itemsToBillList.push(...newBillItems);
+          this.itemNotSelected = false;
+          this.itemNotSelectedMsg = null;
+        }
+      } else {
+        if (this.item == null || this.item == '') {
+          this.itemNotSelected = true;
+          this.itemNotSelectedMsg = 'Item not selected.';
+        } else {
+          // check if request qty is not provided
+          if (this.qtyToCharge == 0 || this.qtyToCharge == null || this.qtyToCharge == '') {
+            this.itemNotSelected = true;
+            this.itemNotSelectedMsg = 'Please provide quantity.';
+          } else {
+            // check if item selected is already on the list
+            if (this.itemsToBillList.some((e) => e.itemCode === this.item['itemCode'])) {
+              this.itemNotSelected = true;
+              this.itemNotSelectedMsg = 'Item is already on the list.';
+            } else {
+              this.itemNotSelected = false;
+              this.itemNotSelectedMsg = null;
+              this.itemsToBillList.push({
+                id: this.item['id'] != null ? this.item['id'] : null,
+                typeOfCharge: this.item['typeOfCharge'],
+                itemCode: this.item['itemCode'],
+                itemDesc: this.item['itemDesc'],
+                unit: this.item['unit'],
+                currentStock: this.item['typeOfCharge'] == 'DRUMN' ? this.item['quantity'] : 'Infinite',
+                qtyToCharge: this.qtyToCharge,
+                price: this.item['price'],
+                total: (this.item['price'] * this.qtyToCharge).toFixed(2),
+              });
+            }
+          }
         }
       }
-
-      // Handle case where not enough quantity was available
-      if (qtyRemaining > 0) {
-        this.itemNotSelected = true;
-        this.itemNotSelectedMsg = 'Not enough quantity available.';
+    },
+    medicalSuppliesQtyValidation1() {
+      console.log(this.item);
+      // check if no selected item
+      if (this.item.typeOfCharge == 'DRUMN' && Number(this.item.quantity) < Number(this.qtyToCharge)) {
+        // check if item selected is already on the list
+        if (this.itemsToBillList.some((e) => e.itemCode === this.item['itemCode'])) {
+          this.itemNotSelected = true;
+          this.itemNotSelectedMsg = 'Item is already on the list.';
+        } else {
+          //   this.stockQtyNotEnough();
+          this.itemNotSelected = true;
+          this.itemNotSelectedMsg = 'Current stock is not enough.';
+        }
       } else {
-        // Ensure there are no items with the same names already in the list before pushing new items
-        this.itemsToBillList = this.itemsToBillList.filter((e) => e.itemCode !== this.item['itemCode']);
-        this.itemsToBillList.push(...newBillItems);
-        this.itemNotSelected = false;
-        this.itemNotSelectedMsg = null;
+        if (this.item == null || this.item == '') {
+          this.itemNotSelected = true;
+          this.itemNotSelectedMsg = 'Item not selected.';
+        } else {
+          // check if request qty is not provided
+          if (this.qtyToCharge == 0 || this.qtyToCharge == null || this.qtyToCharge == '') {
+            this.itemNotSelected = true;
+            this.itemNotSelectedMsg = 'Please provide quantity.';
+          } else {
+            // check if item selected is already on the list
+            if (this.itemsToBillList.some((e) => e.itemCode === this.item['itemCode'])) {
+              this.itemNotSelected = true;
+              this.itemNotSelectedMsg = 'Item is already on the list.';
+            } else {
+              this.itemNotSelected = false;
+              this.itemNotSelectedMsg = null;
+              this.itemsToBillList.push({
+                id: this.item['id'] != null ? this.item['id'] : null,
+                typeOfCharge: this.item['typeOfCharge'],
+                itemCode: this.item['itemCode'],
+                itemDesc: this.item['itemDesc'],
+                unit: this.item['unit'],
+                currentStock: this.item['typeOfCharge'] == 'DRUMN' ? this.item['quantity'] : 'Infinite',
+                qtyToCharge: this.qtyToCharge,
+                price: this.item['price'],
+                total: (this.item['price'] * this.qtyToCharge).toFixed(2),
+              });
+            }
+          }
+        }
       }
     },
     removeFromToBillContainer(item) {
