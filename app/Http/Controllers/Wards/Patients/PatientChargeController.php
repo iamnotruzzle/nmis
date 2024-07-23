@@ -186,6 +186,19 @@ class PatientChargeController extends Controller
         ]);
     }
 
+    protected function generateUniqueChargeCode()
+    {
+        $csrw_code = CsrwCode::create([
+            'charge_desc' => 'a',
+            'created_at' => Carbon::now(),
+        ]);
+        // get count of csrcode where year is NOW
+        $currentCodeCount = CsrwCode::whereYear('created_at', Carbon::now()->year)->count();
+        // CW = Central supply room Ward
+        $pcchrgcod = 'CW' . Carbon::now()->format('y') . '-' . sprintf('%06d', $currentCodeCount);
+
+        return $pcchrgcod;
+    }
 
     public function store(Request $request)
     {
@@ -207,17 +220,20 @@ class PatientChargeController extends Controller
         $hospitalNumber = $request->hospitalNumber;
         $itemsToBillList = $request->itemsToBillList;
 
+        $itemsInBillList = [];
+
+        $pcchrgcod = $this->generateUniqueChargeCode();
 
         if ($request->isUpdate == false) {
             // create csrw_code
-            $csrw_code = CsrwCode::create([
-                'charge_desc' => 'a',
-                'created_at' => Carbon::now(),
-            ]);
-            // get count of csrcode where year is NOW
-            $currentCodeCount = CsrwCode::whereYear('created_at', Carbon::now()->year)->count();
-            // CW = Central supply room Ward
-            $pcchrgcod = 'CW' . Carbon::now()->format('y') . '-' . sprintf('%06d', $currentCodeCount);
+            // $csrw_code = CsrwCode::create([
+            //     'charge_desc' => 'a',
+            //     'created_at' => Carbon::now(),
+            // ]);
+            // // get count of csrcode where year is NOW
+            // $currentCodeCount = CsrwCode::whereYear('created_at', Carbon::now()->year)->count();
+            // // CW = Central supply room Ward
+            // $pcchrgcod = 'CW' . Carbon::now()->format('y') . '-' . sprintf('%06d', $currentCodeCount);
 
             // get patient account number
             $acctno = PatientAccount::where('enccode', $enccode)->first(['paacctno']);
@@ -225,111 +241,223 @@ class PatientChargeController extends Controller
             foreach ($itemsToBillList as $item) {
 
                 if ($item['typeOfCharge'] == 'DRUMN') {
-                    $patientChargeDate = PatientCharge::create([
-                        'enccode' => $enccode,
-                        'hpercode' => $hospitalNumber,
-                        'upicode' => null,
-                        'pcchrgcod' => $pcchrgcod, // charge slip no.
-                        'pcchrgdte' => Carbon::now(),
-                        'chargcode' => $item['typeOfCharge'], // type of charge (chrgcode from hcharge)
-                        'uomcode' => $item['unit'], // unit
-                        'pchrgqty' =>  $item['qtyToCharge'],
-                        'pchrgup' => $item['price'],
-                        'pcchrgamt' => $item['total'],
-                        'pcstat' => 'A', // always A
-                        'pclock' => 'N', // always N
-                        'updsw' => 'N', // always N
-                        'confdl' => 'N', // always N
-                        'srcchrg' => $srcchrg,
-                        'pcdisch' => 'Y',
-                        'acctno' => $acctno->paacctno, // SELECT * FROM hpatacct --pacctno
-                        'itemcode' => $item['itemCode'], // cl2comb or hmisc hmcode
-                        'entryby' => $entryby,
-                        'orinclst' => null, // null
-                        'compense' => null, // always null
-                        'proccode' => null, // always null
-                        'discount' => null, // always null
-                        'disamt' => null, // always null
-                        'discbal' => null, // always null
-                        'phicamt' => null, // always null
-                        'rvscode' => null, // always null
-                        'licno' => null, // always null
-                        'hpatkey' => null, // always null
-                        'time_frequency' => null, // always null
-                        'unit_frequency' => null, // always null
-                        'qtyintake' => null, // always null
-                        'uomintake' => null, // always null
-                    ]);
+                    array_push($itemsInBillList, $item['itemCode']);
 
-                    $remaining_qty_to_charge = $item['qtyToCharge']; // 15
-                    $newStockQty = 0;
+                    if (in_array($item['itemCode'], $itemsInBillList)) {
+                        $patientChargeDate = PatientCharge::create([
+                            'enccode' => $enccode,
+                            'hpercode' => $hospitalNumber,
+                            'upicode' => null,
+                            'pcchrgcod' => $this->generateUniqueChargeCode(), // charge slip no.
+                            'pcchrgdte' => Carbon::now(),
+                            'chargcode' => $item['typeOfCharge'], // type of charge (chrgcode from hcharge)
+                            'uomcode' => $item['unit'], // unit
+                            'pchrgqty' =>  $item['qtyToCharge'],
+                            'pchrgup' => $item['price'],
+                            'pcchrgamt' => $item['total'],
+                            'pcstat' => 'A', // always A
+                            'pclock' => 'N', // always N
+                            'updsw' => 'N', // always N
+                            'confdl' => 'N', // always N
+                            'srcchrg' => $srcchrg,
+                            'pcdisch' => 'Y',
+                            'acctno' => $acctno->paacctno, // SELECT * FROM hpatacct --pacctno
+                            'itemcode' => $item['itemCode'], // cl2comb or hmisc hmcode
+                            'entryby' => $entryby,
+                            'orinclst' => null, // null
+                            'compense' => null, // always null
+                            'proccode' => null, // always null
+                            'discount' => null, // always null
+                            'disamt' => null, // always null
+                            'discbal' => null, // always null
+                            'phicamt' => null, // always null
+                            'rvscode' => null, // always null
+                            'licno' => null, // always null
+                            'hpatkey' => null, // always null
+                            'time_frequency' => null, // always null
+                            'unit_frequency' => null, // always null
+                            'qtyintake' => null, // always null
+                            'uomintake' => null, // always null
+                        ]);
 
-                    while ($remaining_qty_to_charge > 0) {
-                        // remove stock based on ward stock item id
-                        $wardStock = WardsStocks::where('cl2comb', $item['itemCode'])
-                            ->where('quantity', '!=', 0)
-                            ->where('location', $authWardcode->wardcode)
-                            ->where('id', $item['id'])
-                            ->first(); // 10
+                        $remaining_qty_to_charge = $item['qtyToCharge']; // 15
+                        $newStockQty = 0;
 
-                        // execute if row selected qty is enough
-                        if ($wardStock->quantity >= $remaining_qty_to_charge) {
-                            PatientChargeLogs::create([
-                                'enccode' => $enccode,
-                                'acctno' => $acctno->paacctno,
-                                'ward_stocks_id' => $wardStock->id,
-                                'itemcode' => $wardStock->cl2comb,
-                                'from' => $wardStock->from,
-                                'manufactured_date' => $wardStock->manufactured_date == null ? null : Carbon::parse($wardStock->manufactured_date)->format('Y-m-d H:i:s.v'),
-                                'delivery_date' => $wardStock->delivery_date == null ? null : Carbon::parse($wardStock->delivered_date)->format('Y-m-d H:i:s.v'),
-                                'expiration_date' => $wardStock->expiration_date == null ? null : Carbon::parse($wardStock->expiration_date)->format('Y-m-d H:i:s.v'),
-                                'quantity' => $remaining_qty_to_charge,
-                                'price_per_piece' => (float)$item['price'] == null ? null : (float)$item['price'],
-                                'price_total' => (float)$remaining_qty_to_charge * (float)$item['price'],
-                                'pcchrgdte' => $patientChargeDate->pcchrgdte,
-                                'tscode' => $request->tscode,
-                                'entry_at' => $authWardcode->wardcode,
-                                'entry_by' => $entryby,
-                            ]);
+                        while ($remaining_qty_to_charge > 0) {
+                            // remove stock based on ward stock item id
+                            $wardStock = WardsStocks::where('cl2comb', $item['itemCode'])
+                                ->where('quantity', '!=', 0)
+                                ->where('location', $authWardcode->wardcode)
+                                ->where('id', $item['id'])
+                                ->first(); // 10
 
-                            // getting the new qty of current editing ward stock
-                            $newStockQty = $wardStock->quantity - $remaining_qty_to_charge;
-                            // setting the new value of remaining_qty_to_charge
-                            $remaining_qty_to_charge = $remaining_qty_to_charge - $wardStock->quantity;
-
-                            $wardStock::where('id', $wardStock->id)
-                                ->update([
-                                    'quantity' => $newStockQty,
+                            // execute if row selected qty is enough
+                            if ($wardStock->quantity >= $remaining_qty_to_charge) {
+                                PatientChargeLogs::create([
+                                    'enccode' => $enccode,
+                                    'acctno' => $acctno->paacctno,
+                                    'ward_stocks_id' => $wardStock->id,
+                                    'itemcode' => $wardStock->cl2comb,
+                                    'from' => $wardStock->from,
+                                    'manufactured_date' => $wardStock->manufactured_date == null ? null : Carbon::parse($wardStock->manufactured_date)->format('Y-m-d H:i:s.v'),
+                                    'delivery_date' => $wardStock->delivery_date == null ? null : Carbon::parse($wardStock->delivered_date)->format('Y-m-d H:i:s.v'),
+                                    'expiration_date' => $wardStock->expiration_date == null ? null : Carbon::parse($wardStock->expiration_date)->format('Y-m-d H:i:s.v'),
+                                    'quantity' => $remaining_qty_to_charge,
+                                    'price_per_piece' => (float)$item['price'] == null ? null : (float)$item['price'],
+                                    'price_total' => (float)$remaining_qty_to_charge * (float)$item['price'],
+                                    'pcchrgdte' => $patientChargeDate->pcchrgdte,
+                                    'tscode' => $request->tscode,
+                                    'entry_at' => $authWardcode->wardcode,
+                                    'entry_by' => $entryby,
                                 ]);
-                        } else {
-                            // calculate the value of quantity to insert based on the specific
-                            // stock that will be given
-                            $qty = ($wardStock->quantity - $remaining_qty_to_charge) + $remaining_qty_to_charge;
 
-                            PatientChargeLogs::create([
-                                'enccode' => $enccode,
-                                'acctno' => $acctno->paacctno,
-                                'ward_stocks_id' => $wardStock->id,
-                                'itemcode' => $wardStock->cl2comb,
-                                'from' => $wardStock->from,
-                                'manufactured_date' => $wardStock->manufactured_date == null ? null : Carbon::parse($wardStock->manufactured_date)->format('Y-m-d H:i:s.v'),
-                                'delivery_date' => $wardStock->delivery_date == null ? null : Carbon::parse($wardStock->delivered_date)->format('Y-m-d H:i:s.v'),
-                                'expiration_date' => $wardStock->expiration_date == null ? null : Carbon::parse($wardStock->expiration_date)->format('Y-m-d H:i:s.v'),
-                                'quantity' => $qty,
-                                'price_per_piece' => (float)$item['price'] == null ? null : (float)$item['price'],
-                                'price_total' => (float)$qty * (float)$item['price'],
-                                'pcchrgdte' => $patientChargeDate->pcchrgdte,
-                                'tscode' => $request->tscode,
-                                'entry_at' => $authWardcode->wardcode,
-                                'entry_by' => $entryby,
-                            ]);
+                                // getting the new qty of current editing ward stock
+                                $newStockQty = $wardStock->quantity - $remaining_qty_to_charge;
+                                // setting the new value of remaining_qty_to_charge
+                                $remaining_qty_to_charge = $remaining_qty_to_charge - $wardStock->quantity;
 
-                            $remaining_qty_to_charge = $remaining_qty_to_charge - $wardStock->quantity;
+                                $wardStock::where('id', $wardStock->id)
+                                    ->update([
+                                        'quantity' => $newStockQty,
+                                    ]);
+                            } else {
+                                // calculate the value of quantity to insert based on the specific
+                                // stock that will be given
+                                $qty = ($wardStock->quantity - $remaining_qty_to_charge) + $remaining_qty_to_charge;
 
-                            $wardStock::where('id', $wardStock->id)
-                                ->update([
-                                    'quantity' => 0
+                                PatientChargeLogs::create([
+                                    'enccode' => $enccode,
+                                    'acctno' => $acctno->paacctno,
+                                    'ward_stocks_id' => $wardStock->id,
+                                    'itemcode' => $wardStock->cl2comb,
+                                    'from' => $wardStock->from,
+                                    'manufactured_date' => $wardStock->manufactured_date == null ? null : Carbon::parse($wardStock->manufactured_date)->format('Y-m-d H:i:s.v'),
+                                    'delivery_date' => $wardStock->delivery_date == null ? null : Carbon::parse($wardStock->delivered_date)->format('Y-m-d H:i:s.v'),
+                                    'expiration_date' => $wardStock->expiration_date == null ? null : Carbon::parse($wardStock->expiration_date)->format('Y-m-d H:i:s.v'),
+                                    'quantity' => $qty,
+                                    'price_per_piece' => (float)$item['price'] == null ? null : (float)$item['price'],
+                                    'price_total' => (float)$qty * (float)$item['price'],
+                                    'pcchrgdte' => $patientChargeDate->pcchrgdte,
+                                    'tscode' => $request->tscode,
+                                    'entry_at' => $authWardcode->wardcode,
+                                    'entry_by' => $entryby,
                                 ]);
+
+                                $remaining_qty_to_charge = $remaining_qty_to_charge - $wardStock->quantity;
+
+                                $wardStock::where('id', $wardStock->id)
+                                    ->update([
+                                        'quantity' => 0
+                                    ]);
+                            }
+                        }
+                    } else {
+                        $patientChargeDate = PatientCharge::create([
+                            'enccode' => $enccode,
+                            'hpercode' => $hospitalNumber,
+                            'upicode' => null,
+                            'pcchrgcod' => $this->generateUniqueChargeCode(), // charge slip no.
+                            'pcchrgdte' => Carbon::now(),
+                            'chargcode' => $item['typeOfCharge'], // type of charge (chrgcode from hcharge)
+                            'uomcode' => $item['unit'], // unit
+                            'pchrgqty' =>  $item['qtyToCharge'],
+                            'pchrgup' => $item['price'],
+                            'pcchrgamt' => $item['total'],
+                            'pcstat' => 'A', // always A
+                            'pclock' => 'N', // always N
+                            'updsw' => 'N', // always N
+                            'confdl' => 'N', // always N
+                            'srcchrg' => $srcchrg,
+                            'pcdisch' => 'Y',
+                            'acctno' => $acctno->paacctno, // SELECT * FROM hpatacct --pacctno
+                            'itemcode' => $item['itemCode'], // cl2comb or hmisc hmcode
+                            'entryby' => $entryby,
+                            'orinclst' => null, // null
+                            'compense' => null, // always null
+                            'proccode' => null, // always null
+                            'discount' => null, // always null
+                            'disamt' => null, // always null
+                            'discbal' => null, // always null
+                            'phicamt' => null, // always null
+                            'rvscode' => null, // always null
+                            'licno' => null, // always null
+                            'hpatkey' => null, // always null
+                            'time_frequency' => null, // always null
+                            'unit_frequency' => null, // always null
+                            'qtyintake' => null, // always null
+                            'uomintake' => null, // always null
+                        ]);
+
+                        $remaining_qty_to_charge = $item['qtyToCharge']; // 15
+                        $newStockQty = 0;
+
+                        while ($remaining_qty_to_charge > 0) {
+                            // remove stock based on ward stock item id
+                            $wardStock = WardsStocks::where('cl2comb', $item['itemCode'])
+                                ->where('quantity', '!=', 0)
+                                ->where('location', $authWardcode->wardcode)
+                                ->where('id', $item['id'])
+                                ->first(); // 10
+
+                            // execute if row selected qty is enough
+                            if ($wardStock->quantity >= $remaining_qty_to_charge) {
+                                PatientChargeLogs::create([
+                                    'enccode' => $enccode,
+                                    'acctno' => $acctno->paacctno,
+                                    'ward_stocks_id' => $wardStock->id,
+                                    'itemcode' => $wardStock->cl2comb,
+                                    'from' => $wardStock->from,
+                                    'manufactured_date' => $wardStock->manufactured_date == null ? null : Carbon::parse($wardStock->manufactured_date)->format('Y-m-d H:i:s.v'),
+                                    'delivery_date' => $wardStock->delivery_date == null ? null : Carbon::parse($wardStock->delivered_date)->format('Y-m-d H:i:s.v'),
+                                    'expiration_date' => $wardStock->expiration_date == null ? null : Carbon::parse($wardStock->expiration_date)->format('Y-m-d H:i:s.v'),
+                                    'quantity' => $remaining_qty_to_charge,
+                                    'price_per_piece' => (float)$item['price'] == null ? null : (float)$item['price'],
+                                    'price_total' => (float)$remaining_qty_to_charge * (float)$item['price'],
+                                    'pcchrgdte' => $patientChargeDate->pcchrgdte,
+                                    'tscode' => $request->tscode,
+                                    'entry_at' => $authWardcode->wardcode,
+                                    'entry_by' => $entryby,
+                                ]);
+
+                                // getting the new qty of current editing ward stock
+                                $newStockQty = $wardStock->quantity - $remaining_qty_to_charge;
+                                // setting the new value of remaining_qty_to_charge
+                                $remaining_qty_to_charge = $remaining_qty_to_charge - $wardStock->quantity;
+
+                                $wardStock::where('id', $wardStock->id)
+                                    ->update([
+                                        'quantity' => $newStockQty,
+                                    ]);
+                            } else {
+                                // calculate the value of quantity to insert based on the specific
+                                // stock that will be given
+                                $qty = ($wardStock->quantity - $remaining_qty_to_charge) + $remaining_qty_to_charge;
+
+                                PatientChargeLogs::create([
+                                    'enccode' => $enccode,
+                                    'acctno' => $acctno->paacctno,
+                                    'ward_stocks_id' => $wardStock->id,
+                                    'itemcode' => $wardStock->cl2comb,
+                                    'from' => $wardStock->from,
+                                    'manufactured_date' => $wardStock->manufactured_date == null ? null : Carbon::parse($wardStock->manufactured_date)->format('Y-m-d H:i:s.v'),
+                                    'delivery_date' => $wardStock->delivery_date == null ? null : Carbon::parse($wardStock->delivered_date)->format('Y-m-d H:i:s.v'),
+                                    'expiration_date' => $wardStock->expiration_date == null ? null : Carbon::parse($wardStock->expiration_date)->format('Y-m-d H:i:s.v'),
+                                    'quantity' => $qty,
+                                    'price_per_piece' => (float)$item['price'] == null ? null : (float)$item['price'],
+                                    'price_total' => (float)$qty * (float)$item['price'],
+                                    'pcchrgdte' => $patientChargeDate->pcchrgdte,
+                                    'tscode' => $request->tscode,
+                                    'entry_at' => $authWardcode->wardcode,
+                                    'entry_by' => $entryby,
+                                ]);
+
+                                $remaining_qty_to_charge = $remaining_qty_to_charge - $wardStock->quantity;
+
+                                $wardStock::where('id', $wardStock->id)
+                                    ->update([
+                                        'quantity' => 0
+                                    ]);
+                            }
                         }
                     }
                 }
