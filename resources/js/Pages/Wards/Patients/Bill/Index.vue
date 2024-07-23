@@ -243,25 +243,25 @@
                 <Column
                   field="itemDesc"
                   header="ITEM/SERVICE"
-                  style="width: 30%"
+                  style="width: 50%"
                   sortable
                 ></Column>
-                <Column
+                <!-- <Column
                   field="currentStock"
                   header="CURRENT STOCK"
                   style="width: 17.5%"
                   sortable
-                ></Column>
+                ></Column> -->
                 <Column
                   field="qtyToCharge"
                   header="QTY TO CHARGE"
-                  style="width: 17.5%"
+                  style="width: 15%"
                   sortable
                 ></Column>
                 <Column
                   field="price"
                   header="PRICE PER PC."
-                  style="width: 17.5%"
+                  style="width: 15%"
                   sortable
                 >
                   <template #body="{ data }"> ₱ {{ data.price }} </template>
@@ -269,7 +269,7 @@
                 <Column
                   filed="total"
                   header="TOTAL"
-                  style="width: 17.5%"
+                  style="width: 10%"
                   sortable
                 >
                   <template #body="{ data }"> ₱ {{ data.total }} </template>
