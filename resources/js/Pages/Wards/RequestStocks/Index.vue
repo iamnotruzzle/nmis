@@ -1458,9 +1458,9 @@ export default {
     },
     'formMedicalGases.cl2comb': function (val) {
       this.selectedItemsUomDesc = null;
-      //   console.log(this.itemsList);
+      //   console.log(this.medicalGasList);
 
-      this.itemsList.forEach((e) => {
+      this.medicalGasList.forEach((e) => {
         if (e.cl2comb == val) {
           if (e.uomdesc != null) {
             // console.log(e.uomdesc);
