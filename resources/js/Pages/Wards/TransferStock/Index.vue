@@ -484,7 +484,7 @@ export default {
   props: {
     authWardcode: Object,
     wardStocks: Object,
-    wardStocksConsignments: Object,
+    wardStocksMedicalGasess: Object,
     transferredStock: Object,
     employees: Object,
   },
@@ -639,7 +639,7 @@ export default {
         });
       });
 
-      this.wardStocksConsignments.forEach((e) => {
+      this.wardStocksMedicalGasess.forEach((e) => {
         // let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
 
         this.wardStocksList.push({

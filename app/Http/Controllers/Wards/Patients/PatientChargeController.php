@@ -84,7 +84,7 @@ class PatientChargeController extends Controller
             ORDER BY csrw_wards_stocks.expiration_date ASC;"
         );
 
-        // $stocksConvertedAndConsignment = DB::select(
+        // $stocksConvertedAndMedicalGases = DB::select(
         //     "SELECT
         //         csrw_wards_stocks.id,
         //         item.cl2comb,
@@ -100,7 +100,7 @@ class PatientChargeController extends Controller
         //         AND csrw_wards_stocks.expiration_date > GETDATE()
         //         AND (
         //             (csrw_wards_stocks.[from] = 'CSR' AND csrw_wards_stocks.is_converted = 'y')
-        //             OR csrw_wards_stocks.[from] = 'CONSIGNMENT'
+        //             OR csrw_wards_stocks.[from] = 'MEDICAL GASES'
         //         );"
         // );
 
@@ -124,7 +124,7 @@ class PatientChargeController extends Controller
         }
         // dd($medicalSupplies);
 
-        // foreach ($stocksConvertedAndConsignment as $s) {
+        // foreach ($stocksConvertedAndMedicalGases as $s) {
         //     if (!in_array($s->id, $seenIds)) {
         //         $medicalSupplies[] = (object) [
         //             'id' => $s->id,

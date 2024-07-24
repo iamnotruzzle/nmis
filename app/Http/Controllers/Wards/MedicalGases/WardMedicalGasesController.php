@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Wards\Consignment;
+namespace App\Http\Controllers\Wards\MedicalGases;
 
 use App\Http\Controllers\Controller;
 use App\Models\ItemPrices;
@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
-class WardConsignmentController extends Controller
+class WardMedicalGasesController extends Controller
 {
     public function index()
     {
@@ -61,7 +61,7 @@ class WardConsignmentController extends Controller
             'entry_by' => $entry_by,
         ]);
 
-        $consignment = WardsStocks::create([
+        $medicalGases = WardsStocks::create([
             'request_stocks_id' => null,
             'request_stocks_detail_id' => null,
             'ris_no' => $tempRisNo,
@@ -71,12 +71,12 @@ class WardConsignmentController extends Controller
             'uomcode' => $request->uomcode,
             'chrgcode' => $request->fund_source,
             'quantity' => $request->quantity,
-            'from' => 'CONSIGNMENT',
+            'from' => 'MEDICAL GASES',
             'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
             'delivered_date' =>  Carbon::parse($request->delivered_date)->format('Y-m-d H:i:s.v'),
             'expiration_date' =>  Carbon::parse($request->expiration_date)->format('Y-m-d H:i:s.v'),
         ]);
-        // dd($consignment);
+        // dd($medicalGases);
 
         $wardStockLogs = WardsStocksLogs::create([
             'request_stocks_id' => null,

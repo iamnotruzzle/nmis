@@ -443,22 +443,22 @@
           </template>
         </Dialog>
 
-        <!-- Consignment -->
+        <!-- MedicalGases -->
         <Dialog
-          v-model:visible="consignmentDialog"
+          v-model:visible="medicalGasesDialog"
           :modal="true"
           class="p-fluid w-4"
           @hide="whenDialogIsHidden"
         >
           <template #header>
-            <div class="text-primary text-xl font-bold">CONSIGNMENT</div>
+            <div class="text-primary text-xl font-bold">MEDICAL GASES</div>
           </template>
           <div class="field">
             <label for="fundSource">Fund source</label>
             <Dropdown
               id="fundSource"
               required="true"
-              v-model="formConsignment.fund_source"
+              v-model="formMedicalGases.fund_source"
               :options="fundSourceList"
               filter
               showClear
@@ -466,20 +466,20 @@
               optionLabel="chrgdesc"
               optionValue="chrgcode"
               class="w-full"
-              :class="{ 'p-invalid': formConsignment.fund_source == '' }"
+              :class="{ 'p-invalid': formMedicalGases.fund_source == '' }"
             />
             <small
               class="text-error"
-              v-if="formConsignment.errors.fund_source"
+              v-if="formMedicalGases.errors.fund_source"
             >
-              {{ formConsignment.errors.fund_source }}
+              {{ formMedicalGases.errors.fund_source }}
             </small>
           </div>
           <div class="field">
             <label>Item</label>
             <Dropdown
               required="true"
-              v-model="formConsignment.cl2comb"
+              v-model="formMedicalGases.cl2comb"
               :options="itemsList"
               :virtualScrollerOptions="{ itemSize: 38 }"
               filter
@@ -489,9 +489,9 @@
             />
             <small
               class="text-error"
-              v-if="formConsignment.errors.cl2comb"
+              v-if="formMedicalGases.errors.cl2comb"
             >
-              {{ formConsignment.errors.cl2comb }}
+              {{ formMedicalGases.errors.cl2comb }}
             </small>
           </div>
           <div class="field">
@@ -506,17 +506,17 @@
             <label>Quantity</label>
             <InputText
               id="quantity"
-              v-model.trim="formConsignment.quantity"
+              v-model.trim="formMedicalGases.quantity"
               required="true"
               autofocus
-              :class="{ 'p-invalid': formConsignment.quantity == '' || formConsignment.quantity == null }"
+              :class="{ 'p-invalid': formMedicalGases.quantity == '' || formMedicalGases.quantity == null }"
               inputId="integeronly"
             />
             <small
               class="text-error"
-              v-if="formConsignment.errors.quantity"
+              v-if="formMedicalGases.errors.quantity"
             >
-              {{ formConsignment.errors.quantity }}
+              {{ formMedicalGases.errors.quantity }}
             </small>
           </div>
           <div class="field">
@@ -526,7 +526,7 @@
               </div>
               <InputText
                 class="w-full"
-                v-model.trim="formConsignment.acquisition_price"
+                v-model.trim="formMedicalGases.acquisition_price"
                 :maxFractionDigits="2"
               />
             </div>
@@ -538,7 +538,7 @@
               </div>
               <InputText
                 class="w-full"
-                v-model.trim="formConsignment.hospital_price"
+                v-model.trim="formMedicalGases.hospital_price"
                 :maxFractionDigits="2"
               />
             </div>
@@ -550,7 +550,7 @@
               </div>
               <InputText
                 class="w-full"
-                v-model.trim="formConsignment.price_per_unit"
+                v-model.trim="formMedicalGases.price_per_unit"
                 :maxFractionDigits="2"
               />
             </div>
@@ -558,7 +558,7 @@
           <div class="field">
             <label for="manufactured_date">Manufactured date (optional)</label>
             <Calendar
-              v-model="formConsignment.manufactured_date"
+              v-model="formMedicalGases.manufactured_date"
               dateFormat="mm-dd-yy"
               showIcon
               showButtonBar
@@ -569,7 +569,7 @@
           <div class="field">
             <label for="delivered_date">Delivered date (optional)</label>
             <Calendar
-              v-model="formConsignment.delivered_date"
+              v-model="formMedicalGases.delivered_date"
               dateFormat="mm-dd-yy"
               showIcon
               showButtonBar
@@ -578,15 +578,15 @@
             />
             <!-- <small
               class="text-error"
-              v-if="formConsignment.errors.delivered_date"
+              v-if="formMedicalGases.errors.delivered_date"
             >
-              {{ formConsignment.errors.delivered_date }}
+              {{ formMedicalGases.errors.delivered_date }}
             </small> -->
           </div>
           <div class="field">
             <label for="expiration_date">Expiration date</label>
             <Calendar
-              v-model="formConsignment.expiration_date"
+              v-model="formMedicalGases.expiration_date"
               dateFormat="mm-dd-yy"
               showIcon
               showButtonBar
@@ -595,9 +595,9 @@
             />
             <small
               class="text-error"
-              v-if="formConsignment.errors.expiration_date"
+              v-if="formMedicalGases.errors.expiration_date"
             >
-              {{ formConsignment.errors.expiration_date }}
+              {{ formMedicalGases.errors.expiration_date }}
             </small>
           </div>
 
@@ -615,16 +615,16 @@
               text
               type="submit"
               :disabled="
-                formConsignment.processing ||
-                formConsignment.fund_source == null ||
-                formConsignment.cl2comb == null ||
-                formConsignment.quantity == null ||
-                formConsignment.acquisition_price == null ||
-                formConsignment.hospital_price == null ||
-                formConsignment.price_per_unit == null ||
-                formConsignment.expiration_date == null
+                formMedicalGases.processing ||
+                formMedicalGases.fund_source == null ||
+                formMedicalGases.cl2comb == null ||
+                formMedicalGases.quantity == null ||
+                formMedicalGases.acquisition_price == null ||
+                formMedicalGases.hospital_price == null ||
+                formMedicalGases.price_per_unit == null ||
+                formMedicalGases.expiration_date == null
               "
-              @click="submitConsignment"
+              @click="submitMedicalGases"
             />
           </template>
         </Dialog>
@@ -756,10 +756,10 @@
                   </div>
                 </div>
                 <Button
-                  label="Consignment"
+                  label="MedicalGases"
                   icon="pi pi-plus"
                   iconPos="right"
-                  @click="openConsignmentDialog"
+                  @click="openMedicalGasesDialog"
                 />
               </div>
             </div>
@@ -920,7 +920,7 @@ export default {
       requestStockId: null,
       isUpdate: false,
       createRequestStocksDialog: false,
-      consignmentDialog: false,
+      medicalGasesDialog: false,
       editWardStocksDialog: false,
       editStatusDialog: false,
       cancelItemDialog: false,
@@ -964,7 +964,7 @@ export default {
         request_stock_id: null,
         status: null,
       }),
-      formConsignment: this.$inertia.form({
+      formMedicalGases: this.$inertia.form({
         authLocation: null,
         fund_source: null,
         cl2comb: null,
@@ -1183,10 +1183,10 @@ export default {
       this.requestStockId = null;
       this.createRequestStocksDialog = true;
     },
-    openConsignmentDialog() {
-      this.formConsignment.clearErrors();
-      this.formConsignment.reset();
-      this.consignmentDialog = true;
+    openMedicalGasesDialog() {
+      this.formMedicalGases.clearErrors();
+      this.formMedicalGases.reset();
+      this.medicalGasesDialog = true;
     },
     // when dialog is hidden, do this function
     whenDialogIsHidden() {
@@ -1315,28 +1315,28 @@ export default {
         });
       }
     },
-    submitConsignment() {
-      if (this.formConsignment.processing) {
+    submitMedicalGases() {
+      if (this.formMedicalGases.processing) {
         return false;
       }
 
-      this.formConsignment.authLocation = this.$page.props.authWardcode.wardcode;
+      this.formMedicalGases.authLocation = this.$page.props.authWardcode.wardcode;
       if (
-        this.formConsignment.fund_source != null ||
-        this.formConsignment.fund_source != '' ||
-        this.formConsignment.cl2comb != null ||
-        this.formConsignment.cl2comb != '' ||
-        this.formConsignment.quantity != null ||
-        this.formConsignment.quantity != '' ||
-        this.formConsignment.quantity != 0 ||
-        this.formConsignment.expiration_date != null ||
-        this.formConsignment.expiration_date != ''
+        this.formMedicalGases.fund_source != null ||
+        this.formMedicalGases.fund_source != '' ||
+        this.formMedicalGases.cl2comb != null ||
+        this.formMedicalGases.cl2comb != '' ||
+        this.formMedicalGases.quantity != null ||
+        this.formMedicalGases.quantity != '' ||
+        this.formMedicalGases.quantity != 0 ||
+        this.formMedicalGases.expiration_date != null ||
+        this.formMedicalGases.expiration_date != ''
       ) {
         console.log('success');
-        this.formConsignment.post(route('consignment.store'), {
+        this.formMedicalGases.post(route('medicalGases.store'), {
           preserveScroll: true,
           onSuccess: () => {
-            this.formConsignment.reset();
+            this.formMedicalGases.reset();
             this.cancel();
             this.updateData();
             this.createdMsg();
@@ -1368,7 +1368,7 @@ export default {
       this.isUpdate = false;
       this.createRequestStocksDialog = false;
       this.editWardStocksDialog = false;
-      this.consignmentDialog = false;
+      this.medicalGasesDialog = false;
       this.targetItemDesc = null;
       this.oldQuantity = 0;
       this.form.reset();
@@ -1457,7 +1457,7 @@ export default {
       }
       this.updateData();
     },
-    'formConsignment.cl2comb': function (val) {
+    'formMedicalGases.cl2comb': function (val) {
       this.selectedItemsUomDesc = null;
       //   console.log(this.itemsList);
 
@@ -1466,7 +1466,7 @@ export default {
           if (e.uomdesc != null) {
             // console.log(e.uomdesc);
             this.selectedItemsUomDesc = e.uomdesc;
-            this.formConsignment.uomcode = e.uomcode;
+            this.formMedicalGases.uomcode = e.uomcode;
           } else {
             this.selectedItemsUomDesc = null;
           }

@@ -36,7 +36,7 @@ class TransferStockController extends Controller
             ->get();
         // dd($wardStocks);
 
-        $wardStocksConsignments = WardsStocks::with(['item_details:cl2comb,cl2desc'])
+        $wardStocksMedicalGasess = WardsStocks::with(['item_details:cl2comb,cl2desc'])
             ->where(
                 'quantity',
                 '!=',
@@ -45,7 +45,7 @@ class TransferStockController extends Controller
             ->where('location', '=', $authWardcode->wardcode)
             ->where('request_stocks_id', null)
             ->get();
-        // dd($wardStocksConsignments);
+        // dd($wardStocksMedicalGasess);
 
         $transferredStock = WardTransferStock::with(
             'ward_stock',
@@ -64,7 +64,7 @@ class TransferStockController extends Controller
         return Inertia::render('Wards/TransferStock/Index', [
             'authWardcode' => $authWardcode,
             'wardStocks' => $wardStocks,
-            'wardStocksConsignments' => $wardStocksConsignments,
+            'wardStocksMedicalGasess' => $wardStocksMedicalGasess,
             'transferredStock' => $transferredStock,
             'employees' => $employees,
         ]);
