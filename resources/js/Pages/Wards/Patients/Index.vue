@@ -246,13 +246,14 @@
           style="width: 3%"
         >
           <template #body="{ data }">
+            <!-- {{ data }} -->
             <div class="flex justify-content-center">
               <Button
                 icon="pi pi-money-bill"
                 rounded
                 text
                 severity="info"
-                @click="goToPatientCharge(data.enccode)"
+                @click="goToPatientCharge(data)"
               />
             </div>
           </template>
@@ -463,7 +464,10 @@ export default {
       });
     },
     goToPatientCharge(e) {
-      this.params.enccode = e;
+      this.params.enccode = e.enccode;
+      this.params.disch = e.is_for_discharge;
+      //   console.log(e);
+      // this.params.is_for_discharge =
       this.$inertia.get('patientcharge', this.params, {
         preserveState: true,
         preserveScroll: true,

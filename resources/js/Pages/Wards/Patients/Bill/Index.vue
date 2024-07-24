@@ -45,6 +45,7 @@
                     </div>
                   </div>
                   <Button
+                    v-if="is_for_discharge != 'true'"
                     label="Bill patient"
                     icon="pi pi-money-bill"
                     iconPos="right"
@@ -503,6 +504,7 @@ export default {
     pat_name: Array,
     pat_tscode: Object,
     pat_enccode: String,
+    is_for_discharge: String,
     bills: Object,
     medicalSupplies: Object,
     misc: Object,

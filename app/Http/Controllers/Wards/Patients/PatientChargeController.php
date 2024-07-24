@@ -29,6 +29,7 @@ class PatientChargeController extends Controller
     public function index(Request $request)
     {
         $pat_enccode = $request->enccode;
+        $is_for_discharge = $request->disch;
         $pat_tscode = AdmissionLog::where('enccode', $pat_enccode)->get('tscode')->first();
         $medicalSupplies = array();
 
@@ -183,6 +184,7 @@ class PatientChargeController extends Controller
             'bills' => $bills,
             'medicalSupplies' => $medicalSupplies,
             'misc' => $misc,
+            'is_for_discharge' => $is_for_discharge,
         ]);
     }
 
