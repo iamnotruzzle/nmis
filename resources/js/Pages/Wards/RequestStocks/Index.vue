@@ -480,7 +480,7 @@
             <Dropdown
               required="true"
               v-model="formMedicalGases.cl2comb"
-              :options="itemsList"
+              :options="medicalGasList"
               :virtualScrollerOptions="{ itemSize: 38 }"
               filter
               optionValue="cl2comb"
@@ -891,6 +891,7 @@ export default {
   props: {
     authWardcode: Object,
     items: Object,
+    medicalGas: Object,
     requestedStocks: Object,
     currentWardStocks: Object,
     currentWardStocks2: Object,
@@ -921,6 +922,7 @@ export default {
       to: null,
       stockBalanceDeclared: false,
       itemsList: [],
+      medicalGasList: [],
       requestStockList: [],
       currentWardStocksList: [],
       // stock list details
@@ -1050,6 +1052,16 @@ export default {
       this.itemsList = []; // reset
       this.items.forEach((e) => {
         this.itemsList.push({
+          cl2comb: e.cl2comb,
+          cl2desc: e.cl2desc,
+          uomcode: e.uomcode,
+          uomdesc: e.uomdesc,
+        });
+      });
+
+      this.medicalGasList = []; // reset
+      this.medicalGas.forEach((e) => {
+        this.medicalGasList.push({
           cl2comb: e.cl2comb,
           cl2desc: e.cl2desc,
           uomcode: e.uomcode,

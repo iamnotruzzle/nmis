@@ -45,14 +45,42 @@ class RequestStocksController extends Controller
 
         // available items only show if quantity_after == total_issued_qty
         $items = DB::select(
-            "SELECT item.cl2comb, item.cl2desc, item.uomcode, uom.uomdesc
-                FROM hclass2 as item
-                JOIN huom as uom ON uom.uomcode = item.uomcode
-                WHERE item.catID = 1
+            "SELECT
+                item.cl2comb,
+                item.cl2desc,
+                item.uomcode,
+                uom.uomdesc
+            FROM
+                hclass2 AS item
+            FULL OUTER JOIN
+                huom AS uom
+                ON uom.uomcode = item.uomcode
+            WHERE
+                (item.catID = 1
                 AND item.uomcode != 'box'
-                ORDER BY item.cl2desc ASC;"
+                AND (item.itemcode NOT LIKE 'MSMG-%' OR item.itemcode IS NULL))
+            ORDER BY
+                item.cl2desc ASC;"
         );
-        // dd($items);
+
+        $medicalGas = DB::select(
+            "SELECT
+                item.cl2comb,
+                item.cl2desc,
+                item.uomcode,
+                uom.uomdesc
+            FROM
+                hclass2 AS item
+            FULL OUTER JOIN
+                huom AS uom
+                ON uom.uomcode = item.uomcode
+            WHERE
+                item.catID = 1
+                AND item.uomcode != 'box'
+                AND item.itemcode LIKE 'MSMG-%'
+            ORDER BY
+                item.cl2desc ASC;"
+        );
 
         $requestedStocks = RequestStocks::with(['requested_at_details', 'requested_by_details', 'approved_by_details', 'request_stocks_details.item_details'])
             ->where('location', '=', $authWardcode->wardcode)
@@ -105,6 +133,7 @@ class RequestStocksController extends Controller
 
         return Inertia::render('Wards/RequestStocks/Index', [
             'items' => $items,
+            'medicalGas' => $medicalGas,
             'requestedStocks' => $requestedStocks,
             'authWardcode' => $authWardcode,
             'currentWardStocks' => $currentWardStocks,
