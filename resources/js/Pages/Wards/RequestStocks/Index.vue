@@ -520,6 +520,23 @@
             </small>
           </div>
           <div class="field">
+            <label>Average</label>
+            <InputText
+              id="average"
+              v-model.trim="formMedicalGases.average"
+              required="true"
+              autofocus
+              :class="{ 'p-invalid': formMedicalGases.average == '' || formMedicalGases.average == null }"
+              inputId="integeronly"
+            />
+            <small
+              class="text-error"
+              v-if="formMedicalGases.errors.average"
+            >
+              {{ formMedicalGases.errors.average }}
+            </small>
+          </div>
+          <div class="field">
             <div>
               <div class="flex align-content-center">
                 <label>Acquisition price</label>
@@ -556,18 +573,7 @@
             </div>
           </div>
           <div class="field">
-            <label for="manufactured_date">Manufactured date (optional)</label>
-            <Calendar
-              v-model="formMedicalGases.manufactured_date"
-              dateFormat="mm-dd-yy"
-              showIcon
-              showButtonBar
-              :manualInput="false"
-              :hideOnDateTimeSelect="true"
-            />
-          </div>
-          <div class="field">
-            <label for="delivered_date">Delivered date (optional)</label>
+            <label for="delivered_date">Delivered date</label>
             <Calendar
               v-model="formMedicalGases.delivered_date"
               dateFormat="mm-dd-yy"
@@ -576,28 +582,11 @@
               :manualInput="false"
               :hideOnDateTimeSelect="true"
             />
-            <!-- <small
+            <small
               class="text-error"
               v-if="formMedicalGases.errors.delivered_date"
             >
               {{ formMedicalGases.errors.delivered_date }}
-            </small> -->
-          </div>
-          <div class="field">
-            <label for="expiration_date">Expiration date</label>
-            <Calendar
-              v-model="formMedicalGases.expiration_date"
-              dateFormat="mm-dd-yy"
-              showIcon
-              showButtonBar
-              :manualInput="false"
-              :hideOnDateTimeSelect="true"
-            />
-            <small
-              class="text-error"
-              v-if="formMedicalGases.errors.expiration_date"
-            >
-              {{ formMedicalGases.errors.expiration_date }}
             </small>
           </div>
 
@@ -621,8 +610,7 @@
                 formMedicalGases.quantity == null ||
                 formMedicalGases.acquisition_price == null ||
                 formMedicalGases.hospital_price == null ||
-                formMedicalGases.price_per_unit == null ||
-                formMedicalGases.expiration_date == null
+                formMedicalGases.price_per_unit == null
               "
               @click="submitMedicalGases"
             />
@@ -973,9 +961,8 @@ export default {
         acquisition_price: null,
         hospital_price: null,
         price_per_unit: null,
-        manufactured_date: null,
+        average: null,
         delivered_date: null,
-        expiration_date: null,
       }),
       formWardStocks: this.$inertia.form({
         ward_stock_id: null,
@@ -1329,8 +1316,8 @@ export default {
         this.formMedicalGases.quantity != null ||
         this.formMedicalGases.quantity != '' ||
         this.formMedicalGases.quantity != 0 ||
-        this.formMedicalGases.expiration_date != null ||
-        this.formMedicalGases.expiration_date != ''
+        this.formMedicalGases.delivered_date != null ||
+        this.formMedicalGases.delivered_date != ''
       ) {
         console.log('success');
         this.formMedicalGases.post(route('medicalGases.store'), {
