@@ -28,6 +28,9 @@ class WardsStocks extends Model
         'manufactured_date',
         'delivered_date',
         'expiration_date',
+        'is_consumable',
+        'average',
+        'total_consumed',
     ];
 
     public function request_stocks()

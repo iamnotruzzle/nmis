@@ -725,7 +725,6 @@ class ComposerStaticInita35f14ec21fb126801fb4364978bffb6
         'App\\Http\\Controllers\\Users\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/Users/UserController.php',
         'App\\Http\\Controllers\\Users\\User\\ProfileController' => __DIR__ . '/../..' . '/app/Http/Controllers/Users/User/ProfileController.php',
         'App\\Http\\Controllers\\Wards\\Consignment\\WardConsignmentController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/Consignment/WardConsignmentController.php',
-        'App\\Http\\Controllers\\Wards\\ConvertItem\\ConvertItemController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/ConvertItem/ConvertItemController.php',
         'App\\Http\\Controllers\\Wards\\Dashboard\\DashboardController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/Dashboard/DashboardController.php',
         'App\\Http\\Controllers\\Wards\\Patients\\PatientChargeController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/Patients/PatientChargeController.php',
         'App\\Http\\Controllers\\Wards\\Patients\\WardPatientsController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/Patients/WardPatientsController.php',

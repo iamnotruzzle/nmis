@@ -27,7 +27,10 @@ class WardsStocksLogs extends Model
         'expiration_date',
         'action',
         'remarks',
-        'entry_by'
+        'entry_by',
+        'is_consumable',
+        'average',
+        'total_consumed',
     ];
 
     public function unit_of_measurement()
