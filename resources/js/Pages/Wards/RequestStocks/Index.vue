@@ -756,7 +756,7 @@
                   </div>
                 </div>
                 <Button
-                  label="MedicalGases"
+                  label="MEDICAL GASES"
                   icon="pi pi-plus"
                   iconPos="right"
                   @click="openMedicalGasesDialog"
