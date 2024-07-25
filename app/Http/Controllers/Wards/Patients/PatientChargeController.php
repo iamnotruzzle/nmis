@@ -53,6 +53,7 @@ class PatientChargeController extends Controller
         $stocksFromCsr = DB::select(
             "SELECT
                 csrw_wards_stocks.id,
+                csrw_wards_stocks.is_consumable,
                 item.cl2comb,
                 item.cl2desc,
                 item.uomcode,
@@ -77,6 +78,7 @@ class PatientChargeController extends Controller
             if (!in_array($s->id, $seenIds)) {
                 $medicalSupplies[] = (object) [
                     'id' => $s->id,
+                    'is_consumable' => $s->is_consumable,
                     'cl2comb' => $s->cl2comb,
                     'cl2desc' => $s->cl2desc,
                     'uomcode' => $s->uomcode,

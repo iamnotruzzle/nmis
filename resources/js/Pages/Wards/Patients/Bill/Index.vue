@@ -446,11 +446,12 @@
             >
               <template #body="{ data }"> ₱ {{ data.price }} </template>
             </Column>
-            <Column
-              field="expiration_date"
-              header="EXP. DATE"
-            >
-              <template #body="{ data }">{{ tzone(data.expiration_date) }} </template>
+            <Column header="EXP. DATE">
+              <template #body="{ data }">
+                <!-- {{ data }} -->
+                <span v-if="data.is_consumable != null || data.is_consumable == 'y'">NA</span>
+                <span v-else>{{ tzone(data.expiration_date) }}</span>
+              </template>
             </Column>
           </DataTable>
         </div>
@@ -669,6 +670,7 @@ export default {
         // console.log('med', med);
         this.medicalSuppliesList.push({
           id: med.id,
+          is_consumable: med.is_consumable,
           cl2comb: med.cl2comb,
           cl2desc: med.cl2desc,
           uomcode: med.uomcode == null ? null : med.uomcode,
@@ -677,7 +679,7 @@ export default {
           expiration_date: med.expiration_date,
         });
       });
-      console.log(this.medicalSuppliesList);
+      //   console.log(this.medicalSuppliesList);
     },
     storeMiscInContainer() {
       this.misc.forEach((misc) => {
