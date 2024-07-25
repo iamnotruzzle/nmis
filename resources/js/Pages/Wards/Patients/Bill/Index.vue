@@ -708,6 +708,7 @@ export default {
           } else {
             combinedItems[med.cl2desc] = {
               id: med.id, // Use the ID of the first encountered item
+              is_consumable: med.is_consumable,
               typeOfCharge: 'DRUMN',
               itemCode: med.cl2comb,
               itemDesc: med.cl2desc,
@@ -828,52 +829,6 @@ export default {
           this.itemsToBillList.push(...newBillItems);
           this.itemNotSelected = false;
           this.itemNotSelectedMsg = null;
-        }
-      } else {
-        if (this.item == null || this.item == '') {
-          this.itemNotSelected = true;
-          this.itemNotSelectedMsg = 'Item not selected.';
-        } else {
-          // check if request qty is not provided
-          if (this.qtyToCharge == 0 || this.qtyToCharge == null || this.qtyToCharge == '') {
-            this.itemNotSelected = true;
-            this.itemNotSelectedMsg = 'Please provide quantity.';
-          } else {
-            // check if item selected is already on the list
-            if (this.itemsToBillList.some((e) => e.itemCode === this.item['itemCode'])) {
-              this.itemNotSelected = true;
-              this.itemNotSelectedMsg = 'Item is already on the list.';
-            } else {
-              this.itemNotSelected = false;
-              this.itemNotSelectedMsg = null;
-              this.itemsToBillList.push({
-                id: this.item['id'] != null ? this.item['id'] : null,
-                typeOfCharge: this.item['typeOfCharge'],
-                itemCode: this.item['itemCode'],
-                itemDesc: this.item['itemDesc'],
-                unit: this.item['unit'],
-                currentStock: this.item['typeOfCharge'] == 'DRUMN' ? this.item['quantity'] : 'Infinite',
-                qtyToCharge: this.qtyToCharge,
-                price: this.item['price'],
-                total: (this.item['price'] * this.qtyToCharge).toFixed(2),
-              });
-            }
-          }
-        }
-      }
-    },
-    medicalSuppliesQtyValidation1() {
-      console.log(this.item);
-      // check if no selected item
-      if (this.item.typeOfCharge == 'DRUMN' && Number(this.item.quantity) < Number(this.qtyToCharge)) {
-        // check if item selected is already on the list
-        if (this.itemsToBillList.some((e) => e.itemCode === this.item['itemCode'])) {
-          this.itemNotSelected = true;
-          this.itemNotSelectedMsg = 'Item is already on the list.';
-        } else {
-          //   this.stockQtyNotEnough();
-          this.itemNotSelected = true;
-          this.itemNotSelectedMsg = 'Current stock is not enough.';
         }
       } else {
         if (this.item == null || this.item == '') {
