@@ -50,21 +50,6 @@ class PatientChargeController extends Controller
 
         $wardcode = $authWardcode->wardcode;
 
-        // OLD stocksFromCsr
-        // $stocksFromCsr = DB::select(
-        //     "SELECT wards_stocks.id, item.cl2comb, item.cl2desc, item.uomcode, wards_stocks.quantity, price.price_per_unit as price, wards_stocks.expiration_date
-        //         FROM hclass2 item
-        //         JOIN csrw_wards_stocks wards_stocks ON item.cl2comb = wards_stocks.cl2comb
-        //         JOIN csrw_csr_item_conversion converted_item ON wards_stocks.stock_id = converted_item.id
-        //         JOIN csrw_csr_stocks csr_stock ON converted_item.csr_stock_id = csr_stock.id
-        //         JOIN csrw_item_prices price ON item.cl2comb = price.cl2comb
-        //         JOIN csrw_request_stocks request ON request.id = wards_stocks.request_stocks_id
-        //         WHERE item.catID IN (1, 9) AND csr_stock.acquisition_price = price.acquisition_price
-        //             AND wards_stocks.location = '" . $wardcode . "'
-        //             AND request.status = 'RECEIVED'
-        //             AND wards_stocks.expiration_date > GETDATE()"
-        // );
-
         $stocksFromCsr = DB::select(
             "SELECT
                 csrw_wards_stocks.id,
@@ -84,26 +69,6 @@ class PatientChargeController extends Controller
             ORDER BY csrw_wards_stocks.expiration_date ASC;"
         );
 
-        // $stocksConvertedAndMedicalGases = DB::select(
-        //     "SELECT
-        //         csrw_wards_stocks.id,
-        //         item.cl2comb,
-        //         item.cl2desc,
-        //         item.uomcode,
-        //         csrw_wards_stocks.quantity,
-        //         price.price_per_unit as price,
-        //         csrw_wards_stocks.expiration_date
-        //     FROM hclass2 as item
-        //     JOIN csrw_wards_stocks ON csrw_wards_stocks.cl2comb = item.cl2comb
-        //     JOIN csrw_item_prices as price ON item.cl2comb = price.cl2comb
-        //     WHERE csrw_wards_stocks.location = '" . $wardcode . "'
-        //         AND csrw_wards_stocks.expiration_date > GETDATE()
-        //         AND (
-        //             (csrw_wards_stocks.[from] = 'CSR' AND csrw_wards_stocks.is_converted = 'y')
-        //             OR csrw_wards_stocks.[from] = 'MEDICAL GASES'
-        //         );"
-        // );
-
         // set medicalSupplies value and remove duplicate id
         $medicalSupplies = [];
         $seenIds = [];
@@ -122,25 +87,6 @@ class PatientChargeController extends Controller
                 $seenIds[] = $s->id;
             }
         }
-        // dd($medicalSupplies);
-
-        // foreach ($stocksConvertedAndMedicalGases as $s) {
-        //     if (!in_array($s->id, $seenIds)) {
-        //         $medicalSupplies[] = (object) [
-        //             'id' => $s->id,
-        //             'cl2comb' => $s->cl2comb,
-        //             'cl2desc' => $s->cl2desc,
-        //             'uomcode' => $s->uomcode,
-        //             'quantity' => $s->quantity,
-        //             'price' => $s->price,
-        //             'expiration_date' => $s->expiration_date,
-        //         ];
-        //         $seenIds[] = $s->id;
-        //     }
-        // }
-        // end set medicalSupplies value and remove duplicate id
-
-        // dd($medicalSupplies);
 
         // get miscellaneous / miscellaneous
         $misc = Miscellaneous::with('unit')
@@ -227,16 +173,6 @@ class PatientChargeController extends Controller
         $pcchrgcod = $this->generateUniqueChargeCode();
 
         if ($request->isUpdate == false) {
-            // create csrw_code
-            // $csrw_code = CsrwCode::create([
-            //     'charge_desc' => 'a',
-            //     'created_at' => Carbon::now(),
-            // ]);
-            // // get count of csrcode where year is NOW
-            // $currentCodeCount = CsrwCode::whereYear('created_at', Carbon::now()->year)->count();
-            // // CW = Central supply room Ward
-            // $pcchrgcod = 'CW' . Carbon::now()->format('y') . '-' . sprintf('%06d', $currentCodeCount);
-
             // get patient account number
             $acctno = PatientAccount::where('enccode', $enccode)->first(['paacctno']);
 
