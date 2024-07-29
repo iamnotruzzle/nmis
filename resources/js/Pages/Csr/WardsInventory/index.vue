@@ -100,6 +100,7 @@
           field="expiration_date"
           header="EXP. DATE"
           :showFilterMenu="false"
+          sortable
         >
           <template #body="{ data }">
             {{ tzone(data.expiration_date) }}
