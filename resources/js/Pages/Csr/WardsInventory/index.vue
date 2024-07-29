@@ -84,6 +84,7 @@
           sortable
         >
         </Column>
+        <!-- breakpoint -->
         <Column
           field="quantity"
           header="QTY"
