@@ -193,10 +193,12 @@ export default {
     },
     storeLocationsInContainer() {
       this.$page.props.locations.forEach((e) => {
-        this.locationFilter.push({
-          code: e.wardcode,
-          name: e.wardname,
-        });
+        if (e.wardcode != 'CSR' && e.wardcode != 'ADMIN') {
+          this.locationFilter.push({
+            code: e.wardcode,
+            name: e.wardname,
+          });
+        }
       });
 
       console.log(this.locationsList);
