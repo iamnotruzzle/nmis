@@ -90,7 +90,7 @@ export default {
               badge: null,
             },
             {
-              label: 'Wards Inv.',
+              label: 'Wards Inventory',
               icon: 'bi-boxes',
               to: 'wardsinv',
               prefix: 'wardsinv',
