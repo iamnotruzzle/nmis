@@ -86,9 +86,15 @@
         </Column>
         <Column
           field="quantity"
-          header="QUANTITY"
+          header="QTY"
           sortable
+          style="width: 5%"
         >
+          <template #body="{ data }">
+            <p class="text-right">
+              {{ data.quantity }}
+            </p>
+          </template>
         </Column>
         <Column
           field="expiration_date"
