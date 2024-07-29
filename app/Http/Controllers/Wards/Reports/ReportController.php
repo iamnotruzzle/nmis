@@ -136,8 +136,11 @@ class ReportController extends Controller
         }
         // dd($reports);
 
-        return Inertia::render('Wards/Reports/Index', [
-            'reports' => $reports
+        // return Inertia::render('Wards/Reports/Index', [
+        //     'reports' => $reports
+        // ]);
+        return Inertia::render('UnderMaintenancePage', [
+            // 'reports' => $reports
         ]);
     }
 }
