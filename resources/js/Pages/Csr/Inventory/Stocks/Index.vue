@@ -194,6 +194,7 @@
         :style="{ height: '95%' }"
         @hide="clickOutsideDialog"
         :draggable="false"
+        :closeOnEscape="false"
       >
         <template #header>
           <!-- ("CTRL + D " to update an item in the list) -->
@@ -563,6 +564,7 @@
         :style="{ width: '550px' }"
         @hide="clickOutsideDialog"
         :draggable="true"
+        :closeOnEscape="false"
       >
         <template #header>
           <div class="text-primary text-xl font-bold">ADD DELIVERY</div>

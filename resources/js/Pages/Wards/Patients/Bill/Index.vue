@@ -162,6 +162,7 @@
             v-model:visible="createBillDialog"
             :modal="true"
             class="p-fluid w-10"
+            :closeOnEscape="false"
             @hide="whenDialogIsHidden"
           >
             <template #header>

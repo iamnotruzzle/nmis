@@ -251,6 +251,7 @@
           v-model:visible="createRequestStocksDialog"
           :modal="true"
           class="p-fluid w-5"
+          :closeOnEscape="false"
           @hide="whenDialogIsHidden"
         >
           <template #header>
