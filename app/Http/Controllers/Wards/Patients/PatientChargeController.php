@@ -254,6 +254,7 @@ class PatientChargeController extends Controller
                                     'entry_by' => $entryby,
                                 ]);
 
+                                // newStockQty = (($wardStock->quantity * $wardStock->average) - $wardStock->total_consumed) - $remaining_qty_to_charge;
                                 // getting the new qty of current editing ward stock
                                 $newStockQty = $wardStock->quantity - $remaining_qty_to_charge;
                                 // setting the new value of remaining_qty_to_charge
