@@ -428,16 +428,20 @@
               style="width: 20%"
             >
               <template #body="{ data }">
-                <span
+                <p
                   v-if="data.quantity <= 10"
                   class="text-yellow-500 text-bold"
-                  >{{ data.quantity }}
-                </span>
-                <span
+                >
+                  {{ data.quantity }}
+                  <span v-if="data.is_consumable == 'y'"> pounds</span>
+                </p>
+                <p
                   v-else
                   class="text-green-500 text-bold"
-                  >{{ data.quantity }}
-                </span>
+                >
+                  {{ data.quantity }}
+                  <span v-if="data.is_consumable == 'y'"> pounds</span>
+                </p>
               </template>
             </Column>
             <Column
