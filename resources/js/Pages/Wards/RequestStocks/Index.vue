@@ -796,7 +796,10 @@
             sortable
           >
             <template #body="{ data }">
-              <div class="flex flex-column">
+              <div
+                v-if="data.is_consumable != 'y'"
+                class="flex flex-column"
+              >
                 <div>
                   {{ tzone(data.expiration_date) }}
                 </div>
@@ -822,6 +825,7 @@
             <template #body="slotProps">
               <div class="flex justify-content-center">
                 <Button
+                  v-if="slotProps.data.is_consumable != 'y'"
                   rounded
                   text
                   severity="warning"
@@ -1003,6 +1007,9 @@ export default {
     this.storeCurrentWardStocksInContainer();
 
     this.loading = false;
+
+    console.log('currentWardStocks', this.currentWardStocks);
+    console.log('currentWardStocks2', this.currentWardStocks2);
   },
   computed: {
     user() {
@@ -1108,6 +1115,8 @@ export default {
           item: e.item_details.cl2desc,
           unit: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomdesc,
           quantity: e.quantity,
+          average: e.average,
+          is_consumable: e.is_consumable == null ? null : e.is_consumable,
           expiration_date: expiration_date.toString(),
         });
       });
@@ -1122,6 +1131,8 @@ export default {
           item: e.item_details.cl2desc,
           unit: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomdesc,
           quantity: e.quantity,
+          average: e.average,
+          is_consumable: e.is_consumable == null ? null : e.is_consumable,
           expiration_date: expiration_date.toString(),
         });
       });
