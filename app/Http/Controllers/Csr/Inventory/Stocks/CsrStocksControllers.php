@@ -204,7 +204,7 @@ class CsrStocksControllers extends Controller
                         'ris_no' => $r['risno'],
                         'cl2comb' => $r['cl2comb'],
                         'uomcode' => $r['uomcode'],
-                        'supplierID' => $r['supplier']['supplierID'],
+                        'supplierID' => $r['supplier'] != null ? $r['supplier']['supplierID'] : null,
                         'chrgcode' => $r['fsid'],
                         'quantity' => $r['releaseqty'],
                         'manufactured_date' => Carbon::parse($r['manufactured_date'])->format('Y-m-d H:i:s.v'),
@@ -219,7 +219,7 @@ class CsrStocksControllers extends Controller
                         'ris_no' => $r['risno'],
                         'cl2comb' => $r['cl2comb'],
                         'uomcode' => $r['uomcode'],
-                        'supplierID' => $r['supplier']['supplierID'],
+                        'supplierID' => $r['supplier'] != null ? $r['supplier']['supplierID'] : null,
                         'chrgcode' => $r['fsid'],
                         'prev_qty' => 0,
                         'new_qty' => $r['releaseqty'],
@@ -285,7 +285,7 @@ class CsrStocksControllers extends Controller
                         'ris_no' => $r['risno'],
                         'cl2comb' => $r['cl2comb'],
                         'uomcode' => $r['uomcode'],
-                        'supplierID' => $r['supplier']['supplierID'],
+                        'supplierID' => $r['supplier'] != null ? $r['supplier']['supplierID'] : null,
                         'chrgcode' => $r['fsid'],
                         'quantity' => $r['releaseqty'],
                         'manufactured_date' => Carbon::parse($r['manufactured_date'])->format('Y-m-d H:i:s.v'),
@@ -300,7 +300,7 @@ class CsrStocksControllers extends Controller
                         'ris_no' => $r['risno'],
                         'cl2comb' => $r['cl2comb'],
                         'uomcode' => $r['uomcode'],
-                        'supplierID' => $r['supplier']['supplierID'],
+                        'supplierID' => $r['supplier'] != null ? $r['supplier']['supplierID'] : null,
                         'chrgcode' => $r['fsid'],
                         'prev_qty' => 0,
                         'new_qty' => $r['releaseqty'],
@@ -329,7 +329,7 @@ class CsrStocksControllers extends Controller
         $entry_by = Auth::user()->employeeid;
 
         $request->validate([
-            'supplierID' => 'required',
+            // 'supplierID' => 'required',
             'expiration_date' => 'required',
             'remarks' => 'required'
         ]);

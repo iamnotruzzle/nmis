@@ -236,10 +236,9 @@
             <div class="field">
               <div class="flex align-content-center">
                 <label>Supplier</label>
-                <span class="ml-2 text-error">*</span>
+                <!-- <span class="ml-2 text-error">*</span> -->
               </div>
               <Dropdown
-                required="true"
                 v-model="formImport.supplier"
                 :options="suppliersList"
                 :virtualScrollerOptions="{ itemSize: 38 }"
@@ -597,10 +596,9 @@
         <div class="field">
           <div class="flex align-content-center">
             <label>Supplier</label>
-            <span class="ml-2 text-error">*</span>
+            <!-- <span class="ml-2 text-error">*</span> -->
           </div>
           <Dropdown
-            required="true"
             v-model="formAddDelivery.supplier"
             :options="suppliersList"
             :virtualScrollerOptions="{ itemSize: 38 }"
@@ -795,7 +793,6 @@
             :disabled="
               formAddDelivery.processing ||
               formAddDelivery.ris_no == null ||
-              formAddDelivery.supplier == null ||
               formAddDelivery.fund_source == null ||
               formAddDelivery.cl2comb == null ||
               formAddDelivery.delivered_date == null ||
@@ -839,10 +836,9 @@
             >
               <div class="flex align-content-center">
                 <label>Supplier</label>
-                <span class="ml-2 text-error">*</span>
+                <!-- <span class="ml-2 text-error">*</span> -->
               </div>
               <Dropdown
-                required="true"
                 v-model="form.supplierID"
                 :options="suppliersList"
                 :virtualScrollerOptions="{ itemSize: 38 }"
@@ -1021,10 +1017,9 @@
         <div class="field">
           <div class="flex align-content-center">
             <label>Supplier</label>
-            <span class="ml-2 text-error">*</span>
+            <!-- <span class="ml-2 text-error">*</span> -->
           </div>
           <Dropdown
-            required="true"
             v-model="formConvertItem.supplierID"
             :options="suppliersList"
             :virtualScrollerOptions="{ itemSize: 38 }"
@@ -2478,7 +2473,7 @@ export default {
       this.formImport.deliveryDetails = this.deliveryDetails;
 
       const isEmpty = this.deliveryDetails.some((item) => {
-        return !item.supplier || !item.expiration_date || !item.delivered_date;
+        return !item.expiration_date || !item.delivered_date;
       });
 
       this.form.stock_id = this.stockId;
@@ -2513,7 +2508,6 @@ export default {
       if (
         this.formAddDelivery.processing ||
         this.formAddDelivery.ris_no == null ||
-        this.formAddDelivery.supplier == null ||
         this.formAddDelivery.fund_source == null ||
         this.formAddDelivery.cl2comb == null ||
         this.formAddDelivery.delivered_date == null ||

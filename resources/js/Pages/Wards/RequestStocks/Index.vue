@@ -748,7 +748,6 @@
                   label="MEDICAL GASES"
                   icon="pi pi-plus"
                   iconPos="right"
-                  :disabled="true"
                   @click="openMedicalGasesDialog"
                 />
               </div>
