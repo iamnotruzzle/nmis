@@ -58,6 +58,8 @@ class PatientChargeController extends Controller
                 item.cl2desc,
                 item.uomcode,
                 csrw_wards_stocks.quantity,
+                csrw_wards_stocks.average,
+                csrw_wards_stocks.total_consumed,
                 price.price_per_unit as price,
                 csrw_wards_stocks.expiration_date
             FROM csrw_wards_stocks
@@ -69,7 +71,6 @@ class PatientChargeController extends Controller
                 AND csrw_wards_stocks.expiration_date > GETDATE()
             ORDER BY csrw_wards_stocks.expiration_date ASC;"
         );
-
         // set medicalSupplies value and remove duplicate id
         $medicalSupplies = [];
         $seenIds = [];
@@ -83,6 +84,8 @@ class PatientChargeController extends Controller
                     'cl2desc' => $s->cl2desc,
                     'uomcode' => $s->uomcode,
                     'quantity' => $s->quantity,
+                    'average' => $s->average,
+                    'total_consumed' => $s->total_consumed,
                     'price' => $s->price,
                     'expiration_date' => $s->expiration_date,
                 ];

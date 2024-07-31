@@ -262,7 +262,7 @@
                 ></Column>
                 <Column
                   field="price"
-                  header="PRICE PER PC."
+                  header="PRICE PER UNIT"
                   style="width: 15%"
                   sortable
                 >
@@ -442,7 +442,7 @@
             </Column>
             <Column
               field="price"
-              header="PRICE"
+              header="PRICE PER UNIT"
               style="text-align: right; width: 20%"
             >
               <template #body="{ data }"> ₱ {{ data.price }} </template>
@@ -667,20 +667,22 @@ export default {
       //   console.log('bill list', this.billList);
     },
     storeMedicalSuppliesInContainer() {
+      //   let totalPounds = (quantity * average) - totalConsumed;
       this.medicalSupplies.forEach((med) => {
-        // console.log('med', med);
         this.medicalSuppliesList.push({
           id: med.id,
           is_consumable: med.is_consumable,
           cl2comb: med.cl2comb,
           cl2desc: med.cl2desc,
           uomcode: med.uomcode == null ? null : med.uomcode,
-          quantity: med.quantity,
+          quantity: med.is_consumable != 'y' ? med.quantity : med.quantity * med.average - med.total_consumed,
+          average: med.average,
+          total_consumed: med.total_consumed,
           price: med.price,
           expiration_date: med.expiration_date,
         });
       });
-      //   console.log(this.medicalSuppliesList);
+      console.log(this.medicalSuppliesList);
     },
     storeMiscInContainer() {
       this.misc.forEach((misc) => {
@@ -698,12 +700,13 @@ export default {
       const combinedItems = {};
       this.medicalSupplies.forEach((med) => {
         if (med.price != null) {
+          let medQuantity = med.is_consumable != 'y' ? med.quantity : med.quantity * med.average - med.total_consumed;
           if (combinedItems[med.cl2desc]) {
-            combinedItems[med.cl2desc].totalQuantity += med.quantity;
+            combinedItems[med.cl2desc].totalQuantity += medQuantity;
             combinedItems[med.cl2desc].prices.push({
               id: med.id,
               price: med.price,
-              quantity: med.quantity,
+              quantity: medQuantity,
               expiryDate: med.expiryDate,
             });
           } else {
@@ -714,8 +717,8 @@ export default {
               itemCode: med.cl2comb,
               itemDesc: med.cl2desc,
               unit: med.uomcode == null ? null : med.uomcode,
-              totalQuantity: med.quantity,
-              prices: [{ id: med.id, price: med.price, quantity: med.quantity, expiryDate: med.expiryDate }],
+              totalQuantity: medQuantity,
+              prices: [{ id: med.id, price: med.price, quantity: medQuantity, expiryDate: med.expiryDate }],
             };
           }
         }
