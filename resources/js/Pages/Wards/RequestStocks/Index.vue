@@ -775,18 +775,30 @@
           <Column
             field="unit"
             header="UNIT"
-            style="width: 10%"
+            style="width: 5%"
             sortable
           >
           </Column>
           <Column
             field="quantity"
             header="QUANTITY"
-            style="width: 5%"
+            style="text-align: right; width: 5%"
             sortable
           >
             <template #body="{ data }">
               {{ data.quantity }}
+            </template>
+          </Column>
+          <Column
+            field="average"
+            header="AVERAGE"
+            style="text-align: right; width: 5%"
+            sortable
+          >
+            <template #body="{ data }">
+              <p v-if="data.is_consumable == 'y'">
+                <span class="test-success"> {{ data.average }}/unit</span>
+              </p>
             </template>
           </Column>
           <Column
@@ -1116,6 +1128,7 @@ export default {
           unit: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomdesc,
           quantity: e.quantity,
           average: e.average,
+          total_consumed: e.total_consumed,
           is_consumable: e.is_consumable == null ? null : e.is_consumable,
           expiration_date: expiration_date.toString(),
         });
@@ -1132,6 +1145,7 @@ export default {
           unit: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomdesc,
           quantity: e.quantity,
           average: e.average,
+          total_consumed: e.total_consumed,
           is_consumable: e.is_consumable == null ? null : e.is_consumable,
           expiration_date: expiration_date.toString(),
         });
