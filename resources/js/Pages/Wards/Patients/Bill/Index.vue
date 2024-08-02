@@ -130,7 +130,7 @@
                 <!-- slotProps.data.is_consumable != 'y' -->
                 <div v-if="slotProps.data.charge_log_id != null">
                   <Button
-                    v-if="slotProps.data.is_consumable != 'y'"
+                    v-if="slotProps.data.charge_log_from != 'MEDICAL GASES'"
                     icon="pi pi-pencil"
                     class="mr-1"
                     rounded
@@ -657,6 +657,7 @@ export default {
             type_of_charge_description: e.type_of_charge_description,
             item: e.misc != null ? e.misc : e.category + ' ' + e.item,
             charge_log_id: e.charge_log_id,
+            charge_log_from: e.charge_log_from,
             charge_log_ward_stocks_id: e.charge_log_ward_stocks_id,
             charge_log_quantity: e.charge_log_quantity,
             itemcode: e.itemcode,
