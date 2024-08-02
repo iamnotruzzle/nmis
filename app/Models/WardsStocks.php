@@ -30,6 +30,7 @@ class WardsStocks extends Model
         'expiration_date',
         'is_consumable',
         'average',
+        'total_usage',
         'total_consumed',
     ];
 

@@ -74,6 +74,7 @@ class WardMedicalGasesController extends Controller
             'chrgcode' => $request->fund_source,
             'quantity' => $request->quantity,
             'average' => $request->average,
+            'total_usage' => (int)$request->quantity * (int)$request->average,
             'from' => 'MEDICAL GASES',
             // 'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
             'delivered_date' =>  Carbon::parse($request->delivered_date)->format('Y-m-d H:i:s.v'),

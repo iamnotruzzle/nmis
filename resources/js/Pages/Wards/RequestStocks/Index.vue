@@ -745,7 +745,6 @@
                   </div>
                 </div>
                 <Button
-                  :disabled="true"
                   label="MEDICAL GASES"
                   icon="pi pi-plus"
                   iconPos="right"
