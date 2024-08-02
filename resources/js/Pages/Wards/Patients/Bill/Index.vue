@@ -679,14 +679,14 @@ export default {
           cl2comb: med.cl2comb,
           cl2desc: med.cl2desc,
           uomcode: med.uomcode == null ? null : med.uomcode,
-          quantity: med.is_consumable != 'y' ? med.quantity : med.quantity * med.average - med.total_consumed,
+          quantity: med.is_consumable != 'y' ? med.quantity : med.total_usage,
           average: med.average,
           total_consumed: med.total_consumed,
           price: med.price,
           expiration_date: med.expiration_date,
         });
       });
-      console.log(this.medicalSuppliesList);
+      console.log('medical supplies list', this.medicalSupplies);
     },
     storeMiscInContainer() {
       this.misc.forEach((misc) => {
