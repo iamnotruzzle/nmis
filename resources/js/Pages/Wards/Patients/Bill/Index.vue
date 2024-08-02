@@ -127,15 +127,18 @@
             >
               <template #body="slotProps">
                 <!-- only show if the item is charge using this system and not HOMIS -->
-                <Button
-                  v-if="slotProps.data.charge_log_id != null"
-                  icon="pi pi-pencil"
-                  class="mr-1"
-                  rounded
-                  text
-                  severity="warning"
-                  @click="editItem(slotProps.data)"
-                />
+                <!-- slotProps.data.is_consumable != 'y' -->
+                <div v-if="slotProps.data.charge_log_id != null">
+                  <Button
+                    v-if="slotProps.data.is_consumable != 'y'"
+                    icon="pi pi-pencil"
+                    class="mr-1"
+                    rounded
+                    text
+                    severity="warning"
+                    @click="editItem(slotProps.data)"
+                  />
+                </div>
               </template>
             </Column>
 
