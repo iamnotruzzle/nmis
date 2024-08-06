@@ -538,42 +538,6 @@
             </small>
           </div>
           <div class="field">
-            <div>
-              <div class="flex align-content-center">
-                <label>Acquisition price</label>
-              </div>
-              <InputText
-                class="w-full"
-                v-model.trim="formMedicalGases.acquisition_price"
-                :maxFractionDigits="2"
-              />
-            </div>
-          </div>
-          <div class="field">
-            <div>
-              <div class="flex align-content-center">
-                <label class="text-green-500">Hospital price</label>
-              </div>
-              <InputText
-                class="w-full"
-                v-model.trim="formMedicalGases.hospital_price"
-                :maxFractionDigits="2"
-              />
-            </div>
-          </div>
-          <div class="field">
-            <div>
-              <div class="flex align-content-center">
-                <label class="text-blue-500">Price per unit </label>
-              </div>
-              <InputText
-                class="w-full"
-                v-model.trim="formMedicalGases.price_per_unit"
-                :maxFractionDigits="2"
-              />
-            </div>
-          </div>
-          <div class="field">
             <label for="delivered_date">Delivered date</label>
             <Calendar
               v-model="formMedicalGases.delivered_date"
@@ -608,10 +572,7 @@
                 formMedicalGases.processing ||
                 formMedicalGases.fund_source == null ||
                 formMedicalGases.cl2comb == null ||
-                formMedicalGases.quantity == null ||
-                formMedicalGases.acquisition_price == null ||
-                formMedicalGases.hospital_price == null ||
-                formMedicalGases.price_per_unit == null
+                formMedicalGases.quantity == null
               "
               @click="submitMedicalGases"
             />
@@ -977,9 +938,6 @@ export default {
         cl2comb: null,
         uomcode: null,
         quantity: null,
-        acquisition_price: null,
-        hospital_price: null,
-        price_per_unit: null,
         average: null,
         delivered_date: null,
       }),
@@ -1128,7 +1086,6 @@ export default {
           unit: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomdesc,
           quantity: e.quantity,
           average: e.average,
-          total_consumed: e.total_consumed,
           is_consumable: e.is_consumable == null ? null : e.is_consumable,
           expiration_date: expiration_date.toString(),
         });
@@ -1145,7 +1102,6 @@ export default {
           unit: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomdesc,
           quantity: e.quantity,
           average: e.average,
-          total_consumed: e.total_consumed,
           is_consumable: e.is_consumable == null ? null : e.is_consumable,
           expiration_date: expiration_date.toString(),
         });

@@ -683,9 +683,9 @@ export default {
           cl2comb: med.cl2comb,
           cl2desc: med.cl2desc,
           uomcode: med.uomcode == null ? null : med.uomcode,
-          quantity: med.is_consumable != 'y' ? med.quantity : med.total_usage,
+          quantity: med.is_consumable != 'y' ? med.quantity : med.total_pounds,
           average: med.average,
-          total_consumed: med.total_consumed,
+          total_pounds: med.total_pounds,
           price: med.price,
           expiration_date: med.expiration_date,
         });
@@ -708,7 +708,7 @@ export default {
       const combinedItems = {};
       this.medicalSupplies.forEach((med) => {
         if (med.price != null) {
-          let medQuantity = med.is_consumable != 'y' ? med.quantity : med.quantity * med.average - med.total_consumed;
+          let medQuantity = med.is_consumable != 'y' ? med.quantity : med.total_pounds;
           if (combinedItems[med.cl2desc]) {
             combinedItems[med.cl2desc].totalQuantity += medQuantity;
             combinedItems[med.cl2desc].prices.push({

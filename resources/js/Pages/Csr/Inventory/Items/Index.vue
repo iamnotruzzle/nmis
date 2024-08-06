@@ -732,10 +732,10 @@ export default {
         unit: null,
         cl2stat: null,
         mainCategory: null,
+        itemcode: null,
         location: null,
         selectedMainCat: null,
         selectedSubCategory: null,
-        itemcode: null,
       }),
       formConvert: this.$inertia.form({
         cl2comb: null,
@@ -898,6 +898,7 @@ export default {
                 ris_no: price.ris_no,
                 hospital_price: price.hospital_price,
                 acquisition_price: price.acquisition_price,
+                itemcode: item.itemcode,
                 entry_by: price.entry_by,
                 created_at: price.created_at,
               });
@@ -916,6 +917,7 @@ export default {
             uomcode: item.uomcode,
             uomdesc: item.unit,
             cl2stat: item.cl2stat,
+            itemcode: item.itemcode,
             prices: this.prices
               .filter((price) => price.cl2comb === item.cl2comb)
               .map((filteredPrice) => ({
@@ -1111,6 +1113,7 @@ export default {
       );
     },
     editItem(item) {
+      //   console.log(item);
       this.isUpdate = true;
       this.createItemDialog = true;
       this.itemId = item.cl2comb;
@@ -1120,6 +1123,7 @@ export default {
       this.form.cl2desc = item.cl2desc;
       this.form.unit = item.uomcode;
       this.form.cl2stat = item.cl2stat;
+      this.form.itemcode = item.itemcode;
       this.form.mainCategory = item.catID;
       this.form.selectedMainCat = item.mainCategory;
       this.form.selectedSubCategory = item.subCategory;

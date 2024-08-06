@@ -16,13 +16,13 @@ class AddAdditionalColumnToCsrwWardsStocksTable extends Migration
         Schema::table('csrw_wards_stocks', function (Blueprint $table) {
             $table->string('is_consumable')->nullable();
             $table->integer('average')->nullable();
-            $table->integer('total_consumed')->nullable();
+            $table->integer('total_pounds')->nullable();
         });
 
         Schema::table('csrw_wards_stocks_logs', function (Blueprint $table) {
             $table->string('is_consumable')->nullable();
             $table->integer('average')->nullable();
-            $table->integer('total_consumed')->nullable();
+            $table->integer('total_pounds')->nullable();
         });
     }
 

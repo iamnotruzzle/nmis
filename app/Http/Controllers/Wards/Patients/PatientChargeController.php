@@ -59,8 +59,7 @@ class PatientChargeController extends Controller
                 item.uomcode,
                 csrw_wards_stocks.quantity,
                 csrw_wards_stocks.average,
-                csrw_wards_stocks.total_usage,
-                csrw_wards_stocks.total_consumed,
+                csrw_wards_stocks.total_pounds,
                 price.price_per_unit as price,
                 csrw_wards_stocks.expiration_date
             FROM csrw_wards_stocks
@@ -86,8 +85,7 @@ class PatientChargeController extends Controller
                     'uomcode' => $s->uomcode,
                     'quantity' => $s->quantity,
                     'average' => $s->average,
-                    'total_usage' => $s->total_usage,
-                    'total_consumed' => $s->total_consumed,
+                    'total_pounds' => $s->total_pounds,
                     'price' => $s->price,
                     'expiration_date' => $s->expiration_date,
                 ];
@@ -259,7 +257,7 @@ class PatientChargeController extends Controller
                                         'entry_by' => $entryby,
                                     ]);
 
-                                    // newStockQty = (($wardStock->quantity * $wardStock->average) - $wardStock->total_consumed) - $remaining_qty_to_charge;
+                                    // newStockQty = (($wardStock->quantity * $wardStock->average) - $wardStock->total_pounds) - $remaining_qty_to_charge;
                                     // getting the new qty of current editing ward stock
                                     $newStockQty = $wardStock->quantity - $remaining_qty_to_charge;
                                     // setting the new value of remaining_qty_to_charge
@@ -272,7 +270,7 @@ class PatientChargeController extends Controller
                                 }
                             } else {
                                 // execute if row selected qty is enough
-                                if ($wardStock->total_usage >= $remaining_qty_to_charge) {
+                                if ($wardStock->total_pounds >= $remaining_qty_to_charge) {
                                     PatientChargeLogs::create([
                                         'enccode' => $enccode,
                                         'acctno' => $acctno->paacctno,
@@ -292,18 +290,18 @@ class PatientChargeController extends Controller
                                     ]);
 
                                     // Accumulate total consumed
-                                    $wardStock->total_consumed += $remaining_qty_to_charge;
+                                    $wardStock->total_pounds += $remaining_qty_to_charge;
 
-                                    // Check if total_consumed reaches or exceeds the average per tank (1000 pounds)
-                                    if ($wardStock->total_consumed >= $wardStock->average) {
+                                    // Check if total_pounds reaches or exceeds the average per tank (1000 pounds)
+                                    if ($wardStock->total_pounds >= $wardStock->average) {
                                         // Calculate how many tanks to reduce
-                                        $tanks_consumed = floor($wardStock->total_consumed / $wardStock->average);
+                                        $tanks_consumed = floor($wardStock->total_pounds / $wardStock->average);
 
                                         // Reduce the quantity of tanks
                                         $newStockQty = $wardStock->quantity - $tanks_consumed;
 
-                                        // Subtract the corresponding amount from total_consumed
-                                        $wardStock->total_consumed -= $tanks_consumed * $wardStock->average;
+                                        // Subtract the corresponding amount from total_pounds
+                                        $wardStock->total_pounds -= $tanks_consumed * $wardStock->average;
                                     } else {
                                         // No tanks are consumed yet, so no reduction in quantity
                                         $newStockQty = $wardStock->quantity;
@@ -313,8 +311,7 @@ class PatientChargeController extends Controller
                                     $wardStock::where('id', $wardStock->id)
                                         ->update([
                                             'quantity' => $newStockQty,
-                                            'total_usage' => $wardStock->total_usage - $remaining_qty_to_charge,
-                                            'total_consumed' => $wardStock->total_consumed,
+                                            'total_pounds' => $wardStock->total_pounds - $remaining_qty_to_charge,
                                         ]);
 
                                     $remaining_qty_to_charge = 0;

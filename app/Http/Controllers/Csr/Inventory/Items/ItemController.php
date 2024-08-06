@@ -61,6 +61,7 @@ class ItemController extends Controller
                 main_category.categoryname AS main_category,
                 category.cl1comb AS cl1comb,
                 category.cl1desc AS sub_category,
+                item.itemcode,
                 item.catID,
                 item.cl2desc AS item,
                 unit.uomcode,

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Wards\MedicalGases;
 
 use App\Http\Controllers\Controller;
+use App\Models\Item;
 use App\Models\ItemPrices;
 use App\Models\WardsStocks;
 use App\Models\WardsStocksLogs;
@@ -53,14 +54,37 @@ class WardMedicalGasesController extends Controller
             // 'expiration_date' => 'required',
         ]);
 
-        $itemPrices = ItemPrices::create([
-            'ris_no' => $tempRisNo,
-            'cl2comb' => $request->cl2comb,
-            'acquisition_price' => $request->acquisition_price,
-            'hospital_price' => $request->hospital_price,
-            'price_per_unit' => $request->price_per_unit,
-            'entry_by' => $entry_by,
-        ]);
+        $item = Item::where('cl2comb', $request->cl2comb)->first();
+
+        if ($item->itemcode == 'MSMG-1') {
+            $itemPrices = ItemPrices::create([
+                'ris_no' => $tempRisNo,
+                'cl2comb' => $request->cl2comb,
+                'acquisition_price' => 0.48,
+                'hospital_price' =>  0.48,
+                'price_per_unit' =>  0.48,
+                'entry_by' => $entry_by,
+            ]);
+        } else if ($item->itemcode == 'MSMG-2') {
+            $itemPrices = ItemPrices::create([
+                'ris_no' => $tempRisNo,
+                'cl2comb' => $request->cl2comb,
+                'acquisition_price' => 0.35,
+                'hospital_price' =>  0.35,
+                'price_per_unit' =>  0.35,
+                'entry_by' => $entry_by,
+            ]);
+        } else {
+            $itemPrices = ItemPrices::create([
+                'ris_no' => $tempRisNo,
+                'cl2comb' => $request->cl2comb,
+                'acquisition_price' => 0.43,
+                'hospital_price' =>  0.43,
+                'price_per_unit' =>  0.43,
+                'entry_by' => $entry_by,
+            ]);
+        }
+
 
         $medicalGases = WardsStocks::create([
             'request_stocks_id' => null,
@@ -74,7 +98,7 @@ class WardMedicalGasesController extends Controller
             'chrgcode' => $request->fund_source,
             'quantity' => $request->quantity,
             'average' => $request->average,
-            'total_usage' => (int)$request->quantity * (int)$request->average,
+            'total_pounds' => (int)$request->quantity * (int)$request->average,
             'from' => 'MEDICAL GASES',
             // 'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
             'delivered_date' =>  Carbon::parse($request->delivered_date)->format('Y-m-d H:i:s.v'),
@@ -95,6 +119,7 @@ class WardMedicalGasesController extends Controller
             'prev_qty' => 0,
             'new_qty' => $request->quantity,
             'average' => $request->average,
+            'total_pounds' => (int)$request->quantity * (int)$request->average,
             'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
             'delivered_date' =>  Carbon::parse($request->delivered_date)->format('Y-m-d H:i:s.v'),
             'expiration_date' =>  Carbon::maxValue(),

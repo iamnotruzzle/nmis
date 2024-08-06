@@ -30,7 +30,7 @@ class WardsStocksLogs extends Model
         'entry_by',
         'is_consumable',
         'average',
-        'total_consumed',
+        'total_pounds',
     ];
 
     public function unit_of_measurement()
