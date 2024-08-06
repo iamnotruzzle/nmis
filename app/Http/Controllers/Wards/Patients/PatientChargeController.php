@@ -472,7 +472,7 @@ class PatientChargeController extends Controller
             }
         } else {
             // dd($request);
-
+            // return / void charge
             if ($request->charge_log_from != 'MEDICAL GASES') {
                 // dd($request);
                 $previousCharge = null;
