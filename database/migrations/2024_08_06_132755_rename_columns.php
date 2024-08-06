@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddAdditionalColumnToCsrwWardsStocksTable extends Migration
+class RenameColumns extends Migration
 {
     /**
      * Run the migrations.
@@ -14,15 +14,11 @@ class AddAdditionalColumnToCsrwWardsStocksTable extends Migration
     public function up()
     {
         Schema::table('csrw_wards_stocks', function (Blueprint $table) {
-            $table->string('is_consumable')->nullable();
-            $table->integer('average')->nullable();
-            $table->integer('total_consumed')->nullable();
+            $table->integer('total_pounds')->nullable();
         });
 
         Schema::table('csrw_wards_stocks_logs', function (Blueprint $table) {
-            $table->string('is_consumable')->nullable();
-            $table->integer('average')->nullable();
-            $table->integer('total_consumed')->nullable();
+            $table->integer('total_pounds')->nullable();
         });
     }
 
