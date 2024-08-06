@@ -130,7 +130,6 @@
                 <!-- slotProps.data.is_consumable != 'y' -->
                 <div v-if="slotProps.data.charge_log_id != null">
                   <Button
-                    v-if="slotProps.data.charge_log_from != 'MEDICAL GASES'"
                     icon="pi pi-pencil"
                     class="mr-1"
                     rounded
@@ -352,6 +351,7 @@
                 autofocus
                 onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                 @keyup.enter="
+                  form.processing ||
                   Number(form.upd_QtyToReturn) > Number(form.upd_currentChargeQty) ||
                   form.upd_QtyToReturn == null ||
                   form.upd_QtyToReturn == 0 ||
@@ -361,6 +361,12 @@
                 "
                 inputId="integeronly"
               />
+              <span
+                v-if="Number(form.upd_QtyToReturn) > Number(form.upd_currentChargeQty)"
+                class="text-error"
+              >
+                Return quantity is must be less than of the charged quantity
+              </span>
             </div>
 
             <template #footer>
@@ -580,6 +586,7 @@ export default {
         upd_price: null,
         upd_pcchrgdte: null,
         tscode: null,
+        charge_log_from: null,
       }),
     };
   },
@@ -920,43 +927,90 @@ export default {
       this.$emit('hide', this.form.clearErrors(), this.form.reset());
     },
     submit() {
-      if (this.form.processing) {
-        return false;
+      if (this.form.charge_log_from == 'MEDICAL GASES') {
+        if (
+          this.form.processing ||
+          Number(this.form.upd_QtyToReturn) > Number(this.form.upd_currentChargeQty) ||
+          this.form.upd_QtyToReturn == null ||
+          this.form.upd_QtyToReturn == 0 ||
+          this.form.upd_QtyToReturn == ''
+        ) {
+          return false;
+        }
+
+        // set form data
+        this.form.enccode = this.pat_enccode;
+        this.form.hospitalNumber = this.pat_name[0].hpercode;
+        this.form.itemsToBillList = this.itemsToBillList;
+        this.form.tscode = this.pat_tscode.tscode;
+
+        this.form.post(route('patientcharge.store'), {
+          preserveState: true,
+          preserveScroll: true,
+          onSuccess: () => {
+            this.createBillDialog = false;
+            this.cancel();
+            this.createdMsg();
+          },
+          onError: (errors) => {
+            this.stockBalanceDeclared = true;
+          },
+          onFinish: (visit) => {
+            //   console.log('object');
+            if (this.stockBalanceDeclared != true) {
+              this.billList = [];
+              this.medicalSuppliesList = [];
+              this.miscList = [];
+              this.itemList = [];
+              this.itemsToBillList = [];
+              this.storeBillsInContainer();
+              this.getTotalAmount();
+              this.storeMedicalSuppliesInContainer();
+              this.storeMiscInContainer();
+              this.storeItemsInContainer();
+            }
+          },
+        });
+      } else {
+        if (this.form.processing) {
+          return false;
+        }
+
+        // set form data
+        this.form.enccode = this.pat_enccode;
+        this.form.hospitalNumber = this.pat_name[0].hpercode;
+        this.form.itemsToBillList = this.itemsToBillList;
+        this.form.tscode = this.pat_tscode.tscode;
+
+        this.form.post(route('patientcharge.store'), {
+          preserveState: true,
+          preserveScroll: true,
+          onSuccess: () => {
+            this.createBillDialog = false;
+            this.cancel();
+            this.createdMsg();
+          },
+          onError: (errors) => {
+            this.stockBalanceDeclared = true;
+          },
+          onFinish: (visit) => {
+            //   console.log('object');
+            if (this.stockBalanceDeclared != true) {
+              this.billList = [];
+              this.medicalSuppliesList = [];
+              this.miscList = [];
+              this.itemList = [];
+              this.itemsToBillList = [];
+              this.storeBillsInContainer();
+              this.getTotalAmount();
+              this.storeMedicalSuppliesInContainer();
+              this.storeMiscInContainer();
+              this.storeItemsInContainer();
+            }
+          },
+        });
       }
 
-      // set form data
-      this.form.enccode = this.pat_enccode;
-      this.form.hospitalNumber = this.pat_name[0].hpercode;
-      this.form.itemsToBillList = this.itemsToBillList;
-      this.form.tscode = this.pat_tscode.tscode;
-
-      this.form.post(route('patientcharge.store'), {
-        preserveState: true,
-        preserveScroll: true,
-        onSuccess: () => {
-          this.createBillDialog = false;
-          this.cancel();
-          this.createdMsg();
-        },
-        onError: (errors) => {
-          this.stockBalanceDeclared = true;
-        },
-        onFinish: (visit) => {
-          //   console.log('object');
-          if (this.stockBalanceDeclared != true) {
-            this.billList = [];
-            this.medicalSuppliesList = [];
-            this.miscList = [];
-            this.itemList = [];
-            this.itemsToBillList = [];
-            this.storeBillsInContainer();
-            this.getTotalAmount();
-            this.storeMedicalSuppliesInContainer();
-            this.storeMiscInContainer();
-            this.storeItemsInContainer();
-          }
-        },
-      });
       //   console.log(this.$page.props.errors);
     },
     editItem(e) {
@@ -972,8 +1026,10 @@ export default {
       this.form.upd_item_desc = e.item;
       this.form.upd_type_of_charge_code = e.type_of_charge_code;
       this.form.upd_currentChargeQty = e.quantity;
+      this.form.upd_QtyToReturn = e.quantity;
       this.form.upd_price = e.price;
       this.form.upd_pcchrgdte = e.charge_date;
+      this.form.charge_log_from = e.charge_log_from;
       this.updateBillDialog = true;
 
       console.log('form', this.form);
