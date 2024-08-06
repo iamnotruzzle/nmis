@@ -144,7 +144,13 @@
             <template #groupheader="slotProps">
               <div class="bg-primary-reverse py-3">
                 <span class="mr-2">CHARGE SLIP #: </span>
-                <span>{{ slotProps.data.charge_slip_no }}</span>
+                <span class="mr-4">{{ slotProps.data.charge_slip_no }}</span>
+                <v-icon
+                  name="la-receipt-solid"
+                  scale="1.5"
+                  class="pi pi-send text-yellow-500 cursor-pointer"
+                  @click="openReceiptDialog(slotProps.data)"
+                ></v-icon>
               </div>
             </template>
             <template #groupfooter="slotProps">
@@ -470,6 +476,109 @@
           </DataTable>
         </div>
       </div>
+
+      <Dialog
+        v-model:visible="receiptDialog"
+        :modal="true"
+        class="p-fluid w-4"
+        :closeOnEscape="true"
+        @hide="whenDialogIsHidden"
+      >
+        <template #header>
+          <div class="text-primary text-xl font-bold">CHARGE SLIP</div>
+        </template>
+
+        <div class="flex flex-column justify-content-center align-items-center">
+          <h4 class="font-bold">{{ printForm.no }}</h4>
+          <p class="font-semibold">MMMHMC-A-PHB-QP-005 Form 1 Rev 0 Charge Slip</p>
+          <p class="font-bold">MARIANO MARCOS MEMORIAL HOSPITAL and MEDICAL CENTER</p>
+          <p class="text-2xl text-blue-500 font-bold">CHARGE SLIP</p>
+        </div>
+
+        <div class="w-full flex justify-content-center align-content-center">
+          <div class="w-10">
+            <div class="flex justify-content-between w-full mb-2">
+              <div>
+                <label class="mr-2">Type:</label>
+                <span>{{ printForm.type }}</span>
+              </div>
+              <div>
+                <label class="mr-2">No.:</label>
+                <span class="font-bold">{{ printForm.no }}</span>
+              </div>
+            </div>
+
+            <div class="flex justify-content-between w-full mb-2">
+              <div>
+                <label class="mr-2">Hospital #:</label>
+                <span>{{ printForm.hospital_number }}</span>
+              </div>
+              <div>
+                <label class="mr-2">Date:</label>
+                <span class="font-bold">{{ printForm.date }}</span>
+              </div>
+            </div>
+
+            <div class="flex justify-content-start w-full mb-2">
+              <div>
+                <label class="mr-2">Patient name:</label>
+                <span class="capitalize font-semibold">{{ printForm.patient_name }}</span>
+              </div>
+            </div>
+            <div class="flex justify-content-start w-full mb-2">
+              <div>
+                <label class="mr-2">Location:</label>
+                <span>{{ printForm.location }}</span>
+              </div>
+            </div>
+
+            <div class="flex justify-content-center w-full mb-2">
+              <DataTable>
+                <Column header="ITEM"></Column>
+                <Column header="QTY"></Column>
+                <Column header="PRICE"></Column>
+                <Column header="AMOUNT"></Column>
+
+                <template #footer>
+                  <div class="flex justify-content-end font-bold w-full text-green-400">Total: ₱</div>
+                </template>
+              </DataTable>
+            </div>
+
+            <div class="flex justify-content-start w-full mb-4">
+              <div>
+                <label class="mr-2 mb-2">Checked by:</label>
+                <span>____________________________</span>
+              </div>
+            </div>
+            <div class="flex justify-content-start w-full mb-">
+              <div>
+                <label class="mr-2 mb-2">Received by:</label>
+                <span>____________________________</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- <template #footer>
+          <Button
+            label="Cancel"
+            icon="pi pi-times"
+            severity="danger"
+            text
+            @click="cancel"
+          />
+
+          <Button
+            :disabled="itemsToBillList.length == 0 || form.processing"
+            label="Charge"
+            icon="pi pi-check"
+            text
+            type="submit"
+            @click="submit"
+          />
+        </template> -->
+      </Dialog>
     </div>
   </app-layout>
 </template>
@@ -491,6 +600,7 @@ import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
 import AutoComplete from 'primevue/autocomplete';
 import InputNumber from 'primevue/inputnumber';
+import Checkbox from 'primevue/checkbox';
 import Tag from 'primevue/tag';
 import moment from 'moment';
 import { Link } from '@inertiajs/vue3';
@@ -514,6 +624,7 @@ export default {
     Tag,
     Link,
     InputNumber,
+    Checkbox,
   },
   props: {
     pat_name: Array,
@@ -549,6 +660,7 @@ export default {
       itemNotSelected: false,
       itemNotSelectedMsg: null,
       updateQtyNotEnough: false,
+      receiptDialog: false,
       totalAmount: 0,
       medicalSuppliesListFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -587,6 +699,16 @@ export default {
         upd_pcchrgdte: null,
         tscode: null,
         charge_log_from: null,
+      }),
+      printForm: this.$inertia.form({
+        no: null, // charge_slip_no
+        type: null,
+        hospital_number: null,
+        date: null,
+        patient_name: null,
+        location: null,
+        chargedItems: [{}],
+        issued_by: null,
       }),
     };
   },
@@ -901,8 +1023,39 @@ export default {
         (this.itemNotSelectedMsg = null),
         (this.form.isUpdate = false),
         this.form.clearErrors(),
-        this.form.reset()
+        this.form.reset(),
+        this.printForm.reset()
       );
+    },
+    openReceiptDialog(data) {
+      console.log('data', data);
+
+      this.printForm.no = data.charge_slip_no;
+      this.printForm.type = 'type';
+      this.printForm.hospital_number = this.pat_name[0].hpercode;
+      this.printForm.date = 'date';
+      this.printForm.patient_name =
+        this.pat_name[0].patlast + ', ' + this.pat_name[0].patfirst + this.pat_name[0].patmiddle;
+      this.printForm.location = 'location';
+      this.printForm.chargedItems = [];
+      this.printForm.issued_by = 'issued_by';
+
+      //   this.billList.forEach((e) => {
+      //     if (e.charge_slip_no == this.printForm.no) {
+      //       console.log(e);
+      //     }
+      //   });
+
+      //    no: null,
+      //     type: null,
+      //     hospital_number: null,
+      //     date: null,
+      //     patient_name: null,
+      //     location: null,
+      //     chargedItems: [{}],
+      //     issued_by: null,
+
+      this.receiptDialog = true;
     },
     updateData() {
       this.params.enccode = this.enccode;
@@ -1045,6 +1198,7 @@ export default {
       this.createBillDialog = false;
       this.updateBillDialog = false;
       this.form.isUpdate = false;
+      this.printForm.reset();
       this.form.reset();
       this.form.clearErrors();
     },
