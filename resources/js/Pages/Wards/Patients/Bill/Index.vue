@@ -556,7 +556,11 @@
                   ></Column>
 
                   <template #footer>
-                    <div class="flex justify-content-end font-bold w-full">Total: ₱{{ printForm.total }}</div>
+                    <div class="flex justify-content-end font-bold w-full">
+                      Total: ₱{{
+                        printForm.total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                      }}
+                    </div>
                   </template>
                 </DataTable>
               </div>
@@ -1069,13 +1073,24 @@ export default {
 
       this.billList.forEach((e) => {
         if (e.charge_slip_no == this.printForm.no) {
-          //   console.log(e);
+          // Format price and amount with commas and two decimal places
+          const formattedPrice = e.price.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          });
+          const formattedAmount = e.amount.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          });
+
           this.printForm.chargedItems.push({
             item: e.item,
             qty: e.charge_log_quantity,
-            price: e.price,
-            amount: e.amount,
+            price: formattedPrice,
+            amount: formattedAmount,
           });
+
+          // Add the amount to the total, keeping it as a number for calculation
           this.printForm.total += e.amount;
         }
       });
@@ -1083,12 +1098,6 @@ export default {
       this.receiptDialog = true;
     },
     print() {
-      //   const printContents = document.getElementById('print').innerHTML;
-      //   const originalContents = document.body.innerHTML;
-      //   document.body.innerHTML = printContents;
-      //   window.print();
-      //   window.close();
-
       const printContents = document.getElementById('print').innerHTML;
       const originalContents = document.body.innerHTML;
 
