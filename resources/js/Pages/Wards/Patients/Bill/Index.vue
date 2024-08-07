@@ -533,14 +533,29 @@
             </div>
 
             <div class="flex justify-content-center w-full mb-2">
-              <DataTable class="w-full">
-                <Column header="ITEM"></Column>
-                <Column header="QTY"></Column>
-                <Column header="PRICE"></Column>
-                <Column header="AMOUNT"></Column>
+              <DataTable
+                :value="printForm.chargedItems"
+                class="w-full"
+              >
+                <Column
+                  field="item"
+                  header="ITEM"
+                ></Column>
+                <Column
+                  field="qty"
+                  header="QTY"
+                ></Column>
+                <Column
+                  field="price"
+                  header="PRICE"
+                ></Column>
+                <Column
+                  field="amount"
+                  header="AMOUNT"
+                ></Column>
 
                 <template #footer>
-                  <div class="flex justify-content-end font-bold w-full text-green-400">Total: ₱</div>
+                  <div class="flex justify-content-end font-bold w-full">Total: ₱{{ printForm.total }}</div>
                 </template>
               </DataTable>
             </div>
@@ -711,6 +726,7 @@ export default {
         location: null,
         chargedItems: [{}],
         issued_by: null,
+        total: null,
       }),
     };
   },
@@ -1037,7 +1053,7 @@ export default {
       );
     },
     openReceiptDialog(data) {
-      console.log('data', data);
+      //   console.log('data', data);
 
       this.printForm.no = data.charge_slip_no;
       this.printForm.type = 'Ward';
@@ -1048,12 +1064,20 @@ export default {
       this.printForm.location = this.$page.props.auth.user.location.location_name.wardname + ' ' + this.room_bed;
       this.printForm.chargedItems = [];
       this.printForm.issued_by = 'issued_by';
+      this.printForm.total = 0;
 
-      //   this.billList.forEach((e) => {
-      //     if (e.charge_slip_no == this.printForm.no) {
-      //       console.log(e);
-      //     }
-      //   });
+      this.billList.forEach((e) => {
+        if (e.charge_slip_no == this.printForm.no) {
+          //   console.log(e);
+          this.printForm.chargedItems.push({
+            item: e.item,
+            qty: e.charge_log_quantity,
+            price: e.price,
+            amount: e.amount,
+          });
+          this.printForm.total += e.amount;
+        }
+      });
 
       //    no: null,
       //     type: null,
