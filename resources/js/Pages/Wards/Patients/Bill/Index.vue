@@ -563,6 +563,14 @@
 
               <div class="flex justify-content-start w-full mb-4">
                 <div>
+                  <label class="mr-2 mb-2">Issued by:</label>
+                  <span class="text-bold">{{
+                    this.printForm.issued_by.userDetail.firstname + ' ' + this.printForm.issued_by.userDetail.lastname
+                  }}</span>
+                </div>
+              </div>
+              <div class="flex justify-content-start w-full mb-4">
+                <div>
                   <label class="mr-2 mb-2">Checked by:</label>
                   <span>____________________________</span>
                 </div>
@@ -1046,7 +1054,7 @@ export default {
       );
     },
     openReceiptDialog(data) {
-      //   console.log('data', data);
+      console.log('data', data);
 
       this.printForm.no = data.charge_slip_no;
       this.printForm.type = 'Ward';
@@ -1056,7 +1064,7 @@ export default {
         this.pat_name[0].patlast + ', ' + this.pat_name[0].patfirst + this.pat_name[0].patmiddle;
       this.printForm.location = this.$page.props.auth.user.location.location_name.wardname + ' ' + this.room_bed;
       this.printForm.chargedItems = [];
-      this.printForm.issued_by = 'issued_by';
+      this.printForm.issued_by = this.$page.props.auth.user;
       this.printForm.total = 0;
 
       this.billList.forEach((e) => {
