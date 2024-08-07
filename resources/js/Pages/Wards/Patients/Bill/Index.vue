@@ -537,7 +537,10 @@
               </div>
 
               <div class="flex justify-content-center w-full mb-2">
-                <table class="w-full">
+                <table
+                  class="w-full"
+                  style="border-collapse: collapse"
+                >
                   <thead>
                     <tr>
                       <th
