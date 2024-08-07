@@ -488,111 +488,104 @@
           <div class="text-primary text-xl font-bold"></div>
         </template>
 
-        <div class="flex flex-column justify-content-center align-items-center text-center">
-          <h4 class="font-bold">{{ printForm.no }}</h4>
-          <p class="font-semibold">MMMHMC-A-PHB-QP-005 Form 1 Rev 0 Charge Slip</p>
-          <p class="font-bold">MARIANO MARCOS MEMORIAL HOSPITAL and MEDICAL CENTER</p>
-          <p class="text-2xl text-blue-500 font-bold">CHARGE SLIP</p>
-        </div>
+        <div id="print">
+          <div class="flex flex-column justify-content-center align-items-center text-center">
+            <h4 class="font-bold">{{ printForm.no }}</h4>
+            <p class="font-semibold">MMMHMC-A-PHB-QP-005 Form 1 Rev 0 Charge Slip</p>
+            <p class="font-bold">MARIANO MARCOS MEMORIAL HOSPITAL and MEDICAL CENTER</p>
+            <p class="text-2xl text-blue-500 font-bold">CHARGE SLIP</p>
+          </div>
 
-        <div class="w-full flex justify-content-center align-content-center">
-          <div class="">
-            <div class="flex justify-content-between w-full mb-2">
-              <div>
-                <label class="mr-2">Type:</label>
-                <span>{{ printForm.type }}</span>
+          <div class="w-full flex justify-content-center align-content-center">
+            <div class="">
+              <div class="flex justify-content-between w-full mb-2">
+                <div>
+                  <label class="mr-2">Type:</label>
+                  <span>{{ printForm.type }}</span>
+                </div>
+                <div>
+                  <label class="mr-2">No.:</label>
+                  <span class="font-bold">{{ printForm.no }}</span>
+                </div>
               </div>
-              <div>
-                <label class="mr-2">No.:</label>
-                <span class="font-bold">{{ printForm.no }}</span>
-              </div>
-            </div>
 
-            <div class="flex justify-content-between w-full mb-2">
-              <div>
-                <label class="mr-2">Hospital #:</label>
-                <span>{{ printForm.hospital_number }}</span>
+              <div class="flex justify-content-between w-full mb-2">
+                <div>
+                  <label class="mr-2">Hospital #:</label>
+                  <span>{{ printForm.hospital_number }}</span>
+                </div>
+                <div>
+                  <label class="mr-2">Date:</label>
+                  <span class="">{{ printForm.date }}</span>
+                </div>
               </div>
-              <div>
-                <label class="mr-2">Date:</label>
-                <span class="">{{ printForm.date }}</span>
-              </div>
-            </div>
 
-            <div class="flex justify-content-start w-full mb-2">
-              <div>
-                <label class="mr-2">Patient Name:</label>
-                <span class="capitalize font-semibold">{{ printForm.patient_name }}</span>
+              <div class="flex justify-content-start w-full mb-2">
+                <div>
+                  <label class="mr-2">Patient Name:</label>
+                  <span class="capitalize font-semibold">{{ printForm.patient_name }}</span>
+                </div>
               </div>
-            </div>
-            <div class="flex justify-content-start w-full mb-2">
-              <div>
-                <label class="mr-2">Location:</label>
-                <span>{{ printForm.location }}</span>
+              <div class="flex justify-content-start w-full mb-2">
+                <div>
+                  <label class="mr-2">Location:</label>
+                  <span>{{ printForm.location }}</span>
+                </div>
               </div>
-            </div>
 
-            <div class="flex justify-content-center w-full mb-2">
-              <DataTable
-                :value="printForm.chargedItems"
-                class="w-full"
-              >
-                <Column
-                  field="item"
-                  header="ITEM"
-                ></Column>
-                <Column
-                  field="qty"
-                  header="QTY"
-                ></Column>
-                <Column
-                  field="price"
-                  header="PRICE"
-                ></Column>
-                <Column
-                  field="amount"
-                  header="AMOUNT"
-                ></Column>
+              <div class="flex justify-content-center w-full mb-2">
+                <DataTable
+                  :value="printForm.chargedItems"
+                  class="w-full"
+                >
+                  <Column
+                    field="item"
+                    header="ITEM"
+                  ></Column>
+                  <Column
+                    field="qty"
+                    header="QTY"
+                  ></Column>
+                  <Column
+                    field="price"
+                    header="PRICE"
+                  ></Column>
+                  <Column
+                    field="amount"
+                    header="AMOUNT"
+                  ></Column>
 
-                <template #footer>
-                  <div class="flex justify-content-end font-bold w-full">Total: ₱{{ printForm.total }}</div>
-                </template>
-              </DataTable>
-            </div>
-
-            <div class="flex justify-content-start w-full mb-4">
-              <div>
-                <label class="mr-2 mb-2">Checked by:</label>
-                <span>____________________________</span>
+                  <template #footer>
+                    <div class="flex justify-content-end font-bold w-full">Total: ₱{{ printForm.total }}</div>
+                  </template>
+                </DataTable>
               </div>
-            </div>
-            <div class="flex justify-content-start w-full mb-">
-              <div>
-                <label class="mr-2 mb-2">Received by:</label>
-                <span>____________________________</span>
+
+              <div class="flex justify-content-start w-full mb-4">
+                <div>
+                  <label class="mr-2 mb-2">Checked by:</label>
+                  <span>____________________________</span>
+                </div>
+              </div>
+              <div class="flex justify-content-start w-full mb-">
+                <div>
+                  <label class="mr-2 mb-2">Received by:</label>
+                  <span>____________________________</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- <template #footer>
+        <template #footer>
+          <!-- @click="submit" -->
           <Button
-            label="Cancel"
-            icon="pi pi-times"
-            severity="danger"
-            text
-            @click="cancel"
+            label="Print"
+            icon="pi pi-print"
+            severity="success"
+            @click="print"
           />
-
-          <Button
-            :disabled="itemsToBillList.length == 0 || form.processing"
-            label="Charge"
-            icon="pi pi-check"
-            text
-            type="submit"
-            @click="submit"
-          />
-        </template> -->
+        </template>
       </Dialog>
     </div>
   </app-layout>
@@ -1079,16 +1072,32 @@ export default {
         }
       });
 
-      //    no: null,
-      //     type: null,
-      //     hospital_number: null,
-      //     date: null,
-      //     patient_name: null,
-      //     location: null,
-      //     chargedItems: [{}],
-      //     issued_by: null,
-
       this.receiptDialog = true;
+    },
+    print() {
+      //   const printContents = document.getElementById('print').innerHTML;
+      //   const originalContents = document.body.innerHTML;
+      //   document.body.innerHTML = printContents;
+      //   window.print();
+      //   window.close();
+
+      const printContents = document.getElementById('print').innerHTML;
+      const originalContents = document.body.innerHTML;
+
+      // Replace the current page content with the print content
+      document.body.innerHTML = printContents;
+
+      // Trigger the print dialog
+      window.print();
+
+      // After printing, restore the original content and redirect to the previous page
+      document.body.innerHTML = originalContents;
+
+      // Get the current URL with its parameters
+      const currentUrl = window.location.href;
+
+      // Redirect to the current URL
+      window.location.href = currentUrl;
     },
     updateData() {
       this.params.enccode = this.enccode;
