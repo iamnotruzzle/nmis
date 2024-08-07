@@ -480,31 +480,34 @@
       <Dialog
         v-model:visible="receiptDialog"
         :modal="true"
-        class="p-fluid w-3"
+        class="p-fluid w-4"
         :closeOnEscape="true"
         @hide="whenDialogIsHidden"
       >
         <template #header>
-          <div class="text-primary text-xl font-bold"></div>
+          <div class="text-primary text-xl font-bold">CHARGE SLIP</div>
         </template>
 
-        <div id="print">
-          <div class="flex flex-column justify-content-center align-items-center text-center">
-            <h4 class="font-bold">{{ printForm.no }}</h4>
-            <p class="font-semibold">MMMHMC-A-PHB-QP-005 Form 1 Rev 0 Charge Slip</p>
-            <p class="font-bold">MARIANO MARCOS MEMORIAL HOSPITAL and MEDICAL CENTER</p>
-            <p class="text-2xl text-blue-500 font-bold">CHARGE SLIP</p>
-          </div>
-
+        <div
+          id="print"
+          class="bg-white"
+        >
           <div class="w-full flex justify-content-center align-content-center">
-            <div class="">
-              <div class="flex justify-content-between w-full mb-2">
-                <div>
-                  <label class="mr-2">Type:</label>
+            <div class="px-5 text-gray-900">
+              <div class="flex flex-column justify-content-center align-items-center text-center">
+                <h4 class="font-bold">{{ printForm.no }}</h4>
+                <p class="font-semibold">MMMHMC-A-PHB-QP-005 Form 1 Rev 0 Charge Slip</p>
+                <p class="font-bold">MARIANO MARCOS MEMORIAL HOSPITAL and MEDICAL CENTER</p>
+                <p class="text-2xl text-blue-500 font-bold">CHARGE SLIP</p>
+              </div>
+
+              <div class="flex justify-content-between w-full">
+                <div class="mb-2">
+                  <label>Type:</label>
                   <span>{{ printForm.type }}</span>
                 </div>
                 <div>
-                  <label class="mr-2">No.:</label>
+                  <label>No.:</label>
                   <span class="font-bold">{{ printForm.no }}</span>
                 </div>
               </div>
@@ -526,7 +529,7 @@
                   <span class="capitalize font-semibold">{{ printForm.patient_name }}</span>
                 </div>
               </div>
-              <div class="flex justify-content-start w-full mb-2">
+              <div class="flex justify-content-start w-full mb-3">
                 <div>
                   <label class="mr-2">Location:</label>
                   <span>{{ printForm.location }}</span>
@@ -534,37 +537,96 @@
               </div>
 
               <div class="flex justify-content-center w-full mb-2">
-                <DataTable
-                  :value="printForm.chargedItems"
-                  class="w-full"
-                >
-                  <Column
-                    field="item"
-                    header="ITEM"
-                  ></Column>
-                  <Column
-                    field="qty"
-                    header="QTY"
-                  ></Column>
-                  <Column
-                    field="price"
-                    header="PRICE"
-                  ></Column>
-                  <Column
-                    field="amount"
-                    header="AMOUNT"
-                  ></Column>
-
-                  <template #footer>
-                    <div class="flex justify-content-end font-bold w-full">
-                      Total: ₱{{
-                        printForm.total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-                      }}
-                    </div>
-                  </template>
-                </DataTable>
+                <table class="w-full">
+                  <thead>
+                    <tr>
+                      <th
+                        class="p-2 text-left"
+                        style="border-bottom-style: solid; border-top-style: solid"
+                      >
+                        ITEM
+                      </th>
+                      <th
+                        class="p-2 text-right"
+                        style="border-bottom-style: solid; border-top-style: solid"
+                      >
+                        QTY
+                      </th>
+                      <th
+                        class="p-2 text-right"
+                        style="border-bottom-style: solid; border-top-style: solid"
+                      >
+                        PRICE
+                      </th>
+                      <th
+                        class="p-2 text-right"
+                        style="border-bottom-style: solid; border-top-style: solid"
+                      >
+                        AMOUNT
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      v-for="item in printForm.chargedItems"
+                      :key="item.id"
+                    >
+                      <td
+                        class="p-2 text-left"
+                        style="border-bottom-style: solid"
+                      >
+                        {{ item.item }}
+                      </td>
+                      <td
+                        class="p-2 text-right"
+                        style="border-bottom-style: solid"
+                      >
+                        {{ item.qty }}
+                      </td>
+                      <td
+                        class="p-2 text-right"
+                        style="border-bottom-style: solid"
+                      >
+                        {{ item.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
+                      </td>
+                      <td
+                        class="p-2 text-right"
+                        style="border-bottom-style: solid"
+                      >
+                        {{
+                          item.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                        }}
+                      </td>
+                    </tr>
+                  </tbody>
+                  <!-- <tfoot>
+                    <tr>
+                      <td
+                        colspan="4"
+                        class="text-right font-bold"
+                        style="border-bottom-style: solid"
+                      >
+                        Total: ₱{{
+                          printForm.total.toLocaleString('en-US', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })
+                        }}
+                      </td>
+                    </tr>
+                  </tfoot> -->
+                </table>
               </div>
-
+              <div class="flex justify-content-end font-bold w-full mb-2">
+                <span>
+                  Total: ₱{{
+                    printForm.total.toLocaleString('en-US', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })
+                  }}
+                </span>
+              </div>
               <div class="flex justify-content-start w-full mb-4">
                 <div>
                   <label class="mr-2 mb-2">Issued by:</label>
@@ -1085,7 +1147,7 @@ export default {
 
           this.printForm.chargedItems.push({
             item: e.item,
-            qty: e.charge_log_quantity,
+            qty: e.quantity,
             price: formattedPrice,
             amount: formattedAmount,
           });
@@ -1287,4 +1349,12 @@ input[type='number'] {
   -moz-appearance: textfield;
 }
 /* END Remove arrow for input type number */
+
+@media print {
+  @page {
+    margin: 0;
+    /* font-size: 50px; */
+    /* font-weight: bold; */
+  }
+}
 </style>
