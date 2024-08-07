@@ -466,6 +466,8 @@ export default {
     goToPatientCharge(e) {
       this.params.enccode = e.enccode;
       this.params.disch = e.is_for_discharge;
+      this.params.patient = e.patient;
+      this.params.room_bed = e.room_bed;
       //   console.log(e);
       // this.params.is_for_discharge =
       this.$inertia.get('patientcharge', this.params, {

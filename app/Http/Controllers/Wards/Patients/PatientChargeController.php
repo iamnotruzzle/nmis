@@ -30,6 +30,9 @@ class PatientChargeController extends Controller
     {
         $pat_enccode = $request->enccode;
         $is_for_discharge = $request->disch;
+        $room_bed = $request->room_bed;
+        // $patient = $request->patient;
+        // dd($patient);
         $pat_tscode = AdmissionLog::where('enccode', $pat_enccode)->get('tscode')->first();
         $medicalSupplies = array();
 
@@ -48,6 +51,7 @@ class PatientChargeController extends Controller
             ->orderBy('csrw_login_history.created_at', 'desc')
             ->first();
 
+        // dd($authWardcode);
         $wardcode = $authWardcode->wardcode;
 
         $stocksFromCsr = DB::select(
@@ -133,6 +137,8 @@ class PatientChargeController extends Controller
             'pat_name' => $pat_name,
             'pat_tscode' => $pat_tscode,
             'pat_enccode' => $pat_enccode,
+            'room_bed' => $room_bed,
+            // 'patient' => $patient,
             'bills' => $bills,
             'medicalSupplies' => $medicalSupplies,
             'misc' => $misc,

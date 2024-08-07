@@ -480,15 +480,15 @@
       <Dialog
         v-model:visible="receiptDialog"
         :modal="true"
-        class="p-fluid w-4"
+        class="p-fluid w-3"
         :closeOnEscape="true"
         @hide="whenDialogIsHidden"
       >
         <template #header>
-          <div class="text-primary text-xl font-bold">CHARGE SLIP</div>
+          <div class="text-primary text-xl font-bold"></div>
         </template>
 
-        <div class="flex flex-column justify-content-center align-items-center">
+        <div class="flex flex-column justify-content-center align-items-center text-center">
           <h4 class="font-bold">{{ printForm.no }}</h4>
           <p class="font-semibold">MMMHMC-A-PHB-QP-005 Form 1 Rev 0 Charge Slip</p>
           <p class="font-bold">MARIANO MARCOS MEMORIAL HOSPITAL and MEDICAL CENTER</p>
@@ -496,7 +496,7 @@
         </div>
 
         <div class="w-full flex justify-content-center align-content-center">
-          <div class="w-10">
+          <div class="">
             <div class="flex justify-content-between w-full mb-2">
               <div>
                 <label class="mr-2">Type:</label>
@@ -515,13 +515,13 @@
               </div>
               <div>
                 <label class="mr-2">Date:</label>
-                <span class="font-bold">{{ printForm.date }}</span>
+                <span class="">{{ printForm.date }}</span>
               </div>
             </div>
 
             <div class="flex justify-content-start w-full mb-2">
               <div>
-                <label class="mr-2">Patient name:</label>
+                <label class="mr-2">Patient Name:</label>
                 <span class="capitalize font-semibold">{{ printForm.patient_name }}</span>
               </div>
             </div>
@@ -533,7 +533,7 @@
             </div>
 
             <div class="flex justify-content-center w-full mb-2">
-              <DataTable>
+              <DataTable class="w-full">
                 <Column header="ITEM"></Column>
                 <Column header="QTY"></Column>
                 <Column header="PRICE"></Column>
@@ -630,6 +630,8 @@ export default {
     pat_name: Array,
     pat_tscode: Object,
     pat_enccode: String,
+    // patient: String,
+    room_bed: String,
     is_for_discharge: String,
     bills: Object,
     medicalSupplies: Object,
@@ -760,6 +762,13 @@ export default {
         return 'NA';
       } else {
         return moment.tz(date, 'Asia/Manila').format('L');
+      }
+    },
+    chargeSlipDate(date) {
+      if (date == null) {
+        return 'NA';
+      } else {
+        return moment.tz(date, 'Asia/Manila').format('MM/DD/YYYY hh:mm a');
       }
     },
     getTotalAmount() {
@@ -1031,12 +1040,12 @@ export default {
       console.log('data', data);
 
       this.printForm.no = data.charge_slip_no;
-      this.printForm.type = 'type';
+      this.printForm.type = 'Ward';
       this.printForm.hospital_number = this.pat_name[0].hpercode;
-      this.printForm.date = 'date';
+      this.printForm.date = this.chargeSlipDate(data.charge_date);
       this.printForm.patient_name =
         this.pat_name[0].patlast + ', ' + this.pat_name[0].patfirst + this.pat_name[0].patmiddle;
-      this.printForm.location = 'location';
+      this.printForm.location = this.$page.props.auth.user.location.location_name.wardname + ' ' + this.room_bed;
       this.printForm.chargedItems = [];
       this.printForm.issued_by = 'issued_by';
 
