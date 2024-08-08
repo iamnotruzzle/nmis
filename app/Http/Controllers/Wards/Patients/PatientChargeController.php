@@ -198,7 +198,7 @@ class PatientChargeController extends Controller
                             'enccode' => $enccode,
                             'hpercode' => $hospitalNumber,
                             'upicode' => null,
-                            'pcchrgcod' => $this->generateUniqueChargeCode(), // charge slip no.
+                            'pcchrgcod' => $pcchrgcod, // charge slip no.
                             'pcchrgdte' => Carbon::now(),
                             'chargcode' => $item['typeOfCharge'], // type of charge (chrgcode from hcharge)
                             'uomcode' => $item['unit'], // unit
@@ -314,7 +314,7 @@ class PatientChargeController extends Controller
                             'enccode' => $enccode,
                             'hpercode' => $hospitalNumber,
                             'upicode' => null,
-                            'pcchrgcod' => $this->generateUniqueChargeCode(), // charge slip no.
+                            'pcchrgcod' => $pcchrgcod, // charge slip no.
                             'pcchrgdte' => Carbon::now(),
                             'chargcode' => $item['typeOfCharge'], // type of charge (chrgcode from hcharge)
                             'uomcode' => $item['unit'], // unit
