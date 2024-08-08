@@ -116,9 +116,19 @@
               field="amount"
               header="AMOUNT"
               sortable
-              style="text-align: right; width: 10%"
+              style="text-align: right; width: 5%"
             >
               <template #body="{ data }"> {{ data.amount }} </template>
+            </Column>
+            <Column
+              field="entry_by"
+              header="ENTRY BY"
+              style="width: 5%"
+              sortable
+            >
+              <!-- <template #body="{ data }">
+              {{ data.charge_slip_no }}
+            </template> -->
             </Column>
 
             <Column
@@ -634,9 +644,7 @@
               <div class="flex justify-content-start w-full mb-2 text-xs">
                 <div>
                   <label class="mr-2 mb-2">Issued by:</label>
-                  <span class="text-bold">{{
-                    this.printForm.issued_by.userDetail.firstname + ' ' + this.printForm.issued_by.userDetail.lastname
-                  }}</span>
+                  <span class="text-bold">{{ this.printForm.entry_by }}</span>
                 </div>
               </div>
               <div class="flex justify-content-start w-full mb-2 text-xs">
@@ -796,7 +804,7 @@ export default {
         patient_name: null,
         location: null,
         chargedItems: [{}],
-        issued_by: null,
+        entry_by: null,
         total: null,
       }),
     };
@@ -891,6 +899,8 @@ export default {
             price: Math.round(e.price * 100) / 100,
             amount: (Math.trunc(e.quantity) * Math.round(e.price * 100)) / 100,
             charge_date: e.charge_date,
+            charge_date: e.charge_date,
+            entry_by: e.entry_by,
             // patient_charge_logs: e.patient_charge_logs.length == 0 ? null : e.patient_charge_logs,
           });
         } else {
@@ -1134,7 +1144,7 @@ export default {
         this.pat_name[0].patlast + ', ' + this.pat_name[0].patfirst + this.pat_name[0].patmiddle;
       this.printForm.location = this.$page.props.auth.user.location.location_name.wardname + ' ' + this.room_bed;
       this.printForm.chargedItems = [];
-      this.printForm.issued_by = this.$page.props.auth.user;
+      this.printForm.entry_by = data.entry_by;
       this.printForm.total = 0;
 
       this.billList.forEach((e) => {

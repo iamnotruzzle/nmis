@@ -119,11 +119,13 @@ class PatientChargeController extends Controller
                             charge_log.[from] as charge_log_from,
                             charge_log.ward_stocks_id as charge_log_ward_stocks_id,
                             charge_log.quantity as charge_log_quantity,
-                            charge_log.expiration_date as charge_log_expiration_date
+                            charge_log.expiration_date as charge_log_expiration_date,
+                            charge_by.firstname + ' ' + charge_by.lastname as entry_by
                             FROM hospital.dbo.hpatchrg pat_charge
                             LEFT JOIN hospital.dbo.hclass2 as item ON pat_charge.itemcode = item.cl2comb
                             LEFT JOIN hospital.dbo.hclass1 as category ON item.cl1comb = category.cl1comb
                             LEFT JOIN hospital.dbo.hmisc as misc ON pat_charge.itemcode = misc.hmcode
+                            LEFT JOIN hospital.dbo.hpersonal as charge_by ON pat_charge.entryby = charge_by.employeeid
                             LEFT JOIN hospital.dbo.hcharge as type_of_charge ON pat_charge.chargcode = type_of_charge.chrgcode
                             LEFT JOIN hospital.dbo.csrw_patient_charge_logs as charge_log ON pat_charge.enccode = charge_log.enccode
                                                                                         AND pat_charge.pcchrgdte = charge_log.pcchrgdte
