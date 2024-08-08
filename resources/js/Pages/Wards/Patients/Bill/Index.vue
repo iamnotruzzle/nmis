@@ -96,8 +96,8 @@
             </Column>
             <Column
               field="quantity"
-              header="QUANTITY"
-              style="text-align: right; width: 10%"
+              header="QTY"
+              style="text-align: right; width: 5%"
               sortable
             >
               <template #body="{ data }">
@@ -123,7 +123,7 @@
             <Column
               field="entry_by"
               header="ENTRY BY"
-              style="width: 5%"
+              style="width: 10%"
               sortable
             >
               <!-- <template #body="{ data }">
