@@ -495,7 +495,7 @@
           <div class="w-full flex justify-content-center align-content-center">
             <div class="px-5 text-gray-900">
               <div class="flex flex-column justify-content-center align-items-center text-center">
-                <p class="font-bold text-2xl my-0 py-0">{{ printForm.no }}</p>
+                <p class="font-bold text-2xl my-0 py-0 uppercase">{{ printForm.no }}</p>
                 <p class="font-semibold my-0 py-0">MMMHMC-A-PHB-QP-005 Form 1 Rev 0 Charge Slip</p>
                 <p class="font-bold my-0 py-0">MARIANO MARCOS MEMORIAL HOSPITAL and MEDICAL CENTER</p>
                 <p class="text-lg text-blue-500 font-bold">CHARGE SLIP</p>
