@@ -508,7 +508,7 @@
                 </div>
                 <div>
                   <label>No.:</label>
-                  <span class="font-bold">{{ printForm.no }}</span>
+                  <span class="font-bold uppercase">{{ printForm.no }}</span>
                 </div>
               </div>
 
