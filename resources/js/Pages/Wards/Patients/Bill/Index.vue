@@ -492,16 +492,17 @@
           id="print"
           class="bg-white"
         >
+          <!-- x-text -->
           <div class="w-full flex justify-content-center align-content-center">
             <div class="px-5 text-gray-900">
               <div class="flex flex-column justify-content-center align-items-center text-center">
-                <p class="font-bold text-2xl my-0 py-0 uppercase">{{ printForm.no }}</p>
-                <p class="font-semibold my-0 py-0">MMMHMC-A-PHB-QP-005 Form 1 Rev 0 Charge Slip</p>
-                <p class="font-bold my-0 py-0">MARIANO MARCOS MEMORIAL HOSPITAL and MEDICAL CENTER</p>
+                <p class="font-bold text-lg my-0 py-0 uppercase">{{ printForm.no }}</p>
+                <p class="text-xs my-0 py-0">MMMHMC-A-PHB-QP-005 Form 1 Rev 0 Charge Slip</p>
+                <p class="text-xs my-0 py-0">MARIANO MARCOS MEMORIAL HOSPITAL and MEDICAL CENTER</p>
                 <p class="text-lg text-blue-500 font-bold">CHARGE SLIP</p>
               </div>
 
-              <div class="flex justify-content-between w-full">
+              <div class="flex justify-content-between w-full text-xs">
                 <div class="mb-2">
                   <label>Type:</label>
                   <span>{{ printForm.type }}</span>
@@ -512,7 +513,7 @@
                 </div>
               </div>
 
-              <div class="flex justify-content-between w-full mb-2">
+              <div class="flex justify-content-between w-full mb-2 text-xs">
                 <div>
                   <label class="mr-2">Hospital #:</label>
                   <span>{{ printForm.hospital_number }}</span>
@@ -523,13 +524,13 @@
                 </div>
               </div>
 
-              <div class="flex justify-content-start w-full mb-2">
+              <div class="flex justify-content-start w-full mb-2 text-xs">
                 <div>
                   <label class="mr-2">Patient Name:</label>
                   <span class="capitalize font-semibold">{{ printForm.patient_name }}</span>
                 </div>
               </div>
-              <div class="flex justify-content-start w-full mb-3">
+              <div class="flex justify-content-start w-full mb-3 text-xs">
                 <div>
                   <label class="mr-2">Location:</label>
                   <span>{{ printForm.location }}</span>
@@ -538,7 +539,7 @@
 
               <div class="flex justify-content-center w-full mb-2">
                 <table
-                  class="w-full"
+                  class="w-full text-xs"
                   style="border-collapse: collapse"
                 >
                   <thead>
@@ -620,7 +621,7 @@
                   </tfoot> -->
                 </table>
               </div>
-              <div class="flex justify-content-end font-bold w-full mb-2">
+              <div class="flex justify-content-end font-bold w-full mb-2 text-xs">
                 <span>
                   Total: ₱{{
                     printForm.total.toLocaleString('en-US', {
@@ -630,7 +631,7 @@
                   }}
                 </span>
               </div>
-              <div class="flex justify-content-start w-full mb-4">
+              <div class="flex justify-content-start w-full mb-4 text-xs">
                 <div>
                   <label class="mr-2 mb-2">Issued by:</label>
                   <span class="text-bold">{{
@@ -638,13 +639,13 @@
                   }}</span>
                 </div>
               </div>
-              <div class="flex justify-content-start w-full mb-4">
+              <div class="flex justify-content-start w-full mb-4 text-xs">
                 <div>
                   <label class="mr-2 mb-2">Checked by:</label>
                   <span>____________________________</span>
                 </div>
               </div>
-              <div class="flex justify-content-start w-full mb-">
+              <div class="flex justify-content-start w-full text-xs">
                 <div>
                   <label class="mr-2 mb-2">Received by:</label>
                   <span>____________________________</span>
