@@ -492,7 +492,7 @@
           id="print"
           class="bg-white"
         >
-          <!-- x-text -->
+          <!-- font size -->
           <div class="w-full flex justify-content-center align-content-center">
             <div class="px-5 text-gray-900">
               <div class="flex flex-column justify-content-center align-items-center text-center">
@@ -502,8 +502,8 @@
                 <p class="text-lg text-blue-500 font-bold">CHARGE SLIP</p>
               </div>
 
-              <div class="flex justify-content-between w-full text-xs">
-                <div class="mb-2">
+              <div class="flex justify-content-between w-full mb-1 text-xs">
+                <div>
                   <label>Type:</label>
                   <span>{{ printForm.type }}</span>
                 </div>
@@ -513,7 +513,7 @@
                 </div>
               </div>
 
-              <div class="flex justify-content-between w-full mb-2 text-xs">
+              <div class="flex justify-content-between w-full mb-1 text-xs">
                 <div>
                   <label class="mr-2">Hospital #:</label>
                   <span>{{ printForm.hospital_number }}</span>
@@ -524,20 +524,20 @@
                 </div>
               </div>
 
-              <div class="flex justify-content-start w-full mb-2 text-xs">
+              <div class="flex justify-content-start w-full mb-1 text-xs">
                 <div>
                   <label class="mr-2">Patient Name:</label>
                   <span class="capitalize font-semibold">{{ printForm.patient_name }}</span>
                 </div>
               </div>
-              <div class="flex justify-content-start w-full mb-3 text-xs">
+              <div class="flex justify-content-start w-full mb-2 text-xs">
                 <div>
                   <label class="mr-2">Location:</label>
                   <span>{{ printForm.location }}</span>
                 </div>
               </div>
 
-              <div class="flex justify-content-center w-full mb-2">
+              <div class="flex justify-content-center w-full mb-1">
                 <table
                   class="w-full text-xs"
                   style="border-collapse: collapse"
@@ -631,7 +631,7 @@
                   }}
                 </span>
               </div>
-              <div class="flex justify-content-start w-full mb-4 text-xs">
+              <div class="flex justify-content-start w-full mb-2 text-xs">
                 <div>
                   <label class="mr-2 mb-2">Issued by:</label>
                   <span class="text-bold">{{
@@ -639,7 +639,7 @@
                   }}</span>
                 </div>
               </div>
-              <div class="flex justify-content-start w-full mb-4 text-xs">
+              <div class="flex justify-content-start w-full mb-2 text-xs">
                 <div>
                   <label class="mr-2 mb-2">Checked by:</label>
                   <span>____________________________</span>
