@@ -46,7 +46,7 @@
                   </div>
                   <Button
                     v-if="is_for_discharge != 'true'"
-                    label="Bill patient"
+                    label="Charge patient"
                     icon="pi pi-money-bill"
                     iconPos="right"
                     @click="openCreateBillDialog"
