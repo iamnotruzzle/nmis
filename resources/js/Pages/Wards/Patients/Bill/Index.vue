@@ -458,7 +458,7 @@
                   class="text-yellow-500 text-bold"
                 >
                   {{ data.quantity }}
-                  <span v-if="data.is_consumable == 'y'"> pounds</span>
+                  <span v-if="data.is_consumable == 'y'"> </span>
                 </p>
                 <p
                   v-else
@@ -918,9 +918,9 @@ export default {
           cl2comb: med.cl2comb,
           cl2desc: med.cl2desc,
           uomcode: med.uomcode == null ? null : med.uomcode,
-          quantity: med.is_consumable != 'y' ? med.quantity : med.total_pounds,
+          quantity: med.is_consumable != 'y' ? med.quantity : med.total_usage,
           average: med.average,
-          total_pounds: med.total_pounds,
+          total_usage: med.total_usage,
           price: med.price,
           expiration_date: med.expiration_date,
         });
@@ -943,7 +943,7 @@ export default {
       const combinedItems = {};
       this.medicalSupplies.forEach((med) => {
         if (med.price != null) {
-          let medQuantity = med.is_consumable != 'y' ? med.quantity : med.total_pounds;
+          let medQuantity = med.is_consumable != 'y' ? med.quantity : med.total_usage;
           if (combinedItems[med.cl2desc]) {
             combinedItems[med.cl2desc].totalQuantity += medQuantity;
             combinedItems[med.cl2desc].prices.push({
