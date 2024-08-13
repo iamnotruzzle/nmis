@@ -22,7 +22,7 @@ class RequestStocksLogsController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request);
+        dd($request);
         $request->validate([
             'remarks' => 'required'
         ]);
@@ -32,14 +32,11 @@ class RequestStocksLogsController extends Controller
         $wardStock = WardsStocks::where('id', $request->ward_stock_id)->first();
         $csrStockiD = $wardStock->stock_id;
         $prevQuantity = $wardStock->quantity;
-        // dd($prevQuantity);
-        // dd((int)$prevQuantity - (int)$request->quantity);
 
         $updateWardStock = WardsStocks::where('id', $request->ward_stock_id)
             ->update([
                 'quantity' => (int)$prevQuantity - (int)$request->quantity
             ]);
-        // dd($updatedWardStock);
 
         $csrStock = CsrItemConversion::where('id', $csrStockiD)->first();
         $updateCsrStock = CsrItemConversion::where('id', $csrStockiD)

@@ -579,53 +579,49 @@
           </template>
         </Dialog>
 
-        <!-- update ward stock dialog -->
+        <!-- update stocks -->
         <Dialog
           v-model:visible="editWardStocksDialog"
-          header="Update stock"
           :modal="true"
-          class="p-fluid w-7"
+          class="p-fluid w-4"
           @hide="whenDialogIsHidden"
-          dismissableMask
         >
+          <template #header>
+            <div class="text-primary text-xl font-bold">UPDATE STOCK</div>
+          </template>
           <div class="field">
-            <label for="item">Item</label>
+            <label for="unit">Item</label>
             <InputText
-              id="item"
               v-model.trim="formWardStocks.item"
               readonly
-              class="w-full"
             />
           </div>
           <div class="field">
-            <label for="quantity">Deduct from Stock</label>
-            <!-- <InputText
-              id="quantity"
-              v-model.trim="formWardStocks.quantity"
-              autofocus
-              class="w-full"
-            /> -->
-
+            <label>Quantity</label>
             <InputText
               id="quantity"
-              type="number"
-              v-model="formWardStocks.quantity"
-              @keydown="restrictNonNumericAndPeriod"
+              v-model.trim="formWardStocks.quantity"
+              required="true"
+              autofocus
+              :class="{ 'p-invalid': formWardStocks.quantity == '' || formWardStocks.quantity == null }"
+              inputId="integeronly"
             />
             <small
               class="text-error"
-              v-if="Number(formWardStocks.current_quantity) < Number(formWardStocks.quantity)"
+              v-if="formWardStocks.errors.quantity"
             >
-              Input must be less than the current stock quantity.
+              {{ formWardStocks.errors.quantity }}
             </small>
           </div>
           <div class="field">
-            <label for="expiration_date">Expiration date</label>
+            <label>Average</label>
+            <span class="ml-1">(Optional)</span>
             <InputText
-              id="expiration_date"
-              v-model.trim="formWardStocks.expiration_date"
-              readonly
-              class="w-full"
+              id="average"
+              v-model.trim="formWardStocks.average"
+              required="true"
+              autofocus
+              inputId="integeronly"
             />
           </div>
           <div class="field">
@@ -652,19 +648,16 @@
               text
               @click="cancel"
             />
-
             <Button
-              label="Update"
+              label="Save"
               icon="pi pi-check"
-              severity="warning"
               text
               type="submit"
               :disabled="
                 formWardStocks.processing ||
                 formWardStocks.quantity == null ||
-                formWardStocks.quantity == '' ||
-                formWardStocks.quantity == 0 ||
-                Number(formWardStocks.current_quantity) < Number(formWardStocks.quantity)
+                formWardStocks.remarks == '' ||
+                formWardStocks.remarks == null
               "
               @click="submitEditWardStocks"
             />
@@ -889,6 +882,7 @@ export default {
       createRequestStocksDialog: false,
       medicalGasesDialog: false,
       editWardStocksDialog: false,
+      editAverageOfStocksDialog: false,
       editStatusDialog: false,
       cancelItemDialog: false,
       search: '',
@@ -944,8 +938,8 @@ export default {
       formWardStocks: this.$inertia.form({
         ward_stock_id: null,
         item: null,
-        current_quantity: null,
         quantity: null,
+        average: null,
         expiration_date: null,
         remarks: null,
       }),
@@ -978,8 +972,8 @@ export default {
 
     this.loading = false;
 
-    console.log('currentWardStocks', this.currentWardStocks);
-    console.log('currentWardStocks2', this.currentWardStocks2);
+    // console.log('currentWardStocks', this.currentWardStocks);
+    // console.log('currentWardStocks2', this.currentWardStocks2);
   },
   computed: {
     user() {
@@ -1349,6 +1343,7 @@ export default {
       this.isUpdate = false;
       this.createRequestStocksDialog = false;
       this.editWardStocksDialog = false;
+      this.editAverageOfStocksDialog = false;
       this.medicalGasesDialog = false;
       this.targetItemDesc = null;
       this.oldQuantity = 0;
@@ -1388,16 +1383,25 @@ export default {
     },
     // ward stocks logs
     editWardStocks(data) {
-      //   console.log(data);
       this.editWardStocksDialog = true;
 
       this.formWardStocks.ward_stock_id = data.ward_stock_id;
       this.formWardStocks.item = data.item;
-      this.formWardStocks.current_quantity = data.quantity;
       this.formWardStocks.quantity = data.quantity;
-      this.formWardStocks.expiration_date = data.expiration_date;
+      this.formWardStocks.average = data.average;
+
+      //   console.log(this.formWardStocks);
     },
     submitEditWardStocks() {
+      if (
+        this.formWardStocks.processing ||
+        this.formWardStocks.quantity == null ||
+        this.formWardStocks.remarks == '' ||
+        this.formWardStocks.remarks == null
+      ) {
+        return false;
+      }
+
       this.formWardStocks.post(route('wardsstockslogs.store'), {
         preserveScroll: true,
         onSuccess: () => {
