@@ -277,6 +277,7 @@ class PatientChargeController extends Controller
                                         ]);
                                 }
                             } else {
+                                // CHARGE GASES
                                 // execute if row selected qty is enough
                                 if ($wardStock->total_usage >= $remaining_qty_to_charge) {
                                     PatientChargeLogs::create([
@@ -672,6 +673,7 @@ class PatientChargeController extends Controller
                     }
                 }
             } else {
+                // RETURN GASES
                 // dd($request);
                 $previousCharge = null;
                 $previousPatientChargeLogs = null;
