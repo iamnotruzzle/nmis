@@ -7,8 +7,8 @@
     <!-- main container -->
     <div>
       <!-- patient bills -->
-      <div class="card">
-        <div>
+      <div class="flex justify-content-around">
+        <div class="card">
           <DataTable
             class="p-datatable-sm"
             dataKey="uid"
@@ -21,7 +21,7 @@
             removableSort
             showGridlines
             scrollable
-            scrollHeight="800px"
+            scrollHeight="650px"
           >
             <template #header>
               <span class="text-2xl text-primary font-bold">
@@ -412,11 +412,11 @@
             </template>
           </Dialog>
         </div>
-      </div>
 
-      <!-- current stocks -->
-      <div class="card">
-        <div>
+        <div class="mx-2"></div>
+
+        <!-- current stocks -->
+        <div class="card">
           <DataTable
             v-model:filters="medicalSuppliesListFilter"
             :value="medicalSuppliesList"
@@ -424,7 +424,7 @@
             scrollHeight="h-full"
             showGridlines
             removableSort
-            class="p-datatable-sm mt-4"
+            class="p-datatable-sm w-auto"
           >
             <template #header>
               <div class="text-2xl text-primary font-bold">CURRENT STOCKS</div>
@@ -445,7 +445,7 @@
               header="ITEM"
             ></Column>
             <Column
-              header="QUANTITY"
+              header="QUANTITY & PRICE PER UNIT"
               style="text-align: right"
               :pt="{ headerContent: 'justify-content-end' }"
             >
@@ -464,7 +464,7 @@
                   {{ data.quantity }}
                   <span v-if="data.is_consumable == 'y'"> pounds</span>
                 </p>
-                ₱ {{ data.price }} per unit
+                ₱ {{ data.price }}
               </template>
             </Column>
             <!-- <Column
@@ -697,6 +697,7 @@ import Dropdown from 'primevue/dropdown';
 import AutoComplete from 'primevue/autocomplete';
 import InputNumber from 'primevue/inputnumber';
 import Checkbox from 'primevue/checkbox';
+import SpeedDial from 'primevue/speeddial';
 import Tag from 'primevue/tag';
 import moment from 'moment';
 import { Link } from '@inertiajs/vue3';
@@ -721,6 +722,7 @@ export default {
     Link,
     InputNumber,
     Checkbox,
+    SpeedDial,
   },
   props: {
     pat_name: Array,
