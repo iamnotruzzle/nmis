@@ -87,6 +87,7 @@
               header="DATE"
               sortable
               style="text-align: right"
+              :pt="{ headerContent: 'justify-content-end' }"
             >
               <template #body="{ data }">
                 {{ tzone(data.charge_date) }}
@@ -96,6 +97,7 @@
               field="quantity"
               header="QTY"
               style="text-align: right; width: 5%"
+              :pt="{ headerContent: 'justify-content-end' }"
               sortable
             >
               <template #body="{ data }">
@@ -107,6 +109,7 @@
               header="PRICE"
               sortable
               style="text-align: right; width: 10%"
+              :pt="{ headerContent: 'justify-content-end' }"
             >
               <template #body="{ data }"> {{ data.price }} </template>
             </Column>
@@ -115,6 +118,7 @@
               header="AMOUNT"
               sortable
               style="text-align: right; width: 5%"
+              :pt="{ headerContent: 'justify-content-end' }"
             >
               <template #body="{ data }"> {{ data.amount }} </template>
             </Column>
@@ -123,6 +127,7 @@
               header="ENTRY BY"
               sortable
               style="text-align: right"
+              :pt="{ headerContent: 'justify-content-end' }"
             >
               <!-- <template #body="{ data }">
               {{ data.charge_slip_no }}
@@ -445,7 +450,7 @@
               header="ITEM"
             ></Column>
             <Column
-              header="QUANTITY & PRICE PER UNIT"
+              header="QTY & PRICE PER UNIT"
               style="text-align: right"
               :pt="{ headerContent: 'justify-content-end' }"
             >
