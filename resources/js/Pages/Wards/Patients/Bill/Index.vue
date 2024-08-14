@@ -427,7 +427,7 @@
             class="p-datatable-sm mt-4"
           >
             <template #header>
-              <div class="text-2xl text-primary font-bold">INSTOCK</div>
+              <div class="text-2xl text-primary font-bold">CURRENT STOCKS</div>
 
               <div class="p-inputgroup">
                 <span class="p-inputgroup-addon">
@@ -443,12 +443,11 @@
             <Column
               field="cl2desc"
               header="ITEM"
-              style="width: 60%"
             ></Column>
             <Column
-              field="quantity"
               header="QUANTITY"
-              style="width: 20%"
+              style="text-align: right"
+              :pt="{ headerContent: 'justify-content-end' }"
             >
               <template #body="{ data }">
                 <p
@@ -465,16 +464,21 @@
                   {{ data.quantity }}
                   <span v-if="data.is_consumable == 'y'"> pounds</span>
                 </p>
+                ₱ {{ data.price }} per unit
               </template>
             </Column>
-            <Column
+            <!-- <Column
               field="price"
               header="PRICE PER UNIT"
               style="text-align: right; width: 20%"
             >
               <template #body="{ data }"> ₱ {{ data.price }} </template>
-            </Column>
-            <Column header="EXP. DATE">
+            </Column> -->
+            <Column
+              header="EXP. DATE"
+              style="text-align: right"
+              :pt="{ headerContent: 'justify-content-end' }"
+            >
               <template #body="{ data }">
                 <!-- {{ data }} -->
                 <span v-if="data.is_consumable != null || data.is_consumable == 'y'">NA</span>
