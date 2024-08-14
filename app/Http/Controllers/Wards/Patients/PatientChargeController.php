@@ -191,8 +191,8 @@ class PatientChargeController extends Controller
             $acctno = PatientAccount::where('enccode', $enccode)->first(['paacctno']);
 
             foreach ($itemsToBillList as $item) {
-
                 if ($item['typeOfCharge'] == 'DRUMN') {
+                    $previousItem = $item['itemCode'];
                     array_push($itemsInBillList, $item['itemCode']);
 
                     if (in_array($item['itemCode'], $itemsInBillList)) {
@@ -200,7 +200,7 @@ class PatientChargeController extends Controller
                             'enccode' => $enccode,
                             'hpercode' => $hospitalNumber,
                             'upicode' => null,
-                            'pcchrgcod' => $pcchrgcod, // charge slip no.
+                            'pcchrgcod' => $previousItem == $item['itemCode'] ? $this->generateUniqueChargeCode() : $pcchrgcod, // charge slip no.
                             'pcchrgdte' => Carbon::now(),
                             'chargcode' => $item['typeOfCharge'], // type of charge (chrgcode from hcharge)
                             'uomcode' => $item['unit'], // unit

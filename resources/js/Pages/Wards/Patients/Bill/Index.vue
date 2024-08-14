@@ -57,7 +57,6 @@
             <Column
               field="charge_slip_no"
               header="CHARGE SLIP #"
-              style="width: 10%"
               sortable
             >
               <!-- <template #body="{ data }">
@@ -67,7 +66,6 @@
             <Column
               field="type_of_charge_description"
               header="TYPE OF CHARGE"
-              style="width: 15%"
               sortable
             >
               <template #body="{ data }">
@@ -86,9 +84,9 @@
             </Column>
             <Column
               field="charge_date"
-              header="CHARGE DATE"
-              style="width: 10%"
+              header="DATE"
               sortable
+              style="text-align: right"
             >
               <template #body="{ data }">
                 {{ tzone(data.charge_date) }}
@@ -123,8 +121,8 @@
             <Column
               field="entry_by"
               header="ENTRY BY"
-              style="width: 10%"
               sortable
+              style="text-align: right"
             >
               <!-- <template #body="{ data }">
               {{ data.charge_slip_no }}
