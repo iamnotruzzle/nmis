@@ -281,13 +281,15 @@
                 <Column
                   field="qtyToCharge"
                   header="QTY TO CHARGE"
-                  style="width: 15%"
                   sortable
+                  style="text-align: right; width: 15%"
+                  :pt="{ headerContent: 'justify-content-end' }"
                 ></Column>
                 <Column
                   field="price"
                   header="PRICE PER UNIT"
-                  style="width: 15%"
+                  style="text-align: right; width: 15%"
+                  :pt="{ headerContent: 'justify-content-end' }"
                   sortable
                 >
                   <template #body="{ data }"> ₱ {{ data.price }} </template>
@@ -295,7 +297,8 @@
                 <Column
                   filed="total"
                   header="TOTAL"
-                  style="width: 10%"
+                  style="text-align: right; width: 10%"
+                  :pt="{ headerContent: 'justify-content-end' }"
                   sortable
                 >
                   <template #body="{ data }"> ₱ {{ data.total }} </template>
