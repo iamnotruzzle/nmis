@@ -306,9 +306,8 @@
                 <Column header="">
                   <template #body="slotProps">
                     <Button
+                      label="Remove"
                       icon="pi pi-times"
-                      rounded
-                      text
                       severity="danger"
                       @click="removeFromToBillContainer(slotProps.data)"
                     />
