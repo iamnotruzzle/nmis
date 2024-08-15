@@ -8,7 +8,10 @@
     <div>
       <!-- patient bills -->
       <div class="flex justify-content-around">
-        <div class="card">
+        <div
+          class="card"
+          style="height: 80vh"
+        >
           <DataTable
             class="p-datatable-sm"
             dataKey="uid"
@@ -21,7 +24,7 @@
             removableSort
             showGridlines
             scrollable
-            scrollHeight="650px"
+            scrollHeight="flex"
           >
             <template #header>
               <span class="text-2xl text-primary font-bold">
@@ -421,15 +424,18 @@
         <div class="mx-2"></div>
 
         <!-- current stocks -->
-        <div class="card">
+        <div
+          class="card"
+          style="height: 80vh"
+        >
           <DataTable
             v-model:filters="medicalSuppliesListFilter"
             :value="medicalSuppliesList"
             scrollable
-            scrollHeight="h-full"
             showGridlines
             removableSort
             class="p-datatable-sm w-auto"
+            scrollHeight="flex"
           >
             <template #header>
               <div class="text-2xl text-primary font-bold">CURRENT STOCKS</div>
