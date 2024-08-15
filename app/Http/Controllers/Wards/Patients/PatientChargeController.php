@@ -763,7 +763,7 @@ class PatientChargeController extends Controller
                             'updated_at' => $previousPatientChargeLogs->updated_at,
                         ]);
                     }
-
+                    // s
                     // Update or delete the patient charge based on the remaining quantity
                     if (((int)$previousCharge->pchrgqty - (int)$upd_QtyToReturn) == 0) {
                         PatientCharge::where('enccode', $request->upd_enccode)
