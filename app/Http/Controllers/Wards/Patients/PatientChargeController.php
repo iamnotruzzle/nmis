@@ -280,6 +280,7 @@ class PatientChargeController extends Controller
                                 // CHARGE GASES
                                 // execute if row selected qty is enough
                                 if ($wardStock->total_usage >= $remaining_qty_to_charge) {
+                                    // Log the charge for the patient
                                     PatientChargeLogs::create([
                                         'enccode' => $enccode,
                                         'acctno' => $acctno->paacctno,
@@ -299,16 +300,26 @@ class PatientChargeController extends Controller
                                         'entry_by' => $entryby,
                                     ]);
 
-                                    // newStockQty = (($wardStock->quantity * $wardStock->average) - $wardStock->total_usage) - $remaining_qty_to_charge;
-                                    // getting the new qty of current editing ward stock
-                                    $newStockQty = $wardStock->total_usage - $remaining_qty_to_charge;
-                                    // setting the new value of remaining_qty_to_charge
-                                    $remaining_qty_to_charge = $remaining_qty_to_charge - $wardStock->total_usage;
+                                    // Calculate the new total_usage after charging the patient
+                                    $newTotalUsage = $wardStock->total_usage - $remaining_qty_to_charge;
 
+                                    // Calculate the number of full tanks left
+                                    $fullTanks = (int) floor($newTotalUsage / $wardStock->average);
+
+                                    // Determine if there's a partial tank left
+                                    $remainingInLastTank = $newTotalUsage % $wardStock->average;
+
+                                    // Update the quantity: full tanks + 1 if there's a partial tank
+                                    $newQuantity = $fullTanks + ($remainingInLastTank > 0 ? 1 : 0);
+
+                                    // Update the ward stock with the new total_usage and quantity
                                     $wardStock::where('id', $wardStock->id)
                                         ->update([
-                                            'total_usage' => $newStockQty,
+                                            'total_usage' => $newTotalUsage,
+                                            'quantity' => $newQuantity,
                                         ]);
+
+                                    $remaining_qty_to_charge = 0;
                                 }
                             }
                         }
