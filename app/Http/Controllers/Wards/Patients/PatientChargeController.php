@@ -689,7 +689,7 @@ class PatientChargeController extends Controller
                 $previousCharge = null;
                 $previousPatientChargeLogs = null;
                 $previousWardStocks = null;
-                $upd_QtyToReturn = ltrim($request->upd_QtyToReturn, '0'); // removed leading zeroes if theres any
+                $upd_QtyToReturn = ltrim($request->upd_QtyToReturn, '0'); // removed leading zeroes if there's any
                 $authID = Auth::user()->employeeid;
                 $authWard = $authWardcode->wardcode;
 
@@ -697,7 +697,10 @@ class PatientChargeController extends Controller
                 if ($request->upd_type_of_charge_code == 'DRUMN') {
                     $patientCharge = PatientCharge::where('enccode', $request->upd_enccode)
                         ->where('itemcode', $request->upd_itemcode)
-                        ->where('pcchrgdte', $request->upd_pcchrgdte)
+                        ->where(
+                            'pcchrgdte',
+                            $request->upd_pcchrgdte
+                        )
                         ->first();
                     $previousCharge = $patientCharge;
 
@@ -707,11 +710,25 @@ class PatientChargeController extends Controller
                     $wardStocks = WardsStocks::where('id', $request->upd_ward_stocks_id)->first();
                     $previousWardStocks = $wardStocks;
 
-                    // update the ward stock
+                    // Update the ward stock total_usage
+                    $newTotalUsage = (int)$previousWardStocks->total_usage + (int)$upd_QtyToReturn;
+
+                    // Calculate the number of full tanks left
+                    $fullTanks = (int) floor($newTotalUsage / $wardStocks->average);
+
+                    // Determine if there's a partial tank left
+                    $remainingInLastTank = $newTotalUsage % $wardStocks->average;
+
+                    // Update the quantity: full tanks + 1 if there's a partial tank
+                    $newQuantity = $fullTanks + ($remainingInLastTank > 0 ? 1 : 0);
+
+                    // Update the ward stock with the new total_usage and quantity
                     $wardStocks->update([
-                        'total_usage' => (int)$previousWardStocks->total_usage + (int)$upd_QtyToReturn,
+                        'total_usage' => $newTotalUsage,
+                        'quantity' => $newQuantity,
                     ]);
 
+                    // Log the return
                     PatientChargeReturnLogs::create([
                         'enccode' => $request->enccode,
                         'location' => $authWard,
@@ -721,9 +738,10 @@ class PatientChargeController extends Controller
                         'entry_by' => Auth::user()->employeeid,
                     ]);
 
-                    // delete the patient charge log
+                    // Delete the patient charge log
                     $patientChargeLogs->delete();
 
+                    // If the entire quantity wasn't returned, create a new log for the remaining quantity
                     if ((int)$previousPatientChargeLogs->quantity != (int)$upd_QtyToReturn) {
                         PatientChargeLogs::create([
                             'enccode' => $previousPatientChargeLogs->enccode,
@@ -746,6 +764,7 @@ class PatientChargeController extends Controller
                         ]);
                     }
 
+                    // Update or delete the patient charge based on the remaining quantity
                     if (((int)$previousCharge->pchrgqty - (int)$upd_QtyToReturn) == 0) {
                         PatientCharge::where('enccode', $request->upd_enccode)
                             ->where('itemcode', $request->upd_itemcode)
@@ -791,9 +810,8 @@ class PatientChargeController extends Controller
                                 'uomintake' => null, // always null
                             ]);
                     }
-                }
-                // misc
-                else {
+                } else {
+                    // misc
                     $patientCharge = PatientCharge::where('enccode', $request->upd_enccode)
                         ->where('itemcode', $request->upd_itemcode)
                         ->where('pcchrgdte', $request->upd_pcchrgdte)
