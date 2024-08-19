@@ -518,7 +518,7 @@
         style="background-color: white; display: none"
       >
         <div style="width: 100%; display: flex; justify-content: center; align-items: center">
-          <div style="padding: 0 1.5rem; color: #1f2937; margin: 0">
+          <div style="padding: 0 2rem; color: #1f2937; margin: 0">
             <div
               style="
                 display: flex;
