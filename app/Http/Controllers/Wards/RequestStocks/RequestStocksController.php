@@ -108,7 +108,7 @@ class RequestStocksController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        $currentWardStocks = WardsStocks::with(['item_details:cl2comb,cl2desc', 'request_stocks', 'unit_of_measurement:uomcode,uomdesc'])
+        $currentWardStocks = WardsStocks::with(['item_details:cl2comb,cl2desc,tag', 'request_stocks', 'unit_of_measurement:uomcode,uomdesc'])
             ->where('location', $authWardcode->wardcode)
             ->where('quantity', '!=', 0)
             ->whereHas(
@@ -118,11 +118,12 @@ class RequestStocksController extends Controller
                 }
             )
             ->get();
-        $currentWardStocks2 = WardsStocks::with(['item_details:cl2comb,cl2desc', 'request_stocks', 'unit_of_measurement:uomcode,uomdesc'])
+        $currentWardStocks2 = WardsStocks::with(['item_details:cl2comb,cl2desc,tag', 'request_stocks', 'unit_of_measurement:uomcode,uomdesc'])
             ->where('request_stocks_id', null)
             ->where('location', $authWardcode->wardcode)
             ->where('quantity', '!=', 0)
             ->get();
+        // dd($currentWardStocks);
 
         $fundSource = FundSource::orderBy('fsName')
             ->get(['id', 'fsid', 'fsName', 'cluster_code']);
