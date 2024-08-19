@@ -85,7 +85,14 @@
           sortable
         >
           <template #body="{ data }">
-            {{ data.cl2desc }}
+            <span> {{ data.cl2desc }}</span>
+            <div v-if="data.tag != null">
+              <Tag
+                class="text-m"
+                :value="data.tag"
+                severity="info"
+              />
+            </div>
           </template>
         </Column>
         <Column
@@ -383,6 +390,17 @@
           >
             {{ form.errors.cl2stat }}
           </small>
+        </div>
+        <div class="field">
+          <label for="tags">Tag</label>
+          <Dropdown
+            v-model="form.tag"
+            :options="tags"
+            optionLabel="name"
+            optionValue="value"
+            class="w-full"
+            showClear
+          />
         </div>
         <template #footer>
           <Button
@@ -724,6 +742,16 @@ export default {
           value: 'I',
         },
       ],
+      tags: [
+        {
+          name: 'Alcohol',
+          value: 'Alcohol',
+        },
+        {
+          name: 'Cotton ball',
+          value: 'Cotton ball',
+        },
+      ],
       form: this.$inertia.form({
         cl2comb: null,
         cl1comb: null,
@@ -736,6 +764,7 @@ export default {
         location: null,
         selectedMainCat: null,
         selectedSubCategory: null,
+        tag: null,
       }),
       formConvert: this.$inertia.form({
         cl2comb: null,
@@ -918,6 +947,7 @@ export default {
             uomdesc: item.unit,
             cl2stat: item.cl2stat,
             itemcode: item.itemcode,
+            tag: item.tag,
             prices: this.prices
               .filter((price) => price.cl2comb === item.cl2comb)
               .map((filteredPrice) => ({
