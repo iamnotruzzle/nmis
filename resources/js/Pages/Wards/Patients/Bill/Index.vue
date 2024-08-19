@@ -165,7 +165,7 @@
                   name="la-receipt-solid"
                   scale="1.5"
                   class="pi pi-send text-yellow-500 cursor-pointer"
-                  @click="openReceiptDialog(slotProps.data)"
+                  @click="print(slotProps.data)"
                 ></v-icon>
               </div>
             </template>
@@ -502,7 +502,7 @@
         </div>
       </div>
 
-      <Dialog
+      <!-- <Dialog
         v-model:visible="receiptDialog"
         :modal="true"
         class="p-fluid w-4"
@@ -511,175 +511,172 @@
       >
         <template #header>
           <div class="text-primary text-xl font-bold">CHARGE SLIP</div>
-        </template>
+        </template> -->
 
-        <div
-          id="print"
-          class="bg-white"
-        >
-          <!-- font size -->
-          <div class="w-full flex justify-content-center align-content-center">
-            <div class="px-5 text-gray-900">
-              <div class="flex flex-column justify-content-center align-items-center text-center">
-                <p class="font-bold text-lg my-0 py-0 uppercase">{{ printForm.no }}</p>
-                <p class="text-xs my-0 py-0">MMMHMC-A-PHB-QP-005 Form 1 Rev 0 Charge Slip</p>
-                <p class="text-xs my-0 py-0">MARIANO MARCOS MEMORIAL HOSPITAL and MEDICAL CENTER</p>
-                <p class="text-lg text-blue-500 font-bold">CHARGE SLIP</p>
-              </div>
+      <div
+        id="print"
+        style="background-color: white; display: none"
+      >
+        <div style="width: 100%; display: flex; justify-content: center; align-items: center">
+          <div style="padding: 0 1.5rem; color: #1f2937; margin: 0">
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+              "
+            >
+              <p style="font-weight: bold; font-size: 1.125rem; margin: 0; padding: 0; text-transform: uppercase">
+                {{ printForm.no }}
+              </p>
+              <p style="font-size: 0.75rem; margin: 0; padding: 0">MMMHMC-A-PHB-QP-005 Form 1 Rev 0 Charge Slip</p>
+              <p style="font-size: 0.75rem; margin: 0; padding: 0">
+                MARIANO MARCOS MEMORIAL HOSPITAL and MEDICAL CENTER
+              </p>
+              <p style="font-size: 1.125rem; color: #3b82f6; font-weight: bold">CHARGE SLIP</p>
+            </div>
 
-              <div class="flex justify-content-between w-full mb-1 text-xs">
-                <div>
-                  <label>Type:</label>
-                  <span>{{ printForm.type }}</span>
-                </div>
-                <div>
-                  <label>No.:</label>
-                  <span class="font-bold uppercase">{{ printForm.no }}</span>
-                </div>
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
+                margin-bottom: 0.25rem;
+                font-size: 0.75rem;
+              "
+            >
+              <div>
+                <label>Type:</label>
+                <span>{{ printForm.type }}</span>
               </div>
+              <div>
+                <label>No.:</label>
+                <span style="font-weight: bold; text-transform: uppercase">{{ printForm.no }}</span>
+              </div>
+            </div>
 
-              <div class="flex justify-content-between w-full mb-1 text-xs">
-                <div>
-                  <label class="mr-2">Hospital #:</label>
-                  <span>{{ printForm.hospital_number }}</span>
-                </div>
-                <div>
-                  <label class="mr-2">Date:</label>
-                  <span class="">{{ printForm.date }}</span>
-                </div>
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
+                margin-bottom: 0.25rem;
+                font-size: 0.75rem;
+              "
+            >
+              <div>
+                <label style="margin-right: 0.5rem">Hospital #:</label>
+                <span>{{ printForm.hospital_number }}</span>
               </div>
+              <div>
+                <label style="margin-right: 0.5rem">Date:</label>
+                <span>{{ printForm.date }}</span>
+              </div>
+            </div>
 
-              <div class="flex justify-content-start w-full mb-1 text-xs">
-                <div>
-                  <label class="mr-2">Patient Name:</label>
-                  <span class="capitalize font-semibold">{{ printForm.patient_name }}</span>
-                </div>
+            <div
+              style="
+                display: flex;
+                justify-content: flex-start;
+                width: 100%;
+                margin-bottom: 0.25rem;
+                font-size: 0.75rem;
+              "
+            >
+              <div>
+                <label style="margin-right: 0.5rem">Patient Name:</label>
+                <span style="text-transform: capitalize; font-weight: 600">{{ printForm.patient_name }}</span>
               </div>
-              <div class="flex justify-content-start w-full mb-2 text-xs">
-                <div>
-                  <label class="mr-2">Location:</label>
-                  <span>{{ printForm.location }}</span>
-                </div>
+            </div>
+            <div
+              style="display: flex; justify-content: flex-start; width: 100%; margin-bottom: 0.5rem; font-size: 0.75rem"
+            >
+              <div>
+                <label style="margin-right: 0.5rem">Location:</label>
+                <span>{{ printForm.location }}</span>
               </div>
+            </div>
 
-              <div class="flex justify-content-center w-full mb-1">
-                <table
-                  class="w-full text-xs"
-                  style="border-collapse: collapse"
-                >
-                  <thead>
-                    <tr>
-                      <th
-                        class="p-2 text-left"
-                        style="border-bottom-style: solid; border-top-style: solid"
-                      >
-                        ITEM
-                      </th>
-                      <th
-                        class="p-2 text-right"
-                        style="border-bottom-style: solid; border-top-style: solid"
-                      >
-                        QTY
-                      </th>
-                      <th
-                        class="p-2 text-right"
-                        style="border-bottom-style: solid; border-top-style: solid"
-                      >
-                        PRICE
-                      </th>
-                      <th
-                        class="p-2 text-right"
-                        style="border-bottom-style: solid; border-top-style: solid"
-                      >
-                        AMOUNT
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr
-                      v-for="item in printForm.chargedItems"
-                      :key="item.id"
-                    >
-                      <td
-                        class="p-2 text-left"
-                        style="border-bottom-style: solid"
-                      >
-                        {{ item.item }}
-                      </td>
-                      <td
-                        class="p-2 text-right"
-                        style="border-bottom-style: solid"
-                      >
-                        {{ item.qty }}
-                      </td>
-                      <td
-                        class="p-2 text-right"
-                        style="border-bottom-style: solid"
-                      >
-                        {{ item.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
-                      </td>
-                      <td
-                        class="p-2 text-right"
-                        style="border-bottom-style: solid"
-                      >
-                        {{
-                          item.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-                        }}
-                      </td>
-                    </tr>
-                  </tbody>
-                  <!-- <tfoot>
-                    <tr>
-                      <td
-                        colspan="4"
-                        class="text-right font-bold"
-                        style="border-bottom-style: solid"
-                      >
-                        Total: ₱{{
-                          printForm.total.toLocaleString('en-US', {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          })
-                        }}
-                      </td>
-                    </tr>
-                  </tfoot> -->
-                </table>
+            <div style="display: flex; justify-content: center; width: 100%; margin-bottom: 0.25rem">
+              <table style="width: 100%; font-size: 0.75rem; border-collapse: collapse">
+                <thead>
+                  <tr>
+                    <th style="padding: 0.5rem; text-align: left; border-bottom-style: solid; border-top-style: solid">
+                      ITEM
+                    </th>
+                    <th style="padding: 0.5rem; text-align: right; border-bottom-style: solid; border-top-style: solid">
+                      QTY
+                    </th>
+                    <th style="padding: 0.5rem; text-align: right; border-bottom-style: solid; border-top-style: solid">
+                      PRICE
+                    </th>
+                    <th style="padding: 0.5rem; text-align: right; border-bottom-style: solid; border-top-style: solid">
+                      AMOUNT
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="item in printForm.chargedItems"
+                    :key="item.id"
+                  >
+                    <td style="padding: 0.5rem; text-align: left; border-bottom-style: solid">
+                      {{ item.item }}
+                    </td>
+                    <td style="padding: 0.5rem; text-align: right; border-bottom-style: solid">
+                      {{ item.qty }}
+                    </td>
+                    <td style="padding: 0.5rem; text-align: right; border-bottom-style: solid">
+                      {{ item.price }}
+                    </td>
+                    <td style="padding: 0.5rem; text-align: right; border-bottom-style: solid">
+                      {{ item.amount }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div
+              style="
+                display: flex;
+                justify-content: flex-end;
+                font-weight: bold;
+                width: 100%;
+                margin-bottom: 0.5rem;
+                font-size: 0.75rem;
+              "
+            >
+              <span> Total: ₱{{ printForm.total }} </span>
+            </div>
+            <div
+              style="display: flex; justify-content: flex-start; width: 100%; margin-bottom: 0.5rem; font-size: 0.75rem"
+            >
+              <div>
+                <label style="margin-right: 0.5rem; margin-bottom: 0.5rem">Issued by:</label>
+                <span style="font-weight: bold">{{ printForm.entry_by }}</span>
               </div>
-              <div class="flex justify-content-end font-bold w-full mb-2 text-xs">
-                <span>
-                  Total: ₱{{
-                    printForm.total.toLocaleString('en-US', {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })
-                  }}
-                </span>
+            </div>
+            <div
+              style="display: flex; justify-content: flex-start; width: 100%; margin-bottom: 0.5rem; font-size: 0.75rem"
+            >
+              <div>
+                <label style="margin-right: 0.5rem; margin-bottom: 0.5rem">Checked by:</label>
+                <span>____________________________</span>
               </div>
-              <div class="flex justify-content-start w-full mb-2 text-xs">
-                <div>
-                  <label class="mr-2 mb-2">Issued by:</label>
-                  <span class="text-bold">{{ this.printForm.entry_by }}</span>
-                </div>
-              </div>
-              <div class="flex justify-content-start w-full mb-2 text-xs">
-                <div>
-                  <label class="mr-2 mb-2">Checked by:</label>
-                  <span>____________________________</span>
-                </div>
-              </div>
-              <div class="flex justify-content-start w-full text-xs">
-                <div>
-                  <label class="mr-2 mb-2">Received by:</label>
-                  <span>____________________________</span>
-                </div>
+            </div>
+            <div style="display: flex; justify-content: flex-start; width: 100%; font-size: 0.75rem">
+              <div>
+                <label style="margin-right: 0.5rem; margin-bottom: 0.5rem">Received by:</label>
+                <span>____________________________</span>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <template #footer>
-          <!-- @click="submit" -->
+      <!-- <template #footer>
           <Button
             label="Print"
             icon="pi pi-print"
@@ -687,7 +684,7 @@
             @click="print"
           />
         </template>
-      </Dialog>
+      </Dialog> -->
     </div>
   </app-layout>
 </template>
@@ -750,6 +747,7 @@ export default {
   },
   data() {
     return {
+      domUpdater: null,
       stockBalanceDeclared: false,
       expandedRow: [],
       uid: 0, // Initialize unique ID property
@@ -774,6 +772,7 @@ export default {
       itemNotSelectedMsg: null,
       updateQtyNotEnough: false,
       receiptDialog: false,
+      isPrinting: false,
       totalAmount: 0,
       medicalSuppliesListFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -1150,65 +1149,74 @@ export default {
         this.printForm.reset()
       );
     },
-    openReceiptDialog(data) {
-      console.log('data', data);
+    print(data) {
+      console.log('Opening print dialog...');
+      setTimeout(() => {
+        if (data != null) {
+          this.printForm.no = data.charge_slip_no;
+          this.printForm.type = 'Ward';
+          this.printForm.hospital_number = this.pat_name[0].hpercode;
+          this.printForm.date = this.chargeSlipDate(data.charge_date);
+          this.printForm.patient_name =
+            this.pat_name[0].patlast + ', ' + this.pat_name[0].patfirst + this.pat_name[0].patmiddle;
+          this.printForm.location = this.$page.props.auth.user.location.location_name.wardname + ' ' + this.room_bed;
+          this.printForm.chargedItems = [];
+          this.printForm.entry_by = data.entry_by;
+          this.printForm.total = 0;
 
-      this.printForm.no = data.charge_slip_no;
-      this.printForm.type = 'Ward';
-      this.printForm.hospital_number = this.pat_name[0].hpercode;
-      this.printForm.date = this.chargeSlipDate(data.charge_date);
-      this.printForm.patient_name =
-        this.pat_name[0].patlast + ', ' + this.pat_name[0].patfirst + this.pat_name[0].patmiddle;
-      this.printForm.location = this.$page.props.auth.user.location.location_name.wardname + ' ' + this.room_bed;
-      this.printForm.chargedItems = [];
-      this.printForm.entry_by = data.entry_by;
-      this.printForm.total = 0;
+          this.billList.forEach((e) => {
+            if (e.charge_slip_no == this.printForm.no) {
+              const formattedPrice = e.price.toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              });
+              const formattedAmount = e.amount.toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              });
 
-      this.billList.forEach((e) => {
-        if (e.charge_slip_no == this.printForm.no) {
-          // Format price and amount with commas and two decimal places
-          const formattedPrice = e.price.toLocaleString('en-US', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
+              this.printForm.chargedItems.push({
+                item: e.item,
+                qty: e.quantity,
+                price: formattedPrice,
+                amount: formattedAmount,
+              });
+
+              this.printForm.total += e.amount;
+            }
           });
-          const formattedAmount = e.amount.toLocaleString('en-US', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          });
 
-          this.printForm.chargedItems.push({
-            item: e.item,
-            qty: e.quantity,
-            price: formattedPrice,
-            amount: formattedAmount,
-          });
+          // Fix floating-point precision by formatting the total to 2 decimal places
+          this.printForm.total = this.printForm.total.toFixed(2);
 
-          // Add the amount to the total, keeping it as a number for calculation
-          this.printForm.total += e.amount;
+          this.$nextTick(() => {
+            const printWindow = window.open('', '_blank');
+            if (printWindow) {
+              printWindow.document.write(`
+            <html>
+              <head>
+                <title>Print</title>
+                <style>
+                  /* Add your print styles here */
+                </style>
+              </head>
+              <body>
+                ${document.getElementById('print').innerHTML}
+              </body>
+            </html>
+          `);
+              printWindow.document.close();
+              printWindow.focus();
+              printWindow.print();
+              printWindow.close();
+            } else {
+              console.error('Failed to open print window.');
+            }
+          });
         }
-      });
-
-      this.receiptDialog = true;
+      }, 200); // Slightly longer delay to ensure rendering
     },
-    print() {
-      const printContents = document.getElementById('print').innerHTML;
-      const originalContents = document.body.innerHTML;
 
-      // Replace the current page content with the print content
-      document.body.innerHTML = printContents;
-
-      // Trigger the print dialog
-      window.print();
-
-      // After printing, restore the original content and redirect to the previous page
-      document.body.innerHTML = originalContents;
-
-      // Get the current URL with its parameters
-      const currentUrl = window.location.href;
-
-      // Redirect to the current URL
-      window.location.href = currentUrl;
-    },
     updateData() {
       this.params.enccode = this.enccode;
       this.billList = [];
