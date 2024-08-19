@@ -428,7 +428,7 @@
         <!-- current stocks -->
         <div
           class="card"
-          style="height: 80vh"
+          style="height: 80vh; width: 30%"
         >
           <DataTable
             v-model:filters="medicalSuppliesListFilter"
