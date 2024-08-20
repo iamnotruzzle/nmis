@@ -1173,6 +1173,7 @@ export default {
       );
     },
     print(data) {
+      console.log(data);
       console.log('Opening print dialog...');
       setTimeout(() => {
         if (data != null) {
@@ -1199,7 +1200,7 @@ export default {
               });
 
               this.printForm.chargedItems.push({
-                item: e.item,
+                item: e.tag == null ? e.item : e.tag,
                 qty: e.quantity,
                 price: formattedPrice,
                 amount: formattedAmount,
