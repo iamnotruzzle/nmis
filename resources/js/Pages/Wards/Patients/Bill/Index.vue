@@ -438,6 +438,7 @@
             removableSort
             class="p-datatable-sm w-auto"
             scrollHeight="flex"
+            :globalFilterFields="['cl2desc', 'tag']"
           >
             <template #header>
               <div class="text-2xl text-primary font-bold">CURRENT STOCKS</div>
@@ -456,7 +457,17 @@
             <Column
               field="cl2desc"
               header="ITEM"
-            ></Column>
+            >
+              <template #body="{ data }">
+                <span> {{ data.cl2desc }}</span>
+                <div v-if="data.tag != null">
+                  <Tag
+                    :value="data.tag"
+                    severity="info"
+                  />
+                </div>
+              </template>
+            </Column>
             <Column
               header="QTY & PRICE PER UNIT"
               style="text-align: right"
@@ -776,6 +787,8 @@ export default {
       totalAmount: 0,
       medicalSuppliesListFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        tag: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        cl2desc: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -932,7 +945,7 @@ export default {
           id: med.id,
           is_consumable: med.is_consumable,
           cl2comb: med.cl2comb,
-          cl2desc: med.tag != null ? med.tag : med.cl2desc,
+          cl2desc: med.cl2desc,
           uomcode: med.uomcode == null ? null : med.uomcode,
           quantity: med.is_consumable != 'y' ? med.quantity : med.total_usage,
           average: med.average,
