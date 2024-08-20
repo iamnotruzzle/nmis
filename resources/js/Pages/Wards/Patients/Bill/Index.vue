@@ -475,7 +475,7 @@
                   class="text-green-500 text-bold"
                 >
                   {{ data.quantity }}
-                  <span v-if="data.is_consumable == 'y'"> pounds</span>
+                  <span v-if="data.is_consumable == 'y'"> units</span>
                 </p>
                 ₱ {{ data.price }}
               </template>
@@ -932,13 +932,14 @@ export default {
           id: med.id,
           is_consumable: med.is_consumable,
           cl2comb: med.cl2comb,
-          cl2desc: med.cl2desc,
+          cl2desc: med.tag != null ? med.tag : med.cl2desc,
           uomcode: med.uomcode == null ? null : med.uomcode,
           quantity: med.is_consumable != 'y' ? med.quantity : med.total_usage,
           average: med.average,
           total_usage: med.total_usage,
           price: med.price,
           expiration_date: med.expiration_date,
+          tag: med.tag,
         });
       });
       console.log('medical supplies list', this.medicalSupplies);
@@ -974,7 +975,7 @@ export default {
               is_consumable: med.is_consumable,
               typeOfCharge: 'DRUMN',
               itemCode: med.cl2comb,
-              itemDesc: med.cl2desc,
+              itemDesc: med.tag != null ? med.tag : med.cl2desc,
               unit: med.uomcode == null ? null : med.uomcode,
               totalQuantity: medQuantity,
               prices: [{ id: med.id, price: med.price, quantity: medQuantity, expiryDate: med.expiryDate }],

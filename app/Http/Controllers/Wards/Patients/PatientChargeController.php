@@ -65,7 +65,8 @@ class PatientChargeController extends Controller
                 csrw_wards_stocks.average,
                 csrw_wards_stocks.total_usage,
                 price.price_per_unit as price,
-                csrw_wards_stocks.expiration_date
+                csrw_wards_stocks.expiration_date,
+                item.tag
             FROM csrw_wards_stocks
             JOIN hclass2 as item ON item.cl2comb = csrw_wards_stocks.cl2comb
             JOIN csrw_item_prices as price ON csrw_wards_stocks.cl2comb = price.cl2comb
@@ -92,6 +93,7 @@ class PatientChargeController extends Controller
                     'total_usage' => $s->total_usage,
                     'price' => $s->price,
                     'expiration_date' => $s->expiration_date,
+                    'tag' => $s->tag,
                 ];
                 $seenIds[] = $s->id;
             }
@@ -185,6 +187,7 @@ class PatientChargeController extends Controller
         $itemsInBillList = [];
 
         $pcchrgcod = $this->generateUniqueChargeCode();
+        $previousItem = '';
 
         if ($request->isUpdate == false) {
             // get patient account number
@@ -192,7 +195,6 @@ class PatientChargeController extends Controller
 
             foreach ($itemsToBillList as $item) {
                 if ($item['typeOfCharge'] == 'DRUMN') {
-                    $previousItem = $item['itemCode'];
                     array_push($itemsInBillList, $item['itemCode']);
 
                     if (in_array($item['itemCode'], $itemsInBillList)) {
@@ -277,7 +279,7 @@ class PatientChargeController extends Controller
                                         ]);
                                 }
                             } else {
-                                // CHARGE GASES
+                                // CHARGE CONSUMABLE ITEMS
                                 // execute if row selected qty is enough
                                 if ($wardStock->total_usage >= $remaining_qty_to_charge) {
                                     // Log the charge for the patient
@@ -489,12 +491,18 @@ class PatientChargeController extends Controller
                         'entry_by' => $entryby,
                     ]);
                 }
+
+                // set the item code the previous item
+                // this will make sure that there will be no duplicate item with the same price
+                $previousItem = $item['itemCode'];
             }
         } else {
             // dd($request);
+
+            $stock = WardsStocks::where('id', $request->upd_ward_stocks_id)->first();
+            // dd($stock->is_consumable);
             // return / void charge
-            if ($request->charge_log_from != 'MEDICAL GASES') {
-                // dd($request);
+            if ($request->charge_log_from != 'MEDICAL GASES' && $stock->is_consumable == null) {
                 $previousCharge = null;
                 $previousPatientChargeLogs = null;
                 $previousWardStocks = null;
@@ -684,7 +692,7 @@ class PatientChargeController extends Controller
                     }
                 }
             } else {
-                // RETURN GASES
+                // RETURN CONSUMABLE ITEMS
                 // dd($request);
                 $previousCharge = null;
                 $previousPatientChargeLogs = null;

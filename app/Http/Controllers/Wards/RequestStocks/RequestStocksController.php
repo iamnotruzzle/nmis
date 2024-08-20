@@ -43,7 +43,27 @@ class RequestStocksController extends Controller
         //     ",
         // );
 
+        // OLD
         // available items only show if quantity_after == total_issued_qty
+        // $items = DB::select(
+        //     "SELECT
+        //         item.cl2comb,
+        //         item.cl2desc,
+        //         item.uomcode,
+        //         uom.uomdesc
+        //     FROM
+        //         hclass2 AS item
+        //     FULL OUTER JOIN
+        //         huom AS uom
+        //         ON uom.uomcode = item.uomcode
+        //     WHERE
+        //         (item.catID = 1
+        //         AND item.uomcode != 'box'
+        //         AND (item.itemcode NOT LIKE 'MSMG-%' OR item.itemcode IS NULL))
+        //     ORDER BY
+        //         item.cl2desc ASC;"
+        // );
+
         $items = DB::select(
             "SELECT
                 item.cl2comb,
@@ -56,9 +76,24 @@ class RequestStocksController extends Controller
                 huom AS uom
                 ON uom.uomcode = item.uomcode
             WHERE
-                (item.catID = 1
+                item.catID = 1
                 AND item.uomcode != 'box'
-                AND (item.itemcode NOT LIKE 'MSMG-%' OR item.itemcode IS NULL))
+                AND (item.itemcode NOT LIKE 'MSMG-%' OR item.itemcode IS NULL)
+                AND item.tag IS NULL
+            UNION ALL
+            SELECT
+                item.cl2comb,
+                item.cl2desc,
+                item.uomcode,
+                uom.uomdesc
+            FROM
+                hclass2 AS item
+            FULL OUTER JOIN
+                huom AS uom
+                ON uom.uomcode = item.uomcode
+            WHERE
+                item.tag IS NOT NULL
+
             ORDER BY
                 item.cl2desc ASC;"
         );
