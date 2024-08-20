@@ -22,51 +22,41 @@ class RequestStocksLogsController extends Controller
 
     public function store(Request $request)
     {
-        dd($request);
-        $request->validate([
-            'remarks' => 'required'
-        ]);
+        // dd($request);
+        // $request->validate([
+        //     'remarks' => 'required'
+        // ]);
 
         $entry_by = Auth::user()->employeeid;
+        $ward_stock_id = $request->ward_stock_id;
+
+        $updateWardStock = WardsStocks::where('id', $ward_stock_id)
+            ->update([
+                'is_consumable' => 'y',
+                'average' => $request->average,
+                'total_usage' => (int)$request->quantity * (int)$request->average,
+            ]);
 
         $wardStock = WardsStocks::where('id', $request->ward_stock_id)->first();
-        $csrStockiD = $wardStock->stock_id;
-        $prevQuantity = $wardStock->quantity;
-
-        $updateWardStock = WardsStocks::where('id', $request->ward_stock_id)
-            ->update([
-                'quantity' => (int)$prevQuantity - (int)$request->quantity
-            ]);
-
-        $csrStock = CsrItemConversion::where('id', $csrStockiD)->first();
-        $updateCsrStock = CsrItemConversion::where('id', $csrStockiD)
-            ->update([
-                'quantity_after' => (int)$csrStock->quantity_after + (int)$request->quantity,
-                'total_issued_qty' => (int)$csrStock->total_issued_qty - (int)$request->quantity
-            ]);
-
-        $requestStockDetail = RequestStocksDetails::where('id', $wardStock->request_stocks_detail_id)->first();
-        $updateRequestStockDetail = RequestStocksDetails::where('id', $wardStock->request_stocks_detail_id)
-            ->update([
-                'approved_qty' => (int)$requestStockDetail->approved_qty - (int)$request->quantity
-            ]);
 
         $wardStockLogs = WardsStocksLogs::create([
             'request_stocks_id' => $wardStock->request_stocks_id,
             'request_stocks_detail_id' => $wardStock->request_stocks_detail_id,
             'ris_no' => $wardStock->ris_no,
-            'stock_id' => $wardStock->stock_id,
+            'stock_id' => $wardStock->id,
+            'is_consumable' => 'y',
             'location' => $wardStock->location,
             'cl2comb' => $wardStock->cl2comb,
             'uomcode' => $wardStock->uomcode,
-            'chrgcode' => $wardStock->chrgcode,
-            'prev_qty' => $request->current_quantity,
-            'new_qty' => $request->quantity,
-            'converted_from_ward_stock_id' => $wardStock->id,
+            'chrgcode' => $wardStock->fund_source,
+            'prev_qty' => 0,
+            'new_qty' => $wardStock->quantity,
+            'average' => $wardStock->average,
+            'total_usage' => $wardStock->total_usage,
             'manufactured_date' => Carbon::parse($wardStock->manufactured_date)->format('Y-m-d H:i:s.v'),
-            'delivery_date' => Carbon::parse($wardStock->delivered_date)->format('Y-m-d H:i:s.v'),
-            'expiration_date' => Carbon::parse($wardStock->expiration_date)->format('Y-m-d H:i:s.v'),
-            'action' => 'UPDATE',
+            'delivered_date' =>  Carbon::parse($wardStock->delivered_date)->format('Y-m-d H:i:s.v'),
+            'expiration_date' =>  $wardStock->expiration_date,
+            'action' => 'CONVERT IT TO CONSUMABLE',
             'remarks' => $request->remarks,
             'entry_by' => $entry_by,
         ]);
