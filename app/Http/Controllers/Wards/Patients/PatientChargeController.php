@@ -111,6 +111,7 @@ class PatientChargeController extends Controller
                             type_of_charge.chrgdesc as type_of_charge_description,
                             category.cl1desc as category,
                             item.cl2desc as item,
+                            item.tag as tag,
                             misc.hmdesc as misc,
                             pat_charge.itemcode as itemcode,
                             pat_charge.pchrgqty as quantity,

@@ -25,6 +25,7 @@
             showGridlines
             scrollable
             scrollHeight="flex"
+            :globalFilterFields="['charge_slip_no', 'type_of_charge_description', 'item', 'amount', 'tag']"
           >
             <template #header>
               <span class="text-2xl text-primary font-bold">
@@ -82,7 +83,13 @@
               sortable
             >
               <template #body="{ data }">
-                {{ data.item }}
+                <span> {{ data.item }}</span>
+                <div v-if="data.tag != null">
+                  <Tag
+                    :value="data.tag"
+                    severity="info"
+                  />
+                </div>
               </template>
             </Column>
             <Column
@@ -799,6 +806,7 @@ export default {
         quantity: { value: null, matchMode: FilterMatchMode.CONTAINS },
         price: { value: null, matchMode: FilterMatchMode.CONTAINS },
         amount: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        tag: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       itemsToBillFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -930,6 +938,7 @@ export default {
             charge_date: e.charge_date,
             charge_date: e.charge_date,
             entry_by: e.entry_by,
+            tag: e.tag,
             // patient_charge_logs: e.patient_charge_logs.length == 0 ? null : e.patient_charge_logs,
           });
         } else {
