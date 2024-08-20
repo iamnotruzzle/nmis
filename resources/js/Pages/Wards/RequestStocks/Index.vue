@@ -735,7 +735,8 @@
           <Column
             field="unit"
             header="UNIT"
-            style="width: 5%"
+            style="text-align: right; width: 5%"
+            :pt="{ headerContent: 'justify-content-end' }"
             sortable
           >
           </Column>
@@ -764,7 +765,8 @@
           <Column
             field="expiration_date"
             header="EXPIRATION DATE"
-            style="width: 15%"
+            style="text-align: right; width: 15%"
+            :pt="{ headerContent: 'justify-content-end' }"
             sortable
           >
             <template #body="{ data }">
@@ -793,6 +795,7 @@
           <Column
             header="ACTION"
             style="width: 10%"
+            :pt="{ headerContent: 'justify-content-center' }"
           >
             <template #body="slotProps">
               <div class="flex justify-content-center">
