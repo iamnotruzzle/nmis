@@ -80,24 +80,50 @@ class PatientChargeController extends Controller
         $medicalSupplies = [];
         $seenIds = [];
 
+        // foreach ($stocksFromCsr as $s) {
+        //     if (!in_array($s->id, $seenIds)) {
+        //         $medicalSupplies[] = (object) [
+        //             'id' => $s->id,
+        //             'is_consumable' => $s->is_consumable,
+        //             'cl2comb' => $s->cl2comb,
+        //             'cl2desc' => $s->cl2desc,
+        //             'uomcode' => $s->uomcode,
+        //             'quantity' => $s->quantity,
+        //             'average' => $s->average,
+        //             'total_usage' => $s->total_usage,
+        //             'price' => $s->price,
+        //             'expiration_date' => $s->expiration_date,
+        //             'tag' => $s->tag,
+        //         ];
+        //         $seenIds[] = $s->id;
+        //     }
+        // }
         foreach ($stocksFromCsr as $s) {
             if (!in_array($s->id, $seenIds)) {
-                $medicalSupplies[] = (object) [
-                    'id' => $s->id,
-                    'is_consumable' => $s->is_consumable,
-                    'cl2comb' => $s->cl2comb,
-                    'cl2desc' => $s->cl2desc,
-                    'uomcode' => $s->uomcode,
-                    'quantity' => $s->quantity,
-                    'average' => $s->average,
-                    'total_usage' => $s->total_usage,
-                    'price' => $s->price,
-                    'expiration_date' => $s->expiration_date,
-                    'tag' => $s->tag,
-                ];
-                $seenIds[] = $s->id;
+                // Only add the item if tag is null or total_usage is not null
+                if ($s->tag === null || $s->total_usage !== null) {
+                    $medicalSupplies[] = (object) [
+                        'id' => $s->id,
+                        'is_consumable' => $s->is_consumable,
+                        'cl2comb' => $s->cl2comb,
+                        'cl2desc' => $s->cl2desc,
+                        'uomcode' => $s->uomcode,
+                        'quantity' => $s->quantity,
+                        'average' => $s->average,
+                        'total_usage' => $s->total_usage,
+                        'price' => $s->price,
+                        'expiration_date' => $s->expiration_date,
+                        'tag' => $s->tag,
+                    ];
+                    $seenIds[] = $s->id;
+                }
             }
         }
+        // this will filter items with tag but is not converted yet
+        $medicalSupplies = array_filter($medicalSupplies, function ($item) {
+            return !($item->tag !== null && $item->total_usage === null);
+        });
+        // dd($medicalSupplies);
 
         // get miscellaneous / miscellaneous
         $misc = Miscellaneous::with('unit')
