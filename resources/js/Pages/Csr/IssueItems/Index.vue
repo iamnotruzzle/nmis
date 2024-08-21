@@ -711,10 +711,10 @@ export default {
     viewIssuedItem(data) {
       //   console.log('data', data.id);
       data.request_stocks_details.forEach((item) => {
-        console.log('item', item);
+        // console.log('item', item);
 
         item.issued_item.forEach((e) => {
-          console.log(e);
+          //   console.log(e);
           if (data.id == e.request_stocks_id) {
             this.issuedItemList.push({
               ris_no: e.ris_no,

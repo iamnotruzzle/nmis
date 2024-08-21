@@ -913,7 +913,7 @@ export default {
         // console.log('items', this.items);
         // Find corresponding item in itemsList based on cl2comb
         const matchingItem = this.itemsList.find((listItem) => listItem.cl2comb === item.cl2comb);
-        console.log('match', matchingItem);
+        // console.log('match', matchingItem);
         if (matchingItem) {
           // If a matching item is found, iterate through prices array
           this.prices.forEach((price) => {
@@ -1101,7 +1101,7 @@ export default {
       });
     },
     confirmDeleteItem(item) {
-      console.log(item.cl2comb);
+      //   console.log(item.cl2comb);
       this.form.cl2comb = item.cl2comb;
       //   this.itemId = item.id;
       this.deleteItemDialog = true;

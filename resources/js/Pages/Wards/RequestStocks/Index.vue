@@ -1320,7 +1320,7 @@ export default {
         this.formMedicalGases.delivered_date != null ||
         this.formMedicalGases.delivered_date != ''
       ) {
-        console.log('success');
+        // console.log('success');
         this.formMedicalGases.post(route('medicalGases.store'), {
           preserveScroll: true,
           onSuccess: () => {

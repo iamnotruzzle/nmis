@@ -964,7 +964,7 @@ export default {
           tag: med.tag,
         });
       });
-      console.log('medical supplies list', this.medicalSupplies);
+      //   console.log('medical supplies list', this.medicalSupplies);
     },
     storeMiscInContainer() {
       this.misc.forEach((misc) => {
@@ -1034,7 +1034,7 @@ export default {
       });
     },
     medicalSuppliesQtyValidation() {
-      console.log(this.item);
+      //   console.log(this.item);
 
       if (this.item.typeOfCharge == 'DRUMN') {
         // Check if an item is selected
@@ -1173,8 +1173,8 @@ export default {
       );
     },
     print(data) {
-      console.log(data);
-      console.log('Opening print dialog...');
+      //   console.log(data);
+      //   console.log('Opening print dialog...');
       setTimeout(() => {
         if (data != null) {
           this.printForm.no = data.charge_slip_no;
@@ -1351,7 +1351,7 @@ export default {
       //   console.log(this.$page.props.errors);
     },
     editItem(e) {
-      console.log('charge', e);
+      //   console.log('charge', e);
 
       this.form.isUpdate = true;
       this.form.upd_id = e.charge_log_id;
@@ -1369,7 +1369,7 @@ export default {
       this.form.charge_log_from = e.charge_log_from;
       this.updateBillDialog = true;
 
-      console.log('form', this.form);
+      //   console.log('form', this.form);
     },
     cancel() {
       this.stockBalanceDeclared = false;

@@ -909,7 +909,7 @@ export default {
   },
   methods: {
     editRequestedStock(item) {
-      console.log(item);
+      //   console.log(item);
 
       this.isUpdate = true;
       this.form.id = item.id;
@@ -919,7 +919,7 @@ export default {
       this.editRequestedItem = true;
     },
     openUpdateFundSource(item) {
-      console.log(item);
+      //   console.log(item);
       this.selectedFundSource = Number(item.fsId);
       this.formUpdateFundSource.itemId = item.id;
 
@@ -1138,7 +1138,7 @@ export default {
       let reference_id = this.form.reference_id;
       let e = this.form.id;
 
-      console.log('form', this.form);
+      //   console.log('form', this.form);
 
       if (this.isUpdate) {
         this.form.put(route('requestmedsstocks.update', e), {

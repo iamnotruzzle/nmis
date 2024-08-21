@@ -201,7 +201,7 @@ export default {
         }
       });
 
-      console.log(this.locationsList);
+      //   console.log(this.locationsList);
     },
     tzone(date) {
       return moment.tz(date, 'Asia/Manila').format('L');
