@@ -1743,6 +1743,7 @@ export default {
       totalDeliveriesList: [],
       suppliersList: [],
       convertedItemsList: [],
+      convertedItemSelection: [],
       filters: {
         global: {
           value: null,
@@ -2145,7 +2146,19 @@ export default {
     },
     storeItemsInContainer() {
       this.items.forEach((e) => {
-        this.itemsList.push({
+        if (!e.cl2desc.includes('(pc)')) {
+          this.itemsList.push({
+            cl1comb: e.cl1comb,
+            cl2comb: e.cl2comb,
+            cl2desc: e.cl2desc,
+            uomcode: e.uomcode == null ? null : e.uomcode,
+            uomdesc: e.uomdesc == null ? null : e.uomdesc,
+          });
+        }
+      });
+
+      this.items.forEach((e) => {
+        this.convertedItemSelection.push({
           cl1comb: e.cl1comb,
           cl2comb: e.cl2comb,
           cl2desc: e.cl2desc,
@@ -2164,6 +2177,7 @@ export default {
       }
     },
     findSimilarIds(targetId, arr) {
+      this.convertedItemList = [];
       // Extract the prefix from the target ID
       const prefix = targetId.split('-').slice(0, 2).join('-');
 
@@ -2200,6 +2214,7 @@ export default {
           this.itemsList = [];
           this.suppliersList = [];
           this.convertedItemsList = [];
+          this.convertedItemSelection = [];
           this.totalConvertedItemsList = [];
           this.storeFundSourceInContainer();
           this.storeItemsInContainer();
@@ -2311,7 +2326,7 @@ export default {
     },
 
     convertItem(item) {
-      const similarObjects = this.findSimilarIds(item.cl2comb, this.itemsList);
+      const similarObjects = this.findSimilarIds(item.cl2comb, this.convertedItemSelection);
 
       this.formConvertItem.csr_stock_id = item.stock_id;
       this.formConvertItem.ris_no = item.ris_no;
@@ -2429,7 +2444,7 @@ export default {
       //   this.storeConvertedItemsInContainer();
 
       // Find similar IDs in array2
-      const similarObjects = this.findSimilarIds(e.data.cl2comb, this.itemsList);
+      const similarObjects = this.findSimilarIds(e.data.cl2comb, this.convertedItemSelection);
       //   console.log(similarObjects);
 
       // Log or handle the similar objects as needed
@@ -2597,7 +2612,7 @@ export default {
     'formAddDelivery.cl2comb': function (cl2comb) {
       // Find similar IDs in array2
       if (cl2comb != null) {
-        const similarObjects = this.findSimilarIds(cl2comb, this.itemsList);
+        const similarObjects = this.findSimilarIds(cl2comb, this.convertedItemSelection);
       }
     },
     maxDate: function (val) {
