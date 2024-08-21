@@ -152,7 +152,7 @@ export default {
               comp: 'Balance/Index',
             },
             {
-              label: 'Requests',
+              label: 'Inventory',
               icon: 'bi-journal-check',
               to: 'requeststocks',
               prefix: 'requeststocks',
