@@ -59,7 +59,7 @@ class TransferStockController extends Controller
             ->orderBy('created_at', 'DESC')
             ->get();
 
-        $employees = UserDetail::where('empstat', 'A')->orderBy('employeeid', 'ASC')->get(['employeeid', 'empstat']);
+        $employees = UserDetail::where('empstat', 'A')->orderBy('employeeid', 'ASC')->get(['employeeid', 'empstat', 'firstname', 'lastname']);
 
         return Inertia::render('Wards/TransferStock/Index', [
             'authWardcode' => $authWardcode,

@@ -336,7 +336,7 @@
             :options="employeesList"
             :virtualScrollerOptions="{ itemSize: 38 }"
             filter
-            optionLabel="employeeid"
+            optionLabel="name"
             optionValue="employeeid"
             class="w-full mb-3"
             :class="{ 'p-invalid': form.requested_by == '' }"
@@ -581,8 +581,10 @@ export default {
     },
     storeEmployeesInContainer() {
       this.employees.forEach((e) => {
+        // console.log(e);
         this.employeesList.push({
           employeeid: e.employeeid,
+          name: '(' + e.employeeid + ') - ' + e.firstname + ' ' + e.lastname,
         });
       });
     },
