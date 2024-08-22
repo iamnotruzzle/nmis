@@ -43,7 +43,6 @@ class Item extends Model
         'rpoint',
         'catID',
         'itemcode',
-        'tag'
     ];
 
     public function category()

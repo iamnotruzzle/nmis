@@ -25,7 +25,7 @@
             showGridlines
             scrollable
             scrollHeight="flex"
-            :globalFilterFields="['charge_slip_no', 'type_of_charge_description', 'item', 'amount', 'tag']"
+            :globalFilterFields="['charge_slip_no', 'type_of_charge_description', 'item', 'amount']"
           >
             <template #header>
               <span class="text-2xl text-primary font-bold">
@@ -84,12 +84,6 @@
             >
               <template #body="{ data }">
                 <span> {{ data.item }}</span>
-                <div v-if="data.tag != null">
-                  <Tag
-                    :value="data.tag"
-                    severity="info"
-                  />
-                </div>
               </template>
             </Column>
             <Column
@@ -445,7 +439,7 @@
             removableSort
             class="p-datatable-sm w-auto"
             scrollHeight="flex"
-            :globalFilterFields="['cl2desc', 'tag']"
+            :globalFilterFields="['cl2desc']"
           >
             <template #header>
               <div class="text-2xl text-primary font-bold">CURRENT STOCKS</div>
@@ -467,12 +461,6 @@
             >
               <template #body="{ data }">
                 <span> {{ data.cl2desc }}</span>
-                <div v-if="data.tag != null">
-                  <Tag
-                    :value="data.tag"
-                    severity="info"
-                  />
-                </div>
               </template>
             </Column>
             <Column
@@ -794,7 +782,6 @@ export default {
       totalAmount: 0,
       medicalSuppliesListFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        tag: { value: null, matchMode: FilterMatchMode.CONTAINS },
         cl2desc: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       filters: {
@@ -806,7 +793,6 @@ export default {
         quantity: { value: null, matchMode: FilterMatchMode.CONTAINS },
         price: { value: null, matchMode: FilterMatchMode.CONTAINS },
         amount: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        tag: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       itemsToBillFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -938,7 +924,6 @@ export default {
             charge_date: e.charge_date,
             charge_date: e.charge_date,
             entry_by: e.entry_by,
-            tag: e.tag,
             // patient_charge_logs: e.patient_charge_logs.length == 0 ? null : e.patient_charge_logs,
           });
         } else {
@@ -961,7 +946,6 @@ export default {
           total_usage: med.total_usage,
           price: med.price,
           expiration_date: med.expiration_date,
-          tag: med.tag,
         });
       });
       //   console.log('medical supplies list', this.medicalSupplies);
@@ -997,7 +981,7 @@ export default {
               is_consumable: med.is_consumable,
               typeOfCharge: 'DRUMN',
               itemCode: med.cl2comb,
-              itemDesc: med.tag != null ? med.tag : med.cl2desc,
+              itemDesc: med.cl2desc,
               unit: med.uomcode == null ? null : med.uomcode,
               totalQuantity: medQuantity,
               prices: [{ id: med.id, price: med.price, quantity: medQuantity, expiryDate: med.expiryDate }],
@@ -1200,7 +1184,7 @@ export default {
               });
 
               this.printForm.chargedItems.push({
-                item: e.tag == null ? e.item : e.tag,
+                item: e.item,
                 qty: e.quantity,
                 price: formattedPrice,
                 amount: formattedAmount,

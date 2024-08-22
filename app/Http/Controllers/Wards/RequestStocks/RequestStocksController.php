@@ -45,25 +45,6 @@ class RequestStocksController extends Controller
 
         // OLD
         // available items only show if quantity_after == total_issued_qty
-        // $items = DB::select(
-        //     "SELECT
-        //         item.cl2comb,
-        //         item.cl2desc,
-        //         item.uomcode,
-        //         uom.uomdesc
-        //     FROM
-        //         hclass2 AS item
-        //     FULL OUTER JOIN
-        //         huom AS uom
-        //         ON uom.uomcode = item.uomcode
-        //     WHERE
-        //         (item.catID = 1
-        //         AND item.uomcode != 'box'
-        //         AND (item.itemcode NOT LIKE 'MSMG-%' OR item.itemcode IS NULL))
-        //     ORDER BY
-        //         item.cl2desc ASC;"
-        // );
-
         $items = DB::select(
             "SELECT
                 item.cl2comb,
@@ -76,24 +57,9 @@ class RequestStocksController extends Controller
                 huom AS uom
                 ON uom.uomcode = item.uomcode
             WHERE
-                item.catID = 1
+                (item.catID = 1
                 AND item.uomcode != 'box'
-                AND (item.itemcode NOT LIKE 'MSMG-%' OR item.itemcode IS NULL)
-                AND item.tag IS NULL
-            UNION ALL
-            SELECT
-                item.cl2comb,
-                item.cl2desc,
-                item.uomcode,
-                uom.uomdesc
-            FROM
-                hclass2 AS item
-            FULL OUTER JOIN
-                huom AS uom
-                ON uom.uomcode = item.uomcode
-            WHERE
-                item.tag IS NOT NULL
-
+                AND (item.itemcode NOT LIKE 'MSMG-%' OR item.itemcode IS NULL))
             ORDER BY
                 item.cl2desc ASC;"
         );
@@ -143,7 +109,7 @@ class RequestStocksController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        $currentWardStocks = WardsStocks::with(['item_details:cl2comb,cl2desc,tag', 'request_stocks', 'unit_of_measurement:uomcode,uomdesc'])
+        $currentWardStocks = WardsStocks::with(['item_details:cl2comb,cl2desc', 'request_stocks', 'unit_of_measurement:uomcode,uomdesc'])
             ->where('location', $authWardcode->wardcode)
             ->where('quantity', '!=', 0)
             ->whereHas(
@@ -153,7 +119,7 @@ class RequestStocksController extends Controller
                 }
             )
             ->get();
-        $currentWardStocks2 = WardsStocks::with(['item_details:cl2comb,cl2desc,tag', 'request_stocks', 'unit_of_measurement:uomcode,uomdesc'])
+        $currentWardStocks2 = WardsStocks::with(['item_details:cl2comb,cl2desc', 'request_stocks', 'unit_of_measurement:uomcode,uomdesc'])
             ->where('request_stocks_id', null)
             ->where('location', $authWardcode->wardcode)
             ->where('quantity', '!=', 0)

@@ -65,8 +65,7 @@ class PatientChargeController extends Controller
                 csrw_wards_stocks.average,
                 csrw_wards_stocks.total_usage,
                 price.price_per_unit as price,
-                csrw_wards_stocks.expiration_date,
-                item.tag
+                csrw_wards_stocks.expiration_date
             FROM csrw_wards_stocks
             JOIN hclass2 as item ON item.cl2comb = csrw_wards_stocks.cl2comb
             JOIN csrw_item_prices as price ON csrw_wards_stocks.cl2comb = price.cl2comb
@@ -80,49 +79,23 @@ class PatientChargeController extends Controller
         $medicalSupplies = [];
         $seenIds = [];
 
-        // foreach ($stocksFromCsr as $s) {
-        //     if (!in_array($s->id, $seenIds)) {
-        //         $medicalSupplies[] = (object) [
-        //             'id' => $s->id,
-        //             'is_consumable' => $s->is_consumable,
-        //             'cl2comb' => $s->cl2comb,
-        //             'cl2desc' => $s->cl2desc,
-        //             'uomcode' => $s->uomcode,
-        //             'quantity' => $s->quantity,
-        //             'average' => $s->average,
-        //             'total_usage' => $s->total_usage,
-        //             'price' => $s->price,
-        //             'expiration_date' => $s->expiration_date,
-        //             'tag' => $s->tag,
-        //         ];
-        //         $seenIds[] = $s->id;
-        //     }
-        // }
         foreach ($stocksFromCsr as $s) {
             if (!in_array($s->id, $seenIds)) {
-                // Only add the item if tag is null or total_usage is not null
-                if ($s->tag === null || $s->total_usage !== null) {
-                    $medicalSupplies[] = (object) [
-                        'id' => $s->id,
-                        'is_consumable' => $s->is_consumable,
-                        'cl2comb' => $s->cl2comb,
-                        'cl2desc' => $s->cl2desc,
-                        'uomcode' => $s->uomcode,
-                        'quantity' => $s->quantity,
-                        'average' => $s->average,
-                        'total_usage' => $s->total_usage,
-                        'price' => $s->price,
-                        'expiration_date' => $s->expiration_date,
-                        'tag' => $s->tag,
-                    ];
-                    $seenIds[] = $s->id;
-                }
+                $medicalSupplies[] = (object) [
+                    'id' => $s->id,
+                    'is_consumable' => $s->is_consumable,
+                    'cl2comb' => $s->cl2comb,
+                    'cl2desc' => $s->cl2desc,
+                    'uomcode' => $s->uomcode,
+                    'quantity' => $s->quantity,
+                    'average' => $s->average,
+                    'total_usage' => $s->total_usage,
+                    'price' => $s->price,
+                    'expiration_date' => $s->expiration_date,
+                ];
+                $seenIds[] = $s->id;
             }
         }
-        // this will filter items with tag but is not converted yet
-        $medicalSupplies = array_filter($medicalSupplies, function ($item) {
-            return !($item->tag !== null && $item->total_usage === null);
-        });
         // dd($medicalSupplies);
 
         // get miscellaneous / miscellaneous
@@ -137,7 +110,6 @@ class PatientChargeController extends Controller
                             type_of_charge.chrgdesc as type_of_charge_description,
                             category.cl1desc as category,
                             item.cl2desc as item,
-                            item.tag as tag,
                             misc.hmdesc as misc,
                             pat_charge.itemcode as itemcode,
                             pat_charge.pchrgqty as quantity,

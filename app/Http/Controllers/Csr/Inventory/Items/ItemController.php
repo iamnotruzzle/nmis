@@ -66,8 +66,7 @@ class ItemController extends Controller
                 item.cl2desc AS item,
                 unit.uomcode,
                 unit.uomdesc AS unit,
-                item.cl2stat,
-                item.tag
+                item.cl2stat
             FROM
                 hclass2 AS item
             JOIN
@@ -117,7 +116,6 @@ class ItemController extends Controller
             'cl2desc' => 'required',
             'unit' => 'required',
             'cl2stat' => 'required|max:1',
-            // 'tag' => 'required|max:1',
         ]);
 
         $item = Item::create([
@@ -148,7 +146,6 @@ class ItemController extends Controller
             'rpoint' => NULL,
             'catID' => $request->mainCategory,
             'itemcode' => $request->itemcode,
-            'tag' => $request->tag,
         ]);
 
         // dd($item);
@@ -174,7 +171,6 @@ class ItemController extends Controller
             'cl2desc' => trim($request->cl2desc), // item desc
             'uomcode' => $request->unit, // unit
             'cl2stat' => $request->cl2stat,
-            'tag' => $request->tag,
         ]);
 
         return Redirect::route('items.index');

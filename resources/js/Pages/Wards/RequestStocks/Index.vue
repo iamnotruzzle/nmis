@@ -724,12 +724,6 @@
           >
             <template #body="{ data }">
               <span> {{ data.item }}</span>
-              <div v-if="data.tag != null">
-                <Tag
-                  :value="data.tag"
-                  severity="info"
-                />
-              </div>
             </template>
           </Column>
           <Column
@@ -1091,7 +1085,6 @@ export default {
           average: e.average,
           is_consumable: e.is_consumable == null ? null : e.is_consumable,
           expiration_date: expiration_date.toString(),
-          tag: e.item_details.tag,
         });
       });
 
@@ -1108,7 +1101,6 @@ export default {
           average: e.average,
           is_consumable: e.is_consumable == null ? null : e.is_consumable,
           expiration_date: expiration_date.toString(),
-          tag: e.item_details.tag,
         });
       });
 
