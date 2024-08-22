@@ -340,6 +340,7 @@
             optionValue="employeeid"
             class="w-full mb-3"
             :class="{ 'p-invalid': form.requested_by == '' }"
+            showClear
           />
           <small
             class="text-error"
