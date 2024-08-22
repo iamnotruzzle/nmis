@@ -36,15 +36,15 @@ class TransferStockController extends Controller
             ->get();
         // dd($wardStocks);
 
-        $wardStocksMedicalGasess = WardsStocks::with(['item_details:cl2comb,cl2desc'])
-            ->where(
-                'quantity',
-                '!=',
-                0
-            )
-            ->where('location', '=', $authWardcode->wardcode)
-            ->where('request_stocks_id', null)
-            ->get();
+        // $wardStocksMedicalGasess = WardsStocks::with(['item_details:cl2comb,cl2desc'])
+        //     ->where(
+        //         'quantity',
+        //         '!=',
+        //         0
+        //     )
+        //     ->where('location', '=', $authWardcode->wardcode)
+        //     ->where('request_stocks_id', null)
+        //     ->get();
         // dd($wardStocksMedicalGasess);
 
         $transferredStock = WardTransferStock::with(
@@ -64,7 +64,7 @@ class TransferStockController extends Controller
         return Inertia::render('Wards/TransferStock/Index', [
             'authWardcode' => $authWardcode,
             'wardStocks' => $wardStocks,
-            'wardStocksMedicalGasess' => $wardStocksMedicalGasess,
+            // 'wardStocksMedicalGasess' => $wardStocksMedicalGasess,
             'transferredStock' => $transferredStock,
             'employees' => $employees,
         ]);
@@ -154,8 +154,13 @@ class TransferStockController extends Controller
             'uomcode' => $wardStock->uomcode,
             'from' => $wardStock->from,
             'manufactured_date' => Carbon::parse($wardStock->manufactured_date)->format('Y-m-d H:i:s.v'),
-            'delivery_date' => Carbon::parse($wardStock->delivered_date)->format('Y-m-d H:i:s.v'),
+            'delivered_date' => Carbon::parse($wardStock->delivered_date)->format('Y-m-d H:i:s.v'),
             'expiration_date' => Carbon::parse($wardStock->expiration_date)->format('Y-m-d H:i:s.v'),
+            'ris_no' => $wardStock->ris_no,
+            'is_consumable' => $wardStock->is_consumable,
+            'average' => $wardStock->average,
+            'total_consumed' => $wardStock->total_consumed,
+            'total_usage' => $wardStock->total_usage,
         ]);
 
         return Redirect::route('transferstock.index');

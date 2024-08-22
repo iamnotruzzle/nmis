@@ -59,13 +59,15 @@
           field="quantity"
           header="QUANTITY"
           sortable
-          style="width: 5%"
+          style="width: 5%; text-align: right"
+          :pt="{ headerContent: 'justify-content-end' }"
         >
         </Column>
         <Column
           header="EXP. DATE"
           sortable
-          style="width: 15%"
+          style="width: 15%; text-align: right"
+          :pt="{ headerContent: 'justify-content-end' }"
         >
           <template #body="{ data }">
             {{ tzone(data.expiration_date) }}
@@ -73,7 +75,8 @@
         </Column>
         <Column
           header="ACTION"
-          style="width: 10%"
+          style="width: 10%; text-align: center"
+          :pt="{ headerContent: 'justify-content-center' }"
         >
           <template #body="slotProps">
             <Button
@@ -134,25 +137,29 @@
             <Column
               field="quantity"
               header="QUANTITY"
-              style="width: 10%"
+              style="width: 10%; text-align: right"
+              :pt="{ headerContent: 'justify-content-end' }"
             >
             </Column>
             <Column
               field="expiration_date"
               header="EXP. DATE"
-              style="width: 10%"
+              style="width: 10%; text-align: right"
+              :pt="{ headerContent: 'justify-content-end' }"
             >
             </Column>
             <Column
               field="to"
               header="TO"
-              style="width: 20%"
+              style="width: 20%; text-align: right"
+              :pt="{ headerContent: 'justify-content-end' }"
             >
             </Column>
             <Column
               field="status"
               header="STATUS"
-              style="width: 10%"
+              style="width: 10%; text-align: center"
+              :pt="{ headerContent: 'justify-content-center' }"
             >
               <template #body="slotProps">
                 <Tag
@@ -217,24 +224,28 @@
             <Column
               field="quantity"
               header="QUANTITY"
-              style="width: 10%"
+              style="width: 10%; text-align: right"
+              :pt="{ headerContent: 'justify-content-end' }"
             >
             </Column>
             <Column
               field="expiration_date"
               header="EXP. DATE"
-              style="width: 10%"
+              style="width: 10%; text-align: right"
+              :pt="{ headerContent: 'justify-content-end' }"
             >
             </Column>
             <Column
               field="from"
               header="FROM"
-              style="width: 20%"
+              style="width: 20%; text-align: right"
+              :pt="{ headerContent: 'justify-content-end' }"
             >
             </Column>
             <Column
               header="ACTION"
-              style="width: 10%"
+              style="width: 10%; text-align: center"
+              :pt="{ headerContent: 'justify-content-center' }"
             >
               <template #body="slotProps">
                 <!-- <i
@@ -247,8 +258,7 @@
                 <Button
                   v-if="slotProps.data.status != 'RECEIVED'"
                   icon="pi pi-check"
-                  text
-                  style="color: skyblue"
+                  label="Receive"
                   @click="receivedStock(slotProps)"
                 />
               </template>
@@ -485,7 +495,7 @@ export default {
   props: {
     authWardcode: Object,
     wardStocks: Object,
-    wardStocksMedicalGasess: Object,
+    // wardStocksMedicalGasess: Object,
     transferredStock: Object,
     employees: Object,
   },
@@ -642,18 +652,18 @@ export default {
         });
       });
 
-      this.wardStocksMedicalGasess.forEach((e) => {
-        // let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
+      //   this.wardStocksMedicalGasess.forEach((e) => {
+      //     // let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
 
-        this.wardStocksList.push({
-          ward_stock_id: e.id,
-          from: e.from,
-          cl2comb: e.item_details.cl2comb,
-          cl2desc: e.item_details.cl2desc,
-          quantity: e.quantity,
-          expiration_date: e.expiration_date,
-        });
-      });
+      //     this.wardStocksList.push({
+      //       ward_stock_id: e.id,
+      //       from: e.from,
+      //       cl2comb: e.item_details.cl2comb,
+      //       cl2desc: e.item_details.cl2desc,
+      //       quantity: e.quantity,
+      //       expiration_date: e.expiration_date,
+      //     });
+      //   });
     },
     updateData() {
       this.transferredStocksList = [];
