@@ -69,6 +69,23 @@
           </template>
         </Column>
         <Column
+          header="ACTION"
+          style="width: 3%"
+        >
+          <template #body="{ data }">
+            <!-- {{ data }} -->
+            <div class="flex justify-content-center">
+              <Button
+                icon="pi pi-money-bill"
+                rounded
+                text
+                severity="info"
+                @click="goToPatientCharge(data)"
+              />
+            </div>
+          </template>
+        </Column>
+        <Column
           field="bill_stat"
           header="STATUS"
           style="width: 13%"
@@ -237,24 +254,6 @@
               class="mb-2"
             >
               <span>{{ physician }}</span>
-            </div>
-          </template>
-        </Column>
-
-        <Column
-          header="ACTION"
-          style="width: 3%"
-        >
-          <template #body="{ data }">
-            <!-- {{ data }} -->
-            <div class="flex justify-content-center">
-              <Button
-                icon="pi pi-money-bill"
-                rounded
-                text
-                severity="info"
-                @click="goToPatientCharge(data)"
-              />
             </div>
           </template>
         </Column>
