@@ -212,13 +212,12 @@
             </template>
           </Column>
           <template #expansion="slotProps">
-            <div class="p-3">
-              <h5 class="text-green-500">LIST</h5>
+            <div class="p-3 w-full flex justify-content-center">
               <DataTable
                 paginator
                 removableSort
                 showGridlines
-                :rows="7"
+                :rows="5"
                 :value="slotProps.data.request_stocks_details"
               >
                 <Column
@@ -231,14 +230,29 @@
                   </template>
                 </Column>
                 <Column
-                  field="requested_qty"
                   header="PENDING QTY"
-                  style="width: 10%"
-                ></Column>
+                  style="text-align: right; width: 10%"
+                  :pt="{ headerContent: 'justify-content-end' }"
+                >
+                  <template #body="{ data }">
+                    <span class="text-blue-500">{{ data.requested_qty }} </span>
+                  </template>
+                </Column>
                 <Column
                   field="approved_qty"
                   header="APPROVED QTY"
-                  style="width: 30%"
+                  style="text-align: right; width: 10%"
+                  :pt="{ headerContent: 'justify-content-end' }"
+                >
+                  <template #body="{ data }">
+                    <span class="text-green-500">{{ data.approved_qty }} </span>
+                  </template>
+                </Column>
+                <Column
+                  field="remarks"
+                  header="REMARKS"
+                  style="width: 20%; text-align: center"
+                  :pt="{ headerContent: 'justify-content-center' }"
                 ></Column>
               </DataTable>
             </div>
@@ -956,6 +970,7 @@ export default {
     this.rows = this.requestedStocks.per_page;
   },
   mounted() {
+    // console.log(this.requestedStocks);
     window.Echo.channel('issued').listen('ItemIssued', (args) => {
       if (args.message[0] == this.$page.props.authWardcode.wardcode) {
         router.reload({
