@@ -92,10 +92,11 @@
           <Column
             field="status"
             header="STATUS"
-            style="width: 10%"
+            style="text-align: center; width: 10%"
+            :pt="{ headerContent: 'justify-content-center' }"
           >
             <template #body="{ data }">
-              <div class="flex justify-content-start align-content-center">
+              <div class="flex justify-content-center align-content-center">
                 <Tag
                   v-if="data.status == 'PENDING'"
                   :value="data.status"
@@ -121,14 +122,16 @@
                   :value="data.status"
                   severity="danger"
                 />
-                <div>
-                  <i
-                    v-if="data.status == 'FILLED'"
-                    class="pi pi-check ml-3"
-                    style="color: skyblue"
-                    @click="editStatus(data)"
-                  ></i>
-                </div>
+
+                <Button
+                  v-if="data.status == 'FILLED'"
+                  label="Receive"
+                  class="ml-2"
+                  icon="pi pi-check"
+                  iconPos="right"
+                  severity="success"
+                  @click="editStatus(data)"
+                />
               </div>
             </template>
           </Column>
