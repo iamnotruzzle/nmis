@@ -816,7 +816,7 @@
               </div>
             </template>
           </Column>
-          <Column
+          <!-- <Column
             header="ACTION"
             style="width: 10%"
             :pt="{ headerContent: 'justify-content-center' }"
@@ -839,7 +839,7 @@
                 </Button>
               </div>
             </template>
-          </Column>
+          </Column> -->
         </DataTable>
       </div>
     </div>
