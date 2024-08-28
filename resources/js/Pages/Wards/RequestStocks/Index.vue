@@ -407,15 +407,15 @@
               style="font-size: 5rem; color: red"
             />
 
-            <span
-              v-if="form"
-              class="text-justify text-xl"
-            >
-              Upon clicking <b class="text-green-500">"Yes,"</b> the items will be added to your inventory, and
-              <b class="text-green-500">your name</b> will be recorded as the person who received the items and verified
-              that the quantity received is correct. Please call the Central Supply Unit if the items or their
-              quantities are incorrect. Are you sure you want to receive these items?
-            </span>
+            <div v-if="form">
+              <p class="text-justify text-xl">
+                Upon clicking <b class="text-green-500">"Yes,"</b> the items will be added to your inventory, and
+                <b class="text-green-500">your name</b> will be recorded as the person who received the items and
+                verified that the quantity received is correct. Please call the
+                <b class="text-primary">Central Supply Unit</b> if the items or their quantities are incorrect.
+              </p>
+              <p class="text-justify text-xl">Are you sure you want to receive these items?</p>
+            </div>
           </div>
           <template #footer>
             <Button
