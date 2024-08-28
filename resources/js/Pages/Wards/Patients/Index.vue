@@ -79,7 +79,8 @@
                 icon="pi pi-money-bill"
                 rounded
                 text
-                severity="info"
+                size="large"
+                severity="success"
                 @click="goToPatientCharge(data)"
               />
             </div>
