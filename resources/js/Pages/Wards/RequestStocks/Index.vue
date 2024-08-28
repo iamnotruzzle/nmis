@@ -535,6 +535,7 @@
               required="true"
               autofocus
               :class="{ 'p-invalid': formMedicalGases.quantity == '' || formMedicalGases.quantity == null }"
+              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
               inputId="integeronly"
             />
             <small
@@ -552,6 +553,7 @@
               required="true"
               autofocus
               :class="{ 'p-invalid': formMedicalGases.average == '' || formMedicalGases.average == null }"
+              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
               inputId="integeronly"
             />
             <small
@@ -596,7 +598,11 @@
                 formMedicalGases.processing ||
                 formMedicalGases.fund_source == null ||
                 formMedicalGases.cl2comb == null ||
-                formMedicalGases.quantity == null
+                formMedicalGases.quantity == null ||
+                formMedicalGases.quantity <= 0 ||
+                formMedicalGases.average == null ||
+                formMedicalGases.average <= 0 ||
+                formMedicalGases.delivered_date == null
               "
               @click="submitMedicalGases"
             />
@@ -1321,7 +1327,14 @@ export default {
       }
     },
     submitMedicalGases() {
-      if (this.formMedicalGases.processing) {
+      if (
+        this.formMedicalGases.processing ||
+        this.formMedicalGases.fund_source == null ||
+        this.formMedicalGases.cl2comb == null ||
+        this.formMedicalGases.quantity == null ||
+        this.formMedicalGases.average == null ||
+        this.formMedicalGases.delivered_date == null
+      ) {
         return false;
       }
 
@@ -1334,6 +1347,8 @@ export default {
         this.formMedicalGases.quantity != null ||
         this.formMedicalGases.quantity != '' ||
         this.formMedicalGases.quantity != 0 ||
+        this.formMedicalGases.average != '' ||
+        this.formMedicalGases.average != 0 ||
         this.formMedicalGases.delivered_date != null ||
         this.formMedicalGases.delivered_date != ''
       ) {
