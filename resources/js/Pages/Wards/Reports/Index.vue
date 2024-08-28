@@ -52,7 +52,7 @@
         id="print"
         style="overflow-x: auto"
       >
-        <table style="width: 100%; border-collapse: collapse; text-align: left">
+        <table style="width: 100%; border-collapse: collapse; text-align: center">
           <tr>
             <td
               rowspan="2"
@@ -183,7 +183,7 @@
           >
             <th
               scope="row"
-              style="padding: 8px; border: 1px solid black"
+              style="padding: 8px; border: 1px solid black; text-align: left !important"
             >
               {{ rc.item_description }}
             </th>
@@ -357,11 +357,12 @@ export default {
         table {
             width: 100%;
             border-collapse: collapse;
+            text-align: center;
         }
         th, td {
             padding: 5px;
             border: 1px solid black;
-            text-align: left;
+            text-align: center;
         }
         </style>
     `;
