@@ -394,17 +394,24 @@
         <Dialog
           v-model:visible="editStatusDialog"
           :style="{ width: '450px' }"
-          header="Confirm"
+          header=" "
           :modal="true"
           dismissableMask
         >
           <div class="flex align-items-center justify-content-center">
             <i
               class="pi pi-exclamation-triangle mr-3"
-              style="font-size: 2rem"
+              style="font-size: 5rem; color: red"
             />
-            <span v-if="form">
-              Are you sure you want to <b>update</b> the status of this requested stocks to <b>RECEIVED</b>?
+
+            <span
+              v-if="form"
+              class="text-justify text-xl"
+            >
+              Upon clicking <b class="text-green-500">"Yes,"</b> the items will be added to your inventory, and
+              <b class="text-green-500">your name</b> will be recorded as the person who received the items and verified
+              that the quantity received is correct. Please call the Central Supply Unit if the items or their
+              quantities are incorrect. Are you sure you want to receive these items?
             </span>
           </div>
           <template #footer>
@@ -417,7 +424,7 @@
             <Button
               label="Yes"
               icon="pi pi-check"
-              severity="danger"
+              severity="success"
               text
               :disabled="formUpdateStatus.processing"
               @click="updateStatus"
