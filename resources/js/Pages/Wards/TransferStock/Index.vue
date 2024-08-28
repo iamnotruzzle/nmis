@@ -295,6 +295,7 @@
             autofocus
             @keyup.enter="submit"
             :class="{ 'p-invalid': Number(form.quantity) > Number(form.prevQuantity) }"
+            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
             inputId="integeronly"
           />
           <small
