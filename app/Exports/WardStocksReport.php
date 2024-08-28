@@ -34,7 +34,7 @@ class WardStocksReport implements FromArray, WithHeadings, WithStyles, WithEvent
 
     public function registerEvents(): array
     {
-        // dd(count($this->data));
+        // dd($this->data);
 
         // $count = count($this->data);
 

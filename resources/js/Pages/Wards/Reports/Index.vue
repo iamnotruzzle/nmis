@@ -36,162 +36,142 @@
             class="pi pi-file-excel"
             :style="{ color: 'gray', 'font-size': '2rem' }"
           ></i>
-          <a
+          <div
             v-else
-            :href="`wardstocks/export?from=${params.from}&to=${params.to}`"
-            target="_blank"
+            @click="exportToExcel()"
           >
             <i
               class="pi pi-file-excel"
               :style="{ color: 'green', 'font-size': '2rem' }"
             ></i>
-          </a>
+          </div>
         </div>
       </div>
 
-      <div style="overflow-x: auto">
-        <table class="table">
+      <div
+        id="print"
+        style="overflow-x: auto"
+      >
+        <table style="width: 100%; border-collapse: collapse; text-align: left">
           <tr>
             <td
               rowspan="2"
-              class="group-header bg-white colored-header"
+              style="background-color: white; color: black; padding: 8px; border: 1px solid black"
             >
               <div>
-                <p>ITEM DESCRIPTION</p>
+                <p style="margin: 0">ITEM DESCRIPTION</p>
               </div>
             </td>
             <td
               rowspan="2"
-              class="group-header bg-white colored-header"
+              style="background-color: white; color: black; padding: 8px; border: 1px solid black"
             >
               UNIT
             </td>
             <th
               rowspan="1"
               scope="colgroup"
-              class="group-header bg-white colored-header"
+              style="background-color: white; color: black; padding: 8px; border: 1px solid black"
             >
               ESTIMATED BUDGET
             </th>
             <td
               rowspan="2"
-              class="group-header bg-white colored-header"
+              style="background-color: white; color: black; padding: 8px; border: 1px solid black"
             >
               BEGINNING BALANCE
             </td>
             <td
               rowspan="2"
-              class="group-header bg-white colored-header"
+              style="background-color: white; color: black; padding: 8px; border: 1px solid black"
             >
               RECEIVED FROM CSR
             </td>
             <td
               rowspan="2"
-              class="group-header bg-white colored-header"
+              style="background-color: white; color: black; padding: 8px; border: 1px solid black"
             >
               TOTAL STOCK
             </td>
-            <!-- :rowspan="0" -->
             <th
               colspan="6"
               scope="colgroup"
-              class="group-header bg-white colored-header text-center"
+              style="background-color: white; color: black; text-align: center; padding: 8px; border: 1px solid black"
             >
               CONSUMPTION
             </th>
             <td
               rowspan="2"
-              class="group-header bg-white colored-header"
+              style="background-color: white; color: black; padding: 8px; border: 1px solid black"
             >
               TOTAL CONSUMPTION
             </td>
             <th
               scope="colgroup"
-              class="group-header bg-white colored-header text-center"
+              style="background-color: white; color: black; text-align: center; padding: 8px; border: 1px solid black"
             >
               TOTAL CONSUMPTION
             </th>
             <td
               rowspan="2"
-              class="group-header bg-white colored-header text-center"
+              style="background-color: white; color: black; text-align: center; padding: 8px; border: 1px solid black"
             >
               ENDING BALANCE
             </td>
             <td
               rowspan="2"
-              class="group-header bg-white colored-header text-center"
+              style="background-color: white; color: black; text-align: center; padding: 8px; border: 1px solid black"
             >
               ACTUAL INVENTORY
             </td>
           </tr>
 
           <tr>
-            <!-- ESTIMATED BUDGET -->
             <th
               scope="col"
-              class="header bg-white colored-header"
+              style="background-color: white; color: black; padding: 8px; border: 1px solid black"
             >
               UNIT COST
             </th>
-            <!-- CONSUMPTION -->
             <th
               scope="col"
-              class="header bg-white colored-header"
+              style="background-color: white; color: black; padding: 8px; border: 1px solid black"
             >
               SURGERY
             </th>
             <th
               scope="col"
-              class="header bg-white colored-header"
+              style="background-color: white; color: black; padding: 8px; border: 1px solid black"
             >
               OB-GYNE
             </th>
-            <!-- <th
-              scope="col"
-              class="header bg-white colored-header"
-            >
-              UROLOGY
-            </th> -->
             <th
               scope="col"
-              class="header bg-white colored-header"
+              style="background-color: white; color: black; padding: 8px; border: 1px solid black"
             >
               ORTHO
             </th>
             <th
               scope="col"
-              class="header bg-white colored-header"
+              style="background-color: white; color: black; padding: 8px; border: 1px solid black"
             >
               PEDIA
             </th>
-            <!-- <th
-              scope="col"
-              class="header bg-white colored-header"
-            >
-              MED
-            </th> -->
             <th
               scope="col"
-              class="header bg-white colored-header"
+              style="background-color: white; color: black; padding: 8px; border: 1px solid black"
             >
               OPTHA
             </th>
             <th
               scope="col"
-              class="header bg-white colored-header"
+              style="background-color: white; color: black; padding: 8px; border: 1px solid black"
             >
               ENT
             </th>
-            <!-- <th
-              scope="col"
-              class="header bg-white colored-header"
-            >
-              NEURO
-            </th> -->
-            <!-- TOTAL CONSUMPTION -->
             <th
               scope="col"
-              class="header bg-white colored-header"
+              style="background-color: white; color: black; padding: 8px; border: 1px solid black"
             >
               (ESTIMATED COST)
             </th>
@@ -201,25 +181,57 @@
             v-for="rc in reportsContainer"
             :key="rc.cl2comb"
           >
-            <th scope="row">{{ rc.item_description }}</th>
-            <td>{{ rc.unit }}</td>
-            <td>{{ rc.unit_cost }}</td>
-            <td>{{ rc.beginning_balance }}</td>
-            <td>{{ rc.from_csr }}</td>
-            <td>{{ rc.total_stock }}</td>
-            <td>{{ rc.surgery }}</td>
-            <td>{{ rc.obgyne }}</td>
-            <!-- <td>{{ rc.urology }}</td> -->
-            <td>{{ rc.ortho }}</td>
-            <td>{{ rc.pedia }}</td>
-            <!-- <td>{{ rc.med }}</td> -->
-            <td>{{ rc.optha }}</td>
-            <td>{{ rc.ent }}</td>
-            <!-- <td>{{ rc.neuro }}</td> -->
-            <td>{{ rc.total_consumption }}</td>
-            <td>{{ rc.total_cons_estimated_cost }}</td>
-            <td>{{ rc.ending_balance }}</td>
-            <td>{{ rc.actual_inventory }}</td>
+            <th
+              scope="row"
+              style="padding: 8px; border: 1px solid black"
+            >
+              {{ rc.item_description }}
+            </th>
+            <td style="padding: 8px; border: 1px solid black">
+              {{ rc.unit }}
+            </td>
+            <td style="padding: 8px; border: 1px solid black">
+              {{ rc.unit_cost }}
+            </td>
+            <td style="padding: 8px; border: 1px solid black">
+              {{ rc.beginning_balance }}
+            </td>
+            <td style="padding: 8px; border: 1px solid black">
+              {{ rc.from_csr }}
+            </td>
+            <td style="padding: 8px; border: 1px solid black">
+              {{ rc.total_stock }}
+            </td>
+            <td style="padding: 8px; border: 1px solid black">
+              {{ rc.surgery }}
+            </td>
+            <td style="padding: 8px; border: 1px solid black">
+              {{ rc.obgyne }}
+            </td>
+            <td style="padding: 8px; border: 1px solid black">
+              {{ rc.ortho }}
+            </td>
+            <td style="padding: 8px; border: 1px solid black">
+              {{ rc.pedia }}
+            </td>
+            <td style="padding: 8px; border: 1px solid black">
+              {{ rc.optha }}
+            </td>
+            <td style="padding: 8px; border: 1px solid black">
+              {{ rc.ent }}
+            </td>
+            <td style="padding: 8px; border: 1px solid black">
+              {{ rc.total_consumption }}
+            </td>
+            <td style="padding: 8px; border: 1px solid black">
+              {{ rc.total_cons_estimated_cost }}
+            </td>
+            <td style="padding: 8px; border: 1px solid black">
+              {{ rc.ending_balance }}
+            </td>
+            <td style="padding: 8px; border: 1px solid black">
+              {{ rc.actual_inventory }}
+            </td>
           </tr>
         </table>
       </div>
@@ -287,7 +299,96 @@ export default {
         });
       });
 
-      //   console.log('container', this.reportsContainer);
+      console.log('container', this.reportsContainer);
+    },
+
+    // print using windows word
+    print() {
+      //   console.log(data);
+      //   console.log('Opening print dialog...');
+      setTimeout(() => {
+        this.$nextTick(() => {
+          const printWindow = window.open('', '_blank');
+          if (printWindow) {
+            printWindow.document.write(`
+            <html>
+              <head>
+                <title>Print</title>
+                <style>
+                    /* Print-specific styles */
+                    body, #print {
+                        font-family: Calibri, sans-serif;
+                    }
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                    }
+                    th, td {
+                        padding: 5px;
+                        border: 1px solid black;
+                        text-align: left;
+                    }
+                </style>
+              </head>
+              <body>
+                ${document.getElementById('print').innerHTML}
+              </body>
+            </html>
+          `);
+            printWindow.document.close();
+            printWindow.focus();
+            printWindow.print();
+            printWindow.close();
+          } else {
+            console.error('Failed to open print window.');
+          }
+        });
+      }, 200); // Slightly longer delay to ensure rendering
+    },
+    // export to excel
+    exportToExcel() {
+      const tableHTML = document.getElementById('print').outerHTML;
+      const dataType = 'application/vnd.ms-excel';
+      const tableStyle = `
+        <style>
+        body, table {
+            font-family: Calibri, sans-serif;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 5px;
+            border: 1px solid black;
+            text-align: left;
+        }
+        </style>
+    `;
+
+      const excelHTML = `
+        <html xmlns:o="urn:schemas-microsoft-com:office:office"
+            xmlns:x="urn:schemas-microsoft-com:office:excel"
+            xmlns="http://www.w3.org/TR/REC-html40">
+        <head>
+            <meta charset="UTF-8">
+            <title>Export HTML to Excel</title>
+            ${tableStyle}
+        </head>
+        <body>
+            ${tableHTML}
+        </body>
+        </html>
+    `;
+
+      const blob = new Blob([excelHTML], { type: dataType });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'exported_table.xls';
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     },
 
     updateData() {
@@ -366,5 +467,19 @@ td {
 .header {
   font-size: 100%;
   font-weight: 600;
+}
+
+@media print {
+  @page {
+    margin: 0;
+    /* font-size: 50px; */
+    /* font-weight: bold; */
+  }
+  body {
+    font-family: Calibri, sans-serif;
+  }
+  #print {
+    font-family: Calibri, sans-serif;
+  }
 }
 </style>

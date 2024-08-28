@@ -63,6 +63,7 @@ class ReportController extends Controller
                     GROUP BY stockbal.cl2comb
                 ) csrw_location_stock_balance ON ward.cl2comb = csrw_location_stock_balance.cl2comb
                 WHERE ward.location LIKE '$authWardcode->wardcode' AND ward.created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
+                AND ward.is_consumable IS NULL
                 GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc, csrw_patient_charge_logs.charge_quantity, csrw_location_stock_balance.ending_balance, csrw_location_stock_balance.beginning_balance
                 ORDER BY hclass2.cl2desc ASC;"
             );
@@ -101,7 +102,8 @@ class ReportController extends Controller
                     WHERE stockbal.location LIKE '$authWardcode->wardcode'
                     GROUP BY stockbal.cl2comb
                 ) csrw_location_stock_balance ON ward.cl2comb = csrw_location_stock_balance.cl2comb
-                  WHERE ward.location LIKE '$authWardcode->wardcode' AND ward.created_at BETWEEN '$from' AND '$to'
+                WHERE ward.location LIKE '$authWardcode->wardcode' AND ward.created_at BETWEEN '$from' AND '$to'
+                AND ward.is_consumable IS NULL
                 GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc, csrw_patient_charge_logs.charge_quantity, csrw_location_stock_balance.ending_balance, csrw_location_stock_balance.beginning_balance
                 ORDER BY hclass2.cl2desc ASC;"
             );
@@ -110,7 +112,7 @@ class ReportController extends Controller
         // dd($request->from);
 
         foreach ($ward_report as $e) {
-            // dd($e);
+            $total_cons_estimated_cost = $e->total_consumption * $e->unit_cost;
             $reports[] = (object) [
                 'cl2comb' => $e->cl2comb,
                 'item_description' => $e->cl2desc,
@@ -129,18 +131,20 @@ class ReportController extends Controller
                 'ent' => $e->ent,
                 // 'neuro' => 'NA',
                 'total_consumption' => $e->total_consumption,
-                'total_cons_estimated_cost' => $e->total_consumption * $e->unit_cost,
+                'total_cons_estimated_cost' => (string)$total_cons_estimated_cost,
                 'ending_balance' => $e->ending_balance,
                 'actual_inventory' => ($e->from_csr + $e->total_consumption) - $e->total_consumption,
             ];
         }
         // dd($reports);
 
-        // return Inertia::render('Wards/Reports/Index', [
-        //     'reports' => $reports
-        // ]);
-        return Inertia::render('UnderMaintenancePage', [
-            // 'reports' => $reports
+        return Inertia::render('Wards/Reports/Index', [
+            'reports' => $reports
         ]);
+
+        // maintenance page
+        // return Inertia::render('UnderMaintenancePage', [
+        //     // 'reports' => $reports
+        // ]);
     }
 }

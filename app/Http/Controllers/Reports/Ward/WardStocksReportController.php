@@ -63,6 +63,7 @@ class WardStocksReportController extends Controller
                     GROUP BY stockbal.cl2comb
                 ) csrw_location_stock_balance ON ward.cl2comb = csrw_location_stock_balance.cl2comb
                 WHERE ward.location LIKE '$authWardcode->wardcode' AND ward.created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
+                AND ward.is_consumable IS NULL
                 GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc, csrw_patient_charge_logs.charge_quantity, csrw_location_stock_balance.ending_balance, csrw_location_stock_balance.beginning_balance
                 ORDER BY hclass2.cl2desc ASC;"
             );
@@ -101,21 +102,22 @@ class WardStocksReportController extends Controller
                     WHERE stockbal.location LIKE '$authWardcode->wardcode'
                     GROUP BY stockbal.cl2comb
                 ) csrw_location_stock_balance ON ward.cl2comb = csrw_location_stock_balance.cl2comb
-                  WHERE ward.location LIKE '$authWardcode->wardcode' AND ward.created_at BETWEEN '$from' AND '$to'
+                WHERE ward.location LIKE '$authWardcode->wardcode' AND ward.created_at BETWEEN '$from' AND '$to'
+                AND ward.is_consumable IS NULL
                 GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc, csrw_patient_charge_logs.charge_quantity, csrw_location_stock_balance.ending_balance, csrw_location_stock_balance.beginning_balance
                 ORDER BY hclass2.cl2desc ASC;"
             );
         }
 
-
         foreach ($ward_report as $e) {
+            $total_cons_estimated_cost = $e->total_consumption * $e->unit_cost;
             $reports[] = (object) [
-                // 'cl2comb' => $e->cl2comb,
+                'cl2comb' => $e->cl2comb,
                 'item_description' => $e->cl2desc,
                 'unit' => $e->uomdesc,
                 'unit_cost' => $e->unit_cost,
                 'beginning_balance' => $e->beginning_balance,
-                'from_csr' => $e->from_csr,
+                'from_csr' => $e->from_csr + $e->total_consumption,
                 'total_stock' => $e->total_stock,
                 'surgery' => $e->surgery,
                 'obgyne' => $e->obgyne,
@@ -127,9 +129,9 @@ class WardStocksReportController extends Controller
                 'ent' => $e->ent,
                 // 'neuro' => 'NA',
                 'total_consumption' => $e->total_consumption,
-                'total_cons_estimated_cost' => $e->total_consumption * $e->unit_cost,
+                'total_cons_estimated_cost' => (string)$total_cons_estimated_cost,
                 'ending_balance' => $e->ending_balance,
-                'actual_inventory' => $e->total_stock - $e->total_consumption <= 0 ? 0 : $e->total_stock - $e->total_consumption,
+                'actual_inventory' => ($e->from_csr + $e->total_consumption) - $e->total_consumption,
             ];
         }
 
