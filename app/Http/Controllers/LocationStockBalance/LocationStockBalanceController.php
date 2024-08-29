@@ -17,69 +17,74 @@ class LocationStockBalanceController extends Controller
 {
     public function index(Request $request)
     {
-        $searchString = $request->search;
-        $from = Carbon::parse($request->from)->startOfDay();
-        $to = Carbon::parse($request->to)->endOfDay();
+        // $searchString = $request->search;
+        // $from = Carbon::parse($request->from)->startOfDay();
+        // $to = Carbon::parse($request->to)->endOfDay();
 
-        $currentStocks = null;
+        // $currentStocks = null;
 
-        // get auth wardcode
-        $authWardcode = DB::table('csrw_users')
-            ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
-            ->select('csrw_login_history.wardcode')
-            ->where('csrw_login_history.employeeid', Auth::user()->employeeid)
-            ->orderBy('csrw_login_history.created_at', 'desc')
-            ->first();
+        // // get auth wardcode
+        // $authWardcode = DB::table('csrw_users')
+        //     ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
+        //     ->select('csrw_login_history.wardcode')
+        //     ->where('csrw_login_history.employeeid', Auth::user()->employeeid)
+        //     ->orderBy('csrw_login_history.created_at', 'desc')
+        //     ->first();
 
-        if ($authWardcode->wardcode == 'CSR') {
-            $currentStocks = DB::select(
-                "SELECT clsb_csr.cl2comb as clsb_cl2comb, hc.cl2comb as hc_cl2comb, hc.cl2desc
-                FROM csrw_csr_stocks as csr
-                JOIN hclass2 as hc on csr.cl2comb = hc.cl2comb
-                LEFT JOIN (
-                    SELECT id, cl2comb, ending_balance, beginning_balance
-                    FROM csrw_location_stock_balance
-                    WHERE location = 'CSR' AND created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
-                ) AS clsb_csr ON csr.cl2comb = clsb_csr.cl2comb;"
-            );
-        } else {
-            $currentStocks =  DB::select(
-                "SELECT clsb_ward.cl2comb as clsb_cl2comb, hc.cl2comb as hc_cl2comb, hc.cl2desc
-                    FROM csrw_wards_stocks as ward
-                    JOIN hclass2 as hc on ward.cl2comb = hc.cl2comb
-                    left JOIN (
-                        SELECT id, cl2comb, ending_balance, beginning_balance
-                        FROM csrw_location_stock_balance
-                        WHERE location = '$authWardcode->wardcode' AND created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
-                    ) AS clsb_ward ON ward.cl2comb = clsb_ward.cl2comb
-                    WHERE [from] =  'CSR' AND location = '$authWardcode->wardcode'
-                    GROUP BY hc.cl2comb, clsb_ward.cl2comb, hc.cl2desc;"
-            );
-        }
+        // if ($authWardcode->wardcode == 'CSR') {
+        //     $currentStocks = DB::select(
+        //         "SELECT clsb_csr.cl2comb as clsb_cl2comb, hc.cl2comb as hc_cl2comb, hc.cl2desc
+        //         FROM csrw_csr_stocks as csr
+        //         JOIN hclass2 as hc on csr.cl2comb = hc.cl2comb
+        //         LEFT JOIN (
+        //             SELECT id, cl2comb, ending_balance, beginning_balance
+        //             FROM csrw_location_stock_balance
+        //             WHERE location = 'CSR' AND created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
+        //         ) AS clsb_csr ON csr.cl2comb = clsb_csr.cl2comb;"
+        //     );
+        // } else {
+        //     $currentStocks =  DB::select(
+        //         "SELECT clsb_ward.cl2comb as clsb_cl2comb, hc.cl2comb as hc_cl2comb, hc.cl2desc
+        //             FROM csrw_wards_stocks as ward
+        //             JOIN hclass2 as hc on ward.cl2comb = hc.cl2comb
+        //             left JOIN (
+        //                 SELECT id, cl2comb, ending_balance, beginning_balance
+        //                 FROM csrw_location_stock_balance
+        //                 WHERE location = '$authWardcode->wardcode' AND created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
+        //             ) AS clsb_ward ON ward.cl2comb = clsb_ward.cl2comb
+        //             WHERE [from] =  'CSR' AND location = '$authWardcode->wardcode'
+        //             GROUP BY hc.cl2comb, clsb_ward.cl2comb, hc.cl2desc;"
+        //     );
+        // }
 
-        $locationStockBalance = LocationStockBalance::with(['item:cl2comb,cl2desc', 'entry_by', 'updated_by'])
-            ->where('location', $authWardcode->wardcode)
-            ->when(
-                $request->from,
-                function ($query, $value) use ($from) {
-                    $query->whereDate('created_at', '>=', $from);
-                }
-            )
-            ->when(
-                $request->to,
-                function ($query, $value) use ($to) {
-                    $query->whereDate('created_at', '<=', $to);
-                }
-            )
-            ->whereHas('item', function ($q) use ($searchString) {
-                $q->where('cl2desc', 'LIKE', '%' . $searchString . '%');
-            })
-            ->orderBy('created_at', 'DESC')
-            ->paginate(10);
+        // $locationStockBalance = LocationStockBalance::with(['item:cl2comb,cl2desc', 'entry_by', 'updated_by'])
+        //     ->where('location', $authWardcode->wardcode)
+        //     ->when(
+        //         $request->from,
+        //         function ($query, $value) use ($from) {
+        //             $query->whereDate('created_at', '>=', $from);
+        //         }
+        //     )
+        //     ->when(
+        //         $request->to,
+        //         function ($query, $value) use ($to) {
+        //             $query->whereDate('created_at', '<=', $to);
+        //         }
+        //     )
+        //     ->whereHas('item', function ($q) use ($searchString) {
+        //         $q->where('cl2desc', 'LIKE', '%' . $searchString . '%');
+        //     })
+        //     ->orderBy('created_at', 'DESC')
+        //     ->paginate(10);
 
-        return Inertia::render('Balance/Index', [
-            'currentStocks' => $currentStocks,
-            'locationStockBalance' => $locationStockBalance,
+        // return Inertia::render('Balance/Index', [
+        //     'currentStocks' => $currentStocks,
+        //     'locationStockBalance' => $locationStockBalance,
+        // ]);
+
+        // // maintenance page
+        return Inertia::render('UnderMaintenancePage', [
+            // 'reports' => $reports
         ]);
     }
 
