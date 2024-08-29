@@ -186,7 +186,7 @@
           <Dialog
             v-model:visible="createBillDialog"
             :modal="true"
-            class="p-fluid w-10"
+            class="p-fluid w-7"
             :closeOnEscape="false"
             @hide="whenDialogIsHidden"
           >
