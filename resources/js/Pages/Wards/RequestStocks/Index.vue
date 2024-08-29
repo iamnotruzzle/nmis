@@ -611,62 +611,53 @@
 
         <!-- update stocks -->
         <Dialog
-          v-model:visible="editWardStocksDialog"
+          v-model:visible="returnToCsrDialog"
           :modal="true"
-          class="p-fluid w-4"
+          class="p-fluid w-3"
           @hide="whenDialogIsHidden"
         >
           <template #header>
-            <div class="text-primary text-xl font-bold">UPDATE STOCK</div>
+            <div class="text-primary text-xl font-bold">RETURN STOCK TO CSR</div>
           </template>
           <div class="field">
             <label for="unit">Item</label>
-            <InputText
-              v-model.trim="formWardStocks.item"
+            <TextArea
+              v-model.trim="formReturnToCsr.item"
               readonly
+              rows="3"
             />
           </div>
           <div class="field">
             <label>Quantity</label>
             <InputText
               id="quantity"
-              v-model.trim="formWardStocks.quantity"
+              v-model.trim="formReturnToCsr.quantity"
               required="true"
               autofocus
-              :class="{ 'p-invalid': formWardStocks.quantity == '' || formWardStocks.quantity == null }"
+              class="my-0"
+              :class="{ 'p-invalid': formReturnToCsr.quantity == '' || formReturnToCsr.quantity == null }"
               inputId="integeronly"
             />
             <small
               class="text-error"
-              v-if="formWardStocks.errors.quantity"
+              v-if="formReturnToCsr.errors.quantity"
             >
-              {{ formWardStocks.errors.quantity }}
+              {{ formReturnToCsr.errors.quantity }}
             </small>
           </div>
-          <div class="field">
-            <label>Average</label>
-            <span class="ml-1">(Optional)</span>
-            <InputText
-              id="average"
-              v-model.trim="formWardStocks.average"
-              required="true"
-              autofocus
-              inputId="integeronly"
-            />
-          </div>
-          <div class="field">
+          <div class="field flex flex-column">
             <label for="remarks">Remarks <span class="text-error">(Required)</span></label>
             <TextArea
-              v-model.trim="formWardStocks.remarks"
-              rows="5"
+              v-model.trim="formReturnToCsr.remarks"
+              rows="10"
               autofocus
-              :class="{ 'p-invalid': formWardStocks.remarks == '' }"
+              :class="{ 'p-invalid': formReturnToCsr.remarks == '' }"
             />
             <small
               class="text-error"
-              v-if="formWardStocks.errors.remarks"
+              v-if="formReturnToCsr.errors.remarks"
             >
-              {{ formWardStocks.errors.remarks }}
+              {{ formReturnToCsr.errors.remarks }}
             </small>
           </div>
 
@@ -684,10 +675,10 @@
               text
               type="submit"
               :disabled="
-                formWardStocks.processing ||
-                formWardStocks.quantity == null ||
-                formWardStocks.remarks == '' ||
-                formWardStocks.remarks == null
+                formReturnToCsr.processing ||
+                formReturnToCsr.quantity == null ||
+                formReturnToCsr.remarks == '' ||
+                formReturnToCsr.remarks == null
               "
               @click="submitEditWardStocks"
             />
@@ -816,7 +807,7 @@
               </div>
             </template>
           </Column>
-          <!-- <Column
+          <Column
             header="ACTION"
             style="width: 10%"
             :pt="{ headerContent: 'justify-content-center' }"
@@ -828,7 +819,7 @@
                   rounded
                   text
                   severity="warning"
-                  @click="editWardStocks(slotProps.data)"
+                  @click="returnToCsr(slotProps.data)"
                 >
                   <template #default="">
                     <v-icon
@@ -839,7 +830,7 @@
                 </Button>
               </div>
             </template>
-          </Column> -->
+          </Column>
         </DataTable>
       </div>
     </div>
@@ -914,7 +905,7 @@ export default {
       isUpdate: false,
       createRequestStocksDialog: false,
       medicalGasesDialog: false,
-      editWardStocksDialog: false,
+      returnToCsrDialog: false,
       editAverageOfStocksDialog: false,
       editStatusDialog: false,
       cancelItemDialog: false,
@@ -968,11 +959,10 @@ export default {
         average: null,
         delivered_date: null,
       }),
-      formWardStocks: this.$inertia.form({
+      formReturnToCsr: this.$inertia.form({
         ward_stock_id: null,
         item: null,
         quantity: null,
-        average: null,
         expiration_date: null,
         remarks: null,
       }),
@@ -1216,8 +1206,8 @@ export default {
         (this.oldQuantity = 0),
         this.form.clearErrors(),
         this.form.reset(),
-        this.formWardStocks.clearErrors(),
-        this.formWardStocks.reset(),
+        this.formReturnToCsr.clearErrors(),
+        this.formReturnToCsr.reset(),
         this.formUpdateStatus.reset()
       );
     },
@@ -1387,15 +1377,15 @@ export default {
       this.requestStockId = null;
       this.isUpdate = false;
       this.createRequestStocksDialog = false;
-      this.editWardStocksDialog = false;
+      this.returnToCsrDialog = false;
       this.editAverageOfStocksDialog = false;
       this.medicalGasesDialog = false;
       this.targetItemDesc = null;
       this.oldQuantity = 0;
       this.form.reset();
       this.form.clearErrors();
-      this.formWardStocks.reset();
-      this.formWardStocks.clearErrors();
+      this.formReturnToCsr.reset();
+      this.formReturnToCsr.clearErrors();
     },
     convertedMsg() {
       this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Item converted.', life: 3000 });
@@ -1427,30 +1417,29 @@ export default {
       );
     },
     // ward stocks logs
-    editWardStocks(data) {
-      this.editWardStocksDialog = true;
+    returnToCsr(data) {
+      this.returnToCsrDialog = true;
 
-      this.formWardStocks.ward_stock_id = data.ward_stock_id;
-      this.formWardStocks.item = data.item;
-      this.formWardStocks.quantity = data.quantity;
-      this.formWardStocks.average = data.average;
+      this.formReturnToCsr.ward_stock_id = data.ward_stock_id;
+      this.formReturnToCsr.item = data.item;
+      this.formReturnToCsr.quantity = data.quantity;
 
-      //   console.log(this.formWardStocks);
+      //   console.log(this.formReturnToCsr);
     },
     submitEditWardStocks() {
       if (
-        this.formWardStocks.processing ||
-        this.formWardStocks.quantity == null ||
-        this.formWardStocks.remarks == '' ||
-        this.formWardStocks.remarks == null
+        this.formReturnToCsr.processing ||
+        this.formReturnToCsr.quantity == null ||
+        this.formReturnToCsr.remarks == '' ||
+        this.formReturnToCsr.remarks == null
       ) {
         return false;
       }
 
-      this.formWardStocks.post(route('wardsstockslogs.store'), {
+      this.formReturnToCsr.post(route('wardsstockslogs.store'), {
         preserveScroll: true,
         onSuccess: () => {
-          this.editWardStocksDialog = false;
+          this.returnToCsrDialog = false;
           this.cancel();
           this.updateData();
           this.updatedStockMsg();
