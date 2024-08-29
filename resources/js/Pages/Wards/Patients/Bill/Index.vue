@@ -991,18 +991,19 @@ export default {
       });
       this.itemList = Object.values(combinedItems);
 
+      // uncomment this if you want to show misc items
       // misc
-      this.misc.forEach((misc) => {
-        this.itemList.push({
-          id: null,
-          typeOfCharge: 'MISC',
-          itemCode: misc.hmcode,
-          itemDesc: misc.hmdesc,
-          unit: misc.uomcode == null ? null : misc.uomcode,
-          quantity: 99999,
-          price: misc.hmamt,
-        });
-      });
+      //   this.misc.forEach((misc) => {
+      //     this.itemList.push({
+      //       id: null,
+      //       typeOfCharge: 'MISC',
+      //       itemCode: misc.hmcode,
+      //       itemDesc: misc.hmdesc,
+      //       unit: misc.uomcode == null ? null : misc.uomcode,
+      //       quantity: 99999,
+      //       price: misc.hmamt,
+      //     });
+      //   });
 
       this.itemList.sort((a, b) => {
         let cl2descA = a.itemDesc;
