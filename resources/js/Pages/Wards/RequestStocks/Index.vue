@@ -635,7 +635,15 @@
               required="true"
               autofocus
               class="my-0"
-              :class="{ 'p-invalid': formReturnToCsr.quantity == '' || formReturnToCsr.quantity == null }"
+              :class="{
+                'p-invalid':
+                  formReturnToCsr.processing ||
+                  formReturnToCsr.quantity == '' ||
+                  formReturnToCsr.quantity == null ||
+                  Number(formReturnToCsr.quantity) <= 0 ||
+                  Number(formReturnToCsr.quantity) > Number(previousQty),
+              }"
+              @keydown="restrictNonNumericAndPeriod"
               inputId="integeronly"
             />
             <small
@@ -680,7 +688,7 @@
                 formReturnToCsr.remarks == '' ||
                 formReturnToCsr.remarks == null
               "
-              @click="submitEditWardStocks"
+              @click="submitReturnToCsr"
             />
           </template>
         </Dialog>
@@ -966,6 +974,7 @@ export default {
         expiration_date: null,
         remarks: null,
       }),
+      previousQty: 0,
       targetItemDesc: null,
     };
   },
@@ -1419,6 +1428,7 @@ export default {
     // ward stocks logs
     returnToCsr(data) {
       this.returnToCsrDialog = true;
+      this.previousQty = data.quantity;
 
       this.formReturnToCsr.ward_stock_id = data.ward_stock_id;
       this.formReturnToCsr.item = data.item;
@@ -1426,11 +1436,14 @@ export default {
 
       //   console.log(this.formReturnToCsr);
     },
-    submitEditWardStocks() {
+    submitReturnToCsr() {
+      console.log(this.previousQty);
       if (
         this.formReturnToCsr.processing ||
         this.formReturnToCsr.quantity == null ||
+        Number(this.formReturnToCsr.quantity) <= 0 ||
         this.formReturnToCsr.remarks == '' ||
+        Number(this.formReturnToCsr.quantity) > Number(this.previousQty) ||
         this.formReturnToCsr.remarks == null
       ) {
         return false;
