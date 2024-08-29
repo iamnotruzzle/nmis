@@ -726,6 +726,10 @@ export default {
       this.deleteTransferredStockDialog = true;
     },
     deleteCategory() {
+      if (this.form.processing) {
+        return false;
+      }
+
       this.form.delete(route('transferstock.destroy', this.cl1comb), {
         preserveScroll: true,
         onSuccess: () => {
@@ -778,6 +782,10 @@ export default {
       this.formReceiveStock.id = item.data.id;
     },
     updateReceivedStockStatus() {
+      if (this.formReceiveStock.processing) {
+        return false;
+      }
+
       this.formReceiveStock.put(route('transferstock.updatetransferstatus', this.formReceiveStock), {
         preserveScroll: true,
         onSuccess: () => {

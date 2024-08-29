@@ -127,6 +127,8 @@ class TransferStockController extends Controller
             ->orderBy('csrw_login_history.created_at', 'desc')
             ->first();
 
+        // dd($authWardcode->wardcode);
+
         // dd($request->id);
         $wardTransferID = $request->id;
 
@@ -143,26 +145,79 @@ class TransferStockController extends Controller
         // dd($wardStock);
 
         // create the stock
-        WardsStocks::create([
-            'request_stocks_id' => $wardStock->request_stocks_id,
-            'request_stocks_detail_id' => $wardStock->request_stocks_detail_id,
-            'stock_id' => $wardStock->stock_id,
-            'location' => $authWardcode->wardcode,
-            'cl2comb' => $wardStock->cl2comb,
-            'chrgcode' => $wardStock->chrgcode,
-            'quantity' => $transferredStock->quantity,
-            'uomcode' => $wardStock->uomcode,
-            'from' => $wardStock->from,
-            'manufactured_date' => Carbon::parse($wardStock->manufactured_date)->format('Y-m-d H:i:s.v'),
-            'delivered_date' => Carbon::parse($wardStock->delivered_date)->format('Y-m-d H:i:s.v'),
-            'expiration_date' => Carbon::parse($wardStock->expiration_date)->format('Y-m-d H:i:s.v'),
-            'ris_no' => $wardStock->ris_no,
-            'is_consumable' => $wardStock->is_consumable,
-            'average' => $wardStock->average,
-            'total_consumed' => $wardStock->total_consumed,
-            'total_usage' => $wardStock->total_usage,
-        ]);
+        // WardsStocks::create([
+        //     'request_stocks_id' => $wardStock->request_stocks_id,
+        //     'request_stocks_detail_id' => $wardStock->request_stocks_detail_id,
+        //     'stock_id' => $wardStock->stock_id,
+        //     'location' => $authWardcode->wardcode,
+        //     'cl2comb' => $wardStock->cl2comb,
+        //     'chrgcode' => $wardStock->chrgcode,
+        //     'quantity' => $transferredStock->quantity,
+        //     'uomcode' => $wardStock->uomcode,
+        //     'from' => $wardStock->from,
+        //     'manufactured_date' => Carbon::parse($wardStock->manufactured_date)->format('Y-m-d H:i:s.v'),
+        //     'delivered_date' => Carbon::parse($wardStock->delivered_date)->format('Y-m-d H:i:s.v'),
+        //     'expiration_date' => Carbon::parse($wardStock->expiration_date)->format('Y-m-d H:i:s.v'),
+        //     'ris_no' => $wardStock->ris_no,
+        //     'is_consumable' => $wardStock->is_consumable,
+        //     'average' => $wardStock->average,
+        //     'total_consumed' => $wardStock->total_consumed,
+        //     'total_usage' => $wardStock->total_usage,
+        // ]);
 
+        $existingWardStock = WardsStocks::where([
+            'request_stocks_id' => $wardStock->request_stocks_id,
+            'stock_id' => $wardStock->stock_id,
+            'cl2comb' => $wardStock->cl2comb,
+            'ris_no' => $wardStock->ris_no,
+            'location' => $authWardcode->wardcode,
+        ])->first();
+        // dd($existingWardStock);
+
+        if ($existingWardStock == null) {
+            WardsStocks::create([
+                'request_stocks_id' => $wardStock->request_stocks_id,
+                'request_stocks_detail_id' => $wardStock->request_stocks_detail_id,
+                'stock_id' => $wardStock->stock_id,
+                'location' => $authWardcode->wardcode,
+                'cl2comb' => $wardStock->cl2comb,
+                'chrgcode' => $wardStock->chrgcode,
+                'quantity' => $transferredStock->quantity,
+                'uomcode' => $wardStock->uomcode,
+                'from' => $wardStock->from,
+                'manufactured_date' => Carbon::parse($wardStock->manufactured_date)->format('Y-m-d H:i:s.v'),
+                'delivered_date' => Carbon::parse($wardStock->delivered_date)->format('Y-m-d H:i:s.v'),
+                'expiration_date' => Carbon::parse($wardStock->expiration_date)->format('Y-m-d H:i:s.v'),
+                'ris_no' => $wardStock->ris_no,
+                'is_consumable' => $wardStock->is_consumable,
+                'average' => $wardStock->average,
+                'total_consumed' => $wardStock->total_consumed,
+                'total_usage' => $wardStock->total_usage,
+            ]);
+        } else {
+            WardsStocks::where('id', $existingWardStock->id)
+                ->update(
+                    [
+                        'request_stocks_id' => $wardStock->request_stocks_id,
+                        'request_stocks_detail_id' => $wardStock->request_stocks_detail_id,
+                        'stock_id' => $wardStock->stock_id,
+                        'location' => $authWardcode->wardcode,
+                        'cl2comb' => $wardStock->cl2comb,
+                        'chrgcode' => $wardStock->chrgcode,
+                        'quantity' => $existingWardStock->quantity + $transferredStock->quantity,
+                        'uomcode' => $wardStock->uomcode,
+                        'from' => $wardStock->from,
+                        'manufactured_date' => Carbon::parse($wardStock->manufactured_date)->format('Y-m-d H:i:s.v'),
+                        'delivered_date' => Carbon::parse($wardStock->delivered_date)->format('Y-m-d H:i:s.v'),
+                        'expiration_date' => Carbon::parse($wardStock->expiration_date)->format('Y-m-d H:i:s.v'),
+                        'ris_no' => $wardStock->ris_no,
+                        'is_consumable' => $wardStock->is_consumable,
+                        'average' => $wardStock->average,
+                        'total_consumed' => $wardStock->total_consumed,
+                        'total_usage' => $wardStock->total_usage,
+                    ]
+                );
+        }
         return Redirect::route('transferstock.index');
     }
 
