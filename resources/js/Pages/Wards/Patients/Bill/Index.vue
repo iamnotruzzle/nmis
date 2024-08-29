@@ -10,7 +10,7 @@
       <div class="flex justify-content-around">
         <div
           class="card"
-          style="height: 80vh"
+          style="height: 85vh; width: 80%"
         >
           <DataTable
             class="p-datatable-sm"
@@ -429,7 +429,7 @@
         <!-- current stocks -->
         <div
           class="card"
-          style="height: 80vh; width: 30%"
+          style="height: 85vh; width: 30%"
         >
           <DataTable
             v-model:filters="medicalSuppliesListFilter"
