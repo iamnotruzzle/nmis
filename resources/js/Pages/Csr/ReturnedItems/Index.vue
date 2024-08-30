@@ -18,7 +18,7 @@
         dataKey="id"
         filterDisplay="row"
         sortField="created_at"
-        :sortOrder="1"
+        :sortOrder="-1"
         removableSort
         :globalFilterFields="['ward', 'ris_no', 'item']"
         showGridlines
