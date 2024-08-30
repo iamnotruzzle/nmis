@@ -89,7 +89,8 @@
           field="quantity"
           header="QTY"
           sortable
-          style="width: 5%"
+          style="width: 5%; text-align: right"
+          :pt="{ headerContent: 'justify-content-end' }"
         >
           <template #body="{ data }">
             <p class="text-right">
@@ -101,11 +102,15 @@
           field="returned_by"
           header="RETURNED BY"
           sortable
+          style="text-align: right"
+          :pt="{ headerContent: 'justify-content-end' }"
         >
         </Column>
         <Column
           field="remarks"
           header="REMARKS"
+          style="width: 5%; text-align: center"
+          :pt="{ headerContent: 'justify-content-center' }"
         >
         </Column>
         <Column
@@ -113,6 +118,8 @@
           header="RETURN DATE"
           :showFilterMenu="false"
           sortable
+          style="text-align: center"
+          :pt="{ headerContent: 'justify-content-center' }"
         >
           <template #body="{ data }">
             {{ tzone(data.created_at) }}
