@@ -18,6 +18,7 @@ class ReturnedItemsController extends Controller
                 JOIN hward as ward ON ward.wardcode = returned_items.[from]
                 JOIN hpersonal as employee ON employee.employeeid = returned_items.returned_by;"
         );
+        $returnedItems = array();
 
         foreach ($result as $r) {
             $returnedItems[] = (object) [
