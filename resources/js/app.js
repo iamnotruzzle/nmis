@@ -44,6 +44,7 @@ import {
   BiArrowLeftRight,
   BiBoxes,
   LaReceiptSolid,
+  GiReturnArrow,
 } from 'oh-vue-icons/icons';
 addIcons(
   CoChartLine,
@@ -71,7 +72,8 @@ addIcons(
   RiUserSharedFill,
   BiArrowLeftRight,
   BiBoxes,
-  LaReceiptSolid
+  LaReceiptSolid,
+  GiReturnArrow
 );
 
 moment.tz.setDefault('Asia/Manila');

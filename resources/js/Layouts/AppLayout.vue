@@ -98,6 +98,14 @@ export default {
               badge: null,
             },
             {
+              label: 'Returned Items',
+              icon: 'gi-return-arrow',
+              to: 'returneditems',
+              prefix: 'returneditems',
+              comp: 'Csr/ReturnedItems/Index',
+              badge: null,
+            },
+            {
               label: 'Patients',
               icon: 'fa-user-injured',
               to: 'wardspatients',
@@ -346,6 +354,11 @@ export default {
       if (this.$page.props.user.designation == 'ward') {
         this.menu[0].items = this.menu[0].items.filter(function (obj) {
           return obj.to !== 'wardsinv';
+        });
+      }
+      if (this.$page.props.user.designation == 'ward') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'returneditems';
         });
       }
       if (this.$page.props.user.designation == 'ward') {
