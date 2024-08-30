@@ -823,18 +823,17 @@
             <template #body="slotProps">
               <div class="flex justify-content-center">
                 <Button
-                  v-if="slotProps.data.is_consumable != 'y'"
-                  rounded
-                  text
+                  v-if="slotProps.data.is_consumable != 'y' || slotProps.data.is_consumable == null"
+                  label="RETURN"
                   severity="warning"
                   @click="returnToCsr(slotProps.data)"
                 >
-                  <template #default="">
+                  <!-- <template #default="">
                     <v-icon
                       name="pr-pencil"
                       class="text-yellow-500"
                     ></v-icon>
-                  </template>
+                  </template> -->
                 </Button>
               </div>
             </template>
