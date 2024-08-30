@@ -109,7 +109,7 @@
         <Column
           field="remarks"
           header="REMARKS"
-          style="width: 5%; text-align: center"
+          style="width: 10%; text-align: left"
           :pt="{ headerContent: 'justify-content-center' }"
         >
         </Column>
@@ -125,6 +125,23 @@
             {{ tzone(data.created_at) }}
           </template>
         </Column>
+        <!-- <Column
+          header="ACTION"
+          style="width: 5%"
+        >
+          <template #body="slotProps">
+            <div v-if="slotProps.data.charge_log_id != null">
+              <Button
+                icon="pi pi-pencil"
+                class="mr-1"
+                rounded
+                text
+                severity="warning"
+                @click="editItem(slotProps.data)"
+              />
+            </div>
+          </template>
+        </Column> -->
       </DataTable>
     </div>
   </app-layout>
