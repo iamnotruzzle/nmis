@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Wards\RequestStocks\RequestStocksLogs;
 use App\Http\Controllers\Controller;
 use App\Models\CsrItemConversion;
 use App\Models\RequestStocksDetails;
+use App\Models\ReturnedItems;
 use App\Models\WardsStocks;
 use App\Models\WardsStocksLogs;
 use Carbon\Carbon;
@@ -27,6 +28,9 @@ class RequestStocksLogsController extends Controller
         //     'remarks' => 'required'
         // ]);
 
+        $auth = Auth::user();
+        // dd($auth->id);
+
         $entry_by = Auth::user()->employeeid;
         $ward_stock_id = $request->ward_stock_id;
 
@@ -39,8 +43,18 @@ class RequestStocksLogsController extends Controller
             ]);
 
         $wardStock = WardsStocks::where('id', $request->ward_stock_id)->first();
-
+        // dd($wardStock);
         // TODO: Create a disposal table
+
+        ReturnedItems::create([
+            'item_conversion_id' => $wardStock->stock_id,
+            'ris_no' => $wardStock->ris_no,
+            'cl2comb' => $wardStock->cl2comb,
+            'from' => $wardStock->location,
+            'returned_by' => $auth->id,
+            'quantity' => $request->quantity,
+            'remarks' => $request->remarks,
+        ]);
 
 
         // $wardStockLogs = WardsStocksLogs::create([

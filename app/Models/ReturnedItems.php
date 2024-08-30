@@ -17,7 +17,6 @@ class ReturnedItems extends Model
 
     protected $fillable = [
         'item_conversion_id',
-        'csr_stock_id',
         'ris_no',
         'cl2comb',
         'quantity',
