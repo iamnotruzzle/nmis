@@ -619,7 +619,7 @@
           <template #header>
             <div class="text-primary text-xl font-bold">RETURN STOCK TO CSR</div>
           </template>
-          <div class="field">
+          <div class="field flex flex-column">
             <label for="unit">Item</label>
             <TextArea
               v-model.trim="formReturnToCsr.item"
@@ -627,7 +627,7 @@
               rows="3"
             />
           </div>
-          <div class="field">
+          <div class="field flex flex-column">
             <label>Quantity</label>
             <InputText
               id="quantity"
