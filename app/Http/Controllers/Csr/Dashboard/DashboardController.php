@@ -42,7 +42,7 @@ class DashboardController extends Controller
 
     public function store(Request $request)
     {
-        $entry_by = Auth::user()->employeeid;
+        $entry_by = Auth::user()->;
 
         return Redirect::route('csrdashboard.index');
     }

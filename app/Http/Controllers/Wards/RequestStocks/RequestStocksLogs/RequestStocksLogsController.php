@@ -28,7 +28,7 @@ class RequestStocksLogsController extends Controller
         //     'remarks' => 'required'
         // ]);
 
-        $auth = Auth::user();
+        $returned_by = Auth::user()->employeeid;
         // dd($auth->id);
 
         $entry_by = Auth::user()->employeeid;
@@ -51,7 +51,7 @@ class RequestStocksLogsController extends Controller
             'ris_no' => $wardStock->ris_no,
             'cl2comb' => $wardStock->cl2comb,
             'from' => $wardStock->location,
-            'returned_by' => $auth->id,
+            'returned_by' => $returned_by,
             'quantity' => $request->quantity,
             'remarks' => $request->remarks,
         ]);
