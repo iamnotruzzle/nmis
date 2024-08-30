@@ -89,7 +89,8 @@
           field="quantity"
           header="QTY"
           sortable
-          style="width: 5%"
+          style="width: 5%; text-align: right"
+          :pt="{ headerContent: 'justify-content-end' }"
         >
           <template #body="{ data }">
             <p class="text-right">
@@ -102,6 +103,8 @@
           header="EXP. DATE"
           :showFilterMenu="false"
           sortable
+          style="text-align: center"
+          :pt="{ headerContent: 'justify-content-center' }"
         >
           <template #body="{ data }">
             {{ tzone(data.expiration_date) }}
