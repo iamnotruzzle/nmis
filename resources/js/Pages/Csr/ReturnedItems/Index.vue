@@ -125,24 +125,101 @@
             {{ tzone(data.created_at) }}
           </template>
         </Column>
-        <!-- <Column
+        <Column
           header="ACTION"
-          style="width: 5%"
+          style="text-align: center"
+          :pt="{ headerContent: 'justify-content-center' }"
         >
           <template #body="slotProps">
-            <div v-if="slotProps.data.charge_log_id != null">
-              <Button
-                icon="pi pi-pencil"
-                class="mr-1"
-                rounded
-                text
-                severity="warning"
-                @click="editItem(slotProps.data)"
-              />
-            </div>
+            <Button
+              v-if="slotProps.data > 0"
+              label="Add to stock"
+              class="mr-1"
+              severity="warning"
+              @click="addQtyToStock(slotProps.data)"
+            />
           </template>
-        </Column> -->
+        </Column>
       </DataTable>
+
+      <Dialog
+        v-model:visible="addQtyToStockDialog"
+        :modal="true"
+        class="p-fluid w-3"
+        @hide="whenDialogIsHidden"
+      >
+        <template #header>
+          <div class="text-primary text-xl font-bold">RETURN ITEM IN THE CURRENT STOCK</div>
+        </template>
+        <div class="field flex flex-column">
+          <label for="unit">Item</label>
+          <TextArea
+            v-model.trim="formAddQtyToStock.item"
+            readonly
+            rows="3"
+          />
+        </div>
+        <div class="field flex flex-column">
+          <label for="remarks">
+            Remarks from <span class="text-yellow-500 font-semibold">{{ formAddQtyToStock.ward }}</span></label
+          >
+          <TextArea
+            v-model.trim="formAddQtyToStock.remarks"
+            rows="10"
+            readonly
+          />
+        </div>
+        <div class="field flex flex-column">
+          <label>Qty to return</label>
+          <InputText
+            id="quantity"
+            v-model.trim="formAddQtyToStock.quantity"
+            required="true"
+            autofocus
+            class="my-0"
+            :class="{
+              'p-invalid':
+                formAddQtyToStock.processing ||
+                formAddQtyToStock.quantity == '' ||
+                formAddQtyToStock.quantity == null ||
+                Number(formAddQtyToStock.quantity) <= 0 ||
+                Number(formAddQtyToStock.quantity) > Number(previousQty),
+            }"
+            @keydown="restrictNonNumericAndPeriod"
+            inputId="integeronly"
+          />
+          <small
+            class="text-error"
+            v-if="formAddQtyToStock.errors.quantity"
+          >
+            {{ formAddQtyToStock.errors.quantity }}
+          </small>
+        </div>
+
+        <template #footer>
+          <Button
+            label="Cancel"
+            icon="pi pi-times"
+            severity="danger"
+            text
+            @click="cancel"
+          />
+          <Button
+            label="Save"
+            icon="pi pi-check"
+            text
+            type="submit"
+            :disabled="
+              formAddQtyToStock.processing ||
+              formAddQtyToStock.quantity == null ||
+              formAddQtyToStock.quantity <= 0 ||
+              Number(formAddQtyToStock.quantity) > Number(previousQty)
+            "
+            @keyup.enter="submitReturnToCsr"
+            @click="submitReturnToCsr"
+          />
+        </template>
+      </Dialog>
     </div>
   </app-layout>
 </template>
@@ -165,6 +242,7 @@ import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
 import AutoComplete from 'primevue/autocomplete';
 import IconField from 'primevue/iconField';
+import TextArea from 'primevue/textarea';
 import Tag from 'primevue/tag';
 import moment from 'moment';
 import { Link } from '@inertiajs/vue3';
@@ -188,6 +266,7 @@ export default {
     Tag,
     Link,
     IconField,
+    TextArea,
   },
   props: {
     returnedItems: Object,
@@ -205,14 +284,40 @@ export default {
         ris_no: { value: null, matchMode: FilterMatchMode.CONTAINS },
         item: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
+      previousQty: null,
+      addQtyToStockDialog: false,
+      formAddQtyToStock: this.$inertia.form({
+        id: null,
+        cl2comb: null,
+        item: null,
+        quantity: null,
+        remarks: null,
+        wardcode: null,
+        ward: null,
+      }),
     };
   },
   mounted() {
-    this.storeWardsInventoryInContainer();
+    this.storeReturnedItemsInContainer();
     this.storeLocationsInContainer();
   },
   methods: {
-    storeWardsInventoryInContainer() {
+    updateData() {
+      this.$inertia.get('returneditems', this.params, {
+        preserveState: true,
+        preserveScroll: true,
+        onFinish: (visit) => {
+          this.previousQty = null;
+          this.addQtyToStockDialog = false;
+          this.returnedItemsList = [];
+          this.locationFilter = [];
+          this.storeReturnedItemsInContainer();
+          this.storeLocationsInContainer();
+          this.formAddQtyToStock.reset();
+        },
+      });
+    },
+    storeReturnedItemsInContainer() {
       this.returnedItemsList = []; // reset
 
       this.returnedItems.forEach((e) => {
@@ -221,6 +326,7 @@ export default {
           ris_no: e.ris_no,
           wardcode: e.wardcode,
           ward: e.ward,
+          cl2comb: e.cl2comb,
           item: e.item,
           quantity: e.quantity,
           returned_by: e.returned_by,
@@ -240,6 +346,79 @@ export default {
       });
 
       //   console.log(this.locationsList);
+    },
+    // ward stocks logs
+    addQtyToStock(data) {
+      console.log(data);
+
+      this.previousQty = data.quantity;
+
+      this.formAddQtyToStock.id = data.id;
+      this.formAddQtyToStock.cl2comb = data.cl2comb;
+      this.formAddQtyToStock.item = data.item;
+      this.formAddQtyToStock.quantity = Number(data.quantity);
+      this.formAddQtyToStock.remarks = data.remarks;
+      this.formAddQtyToStock.wardcode = data.wardcode;
+      this.formAddQtyToStock.ward = data.ward;
+
+      this.addQtyToStockDialog = true;
+    },
+    submitReturnToCsr() {
+      console.log(this.previousQty);
+      if (
+        this.formAddQtyToStock.processing ||
+        this.formAddQtyToStock.quantity == null ||
+        Number(this.formAddQtyToStock.quantity) <= 0 ||
+        Number(this.formAddQtyToStock.quantity) > Number(this.previousQty)
+      ) {
+        return false;
+      }
+
+      this.formAddQtyToStock.post(route('returneditems.store'), {
+        preserveScroll: true,
+        onSuccess: () => {
+          this.addQtyToStockDialog = false;
+          this.cancel();
+          this.updateData();
+          this.qtyAddedMsg();
+        },
+      });
+    },
+    qtyAddedMsg() {
+      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Item added to stock', life: 3000 });
+    },
+    cancel() {
+      this.addQtyToStockDialog = false;
+      this.formAddQtyToStock.reset();
+      this.formAddQtyToStock.clearErrors();
+    },
+    whenDialogIsHidden() {
+      this.$emit(
+        'hide',
+        (this.addQtyToStockDialog = false),
+        this.formAddQtyToStock.reset(),
+        this.formAddQtyToStock.clearErrors()
+      );
+    },
+    restrictNonNumericAndPeriod(event) {
+      if (
+        [46, 8, 9, 27, 13].includes(event.keyCode) ||
+        // Allow: Ctrl+A, Command+A
+        (event.keyCode === 65 && (event.ctrlKey === true || event.metaKey === true)) ||
+        // Allow: Ctrl+C, Command+C
+        (event.keyCode === 67 && (event.ctrlKey === true || event.metaKey === true)) ||
+        // Allow: Ctrl+V, Command+V
+        (event.keyCode === 86 && (event.ctrlKey === true || event.metaKey === true)) ||
+        // Allow: Ctrl+X, Command+X
+        (event.keyCode === 88 && (event.ctrlKey === true || event.metaKey === true))
+      ) {
+        // Let it happen, don't do anything
+        return;
+      }
+      // Ensure that it is a number and stop the keypress
+      if ((event.shiftKey || event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105)) {
+        event.preventDefault();
+      }
     },
     tzone(date) {
       return moment.tz(date, 'Asia/Manila').format('L');
