@@ -91,182 +91,6 @@
         </Column>
       </DataTable>
 
-      <TabView class="mt-8">
-        <TabPanel header="TRANSFERRED STOCKS">
-          <DataTable
-            class="p-datatable-sm"
-            dataKey="ward_stock_id"
-            v-model:filters="transferredStocksFilter"
-            :value="transferredStocksList"
-            paginator
-            :rows="10"
-            :rowsPerPageOptions="[10, 30, 50]"
-            removableSort
-            sortField="expiration_date"
-            :sortOrder="1"
-            filterDisplay="row"
-            showGridlines
-            :loading="loading"
-          >
-            <template #header>
-              <div class="flex flex-wrap align-items-center justify-content-end">
-                <div class="flex">
-                  <div class="mr-2">
-                    <div class="p-inputgroup">
-                      <span class="p-inputgroup-addon">
-                        <i class="pi pi-search"></i>
-                      </span>
-                      <InputText
-                        id="searchInput"
-                        v-model="transferredStocksFilter['global'].value"
-                        placeholder="Search"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </template>
-            <template #empty> No data found. </template>
-            <template #loading> Loading data. Please wait. </template>
-            <Column
-              field="item"
-              header="ITEM"
-              style="width: 30%"
-            >
-            </Column>
-            <Column
-              field="quantity"
-              header="QUANTITY"
-              style="width: 10%; text-align: right"
-              :pt="{ headerContent: 'justify-content-end' }"
-            >
-            </Column>
-            <Column
-              field="expiration_date"
-              header="EXP. DATE"
-              style="width: 10%; text-align: right"
-              :pt="{ headerContent: 'justify-content-end' }"
-            >
-            </Column>
-            <Column
-              field="to"
-              header="TO"
-              style="width: 20%; text-align: right"
-              :pt="{ headerContent: 'justify-content-end' }"
-            >
-            </Column>
-            <Column
-              field="status"
-              header="STATUS"
-              style="width: 10%; text-align: center"
-              :pt="{ headerContent: 'justify-content-center' }"
-            >
-              <template #body="slotProps">
-                <Tag
-                  v-if="slotProps.data.status == 'TRANSFERRED'"
-                  :value="slotProps.data.status"
-                  severity="warning"
-                />
-                <Tag
-                  v-else-if="slotProps.data.status == 'RECEIVED'"
-                  :value="slotProps.data.status"
-                  severity="success"
-                />
-                <p v-else></p>
-              </template>
-            </Column>
-          </DataTable>
-        </TabPanel>
-        <TabPanel header="TO RECEIVE">
-          <DataTable
-            class="p-datatable-sm"
-            dataKey="ward_stock_id"
-            v-model:filters="toReceiveFilter"
-            :value="toReceiveList"
-            paginator
-            :rows="10"
-            :rowsPerPageOptions="[10, 30, 50]"
-            removableSort
-            sortField="expiration_date"
-            :sortOrder="1"
-            filterDisplay="row"
-            showGridlines
-            :loading="loading"
-          >
-            <template #header>
-              <div class="flex flex-wrap align-items-center justify-content-end">
-                <div>
-                  <div class="flex">
-                    <div class="mr-2">
-                      <div class="p-inputgroup">
-                        <span class="p-inputgroup-addon">
-                          <i class="pi pi-search"></i>
-                        </span>
-                        <InputText
-                          id="searchInput"
-                          v-model="toReceiveFilter['global'].value"
-                          placeholder="Search"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </template>
-            <template #empty> No data found. </template>
-            <template #loading> Loading data. Please wait. </template>
-            <Column
-              field="item"
-              header="ITEM"
-              style="width: 30%"
-            >
-            </Column>
-            <Column
-              field="quantity"
-              header="QUANTITY"
-              style="width: 10%; text-align: right"
-              :pt="{ headerContent: 'justify-content-end' }"
-            >
-            </Column>
-            <Column
-              field="expiration_date"
-              header="EXP. DATE"
-              style="width: 10%; text-align: right"
-              :pt="{ headerContent: 'justify-content-end' }"
-            >
-            </Column>
-            <Column
-              field="from"
-              header="FROM"
-              style="width: 20%; text-align: right"
-              :pt="{ headerContent: 'justify-content-end' }"
-            >
-            </Column>
-            <Column
-              header="ACTION"
-              style="width: 10%; text-align: center"
-              :pt="{ headerContent: 'justify-content-center' }"
-            >
-              <template #body="slotProps">
-                <!-- <i
-                  v-if="slotProps.data.status != 'RECEIVED'"
-                  class="pi pi-check"
-                  style="color: skyblue"
-
-                ></i> -->
-
-                <Button
-                  v-if="slotProps.data.status != 'RECEIVED'"
-                  icon="pi pi-check"
-                  label="Receive"
-                  @click="receivedStock(slotProps)"
-                />
-              </template>
-            </Column>
-          </DataTable>
-        </TabPanel>
-      </TabView>
-
       <!-- create dialog -->
       <Dialog
         v-model:visible="transferStockDialog"
@@ -444,6 +268,184 @@
           />
         </template>
       </Dialog>
+    </div>
+
+    <div class="card">
+      <TabView>
+        <TabPanel header="TRANSFERRED STOCKS">
+          <DataTable
+            class="p-datatable-sm"
+            dataKey="ward_stock_id"
+            v-model:filters="transferredStocksFilter"
+            :value="transferredStocksList"
+            paginator
+            :rows="10"
+            :rowsPerPageOptions="[10, 30, 50]"
+            removableSort
+            sortField="expiration_date"
+            :sortOrder="1"
+            filterDisplay="row"
+            showGridlines
+            :loading="loading"
+          >
+            <template #header>
+              <div class="flex flex-wrap align-items-center justify-content-end">
+                <div class="flex">
+                  <div class="mr-2">
+                    <div class="p-inputgroup">
+                      <span class="p-inputgroup-addon">
+                        <i class="pi pi-search"></i>
+                      </span>
+                      <InputText
+                        id="searchInput"
+                        v-model="transferredStocksFilter['global'].value"
+                        placeholder="Search"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+            <template #empty> No data found. </template>
+            <template #loading> Loading data. Please wait. </template>
+            <Column
+              field="item"
+              header="ITEM"
+              style="width: 30%"
+            >
+            </Column>
+            <Column
+              field="quantity"
+              header="QUANTITY"
+              style="width: 10%; text-align: right"
+              :pt="{ headerContent: 'justify-content-end' }"
+            >
+            </Column>
+            <Column
+              field="expiration_date"
+              header="EXP. DATE"
+              style="width: 10%; text-align: right"
+              :pt="{ headerContent: 'justify-content-end' }"
+            >
+            </Column>
+            <Column
+              field="to"
+              header="TO"
+              style="width: 20%; text-align: right"
+              :pt="{ headerContent: 'justify-content-end' }"
+            >
+            </Column>
+            <Column
+              field="status"
+              header="STATUS"
+              style="width: 10%; text-align: center"
+              :pt="{ headerContent: 'justify-content-center' }"
+            >
+              <template #body="slotProps">
+                <Tag
+                  v-if="slotProps.data.status == 'TRANSFERRED'"
+                  :value="slotProps.data.status"
+                  severity="warning"
+                />
+                <Tag
+                  v-else-if="slotProps.data.status == 'RECEIVED'"
+                  :value="slotProps.data.status"
+                  severity="success"
+                />
+                <p v-else></p>
+              </template>
+            </Column>
+          </DataTable>
+        </TabPanel>
+        <TabPanel header="TO RECEIVE">
+          <DataTable
+            class="p-datatable-sm"
+            dataKey="ward_stock_id"
+            v-model:filters="toReceiveFilter"
+            :value="toReceiveList"
+            paginator
+            :rows="10"
+            :rowsPerPageOptions="[10, 30, 50]"
+            removableSort
+            sortField="expiration_date"
+            :sortOrder="1"
+            filterDisplay="row"
+            showGridlines
+            :loading="loading"
+          >
+            <template #header>
+              <div class="flex flex-wrap align-items-center justify-content-end">
+                <div>
+                  <div class="flex">
+                    <div class="mr-2">
+                      <div class="p-inputgroup">
+                        <span class="p-inputgroup-addon">
+                          <i class="pi pi-search"></i>
+                        </span>
+                        <InputText
+                          id="searchInput"
+                          v-model="toReceiveFilter['global'].value"
+                          placeholder="Search"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+            <template #empty> No data found. </template>
+            <template #loading> Loading data. Please wait. </template>
+            <Column
+              field="item"
+              header="ITEM"
+              style="width: 30%"
+            >
+            </Column>
+            <Column
+              field="quantity"
+              header="QUANTITY"
+              style="width: 10%; text-align: right"
+              :pt="{ headerContent: 'justify-content-end' }"
+            >
+            </Column>
+            <Column
+              field="expiration_date"
+              header="EXP. DATE"
+              style="width: 10%; text-align: right"
+              :pt="{ headerContent: 'justify-content-end' }"
+            >
+            </Column>
+            <Column
+              field="from"
+              header="FROM"
+              style="width: 20%; text-align: right"
+              :pt="{ headerContent: 'justify-content-end' }"
+            >
+            </Column>
+            <Column
+              header="ACTION"
+              style="width: 10%; text-align: center"
+              :pt="{ headerContent: 'justify-content-center' }"
+            >
+              <template #body="slotProps">
+                <!-- <i
+                  v-if="slotProps.data.status != 'RECEIVED'"
+                  class="pi pi-check"
+                  style="color: skyblue"
+
+                ></i> -->
+
+                <Button
+                  v-if="slotProps.data.status != 'RECEIVED'"
+                  icon="pi pi-check"
+                  label="Receive"
+                  @click="receivedStock(slotProps)"
+                />
+              </template>
+            </Column>
+          </DataTable>
+        </TabPanel>
+      </TabView>
     </div>
   </app-layout>
 </template>
