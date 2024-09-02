@@ -26,13 +26,21 @@ class TransferStockController extends Controller
             ->orderBy('csrw_login_history.created_at', 'desc')
             ->first();
 
+        // FROM CSR
         $wardStocks = WardsStocks::with(['item_details:cl2comb,cl2desc', 'request_stocks'])
             ->where('quantity', '!=', 0)
             ->where('location', '=', $authWardcode->wardcode)
             ->whereHas('request_stocks', function ($query) {
                 return $query->where('status', 'RECEIVED');
             })
-            // ->orWhere('request_stocks_id', null)
+            ->where('from', 'CSR')
+            ->get();
+
+        // FROM TRANSFERRED STOCKS
+        $wardStocks2 = WardsStocks::with(['item_details:cl2comb,cl2desc'])
+            ->where('quantity', '!=', 0)
+            ->where('location', '=', $authWardcode->wardcode)
+            ->where('from', 'WARD')
             ->get();
         // dd($wardStocks);
 
@@ -64,6 +72,7 @@ class TransferStockController extends Controller
         return Inertia::render('Wards/TransferStock/Index', [
             'authWardcode' => $authWardcode,
             'wardStocks' => $wardStocks,
+            'wardStocks2' => $wardStocks2,
             // 'wardStocksMedicalGasess' => $wardStocksMedicalGasess,
             'transferredStock' => $transferredStock,
             'employees' => $employees,
@@ -184,7 +193,7 @@ class TransferStockController extends Controller
                 'chrgcode' => $wardStock->chrgcode,
                 'quantity' => $transferredStock->quantity,
                 'uomcode' => $wardStock->uomcode,
-                'from' => $wardStock->from,
+                'from' => 'WARD',
                 'manufactured_date' => Carbon::parse($wardStock->manufactured_date)->format('Y-m-d H:i:s.v'),
                 'delivered_date' => Carbon::parse($wardStock->delivered_date)->format('Y-m-d H:i:s.v'),
                 'expiration_date' => Carbon::parse($wardStock->expiration_date)->format('Y-m-d H:i:s.v'),
@@ -206,7 +215,7 @@ class TransferStockController extends Controller
                         'chrgcode' => $wardStock->chrgcode,
                         'quantity' => $existingWardStock->quantity + $transferredStock->quantity,
                         'uomcode' => $wardStock->uomcode,
-                        'from' => $wardStock->from,
+                        'from' => 'WARD',
                         'manufactured_date' => Carbon::parse($wardStock->manufactured_date)->format('Y-m-d H:i:s.v'),
                         'delivered_date' => Carbon::parse($wardStock->delivered_date)->format('Y-m-d H:i:s.v'),
                         'expiration_date' => Carbon::parse($wardStock->expiration_date)->format('Y-m-d H:i:s.v'),
