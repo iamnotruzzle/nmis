@@ -988,10 +988,11 @@ export default {
     window.Echo.channel('issued').listen('ItemIssued', (args) => {
       if (args.message[0] == this.$page.props.authWardcode.wardcode) {
         router.reload({
-          onSuccess: (e) => {
+          onFinish: (e) => {
             this.requestStockList = [];
             this.storeRequestedStocksInContainer();
             this.createRequestStocksDialog = false;
+            this.loading = false;
           },
         });
       }
@@ -1281,12 +1282,13 @@ export default {
 
       this.formUpdateStatus.put(route('requeststocks.updatedeliverystatus', this.formUpdateStatus), {
         preserveScroll: true,
-        onSuccess: () => {
+        onFinish: () => {
           this.requestStockId = null;
           this.editStatusDialog = false;
           this.cancel();
           this.updateData();
           this.updatedStatusMsg();
+          this.loading = false;
         },
       });
     },
@@ -1303,23 +1305,25 @@ export default {
       if (this.isUpdate) {
         this.form.put(route('requeststocks.update', this.requestStockId), {
           preserveScroll: true,
-          onSuccess: () => {
+          onFinish: () => {
             this.requestStockId = null;
             this.createRequestStocksDialog = false;
             this.cancel();
             this.updateData();
             this.updatedMsg();
+            this.loading = false;
           },
         });
       } else {
         this.form.post(route('requeststocks.store'), {
           preserveScroll: true,
-          onSuccess: () => {
+          onFinish: () => {
             this.requestStockId = null;
             this.createRequestStocksDialog = false;
             this.cancel();
             this.updateData();
             this.createdMsg();
+            this.loading = false;
           },
         });
       }
@@ -1353,11 +1357,12 @@ export default {
         // console.log('success');
         this.formMedicalGases.post(route('medicalGases.store'), {
           preserveScroll: true,
-          onSuccess: () => {
+          onFinish: () => {
             this.formMedicalGases.reset();
             this.cancel();
             this.updateData();
             this.createdMsg();
+            this.loading = false;
           },
         });
       }
@@ -1370,7 +1375,8 @@ export default {
     cancelItem() {
       this.form.delete(route('requeststocks.destroy', this.requestStockId), {
         preserveScroll: true,
-        onSuccess: () => {
+        onFinish: () => {
+          this.loading = false;
           this.requestStockList = [];
           this.cancelItemDialog = false;
           this.requestStockId = null;
@@ -1388,6 +1394,7 @@ export default {
       this.returnToCsrDialog = false;
       this.editAverageOfStocksDialog = false;
       this.medicalGasesDialog = false;
+      this.editStatusDialog = false;
       this.targetItemDesc = null;
       this.oldQuantity = 0;
       this.form.reset();
@@ -1450,11 +1457,12 @@ export default {
 
       this.formReturnToCsr.post(route('wardsstockslogs.store'), {
         preserveScroll: true,
-        onSuccess: () => {
+        onFinish: () => {
           this.returnToCsrDialog = false;
           this.cancel();
           this.updateData();
           this.updatedStockMsg();
+          this.loading = false;
         },
       });
     },
