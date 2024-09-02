@@ -14,7 +14,7 @@ class AddColumnNameToCsrwCsrReturnedItemse extends Migration
     public function up()
     {
         Schema::table('csrw_csr_returned_items', function (Blueprint $table) {
-            $table->integer('returned_to_stock')->default(0);
+            $table->integer('restocked_quantity')->default(0);
         });
     }
 
@@ -26,7 +26,7 @@ class AddColumnNameToCsrwCsrReturnedItemse extends Migration
     public function down()
     {
         Schema::table('csrw_csr_returned_items', function (Blueprint $table) {
-            $table->dropColumn('returned_to_stock');
+            $table->dropColumn('restocked_quantity');
         });
     }
 }

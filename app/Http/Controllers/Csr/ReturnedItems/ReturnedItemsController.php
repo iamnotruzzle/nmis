@@ -15,7 +15,10 @@ class ReturnedItemsController extends Controller
     public function index(Request $request)
     {
         $result = DB::select(
-            "SELECT returned_items.id, returned_items.ris_no, returned_items.cl2comb, item.cl2desc as item, returned_items.quantity, ward.wardcode, ward.wardname as ward, employee.firstname, employee.lastname, returned_items.remarks, returned_items.created_at
+            "SELECT returned_items.id, returned_items.ris_no, returned_items.cl2comb, item.cl2desc as item,
+                    returned_items.quantity, returned_items.restocked_quantity,
+                    ward.wardcode, ward.wardname as ward,
+                    employee.firstname, employee.lastname, returned_items.remarks, returned_items.created_at
                 FROM csrw_csr_returned_items as returned_items
                 JOIN hclass2 as item ON item.cl2comb = returned_items.cl2comb
                 JOIN hward as ward ON ward.wardcode = returned_items.[from]
@@ -30,6 +33,7 @@ class ReturnedItemsController extends Controller
                 'cl2comb' => $r->cl2comb,
                 'item' => $r->item,
                 'quantity' => $r->quantity,
+                'restocked_quantity' => $r->restocked_quantity,
                 'wardcode' => $r->wardcode,
                 'ward' => $r->ward,
                 'returned_by' => $r->firstname . ' ' . $r->lastname,
@@ -55,6 +59,7 @@ class ReturnedItemsController extends Controller
         $returnedItems->update(
             [
                 'quantity' => $returnedItems->quantity - $request->quantity,
+                'restocked_quantity' => $returnedItems->restocked_quantity + $request->quantity,
             ]
         );
 

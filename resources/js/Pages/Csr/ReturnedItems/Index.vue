@@ -84,10 +84,9 @@
           sortable
         >
         </Column>
-        <!-- breakpoint -->
         <Column
           field="quantity"
-          header="QTY"
+          header="RETURNED QTY"
           sortable
           style="width: 5%; text-align: right"
           :pt="{ headerContent: 'justify-content-end' }"
@@ -95,6 +94,22 @@
           <template #body="{ data }">
             <p class="text-right">
               {{ data.quantity }}
+            </p>
+          </template>
+        </Column>
+        <Column
+          field="restocked_quantity"
+          header="RESTOCKED QTY"
+          sortable
+          style="width: 5%; text-align: right"
+          :pt="{ headerContent: 'justify-content-end' }"
+        >
+          <template #body="{ data }">
+            <p
+              class="text-right"
+              :class="{ 'text-green-500': data.quantity === data.restocked_quantity }"
+            >
+              {{ data.restocked_quantity }}
             </p>
           </template>
         </Column>
@@ -186,6 +201,7 @@
                 Number(formAddQtyToStock.quantity) > Number(previousQty),
             }"
             @keydown="restrictNonNumericAndPeriod"
+            @keyup.enter="submitReturnToCsr"
             inputId="integeronly"
           />
           <small
@@ -215,7 +231,6 @@
               formAddQtyToStock.quantity <= 0 ||
               Number(formAddQtyToStock.quantity) > Number(previousQty)
             "
-            @keyup.enter="submitReturnToCsr"
             @click="submitReturnToCsr"
           />
         </template>
@@ -329,6 +344,7 @@ export default {
           cl2comb: e.cl2comb,
           item: e.item,
           quantity: e.quantity,
+          restocked_quantity: Number(e.restocked_quantity),
           returned_by: e.returned_by,
           remarks: e.remarks,
           created_at: e.created_at,

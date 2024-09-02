@@ -23,5 +23,6 @@ class ReturnedItems extends Model
         'from',
         'returned_by',
         'remarks',
+        'restocked_quantity',
     ];
 }
