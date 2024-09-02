@@ -132,7 +132,7 @@
         >
           <template #body="slotProps">
             <Button
-              v-if="slotProps.data > 0"
+              v-if="slotProps.data.quantity > 0"
               label="Add to stock"
               class="mr-1"
               severity="warning"
