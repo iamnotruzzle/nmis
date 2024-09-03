@@ -248,7 +248,7 @@
               {{ rc.total_cons_estimated_cost }}
             </td>
             <td style="padding: 8px; border: 1px solid black">
-              <span>total transfers</span>
+              {{ rc.transferred_qty }}
             </td>
             <td style="padding: 8px; border: 1px solid black">
               {{ rc.ending_balance }}
@@ -322,6 +322,7 @@ export default {
           //   neuro: e.neuro,
           total_consumption: e.total_consumption,
           total_cons_estimated_cost: e.total_cons_estimated_cost,
+          transferred_qty: e.transferred_qty,
           ending_balance: e.ending_balance,
           actual_inventory: e.actual_inventory,
         });

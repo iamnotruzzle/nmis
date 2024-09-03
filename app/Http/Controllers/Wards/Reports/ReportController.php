@@ -129,7 +129,8 @@ class ReportController extends Controller
                 (SELECT SUM(CASE WHEN tscode = 'OPHTH' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'optha',
                 (SELECT SUM(CASE WHEN tscode = 'ENT' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'ent',
                 -- (SELECT SUM(CASE WHEN tscode = 'neuro' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'neuro',
-                csrw_patient_charge_logs.charge_quantity as total_consumption
+                csrw_patient_charge_logs.charge_quantity as total_consumption,
+                SUM(csrw_ward_transfer_stock.transferred_qty) as transferred_qty
                 FROM csrw_wards_stocks as ward
                 JOIN hclass2 ON ward.cl2comb = hclass2.cl2comb
                 JOIN csrw_item_prices ON csrw_item_prices.ris_no = ward.ris_no
@@ -146,6 +147,12 @@ class ReportController extends Controller
                     WHERE stockbal.location LIKE '$authWardcode->wardcode'
                     GROUP BY stockbal.cl2comb
                 ) csrw_location_stock_balance ON ward.cl2comb = csrw_location_stock_balance.cl2comb
+                LEFT JOIN (
+                    SELECT ward_stock_id, SUM(quantity) as transferred_qty
+                    FROM csrw_ward_transfer_stock
+                    WHERE status = 'RECEIVED'
+                    GROUP BY ward_stock_id
+                ) csrw_ward_transfer_stock ON ward.id = csrw_ward_transfer_stock.ward_stock_id -- Join with ward_stock_id
                 WHERE ward.location LIKE '$authWardcode->wardcode' AND ward.created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
                 AND ward.is_consumable IS NULL
                 GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc, csrw_patient_charge_logs.charge_quantity, csrw_location_stock_balance.ending_balance, csrw_location_stock_balance.beginning_balance, csrw_item_prices.price_per_unit
@@ -170,7 +177,8 @@ class ReportController extends Controller
                 (SELECT SUM(CASE WHEN tscode = 'OPHTH' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'optha',
                 (SELECT SUM(CASE WHEN tscode = 'ENT' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'ent',
                 -- (SELECT SUM(CASE WHEN tscode = 'neuro' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'neuro',
-                csrw_patient_charge_logs.charge_quantity as total_consumption
+                csrw_patient_charge_logs.charge_quantity as total_consumption,
+                SUM(csrw_ward_transfer_stock.transferred_qty) as transferred_qty
                 FROM csrw_wards_stocks as ward
                 JOIN hclass2 ON ward.cl2comb = hclass2.cl2comb
                 JOIN csrw_item_prices ON csrw_item_prices.ris_no = ward.ris_no
@@ -187,6 +195,12 @@ class ReportController extends Controller
                     WHERE stockbal.location LIKE '$authWardcode->wardcode'
                     GROUP BY stockbal.cl2comb
                 ) csrw_location_stock_balance ON ward.cl2comb = csrw_location_stock_balance.cl2comb
+                LEFT JOIN (
+                    SELECT ward_stock_id, SUM(quantity) as transferred_qty
+                    FROM csrw_ward_transfer_stock
+                    WHERE status = 'RECEIVED'
+                    GROUP BY ward_stock_id
+                ) csrw_ward_transfer_stock ON ward.id = csrw_ward_transfer_stock.ward_stock_id
                 WHERE ward.location LIKE '$authWardcode->wardcode' AND ward.created_at BETWEEN '$from' AND '$to'
                 AND ward.is_consumable IS NULL
                 GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc, csrw_patient_charge_logs.charge_quantity, csrw_location_stock_balance.ending_balance, csrw_location_stock_balance.beginning_balance, csrw_item_prices.price_per_unit
@@ -218,6 +232,7 @@ class ReportController extends Controller
                 // 'neuro' => 'NA',
                 'total_consumption' => $e->total_consumption,
                 'total_cons_estimated_cost' => (string)$total_cons_estimated_cost,
+                'transferred_qty' => $e->transferred_qty,
                 'ending_balance' => $e->ending_balance,
                 'actual_inventory' => 0
             ];
