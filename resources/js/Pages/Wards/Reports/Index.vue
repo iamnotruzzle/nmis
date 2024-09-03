@@ -91,6 +91,12 @@
               rowspan="2"
               style="background-color: white; color: black; padding: 8px; border: 1px solid black"
             >
+              RECEIVED FROM WARD
+            </td>
+            <td
+              rowspan="2"
+              style="background-color: white; color: black; padding: 8px; border: 1px solid black"
+            >
               TOTAL STOCK
             </td>
             <th
@@ -114,6 +120,12 @@
             </th>
             <td
               rowspan="2"
+              style="background-color: white; color: black; padding: 8px; border: 1px solid black"
+            >
+              TOTAL TRANSFERS
+            </td>
+            <td
+              rowspan="2"
               style="background-color: white; color: black; text-align: center; padding: 8px; border: 1px solid black"
             >
               ENDING BALANCE
@@ -122,7 +134,13 @@
               rowspan="2"
               style="background-color: white; color: black; text-align: center; padding: 8px; border: 1px solid black"
             >
-              ACTUAL INVENTORY
+              PHYSICAL COUNT
+            </td>
+            <td
+              rowspan="2"
+              style="background-color: white; color: black; text-align: center; padding: 8px; border: 1px solid black"
+            >
+              VARIANCE
             </td>
           </tr>
 
@@ -200,6 +218,9 @@
               {{ rc.from_csr }}
             </td>
             <td style="padding: 8px; border: 1px solid black">
+              <span>from wards</span>
+            </td>
+            <td style="padding: 8px; border: 1px solid black">
               {{ rc.total_stock }}
             </td>
             <td style="padding: 8px; border: 1px solid black">
@@ -227,10 +248,16 @@
               {{ rc.total_cons_estimated_cost }}
             </td>
             <td style="padding: 8px; border: 1px solid black">
+              <span>total transfers</span>
+            </td>
+            <td style="padding: 8px; border: 1px solid black">
               {{ rc.ending_balance }}
             </td>
             <td style="padding: 8px; border: 1px solid black">
               {{ rc.actual_inventory }}
+            </td>
+            <td style="padding: 8px; border: 1px solid black">
+              <span>variance</span>
             </td>
           </tr>
         </table>
