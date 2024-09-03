@@ -31,31 +31,51 @@ class LocationStockBalanceController extends Controller
             ->orderBy('csrw_login_history.created_at', 'desc')
             ->first();
 
-        if ($authWardcode->wardcode == 'CSR') {
-            $currentStocks = DB::select(
-                "SELECT clsb_csr.cl2comb as clsb_cl2comb, hc.cl2comb as hc_cl2comb, hc.cl2desc
-                FROM csrw_csr_stocks as csr
-                JOIN hclass2 as hc on csr.cl2comb = hc.cl2comb
+        // OLD condition. this also add CSR stock balance
+        // if ($authWardcode->wardcode == 'CSR') {
+        //     $currentStocks = DB::select(
+        //         "SELECT clsb_csr.cl2comb as clsb_cl2comb, hc.cl2comb as hc_cl2comb, hc.cl2desc
+        //         FROM csrw_csr_stocks as csr
+        //         JOIN hclass2 as hc on csr.cl2comb = hc.cl2comb
+        //         RIGHT JOIN (
+        //             SELECT id, cl2comb, ending_balance, beginning_balance
+        //             FROM csrw_location_stock_balance
+        //             WHERE location = 'CSR' AND created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
+        //         ) AS clsb_csr ON csr.cl2comb = clsb_csr.cl2comb;"
+        //     );
+        // } else {
+        //     $currentStocks =  DB::select(
+        //         "SELECT ward.id, clsb_ward.cl2comb as clsb_cl2comb, hc.cl2comb as hc_cl2comb, hc.cl2desc
+        //             FROM csrw_wards_stocks as ward
+        //             JOIN hclass2 as hc on ward.cl2comb = hc.cl2comb
+        //             LEFT JOIN (
+        //                 SELECT id, cl2comb, ending_balance, beginning_balance
+        //                 FROM csrw_location_stock_balance
+        //                 WHERE location = '$authWardcode->wardcode' AND created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
+        //             ) AS clsb_ward ON ward.cl2comb = clsb_ward.cl2comb
+        //             WHERE [from] = 'CSR' AND location = '$authWardcode->wardcode';"
+        //     );
+        //     dd($currentStocks);
+        // }
+
+        // ONLY WARD
+        $currentStocks =  DB::select(
+            "SELECT ward.id,
+                    clsb_ward.cl2comb as clsb_cl2comb,
+                    hc.cl2comb as hc_cl2comb,
+                    hc.cl2desc
+                FROM csrw_wards_stocks as ward
+                JOIN hclass2 as hc on ward.cl2comb = hc.cl2comb
                 LEFT JOIN (
                     SELECT id, cl2comb, ending_balance, beginning_balance
                     FROM csrw_location_stock_balance
-                    WHERE location = 'CSR' AND created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
-                ) AS clsb_csr ON csr.cl2comb = clsb_csr.cl2comb;"
-            );
-        } else {
-            $currentStocks =  DB::select(
-                "SELECT clsb_ward.cl2comb as clsb_cl2comb, hc.cl2comb as hc_cl2comb, hc.cl2desc
-                    FROM csrw_wards_stocks as ward
-                    JOIN hclass2 as hc on ward.cl2comb = hc.cl2comb
-                    left JOIN (
-                        SELECT id, cl2comb, ending_balance, beginning_balance
-                        FROM csrw_location_stock_balance
-                        WHERE location = '$authWardcode->wardcode' AND created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
-                    ) AS clsb_ward ON ward.cl2comb = clsb_ward.cl2comb
-                    WHERE [from] =  'CSR' AND location = '$authWardcode->wardcode'
-                    GROUP BY hc.cl2comb, clsb_ward.cl2comb, hc.cl2desc;"
-            );
-        }
+                    WHERE location = '$authWardcode->wardcode'
+                        AND created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
+                ) AS clsb_ward ON ward.cl2comb = clsb_ward.cl2comb
+                WHERE [from] = 'CSR'
+                AND ward.location = '$authWardcode->wardcode'"
+        );
+        // dd($currentStocks);
 
         $locationStockBalance = LocationStockBalance::with(['item:cl2comb,cl2desc', 'entry_by', 'updated_by'])
             ->where('location', $authWardcode->wardcode)
