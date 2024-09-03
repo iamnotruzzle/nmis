@@ -218,7 +218,7 @@
               {{ rc.from_csr }}
             </td>
             <td style="padding: 8px; border: 1px solid black">
-              <span>from wards</span>
+              {{ rc.from_ward }}
             </td>
             <td style="padding: 8px; border: 1px solid black">
               {{ rc.total_stock }}
@@ -309,6 +309,7 @@ export default {
           unit_cost: e.unit_cost,
           beginning_balance: e.beginning_balance,
           from_csr: e.from_csr,
+          from_ward: e.from_ward,
           total_stock: e.total_stock,
           surgery: e.surgery,
           obgyne: e.obgyne,
