@@ -254,7 +254,7 @@
               {{ rc.ending_balance }}
             </td>
             <td style="padding: 8px; border: 1px solid black">
-              {{ rc.actual_inventory }}
+              <span>manual</span>
             </td>
             <td style="padding: 8px; border: 1px solid black">
               <span>variance</span>
