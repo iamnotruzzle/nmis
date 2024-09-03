@@ -58,7 +58,7 @@ class LocationStockBalanceController extends Controller
         //     dd($currentStocks);
         // }
 
-        // ONLY WARD
+
         $currentStocks =  DB::select(
             "SELECT ward.id,
                     clsb_ward.cl2comb as clsb_cl2comb,
@@ -73,6 +73,7 @@ class LocationStockBalanceController extends Controller
                         AND created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
                 ) AS clsb_ward ON ward.cl2comb = clsb_ward.cl2comb
                 WHERE [from] = 'CSR'
+                AND quantity > 0
                 AND ward.location = '$authWardcode->wardcode'"
         );
         // dd($currentStocks);
