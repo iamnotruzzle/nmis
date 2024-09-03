@@ -97,7 +97,7 @@
               rowspan="2"
               style="background-color: white; color: black; padding: 8px; border: 1px solid black"
             >
-              TOTAL STOCK
+              TOTAL BEGINNING BALANCE
             </td>
             <th
               colspan="6"
@@ -221,7 +221,7 @@
               {{ rc.from_ward }}
             </td>
             <td style="padding: 8px; border: 1px solid black">
-              {{ rc.total_stock }}
+              {{ rc.total_beg_bal }}
             </td>
             <td style="padding: 8px; border: 1px solid black">
               {{ rc.surgery }}
@@ -310,7 +310,7 @@ export default {
           beginning_balance: e.beginning_balance,
           from_csr: e.from_csr,
           from_ward: e.from_ward,
-          total_stock: e.total_stock,
+          total_beg_bal: e.total_beg_bal,
           surgery: e.surgery,
           obgyne: e.obgyne,
           //   urology: e.urology,
