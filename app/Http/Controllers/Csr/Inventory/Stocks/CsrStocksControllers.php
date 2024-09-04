@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
+use App\Models\Sessions;
+use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use mysqli;
 use PDO;
@@ -28,6 +30,27 @@ class CsrStocksControllers extends Controller
 {
     public function index(Request $request)
     {
+        //   check session
+        $hasSession = Sessions::where('id', Session::getId())->exists();
+
+        if ($hasSession) {
+            $user = Auth::user();
+
+            $authWardcode = DB::table('csrw_users')
+                ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
+                ->select('csrw_login_history.wardcode')
+                ->where('csrw_login_history.employeeid', $user->employeeid)
+                ->orderBy('csrw_login_history.created_at', 'desc')
+                ->first();
+
+
+            Sessions::where('id', Session::getId())->update([
+                // 'user_id' => $request->login,
+                'location' => $authWardcode->wardcode,
+            ]);
+        }
+        // end check session
+
         $items = DB::select(
             "SELECT hclass2.cl1comb, hclass2.cl2comb as cl2comb, hclass2.cl2desc as cl2desc, huom.uomcode as uomcode, huom.uomdesc as uomdesc FROM hclass2
                 JOIN huom ON hclass2.uomcode = huom.uomcode

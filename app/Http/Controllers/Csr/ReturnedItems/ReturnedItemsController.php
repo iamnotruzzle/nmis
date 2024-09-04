@@ -8,12 +8,36 @@ use App\Models\ReturnedItems;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use App\Models\Sessions;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class ReturnedItemsController extends Controller
 {
     public function index(Request $request)
     {
+        //   check session
+        $hasSession = Sessions::where('id', Session::getId())->exists();
+
+        if ($hasSession) {
+            $user = Auth::user();
+
+            $authWardcode = DB::table('csrw_users')
+                ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
+                ->select('csrw_login_history.wardcode')
+                ->where('csrw_login_history.employeeid', $user->employeeid)
+                ->orderBy('csrw_login_history.created_at', 'desc')
+                ->first();
+
+
+            Sessions::where('id', Session::getId())->update([
+                // 'user_id' => $request->login,
+                'location' => $authWardcode->wardcode,
+            ]);
+        }
+        // end check session
+
         $result = DB::select(
             "SELECT returned_items.id, returned_items.ris_no, returned_items.cl2comb, item.cl2desc as item,
                     returned_items.quantity, returned_items.restocked_quantity,
