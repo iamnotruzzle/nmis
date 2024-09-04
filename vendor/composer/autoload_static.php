@@ -785,6 +785,7 @@ class ComposerStaticInita35f14ec21fb126801fb4364978bffb6
         'App\\Models\\RequestStocksDetails' => __DIR__ . '/../..' . '/app/Models/RequestStocksDetails.php',
         'App\\Models\\ReturnedItems' => __DIR__ . '/../..' . '/app/Models/ReturnedItems.php',
         'App\\Models\\RoomType' => __DIR__ . '/../..' . '/app/Models/RoomType.php',
+        'App\\Models\\Sessions' => __DIR__ . '/../..' . '/app/Models/Sessions.php',
         'App\\Models\\Supplier' => __DIR__ . '/../..' . '/app/Models/Supplier.php',
         'App\\Models\\TypeOfCharge' => __DIR__ . '/../..' . '/app/Models/TypeOfCharge.php',
         'App\\Models\\UnitOfMeasurement' => __DIR__ . '/../..' . '/app/Models/UnitOfMeasurement.php',

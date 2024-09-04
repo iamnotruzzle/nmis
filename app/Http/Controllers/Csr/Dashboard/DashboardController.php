@@ -8,19 +8,43 @@ use App\Models\CsrStocksLogs;
 use App\Models\FundSource;
 use App\Models\Item;
 use App\Models\RequestStocks;
+use App\Models\Sessions;
 use App\Models\Supplier;
 use App\Models\TypeOfCharge;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
     public function index(Request $request)
     {
+        //   check session
+        $hasSession = Sessions::where('id', Session::getId())->exists();
+
+        if ($hasSession) {
+            $user = Auth::user();
+
+            $authWardcode = DB::table('csrw_users')
+                ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
+                ->select('csrw_login_history.wardcode')
+                ->where('csrw_login_history.employeeid', $user->employeeid)
+                ->orderBy('csrw_login_history.created_at', 'desc')
+                ->first();
+
+
+            Sessions::where('id', Session::getId())->update([
+                // 'user_id' => $request->login,
+                'location' => $authWardcode->wardcode,
+            ]);
+        }
+        // end check session
+
         $pending_requests = RequestStocks::where('status', 'PENDING')->count();
         $cancelled_requests = RequestStocks::where('status', 'CANCELLED')->count();
         $completed_requests = RequestStocks::where('status', 'RECEIVED')->count();

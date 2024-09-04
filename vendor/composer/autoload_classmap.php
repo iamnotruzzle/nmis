@@ -106,6 +106,7 @@ return array(
     'App\\Models\\RequestStocksDetails' => $baseDir . '/app/Models/RequestStocksDetails.php',
     'App\\Models\\ReturnedItems' => $baseDir . '/app/Models/ReturnedItems.php',
     'App\\Models\\RoomType' => $baseDir . '/app/Models/RoomType.php',
+    'App\\Models\\Sessions' => $baseDir . '/app/Models/Sessions.php',
     'App\\Models\\Supplier' => $baseDir . '/app/Models/Supplier.php',
     'App\\Models\\TypeOfCharge' => $baseDir . '/app/Models/TypeOfCharge.php',
     'App\\Models\\UnitOfMeasurement' => $baseDir . '/app/Models/UnitOfMeasurement.php',
