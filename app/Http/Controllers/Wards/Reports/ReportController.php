@@ -134,26 +134,70 @@ class ReportController extends Controller
 
         // // NEW
         if (is_null($request->from) || is_null($request->to)) {
+            // $ward_report = DB::select(
+            //     "SELECT hclass2.cl2comb,
+            //     hclass2.cl2desc as cl2desc,
+            //     huom.uomdesc as uomdesc,
+            //     csrw_location_stock_balance.ending_balance as ending_balance,
+            //     csrw_location_stock_balance.beginning_balance as beginning_balance,
+            //     csrw_item_prices.price_per_unit as 'unit_cost',
+            //     sum(CASE WHEN [from]='CSR' THEN quantity ELSE 0 END) as 'from_csr',
+            //     sum(CASE WHEN [from]='WARD' THEN quantity ELSE 0 END) as 'from_ward',
+            //     (SELECT SUM(CASE WHEN tscode = 'SURG' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'surgery',
+            //     (SELECT SUM(CASE WHEN tscode = 'GYNE' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'obgyne',
+            //     -- (SELECT SUM(CASE WHEN tscode = 'urology' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'urology',
+            //     (SELECT SUM(CASE WHEN tscode = 'ORTHO' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'ortho',
+            //     (SELECT SUM(CASE WHEN tscode = 'PEDIA' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'pedia',
+            //     -- (SELECT SUM(CASE WHEN tscode = 'med' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'med',
+            //     (SELECT SUM(CASE WHEN tscode = 'OPHTH' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'optha',
+            //     (SELECT SUM(CASE WHEN tscode = 'ENT' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'ent',
+            //     -- (SELECT SUM(CASE WHEN tscode = 'neuro' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'neuro',
+            //     csrw_patient_charge_logs.charge_quantity as total_consumption,
+            //     SUM(csrw_ward_transfer_stock.transferred_qty) as transferred_qty
+            //     FROM csrw_wards_stocks as ward
+            //     JOIN hclass2 ON ward.cl2comb = hclass2.cl2comb
+            //     JOIN csrw_item_prices ON csrw_item_prices.ris_no = ward.ris_no
+            //     LEFT JOIN huom ON ward.uomcode = huom.uomcode
+            //     LEFT JOIN (
+            //         SELECT charge.itemcode, SUM(charge.quantity) as charge_quantity, SUM(charge.price_total) as charge_total
+            //         FROM csrw_patient_charge_logs as charge
+            //         WHERE charge.[from] = 'CSR'
+            //         GROUP BY charge.itemcode
+            //     ) csrw_patient_charge_logs ON ward.cl2comb = csrw_patient_charge_logs.itemcode
+            //     LEFT JOIN (
+            //         SELECT stockbal.cl2comb, SUM(stockbal.ending_balance) as ending_balance, SUM(stockbal.beginning_balance) as beginning_balance
+            //         FROM csrw_location_stock_balance as stockbal
+            //         WHERE stockbal.location LIKE '$authWardcode->wardcode'
+            //         GROUP BY stockbal.cl2comb
+            //     ) csrw_location_stock_balance ON ward.cl2comb = csrw_location_stock_balance.cl2comb
+            //     LEFT JOIN (
+            //         SELECT ward_stock_id, SUM(quantity) as transferred_qty
+            //         FROM csrw_ward_transfer_stock
+            //         WHERE status = 'RECEIVED'
+            //         GROUP BY ward_stock_id
+            //     ) csrw_ward_transfer_stock ON ward.id = csrw_ward_transfer_stock.ward_stock_id -- Join with ward_stock_id
+            //     WHERE ward.location LIKE '$authWardcode->wardcode' AND ward.created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
+            //     AND ward.is_consumable IS NULL
+            //     GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc, csrw_patient_charge_logs.charge_quantity, csrw_location_stock_balance.ending_balance, csrw_location_stock_balance.beginning_balance, csrw_item_prices.price_per_unit
+            //     ORDER BY hclass2.cl2desc ASC;"
+            // );
             $ward_report = DB::select(
                 "SELECT hclass2.cl2comb,
-                hclass2.cl2desc as cl2desc,
-                huom.uomdesc as uomdesc,
-                csrw_location_stock_balance.ending_balance as ending_balance,
-                csrw_location_stock_balance.beginning_balance as beginning_balance,
-                csrw_item_prices.price_per_unit as 'unit_cost',
-                sum(CASE WHEN [from]='CSR' THEN quantity ELSE 0 END) as 'from_csr',
-                sum(CASE WHEN [from]='WARD' THEN quantity ELSE 0 END) as 'from_ward',
-                (SELECT SUM(CASE WHEN tscode = 'SURG' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'surgery',
-                (SELECT SUM(CASE WHEN tscode = 'GYNE' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'obgyne',
-                -- (SELECT SUM(CASE WHEN tscode = 'urology' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'urology',
-                (SELECT SUM(CASE WHEN tscode = 'ORTHO' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'ortho',
-                (SELECT SUM(CASE WHEN tscode = 'PEDIA' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'pedia',
-                -- (SELECT SUM(CASE WHEN tscode = 'med' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'med',
-                (SELECT SUM(CASE WHEN tscode = 'OPHTH' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'optha',
-                (SELECT SUM(CASE WHEN tscode = 'ENT' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'ent',
-                -- (SELECT SUM(CASE WHEN tscode = 'neuro' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'neuro',
-                csrw_patient_charge_logs.charge_quantity as total_consumption,
-                SUM(csrw_ward_transfer_stock.transferred_qty) as transferred_qty
+                        hclass2.cl2desc as cl2desc,
+                        huom.uomdesc as uomdesc,
+                        csrw_location_stock_balance.ending_balance as ending_balance,
+                        csrw_location_stock_balance.beginning_balance as beginning_balance,
+                        csrw_item_prices.price_per_unit as 'unit_cost',
+                        sum(CASE WHEN [from]='CSR' THEN quantity ELSE 0 END) as 'from_csr',
+                        sum(CASE WHEN [from]='WARD' THEN quantity ELSE 0 END) as 'from_ward',
+                        (SELECT SUM(CASE WHEN tscode = 'SURG' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'surgery',
+                        (SELECT SUM(CASE WHEN tscode = 'GYNE' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'obgyne',
+                        (SELECT SUM(CASE WHEN tscode = 'ORTHO' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'ortho',
+                        (SELECT SUM(CASE WHEN tscode = 'PEDIA' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'pedia',
+                        (SELECT SUM(CASE WHEN tscode = 'OPHTH' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'optha',
+                        (SELECT SUM(CASE WHEN tscode = 'ENT' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'ent',
+                        csrw_patient_charge_logs.charge_quantity as total_consumption,
+                        SUM(csrw_ward_transfer_stock.transferred_qty) as transferred_qty
                 FROM csrw_wards_stocks as ward
                 JOIN hclass2 ON ward.cl2comb = hclass2.cl2comb
                 JOIN csrw_item_prices ON csrw_item_prices.ris_no = ward.ris_no
@@ -165,18 +209,23 @@ class ReportController extends Controller
                     GROUP BY charge.itemcode
                 ) csrw_patient_charge_logs ON ward.cl2comb = csrw_patient_charge_logs.itemcode
                 LEFT JOIN (
-                    SELECT stockbal.cl2comb, SUM(stockbal.ending_balance) as ending_balance, SUM(stockbal.beginning_balance) as beginning_balance
+                    SELECT stockbal.ward_stock_id,
+                        stockbal.ending_balance as ending_balance,
+                        stockbal.beginning_balance as beginning_balance
                     FROM csrw_location_stock_balance as stockbal
                     WHERE stockbal.location LIKE '$authWardcode->wardcode'
-                    GROUP BY stockbal.cl2comb
-                ) csrw_location_stock_balance ON ward.cl2comb = csrw_location_stock_balance.cl2comb
+                    AND DATEPART(month, stockbal.created_at) = DATEPART(month, DATEADD(month, -1, GETDATE()))
+                    AND DATEPART(year, stockbal.created_at) = DATEPART(year, DATEADD(month, -1, GETDATE()))
+                    AND DAY(stockbal.created_at) <= 25
+                ) csrw_location_stock_balance ON ward.id = csrw_location_stock_balance.ward_stock_id -- Use ward.id as the identifier
                 LEFT JOIN (
                     SELECT ward_stock_id, SUM(quantity) as transferred_qty
                     FROM csrw_ward_transfer_stock
                     WHERE status = 'RECEIVED'
                     GROUP BY ward_stock_id
-                ) csrw_ward_transfer_stock ON ward.id = csrw_ward_transfer_stock.ward_stock_id -- Join with ward_stock_id
-                WHERE ward.location LIKE '$authWardcode->wardcode' AND ward.created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
+                ) csrw_ward_transfer_stock ON ward.id = csrw_ward_transfer_stock.ward_stock_id
+                WHERE ward.location LIKE '$authWardcode->wardcode'
+                AND ward.created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
                 AND ward.is_consumable IS NULL
                 GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc, csrw_patient_charge_logs.charge_quantity, csrw_location_stock_balance.ending_balance, csrw_location_stock_balance.beginning_balance, csrw_item_prices.price_per_unit
                 ORDER BY hclass2.cl2desc ASC;"
@@ -230,8 +279,7 @@ class ReportController extends Controller
                 ORDER BY hclass2.cl2desc ASC;"
             );
         }
-
-        // dd($request->from);
+        // dd($ward_report);
 
         foreach ($ward_report as $e) {
             $total_cons_estimated_cost = $e->total_consumption * $e->unit_cost;

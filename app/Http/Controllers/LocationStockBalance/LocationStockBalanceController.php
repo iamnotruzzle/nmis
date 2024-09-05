@@ -121,6 +121,8 @@ class LocationStockBalanceController extends Controller
             ->orderBy('created_at', 'DESC')
             ->paginate(10);
 
+        // dd($locationStockBalance);
+
         return Inertia::render('Balance/Index', [
             'currentStocks' => $currentStocks,
             'locationStockBalance' => $locationStockBalance,
@@ -152,18 +154,19 @@ class LocationStockBalanceController extends Controller
 
 
         // OLD FUNCTION
-        $request->validate(
-            [
-                'cl2comb' => ['required', new StockBalanceRule($request->cl2comb)],
-                'ending_balance' => 'required',
-                // 'beginning_balance' => 'required',
-            ],
-            [
-                'cl2comb.required' => 'Item field is required.',
-            ]
-        );
+        // $request->validate(
+        //     [
+        //         'cl2comb' => ['required', new StockBalanceRule($request->cl2comb)],
+        //         'ending_balance' => 'required',
+        //         // 'beginning_balance' => 'required',
+        //     ],
+        //     [
+        //         'cl2comb.required' => 'Item field is required.',
+        //     ]
+        // );
 
         LocationStockBalance::create([
+            'ward_stock_id' => $request->id,
             'location' => $request->location,
             'cl2comb' => $request->cl2comb,
             'ending_balance' => $request->ending_balance,

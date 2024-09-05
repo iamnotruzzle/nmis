@@ -419,6 +419,7 @@ export default {
       //   });
 
       this.currentStocks.forEach((e) => {
+        console.log(e);
         if (e.clsb_cl2comb == null) {
           //   const cl2combValue = e.hc_cl2comb;
 
