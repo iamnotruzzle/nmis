@@ -97,7 +97,7 @@
               rowspan="2"
               style="background-color: white; color: black; padding: 8px; border: 1px solid black"
             >
-              TOTAL BEGINNING BALANCE
+              TOTAL STOCKS
             </td>
             <th
               colspan="6"

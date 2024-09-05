@@ -20,6 +20,8 @@ class LocationStockBalance extends Model
         'entry_by',
         'updated_by',
         'ward_stock_id',
+        'end_bal_created_at',
+        'beg_bal_created_at',
     ];
 
     public function item()

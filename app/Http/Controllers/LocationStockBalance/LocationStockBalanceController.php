@@ -128,7 +128,7 @@ class LocationStockBalanceController extends Controller
             'locationStockBalance' => $locationStockBalance,
         ]);
 
-        // // // maintenance page
+        // // maintenance page
         // return Inertia::render('UnderMaintenancePage', [
         //     // 'reports' => $reports
         // ]);
@@ -172,6 +172,8 @@ class LocationStockBalanceController extends Controller
             'ending_balance' => $request->ending_balance,
             'beginning_balance' => $request->beginning_balance,
             'entry_by' => $request->entry_by,
+            'end_bal_created_at' => Carbon::now(),
+            'beg_bal_created_at' => Carbon::now(),
         ]);
         return redirect()->back();
     }

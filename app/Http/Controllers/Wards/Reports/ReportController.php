@@ -210,14 +210,23 @@ class ReportController extends Controller
                 ) csrw_patient_charge_logs ON ward.cl2comb = csrw_patient_charge_logs.itemcode
                 LEFT JOIN (
                     SELECT stockbal.ward_stock_id,
-                        stockbal.ending_balance as ending_balance,
-                        stockbal.beginning_balance as beginning_balance
+                        SUM(CASE
+                            WHEN DAY(stockbal.end_bal_created_at) <= 25
+                            THEN stockbal.ending_balance ELSE 0 END) as ending_balance,
+                        SUM(CASE
+                            WHEN DAY(stockbal.beg_bal_created_at) >= 25
+                            THEN stockbal.beginning_balance ELSE 0 END) as beginning_balance
                     FROM csrw_location_stock_balance as stockbal
                     WHERE stockbal.location LIKE '$authWardcode->wardcode'
-                    AND DATEPART(month, stockbal.created_at) = DATEPART(month, DATEADD(month, -1, GETDATE()))
-                    AND DATEPART(year, stockbal.created_at) = DATEPART(year, DATEADD(month, -1, GETDATE()))
-                    AND DAY(stockbal.created_at) <= 25
-                ) csrw_location_stock_balance ON ward.id = csrw_location_stock_balance.ward_stock_id -- Use ward.id as the identifier
+                    AND (
+                        (DATEPART(month, stockbal.created_at) = DATEPART(month, DATEADD(month, -1, GETDATE()))
+                        AND DAY(stockbal.end_bal_created_at) <= 25)
+                        OR
+                        (DATEPART(month, stockbal.created_at) = DATEPART(month, GETDATE())
+                        AND DAY(stockbal.beg_bal_created_at) >= 25)
+                    )
+                    GROUP BY stockbal.ward_stock_id
+                ) csrw_location_stock_balance ON ward.id = csrw_location_stock_balance.ward_stock_id
                 LEFT JOIN (
                     SELECT ward_stock_id, SUM(quantity) as transferred_qty
                     FROM csrw_ward_transfer_stock
@@ -314,7 +323,7 @@ class ReportController extends Controller
             'reports' => $reports
         ]);
 
-        // // maintenance page
+        // maintenance page
         // return Inertia::render('UnderMaintenancePage', [
         //     'reports' => $reports
         // ]);
