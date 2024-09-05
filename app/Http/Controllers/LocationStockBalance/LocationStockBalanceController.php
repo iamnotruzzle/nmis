@@ -134,11 +134,29 @@ class LocationStockBalanceController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request);
+
+        // TODO add condition to check if the request is to
+        // generate ending balance or starting balance
+
+        // $authWardcode = DB::table('csrw_users')
+        //     ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
+        //     ->select('csrw_login_history.wardcode')
+        //     ->where('csrw_login_history.employeeid', Auth::user()->employeeid)
+        //     ->orderBy('csrw_login_history.created_at', 'desc')
+        //     ->first();
+
+        // $stock = DB::select();
+
+        // return redirect()->back();
+
+
+        // OLD FUNCTION
         $request->validate(
             [
                 'cl2comb' => ['required', new StockBalanceRule($request->cl2comb)],
                 'ending_balance' => 'required',
-                'beginning_balance' => 'required',
+                // 'beginning_balance' => 'required',
             ],
             [
                 'cl2comb.required' => 'Item field is required.',
@@ -152,7 +170,6 @@ class LocationStockBalanceController extends Controller
             'beginning_balance' => $request->beginning_balance,
             'entry_by' => $request->entry_by,
         ]);
-
         return redirect()->back();
     }
 
