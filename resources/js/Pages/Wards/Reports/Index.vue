@@ -254,10 +254,10 @@
               {{ rc.ending_balance }}
             </td>
             <td style="padding: 8px; border: 1px solid black">
-              <span>manual</span>
+              <!-- <span>manual</span> -->
             </td>
             <td style="padding: 8px; border: 1px solid black">
-              <span>variance</span>
+              <!-- <span>variance</span> -->
             </td>
           </tr>
         </table>
