@@ -24,7 +24,7 @@
             <span class="text-xl text-900 font-bold text-primary">ITEMS</span>
             <div class="flex">
               <div class="mr-2">
-                <div class="p-inputgroup">
+                <!-- <div class="p-inputgroup">
                   <span class="p-inputgroup-addon">
                     <i class="pi pi-search"></i>
                   </span>
@@ -33,7 +33,7 @@
                     v-model="filters['global'].value"
                     placeholder="Search item"
                   />
-                </div>
+                </div> -->
               </div>
               <Button
                 v-if="$page.props.auth.user.roles[0] == 'super-admin'"
@@ -82,10 +82,20 @@
         <Column
           field="cl2desc"
           header="DESCRIPTION"
+          :showFilterMenu="false"
           sortable
         >
           <template #body="{ data }">
             <span> {{ data.cl2desc }}</span>
+          </template>
+          <template #filter="{ filterModel, filterCallback }">
+            <InputText
+              id="searchInput"
+              ref="searchInput"
+              v-model="filters['global'].value"
+              placeholder="Search item (ALT + 1)"
+              size="large"
+            />
           </template>
         </Column>
         <Column
@@ -776,6 +786,10 @@ export default {
     // console.log(this.authLocation.location.wardcode);
 
     this.loading = false;
+    window.addEventListener('keydown', this.handleAlt1Shortcut);
+  },
+  beforeDestroy() {
+    window.removeEventListener('keydown', this.handleAlt1Shortcut);
   },
   computed: {
     user() {
@@ -783,6 +797,11 @@ export default {
     },
   },
   methods: {
+    handleAlt1Shortcut(event) {
+      if (event.altKey && event.key === '1') {
+        this.$refs.searchInput.$el.focus();
+      }
+    },
     restrictNonNumericAndPeriod(event) {
       if (
         [46, 8, 9, 27, 13].includes(event.keyCode) ||
