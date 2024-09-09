@@ -345,9 +345,10 @@
         </div>
         <div class="field">
           <label>Description</label>
-          <InputText
+          <Textarea
             id="Description"
             v-model.trim="form.cl2desc"
+            rows="6"
             required="true"
             :class="{ 'p-invalid': form.cl2desc == '' }"
             @keyup.enter="submit"
@@ -452,10 +453,11 @@
         </div>
         <div class="field">
           <label>Description</label>
-          <InputText
+          <Textarea
             id="Description"
             v-model.trim="formConvert.cl2desc"
             required="true"
+            rows="6"
             autofocus
             :class="{ 'p-invalid': formConvert.cl2desc == '' }"
             @keyup.enter="submitConvert"
