@@ -33,7 +33,7 @@
           </div>
           <i
             v-if="from == null || to == null"
-            class="pi pi-file-excel"
+            class="pi pi-file-excel cursor-pointer"
             :style="{ color: 'gray', 'font-size': '2rem' }"
           ></i>
           <div
@@ -41,7 +41,7 @@
             @click="exportToExcel()"
           >
             <i
-              class="pi pi-file-excel"
+              class="pi pi-file-excel cursor-pointer"
               :style="{ color: 'green', 'font-size': '2rem' }"
             ></i>
           </div>
@@ -68,13 +68,13 @@
             >
               UNIT
             </td>
-            <th
+            <td
               rowspan="1"
               scope="colgroup"
               style="background-color: white; color: black; padding: 8px; border: 1px solid black"
             >
               ESTIMATED BUDGET
-            </th>
+            </td>
             <td
               rowspan="2"
               style="background-color: white; color: black; padding: 8px; border: 1px solid black"
@@ -99,25 +99,25 @@
             >
               TOTAL STOCKS
             </td>
-            <th
+            <td
               colspan="6"
               scope="colgroup"
               style="background-color: white; color: black; text-align: center; padding: 8px; border: 1px solid black"
             >
               CONSUMPTION
-            </th>
+            </td>
             <td
               rowspan="2"
               style="background-color: white; color: black; padding: 8px; border: 1px solid black"
             >
               TOTAL CONSUMPTION
             </td>
-            <th
+            <td
               scope="colgroup"
               style="background-color: white; color: black; text-align: center; padding: 8px; border: 1px solid black"
             >
               TOTAL CONSUMPTION
-            </th>
+            </td>
             <td
               rowspan="2"
               style="background-color: white; color: black; padding: 8px; border: 1px solid black"
@@ -145,66 +145,66 @@
           </tr>
 
           <tr>
-            <th
+            <td
               scope="col"
               style="background-color: white; color: black; padding: 8px; border: 1px solid black"
             >
               UNIT COST
-            </th>
-            <th
+            </td>
+            <td
               scope="col"
               style="background-color: white; color: black; padding: 8px; border: 1px solid black"
             >
               SURGERY
-            </th>
-            <th
+            </td>
+            <td
               scope="col"
               style="background-color: white; color: black; padding: 8px; border: 1px solid black"
             >
               OB-GYNE
-            </th>
-            <th
+            </td>
+            <td
               scope="col"
               style="background-color: white; color: black; padding: 8px; border: 1px solid black"
             >
               ORTHO
-            </th>
-            <th
+            </td>
+            <td
               scope="col"
               style="background-color: white; color: black; padding: 8px; border: 1px solid black"
             >
               PEDIA
-            </th>
-            <th
+            </td>
+            <td
               scope="col"
               style="background-color: white; color: black; padding: 8px; border: 1px solid black"
             >
               OPTHA
-            </th>
-            <th
+            </td>
+            <td
               scope="col"
               style="background-color: white; color: black; padding: 8px; border: 1px solid black"
             >
               ENT
-            </th>
-            <th
+            </td>
+            <td
               scope="col"
               style="background-color: white; color: black; padding: 8px; border: 1px solid black"
             >
               (ESTIMATED COST)
-            </th>
+            </td>
           </tr>
 
           <tr
             v-for="rc in reportsContainer"
             :key="rc.cl2comb"
           >
-            <th
+            <td
               scope="row"
               style="padding: 8px; border: 1px solid black; text-align: left !important"
             >
               {{ rc.item_description }}
-            </th>
+            </td>
             <td style="padding: 8px; border: 1px solid black">
               {{ rc.unit }}
             </td>
@@ -492,7 +492,6 @@ td {
   text-align: center;
   font-size: 120%;
   font-weight: 700;
-  /* background-color: rgb(0, 156, 120); */
 }
 .header {
   font-size: 100%;

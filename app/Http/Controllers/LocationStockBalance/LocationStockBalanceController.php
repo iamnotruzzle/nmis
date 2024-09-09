@@ -123,15 +123,15 @@ class LocationStockBalanceController extends Controller
 
         // dd($locationStockBalance);
 
-        // return Inertia::render('Balance/Index', [
-        //     'currentStocks' => $currentStocks,
-        //     'locationStockBalance' => $locationStockBalance,
-        // ]);
-
-        // maintenance page
-        return Inertia::render('UnderMaintenancePage', [
-            // 'reports' => $reports
+        return Inertia::render('Balance/Index', [
+            'currentStocks' => $currentStocks,
+            'locationStockBalance' => $locationStockBalance,
         ]);
+
+        // // maintenance page
+        // return Inertia::render('UnderMaintenancePage', [
+        //     // 'reports' => $reports
+        // ]);
     }
 
     public function store(Request $request)
