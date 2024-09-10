@@ -41,13 +41,21 @@
                   />
                 </div>
               </div>
-              <!-- as -->
-              <Button
+              <!-- <Button
                 label="Balance"
                 icon="pi pi-user-plus"
                 iconPos="right"
                 @click="openCreateItemDialog"
-              />
+              /> -->
+              <div v-tooltip.top="'You can generate balance beginning on the 25th of this month.'">
+                <Button
+                  severity="success"
+                  icon="pi pi-save"
+                  label="Generate balance"
+                  @click="generateBalance"
+                  :disabled="!isBetween25thAndLastDay"
+                />
+              </div>
             </div>
           </div>
         </template>
@@ -131,25 +139,27 @@
         </Column>
         <Column
           header="ACTION"
-          style="width: 10%"
+          style="width: 5%"
         >
           <template #body="slotProps">
-            <Button
-              icon="pi pi-pencil"
-              class="mr-1"
-              rounded
-              text
-              severity="warning"
-              @click="editItem(slotProps.data)"
-            />
+            <div class="flex flex-row justify-between-center align-items-center">
+              <Button
+                icon="pi pi-pencil"
+                class="mr-1"
+                rounded
+                text
+                severity="warning"
+                @click="editItem(slotProps.data)"
+              />
 
-            <Button
-              icon="pi pi-trash"
-              rounded
-              text
-              severity="danger"
-              @click="confirmDeleteItem(slotProps.data)"
-            />
+              <Button
+                icon="pi pi-trash"
+                rounded
+                text
+                severity="danger"
+                @click="confirmDeleteItem(slotProps.data)"
+              />
+            </div>
           </template>
         </Column>
       </DataTable>
@@ -308,6 +318,7 @@ import Avatar from 'primevue/avatar';
 import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
 import AutoComplete from 'primevue/autocomplete';
+import Tooltip from 'primevue/tooltip';
 import Tag from 'primevue/tag';
 import moment from 'moment';
 import { Link } from '@inertiajs/vue3';
@@ -331,10 +342,15 @@ export default {
     Tag,
     Link,
     InputNumber,
+    Tooltip,
+  },
+  directives: {
+    tooltip: Tooltip,
   },
   props: {
     currentStocks: Object,
     locationStockBalance: Object,
+    hasBalance: Number,
   },
   data() {
     return {
@@ -359,6 +375,7 @@ export default {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       form: this.$inertia.form({
+        isAbleToGenerate: null,
         id: null,
         location: null,
         cl2comb: null,
@@ -375,7 +392,7 @@ export default {
     this.rows = this.locationStockBalance.per_page;
   },
   mounted() {
-    // console.log('stock bal', this.locationStockBalance);
+    // console.log(moment().format('YYYY-MM-DD HH:mm:ss'));
 
     this.storeStockBalanceInContainer();
     this.storeItemsInController();
@@ -384,6 +401,22 @@ export default {
 
     this.form.location = this.$page.props.auth.user.location.location_name.wardcode;
     this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid;
+  },
+  computed: {
+    isBetween25thAndLastDay() {
+      // Get the current date
+      const currentDate = moment();
+
+      // Get the 25th of the current month
+      const day25th = moment().set('date', 25);
+
+      // Get the last day of the current month
+      const lastDayOfMonth = moment().endOf('month');
+
+      // Return true if the current date is between the 25th and the last day of the month (inclusive)
+      console.log(currentDate.isSameOrAfter(day25th, 'day') && currentDate.isSameOrBefore(lastDayOfMonth, 'day'));
+      return currentDate.isSameOrAfter(day25th, 'day') && currentDate.isSameOrBefore(lastDayOfMonth, 'day');
+    },
   },
   methods: {
     storeStockBalanceInContainer() {
@@ -419,7 +452,7 @@ export default {
       //   });
 
       this.currentStocks.forEach((e) => {
-        console.log(e);
+        // console.log(e);
         if (e.clsb_cl2comb == null) {
           //   const cl2combValue = e.hc_cl2comb;
 
@@ -486,6 +519,28 @@ export default {
       this.params.page = event.page + 1;
       this.updateData();
     },
+    generateBalance() {
+      this.form.isAbleToGenerate = true;
+      this.form.location = this.$page.props.auth.user.location.location_name.wardcode;
+      this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid;
+
+      if (this.form.processing && this.form.isAbleToGenerate != true) {
+        return false;
+      }
+
+      this.form.post(route('stockbal.store'), {
+        preserveScroll: true,
+        onSuccess: () => {
+          this.cancel();
+          this.updateData();
+          this.createdMsg();
+        },
+        onError: () => {
+          //   console.log(this.$page.props.errors.error);
+          this.errorMsg();
+        },
+      });
+    },
     openCreateItemDialog() {
       this.isUpdate = false;
       this.form.clearErrors();
@@ -537,6 +592,7 @@ export default {
         this.form.post(route('stockbal.store'), {
           preserveScroll: true,
           onSuccess: () => {
+            console.log('aaaa');
             this.createItemDialog = false;
             this.cancel();
             this.updateData();
@@ -594,6 +650,14 @@ export default {
         summary: 'Success',
         detail: 'Starting and ending balance declared',
         life: 3000,
+      });
+    },
+    errorMsg() {
+      this.$toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Stock balance for this month already declared.',
+        life: 5000,
       });
     },
     updatedMsg() {

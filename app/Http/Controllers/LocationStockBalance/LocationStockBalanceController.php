@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\Sessions;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
 class LocationStockBalanceController extends Controller
@@ -99,7 +100,6 @@ class LocationStockBalanceController extends Controller
                 AND quantity > 0
                 AND ward.location = '$authWardcode->wardcode'"
         );
-        // dd($currentStocks);
 
         $locationStockBalance = LocationStockBalance::with(['item:cl2comb,cl2desc', 'entry_by', 'updated_by'])
             ->where('location', $authWardcode->wardcode)
@@ -121,8 +121,7 @@ class LocationStockBalanceController extends Controller
             ->orderBy('created_at', 'DESC')
             ->paginate(10);
 
-        // dd($locationStockBalance);
-
+        // dd(count($hasBalance));
         return Inertia::render('Balance/Index', [
             'currentStocks' => $currentStocks,
             'locationStockBalance' => $locationStockBalance,
@@ -136,46 +135,66 @@ class LocationStockBalanceController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request);
+        // Get current date and check if it's between the 25th and the end of the current month
+        $currentDate = Carbon::now()->startOfDay(); // Ensure we're comparing dates only
+        // Explicitly set startOfBalancePeriod to the 25th of the current month
+        $startOfBalancePeriod = $currentDate->copy()->setDay(25)->startOfDay();
+        // End of month with the last moment of the day
+        $endOfBalancePeriod = $currentDate->copy()->endOfMonth()->endOfDay();
 
-        // TODO add condition to check if the request is to
-        // generate ending balance or starting balance
+        // dd([
+        //     'currentDate' => $currentDate->toDateTimeString(),
+        //     'startOfBalancePeriod' => $startOfBalancePeriod->toDateTimeString(),
+        //     'endOfBalancePeriod' => $endOfBalancePeriod->toDateTimeString(),
+        // ]);
 
-        // $authWardcode = DB::table('csrw_users')
-        //     ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
-        //     ->select('csrw_login_history.wardcode')
-        //     ->where('csrw_login_history.employeeid', Auth::user()->employeeid)
-        //     ->orderBy('csrw_login_history.created_at', 'desc')
-        //     ->first();
+        if ($currentDate->greaterThanOrEqualTo($startOfBalancePeriod) && $currentDate->lessThanOrEqualTo($endOfBalancePeriod)) {
+            // Check if there's a balance record for this location for the current month before the 25th
+            $hasBalance = DB::select(
+                "SELECT *
+                    FROM csrw_location_stock_balance
+                    WHERE location = '$request->location'
+                    AND MONTH(created_at) = MONTH(GETDATE())
+                    AND YEAR(created_at) = YEAR(GETDATE());"
+            );
 
-        // $stock = DB::select();
+            // Retrieve current stocks
+            $currentStocks = DB::select(
+                "SELECT * FROM csrw_wards_stocks
+                    WHERE location = '$request->location'
+                    AND [from] = 'CSR'
+                    AND quantity > 0;"
+            );
 
-        // return redirect()->back();
+            // If no balance has been declared before the 25th, create the balance
+            if (count($hasBalance) == 0) {
+                foreach ($currentStocks as $stock) {
+                    LocationStockBalance::create([
+                        'location' => $request->location,
+                        'cl2comb' => $stock->cl2comb,
+                        'ending_balance' => $stock->quantity,
+                        'beginning_balance' => $stock->quantity,
+                        'entry_by' => $request->entry_by,
+                        'ward_stock_id' => $stock->id,
+                        'end_bal_created_at' => Carbon::now(),
+                        'beg_bal_created_at' => Carbon::now(),
+                    ]);
+                }
 
-
-        // OLD FUNCTION
-        // $request->validate(
-        //     [
-        //         'cl2comb' => ['required', new StockBalanceRule($request->cl2comb)],
-        //         'ending_balance' => 'required',
-        //         // 'beginning_balance' => 'required',
-        //     ],
-        //     [
-        //         'cl2comb.required' => 'Item field is required.',
-        //     ]
-        // );
-
-        LocationStockBalance::create([
-            'ward_stock_id' => $request->id,
-            'location' => $request->location,
-            'cl2comb' => $request->cl2comb,
-            'ending_balance' => $request->ending_balance,
-            'beginning_balance' => $request->beginning_balance,
-            'entry_by' => $request->entry_by,
-            'end_bal_created_at' => Carbon::now(),
-            'beg_bal_created_at' => Carbon::now(),
-        ]);
-        return redirect()->back();
+                return redirect()->back()->with('success', 'Balance set successfully.');
+            } else {
+                // dd('declared');
+                throw ValidationException::withMessages([
+                    'error' => 'Stock balance for this month already declared.',
+                ]);
+            }
+        } else {
+            // dd('Balance can only be set between the 25th and the last day of the month.');
+            // Return error if date is outside the allowed range
+            throw ValidationException::withMessages([
+                'error' => 'Balance can only be set between the 25th and the last day of the month.',
+            ]);
+        }
     }
 
     public function update(LocationStockBalance $stockbal, Request $request)
