@@ -85,6 +85,7 @@ class LocationStockBalanceController extends Controller
 
         $currentStocks =  DB::select(
             "SELECT ward.id,
+                    ward.ris_no,
                     clsb_ward.cl2comb as clsb_cl2comb,
                     hc.cl2comb as hc_cl2comb,
                     hc.cl2desc
@@ -121,6 +122,8 @@ class LocationStockBalanceController extends Controller
             ->orderBy('created_at', 'DESC')
             ->paginate(10);
 
+        // dd($currentStocks);
+
         // dd(count($hasBalance));
         return Inertia::render('Balance/Index', [
             'currentStocks' => $currentStocks,
@@ -135,10 +138,10 @@ class LocationStockBalanceController extends Controller
 
     public function store(Request $request)
     {
-        // Get current date and check if it's between the 25th and the end of the current month
+        // Get current date and check if it's between the 12th and the end of the current month
         $currentDate = Carbon::now()->startOfDay(); // Ensure we're comparing dates only
-        // Explicitly set startOfBalancePeriod to the 25th of the current month
-        $startOfBalancePeriod = $currentDate->copy()->setDay(25)->startOfDay();
+        // Explicitly set startOfBalancePeriod to the 12th of the current month
+        $startOfBalancePeriod = $currentDate->copy()->setDay(12)->startOfDay();
         // End of month with the last moment of the day
         $endOfBalancePeriod = $currentDate->copy()->endOfMonth()->endOfDay();
 
@@ -149,7 +152,7 @@ class LocationStockBalanceController extends Controller
         // ]);
 
         if ($currentDate->greaterThanOrEqualTo($startOfBalancePeriod) && $currentDate->lessThanOrEqualTo($endOfBalancePeriod)) {
-            // Check if there's a balance record for this location for the current month before the 25th
+            // Check if there's a balance record for this location for the current month before the 12th
             $hasBalance = DB::select(
                 "SELECT *
                     FROM csrw_location_stock_balance
@@ -157,16 +160,25 @@ class LocationStockBalanceController extends Controller
                     AND MONTH(created_at) = MONTH(GETDATE())
                     AND YEAR(created_at) = YEAR(GETDATE());"
             );
+            // dd($hasBalance);
 
             // Retrieve current stocks
+            // $currentStocks = DB::select(
+            //     "SELECT * FROM csrw_wards_stocks
+            //         WHERE location = '$request->location'
+            //         AND [from] = 'CSR'
+            //         AND quantity > 0;"
+            // );
             $currentStocks = DB::select(
-                "SELECT * FROM csrw_wards_stocks
-                    WHERE location = '$request->location'
+                "SELECT location, cl2comb, sum(quantity) as quantity, ris_no FROM csrw_wards_stocks
+                    WHERE location = '4FSA'
                     AND [from] = 'CSR'
-                    AND quantity > 0;"
+                    AND quantity > 0
+                    GROUP BY location, cl2comb, ris_no;"
             );
+            // dd($currentStocks);
 
-            // If no balance has been declared before the 25th, create the balance
+            // If no balance has been declared before the 12th, create the balance
             if (count($hasBalance) == 0) {
                 foreach ($currentStocks as $stock) {
                     LocationStockBalance::create([
@@ -175,7 +187,7 @@ class LocationStockBalanceController extends Controller
                         'ending_balance' => $stock->quantity,
                         'beginning_balance' => $stock->quantity,
                         'entry_by' => $request->entry_by,
-                        'ward_stock_id' => $stock->id,
+                        'ris_no' => $stock->ris_no,
                         'end_bal_created_at' => Carbon::now(),
                         'beg_bal_created_at' => Carbon::now(),
                     ]);
@@ -189,10 +201,10 @@ class LocationStockBalanceController extends Controller
                 ]);
             }
         } else {
-            // dd('Balance can only be set between the 25th and the last day of the month.');
+            // dd('Balance can only be set between the 12th and the last day of the month.');
             // Return error if date is outside the allowed range
             throw ValidationException::withMessages([
-                'error' => 'Balance can only be set between the 25th and the last day of the month.',
+                'error' => 'Balance can only be set between the 12th and the last day of the month.',
             ]);
         }
     }

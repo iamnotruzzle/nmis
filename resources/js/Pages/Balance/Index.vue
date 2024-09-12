@@ -47,13 +47,13 @@
                 iconPos="right"
                 @click="openCreateItemDialog"
               /> -->
-              <div v-tooltip.top="'You can generate balance beginning on the 25th of this month.'">
+              <div v-tooltip.top="'You can generate balance beginning on the 10th of this month.'">
                 <Button
                   severity="success"
                   icon="pi pi-save"
                   label="Generate balance"
                   @click="generateBalance"
-                  :disabled="!isBetween25thAndLastDay"
+                  :disabled="!isBetween10thAndLastDay"
                 />
               </div>
             </div>
@@ -62,18 +62,25 @@
         <template #empty> No stock found. </template>
         <template #loading> Loading stock data. Please wait. </template>
         <Column
+          field="ris_no"
+          header="RIS. NO"
+        >
+          <template #body="{ data }">
+            <span style="text-wrap: nowrap"> {{ data.ris_no }}</span>
+          </template>
+        </Column>
+        <Column
           field="item"
           header="ITEM"
           style="width: 30%"
         >
           <template #body="{ data }">
-            {{ data.cl2desc }}
+            <span style="text-wrap: nowrap"> {{ data.cl2desc }}</span>
           </template>
         </Column>
         <Column
           field="ending_balance"
           header="ENDING BALANCE"
-          style="width: 5%"
         >
           <template #body="{ data }">
             {{ data.ending_balance }}
@@ -82,7 +89,6 @@
         <Column
           field="beginning_balance"
           header="STARTING BALANCE"
-          style="width: 5%"
         >
           <template #body="{ data }">
             {{ data.beginning_balance }}
@@ -377,6 +383,7 @@ export default {
       form: this.$inertia.form({
         isAbleToGenerate: null,
         id: null,
+        ris_no: null,
         location: null,
         cl2comb: null,
         ending_balance: null,
@@ -403,19 +410,19 @@ export default {
     this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid;
   },
   computed: {
-    isBetween25thAndLastDay() {
+    isBetween10thAndLastDay() {
       // Get the current date
       const currentDate = moment();
 
-      // Get the 25th of the current month
-      const day25th = moment().set('date', 25);
+      // Get the 10th of the current month
+      const day10th = moment().set('date', 10);
 
       // Get the last day of the current month
       const lastDayOfMonth = moment().endOf('month');
 
-      // Return true if the current date is between the 25th and the last day of the month (inclusive)
-      console.log(currentDate.isSameOrAfter(day25th, 'day') && currentDate.isSameOrBefore(lastDayOfMonth, 'day'));
-      return currentDate.isSameOrAfter(day25th, 'day') && currentDate.isSameOrBefore(lastDayOfMonth, 'day');
+      // Return true if the current date is between the 10th and the last day of the month (inclusive)
+      //   console.log(currentDate.isSameOrAfter(day10th, 'day') && currentDate.isSameOrBefore(lastDayOfMonth, 'day'));
+      return currentDate.isSameOrAfter(day10th, 'day') && currentDate.isSameOrBefore(lastDayOfMonth, 'day');
     },
   },
   methods: {
@@ -423,6 +430,7 @@ export default {
       this.locationStockBalance.data.forEach((e) => {
         this.balanceContainer.push({
           id: e.id,
+          ris_no: e.ris_no,
           cl2comb: e.item.cl2comb,
           cl2desc: e.item.cl2desc,
           ending_balance: e.ending_balance,
@@ -470,6 +478,7 @@ export default {
           // this does not catch duplicate item
           this.itemsList.push({
             id: e.id,
+            ris_no: e.ris_no,
             cl2comb: e.hc_cl2comb,
             cl2desc: e.cl2desc,
           });
@@ -477,6 +486,8 @@ export default {
       });
 
       this.sortItemsList(this.itemsList, 'cl2desc');
+
+      console.log(this.itemsList);
     },
     sortItemsList(arr, propertyName, order = 'ascending') {
       const sortedArr = this.itemsList.sort((a, b) => {
@@ -592,7 +603,7 @@ export default {
         this.form.post(route('stockbal.store'), {
           preserveScroll: true,
           onSuccess: () => {
-            console.log('aaaa');
+            // console.log('aaaa');
             this.createItemDialog = false;
             this.cancel();
             this.updateData();
