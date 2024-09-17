@@ -15,33 +15,13 @@ class WardsInventoryController extends Controller
 {
     public function index()
     {
-        //   check session
-        $hasSession = Sessions::where('id', Session::getId())->exists();
-
-        if ($hasSession) {
-            $user = Auth::user();
-
-            $authWardcode = DB::table('csrw_users')
-                ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
-                ->select('csrw_login_history.wardcode')
-                ->where('csrw_login_history.employeeid', $user->employeeid)
-                ->orderBy('csrw_login_history.created_at', 'desc')
-                ->first();
-
-
-            Sessions::where('id', Session::getId())->update([
-                // 'user_id' => $request->login,
-                'location' => $authWardcode->wardcode,
-            ]);
-        }
-        // end check session
-
         $wardsInventory = DB::select(
-            "SELECT ward_stock.id, ward.wardname as ward, ward_stock.ris_no, item.cl2desc, ward_stock.quantity, ward_stock.expiration_date
+            "SELECT ward.wardname as ward, item.cl2desc, SUM(ward_stock.quantity) as quantity
                 FROM csrw_wards_stocks as ward_stock
                 JOIN hward as ward ON ward.wardcode = ward_stock.location
                 JOIN hclass2 as item ON item.cl2comb = ward_stock.cl2comb
-                WHERE ward_stock.quantity > 0;"
+                WHERE ward_stock.quantity > 0
+                GROUP BY item.cl2desc, ward.wardname;"
         );
 
         return Inertia::render('Csr/WardsInventory/Index', [

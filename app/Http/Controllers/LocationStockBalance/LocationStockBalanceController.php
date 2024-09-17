@@ -20,27 +20,6 @@ class LocationStockBalanceController extends Controller
 {
     public function index(Request $request)
     {
-        //   check session
-        $hasSession = Sessions::where('id', Session::getId())->exists();
-
-        if ($hasSession) {
-            $user = Auth::user();
-
-            $authWardcode = DB::table('csrw_users')
-                ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
-                ->select('csrw_login_history.wardcode')
-                ->where('csrw_login_history.employeeid', $user->employeeid)
-                ->orderBy('csrw_login_history.created_at', 'desc')
-                ->first();
-
-
-            Sessions::where('id', Session::getId())->update([
-                // 'user_id' => $request->login,
-                'location' => $authWardcode->wardcode,
-            ]);
-        }
-        // end check session
-
         $searchString = $request->search;
         $from = Carbon::parse($request->from)->startOfDay();
         $to = Carbon::parse($request->to)->endOfDay();
@@ -170,11 +149,18 @@ class LocationStockBalanceController extends Controller
             //         AND quantity > 0;"
             // );
             $currentStocks = DB::select(
-                "SELECT location, cl2comb, sum(quantity) as quantity, ris_no FROM csrw_wards_stocks
-                    WHERE location = '4FSA'
-                    AND [from] = 'CSR'
-                    AND quantity > 0
-                    GROUP BY location, cl2comb, ris_no;"
+                // "SELECT location, cl2comb, sum(quantity) as quantity, ris_no FROM csrw_wards_stocks
+                //     WHERE location = '4FSA'
+                //     AND [from] = 'CSR'
+                //     AND quantity > 0
+                //     GROUP BY location, cl2comb, ris_no;"
+                "SELECT ward.id, ward.location, ward.cl2comb, sum(ward.quantity) as quantity, ward.ris_no
+                    FROM csrw_wards_stocks as ward
+                    JOIN csrw_item_prices as price ON price.ris_no = ward.ris_no
+                    WHERE ward.location = '$request->location'
+                    AND ward.[from] = 'CSR'
+                    AND ward.quantity > 0
+                    GROUP BY ward.location, ward.cl2comb, price.price_per_unit, ward.ris_no, ward.id"
             );
             // dd($currentStocks);
 
@@ -187,7 +173,7 @@ class LocationStockBalanceController extends Controller
                         'ending_balance' => $stock->quantity,
                         'beginning_balance' => $stock->quantity,
                         'entry_by' => $request->entry_by,
-                        'ris_no' => $stock->ris_no,
+                        'ward_stock_id' => $stock->id,
                         'end_bal_created_at' => Carbon::now(),
                         'beg_bal_created_at' => Carbon::now(),
                     ]);

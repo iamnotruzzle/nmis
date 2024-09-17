@@ -31,29 +31,6 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        // dd(Auth::user());
-
-        //   check session
-        $hasSession = Sessions::where('id', Session::getId())->exists();
-
-        if ($hasSession) {
-            $user = Auth::user();
-
-            $authWardcode = DB::table('csrw_users')
-                ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
-                ->select('csrw_login_history.wardcode')
-                ->where('csrw_login_history.employeeid', $user->employeeid)
-                ->orderBy('csrw_login_history.created_at', 'desc')
-                ->first();
-
-
-            Sessions::where('id', Session::getId())->update([
-                // 'user_id' => $request->login,
-                'location' => $authWardcode->wardcode,
-            ]);
-        }
-        // end check session
-
         $employeeids = UserDetail::where('empstat', 'A')->get('employeeid');
 
         $from = Carbon::parse($request->from)->startOfDay();
