@@ -62,14 +62,6 @@
         <template #empty> No stock found. </template>
         <template #loading> Loading stock data. Please wait. </template>
         <Column
-          field="ris_no"
-          header="RIS. NO"
-        >
-          <template #body="{ data }">
-            <span style="text-wrap: nowrap"> {{ data.ris_no }}</span>
-          </template>
-        </Column>
-        <Column
           field="item"
           header="ITEM"
           style="width: 30%"
@@ -81,6 +73,7 @@
         <Column
           field="ending_balance"
           header="ENDING BALANCE"
+          style="text-align: center; width: 5%"
         >
           <template #body="{ data }">
             {{ data.ending_balance }}
@@ -88,7 +81,9 @@
         </Column>
         <Column
           field="beginning_balance"
-          header="STARTING BALANCE"
+          header="BEGINNING BALANCE"
+          style="text-align: center; width: 5%"
+          :pt="{ headerContent: 'justify-content-end' }"
         >
           <template #body="{ data }">
             {{ data.beginning_balance }}
@@ -97,7 +92,8 @@
         <Column
           field="entry_by"
           header="ENTRY BY"
-          style="width: 15%"
+          style="text-align: center; width: 10%"
+          :pt="{ headerContent: 'justify-content-center' }"
         >
           <template #body="{ data }">
             {{ data.entry_by }}
@@ -106,7 +102,8 @@
         <Column
           field="updated_by"
           header="UPDATED BY"
-          style="width: 15%"
+          style="text-align: center; width: 10%"
+          :pt="{ headerContent: 'justify-content-center' }"
         >
           <template #body="{ data }">
             {{ data.updated_by }}
@@ -115,7 +112,8 @@
         <Column
           header="CREATED AT"
           filterField="created_at"
-          style="width: 20%"
+          style="text-align: center; width: 10%"
+          :pt="{ headerContent: 'justify-content-center' }"
           :showFilterMenu="false"
         >
           <template #body="{ data }">
@@ -145,10 +143,10 @@
         </Column>
         <Column
           header="ACTION"
-          style="width: 5%"
+          style="text-align: center; width: 5%"
         >
           <template #body="slotProps">
-            <div class="flex flex-row justify-between-center align-items-center">
+            <div class="flex flex-row justify-content-center">
               <Button
                 icon="pi pi-pencil"
                 class="mr-1"
