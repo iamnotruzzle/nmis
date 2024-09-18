@@ -285,7 +285,7 @@ class ReportController extends Controller
         //         'beginning_balance' => $e->beginning_balance, // combine
         //         'from_csr' => $e->from_csr + $e->total_consumption, // combine
         //         'from_ward' => $e->from_ward,
-        //         'total_beg_bal' => $e->beginning_balance + $e->from_csr + $e->from_ward, // combine
+        //         'total_beg_bal' => $e->from_csr + $e->from_ward, // combine
         //         'surgery' => $e->surgery, // combine
         //         'obgyne' => $e->obgyne, // combine
         //         // 'urology' => 'NA',
@@ -302,6 +302,7 @@ class ReportController extends Controller
         //         'actual_inventory' => 0 // combine
         //     ];
         // }
+        // dd($reports);
 
         // new
         $combinedReports = [];
@@ -314,7 +315,7 @@ class ReportController extends Controller
                 $combinedReports[$key]->beginning_balance += $e->beginning_balance;
                 $combinedReports[$key]->from_csr += $e->from_csr + $e->total_consumption;
                 $combinedReports[$key]->from_ward += $e->from_ward;
-                $combinedReports[$key]->total_beg_bal += $e->beginning_balance + $e->from_csr + $e->from_ward;
+                $combinedReports[$key]->total_beg_bal += $e->from_csr + $e->from_ward;
                 $combinedReports[$key]->surgery += $e->surgery;
                 $combinedReports[$key]->obgyne += $e->obgyne;
                 $combinedReports[$key]->ortho += $e->ortho;
@@ -335,7 +336,7 @@ class ReportController extends Controller
                     'beginning_balance' => $e->beginning_balance,
                     'from_csr' => $e->from_csr + $e->total_consumption,
                     'from_ward' => $e->from_ward,
-                    'total_beg_bal' => $e->beginning_balance + $e->from_csr + $e->from_ward,
+                    'total_beg_bal' => $e->from_csr + $e->from_ward,
                     'surgery' => $e->surgery,
                     'obgyne' => $e->obgyne,
                     'ortho' => $e->ortho,
@@ -352,7 +353,6 @@ class ReportController extends Controller
         }
         // Convert the combined associative array into a regular array of objects
         $reports = array_values($combinedReports);
-
         // dd($reports);
 
         return Inertia::render('Wards/Reports/Index', [

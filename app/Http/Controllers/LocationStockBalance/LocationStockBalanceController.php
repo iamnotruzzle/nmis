@@ -154,17 +154,18 @@ class LocationStockBalanceController extends Controller
                 //     AND [from] = 'CSR'
                 //     AND quantity > 0
                 //     GROUP BY location, cl2comb, ris_no;"
-                "SELECT ward.id, ward.location, ward.cl2comb, sum(ward.quantity) as quantity, ward.ris_no
+                "SELECT ward.id, ward.location, ward.cl2comb, sum(ward.quantity) as quantity, ward.ris_no, price.id as price_id
                     FROM csrw_wards_stocks as ward
                     JOIN csrw_item_prices as price ON price.ris_no = ward.ris_no
                     WHERE ward.location = '$request->location'
                     AND ward.[from] = 'CSR'
                     AND ward.quantity > 0
-                    GROUP BY ward.location, ward.cl2comb, price.price_per_unit, ward.ris_no, ward.id"
+                    GROUP BY ward.location, ward.cl2comb, price.price_per_unit, ward.ris_no, ward.id, price.id"
             );
             // dd($currentStocks);
 
             // If no balance has been declared before the 12th, create the balance
+            $dateTime = Carbon::now();
             if (count($hasBalance) == 0) {
                 foreach ($currentStocks as $stock) {
                     LocationStockBalance::create([
@@ -172,10 +173,12 @@ class LocationStockBalanceController extends Controller
                         'cl2comb' => $stock->cl2comb,
                         'ending_balance' => $stock->quantity,
                         'beginning_balance' => $stock->quantity,
+                        'ris_no' => $stock->ris_no,
+                        'price_id' => $stock->price_id,
                         'entry_by' => $request->entry_by,
                         'ward_stock_id' => $stock->id,
-                        'end_bal_created_at' => Carbon::now(),
-                        'beg_bal_created_at' => Carbon::now(),
+                        'end_bal_created_at' => $dateTime,
+                        'beg_bal_created_at' => $dateTime,
                     ]);
                 }
 

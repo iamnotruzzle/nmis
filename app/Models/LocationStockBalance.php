@@ -22,7 +22,8 @@ class LocationStockBalance extends Model
         'ward_stock_id',
         'end_bal_created_at',
         'beg_bal_created_at',
-        // 'ris_no',
+        'ris_no',
+        'price_id',
     ];
 
     public function item()
