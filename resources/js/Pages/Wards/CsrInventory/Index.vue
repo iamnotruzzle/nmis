@@ -3,29 +3,28 @@
     <Head title="NMIS - Wards Inventory" />
 
     <div
-      class="card"
+      class="card flex flex-row justify-content-around"
       style="width: 100%"
     >
       <Toast />
 
       <DataTable
-        class="p-datatable-sm"
+        class="p-datatable-sm w-full"
         v-model:filters="filters"
-        :value="wardsInventoryList"
+        :value="csrInventoryList"
         paginator
         :rows="20"
         :rowsPerPageOptions="[20, 30, 40]"
         dataKey="id"
-        filterDisplay="row"
-        sortField="expiration_date"
+        sortField="item_desc"
         :sortOrder="1"
         removableSort
-        :globalFilterFields="['ward', 'cl2desc']"
+        :globalFilterFields="['item_desc']"
         showGridlines
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold text-primary">WARDS INVENTORY</span>
+            <span class="text-xl text-900 font-bold text-primary">CSR INVENTORY</span>
             <div class="flex">
               <div class="mr-2">
                 <div class="p-inputgroup">
@@ -51,30 +50,7 @@
         >
         </Column> -->
         <Column
-          field="ward"
-          header="WARD"
-          sortable
-          :showFilterMenu="false"
-        >
-          <template #body="{ data }">
-            {{ data.ward }}
-          </template>
-
-          <template #filter="{ filterModel, filterCallback }">
-            <Dropdown
-              v-model="filterModel.value"
-              :options="locationFilter"
-              @change="filterCallback()"
-              :virtualScrollerOptions="{ itemSize: 38 }"
-              filter
-              optionLabel="name"
-              optionValue="name"
-              placeholder="NO FILTER"
-            />
-          </template>
-        </Column>
-        <Column
-          field="cl2desc"
+          field="item_desc"
           header="ITEM"
           sortable
         >
@@ -82,7 +58,7 @@
         <!-- breakpoint -->
         <Column
           field="quantity"
-          header="QTY"
+          header="QUANTITY"
           sortable
           style="width: 5%; text-align: right"
           :pt="{ headerContent: 'justify-content-end' }"
@@ -93,17 +69,70 @@
             </p>
           </template>
         </Column>
-        <Column
-          field="expiration_date"
-          header="EXP. DATE"
-          :showFilterMenu="false"
-          sortable
-          style="text-align: center"
-          :pt="{ headerContent: 'justify-content-center' }"
+      </DataTable>
+
+      <div class="mx-2"></div>
+
+      <DataTable
+        class="p-datatable-sm w-full"
+        v-model:filters="filtersCurrentStock"
+        :value="currentStockList"
+        paginator
+        :rows="20"
+        :rowsPerPageOptions="[20, 30, 40]"
+        dataKey="id"
+        sortField="item_desc"
+        :sortOrder="1"
+        removableSort
+        :globalFilterFields="['item_desc']"
+        showGridlines
+      >
+        <template #header>
+          <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+            <span class="text-xl text-900 font-bold text-green-500">CURRENT STOCK</span>
+            <div class="flex">
+              <div class="mr-2">
+                <div class="p-inputgroup">
+                  <span class="p-inputgroup-addon">
+                    <i class="pi pi-search"></i>
+                  </span>
+                  <InputText
+                    id="searchInput"
+                    v-model="filtersCurrentStock['global'].value"
+                    placeholder="Search"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+        <template #empty> No data found. </template>
+        <template #loading> Loading data. Please wait. </template>
+        <!-- <Column
+          field="cl1comb"
+          header="ID"
+          style="width: 5%"
         >
-          <template #body="{ data }">
-            {{ tzone(data.expiration_date) }}
-          </template>
+        </Column> -->
+        <Column
+          field="item_desc"
+          header="ITEM"
+          sortable
+        >
+        </Column>
+        <!-- breakpoint -->
+        <Column
+          field="quantity"
+          header="QUANTITY"
+          sortable
+          style="width: 5%; text-align: right"
+          :pt="{ headerContent: 'justify-content-end' }"
+        >
+          <!-- <template #body="{ data }">
+              <p class="text-right">
+                {{ data.quantity }}
+              </p>
+            </template> -->
         </Column>
       </DataTable>
     </div>
@@ -153,51 +182,54 @@ export default {
     IconField,
   },
   props: {
-    wardsInventory: Object,
+    csrInventory: Object,
+    currentStock: Object,
   },
   data() {
     return {
       //   categoryFilter: [
       //     { name: 'Accountable forms', catID: 22 },
       //   ],
-      wardsInventoryList: [],
+      csrInventoryList: [],
+      currentStockList: [],
       locationFilter: [],
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        ward: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        cl2desc: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        item_desc: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      },
+      filtersCurrentStock: {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        item_desc: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
     };
   },
   mounted() {
-    this.storeWardsInventoryInContainer();
-    this.storeLocationsInContainer();
+    console.log(this.currentStock);
+    this.storeCsrInventoryInContainer();
+    this.storeCurrentStockInContainer();
   },
   methods: {
-    storeWardsInventoryInContainer() {
-      this.wardsInventoryList = []; // reset
+    storeCsrInventoryInContainer() {
+      this.csrInventoryList = []; // reset
 
-      this.wardsInventory.forEach((e) => {
-        this.wardsInventoryList.push({
-          id: e.id,
-          ward: e.ward,
-          cl2desc: e.cl2desc,
+      this.csrInventory.forEach((e) => {
+        this.csrInventoryList.push({
+          item_desc: e.item_desc,
           quantity: e.quantity,
-          expiration_date: e.expiration_date,
         });
       });
     },
-    storeLocationsInContainer() {
-      this.$page.props.locations.forEach((e) => {
-        if (e.wardcode != 'CSR' && e.wardcode != 'ADMIN') {
-          this.locationFilter.push({
-            code: e.wardcode,
-            name: e.wardname,
-          });
-        }
+    storeCurrentStockInContainer() {
+      this.currentStockList = []; // reset
+
+      this.currentStock.forEach((e) => {
+        this.currentStockList.push({
+          item_desc: e.item_desc,
+          quantity: e.quantity,
+        });
       });
 
-      //   console.log(this.locationsList);
+      console.log(this.currentStockList);
     },
     tzone(date) {
       return moment.tz(date, 'Asia/Manila').format('L');

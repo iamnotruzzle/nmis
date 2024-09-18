@@ -120,6 +120,14 @@ export default {
               comp: 'Wards/TransferStock/Index',
             },
             {
+              label: 'CSR Inventory',
+              icon: 'bi-boxes',
+              to: 'csrinv',
+              prefix: 'csrinv',
+              comp: 'Wards/CsrInventory/Index',
+              badge: null,
+            },
+            {
               label: 'Reports',
               icon: 'si-microsoftexcel',
               to: 'wardreports',
@@ -296,6 +304,11 @@ export default {
       if (this.$page.props.user.designation == 'csr') {
         this.menu[0].items = this.menu[0].items.filter(function (obj) {
           return obj.to !== 'wardspatients';
+        });
+      }
+      if (this.$page.props.user.designation == 'csr') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'csrinv';
         });
       }
       if (this.$page.props.user.designation == 'csr') {
