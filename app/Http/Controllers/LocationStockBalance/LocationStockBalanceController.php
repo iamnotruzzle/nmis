@@ -104,15 +104,15 @@ class LocationStockBalanceController extends Controller
         // dd($currentStocks);
 
         // dd(count($hasBalance));
-        return Inertia::render('Balance/Index', [
-            'currentStocks' => $currentStocks,
-            'locationStockBalance' => $locationStockBalance,
-        ]);
-
-        // // maintenance page
-        // return Inertia::render('UnderMaintenancePage', [
-        //     // 'reports' => $reports
+        // return Inertia::render('Balance/Index', [
+        //     'currentStocks' => $currentStocks,
+        //     'locationStockBalance' => $locationStockBalance,
         // ]);
+
+        // maintenance page
+        return Inertia::render('UnderMaintenancePage', [
+            // 'reports' => $reports
+        ]);
     }
 
     public function store(Request $request)
@@ -158,11 +158,11 @@ class LocationStockBalanceController extends Controller
                     FROM csrw_wards_stocks as ward
                     JOIN csrw_item_prices as price ON price.ris_no = ward.ris_no
                     WHERE ward.location = '$request->location'
-                    AND ward.[from] = 'CSR'
+                    -- AND ward.[from] = 'CSR'
                     AND ward.quantity > 0
                     GROUP BY ward.location, ward.cl2comb, price.price_per_unit, ward.ris_no, ward.id, price.id"
             );
-            // dd($currentStocks);
+            dd($currentStocks);
 
             // If no balance has been declared before the 12th, create the balance
             $dateTime = Carbon::now();
