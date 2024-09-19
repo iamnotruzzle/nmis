@@ -933,22 +933,51 @@ export default {
       //   console.log('bill list', this.billList);
     },
     storeMedicalSuppliesInContainer() {
-      //   let totalPounds = (quantity * average) - totalConsumed;
+      //   OLD;
+      //   this.medicalSupplies.forEach((med) => {
+      //     this.medicalSuppliesList.push({
+      //       id: med.id,
+      //       is_consumable: med.is_consumable,
+      //       cl2comb: med.cl2comb,
+      //       cl2desc: med.cl2desc,
+      //       uomcode: med.uomcode == null ? null : med.uomcode,
+      //       quantity: med.is_consumable != 'y' ? med.quantity : med.total_usage,
+      //       average: med.average,
+      //       total_usage: med.total_usage,
+      //       price: med.price,
+      //       expiration_date: med.expiration_date,
+      //     });
+      //   });
+
+      // NEW
+      let combinedSupplies = [];
       this.medicalSupplies.forEach((med) => {
-        this.medicalSuppliesList.push({
-          id: med.id,
-          is_consumable: med.is_consumable,
-          cl2comb: med.cl2comb,
-          cl2desc: med.cl2desc,
-          uomcode: med.uomcode == null ? null : med.uomcode,
-          quantity: med.is_consumable != 'y' ? med.quantity : med.total_usage,
-          average: med.average,
-          total_usage: med.total_usage,
-          price: med.price,
-          expiration_date: med.expiration_date,
-        });
+        // Find if the item with the same cl2desc and price already exists in the combinedSupplies array
+        let existingItem = combinedSupplies.find(
+          (item) => item.cl2desc === med.cl2desc && Number(item.price) === Number(med.price)
+        );
+
+        if (existingItem) {
+          // If found, just update the quantity
+          existingItem.quantity += med.is_consumable != 'y' ? Number(med.quantity) : Number(med.total_usage);
+        } else {
+          // If not found, add a new entry
+          combinedSupplies.push({
+            id: med.id,
+            is_consumable: med.is_consumable,
+            cl2comb: med.cl2comb,
+            cl2desc: med.cl2desc,
+            uomcode: med.uomcode == null ? null : med.uomcode,
+            quantity: med.is_consumable != 'y' ? Number(med.quantity) : Number(med.total_usage),
+            average: Number(med.average),
+            total_usage: Number(med.total_usage),
+            price: Number(med.price),
+            expiration_date: med.expiration_date,
+          });
+        }
       });
-      //   console.log('medical supplies list', this.medicalSupplies);
+
+      this.medicalSuppliesList = combinedSupplies;
     },
     storeMiscInContainer() {
       this.misc.forEach((misc) => {
