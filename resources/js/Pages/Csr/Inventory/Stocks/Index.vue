@@ -206,7 +206,7 @@
 
         <div class="flex flex-row justify-content-between overflow-hidden">
           <!-- form -->
-          <div class="w-3">
+          <div class="w-4">
             <div class="field">
               <div class="flex justify-content-between align-items-center">
                 <label>RIS no.</label>
@@ -350,7 +350,7 @@
               </div>
             </div>
             <div class="field flex flex-row">
-              <div :style="{ width: '65%' }">
+              <div :style="{ width: '100%' }">
                 <div class="flex align-content-center">
                   <label>Convert to</label>
                 </div>
@@ -413,7 +413,7 @@
 
           <div class="border-1 mx-3"></div>
           <!-- delivery list -->
-          <div class="w-11">
+          <div class="w-8">
             <DataTable
               class="p-datatable-sm"
               v-model:filters="deliveryDetailsFilter"
