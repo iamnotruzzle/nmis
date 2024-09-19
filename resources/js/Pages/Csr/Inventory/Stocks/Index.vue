@@ -2146,7 +2146,8 @@ export default {
     },
     storeItemsInContainer() {
       this.items.forEach((e) => {
-        if (!e.cl2desc.includes('(pc)')) {
+        // if (!e.cl2desc.includes('(pc)')) {
+        if (e.uomcode == 'box') {
           this.itemsList.push({
             cl1comb: e.cl1comb,
             cl2comb: e.cl2comb,
