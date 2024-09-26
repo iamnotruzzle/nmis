@@ -81,121 +81,154 @@ class LocationStockBalanceController extends Controller
                 AND ward.location = '$authWardcode->wardcode'"
         );
 
-        $locationStockBalance = LocationStockBalance::with(['item:cl2comb,cl2desc', 'entry_by', 'updated_by'])
-            ->where('location', $authWardcode->wardcode)
-            ->when(
-                $request->from,
-                function ($query, $value) use ($from) {
-                    $query->whereDate('created_at', '>=', $from);
-                }
-            )
-            ->when(
-                $request->to,
-                function ($query, $value) use ($to) {
-                    $query->whereDate('created_at', '<=', $to);
-                }
-            )
-            ->whereHas('item', function ($q) use ($searchString) {
-                $q->where('cl2desc', 'LIKE', '%' . $searchString . '%');
-            })
-            ->orderBy('created_at', 'DESC')
-            ->paginate(10);
+        $date = DB::select("SELECT TOP 1 beg_bal_created_at
+                FROM csrw_location_stock_balance
+                WHERE beginning_balance IS NOT NULL
+                ORDER BY created_at DESC;");
+        $lastDeclareadBegBal =  Carbon::parse($date[0]->beg_bal_created_at)->startOfDay();
+        // dd($lastDeclareadBegBal);
+
+
+        if ($request->from == null || $request->from == '') {
+            $locationStockBalance = DB::select(
+                "SELECT
+                    balance.ward_stock_id,
+                    balance.location,
+                    balance.cl2comb,
+                    item.cl2desc,
+                    SUM(balance.beginning_balance) AS beginning_balance,
+                    SUM(balance.ending_balance) AS ending_balance,
+                    MIN(balance.created_at) AS created_at,
+                    MAX(balance.updated_at) AS updated_at,
+                    MIN(balance.beg_bal_created_at) AS beg_bal_created_at,
+                    MAX(balance.end_bal_created_at) AS end_bal_created_at,
+                    balance.ris_no,
+                    balance.price_id
+                FROM
+                    csrw_location_stock_balance as balance
+                JOIN hclass2 as item ON item.cl2comb = balance.cl2comb
+                WHERE balance.created_at >= '$lastDeclareadBegBal'
+                GROUP BY
+                    balance.ward_stock_id,
+                    balance.location,
+                    balance.cl2comb,
+                    item.cl2desc,
+                    balance.ris_no,
+                    balance.price_id;"
+            );
+            // dd($locationStockBalance);
+        } else {
+            // dd($request->from);
+            $locationStockBalance = DB::select(
+                "SELECT
+                    balance.ward_stock_id,
+                    balance.location,
+                    balance.cl2comb,
+                    item.cl2desc,
+                    SUM(balance.beginning_balance) AS beginning_balance,
+                    SUM(balance.ending_balance) AS ending_balance,
+                    MIN(balance.created_at) AS created_at,
+                    MAX(balance.updated_at) AS updated_at,
+                    MIN(balance.beg_bal_created_at) AS beg_bal_created_at,
+                    MAX(balance.end_bal_created_at) AS end_bal_created_at,
+                    balance.ris_no,
+                    balance.price_id
+                FROM
+                    csrw_location_stock_balance as balance
+                JOIN hclass2 as item ON item.cl2comb = balance.cl2comb
+                 WHERE
+                    balance.created_at >= '$from'
+                AND (balance.created_at <= '$to' OR balance.created_at IS NULL)
+                GROUP BY
+                    balance.ward_stock_id,
+                    balance.location,
+                    balance.cl2comb,
+                    item.cl2desc,
+                    balance.ris_no,
+                    balance.price_id;"
+            );
+            // dd($locationStockBalance);
+        }
+
+        // $locationStockBalance = LocationStockBalance::with(['item:cl2comb,cl2desc', 'entry_by', 'updated_by'])
+        //     ->where('location', $authWardcode->wardcode)
+        //     ->when(
+        //         $request->from,
+        //         function ($query, $value) use ($from) {
+        //             $query->whereDate('created_at', '>=', $from);
+        //         }
+        //     )
+        //     ->when(
+        //         $request->to,
+        //         function ($query, $value) use ($to) {
+        //             $query->whereDate('created_at', '<=', $to);
+        //         }
+        //     )
+        //     ->whereHas('item', function ($q) use ($searchString) {
+        //         $q->where('cl2desc', 'LIKE', '%' . $searchString . '%');
+        //     })
+        //     ->orderBy('created_at', 'DESC')
+        //     ->paginate(10);
 
         // dd($currentStocks);
 
         // dd(count($hasBalance));
-        // return Inertia::render('Balance/Index', [
-        //     'currentStocks' => $currentStocks,
-        //     'locationStockBalance' => $locationStockBalance,
-        // ]);
-
-        // maintenance page
-        return Inertia::render('UnderMaintenancePage', [
-            // 'reports' => $reports
+        return Inertia::render('Balance/Index', [
+            'currentStocks' => $currentStocks,
+            'locationStockBalance' => $locationStockBalance,
         ]);
+
+        // // maintenance page
+        // return Inertia::render('UnderMaintenancePage', [
+        //     // 'reports' => $reports
+        // ]);
     }
 
     public function store(Request $request)
     {
-        // Get current date and check if it's between the 12th and the end of the current month
-        $currentDate = Carbon::now()->startOfDay(); // Ensure we're comparing dates only
-        // Explicitly set startOfBalancePeriod to the 12th of the current month
-        $startOfBalancePeriod = $currentDate->copy()->setDay(12)->startOfDay();
-        // End of month with the last moment of the day
-        $endOfBalancePeriod = $currentDate->copy()->endOfMonth()->endOfDay();
+        $currentStocks = DB::select(
+            "SELECT ward.id, ward.location, ward.cl2comb, ward.quantity, ward.ris_no, price.id as price_id
+                FROM csrw_wards_stocks as ward
+                JOIN csrw_item_prices as price ON price.ris_no = ward.ris_no
+                WHERE ward.location = '$request->location'
+                -- AND ward.[from] = 'CSR'
+                AND ward.quantity > 0"
+        );
+        // dd($currentStocks);
 
-        // dd([
-        //     'currentDate' => $currentDate->toDateTimeString(),
-        //     'startOfBalancePeriod' => $startOfBalancePeriod->toDateTimeString(),
-        //     'endOfBalancePeriod' => $endOfBalancePeriod->toDateTimeString(),
-        // ]);
-
-        if ($currentDate->greaterThanOrEqualTo($startOfBalancePeriod) && $currentDate->lessThanOrEqualTo($endOfBalancePeriod)) {
-            // Check if there's a balance record for this location for the current month before the 12th
-            $hasBalance = DB::select(
-                "SELECT *
-                    FROM csrw_location_stock_balance
-                    WHERE location = '$request->location'
-                    AND MONTH(created_at) = MONTH(GETDATE())
-                    AND YEAR(created_at) = YEAR(GETDATE());"
-            );
-            // dd($hasBalance);
-
-            // Retrieve current stocks
-            // $currentStocks = DB::select(
-            //     "SELECT * FROM csrw_wards_stocks
-            //         WHERE location = '$request->location'
-            //         AND [from] = 'CSR'
-            //         AND quantity > 0;"
-            // );
-            $currentStocks = DB::select(
-                // "SELECT location, cl2comb, sum(quantity) as quantity, ris_no FROM csrw_wards_stocks
-                //     WHERE location = '4FSA'
-                //     AND [from] = 'CSR'
-                //     AND quantity > 0
-                //     GROUP BY location, cl2comb, ris_no;"
-                "SELECT ward.id, ward.location, ward.cl2comb, sum(ward.quantity) as quantity, ward.ris_no, price.id as price_id
-                    FROM csrw_wards_stocks as ward
-                    JOIN csrw_item_prices as price ON price.ris_no = ward.ris_no
-                    WHERE ward.location = '$request->location'
-                    -- AND ward.[from] = 'CSR'
-                    AND ward.quantity > 0
-                    GROUP BY ward.location, ward.cl2comb, price.price_per_unit, ward.ris_no, ward.id, price.id"
-            );
-            dd($currentStocks);
-
-            // If no balance has been declared before the 12th, create the balance
-            $dateTime = Carbon::now();
-            if (count($hasBalance) == 0) {
-                foreach ($currentStocks as $stock) {
-                    LocationStockBalance::create([
-                        'location' => $request->location,
-                        'cl2comb' => $stock->cl2comb,
-                        'ending_balance' => $stock->quantity,
-                        'beginning_balance' => $stock->quantity,
-                        'ris_no' => $stock->ris_no,
-                        'price_id' => $stock->price_id,
-                        'entry_by' => $request->entry_by,
-                        'ward_stock_id' => $stock->id,
-                        'end_bal_created_at' => $dateTime,
-                        'beg_bal_created_at' => $dateTime,
-                    ]);
-                }
-
-                return redirect()->back()->with('success', 'Balance set successfully.');
-            } else {
-                // dd('declared');
-                throw ValidationException::withMessages([
-                    'error' => 'Stock balance for this month already declared.',
+        // If no balance has been declared before the 12th, create the balance
+        $dateTime = Carbon::now();
+        if ($request->beg_bal == true) {
+            // beginning balance
+            foreach ($currentStocks as $stock) {
+                LocationStockBalance::create([
+                    'location' => $request->location,
+                    'cl2comb' => $stock->cl2comb,
+                    'beginning_balance' => $stock->quantity,
+                    'ris_no' => $stock->ris_no,
+                    'price_id' => $stock->price_id,
+                    'entry_by' => $request->entry_by,
+                    'ward_stock_id' => $stock->id,
+                    'beg_bal_created_at' => $dateTime,
                 ]);
             }
         } else {
-            // dd('Balance can only be set between the 12th and the last day of the month.');
-            // Return error if date is outside the allowed range
-            throw ValidationException::withMessages([
-                'error' => 'Balance can only be set between the 12th and the last day of the month.',
-            ]);
+            // ending balance
+            foreach ($currentStocks as $stock) {
+                LocationStockBalance::create([
+                    'location' => $request->location,
+                    'cl2comb' => $stock->cl2comb,
+                    'ending_balance' => $stock->quantity,
+                    'ris_no' => $stock->ris_no,
+                    'price_id' => $stock->price_id,
+                    'entry_by' => $request->entry_by,
+                    'ward_stock_id' => $stock->id,
+                    'end_bal_created_at' => $dateTime,
+                ]);
+            }
         }
+
+        return redirect()->back()->with('success', 'Balance set successfully.');
     }
 
     public function update(LocationStockBalance $stockbal, Request $request)

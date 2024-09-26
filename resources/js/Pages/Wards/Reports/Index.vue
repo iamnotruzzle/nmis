@@ -31,20 +31,6 @@
               class="mr-2"
             />
           </div>
-          <i
-            v-if="from == null || to == null"
-            class="pi pi-file-excel cursor-pointer"
-            :style="{ color: 'gray', 'font-size': '2rem' }"
-          ></i>
-          <div
-            v-else
-            @click="exportToExcel()"
-          >
-            <i
-              class="pi pi-file-excel cursor-pointer"
-              :style="{ color: 'green', 'font-size': '2rem' }"
-            ></i>
-          </div>
         </div>
       </div>
 

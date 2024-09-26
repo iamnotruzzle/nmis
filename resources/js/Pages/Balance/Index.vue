@@ -10,18 +10,15 @@
 
       <DataTable
         class="p-datatable-sm"
+        dataKey="ward_stock_id"
         v-model:filters="filters"
         :value="balanceContainer"
-        selectionMode="single"
-        lazy
         paginator
+        :rows="10"
+        :rowsPerPageOptions="[10, 30, 50]"
         removableSort
-        :rows="rows"
-        ref="dt"
-        :totalRecords="totalRecords"
-        @page="onPage($event)"
-        dataKey="id"
-        filterDisplay="row"
+        sortField="created_at"
+        :sortOrder="1"
         showGridlines
         :loading="loading"
       >
@@ -36,25 +33,48 @@
                   </span>
                   <InputText
                     id="searchInput"
-                    v-model="search"
+                    v-model="filters['global'].value"
                     placeholder="Search item"
                   />
                 </div>
               </div>
-              <!-- <Button
-                label="Balance"
-                icon="pi pi-user-plus"
-                iconPos="right"
-                @click="openCreateItemDialog"
-              /> -->
-              <div v-tooltip.top="'You can generate balance beginning on the 10th of this month.'">
-                <Button
-                  severity="success"
-                  icon="pi pi-save"
-                  label="Generate balance"
-                  @click="generateBalance"
-                  :disabled="!isBetween10thAndLastDay"
-                />
+
+              <Button
+                severity="success"
+                icon="pi pi-save"
+                label="Beginning balance"
+                class="mr-2"
+                @click="generateBegBalance"
+              />
+              <Button
+                severity="danger"
+                icon="pi pi-save"
+                label="Ending balance"
+                @click="generateEndBalance"
+              />
+              <div class="flex flex-row align-items-center">
+                <div class="flex flex-row">
+                  <Calendar
+                    v-model="from"
+                    dateFormat="mm-dd-yy"
+                    placeholder="FROM"
+                    showIcon
+                    showButtonBar
+                    :manualInput="false"
+                    :hideOnDateTimeSelect="true"
+                    class="mr-2"
+                  />
+                  <Calendar
+                    v-model="to"
+                    dateFormat="mm-dd-yy"
+                    placeholder="TO"
+                    showIcon
+                    showButtonBar
+                    :manualInput="false"
+                    :hideOnDateTimeSelect="true"
+                    class="mr-2"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -62,21 +82,12 @@
         <template #empty> No stock found. </template>
         <template #loading> Loading stock data. Please wait. </template>
         <Column
-          field="item"
+          field="cl2desc"
           header="ITEM"
           style="width: 30%"
         >
           <template #body="{ data }">
             <span style="text-wrap: nowrap"> {{ data.cl2desc }}</span>
-          </template>
-        </Column>
-        <Column
-          field="ending_balance"
-          header="ENDING BALANCE"
-          style="text-align: center; width: 5%"
-        >
-          <template #body="{ data }">
-            {{ data.ending_balance }}
           </template>
         </Column>
         <Column
@@ -87,6 +98,15 @@
         >
           <template #body="{ data }">
             {{ data.beginning_balance }}
+          </template>
+        </Column>
+        <Column
+          field="ending_balance"
+          header="ENDING BALANCE"
+          style="text-align: center; width: 5%"
+        >
+          <template #body="{ data }">
+            {{ data.ending_balance }}
           </template>
         </Column>
         <Column
@@ -360,8 +380,6 @@ export default {
     return {
       // paginator
       loading: false,
-      totalRecords: null,
-      rows: null,
       // end paginator
       itemId: null,
       isUpdate: false,
@@ -379,6 +397,8 @@ export default {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       form: this.$inertia.form({
+        beg_bal: null,
+        end_bal: null,
         isAbleToGenerate: null,
         id: null,
         ris_no: null,
@@ -389,12 +409,6 @@ export default {
         entry_by: null,
       }),
     };
-  },
-  // created will be initialize before mounted
-  created() {
-    this.totalRecords = this.locationStockBalance.total;
-    this.params.page = this.locationStockBalance.current_page;
-    this.rows = this.locationStockBalance.per_page;
   },
   mounted() {
     // console.log(moment().format('YYYY-MM-DD HH:mm:ss'));
@@ -425,16 +439,20 @@ export default {
   },
   methods: {
     storeStockBalanceInContainer() {
-      this.locationStockBalance.data.forEach((e) => {
+      this.locationStockBalance.forEach((e) => {
         this.balanceContainer.push({
-          id: e.id,
+          ward_stock_id: e.ward_stock_id,
           ris_no: e.ris_no,
-          cl2comb: e.item.cl2comb,
-          cl2desc: e.item.cl2desc,
-          ending_balance: e.ending_balance,
+          cl2comb: e.cl2comb,
+          cl2desc: e.cl2desc,
           beginning_balance: e.beginning_balance,
-          entry_by: e.entry_by.firstname + ' ' + e.entry_by.lastname,
-          updated_by: e.updated_by == null ? null : e.updated_by.firstname + ' ' + e.updated_by.lastname,
+          ending_balance: e.ending_balance,
+          beg_bal_created_at: e.beg_bal_created_at,
+          end_bal_created_at: e.end_bal_created_at,
+          //   entry_by: e.entry_by.firstname + ' ' + e.entry_by.lastname,
+          entry_by: 'NA',
+          //   updated_by: e.updated_by == null ? null : e.updated_by.firstname + ' ' + e.updated_by.lastname,
+          updated_by: 'NA',
         });
       });
       //   console.log('container', this.reportsContainer);
@@ -528,7 +546,33 @@ export default {
       this.params.page = event.page + 1;
       this.updateData();
     },
-    generateBalance() {
+    generateBegBalance() {
+      this.form.beg_bal = true;
+
+      this.form.isAbleToGenerate = true;
+      this.form.location = this.$page.props.auth.user.location.location_name.wardcode;
+      this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid;
+
+      if (this.form.processing && this.form.isAbleToGenerate != true) {
+        return false;
+      }
+
+      this.form.post(route('stockbal.store'), {
+        preserveScroll: true,
+        onSuccess: () => {
+          this.cancel();
+          this.updateData();
+          this.createdMsg();
+        },
+        onError: () => {
+          //   console.log(this.$page.props.errors.error);
+          this.errorMsg();
+        },
+      });
+    },
+    generateEndBalance() {
+      this.form.end_bal = true;
+
       this.form.isAbleToGenerate = true;
       this.form.location = this.$page.props.auth.user.location.location_name.wardcode;
       this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid;
@@ -707,8 +751,7 @@ export default {
     },
     from: function (val) {
       if (val != null) {
-        let from = moment(val).format('LL');
-        // console.log('from', from);
+        let from = this.getLocalDateString(val);
         this.params.from = from;
       } else {
         this.params.from = null;
@@ -718,8 +761,7 @@ export default {
     },
     to: function (val) {
       if (val != null) {
-        let to = moment(val).format('LL');
-        // console.log('to', to);
+        let to = this.getLocalDateString(val);
         this.params.to = to;
       } else {
         this.params.to = null;
