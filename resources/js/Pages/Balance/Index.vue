@@ -168,15 +168,6 @@
           <template #body="slotProps">
             <div class="flex flex-row justify-content-center">
               <Button
-                icon="pi pi-pencil"
-                class="mr-1"
-                rounded
-                text
-                severity="warning"
-                @click="editItem(slotProps.data)"
-              />
-
-              <Button
                 icon="pi pi-trash"
                 rounded
                 text
