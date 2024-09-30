@@ -23,9 +23,9 @@
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold text-primary">STOCK BALANCE</span>
-            <div class="flex">
-              <!-- <Button
+            <div>
+              <p class="text-xl text-900 font-bold text-primary">STOCK BALANCE</p>
+              <Button
                 severity="success"
                 icon="pi pi-save"
                 label="Beginning balance"
@@ -37,7 +37,9 @@
                 icon="pi pi-save"
                 label="Ending balance"
                 @click="generateEndBalance"
-              /> -->
+              />
+            </div>
+            <div class="flex">
               <div class="flex flex-column">
                 <div class="flex flex-row">
                   <Calendar
