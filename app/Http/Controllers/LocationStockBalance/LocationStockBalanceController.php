@@ -33,6 +33,7 @@ class LocationStockBalanceController extends Controller
             ->where('csrw_login_history.employeeid', Auth::user()->employeeid)
             ->orderBy('csrw_login_history.created_at', 'desc')
             ->first();
+        // dd($authWardcode);
 
         // OLD condition. this also add CSR stock balance
         // if ($authWardcode->wardcode == 'CSR') {
@@ -61,7 +62,6 @@ class LocationStockBalanceController extends Controller
         //     dd($currentStocks);
         // }
 
-
         $currentStocks =  DB::select(
             "SELECT ward.id,
                     ward.ris_no,
@@ -81,98 +81,34 @@ class LocationStockBalanceController extends Controller
                 AND ward.location = '$authWardcode->wardcode'"
         );
 
-        $date = DB::select("SELECT TOP 1 beg_bal_created_at
-                FROM csrw_location_stock_balance
-                WHERE beginning_balance IS NOT NULL
-                ORDER BY created_at DESC;");
-        $lastDeclareadBegBal =  Carbon::parse($date[0]->beg_bal_created_at)->startOfDay();
-        // dd($lastDeclareadBegBal);
-
-
-        if ($request->from == null || $request->from == '') {
-            $locationStockBalance = DB::select(
-                "SELECT
-                    balance.ward_stock_id,
-                    balance.location,
-                    balance.cl2comb,
-                    item.cl2desc,
-                    SUM(balance.beginning_balance) AS beginning_balance,
-                    SUM(balance.ending_balance) AS ending_balance,
-                    MIN(balance.created_at) AS created_at,
-                    MAX(balance.updated_at) AS updated_at,
-                    MIN(balance.beg_bal_created_at) AS beg_bal_created_at,
-                    MAX(balance.end_bal_created_at) AS end_bal_created_at,
-                    balance.ris_no,
-                    balance.price_id
-                FROM
-                    csrw_location_stock_balance as balance
-                JOIN hclass2 as item ON item.cl2comb = balance.cl2comb
-                WHERE balance.created_at >= '$lastDeclareadBegBal'
-                GROUP BY
-                    balance.ward_stock_id,
-                    balance.location,
-                    balance.cl2comb,
-                    item.cl2desc,
-                    balance.ris_no,
-                    balance.price_id;"
-            );
-            // dd($locationStockBalance);
-        } else {
-            // dd($request->from);
-            $locationStockBalance = DB::select(
-                "SELECT
-                    balance.ward_stock_id,
-                    balance.location,
-                    balance.cl2comb,
-                    item.cl2desc,
-                    SUM(balance.beginning_balance) AS beginning_balance,
-                    SUM(balance.ending_balance) AS ending_balance,
-                    MIN(balance.created_at) AS created_at,
-                    MAX(balance.updated_at) AS updated_at,
-                    MIN(balance.beg_bal_created_at) AS beg_bal_created_at,
-                    MAX(balance.end_bal_created_at) AS end_bal_created_at,
-                    balance.ris_no,
-                    balance.price_id
-                FROM
-                    csrw_location_stock_balance as balance
-                JOIN hclass2 as item ON item.cl2comb = balance.cl2comb
-                 WHERE
-                    balance.created_at >= '$from'
+        $locationStockBalance = DB::select(
+            "SELECT
+                balance.cl2comb,
+                item.cl2desc,
+                SUM(balance.beginning_balance) AS beginning_balance,
+                SUM(balance.ending_balance) AS ending_balance,
+                MIN(balance.created_at) AS created_at,
+                MIN(balance.beg_bal_created_at) AS beg_bal_created_at,
+                MAX(balance.end_bal_created_at) AS end_bal_created_at,
+                price.price_per_unit
+            FROM
+                csrw_location_stock_balance AS balance
+            JOIN
+                hclass2 AS item ON item.cl2comb = balance.cl2comb
+            JOIN
+                csrw_item_prices AS price ON price.cl2comb = balance.cl2comb
+                AND price.id = balance.price_id  -- Ensure price matching by ID
+            WHERE
+                balance.created_at >= '$from'
                 AND (balance.created_at <= '$to' OR balance.created_at IS NULL)
-                GROUP BY
-                    balance.ward_stock_id,
-                    balance.location,
-                    balance.cl2comb,
-                    item.cl2desc,
-                    balance.ris_no,
-                    balance.price_id;"
-            );
-            // dd($locationStockBalance);
-        }
+                AND balance.location = '$authWardcode->wardcode'
+            GROUP BY
+                balance.cl2comb,
+                item.cl2desc,
+                price.price_per_unit;"
+        );
+        // dd($locationStockBalance);
 
-        // $locationStockBalance = LocationStockBalance::with(['item:cl2comb,cl2desc', 'entry_by', 'updated_by'])
-        //     ->where('location', $authWardcode->wardcode)
-        //     ->when(
-        //         $request->from,
-        //         function ($query, $value) use ($from) {
-        //             $query->whereDate('created_at', '>=', $from);
-        //         }
-        //     )
-        //     ->when(
-        //         $request->to,
-        //         function ($query, $value) use ($to) {
-        //             $query->whereDate('created_at', '<=', $to);
-        //         }
-        //     )
-        //     ->whereHas('item', function ($q) use ($searchString) {
-        //         $q->where('cl2desc', 'LIKE', '%' . $searchString . '%');
-        //     })
-        //     ->orderBy('created_at', 'DESC')
-        //     ->paginate(10);
-
-        // dd($currentStocks);
-
-        // dd(count($hasBalance));
         return Inertia::render('Balance/Index', [
             'currentStocks' => $currentStocks,
             'locationStockBalance' => $locationStockBalance,

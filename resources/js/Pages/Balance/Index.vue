@@ -10,7 +10,6 @@
 
       <DataTable
         class="p-datatable-sm"
-        dataKey="ward_stock_id"
         v-model:filters="filters"
         :value="balanceContainer"
         paginator
@@ -26,20 +25,7 @@
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
             <span class="text-xl text-900 font-bold text-primary">STOCK BALANCE</span>
             <div class="flex">
-              <div class="mr-2">
-                <div class="p-inputgroup">
-                  <span class="p-inputgroup-addon">
-                    <i class="pi pi-search"></i>
-                  </span>
-                  <InputText
-                    id="searchInput"
-                    v-model="filters['global'].value"
-                    placeholder="Search item"
-                  />
-                </div>
-              </div>
-
-              <Button
+              <!-- <Button
                 severity="success"
                 icon="pi pi-save"
                 label="Beginning balance"
@@ -51,8 +37,8 @@
                 icon="pi pi-save"
                 label="Ending balance"
                 @click="generateEndBalance"
-              />
-              <div class="flex flex-row align-items-center">
+              /> -->
+              <div class="flex flex-column">
                 <div class="flex flex-row">
                   <Calendar
                     v-model="from"
@@ -74,6 +60,18 @@
                     :hideOnDateTimeSelect="true"
                     class="mr-2"
                   />
+                </div>
+                <div class="mt-2">
+                  <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon">
+                      <i class="pi pi-search"></i>
+                    </span>
+                    <InputText
+                      id="searchInput"
+                      v-model="filters['global'].value"
+                      placeholder="Search item"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -110,55 +108,30 @@
           </template>
         </Column>
         <Column
-          field="entry_by"
-          header="ENTRY BY"
-          style="text-align: center; width: 10%"
-          :pt="{ headerContent: 'justify-content-center' }"
+          header="PPU"
+          style="text-align: right"
+          :pt="{ headerContent: 'justify-content-end' }"
         >
           <template #body="{ data }">
-            {{ data.entry_by }}
+            <span class="text-blue-500 text-bold"> ₱ {{ data.price_per_unit }}</span>
           </template>
         </Column>
         <Column
-          field="updated_by"
-          header="UPDATED BY"
-          style="text-align: center; width: 10%"
-          :pt="{ headerContent: 'justify-content-center' }"
+          header="BEG. BAL DATE"
+          style="text-align: right"
+          :pt="{ headerContent: 'justify-content-end' }"
         >
           <template #body="{ data }">
-            {{ data.updated_by }}
+            <span class="text-green-500 text-bold"> {{ tzone(data.beg_bal_created_at) }}</span>
           </template>
         </Column>
         <Column
-          header="CREATED AT"
-          filterField="created_at"
-          style="text-align: center; width: 10%"
-          :pt="{ headerContent: 'justify-content-center' }"
-          :showFilterMenu="false"
+          header="END. BAL DATE"
+          style="text-align: right"
+          :pt="{ headerContent: 'justify-content-end' }"
         >
           <template #body="{ data }">
-            {{ tzone(data.created_at) }}
-          </template>
-          <template #filter="{}">
-            <Calendar
-              v-model="from"
-              dateFormat="mm-dd-yy"
-              placeholder="FROM"
-              showIcon
-              showButtonBar
-              :manualInput="false"
-              :hideOnDateTimeSelect="true"
-            />
-            <div class="mt-2"></div>
-            <Calendar
-              v-model="to"
-              dateFormat="mm-dd-yy"
-              placeholder="TO"
-              showIcon
-              showButtonBar
-              :manualInput="false"
-              :hideOnDateTimeSelect="true"
-            />
+            <span class="text-error text-bold"> {{ tzone(data.end_bal_created_at) }}</span>
           </template>
         </Column>
         <Column
@@ -432,7 +405,6 @@ export default {
     storeStockBalanceInContainer() {
       this.locationStockBalance.forEach((e) => {
         this.balanceContainer.push({
-          ward_stock_id: e.ward_stock_id,
           ris_no: e.ris_no,
           cl2comb: e.cl2comb,
           cl2desc: e.cl2desc,
@@ -440,10 +412,7 @@ export default {
           ending_balance: e.ending_balance,
           beg_bal_created_at: e.beg_bal_created_at,
           end_bal_created_at: e.end_bal_created_at,
-          //   entry_by: e.entry_by.firstname + ' ' + e.entry_by.lastname,
-          entry_by: 'NA',
-          //   updated_by: e.updated_by == null ? null : e.updated_by.firstname + ' ' + e.updated_by.lastname,
-          updated_by: 'NA',
+          price_per_unit: e.price_per_unit,
         });
       });
       //   console.log('container', this.reportsContainer);
@@ -494,7 +463,7 @@ export default {
 
       this.sortItemsList(this.itemsList, 'cl2desc');
 
-      console.log(this.itemsList);
+      //   console.log(this.itemsList);
     },
     sortItemsList(arr, propertyName, order = 'ascending') {
       const sortedArr = this.itemsList.sort((a, b) => {
@@ -531,7 +500,12 @@ export default {
       });
     },
     tzone(date) {
-      return moment.tz(date, 'Asia/Manila').format('L');
+      //   console.log('date', date);
+      if (date == null || date == undefined) {
+        return '';
+      } else {
+        return moment.tz(date, 'Asia/Manila').format('L');
+      }
     },
     onPage(event) {
       this.params.page = event.page + 1;
