@@ -31,12 +31,14 @@
                 label="Beginning balance"
                 class="mr-2"
                 @click="generateBegBalance"
+                :disabled="canBeginBalance !== true"
               />
               <Button
                 severity="danger"
                 icon="pi pi-save"
                 label="Ending balance"
                 @click="generateEndBalance"
+                :disabled="canBeginBalance !== false"
               />
             </div>
             <div class="flex">
@@ -341,6 +343,7 @@ export default {
     currentStocks: Object,
     locationStockBalance: Object,
     hasBalance: Number,
+    canBeginBalance: Boolean,
   },
   data() {
     return {

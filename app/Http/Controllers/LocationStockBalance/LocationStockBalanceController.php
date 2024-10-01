@@ -35,32 +35,16 @@ class LocationStockBalanceController extends Controller
             ->first();
         // dd($authWardcode);
 
-        // OLD condition. this also add CSR stock balance
-        // if ($authWardcode->wardcode == 'CSR') {
-        //     $currentStocks = DB::select(
-        //         "SELECT clsb_csr.cl2comb as clsb_cl2comb, hc.cl2comb as hc_cl2comb, hc.cl2desc
-        //         FROM csrw_csr_stocks as csr
-        //         JOIN hclass2 as hc on csr.cl2comb = hc.cl2comb
-        //         RIGHT JOIN (
-        //             SELECT id, cl2comb, ending_balance, beginning_balance
-        //             FROM csrw_location_stock_balance
-        //             WHERE location = 'CSR' AND created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
-        //         ) AS clsb_csr ON csr.cl2comb = clsb_csr.cl2comb;"
-        //     );
-        // } else {
-        //     $currentStocks =  DB::select(
-        //         "SELECT ward.id, clsb_ward.cl2comb as clsb_cl2comb, hc.cl2comb as hc_cl2comb, hc.cl2desc
-        //             FROM csrw_wards_stocks as ward
-        //             JOIN hclass2 as hc on ward.cl2comb = hc.cl2comb
-        //             LEFT JOIN (
-        //                 SELECT id, cl2comb, ending_balance, beginning_balance
-        //                 FROM csrw_location_stock_balance
-        //                 WHERE location = '$authWardcode->wardcode' AND created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
-        //             ) AS clsb_ward ON ward.cl2comb = clsb_ward.cl2comb
-        //             WHERE [from] = 'CSR' AND location = '$authWardcode->wardcode';"
-        //     );
-        //     dd($currentStocks);
-        // }
+        // check if the latest has a beg bal or ending bal
+        $balanceDecChecker = LocationStockBalance::OrderBy('created_at', 'DESC')->first();
+        $canBeginBalance = null;
+
+        // if true, it can generate beginning balance else it can generate ending balance
+        if ($balanceDecChecker->beginning_balance == null) {
+            $canBeginBalance = true;
+        } else {
+            $canBeginBalance = false;
+        }
 
         $currentStocks =  DB::select(
             "SELECT ward.id,
@@ -112,6 +96,7 @@ class LocationStockBalanceController extends Controller
         return Inertia::render('Balance/Index', [
             'currentStocks' => $currentStocks,
             'locationStockBalance' => $locationStockBalance,
+            'canBeginBalance' => $canBeginBalance,
         ]);
 
         // // maintenance page
