@@ -36,7 +36,8 @@ class LocationStockBalanceController extends Controller
         // dd($authWardcode);
 
         // check if the latest has a beg bal or ending bal
-        $balanceDecChecker = LocationStockBalance::OrderBy('created_at', 'DESC')->first();
+        $balanceDecChecker = LocationStockBalance::where('location', $authWardcode->wardcode)->OrderBy('created_at', 'DESC')->first();
+        // dd($balanceDecChecker);
         $canBeginBalance = null;
 
         // if true, it can generate beginning balance else it can generate ending balance
