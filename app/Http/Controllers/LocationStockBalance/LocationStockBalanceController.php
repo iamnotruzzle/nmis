@@ -41,7 +41,9 @@ class LocationStockBalanceController extends Controller
         $canBeginBalance = null;
 
         // if true, it can generate beginning balance else it can generate ending balance
-        if ($balanceDecChecker->beginning_balance == null) {
+        if ($balanceDecChecker == null) {
+            $canBeginBalance = true;
+        } else if ($balanceDecChecker->beginning_balance == null) {
             $canBeginBalance = true;
         } else {
             $canBeginBalance = false;
