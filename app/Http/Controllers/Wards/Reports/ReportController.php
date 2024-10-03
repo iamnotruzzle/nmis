@@ -187,22 +187,25 @@ class ReportController extends Controller
                     hclass2.cl2comb,
                     hclass2.cl2desc as cl2desc,
                     huom.uomdesc as uomdesc,
-                    csrw_location_stock_balance.beginning_balance as beginning_balance,
-                    csrw_location_stock_balance.ending_balance as ending_balance,
+                    SUM(csrw_location_stock_balance.beginning_balance) as beginning_balance,
+                    SUM(csrw_location_stock_balance.ending_balance) as ending_balance,
                     csrw_item_prices.price_per_unit as 'unit_cost',
-                    sum(CASE WHEN [from]='CSR' THEN quantity ELSE 0 END) as 'from_csr',
-                    sum(CASE WHEN [from]='WARD' THEN quantity ELSE 0 END) as 'from_ward',
+                    -- Sum the quantities from CSR
+                    SUM(CASE
+                            WHEN [from] = 'CSR' THEN quantity
+                            ELSE 0
+                        END) as 'from_csr',
+                    SUM(CASE
+                        WHEN [from] = 'WARD' THEN quantity
+                        ELSE 0
+                    END) as 'from_ward',
                     (SELECT SUM(CASE WHEN tscode = 'SURG' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'surgery',
                     (SELECT SUM(CASE WHEN tscode = 'GYNE' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'obgyne',
                     (SELECT SUM(CASE WHEN tscode = 'ORTHO' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'ortho',
                     (SELECT SUM(CASE WHEN tscode = 'PEDIA' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'pedia',
                     (SELECT SUM(CASE WHEN tscode = 'OPHTH' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'optha',
                     (SELECT SUM(CASE WHEN tscode = 'ENT' THEN quantity ELSE 0 END) FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'ent',
-                    -- Include total_consumption only if ending_balance is NULL
-                    CASE
-                        WHEN csrw_location_stock_balance.ending_balance IS NULL THEN csrw_patient_charge_logs.charge_quantity
-                        ELSE NULL
-                    END as total_consumption,
+                    csrw_patient_charge_logs.charge_quantity as total_consumption,
                     SUM(csrw_ward_transfer_stock.transferred_qty) as transferred_qty
                 FROM csrw_wards_stocks as ward
                 JOIN hclass2 ON ward.cl2comb = hclass2.cl2comb
@@ -219,11 +222,11 @@ class ReportController extends Controller
                     FROM csrw_ward_transfer_stock
                     WHERE status = 'RECEIVED'
                     GROUP BY ward_stock_id
-                ) csrw_ward_transfer_stock ON ward.id = csrw_ward_transfer_stock.ward_stock_id -- Join with ward_stock_id
+                ) csrw_ward_transfer_stock ON ward.id = csrw_ward_transfer_stock.ward_stock_id
                 WHERE ward.location LIKE '$authWardcode->wardcode'
                 AND ward.created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
                 AND ward.is_consumable IS NULL
-                GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc, csrw_location_stock_balance.ending_balance, csrw_location_stock_balance.beginning_balance, csrw_item_prices.price_per_unit, ward.ris_no, csrw_patient_charge_logs.charge_quantity
+                GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc, csrw_item_prices.price_per_unit, ward.ris_no, csrw_patient_charge_logs.charge_quantity
                 ORDER BY hclass2.cl2desc ASC;"
             );
         } else {
@@ -273,8 +276,9 @@ class ReportController extends Controller
                     ORDER BY hclass2.cl2desc ASC;"
             );
         }
+        // dd($ward_report);
 
-        // new
+        // // new
         $combinedReports = [];
         foreach ($ward_report as $e) {
             // Create a unique key based on cl2comb and unit_cost
@@ -283,6 +287,7 @@ class ReportController extends Controller
             // If this key already exists, combine the values
             if (isset($combinedReports[$key])) {
                 $combinedReports[$key]->beginning_balance += $e->beginning_balance;
+                // $combinedReports[$key]->from_csr += $e->from_csr + $e->total_consumption;
                 $combinedReports[$key]->from_csr += $e->from_csr + $e->total_consumption;
                 $combinedReports[$key]->from_ward += $e->from_ward;
                 $combinedReports[$key]->total_beg_bal += $e->from_csr + $e->from_ward;
@@ -305,7 +310,7 @@ class ReportController extends Controller
                     'unit_cost' => $e->unit_cost,
                     'beginning_balance' => $e->beginning_balance,
                     // 'from_csr' => $e->from_csr + $e->total_consumption,
-                    'from_csr' => ($e->from_csr + $e->total_consumption) - $e->beginning_balance,
+                    'from_csr' => $e->from_csr + $e->total_consumption,
                     'from_ward' => $e->from_ward,
                     'total_beg_bal' => $e->from_csr + $e->from_ward + $e->total_consumption,
                     'surgery' => $e->surgery,
@@ -324,15 +329,26 @@ class ReportController extends Controller
         }
         // Convert the combined associative array into a regular array of objects
         $reports = array_values($combinedReports);
+
+        // After you've created the $reports array
+        foreach ($reports as $report) {
+            // Check if 'from_csr' and 'beginning_balance' exist to avoid undefined property issues
+            if (
+                isset($report->from_csr) && isset($report->beginning_balance)
+            ) {
+                // Update the 'from_csr' value by subtracting 'beginning_balance'
+                $report->from_csr = $report->from_csr - $report->beginning_balance;
+            }
+        }
         // dd($reports);
 
-        // return Inertia::render('Wards/Reports/Index', [
-        //     'reports' => $reports
-        // ]);
-
-        // maintenance page
-        return Inertia::render('UnderMaintenancePage', [
+        return Inertia::render('Wards/Reports/Index', [
             'reports' => $reports
         ]);
+
+        // // maintenance page
+        // return Inertia::render('UnderMaintenancePage', [
+        //     'reports' => $reports
+        // ]);
     }
 }
