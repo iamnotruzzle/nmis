@@ -5,6 +5,7 @@ namespace App\Http\Controllers\LocationStockBalance;
 use App\Http\Controllers\Controller;
 use App\Models\CsrStocks;
 use App\Models\LocationStockBalance;
+use App\Models\LocationStockBalanceDateLogs;
 use App\Rules\StockBalanceRule;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -21,8 +22,8 @@ class LocationStockBalanceController extends Controller
     public function index(Request $request)
     {
         $searchString = $request->search;
-        $from = Carbon::parse($request->from)->startOfDay();
-        $to = Carbon::parse($request->to)->endOfDay();
+        // $from = Carbon::parse($request->from)->startOfDay();
+        // $to = Carbon::parse($request->to)->endOfDay();
 
         $currentStocks = null;
 
@@ -34,6 +35,14 @@ class LocationStockBalanceController extends Controller
             ->orderBy('csrw_login_history.created_at', 'desc')
             ->first();
         // dd($authWardcode);
+
+        $stockBalDates = DB::select(
+            "SELECT CAST(beg_bal_created_at as DATE) AS beg_bal_date, CAST(end_bal_created_at AS DATE) AS end_bal_date
+            FROM csrw_stock_bal_date_logs
+            WHERE wardcode = '$authWardcode->wardcode'
+            oRDER BY created_at DESC;"
+        );
+        // dd($stockBalDates);
 
         // check if the latest has a beg bal or ending bal
         $balanceDecChecker = LocationStockBalance::where('location', $authWardcode->wardcode)->OrderBy('created_at', 'DESC')->first();
@@ -68,6 +77,18 @@ class LocationStockBalanceController extends Controller
                 AND ward.location = '$authWardcode->wardcode'"
         );
 
+        // dd($request->date);
+        $dateRange = $request->date;
+        $from = null;
+        $to = null;
+        preg_match('/\[\s*(\d{4}-\d{2}-\d{2})\s*\] - \[\s*(\d{4}-\d{2}-\d{2}|ONGOING)\s*\]/', $dateRange, $matches);
+        if ($matches) {
+            $from = $matches[1]; // "2024-11-04"
+            $to = $matches[2] === 'ONGOING' ? null : $matches[2]; // "2024-11-05" or null if "ONGOING"
+        }
+        // If $to is null, set it to the current date
+        $to = $to ?? Carbon::now()->format('Y-m-d');
+
         $locationStockBalance = DB::select(
             "SELECT
                 balance.cl2comb,
@@ -86,20 +107,31 @@ class LocationStockBalanceController extends Controller
                 csrw_item_prices AS price ON price.cl2comb = balance.cl2comb
                 AND price.id = balance.price_id  -- Ensure price matching by ID
             WHERE
-                balance.created_at >= '$from'
-                AND (balance.created_at <= '$to' OR balance.created_at IS NULL)
-                AND balance.location = '$authWardcode->wardcode'
+                -- balance.created_at >= '$from'
+                -- AND (balance.created_at <= '$to' OR balance.created_at IS NULL)
+                balance.location = '$authWardcode->wardcode'
+                AND (
+                    (CAST(balance.beg_bal_created_at AS DATE) BETWEEN '$from' AND '$to')
+                    OR balance.beg_bal_created_at IS NULL
+                )
+                AND (
+                    (CAST(balance.end_bal_created_at AS DATE) BETWEEN '$from' AND '$to')
+                    OR balance.end_bal_created_at IS NULL
+                )
             GROUP BY
                 balance.cl2comb,
                 item.cl2desc,
                 price.price_per_unit;"
         );
+
+        // dd($request->date);
         // dd($locationStockBalance);
 
         return Inertia::render('Balance/Index', [
             'currentStocks' => $currentStocks,
             'locationStockBalance' => $locationStockBalance,
             'canBeginBalance' => $canBeginBalance,
+            'stockBalDates' => $stockBalDates,
         ]);
 
         // // maintenance page
@@ -136,6 +168,11 @@ class LocationStockBalanceController extends Controller
                     'beg_bal_created_at' => $dateTime,
                 ]);
             }
+
+            LocationStockBalanceDateLogs::create([
+                'wardcode' => $request->location,
+                'beg_bal_created_at' => $dateTime,
+            ]);
         } else {
             // ending balance
             foreach ($currentStocks as $stock) {
@@ -148,6 +185,19 @@ class LocationStockBalanceController extends Controller
                     'entry_by' => $request->entry_by,
                     'ward_stock_id' => $stock->id,
                     'end_bal_created_at' => $dateTime,
+                ]);
+            }
+
+            // Find the last row where wardcode matches and end_bal_created_at is null
+            $lastRecord = LocationStockBalanceDateLogs::where('wardcode', $request->location)
+                ->whereNull('end_bal_created_at')
+                ->latest('id') // or specify another column if 'id' is not the latest indicator
+                ->first();
+
+            if ($lastRecord) {
+                // Update the end_bal_created_at column
+                $lastRecord->update([
+                    'end_bal_created_at' => $dateTime, // or specify a custom date if needed
                 ]);
             }
         }

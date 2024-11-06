@@ -43,7 +43,7 @@
             </div>
             <div class="flex">
               <div class="flex flex-column">
-                <div class="flex flex-row">
+                <!-- <div class="flex flex-row">
                   <Calendar
                     v-model="from"
                     dateFormat="mm-dd-yy"
@@ -64,7 +64,7 @@
                     :hideOnDateTimeSelect="true"
                     class="mr-2"
                   />
-                </div>
+                </div> -->
                 <div class="mt-2">
                   <div class="p-inputgroup">
                     <span class="p-inputgroup-addon">
@@ -74,6 +74,14 @@
                       id="searchInput"
                       v-model="filters['global'].value"
                       placeholder="Search item"
+                    />
+                    <div class="mx-2"></div>
+                    <Dropdown
+                      v-model="selectedDate"
+                      :options="stockBalDatesList"
+                      optionLabel="name"
+                      optionValue="code"
+                      placeholder="Select a date"
                     />
                   </div>
                 </div>
@@ -138,7 +146,7 @@
             <span class="text-error text-bold"> {{ tzone(data.end_bal_created_at) }}</span>
           </template>
         </Column>
-        <Column
+        <!-- <Column
           header="ACTION"
           style="text-align: center; width: 5%"
         >
@@ -153,7 +161,7 @@
               />
             </div>
           </template>
-        </Column>
+        </Column> -->
       </DataTable>
 
       <Dialog
@@ -344,6 +352,7 @@ export default {
     locationStockBalance: Object,
     hasBalance: Number,
     canBeginBalance: Boolean,
+    stockBalDates: Array,
   },
   data() {
     return {
@@ -355,6 +364,8 @@ export default {
       cl2desc: '',
       createItemDialog: false,
       deleteItemDialog: false,
+      selectedDate: '',
+      stockBalDatesList: [],
       search: '',
       options: {},
       params: {},
@@ -381,7 +392,8 @@ export default {
   },
   mounted() {
     // console.log(moment().format('YYYY-MM-DD HH:mm:ss'));
-
+    // console.log(this.stockBalDates);
+    this.storeStockBalDatesInContainer();
     this.storeStockBalanceInContainer();
     this.storeItemsInController();
 
@@ -407,6 +419,18 @@ export default {
     },
   },
   methods: {
+    storeStockBalDatesInContainer() {
+      //   this.stockBalDatesList = []; // Clear the list to avoid duplicates
+
+      this.stockBalDates.forEach((e) => {
+        this.stockBalDatesList.push({
+          name: `[ ${e.beg_bal_date} ] - [ ${e.end_bal_date === null ? 'ONGOING' : e.end_bal_date} ]`,
+          code: `[ ${e.beg_bal_date} ] - [ ${e.end_bal_date || 'ONGOING'} ]`, // Use 'ONGOING' for null end dates
+        });
+      });
+
+      console.log(this.stockBalDatesList);
+    },
     storeStockBalanceInContainer() {
       this.locationStockBalance.forEach((e) => {
         this.balanceContainer.push({
@@ -717,6 +741,10 @@ export default {
   watch: {
     search: function (val, oldVal) {
       this.params.search = val;
+      this.updateData();
+    },
+    selectedDate: function (val, oldVal) {
+      this.params.date = val;
       this.updateData();
     },
     from: function (val) {
