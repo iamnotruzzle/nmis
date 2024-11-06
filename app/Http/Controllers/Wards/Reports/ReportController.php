@@ -226,8 +226,15 @@ class ReportController extends Controller
                 ) csrw_ward_transfer_stock ON ward.id = csrw_ward_transfer_stock.ward_stock_id
                 WHERE
                     ward.location LIKE '$authWardcode->wardcode'
-                    AND ward.created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, GETDATE()), 0) AND GETDATE()
                     AND ward.is_consumable IS NULL
+                    AND (
+                        (CAST(csrw_location_stock_balance.beg_bal_created_at AS DATE) BETWEEN '2024-11-01' AND '2024-11-04')
+                        OR csrw_location_stock_balance.beg_bal_created_at IS NULL
+                    )
+                    AND (
+                        (CAST(csrw_location_stock_balance.end_bal_created_at AS DATE) BETWEEN '2024-11-01' AND '2024-11-04')
+                        OR csrw_location_stock_balance.end_bal_created_at IS NULL
+                    AND ward.is_consumable IS NULL)
                 GROUP BY
                     hclass2.cl2comb,
                     hclass2.cl2desc,
@@ -284,8 +291,15 @@ class ReportController extends Controller
                 ) csrw_ward_transfer_stock ON ward.id = csrw_ward_transfer_stock.ward_stock_id
                 WHERE
                     ward.location LIKE '$authWardcode->wardcode'
-                    AND ward.created_at BETWEEN '$from' AND '$to'
                     AND ward.is_consumable IS NULL
+                    AND (
+                        (CAST(csrw_location_stock_balance.beg_bal_created_at AS DATE) BETWEEN '$from' AND '$to')
+                        OR csrw_location_stock_balance.beg_bal_created_at IS NULL
+                    )
+                    AND (
+                        (CAST(csrw_location_stock_balance.end_bal_created_at AS DATE) BETWEEN '$from' AND '$to')
+                        OR csrw_location_stock_balance.end_bal_created_at IS NULL
+                    AND ward.is_consumable IS NULL)
                 GROUP BY
                     hclass2.cl2comb,
                     hclass2.cl2desc,
