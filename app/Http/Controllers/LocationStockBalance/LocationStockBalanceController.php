@@ -178,7 +178,7 @@ class LocationStockBalanceController extends Controller
 
     public function destroy(LocationStockBalance $stockbal)
     {
-        $stockbal->delete();
+        // $stockbal->delete();
 
         return redirect()->back();
     }
