@@ -46,6 +46,7 @@ return array(
     'App\\Http\\Controllers\\Reports\\Ward\\WardsManualReportExportController' => $baseDir . '/app/Http/Controllers/Reports/Ward/WardsManualReportExportController.php',
     'App\\Http\\Controllers\\Users\\UserController' => $baseDir . '/app/Http/Controllers/Users/UserController.php',
     'App\\Http\\Controllers\\Users\\User\\ProfileController' => $baseDir . '/app/Http/Controllers/Users/User/ProfileController.php',
+    'App\\Http\\Controllers\\Wards\\CsrInventory\\CsrInventoryController' => $baseDir . '/app/Http/Controllers/Wards/CsrInventory/CsrInventoryController.php',
     'App\\Http\\Controllers\\Wards\\Dashboard\\DashboardController' => $baseDir . '/app/Http/Controllers/Wards/Dashboard/DashboardController.php',
     'App\\Http\\Controllers\\Wards\\MedicalGases\\WardMedicalGasesController' => $baseDir . '/app/Http/Controllers/Wards/MedicalGases/WardMedicalGasesController.php',
     'App\\Http\\Controllers\\Wards\\Patients\\PatientChargeController' => $baseDir . '/app/Http/Controllers/Wards/Patients/PatientChargeController.php',

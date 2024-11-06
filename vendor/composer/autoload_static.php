@@ -725,6 +725,7 @@ class ComposerStaticInita35f14ec21fb126801fb4364978bffb6
         'App\\Http\\Controllers\\Reports\\Ward\\WardsManualReportExportController' => __DIR__ . '/../..' . '/app/Http/Controllers/Reports/Ward/WardsManualReportExportController.php',
         'App\\Http\\Controllers\\Users\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/Users/UserController.php',
         'App\\Http\\Controllers\\Users\\User\\ProfileController' => __DIR__ . '/../..' . '/app/Http/Controllers/Users/User/ProfileController.php',
+        'App\\Http\\Controllers\\Wards\\CsrInventory\\CsrInventoryController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/CsrInventory/CsrInventoryController.php',
         'App\\Http\\Controllers\\Wards\\Dashboard\\DashboardController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/Dashboard/DashboardController.php',
         'App\\Http\\Controllers\\Wards\\MedicalGases\\WardMedicalGasesController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/MedicalGases/WardMedicalGasesController.php',
         'App\\Http\\Controllers\\Wards\\Patients\\PatientChargeController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/Patients/PatientChargeController.php',
