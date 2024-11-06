@@ -89,6 +89,7 @@ return array(
     'App\\Models\\ItemPrices' => $baseDir . '/app/Models/ItemPrices.php',
     'App\\Models\\Location' => $baseDir . '/app/Models/Location.php',
     'App\\Models\\LocationStockBalance' => $baseDir . '/app/Models/LocationStockBalance.php',
+    'App\\Models\\LocationStockBalanceDateLogs' => $baseDir . '/app/Models/LocationStockBalanceDateLogs.php',
     'App\\Models\\LoginHistory' => $baseDir . '/app/Models/LoginHistory.php',
     'App\\Models\\Miscellaneous' => $baseDir . '/app/Models/Miscellaneous.php',
     'App\\Models\\Patient' => $baseDir . '/app/Models/Patient.php',

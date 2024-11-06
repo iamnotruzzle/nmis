@@ -768,6 +768,7 @@ class ComposerStaticInita35f14ec21fb126801fb4364978bffb6
         'App\\Models\\ItemPrices' => __DIR__ . '/../..' . '/app/Models/ItemPrices.php',
         'App\\Models\\Location' => __DIR__ . '/../..' . '/app/Models/Location.php',
         'App\\Models\\LocationStockBalance' => __DIR__ . '/../..' . '/app/Models/LocationStockBalance.php',
+        'App\\Models\\LocationStockBalanceDateLogs' => __DIR__ . '/../..' . '/app/Models/LocationStockBalanceDateLogs.php',
         'App\\Models\\LoginHistory' => __DIR__ . '/../..' . '/app/Models/LoginHistory.php',
         'App\\Models\\Miscellaneous' => __DIR__ . '/../..' . '/app/Models/Miscellaneous.php',
         'App\\Models\\Patient' => __DIR__ . '/../..' . '/app/Models/Patient.php',
