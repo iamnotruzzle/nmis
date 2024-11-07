@@ -22,10 +22,11 @@ class LocationStockBalanceController extends Controller
     public function index(Request $request)
     {
         $searchString = $request->search;
-        // $from = Carbon::parse($request->from)->startOfDay();
-        // $to = Carbon::parse($request->to)->endOfDay();
-
-        $currentStocks = null;
+        $dateRange = $request->date;
+        $from = null;
+        $to = null;
+        $locationStockBalance = null;
+        $now = Carbon::now()->format('Y-m-d');
 
         // get auth wardcode
         $authWardcode = DB::table('csrw_users')
@@ -42,7 +43,7 @@ class LocationStockBalanceController extends Controller
             WHERE wardcode = '$authWardcode->wardcode'
             oRDER BY created_at DESC;"
         );
-        // dd($stockBalDates);
+        $default_beg_bal_date = Carbon::parse($stockBalDates[0]->beg_bal_date)->format('Y-m-d');
 
         // check if the latest has a beg bal or ending bal
         $balanceDecChecker = LocationStockBalance::where('location', $authWardcode->wardcode)->OrderBy('created_at', 'DESC')->first();
@@ -58,39 +59,51 @@ class LocationStockBalanceController extends Controller
             $canBeginBalance = false;
         }
 
-        $currentStocks =  DB::select(
-            "SELECT ward.id,
-                    ward.ris_no,
-                    clsb_ward.cl2comb as clsb_cl2comb,
-                    hc.cl2comb as hc_cl2comb,
-                    hc.cl2desc
-                FROM csrw_wards_stocks as ward
-                JOIN hclass2 as hc on ward.cl2comb = hc.cl2comb
-                LEFT JOIN (
-                    SELECT id, cl2comb, ending_balance, beginning_balance
-                    FROM csrw_location_stock_balance
-                    WHERE location = '$authWardcode->wardcode'
-                        AND created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
-                ) AS clsb_ward ON ward.cl2comb = clsb_ward.cl2comb
-                WHERE [from] = 'CSR'
-                AND quantity > 0
-                AND ward.location = '$authWardcode->wardcode'"
-        );
-
-        // dd($request->date);
-        $dateRange = $request->date;
-        $from = null;
-        $to = null;
         preg_match('/\[\s*(\d{4}-\d{2}-\d{2})\s*\] - \[\s*(\d{4}-\d{2}-\d{2}|ONGOING)\s*\]/', $dateRange, $matches);
         if ($matches) {
             $from = $matches[1]; // "2024-11-04"
             $to = $matches[2] === 'ONGOING' ? null : $matches[2]; // "2024-11-05" or null if "ONGOING"
         }
+        // dd($from);
         // If $to is null, set it to the current date
         $to = $to ?? Carbon::now()->format('Y-m-d');
 
-        $locationStockBalance = DB::select(
-            "SELECT
+        if ($from == null) {
+            $locationStockBalance = DB::select(
+                "SELECT
+                balance.cl2comb,
+                item.cl2desc,
+                SUM(balance.beginning_balance) AS beginning_balance,
+                SUM(balance.ending_balance) AS ending_balance,
+                MIN(balance.created_at) AS created_at,
+                MIN(balance.beg_bal_created_at) AS beg_bal_created_at,
+                MAX(balance.end_bal_created_at) AS end_bal_created_at,
+                price.price_per_unit
+            FROM
+                csrw_location_stock_balance AS balance
+            JOIN
+                hclass2 AS item ON item.cl2comb = balance.cl2comb
+            JOIN
+                csrw_item_prices AS price ON price.cl2comb = balance.cl2comb
+                AND price.id = balance.price_id  -- Ensure price matching by ID
+            WHERE
+                balance.location = '$authWardcode->wardcode'
+                AND (
+                    (CAST(balance.beg_bal_created_at AS DATE) BETWEEN '$default_beg_bal_date' AND '$now')
+                    OR balance.beg_bal_created_at IS NULL
+                )
+                AND (
+                    (CAST(balance.end_bal_created_at AS DATE) BETWEEN '$default_beg_bal_date' AND '$now')
+                    OR balance.end_bal_created_at IS NULL
+                )
+            GROUP BY
+                balance.cl2comb,
+                item.cl2desc,
+                price.price_per_unit;"
+            );
+        } else {
+            $locationStockBalance = DB::select(
+                "SELECT
                 balance.cl2comb,
                 item.cl2desc,
                 SUM(balance.beginning_balance) AS beginning_balance,
@@ -120,10 +133,10 @@ class LocationStockBalanceController extends Controller
                 balance.cl2comb,
                 item.cl2desc,
                 price.price_per_unit;"
-        );
+            );
+        }
 
         return Inertia::render('Balance/Index', [
-            'currentStocks' => $currentStocks,
             'locationStockBalance' => $locationStockBalance,
             'canBeginBalance' => $canBeginBalance,
             'stockBalDates' => $stockBalDates,

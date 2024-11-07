@@ -144,105 +144,6 @@
       </DataTable>
 
       <Dialog
-        v-model:visible="createItemDialog"
-        :modal="true"
-        :style="{ width: '350px' }"
-        class="p-fluid"
-        @hide="whenDialogIsHidden"
-        dismissableMask
-      >
-        <template #header>
-          <div class="text-primary text-xl font-bold">BALANCE</div>
-        </template>
-        <div class="field">
-          <label>Item</label>
-          <Dropdown
-            v-if="!isUpdate"
-            required="true"
-            v-model="form.cl2comb"
-            :options="itemsList"
-            :virtualScrollerOptions="{ itemSize: 38 }"
-            filter
-            optionLabel="cl2desc"
-            optionValue="cl2comb"
-            class="w-full"
-          />
-          <InputText
-            v-else
-            v-model.trim="cl2desc"
-            disabled=""
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.cl2comb"
-          >
-            {{ form.errors.cl2comb }}
-          </small>
-        </div>
-        <div class="field">
-          <label>Ending balance</label>
-          <InputText
-            v-model.trim="form.ending_balance"
-            required="true"
-            autofocus
-            @keyup.enter="submit"
-            inputId="integeronly"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.ending_balance"
-          >
-            {{ form.errors.ending_balance }}
-          </small>
-        </div>
-        <div class="field">
-          <label>Starting balance</label>
-          <InputText
-            v-model.trim="form.beginning_balance"
-            required="true"
-            autofocus
-            @keyup.enter="submit"
-            inputId="integeronly"
-          />
-          <small
-            class="text-error"
-            v-if="form.errors.beginning_balance"
-          >
-            {{ form.errors.beginning_balance }}
-          </small>
-        </div>
-
-        <template #footer>
-          <Button
-            label="Cancel"
-            icon="pi pi-times"
-            severity="danger"
-            text
-            @click="cancel"
-          />
-          <Button
-            v-if="isUpdate == true"
-            label="Update"
-            icon="pi pi-check"
-            text
-            type="submit"
-            severity="warning"
-            :disabled="form.processing"
-            @click="submit"
-          />
-          <Button
-            v-else
-            label="Save"
-            icon="pi pi-check"
-            text
-            type="submit"
-            :disabled="form.processing"
-            @click="submit"
-          />
-        </template>
-      </Dialog>
-
-      <Dialog
         v-model:visible="deleteItemDialog"
         :style="{ width: '450px' }"
         header="Confirm"
@@ -327,7 +228,6 @@ export default {
     tooltip: Tooltip,
   },
   props: {
-    currentStocks: Object,
     locationStockBalance: Object,
     hasBalance: Number,
     canBeginBalance: Boolean,
@@ -341,14 +241,12 @@ export default {
       itemId: null,
       isUpdate: false,
       cl2desc: '',
-      createItemDialog: false,
       deleteItemDialog: false,
       selectedDate: '',
       stockBalDatesList: [],
       search: '',
       options: {},
       params: {},
-      itemsList: [],
       balanceContainer: [],
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -370,9 +268,9 @@ export default {
   mounted() {
     // console.log(moment().format('YYYY-MM-DD HH:mm:ss'));
     // console.log(this.stockBalDates);
+
     this.storeStockBalDatesInContainer();
     this.storeStockBalanceInContainer();
-    this.storeItemsInController();
 
     this.loading = false;
 
@@ -405,8 +303,6 @@ export default {
           code: `[ ${e.beg_bal_date} ] - [ ${e.end_bal_date || 'ONGOING'} ]`, // Use 'ONGOING' for null end dates
         });
       });
-
-      console.log(this.stockBalDatesList);
     },
     storeStockBalanceInContainer() {
       this.locationStockBalance.forEach((e) => {
@@ -423,71 +319,6 @@ export default {
       });
       //   console.log('container', this.reportsContainer);
     },
-    storeItemsInController() {
-      this.itemsList = []; // reset
-      //   this.currentStocks.forEach((e) => {
-      //     this.itemsList.push({
-      //       cl2comb: e.item_details.cl2comb,
-      //       cl2desc: e.item_details.cl2desc,
-      //     });
-      //   });
-
-      //   this.currentStocks.forEach((e) => {
-      //     if (e.clsb_cl2comb == null) {
-      //       this.itemsList.push({
-      //         cl2comb: e.hc_cl2comb,
-      //         cl2desc: e.cl2desc,
-      //       });
-      //     }
-      //   });
-
-      this.currentStocks.forEach((e) => {
-        // console.log(e);
-        if (e.clsb_cl2comb == null) {
-          //   const cl2combValue = e.hc_cl2comb;
-
-          //   // Check if the cl2comb value is not already in the itemsList
-          //   const isDuplicate = this.itemsList.some((item) => item.cl2comb === cl2combValue);
-
-          //   // If it's not a duplicate, add it to the itemsList
-          //   if (!isDuplicate) {
-          //     this.itemsList.push({
-          //       cl2comb: cl2combValue,
-          //       cl2desc: e.cl2desc,
-          //     });
-          //   }
-
-          // this does not catch duplicate item
-          this.itemsList.push({
-            id: e.id,
-            ris_no: e.ris_no,
-            cl2comb: e.hc_cl2comb,
-            cl2desc: e.cl2desc,
-          });
-        }
-      });
-
-      this.sortItemsList(this.itemsList, 'cl2desc');
-
-      //   console.log(this.itemsList);
-    },
-    sortItemsList(arr, propertyName, order = 'ascending') {
-      const sortedArr = this.itemsList.sort((a, b) => {
-        if (a[propertyName] < b[propertyName]) {
-          return -1;
-        }
-        if (a[propertyName] > b[propertyName]) {
-          return 1;
-        }
-        return 0;
-      });
-
-      if (order === 'descending') {
-        return sortedArr.reverse();
-      }
-
-      this.itemsList = sortedArr;
-    },
     updateData() {
       this.balanceContainer = [];
       this.loading = true;
@@ -499,8 +330,6 @@ export default {
           //   this.totalRecords = this.users.total;
           this.balanceContainer = [];
           this.storeStockBalanceInContainer();
-          this.itemsList = [];
-          this.storeItemsInController();
           this.loading = false;
         },
       });
@@ -565,15 +394,6 @@ export default {
         },
       });
     },
-    openCreateItemDialog() {
-      this.isUpdate = false;
-      this.form.clearErrors();
-      this.form.reset();
-      this.itemId = null;
-      this.createItemDialog = true;
-      this.form.location = this.$page.props.auth.user.location.location_name.wardcode;
-      this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid;
-    },
     clickOutsideDialog() {
       this.$emit(
         'hide',
@@ -586,16 +406,6 @@ export default {
         (this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid)
       );
     },
-    editItem(item) {
-      //   console.log(item);
-      this.isUpdate = true;
-      this.createItemDialog = true;
-      this.form.id = item.id;
-      this.form.cl2comb = item.cl2comb;
-      this.cl2desc = item.cl2desc;
-      this.form.ending_balance = item.ending_balance;
-      this.form.beginning_balance = item.beginning_balance;
-    },
     submit() {
       if (this.form.processing) {
         return false;
@@ -606,7 +416,6 @@ export default {
         this.form.put(route('stockbal.update', id), {
           preserveScroll: true,
           onSuccess: () => {
-            this.createItemDialog = false;
             this.cancel();
             this.updateData();
             this.updatedMsg();
@@ -616,8 +425,6 @@ export default {
         this.form.post(route('stockbal.store'), {
           preserveScroll: true,
           onSuccess: () => {
-            // console.log('aaaa');
-            this.createItemDialog = false;
             this.cancel();
             this.updateData();
             this.createdMsg();
@@ -662,7 +469,6 @@ export default {
     cancel() {
       this.itemId = null;
       this.isUpdate = false;
-      this.createItemDialog = false;
       this.form.reset();
       this.form.clearErrors();
       this.form.location = this.$page.props.auth.user.location.location_name.wardcode;
