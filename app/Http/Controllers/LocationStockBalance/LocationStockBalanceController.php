@@ -107,8 +107,6 @@ class LocationStockBalanceController extends Controller
                 csrw_item_prices AS price ON price.cl2comb = balance.cl2comb
                 AND price.id = balance.price_id  -- Ensure price matching by ID
             WHERE
-                -- balance.created_at >= '$from'
-                -- AND (balance.created_at <= '$to' OR balance.created_at IS NULL)
                 balance.location = '$authWardcode->wardcode'
                 AND (
                     (CAST(balance.beg_bal_created_at AS DATE) BETWEEN '$from' AND '$to')
@@ -124,20 +122,12 @@ class LocationStockBalanceController extends Controller
                 price.price_per_unit;"
         );
 
-        // dd($request->date);
-        // dd($locationStockBalance);
-
         return Inertia::render('Balance/Index', [
             'currentStocks' => $currentStocks,
             'locationStockBalance' => $locationStockBalance,
             'canBeginBalance' => $canBeginBalance,
             'stockBalDates' => $stockBalDates,
         ]);
-
-        // // maintenance page
-        // return Inertia::render('UnderMaintenancePage', [
-        //     // 'reports' => $reports
-        // ]);
     }
 
     public function store(Request $request)

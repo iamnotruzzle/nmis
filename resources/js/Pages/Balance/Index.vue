@@ -348,8 +348,6 @@ export default {
       search: '',
       options: {},
       params: {},
-      from: null,
-      to: null,
       itemsList: [],
       balanceContainer: [],
       filters: {
@@ -724,26 +722,6 @@ export default {
     },
     selectedDate: function (val, oldVal) {
       this.params.date = val;
-      this.updateData();
-    },
-    from: function (val) {
-      if (val != null) {
-        let from = this.getLocalDateString(val);
-        this.params.from = from;
-      } else {
-        this.params.from = null;
-        this.from = null;
-      }
-      this.updateData();
-    },
-    to: function (val) {
-      if (val != null) {
-        let to = this.getLocalDateString(val);
-        this.params.to = to;
-      } else {
-        this.params.to = null;
-        this.to = null;
-      }
       this.updateData();
     },
   },
