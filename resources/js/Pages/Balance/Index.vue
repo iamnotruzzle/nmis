@@ -23,7 +23,7 @@
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <div>
+            <div class="">
               <p class="text-xl text-900 font-bold text-primary">STOCK BALANCE</p>
               <Button
                 severity="success"
@@ -41,50 +41,29 @@
                 :disabled="canBeginBalance !== false"
               />
             </div>
-            <div class="flex">
-              <div class="flex flex-column">
-                <!-- <div class="flex flex-row">
-                  <Calendar
-                    v-model="from"
-                    dateFormat="mm-dd-yy"
-                    placeholder="FROM"
-                    showIcon
-                    showButtonBar
-                    :manualInput="false"
-                    :hideOnDateTimeSelect="true"
-                    class="mr-2"
-                  />
-                  <Calendar
-                    v-model="to"
-                    dateFormat="mm-dd-yy"
-                    placeholder="TO"
-                    showIcon
-                    showButtonBar
-                    :manualInput="false"
-                    :hideOnDateTimeSelect="true"
-                    class="mr-2"
-                  />
-                </div> -->
-                <div class="mt-2">
-                  <div class="p-inputgroup">
-                    <span class="p-inputgroup-addon">
-                      <i class="pi pi-search"></i>
-                    </span>
-                    <InputText
-                      id="searchInput"
-                      v-model="filters['global'].value"
-                      placeholder="Search item"
-                    />
-                    <div class="mx-2"></div>
-                    <Dropdown
-                      v-model="selectedDate"
-                      :options="stockBalDatesList"
-                      optionLabel="name"
-                      optionValue="code"
-                      placeholder="Select a date"
-                    />
-                  </div>
-                </div>
+
+            <div class="w-full md:w-auto mt-2 md:mt-0">
+              <Dropdown
+                v-model="selectedDate"
+                :options="stockBalDatesList"
+                optionLabel="name"
+                optionValue="code"
+                placeholder="Select a date"
+                checkmark
+                :highlightOnSelect="true"
+                class="w-full"
+              />
+              <div class="my-2"></div>
+              <div class="p-inputgroup">
+                <span class="p-inputgroup-addon">
+                  <i class="pi pi-search"></i>
+                </span>
+                <InputText
+                  class="w-auto"
+                  id="searchInput"
+                  v-model="filters['global'].value"
+                  placeholder="Search item"
+                />
               </div>
             </div>
           </div>
