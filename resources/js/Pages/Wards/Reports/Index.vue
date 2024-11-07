@@ -10,25 +10,15 @@
         <span class="font-bold text-primary text-4xl">REPORTS</span>
         <div class="flex flex-row align-items-center">
           <div class="flex flex-row">
-            <Calendar
-              v-model="from"
-              dateFormat="mm-dd-yy"
-              placeholder="FROM"
-              showIcon
-              showButtonBar
-              :manualInput="false"
-              :hideOnDateTimeSelect="true"
-              class="mr-2"
-            />
-            <Calendar
-              v-model="to"
-              dateFormat="mm-dd-yy"
-              placeholder="TO"
-              showIcon
-              showButtonBar
-              :manualInput="false"
-              :hideOnDateTimeSelect="true"
-              class="mr-2"
+            <Dropdown
+              v-model="selectedDate"
+              :options="stockBalDatesList"
+              optionLabel="name"
+              optionValue="code"
+              placeholder="Select a date"
+              checkmark
+              :highlightOnSelect="true"
+              class="w-full"
             />
           </div>
         </div>
@@ -256,6 +246,7 @@
 import { Head } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Calendar from 'primevue/calendar';
+import Dropdown from 'primevue/dropdown';
 import Button from 'primevue/button';
 import moment from 'moment';
 import { Link } from '@inertiajs/vue3';
@@ -267,16 +258,19 @@ export default {
     Calendar,
     Button,
     Link,
+    Dropdown,
   },
   props: {
     reports: Object,
+    locationStockBalance: Object,
+    stockBalDates: Array,
   },
   data() {
     return {
       options: {},
       params: {},
-      from: null,
-      to: null,
+      selectedDate: '',
+      stockBalDatesList: [],
       reportsContainer: [],
     };
   },
@@ -284,8 +278,19 @@ export default {
     // console.log('reports', this.reports);
 
     this.storeReportsInContainer();
+    this.storeStockBalDatesInContainer();
   },
   methods: {
+    storeStockBalDatesInContainer() {
+      //   this.stockBalDatesList = []; // Clear the list to avoid duplicates
+
+      this.stockBalDates.forEach((e) => {
+        this.stockBalDatesList.push({
+          name: `[ ${e.beg_bal_date} ] - [ ${e.end_bal_date === null ? 'ONGOING' : e.end_bal_date} ]`,
+          code: `[ ${e.beg_bal_date} ] - [ ${e.end_bal_date || 'ONGOING'} ]`, // Use 'ONGOING' for null end dates
+        });
+      });
+    },
     storeReportsInContainer() {
       this.reports.forEach((e) => {
         this.reportsContainer.push({
@@ -435,26 +440,8 @@ export default {
     },
   },
   watch: {
-    from: function (val) {
-      if (val != null) {
-        let from = moment(val).format('YYYY-MM-DD 12:00:00');
-        // console.log('from', from);
-        this.params.from = from;
-      } else {
-        this.params.from = null;
-        this.from = null;
-      }
-      this.updateData();
-    },
-    to: function (val) {
-      if (val != null) {
-        let to = moment(val).format('YYYY-MM-DD 11:59:59');
-        // console.log('to', to);
-        this.params.to = to;
-      } else {
-        this.params.to = null;
-        this.to = null;
-      }
+    selectedDate: function (val, oldVal) {
+      this.params.date = val;
       this.updateData();
     },
   },
