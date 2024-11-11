@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Wards\TransferStock;
 
 use App\Http\Controllers\Controller;
+use App\Models\LocationStockBalance;
 use App\Models\UserDetail;
 use App\Models\WardTransferStock;
 use Illuminate\Http\Request;
@@ -46,17 +47,6 @@ class TransferStockController extends Controller
             ->get();
         // dd($wardStocks);
 
-        // $wardStocksMedicalGasess = WardsStocks::with(['item_details:cl2comb,cl2desc'])
-        //     ->where(
-        //         'quantity',
-        //         '!=',
-        //         0
-        //     )
-        //     ->where('location', '=', $authWardcode->wardcode)
-        //     ->where('request_stocks_id', null)
-        //     ->get();
-        // dd($wardStocksMedicalGasess);
-
         $transferredStock = WardTransferStock::with(
             'ward_stock',
             'ward_from:wardcode,wardname',
@@ -69,6 +59,20 @@ class TransferStockController extends Controller
             ->orderBy('created_at', 'DESC')
             ->get();
 
+        // check if the latest has a beg bal or ending bal
+        $balanceDecChecker = LocationStockBalance::where('location', $authWardcode->wardcode)->OrderBy('created_at', 'DESC')->first();
+        // dd($balanceDecChecker);
+        $canTransfer = null;
+
+        // if true, it can generate beginning balance else it can generate ending balance
+        if ($balanceDecChecker !== null) {
+            $canTransfer = true;
+        } else if ($balanceDecChecker->beginning_balance == null) {
+            $canTransfer = true;
+        } else {
+            $canTransfer = false;
+        }
+
         $employees = UserDetail::where('empstat', 'A')->orderBy('employeeid', 'ASC')->get(['employeeid', 'empstat', 'firstname', 'lastname']);
 
         return Inertia::render('Wards/TransferStock/Index', [
@@ -78,6 +82,7 @@ class TransferStockController extends Controller
             // 'wardStocksMedicalGasess' => $wardStocksMedicalGasess,
             'transferredStock' => $transferredStock,
             'employees' => $employees,
+            'canTransfer' => $canTransfer,
         ]);
     }
 

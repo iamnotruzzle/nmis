@@ -80,12 +80,22 @@
         >
           <template #body="slotProps">
             <Button
+              v-if="canTransfer == true"
               icon="pi pi-pencil"
               class="mr-1"
               rounded
               text
               severity="warning"
               @click="transferStock(slotProps.data)"
+            />
+            <Button
+              v-else
+              icon="pi pi-pencil"
+              class="mr-1"
+              rounded
+              text
+              severity="warning"
+              :disabled="true"
             />
           </template>
         </Column>
@@ -435,12 +445,22 @@
 
                 ></i> -->
 
-                <Button
-                  v-if="slotProps.data.status != 'RECEIVED'"
-                  icon="pi pi-check"
-                  label="Receive"
-                  @click="receivedStock(slotProps)"
-                />
+                <div v-if="canTransfer == true">
+                  <Button
+                    v-if="slotProps.data.status != 'RECEIVED'"
+                    icon="pi pi-check"
+                    label="Receive"
+                    @click="receivedStock(slotProps)"
+                  />
+                </div>
+                <div v-else>
+                  <Button
+                    v-if="slotProps.data.status != 'RECEIVED'"
+                    icon="pi pi-check"
+                    label="Receive"
+                    :disabled="true"
+                  />
+                </div>
               </template>
             </Column>
           </DataTable>
@@ -502,6 +522,7 @@ export default {
     // wardStocksMedicalGasess: Object,
     transferredStock: Object,
     employees: Object,
+    canTransfer: Boolean,
   },
   data() {
     return {
