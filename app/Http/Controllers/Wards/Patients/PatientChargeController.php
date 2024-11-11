@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AdmissionLog;
 use App\Models\CsrwCode;
 use App\Models\Item;
+use App\Models\LocationStockBalance;
 use App\Models\Miscellaneous;
 use App\Models\Patient;
 use App\Models\PatientAccount;
@@ -138,6 +139,20 @@ class PatientChargeController extends Controller
                             ORDER BY pat_charge.pcchrgdte DESC;"
         );
 
+        // check if the latest has a beg bal or ending bal
+        $balanceDecChecker = LocationStockBalance::where('location', $authWardcode->wardcode)->OrderBy('created_at', 'DESC')->first();
+        // dd($balanceDecChecker);
+        $canCharge = null;
+
+        // if true, it can generate beginning balance else it can generate ending balance
+        if ($balanceDecChecker !== null) {
+            $canCharge = true;
+        } else if ($balanceDecChecker->beginning_balance == null) {
+            $canCharge = true;
+        } else {
+            $canCharge = false;
+        }
+
         return Inertia::render('Wards/Patients/Bill/Index', [
             'pat_name' => $pat_name,
             'pat_tscode' => $pat_tscode,
@@ -148,6 +163,7 @@ class PatientChargeController extends Controller
             'medicalSupplies' => $medicalSupplies,
             'misc' => $misc,
             'is_for_discharge' => $is_for_discharge,
+            'canCharge' => $canCharge,
         ]);
     }
 

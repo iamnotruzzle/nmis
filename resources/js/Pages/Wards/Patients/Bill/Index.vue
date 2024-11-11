@@ -48,13 +48,26 @@
                       />
                     </div>
                   </div>
-                  <Button
-                    v-if="is_for_discharge != 'true'"
-                    label="Charge patient"
-                    icon="pi pi-money-bill"
-                    iconPos="right"
-                    @click="openCreateBillDialog"
-                  />
+                  <div
+                    class="flex align-items-center"
+                    v-if="canCharge == true"
+                  >
+                    <Button
+                      v-if="is_for_discharge !== 'true'"
+                      label="Charge patient"
+                      icon="pi pi-money-bill"
+                      iconPos="right"
+                      @click="openCreateBillDialog"
+                    />
+                  </div>
+                  <div v-else>
+                    <Button
+                      :disabled="true"
+                      label="Charge patient"
+                      icon="pi pi-money-bill"
+                      iconPos="right"
+                    />
+                  </div>
                 </div>
               </div>
             </template>
@@ -147,12 +160,21 @@
                 <!-- slotProps.data.is_consumable != 'y' -->
                 <div v-if="slotProps.data.charge_log_id != null">
                   <Button
+                    v-if="canCharge == true"
                     icon="pi pi-pencil"
                     class="mr-1"
                     rounded
                     text
                     severity="warning"
                     @click="editItem(slotProps.data)"
+                  />
+                  <Button
+                    v-else
+                    icon="pi pi-pencil"
+                    class="mr-1"
+                    rounded
+                    text
+                    severity="warning"
                   />
                 </div>
               </template>
@@ -750,6 +772,7 @@ export default {
     bills: Object,
     medicalSupplies: Object,
     misc: Object,
+    canCharge: Boolean,
   },
   data() {
     return {
@@ -839,7 +862,7 @@ export default {
   //     this.rows = this.bills.per_page;
   //   },
   mounted() {
-    // console.log(this.pat_tscode.tscode);
+    // console.log(this.canCharge); //
 
     this.storeBillsInContainer();
     this.getTotalAmount();
