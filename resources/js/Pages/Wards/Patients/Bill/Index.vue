@@ -175,6 +175,7 @@
                     rounded
                     text
                     severity="warning"
+                    :disabled="true"
                   />
                 </div>
               </template>
