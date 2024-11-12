@@ -56,8 +56,8 @@ class ReportController extends Controller
             WHERE wardcode = '$authWardcode->wardcode'
             oRDER BY created_at DESC;"
         );
-        $default_beg_bal_date = Carbon::parse($stockBalDates[0]->beg_bal_date)->format('Y-m-d');
-
+        $default_beg_bal_date = $stockBalDates == [] ? Carbon::now()->format('Y-m-d') : Carbon::parse($stockBalDates[0]->beg_bal_date)->format('Y-m-d');
+        // dd($default_beg_bal_date);
         preg_match('/\[\s*(\d{4}-\d{2}-\d{2})\s*\] - \[\s*(\d{4}-\d{2}-\d{2}|ONGOING)\s*\]/', $dateRange, $matches);
         if ($matches) {
             $from = $matches[1]; // "2024-11-04"
@@ -76,8 +76,8 @@ class ReportController extends Controller
                     SUM(csrw_location_stock_balance.ending_balance) AS ending_balance,
                     csrw_item_prices.price_per_unit AS 'unit_cost',
                     -- Include items from 'CSR' even if charge_quantity is null
-                    SUM(CASE WHEN ward.[from] = 'CSR' THEN csrw_location_stock_balance.ending_balance + COALESCE(csrw_patient_charge_logs.charge_quantity, 0) ELSE 0 END) AS 'from_csr',
-                    SUM(CASE WHEN ward.[from] = 'WARD' THEN csrw_location_stock_balance.ending_balance + COALESCE(csrw_patient_charge_logs.charge_quantity, 0) ELSE 0 END) AS 'from_ward',
+                    SUM(CASE WHEN ward.[from] = 'CSR' THEN ward.quantity + COALESCE(csrw_patient_charge_logs.charge_quantity, 0) ELSE 0 END) AS 'from_csr',
+                    SUM(CASE WHEN ward.[from] = 'WARD' THEN ward.quantity + COALESCE(csrw_patient_charge_logs.charge_quantity, 0) ELSE 0 END) AS 'from_ward',
                     (SELECT SUM(CASE WHEN tscode = 'SURG' THEN quantity ELSE 0 END)
                     FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'surgery',
                     (SELECT SUM(CASE WHEN tscode = 'GYNE' THEN quantity ELSE 0 END)
@@ -142,8 +142,8 @@ class ReportController extends Controller
                     SUM(csrw_location_stock_balance.ending_balance) AS ending_balance,
                     csrw_item_prices.price_per_unit AS 'unit_cost',
                     -- Include items from 'CSR' even if charge_quantity is null
-                    SUM(CASE WHEN ward.[from] = 'CSR' THEN csrw_location_stock_balance.ending_balance + COALESCE(csrw_patient_charge_logs.charge_quantity, 0) ELSE 0 END) AS 'from_csr',
-                    SUM(CASE WHEN ward.[from] = 'WARD' THEN csrw_location_stock_balance.ending_balance + COALESCE(csrw_patient_charge_logs.charge_quantity, 0) ELSE 0 END) AS 'from_ward',
+                    SUM(CASE WHEN ward.[from] = 'CSR' THEN ward.quantity + COALESCE(csrw_patient_charge_logs.charge_quantity, 0) ELSE 0 END) AS 'from_csr',
+                    SUM(CASE WHEN ward.[from] = 'WARD' THEN ward.quantity + COALESCE(csrw_patient_charge_logs.charge_quantity, 0) ELSE 0 END) AS 'from_ward',
                     (SELECT SUM(CASE WHEN tscode = 'SURG' THEN quantity ELSE 0 END)
                     FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'surgery',
                     (SELECT SUM(CASE WHEN tscode = 'GYNE' THEN quantity ELSE 0 END)
@@ -198,6 +198,8 @@ class ReportController extends Controller
                     hclass2.cl2desc ASC;"
             );
         }
+
+        // dd($ward_report);
 
         // // new
         $combinedReports = [];

@@ -43,7 +43,8 @@ class LocationStockBalanceController extends Controller
             WHERE wardcode = '$authWardcode->wardcode'
             oRDER BY created_at DESC;"
         );
-        $default_beg_bal_date = Carbon::parse($stockBalDates[0]->beg_bal_date)->format('Y-m-d');
+        // dd($stockBalDates);
+        $default_beg_bal_date = $stockBalDates == [] ? Carbon::now()->format('Y-m-d') : Carbon::parse($stockBalDates[0]->beg_bal_date)->format('Y-m-d');
 
         // check if the latest has a beg bal or ending bal
         $balanceDecChecker = LocationStockBalance::where('location', $authWardcode->wardcode)->OrderBy('created_at', 'DESC')->first();
