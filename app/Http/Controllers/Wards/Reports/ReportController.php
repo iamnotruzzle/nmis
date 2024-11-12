@@ -64,6 +64,10 @@ class ReportController extends Controller
             $to = $matches[2] === 'ONGOING' ? $default_beg_bal_date : $matches[2]; // "2024-11-05" or null if "ONGOING"
         }
 
+        //#region NOTES
+        // WHEN THey ASK WHY RECEIVED FROM CSR/WARDS IN NOT SHOWING IN THE CURRENT
+        // REPORT: IT'S BECAUSE ENDING BALANCE IS NOT YET DECLARED YET
+        //#endregion
         // // NEW
         if ($from == null) {
             $ward_report = DB::select(
@@ -76,8 +80,8 @@ class ReportController extends Controller
                     SUM(csrw_location_stock_balance.ending_balance) AS ending_balance,
                     csrw_item_prices.price_per_unit AS 'unit_cost',
                     -- Include items from 'CSR' even if charge_quantity is null
-                    SUM(CASE WHEN ward.[from] = 'CSR' THEN ward.quantity + COALESCE(csrw_patient_charge_logs.charge_quantity, 0) ELSE 0 END) AS 'from_csr',
-                    SUM(CASE WHEN ward.[from] = 'WARD' THEN ward.quantity + COALESCE(csrw_patient_charge_logs.charge_quantity, 0) ELSE 0 END) AS 'from_ward',
+                    SUM(CASE WHEN ward.[from] = 'CSR' THEN csrw_location_stock_balance.ending_balance + COALESCE(csrw_patient_charge_logs.charge_quantity, 0) ELSE 0 END) AS 'from_csr',
+                    SUM(CASE WHEN ward.[from] = 'WARD' THEN csrw_location_stock_balance.ending_balance + COALESCE(csrw_patient_charge_logs.charge_quantity, 0) ELSE 0 END) AS 'from_ward',
                     (SELECT SUM(CASE WHEN tscode = 'SURG' THEN quantity ELSE 0 END)
                     FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'surgery',
                     (SELECT SUM(CASE WHEN tscode = 'GYNE' THEN quantity ELSE 0 END)
@@ -142,8 +146,8 @@ class ReportController extends Controller
                     SUM(csrw_location_stock_balance.ending_balance) AS ending_balance,
                     csrw_item_prices.price_per_unit AS 'unit_cost',
                     -- Include items from 'CSR' even if charge_quantity is null
-                    SUM(CASE WHEN ward.[from] = 'CSR' THEN ward.quantity + COALESCE(csrw_patient_charge_logs.charge_quantity, 0) ELSE 0 END) AS 'from_csr',
-                    SUM(CASE WHEN ward.[from] = 'WARD' THEN ward.quantity + COALESCE(csrw_patient_charge_logs.charge_quantity, 0) ELSE 0 END) AS 'from_ward',
+                    SUM(CASE WHEN ward.[from] = 'CSR' THEN csrw_location_stock_balance.ending_balance + COALESCE(csrw_patient_charge_logs.charge_quantity, 0) ELSE 0 END) AS 'from_csr',
+                    SUM(CASE WHEN ward.[from] = 'WARD' THEN csrw_location_stock_balance.ending_balance + COALESCE(csrw_patient_charge_logs.charge_quantity, 0) ELSE 0 END) AS 'from_ward',
                     (SELECT SUM(CASE WHEN tscode = 'SURG' THEN quantity ELSE 0 END)
                     FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'surgery',
                     (SELECT SUM(CASE WHEN tscode = 'GYNE' THEN quantity ELSE 0 END)
@@ -198,12 +202,13 @@ class ReportController extends Controller
                     hclass2.cl2desc ASC;"
             );
         }
-
         // dd($ward_report);
 
         // // new
         $combinedReports = [];
+        $loopCount  = 0;
         foreach ($ward_report as $e) {
+            $loopCount++;
             // Create a unique key based on cl2comb and unit_cost
             $key = $e->cl2comb . '-' . $e->unit_cost;
 
@@ -253,6 +258,7 @@ class ReportController extends Controller
         }
         // Convert the combined associative array into a regular array of objects
         $reports = array_values($combinedReports);
+        // dd($loopCount);
 
         return Inertia::render('Wards/Reports/Index', [
             'reports' => $reports,
