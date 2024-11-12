@@ -147,8 +147,8 @@ class PatientChargeController extends Controller
         // if true, it can generate beginning balance else it can generate ending balance
         if ($balanceDecChecker !== null) {
             $canCharge = true;
-        } else if ($balanceDecChecker->beginning_balance == null) {
-            $canCharge = true;
+        } else if ($balanceDecChecker == null) {
+            $canCharge = false;
         } else {
             $canCharge = false;
         }

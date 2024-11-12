@@ -67,8 +67,8 @@ class TransferStockController extends Controller
         // if true, it can generate beginning balance else it can generate ending balance
         if ($balanceDecChecker !== null) {
             $canTransfer = true;
-        } else if ($balanceDecChecker->beginning_balance == null) {
-            $canTransfer = true;
+        } else if ($balanceDecChecker == null) {
+            $canTransfer = false;
         } else {
             $canTransfer = false;
         }
