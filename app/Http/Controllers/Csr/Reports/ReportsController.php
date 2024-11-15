@@ -30,7 +30,7 @@ class ReportsController extends Controller
                 price.price_per_unit AS unit_cost,
                 csr_stock.quantity_after AS beg_bal_csr_quantity,
                 (csr_stock.quantity_after + csr_stock.total_issued_qty) AS received_mms_qty,
-                price.hospital_price AS received_mms_total_cost,
+                (csr_stock.total_issued_qty + csr_stock.quantity_after) * price.price_per_unit AS received_mms_total_cost,
                 csr_stock.total_issued_qty as issued_qty,
                 (csr_stock.total_issued_qty * price.price_per_unit) AS issued_total_cost,
                 pat_charge.quantity AS consump_quantity,
@@ -92,7 +92,78 @@ class ReportsController extends Controller
             ORDER BY
                 hclass2.cl2desc ASC;"
         );
-        dd($ward_report);
+        // dd($ward_report);
+
+        // Step 1: Index second query results by `csr_stock_id`
+        $combinedResults = [];
+
+        // Index the second result set by csr_stock_id
+        foreach ($ward_report as $row) {
+            $combinedResults[$row->csr_stock_id] = array_merge(
+                (array)$row,
+                [
+                    'beginning_balance' => $row->beginning_balance ?? 0,
+                    'ending_balance' => $row->ending_balance ?? 0
+                ]
+            );
+        }
+
+        // Step 2: Merge the first result set with the second
+        foreach ($csr_report as $row) {
+            $csr_stock_id = $row->csr_stock_id;
+
+            if (isset($combinedResults[$csr_stock_id])) {
+                $combinedResults[$csr_stock_id] = array_merge(
+                    $combinedResults[$csr_stock_id],
+                    (array)$row
+                );
+            } else {
+                $combinedResults[$csr_stock_id] = array_merge(
+                    (array)$row,
+                    [
+                        'beginning_balance' => 0,
+                        'ending_balance' => 0
+                    ]
+                );
+            }
+        }
+
+        // Step 3: Aggregate results by `cl2comb` and `unit_cost`, removing `csr_stock_id` and `created_at`
+        $aggregatedResults = [];
+        foreach ($combinedResults as $record) {
+            $key = $record['cl2comb'] . '-' . $record['unit_cost'];
+
+            if (!isset($aggregatedResults[$key])) {
+                // Initialize the entry if it doesn't exist
+                $aggregatedResults[$key] = [
+                    'cl2comb' => $record['cl2comb'],
+                    'item_description' => $record['item_description'],
+                    'unit' => $record['unit'],
+                    'unit_cost' => $record['unit_cost'],
+                    'beg_bal_csr_quantity' => $record['beg_bal_csr_quantity'] ?? 0,
+                    'received_mms_qty' => $record['received_mms_qty'] ?? 0,
+                    'received_mms_total_cost' => $record['received_mms_total_cost'] ?? 0,
+                    'issued_qty' => $record['issued_qty'] ?? 0,
+                    'issued_total_cost' => $record['issued_total_cost'] ?? 0,
+                    'consump_quantity' => $record['consump_quantity'] ?? 0,
+                    'consump_total_cost' => $record['consump_total_cost'] ?? 0,
+                    'beginning_balance' => $record['beginning_balance'],
+                    'ending_balance' => $record['ending_balance'],
+                ];
+            } else {
+                // Sum the values for the existing entry
+                $aggregatedResults[$key]['beg_bal_csr_quantity'] += $record['beg_bal_csr_quantity'] ?? 0;
+                $aggregatedResults[$key]['received_mms_qty'] += $record['received_mms_qty'] ?? 0;
+                $aggregatedResults[$key]['received_mms_total_cost'] += $record['received_mms_total_cost'] ?? 0;
+                $aggregatedResults[$key]['issued_qty'] += $record['issued_qty'] ?? 0;
+                $aggregatedResults[$key]['issued_total_cost'] += $record['issued_total_cost'] ?? 0;
+                $aggregatedResults[$key]['consump_quantity'] += $record['consump_quantity'] ?? 0;
+                $aggregatedResults[$key]['consump_total_cost'] += $record['consump_total_cost'] ?? 0;
+                $aggregatedResults[$key]['beginning_balance'] += $record['beginning_balance'];
+                $aggregatedResults[$key]['ending_balance'] += $record['ending_balance'];
+            }
+        }
+        dd($aggregatedResults);
 
         // if (is_null($request->from) || is_null($request->to)) {
         //     // WHERE created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
