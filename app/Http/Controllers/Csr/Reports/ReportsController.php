@@ -45,7 +45,7 @@ class ReportsController extends Controller
             LEFT JOIN csrw_wards_stocks AS ward_stock ON ward_stock.stock_id = csr_stock.csr_stock_id
             LEFT JOIN csrw_patient_charge_logs AS pat_charge ON pat_charge.ward_stocks_id = ward_stock.id
             WHERE
-                (CAST(csr_stock.created_at AS DATE) BETWEEN '2024-11-04' AND '2024-11-30');"
+                (CAST(csr_stock.created_at AS DATE) BETWEEN '2024-11-04' AND '2024-11-04');"
         );
         // dd($csr_report);
 
@@ -62,7 +62,7 @@ class ReportsController extends Controller
             LEFT JOIN (
                 SELECT ward_stocks_id, SUM(quantity) AS charge_quantity
                 FROM csrw_patient_charge_logs
-                WHERE CAST(pcchrgdte AS DATE) BETWEEN '2024-11-04' AND '2024-11-30'
+                WHERE CAST(pcchrgdte AS DATE) BETWEEN '2024-11-04' AND '2024-11-04'
                 GROUP BY ward_stocks_id
             ) csrw_patient_charge_logs ON ward.id = csrw_patient_charge_logs.ward_stocks_id
             LEFT JOIN csrw_location_stock_balance ON csrw_location_stock_balance.ward_stock_id = ward.id
@@ -75,11 +75,11 @@ class ReportsController extends Controller
             WHERE
                 ward.is_consumable IS NULL
                 AND (
-                (CAST(csrw_location_stock_balance.beg_bal_created_at AS DATE) BETWEEN '2024-11-04' AND '2024-11-30')
+                (CAST(csrw_location_stock_balance.beg_bal_created_at AS DATE) BETWEEN '2024-11-04' AND '2024-11-04')
                 OR csrw_location_stock_balance.beg_bal_created_at IS NULL
                 )
                 AND (
-                    (CAST(csrw_location_stock_balance.end_bal_created_at AS DATE) BETWEEN '2024-11-04' AND '2024-11-30')
+                    (CAST(csrw_location_stock_balance.end_bal_created_at AS DATE) BETWEEN '2024-11-04' AND '2024-11-04')
                     OR csrw_location_stock_balance.end_bal_created_at IS NULL
                 )
             GROUP BY
@@ -151,6 +151,8 @@ class ReportsController extends Controller
                     'ward_beginning_balance' => $record['ward_beginning_balance'],
                     'ward_ending_balance' => $record['ward_ending_balance'],
                     'end_bal_csr_quantity' => $record['end_bal_csr_quantity'] ?? 0, // Add new column here
+                    'beg_bal_total_quantity' => ($record['ward_beginning_balance'] ?? 0) + ($record['beg_bal_csr_quantity'] ?? 0), // New calculation
+                    'end_bal_total_quantity' => ($record['ward_ending_balance'] ?? 0) + ($record['end_bal_csr_quantity'] ?? 0), // New calculation
                 ];
             } else {
                 // Sum the values for the existing entry
@@ -164,6 +166,8 @@ class ReportsController extends Controller
                 $aggregatedResults[$key]['ward_beginning_balance'] += $record['ward_beginning_balance'];
                 $aggregatedResults[$key]['ward_ending_balance'] += $record['ward_ending_balance'];
                 $aggregatedResults[$key]['end_bal_csr_quantity'] += $record['end_bal_csr_quantity'] ?? 0; // Add sum for new column
+                $aggregatedResults[$key]['beg_bal_total_quantity'] += ($record['ward_beginning_balance'] ?? 0) + ($record['beg_bal_csr_quantity'] ?? 0); // Sum of new column
+                $aggregatedResults[$key]['end_bal_total_quantity'] += ($record['ward_ending_balance'] ?? 0) + ($record['end_bal_csr_quantity'] ?? 0); // Sum of new column
             }
         }
         dd($aggregatedResults);
