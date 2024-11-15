@@ -51,18 +51,18 @@
       </div>
 
       <div style="overflow-x: auto">
-        <table class="min-w-full border border-black">
+        <table class="min-w-full border border-slate-500">
           <!-- Table Header -->
           <thead>
             <tr>
-              <th class="bg-black border border-black px-4 py-2 text-center">Item Description</th>
-              <th class="bg-black border border-black px-4 py-2 text-center">Unit</th>
-              <th class="bg-black border border-black px-4 py-2 text-center">Unit Cost</th>
+              <th class="bg-black border px-4 py-2 text-center">Item Description</th>
+              <th class="bg-black border px-4 py-2 text-center">Unit</th>
+              <th class="bg-black border px-4 py-2 text-center">Unit Cost</th>
 
               <!-- CSR Column -->
               <th
                 colspan="1"
-                class="bg-yellow-500 border border-black px-4 py-2 text-center"
+                class="bg-yellow-500 border px-4 py-2 text-center"
               >
                 CSR
               </th>
@@ -70,7 +70,7 @@
               <!-- Wards Column -->
               <th
                 colspan="1"
-                class="bg-yellow-500 border border-black px-4 py-2 text-center"
+                class="bg-yellow-500 border px-4 py-2 text-center"
               >
                 Wards
               </th>
@@ -78,7 +78,7 @@
               <!-- Total Beginning Balance Column -->
               <th
                 colspan="2"
-                class="bg-yellow-500 border border-black px-4 py-2 text-center"
+                class="bg-yellow-500 border px-4 py-2 text-center"
               >
                 Total Beginning Balance
               </th>
@@ -86,7 +86,7 @@
               <!-- Received from MMS Column -->
               <th
                 colspan="2"
-                class="bg-purple-500 border border-black px-4 py-2 text-center"
+                class="bg-purple-500 border px-4 py-2 text-center"
               >
                 Received from MMS
               </th>
@@ -94,7 +94,7 @@
               <!-- Supplies Issued to Wards Column -->
               <th
                 colspan="2"
-                class="bg-green-500 border border-black px-4 py-2 text-center"
+                class="bg-green-500 border px-4 py-2 text-center"
               >
                 Supplies Issued to Wards
               </th>
@@ -102,7 +102,7 @@
               <!-- Consumption Column -->
               <th
                 colspan="2"
-                class="bg-yellow-500 border border-black px-4 py-2 text-center"
+                class="bg-yellow-500 border px-4 py-2 text-center"
               >
                 Consumption
               </th>
@@ -110,7 +110,7 @@
               <!-- Total Ending Balance Column -->
               <th
                 colspan="2"
-                class="bg-blue-500 border border-black px-4 py-2 text-center"
+                class="bg-blue-500 border px-4 py-2 text-center"
               >
                 Total Ending Balance
               </th>
@@ -118,26 +118,26 @@
             <tr>
               <!-- Sub-headers -->
               <th colspan="3"></th>
-              <th class="bg-yellow-500 border border-black px-4 py-2 text-center">Quantity</th>
-              <!-- <th class="bg-yellow-500 border border-black px-4 py-2 text-center">Cost</th> -->
+              <th class="bg-yellow-500 border px-4 py-2 text-center">Quantity</th>
+              <!-- <th class="bg-yellow-500 border  px-4 py-2 text-center">Cost</th> -->
 
-              <th class="bg-yellow-500 border border-black px-4 py-2 text-center">Quantity</th>
-              <!-- <th class="bg-yellow-500 border border-black px-4 py-2 text-center">Cost</th> -->
+              <th class="bg-yellow-500 border px-4 py-2 text-center">Quantity</th>
+              <!-- <th class="bg-yellow-500 border  px-4 py-2 text-center">Cost</th> -->
 
-              <th class="bg-yellow-500 border border-black px-4 py-2 text-center">Total Quantity</th>
-              <th class="bg-yellow-500 border border-black px-4 py-2 text-center">Total Cost</th>
+              <th class="bg-yellow-500 border px-4 py-2 text-center">Total Quantity</th>
+              <th class="bg-yellow-500 border px-4 py-2 text-center">Total Cost</th>
 
-              <th class="bg-purple-500 border border-black px-4 py-2 text-center">Quantity</th>
-              <th class="bg-purple-500 border border-black px-4 py-2 text-center">Cost</th>
+              <th class="bg-purple-500 border px-4 py-2 text-center">Quantity</th>
+              <th class="bg-purple-500 border px-4 py-2 text-center">Cost</th>
 
-              <th class="bg-green-500 border border-black px-4 py-2 text-center">Quantity</th>
-              <th class="bg-green-500 border border-black px-4 py-2 text-center">Cost</th>
+              <th class="bg-green-500 border px-4 py-2 text-center">Quantity</th>
+              <th class="bg-green-500 border px-4 py-2 text-center">Cost</th>
 
-              <th class="bg-yellow-500 border border-black px-4 py-2 text-center">Quantity</th>
-              <th class="bg-yellow-500 border border-black px-4 py-2 text-center">Cost</th>
+              <th class="bg-yellow-500 border px-4 py-2 text-center">Quantity</th>
+              <th class="bg-yellow-500 border px-4 py-2 text-center">Cost</th>
 
-              <th class="bg-blue-500 border border-black px-4 py-2 text-center">Total Quantity</th>
-              <th class="bg-blue-500 border border-black px-4 py-2 text-center">Total Cost</th>
+              <th class="bg-blue-500 border px-4 py-2 text-center">Total Quantity</th>
+              <th class="bg-blue-500 border px-4 py-2 text-center">Total Cost</th>
             </tr>
           </thead>
 
@@ -145,51 +145,51 @@
           <tbody>
             <!-- Sample Data Row -->
             <tr class="text-center">
-              <td class="border border-black px-4 py-2">Suture. Synthetic non-absorbable Monofilament</td>
-              <td class="border border-black px-4 py-2">Piece</td>
-              <td class="border border-black px-4 py-2">2,472.22</td>
+              <td class="border px-4 py-2">Suture. Synthetic non-absorbable Monofilament</td>
+              <td class="border px-4 py-2">Piece</td>
+              <td class="border px-4 py-2">2,472.22</td>
 
-              <td class="border border-black px-4 py-2 bg-yellow-500">beg csr quantity</td>
-              <!-- <td class="border border-black px-4 py-2 bg-yellow-100">-</td> -->
+              <td class="border px-4 py-2 bg-yellow-500">beg csr quantity</td>
+              <!-- <td class="border  px-4 py-2 bg-yellow-100">-</td> -->
 
-              <td class="border border-black px-4 py-2 bg-yellow-500">beg ward_quantity</td>
-              <td class="border border-black px-4 py-2 bg-yellow-500">beg Total quantity</td>
+              <td class="border px-4 py-2 bg-yellow-500">beg ward_quantity</td>
+              <td class="border px-4 py-2 bg-yellow-500">beg Total quantity</td>
 
-              <td class="border border-black px-4 py-2 bg-yellow-500">beg total cost</td>
-              <!-- <td class="border border-black px-4 py-2 bg-yellow-500">-</td> -->
+              <td class="border px-4 py-2 bg-yellow-500">beg total cost</td>
+              <!-- <td class="border  px-4 py-2 bg-yellow-500">-</td> -->
 
-              <td class="border border-black px-4 py-2 bg-purple-500">mms quantity</td>
-              <td class="border border-black px-4 py-2 bg-purple-500">mms cost</td>
+              <td class="border px-4 py-2 bg-purple-500">mms quantity</td>
+              <td class="border px-4 py-2 bg-purple-500">mms cost</td>
 
-              <td class="border border-black px-4 py-2 bg-green-500">issued quantity</td>
-              <td class="border border-black px-4 py-2 bg-green-500">issued cost</td>
+              <td class="border px-4 py-2 bg-green-500">issued quantity</td>
+              <td class="border px-4 py-2 bg-green-500">issued cost</td>
 
-              <td class="border border-black px-4 py-2 bg-yellow-500">consump qty</td>
-              <td class="border border-black px-4 py-2 bg-yellow-500">consump cost</td>
+              <td class="border px-4 py-2 bg-yellow-500">consump qty</td>
+              <td class="border px-4 py-2 bg-yellow-500">consump cost</td>
 
-              <td class="border border-black px-4 py-2 bg-blue-500">end total qty</td>
-              <td class="border border-black px-4 py-2 bg-blue-500">end total cost</td>
+              <td class="border px-4 py-2 bg-blue-500">end total qty</td>
+              <td class="border px-4 py-2 bg-blue-500">end total cost</td>
             </tr>
 
             <!-- Grand Total Row -->
             <!-- <tr class="bg-green-500 font-bold text-white text-center">
               <td
                 colspan="6"
-                class="border border-black px-4 py-2"
+                class="border  px-4 py-2"
               >
                 GRAND TOTAL
               </td>
-              <td class="border border-black px-4 py-2">-</td>
-              <td class="border border-black px-4 py-2">89,388.50</td>
-              <td class="border border-black px-4 py-2">-</td>
-              <td class="border border-black px-4 py-2">388.50</td>
+              <td class="border  px-4 py-2">-</td>
+              <td class="border  px-4 py-2">89,388.50</td>
+              <td class="border  px-4 py-2">-</td>
+              <td class="border  px-4 py-2">388.50</td>
               <td
                 colspan="4"
-                class="border border-black px-4 py-2"
+                class="border  px-4 py-2"
               >
                 -
               </td>
-              <td class="border border-black px-4 py-2">89,000.00</td>
+              <td class="border  px-4 py-2">89,000.00</td>
             </tr> -->
           </tbody>
         </table>
@@ -321,6 +321,22 @@ table {
   width: 100%;
   border-collapse: collapse;
 }
+
+th,
+td {
+  border: 1px solid black; /* Adjust color as needed */
+  padding: 8px;
+}
+
+th {
+  background-color: inherit; /* Optional: Adds a light gray background to header cells */
+}
+
+/* table {
+  width: 100%;
+  border-collapse: collapse;
+  border-color: white;
+}
 table,
 th,
 td {
@@ -334,10 +350,9 @@ td {
   text-align: center;
   font-size: 120%;
   font-weight: 700;
-  /* background-color: rgb(0, 156, 120); */
 }
 .header {
   font-size: 100%;
   font-weight: 600;
-}
+} */
 </style>
