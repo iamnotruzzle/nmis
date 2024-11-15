@@ -28,15 +28,15 @@ class ReportsController extends Controller
                 item.cl2desc AS item_description,
                 uom.uomdesc AS unit,
                 price.price_per_unit AS unit_cost,
-                csr_stock.quantity_after AS beg_bal_csr_quantity,
+                (csr_stock.total_issued_qty + csr_stock.quantity_after) AS beg_bal_csr_quantity,
                 (csr_stock.total_issued_qty + csr_stock.quantity_after) AS received_mms_qty,
                 (csr_stock.total_issued_qty + csr_stock.quantity_after) * price.price_per_unit AS received_mms_total_cost,
-                --price.hospital_price AS received_mms_total_cost,
                 csr_stock.total_issued_qty as issued_qty,
                 (csr_stock.total_issued_qty * price.price_per_unit) AS issued_total_cost, --
                 pat_charge.quantity AS consump_quantity,
                 pat_charge.price_total AS consump_total_cost,
-                csr_stock.created_at
+                csr_stock.created_at,
+                csr_stock.quantity_after AS end_bal_csr_quantity
             FROM
                 csrw_csr_item_conversion AS csr_stock
             JOIN hclass2 AS item ON item.cl2comb = csr_stock.cl2comb_after
@@ -150,6 +150,7 @@ class ReportsController extends Controller
                     'consump_total_cost' => $record['consump_total_cost'] ?? 0,
                     'ward_beginning_balance' => $record['ward_beginning_balance'],
                     'ward_ending_balance' => $record['ward_ending_balance'],
+                    'end_bal_csr_quantity' => $record['end_bal_csr_quantity'] ?? 0, // Add new column here
                 ];
             } else {
                 // Sum the values for the existing entry
@@ -162,6 +163,7 @@ class ReportsController extends Controller
                 $aggregatedResults[$key]['consump_total_cost'] += $record['consump_total_cost'] ?? 0;
                 $aggregatedResults[$key]['ward_beginning_balance'] += $record['ward_beginning_balance'];
                 $aggregatedResults[$key]['ward_ending_balance'] += $record['ward_ending_balance'];
+                $aggregatedResults[$key]['end_bal_csr_quantity'] += $record['end_bal_csr_quantity'] ?? 0; // Add sum for new column
             }
         }
         dd($aggregatedResults);
