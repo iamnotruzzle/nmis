@@ -307,7 +307,7 @@ export default {
     };
   },
   mounted() {
-    // console.log(this.reports);
+    console.log(this.reports);
 
     this.storeReportsInContainer();
   },

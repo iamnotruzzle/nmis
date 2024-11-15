@@ -170,10 +170,10 @@ class ReportsController extends Controller
                 $aggregatedResults[$key]['end_bal_total_quantity'] += ($record['ward_ending_balance'] ?? 0) + ($record['end_bal_csr_quantity'] ?? 0); // Sum of new column
             }
         }
-        dd($aggregatedResults);
+        // dd($aggregatedResults);
 
         return Inertia::render('Csr/Reports/Index', [
-            // 'reports' => $reports
+            'reports' => $aggregatedResults
         ]);
 
         // return Inertia::render('UnderMaintenancePage', [
