@@ -51,227 +51,147 @@
       </div>
 
       <div style="overflow-x: auto">
-        <table class="table">
-          <!-- <col />
-        <colgroup span="2"></colgroup>
-        <colgroup span="2"></colgroup> -->
-          <tr>
-            <td
-              rowspan="2"
-              class="group-header bg-white colored-header"
-            >
-              <div>
-                <p>REGULAR FUND</p>
-                <p>ITEM DESCRIPTION</p>
-              </div>
-            </td>
-            <td
-              rowspan="2"
-              class="group-header bg-white colored-header"
-            >
-              UNIT
-            </td>
-            <td
-              rowspan="2"
-              class="group-header bg-white colored-header"
-            >
-              UNIT COST
-            </td>
-            <th
-              colspan="2"
-              scope="colgroup"
-              class="group-header bg-yellow-400 colored-header"
-            >
-              CSR
-            </th>
-            <th
-              colspan="2"
-              scope="colgroup"
-              class="group-header bg-yellow-400 colored-header"
-            >
-              WARDS
-            </th>
-            <th
-              colspan="2"
-              scope="colgroup"
-              class="group-header bg-yellow-400 colored-header"
-            >
-              TOTAL BEGINNING BALANCE
-            </th>
-            <th
-              colspan="2"
-              scope="colgroup"
-              class="group-header bg-green-400 colored-header"
-            >
-              SUPPLIES ISSUED TO WARDS
-            </th>
-            <th
-              colspan="2"
-              scope="colgroup"
-              class="group-header bg-yellow-600 colored-header"
-            >
-              CONSUMPTION
-            </th>
-            <th
-              colspan="2"
-              scope="colgroup"
-              class="group-header bg-cyan-400 colored-header"
-            >
-              CSR
-            </th>
-            <th
-              colspan="2"
-              scope="colgroup"
-              class="group-header bg-cyan-400 colored-header"
-            >
-              WARDS
-            </th>
-            <th
-              colspan="2"
-              scope="colgroup"
-              class="group-header bg-cyan-400 colored-header"
-            >
-              TOTAL ENDING BALANCE
-            </th>
-          </tr>
+        <table class="min-w-full border border-black">
+          <!-- Table Header -->
+          <thead>
+            <tr>
+              <th class="bg-black border border-black px-4 py-2 text-center">Item Description</th>
+              <th class="bg-black border border-black px-4 py-2 text-center">Unit</th>
+              <th class="bg-black border border-black px-4 py-2 text-center">Unit Cost</th>
 
-          <tr>
-            <!-- csr -->
-            <th
-              scope="col"
-              class="header bg-yellow-400 colored-header"
-            >
-              QUANTITY
-            </th>
-            <th
-              scope="col"
-              class="header bg-yellow-400 colored-header"
-            >
-              TOTAL COST
-            </th>
-            <!-- wards -->
-            <th
-              scope="col"
-              class="header bg-yellow-400 colored-header"
-            >
-              QUANTITY
-            </th>
-            <th
-              scope="col"
-              class="header bg-yellow-400 colored-header"
-            >
-              TOTAL COST
-            </th>
-            <!-- total beginning balance -->
-            <th
-              scope="col"
-              class="header bg-yellow-400 colored-header"
-            >
-              TOTAL QUANTITY
-            </th>
-            <th
-              scope="col"
-              class="header bg-yellow-400 colored-header"
-            >
-              TOTAL COST
-            </th>
-            <!-- supplies issued to wards -->
-            <th
-              scope="col"
-              class="header bg-green-400 colored-header"
-            >
-              TOTAL QUANTITY
-            </th>
-            <th
-              scope="col"
-              class="header bg-green-400 colored-header"
-            >
-              TOTAL COST
-            </th>
-            <!-- CONSUMPTiON -->
-            <th
-              scope="col"
-              class="header bg-yellow-600 colored-header"
-            >
-              QUANTITY
-            </th>
-            <th
-              scope="col"
-              class="header bg-yellow-600 colored-header"
-            >
-              TOTAL COST
-            </th>
-            <!-- TOTAL ENDING BALANCE -->
-            <!-- TOTAL ENDING BALANCE CSR-->
-            <th
-              scope="col"
-              class="header bg-cyan-400 colored-header"
-            >
-              QUANTITY
-            </th>
-            <th
-              scope="col"
-              class="header bg-cyan-400 colored-header"
-            >
-              TOTAL COST
-            </th>
-            <!-- TOTAL ENDING BALANCE WARD-->
-            <th
-              scope="col"
-              class="header bg-cyan-400 colored-header"
-            >
-              QUANTITY
-            </th>
-            <th
-              scope="col"
-              class="header bg-cyan-400 colored-header"
-            >
-              TOTAL COST
-            </th>
-            <!-- TOTAL ENDING BALANCE-->
-            <th
-              scope="col"
-              class="header bg-cyan-400 colored-header"
-            >
-              TOTAL QUANTITY
-            </th>
-            <th
-              scope="col"
-              class="header bg-cyan-400 colored-header"
-            >
-              TOTAL COST
-            </th>
-          </tr>
+              <!-- CSR Column -->
+              <th
+                colspan="1"
+                class="bg-yellow-500 border border-black px-4 py-2 text-center"
+              >
+                CSR
+              </th>
 
-          <tr
-            v-for="rc in reportsContainer"
-            :key="rc.cl2comb"
-          >
-            <th scope="row">{{ rc.item_description }}</th>
-            <td>{{ rc.unit }}</td>
-            <td>{{ rc.unit_cost }}</td>
-            <td>{{ rc.csr_quantity }}</td>
-            <td>{{ rc.csr_total_cost }}</td>
-            <td>{{ rc.ward_quantity }}</td>
-            <td>{{ rc.ward_total_cost }}</td>
-            <td>{{ rc.total_beg_total_quantity }}</td>
-            <td>{{ rc.total_beg_total_cost }}</td>
-            <!-- SUPPLIES ISSUED TO WARDS -->
-            <td>{{ rc.supplies_issued_to_wards_quantity }}</td>
-            <td>{{ rc.supplies_issued_to_wards_total_cost }}</td>
-            <!-- CONSUMPTION -->
-            <td>{{ rc.consumption_quantity }}</td>
-            <td>{{ rc.consumption_total_cost }}</td>
-            <!-- CSR -->
-            <td>{{ rc.csr_quantity_ending_bal }}</td>
-            <td>{{ rc.csr_total_cost_ending_bal }}</td>
-            <!-- WARD -->
-            <td>{{ rc.ward_quantity_ending_bal }}</td>
-            <td>{{ rc.ward_total_cost_ending_bal }}</td>
-            <!-- TOTAL ENDING BALANCE -->
-            <td>{{ rc.total_end_total_quantity }}</td>
-            <td>{{ rc.total_end_total_cost }}</td>
-          </tr>
+              <!-- Wards Column -->
+              <th
+                colspan="1"
+                class="bg-yellow-500 border border-black px-4 py-2 text-center"
+              >
+                Wards
+              </th>
+
+              <!-- Total Beginning Balance Column -->
+              <th
+                colspan="2"
+                class="bg-yellow-500 border border-black px-4 py-2 text-center"
+              >
+                Total Beginning Balance
+              </th>
+
+              <!-- Received from MMS Column -->
+              <th
+                colspan="2"
+                class="bg-purple-500 border border-black px-4 py-2 text-center"
+              >
+                Received from MMS
+              </th>
+
+              <!-- Supplies Issued to Wards Column -->
+              <th
+                colspan="2"
+                class="bg-green-500 border border-black px-4 py-2 text-center"
+              >
+                Supplies Issued to Wards
+              </th>
+
+              <!-- Consumption Column -->
+              <th
+                colspan="2"
+                class="bg-yellow-500 border border-black px-4 py-2 text-center"
+              >
+                Consumption
+              </th>
+
+              <!-- Total Ending Balance Column -->
+              <th
+                colspan="2"
+                class="bg-blue-500 border border-black px-4 py-2 text-center"
+              >
+                Total Ending Balance
+              </th>
+            </tr>
+            <tr>
+              <!-- Sub-headers -->
+              <th colspan="3"></th>
+              <th class="bg-yellow-500 border border-black px-4 py-2 text-center">Quantity</th>
+              <!-- <th class="bg-yellow-500 border border-black px-4 py-2 text-center">Cost</th> -->
+
+              <th class="bg-yellow-500 border border-black px-4 py-2 text-center">Quantity</th>
+              <!-- <th class="bg-yellow-500 border border-black px-4 py-2 text-center">Cost</th> -->
+
+              <th class="bg-yellow-500 border border-black px-4 py-2 text-center">Total Quantity</th>
+              <th class="bg-yellow-500 border border-black px-4 py-2 text-center">Total Cost</th>
+
+              <th class="bg-purple-500 border border-black px-4 py-2 text-center">Quantity</th>
+              <th class="bg-purple-500 border border-black px-4 py-2 text-center">Cost</th>
+
+              <th class="bg-green-500 border border-black px-4 py-2 text-center">Quantity</th>
+              <th class="bg-green-500 border border-black px-4 py-2 text-center">Cost</th>
+
+              <th class="bg-yellow-500 border border-black px-4 py-2 text-center">Quantity</th>
+              <th class="bg-yellow-500 border border-black px-4 py-2 text-center">Cost</th>
+
+              <th class="bg-blue-500 border border-black px-4 py-2 text-center">Total Quantity</th>
+              <th class="bg-blue-500 border border-black px-4 py-2 text-center">Total Cost</th>
+            </tr>
+          </thead>
+
+          <!-- Table Body -->
+          <tbody>
+            <!-- Sample Data Row -->
+            <tr class="text-center">
+              <td class="border border-black px-4 py-2">Suture. Synthetic non-absorbable Monofilament</td>
+              <td class="border border-black px-4 py-2">Piece</td>
+              <td class="border border-black px-4 py-2">2,472.22</td>
+
+              <td class="border border-black px-4 py-2 bg-yellow-500">beg csr quantity</td>
+              <!-- <td class="border border-black px-4 py-2 bg-yellow-100">-</td> -->
+
+              <td class="border border-black px-4 py-2 bg-yellow-500">beg ward_quantity</td>
+              <td class="border border-black px-4 py-2 bg-yellow-500">beg Total quantity</td>
+
+              <td class="border border-black px-4 py-2 bg-yellow-500">beg total cost</td>
+              <!-- <td class="border border-black px-4 py-2 bg-yellow-500">-</td> -->
+
+              <td class="border border-black px-4 py-2 bg-purple-500">mms quantity</td>
+              <td class="border border-black px-4 py-2 bg-purple-500">mms cost</td>
+
+              <td class="border border-black px-4 py-2 bg-green-500">issued quantity</td>
+              <td class="border border-black px-4 py-2 bg-green-500">issued cost</td>
+
+              <td class="border border-black px-4 py-2 bg-yellow-500">consump qty</td>
+              <td class="border border-black px-4 py-2 bg-yellow-500">consump cost</td>
+
+              <td class="border border-black px-4 py-2 bg-blue-500">end total qty</td>
+              <td class="border border-black px-4 py-2 bg-blue-500">end total cost</td>
+            </tr>
+
+            <!-- Grand Total Row -->
+            <!-- <tr class="bg-green-500 font-bold text-white text-center">
+              <td
+                colspan="6"
+                class="border border-black px-4 py-2"
+              >
+                GRAND TOTAL
+              </td>
+              <td class="border border-black px-4 py-2">-</td>
+              <td class="border border-black px-4 py-2">89,388.50</td>
+              <td class="border border-black px-4 py-2">-</td>
+              <td class="border border-black px-4 py-2">388.50</td>
+              <td
+                colspan="4"
+                class="border border-black px-4 py-2"
+              >
+                -
+              </td>
+              <td class="border border-black px-4 py-2">89,000.00</td>
+            </tr> -->
+          </tbody>
         </table>
       </div>
     </div>
@@ -319,10 +239,12 @@ export default {
           item_description: e.item_description,
           unit: e.unit,
           unit_cost: e.unit_cost,
-          csr_quantity: e.csr_quantity, // csr beginning balance
+          beg_bal_csr_quantity: e.beg_bal_csr_quantity, // csr beginning balance
           csr_total_cost: e.csr_total_cost,
-          ward_quantity: e.ward_quantity, // ward beginning balance
+          ward_beginning_balance: e.ward_beginning_balance, // ward beginning balance
           ward_total_cost: e.ward_total_cost,
+          received_mms_qty: 0,
+          received_mms_total_cost: 0,
           supplies_issued_to_wards_quantity: e.supplies_issued_to_wards_quantity,
           supplies_issued_to_wards_total_cost: e.supplies_issued_to_wards_total_cost,
           total_beg_total_quantity: e.total_beg_total_quantity,
