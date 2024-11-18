@@ -20,26 +20,32 @@
               :hideOnDateTimeSelect="true"
               class="mr-2"
             /> -->
-            <Dropdown
-              v-model="from"
-              :options="beg_bal_dates_list"
-              optionLabel="name"
-              optionValue="code"
-              placeholder="Select beg. bal date"
-              checkmark
-              :highlightOnSelect="true"
-              class="mr-2"
-            />
-            <Dropdown
-              v-model="to"
-              :options="end_bal_dates_list"
-              optionLabel="name"
-              optionValue="code"
-              placeholder="Select end bal date"
-              checkmark
-              :highlightOnSelect="true"
-              class="mr-2"
-            />
+            <div>
+              <label class="font-bold text-lg mr-2">FROM:</label>
+              <Dropdown
+                v-model="from"
+                :options="beg_bal_dates_list"
+                optionLabel="name"
+                optionValue="code"
+                placeholder="Select beg. bal date"
+                checkmark
+                :highlightOnSelect="true"
+                class="mr-2"
+              />
+            </div>
+            <div>
+              <label class="font-bold text-lg mr-2">TO:</label>
+              <Dropdown
+                v-model="to"
+                :options="end_bal_dates_list"
+                optionLabel="name"
+                optionValue="code"
+                placeholder="Select end bal date"
+                checkmark
+                :highlightOnSelect="true"
+                class="mr-2"
+              />
+            </div>
           </div>
 
           <i
@@ -47,32 +53,33 @@
             class="pi pi-file-excel"
             :style="{ color: 'gray', 'font-size': '2rem' }"
           ></i>
-          <a
+          <i
             v-else
-            :href="`csrstocks/export?from=${params.from}&to=${params.to}`"
-            target="_blank"
-          >
-            <i
-              class="pi pi-file-excel"
-              :style="{ color: 'green', 'font-size': '2rem' }"
-            ></i>
-          </a>
+            class="pi pi-file-excel"
+            :style="{ color: 'green', 'font-size': '2rem' }"
+            @click="fnExcelReport"
+          ></i>
         </div>
       </div>
 
       <div style="overflow-x: auto">
-        <table class="min-w-full border">
+        <table
+          id="theTable"
+          style="width: 100%; border-collapse: collapse; border: 1px solid black"
+        >
           <!-- Table Header -->
           <thead>
             <tr>
-              <th class="bg-white border px-4 py-2 text-center">Item Description</th>
-              <th class="bg-white border px-4 py-2 text-center">Unit</th>
-              <th class="bg-white border px-4 py-2 text-center">Unit Cost</th>
+              <th style="background: white; border: 1px solid black; padding: 8px; text-align: center">
+                Item Description
+              </th>
+              <th style="background: white; border: 1px solid black; padding: 8px; text-align: center">Unit</th>
+              <th style="background: white; border: 1px solid black; padding: 8px; text-align: center">Unit Cost</th>
 
               <!-- CSR Column -->
               <th
                 colspan="1"
-                class="bg-yellow-500 border px-4 py-2 text-center"
+                style="background: #facc15; border: 1px solid black; padding: 8px; text-align: center"
               >
                 CSR
               </th>
@@ -80,7 +87,7 @@
               <!-- Wards Column -->
               <th
                 colspan="1"
-                class="bg-yellow-500 border px-4 py-2 text-center"
+                style="background: #facc15; border: 1px solid black; padding: 8px; text-align: center"
               >
                 Wards
               </th>
@@ -88,7 +95,7 @@
               <!-- Total Beginning Balance Column -->
               <th
                 colspan="2"
-                class="bg-yellow-500 border px-4 py-2 text-center"
+                style="background: #facc15; border: 1px solid black; padding: 8px; text-align: center"
               >
                 Total Beginning Balance
               </th>
@@ -96,7 +103,7 @@
               <!-- Received from MMS Column -->
               <th
                 colspan="2"
-                class="bg-purple-500 border px-4 py-2 text-center"
+                style="background: #a78bfa; border: 1px solid black; padding: 8px; text-align: center"
               >
                 Received from MMS
               </th>
@@ -104,7 +111,7 @@
               <!-- Supplies Issued to Wards Column -->
               <th
                 colspan="2"
-                class="bg-green-500 border px-4 py-2 text-center"
+                style="background: #22c55e; border: 1px solid black; padding: 8px; text-align: center"
               >
                 Supplies Issued to Wards
               </th>
@@ -112,21 +119,21 @@
               <!-- Consumption Column -->
               <th
                 colspan="2"
-                class="bg-orange-500 border px-4 py-2 text-center"
+                style="background: #fb923c; border: 1px solid black; padding: 8px; text-align: center"
               >
                 Consumption
               </th>
 
-              <!-- end bal csr and ward -->
+              <!-- End Bal CSR and Ward -->
               <th
                 colspan="1"
-                class="bg-blue-500 border px-4 py-2 text-center"
+                style="background: #3b82f6; border: 1px solid black; padding: 8px; text-align: center"
               >
                 CSR
               </th>
               <th
                 colspan="1"
-                class="bg-blue-500 border px-4 py-2 text-center"
+                style="background: #3b82f6; border: 1px solid black; padding: 8px; text-align: center"
               >
                 WARD
               </th>
@@ -134,7 +141,7 @@
               <!-- Total Ending Balance Column -->
               <th
                 colspan="2"
-                class="bg-blue-500 border px-4 py-2 text-center"
+                style="background: #3b82f6; border: 1px solid black; padding: 8px; text-align: center"
               >
                 Total Ending Balance
               </th>
@@ -143,98 +150,54 @@
               <!-- Sub-headers -->
               <th
                 colspan="3"
-                class="bg-white"
+                style="background: white"
               ></th>
-              <!-- csr -->
-              <th class="bg-yellow-500 border px-4 py-2 text-center">Quantity</th>
-              <!-- <th class="bg-yellow-500 border  px-4 py-2 text-center">Cost</th> -->
-
-              <!-- wards -->
-              <th class="bg-yellow-500 border px-4 py-2 text-center">Quantity</th>
-              <!-- <th class="bg-yellow-500 border  px-4 py-2 text-center">Cost</th> -->
-
-              <!-- total beginning balance -->
-              <th class="bg-yellow-500 border px-4 py-2 text-center">Total Quantity</th>
-              <th class="bg-yellow-500 border px-4 py-2 text-center">Total Cost</th>
-
-              <!-- received from MMS -->
-              <th class="bg-purple-500 border px-4 py-2 text-center">Quantity</th>
-              <th class="bg-purple-500 border px-4 py-2 text-center">Cost</th>
-
-              <!-- Supplies issued to wards -->
-              <th class="bg-green-500 border px-4 py-2 text-center">Quantity</th>
-              <th class="bg-green-500 border px-4 py-2 text-center">Cost</th>
-
-              <!-- Consumption -->
-              <th class="bg-orange-500 border px-4 py-2 text-center">Quantity</th>
-              <th class="bg-orange-500 border px-4 py-2 text-center">Cost</th>
-
-              <!-- end bal csr & ward -->
-              <th class="bg-blue-500 border px-4 py-2 text-center">QUANTITY</th>
-              <th class="bg-blue-500 border px-4 py-2 text-center">QUANTITY</th>
-
-              <!-- Total ending balance -->
-              <th class="bg-blue-500 border px-4 py-2 text-center">Total Quantity</th>
-              <th class="bg-blue-500 border px-4 py-2 text-center">Total Cost</th>
+              <th style="background: #facc15; border: 1px solid black; padding: 8px; text-align: center">Quantity</th>
+              <th style="background: #facc15; border: 1px solid black; padding: 8px; text-align: center">Quantity</th>
+              <th style="background: #facc15; border: 1px solid black; padding: 8px; text-align: center">
+                Total Quantity
+              </th>
+              <th style="background: #facc15; border: 1px solid black; padding: 8px; text-align: center">Total Cost</th>
+              <th style="background: #a78bfa; border: 1px solid black; padding: 8px; text-align: center">Quantity</th>
+              <th style="background: #a78bfa; border: 1px solid black; padding: 8px; text-align: center">Cost</th>
+              <th style="background: #22c55e; border: 1px solid black; padding: 8px; text-align: center">Quantity</th>
+              <th style="background: #22c55e; border: 1px solid black; padding: 8px; text-align: center">Cost</th>
+              <th style="background: #fb923c; border: 1px solid black; padding: 8px; text-align: center">Quantity</th>
+              <th style="background: #fb923c; border: 1px solid black; padding: 8px; text-align: center">Cost</th>
+              <th style="background: #3b82f6; border: 1px solid black; padding: 8px; text-align: center">QUANTITY</th>
+              <th style="background: #3b82f6; border: 1px solid black; padding: 8px; text-align: center">QUANTITY</th>
+              <th style="background: #3b82f6; border: 1px solid black; padding: 8px; text-align: center">
+                Total Quantity
+              </th>
+              <th style="background: #3b82f6; border: 1px solid black; padding: 8px; text-align: center">Total Cost</th>
             </tr>
           </thead>
 
           <!-- Table Body -->
           <tbody>
-            <!-- Sample Data Row -->
             <tr
               v-for="(report, index) in reportsContainer"
               :key="index"
-              class="text-center"
+              style="text-align: center"
             >
-              <td class="border px-4 py-2">{{ report.item_description }}</td>
-              <td class="border px-4 py-2">{{ report.unit }}</td>
-              <td class="border px-4 py-2">{{ report.unit_cost }}</td>
-
-              <td class="border px-4 py-2">{{ report.beg_bal_csr_quantity }}</td>
-              <!-- <td class="border  px-4 py-2 bg-yellow-100">-</td> -->
-
-              <td class="border px-4 py-2">{{ report.beg_bal_ward_quantity }}</td>
-              <td class="border px-4 py-2">{{ report.beg_bal_total_quantity }}</td>
-
-              <td class="border px-4 py-2">{{ report.beg_bal_total_cost }}</td>
-              <!-- <td class="border  px-4 py-2 bg-yellow-500">-</td> -->
-
-              <td class="border px-4 py-2">{{ report.received_mms_qty }}</td>
-              <td class="border px-4 py-2">{{ report.received_mms_total_cost }}</td>
-
-              <td class="border px-4 py-2">{{ report.issued_qty }}</td>
-              <td class="border px-4 py-2">{{ report.issued_total_cost }}</td>
-
-              <td class="border px-4 py-2">{{ report.consump_quantity }}</td>
-              <td class="border px-4 py-2">{{ report.consump_total_cost }}</td>
-
-              <td class="border px-4 py-2">{{ report.end_bal_csr_quantity }}</td>
-              <td class="border px-4 py-2">{{ report.end_bal_ward_quantity }}</td>
-              <td class="border px-4 py-2">{{ report.end_bal_total_quantity }}</td>
-              <td class="border px-4 py-2">{{ report.end_bal_total_cost }}</td>
+              <td style="border: 1px solid black; padding: 8px">{{ report.item_description }}</td>
+              <td style="border: 1px solid black; padding: 8px">{{ report.unit }}</td>
+              <td style="border: 1px solid black; padding: 8px">{{ report.unit_cost }}</td>
+              <td style="border: 1px solid black; padding: 8px">{{ report.beg_bal_csr_quantity }}</td>
+              <td style="border: 1px solid black; padding: 8px">{{ report.beg_bal_ward_quantity }}</td>
+              <td style="border: 1px solid black; padding: 8px">{{ report.beg_bal_total_quantity }}</td>
+              <td style="border: 1px solid black; padding: 8px">{{ report.beg_bal_total_cost }}</td>
+              <td style="border: 1px solid black; padding: 8px">{{ report.received_mms_qty }}</td>
+              <td style="border: 1px solid black; padding: 8px">{{ report.received_mms_total_cost }}</td>
+              <td style="border: 1px solid black; padding: 8px">{{ report.issued_qty }}</td>
+              <td style="border: 1px solid black; padding: 8px">{{ report.issued_total_cost }}</td>
+              <td style="border: 1px solid black; padding: 8px">{{ report.consump_quantity }}</td>
+              <td style="border: 1px solid black; padding: 8px">{{ report.consump_total_cost }}</td>
+              <td style="border: 1px solid black; padding: 8px">{{ report.end_bal_csr_quantity }}</td>
+              <td style="border: 1px solid black; padding: 8px">{{ report.end_bal_ward_quantity }}</td>
+              <td style="border: 1px solid black; padding: 8px">{{ report.end_bal_total_quantity }}</td>
+              <td style="border: 1px solid black; padding: 8px">{{ report.end_bal_total_cost }}</td>
             </tr>
-
-            <!-- Grand Total Row -->
-            <!-- <tr class="bg-green-500 font-bold text-white text-center">
-              <td
-                colspan="6"
-                class="border  px-4 py-2"
-              >
-                GRAND TOTAL
-              </td>
-              <td class="border  px-4 py-2">-</td>
-              <td class="border  px-4 py-2">89,388.50</td>
-              <td class="border  px-4 py-2">-</td>
-              <td class="border  px-4 py-2">388.50</td>
-              <td
-                colspan="4"
-                class="border  px-4 py-2"
-              >
-                -
-              </td>
-              <td class="border  px-4 py-2">89,000.00</td>
-            </tr> -->
           </tbody>
         </table>
       </div>
@@ -294,7 +257,7 @@ export default {
           beg_bal_csr_quantity: e.beg_bal_csr_quantity, // *
           beg_bal_ward_quantity: e.beg_bal_ward_quantity, // *
           beg_bal_total_quantity: e.beg_bal_total_quantity, // *
-          beg_bal_total_cost: 0,
+          beg_bal_total_cost: e.beg_bal_total_cost,
 
           received_mms_qty: e.received_mms_qty, // *
           received_mms_total_cost: e.received_mms_total_cost, // *
@@ -316,21 +279,23 @@ export default {
       //   console.log('container', this.reportsContainer);
     },
     storeDatesInContainer() {
-      this.beg_bal_dates.forEach((e) => {
-        this.beg_bal_dates_list.push({
-          name: e.date, // *
-          code: e.date, // *
-        });
-      });
-      this.end_bal_dates.forEach((e) => {
-        this.end_bal_dates_list.push({
-          name: e.date, // *
-          code: e.date, // *
-        });
-      });
-      console.log(this.end_bal_dates_list);
+      // Helper to remove duplicates manually
+      const uniqueBegBalDates = this.beg_bal_dates.filter(
+        (e, index, self) => index === self.findIndex((obj) => obj.date === e.date)
+      );
+      const uniqueEndBalDates = this.end_bal_dates.filter(
+        (e, index, self) => index === self.findIndex((obj) => obj.date === e.date)
+      );
+      // Populate date list
+      this.beg_bal_dates_list = uniqueBegBalDates.map((e) => ({
+        name: e.date, // *
+        code: e.date, // *
+      }));
+      this.end_bal_dates_list = uniqueEndBalDates.map((e) => ({
+        name: e.date, // *
+        code: e.date, // *
+      }));
     },
-
     updateData() {
       this.reportsContainer = [];
 
@@ -357,6 +322,32 @@ export default {
         String(date.getMinutes()).padStart(2, '0')
       );
     },
+    fnExcelReport() {
+      const table = document.getElementById('theTable');
+      let tableHTML = table.outerHTML;
+      const fileName = 'download.xls';
+
+      const msie = window.navigator.userAgent.indexOf('MSIE ');
+
+      // If Internet Explorer
+      if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+        const dummyFrame = document.getElementById('dummyFrame').contentWindow;
+        dummyFrame.document.open('txt/html', 'replace');
+        dummyFrame.document.write(tableHTML);
+        dummyFrame.document.close();
+        dummyFrame.focus();
+        dummyFrame.document.execCommand('SaveAs', true, fileName);
+      } else {
+        // Other browsers
+        const a = document.createElement('a');
+        tableHTML = tableHTML.replace(/  /g, '').replace(/ /g, '%20'); // Replaces spaces
+        a.href = 'data:application/vnd.ms-excel,' + tableHTML;
+        a.setAttribute('download', fileName);
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
+    },
   },
   watch: {
     from: function (val) {
@@ -378,36 +369,11 @@ table {
 
 th,
 td {
-  border: 1px solid black; /* Adjust color as needed */
+  border: 1px solid black;
   padding: 8px;
 }
 
 th {
-  /* background-color: inherit; */
   color: black;
 }
-
-/* table {
-  width: 100%;
-  border-collapse: collapse;
-  border-color: white;
-}
-table,
-th,
-td {
-  border: 1px solid;
-  padding: 10px;
-}
-.colored-header {
-  color: black;
-}
-.group-header {
-  text-align: center;
-  font-size: 120%;
-  font-weight: 700;
-}
-.header {
-  font-size: 100%;
-  font-weight: 600;
-} */
 </style>
