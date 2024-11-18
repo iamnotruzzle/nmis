@@ -51,13 +51,13 @@
       </div>
 
       <div style="overflow-x: auto">
-        <table class="min-w-full border border-slate-500">
+        <table class="min-w-full border">
           <!-- Table Header -->
           <thead>
             <tr>
-              <th class="bg-black border px-4 py-2 text-center">Item Description</th>
-              <th class="bg-black border px-4 py-2 text-center">Unit</th>
-              <th class="bg-black border px-4 py-2 text-center">Unit Cost</th>
+              <th class="bg-white border px-4 py-2 text-center">Item Description</th>
+              <th class="bg-white border px-4 py-2 text-center">Unit</th>
+              <th class="bg-white border px-4 py-2 text-center">Unit Cost</th>
 
               <!-- CSR Column -->
               <th
@@ -102,7 +102,7 @@
               <!-- Consumption Column -->
               <th
                 colspan="2"
-                class="bg-yellow-500 border px-4 py-2 text-center"
+                class="bg-orange-500 border px-4 py-2 text-center"
               >
                 Consumption
               </th>
@@ -117,25 +117,35 @@
             </tr>
             <tr>
               <!-- Sub-headers -->
-              <th colspan="3"></th>
+              <th
+                colspan="3"
+                class="bg-white"
+              ></th>
+              <!-- csr -->
               <th class="bg-yellow-500 border px-4 py-2 text-center">Quantity</th>
               <!-- <th class="bg-yellow-500 border  px-4 py-2 text-center">Cost</th> -->
 
+              <!-- wards -->
               <th class="bg-yellow-500 border px-4 py-2 text-center">Quantity</th>
               <!-- <th class="bg-yellow-500 border  px-4 py-2 text-center">Cost</th> -->
 
+              <!-- total beginning balance -->
               <th class="bg-yellow-500 border px-4 py-2 text-center">Total Quantity</th>
               <th class="bg-yellow-500 border px-4 py-2 text-center">Total Cost</th>
 
+              <!-- received from MMS -->
               <th class="bg-purple-500 border px-4 py-2 text-center">Quantity</th>
               <th class="bg-purple-500 border px-4 py-2 text-center">Cost</th>
 
+              <!-- Supplies issued to wards -->
               <th class="bg-green-500 border px-4 py-2 text-center">Quantity</th>
               <th class="bg-green-500 border px-4 py-2 text-center">Cost</th>
 
-              <th class="bg-yellow-500 border px-4 py-2 text-center">Quantity</th>
-              <th class="bg-yellow-500 border px-4 py-2 text-center">Cost</th>
+              <!-- Consumption -->
+              <th class="bg-orange-500 border px-4 py-2 text-center">Quantity</th>
+              <th class="bg-orange-500 border px-4 py-2 text-center">Cost</th>
 
+              <!-- Total ending balance -->
               <th class="bg-blue-500 border px-4 py-2 text-center">Total Quantity</th>
               <th class="bg-blue-500 border px-4 py-2 text-center">Total Cost</th>
             </tr>
@@ -149,26 +159,26 @@
               <td class="border px-4 py-2">Piece</td>
               <td class="border px-4 py-2">2,472.22</td>
 
-              <td class="border px-4 py-2 bg-yellow-500">beg csr quantity</td>
+              <td class="border px-4 py-2">beg csr_quantity</td>
               <!-- <td class="border  px-4 py-2 bg-yellow-100">-</td> -->
 
-              <td class="border px-4 py-2 bg-yellow-500">beg ward_quantity</td>
-              <td class="border px-4 py-2 bg-yellow-500">beg Total quantity</td>
+              <td class="border px-4 py-2">beg ward_quantity</td>
+              <td class="border px-4 py-2">beg Total quantity</td>
 
-              <td class="border px-4 py-2 bg-yellow-500">beg total cost</td>
+              <td class="border px-4 py-2">beg total cost</td>
               <!-- <td class="border  px-4 py-2 bg-yellow-500">-</td> -->
 
-              <td class="border px-4 py-2 bg-purple-500">mms quantity</td>
-              <td class="border px-4 py-2 bg-purple-500">mms cost</td>
+              <td class="border px-4 py-2">mms quantity</td>
+              <td class="border px-4 py-2">mms cost</td>
 
-              <td class="border px-4 py-2 bg-green-500">issued quantity</td>
-              <td class="border px-4 py-2 bg-green-500">issued cost</td>
+              <td class="border px-4 py-2">issued quantity</td>
+              <td class="border px-4 py-2">issued cost</td>
 
-              <td class="border px-4 py-2 bg-yellow-500">consump qty</td>
-              <td class="border px-4 py-2 bg-yellow-500">consump cost</td>
+              <td class="border px-4 py-2">consump qty</td>
+              <td class="border px-4 py-2">consump cost</td>
 
-              <td class="border px-4 py-2 bg-blue-500">end total qty</td>
-              <td class="border px-4 py-2 bg-blue-500">end total cost</td>
+              <td class="border px-4 py-2">end total qty</td>
+              <td class="border px-4 py-2">end total cost</td>
             </tr>
 
             <!-- Grand Total Row -->
@@ -329,7 +339,8 @@ td {
 }
 
 th {
-  background-color: inherit; /* Optional: Adds a light gray background to header cells */
+  /* background-color: inherit; */
+  color: black;
 }
 
 /* table {
