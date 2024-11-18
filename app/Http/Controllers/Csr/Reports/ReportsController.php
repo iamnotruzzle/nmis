@@ -52,8 +52,8 @@ class ReportsController extends Controller
         $ward_report = DB::select(
             "SELECT
                 ward.stock_id AS csr_stock_id,
-                SUM(csrw_location_stock_balance.beginning_balance) AS ward_beginning_balance,
-                SUM(csrw_location_stock_balance.ending_balance) AS ward_ending_balance
+                SUM(csrw_location_stock_balance.beginning_balance) AS beg_bal_ward_quantity,
+                SUM(csrw_location_stock_balance.ending_balance) AS end_bal_ward_quantity
             FROM
                 csrw_wards_stocks AS ward
             JOIN hclass2 ON ward.cl2comb = hclass2.cl2comb
@@ -103,8 +103,8 @@ class ReportsController extends Controller
             $combinedResults[$row->csr_stock_id] = array_merge(
                 (array)$row,
                 [
-                    'ward_beginning_balance' => $row->ward_beginning_balance ?? 0,
-                    'ward_ending_balance' => $row->ward_ending_balance ?? 0
+                    'beg_bal_ward_quantity' => $row->beg_bal_ward_quantity ?? 0,
+                    'end_bal_ward_quantity' => $row->end_bal_ward_quantity ?? 0
                 ]
             );
         }
@@ -122,8 +122,8 @@ class ReportsController extends Controller
                 $combinedResults[$csr_stock_id] = array_merge(
                     (array)$row,
                     [
-                        'ward_beginning_balance' => 0,
-                        'ward_ending_balance' => 0
+                        'beg_bal_ward_quantity' => 0,
+                        'end_bal_ward_quantity' => 0
                     ]
                 );
             }
@@ -148,11 +148,12 @@ class ReportsController extends Controller
                     'issued_total_cost' => $record['issued_total_cost'] ?? 0,
                     'consump_quantity' => $record['consump_quantity'] ?? 0,
                     'consump_total_cost' => $record['consump_total_cost'] ?? 0,
-                    'ward_beginning_balance' => $record['ward_beginning_balance'],
-                    'ward_ending_balance' => $record['ward_ending_balance'],
+                    'beg_bal_ward_quantity' => $record['beg_bal_ward_quantity'],
+                    'end_bal_ward_quantity' => $record['end_bal_ward_quantity'],
                     'end_bal_csr_quantity' => $record['end_bal_csr_quantity'] ?? 0, // Add new column here
-                    'beg_bal_total_quantity' => ($record['ward_beginning_balance'] ?? 0) + ($record['beg_bal_csr_quantity'] ?? 0), // New calculation
-                    'end_bal_total_quantity' => ($record['ward_ending_balance'] ?? 0) + ($record['end_bal_csr_quantity'] ?? 0), // New calculation
+                    'beg_bal_total_quantity' => ($record['beg_bal_ward_quantity'] ?? 0) + ($record['beg_bal_csr_quantity'] ?? 0), // New calculation
+                    'end_bal_total_quantity' => ($record['end_bal_ward_quantity'] ?? 0) + ($record['end_bal_csr_quantity'] ?? 0), // New calculation
+                    'end_bal_total_cost' => (($record['end_bal_ward_quantity'] ?? 0) + ($record['end_bal_csr_quantity'] ?? 0)) * ($record['unit_cost'] ?? 0),
                 ];
             } else {
                 // Sum the values for the existing entry
@@ -163,14 +164,18 @@ class ReportsController extends Controller
                 $aggregatedResults[$key]['issued_total_cost'] += $record['issued_total_cost'] ?? 0;
                 $aggregatedResults[$key]['consump_quantity'] += $record['consump_quantity'] ?? 0;
                 $aggregatedResults[$key]['consump_total_cost'] += $record['consump_total_cost'] ?? 0;
-                $aggregatedResults[$key]['ward_beginning_balance'] += $record['ward_beginning_balance'];
-                $aggregatedResults[$key]['ward_ending_balance'] += $record['ward_ending_balance'];
+                $aggregatedResults[$key]['beg_bal_ward_quantity'] += $record['beg_bal_ward_quantity'];
+                $aggregatedResults[$key]['end_bal_ward_quantity'] += $record['end_bal_ward_quantity'];
                 $aggregatedResults[$key]['end_bal_csr_quantity'] += $record['end_bal_csr_quantity'] ?? 0; // Add sum for new column
-                $aggregatedResults[$key]['beg_bal_total_quantity'] += ($record['ward_beginning_balance'] ?? 0) + ($record['beg_bal_csr_quantity'] ?? 0); // Sum of new column
-                $aggregatedResults[$key]['end_bal_total_quantity'] += ($record['ward_ending_balance'] ?? 0) + ($record['end_bal_csr_quantity'] ?? 0); // Sum of new column
+                $aggregatedResults[$key]['beg_bal_total_quantity'] += ($record['beg_bal_ward_quantity'] ?? 0) + ($record['beg_bal_csr_quantity'] ?? 0); // Sum of new column
+                $aggregatedResults[$key]['end_bal_total_quantity'] += ($record['end_bal_ward_quantity'] ?? 0) + ($record['end_bal_csr_quantity'] ?? 0); // Sum of new column
+                $aggregatedResults[$key]['end_bal_total_cost'] = $aggregatedResults[$key]['end_bal_total_quantity'] * ($record['unit_cost'] ?? 0);
             }
         }
         // dd($aggregatedResults);
+
+        // Remove keys and re-index the array
+        $aggregatedResults = array_values($aggregatedResults);
 
         return Inertia::render('Csr/Reports/Index', [
             'reports' => $aggregatedResults

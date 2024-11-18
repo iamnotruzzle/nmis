@@ -107,6 +107,20 @@
                 Consumption
               </th>
 
+              <!-- end bal csr and ward -->
+              <th
+                colspan="1"
+                class="bg-blue-500 border px-4 py-2 text-center"
+              >
+                CSR
+              </th>
+              <th
+                colspan="1"
+                class="bg-blue-500 border px-4 py-2 text-center"
+              >
+                WARD
+              </th>
+
               <!-- Total Ending Balance Column -->
               <th
                 colspan="2"
@@ -145,6 +159,10 @@
               <th class="bg-orange-500 border px-4 py-2 text-center">Quantity</th>
               <th class="bg-orange-500 border px-4 py-2 text-center">Cost</th>
 
+              <!-- end bal csr & ward -->
+              <th class="bg-blue-500 border px-4 py-2 text-center">QUANTITY</th>
+              <th class="bg-blue-500 border px-4 py-2 text-center">QUANTITY</th>
+
               <!-- Total ending balance -->
               <th class="bg-blue-500 border px-4 py-2 text-center">Total Quantity</th>
               <th class="bg-blue-500 border px-4 py-2 text-center">Total Cost</th>
@@ -154,31 +172,37 @@
           <!-- Table Body -->
           <tbody>
             <!-- Sample Data Row -->
-            <tr class="text-center">
-              <td class="border px-4 py-2">Suture. Synthetic non-absorbable Monofilament</td>
-              <td class="border px-4 py-2">Piece</td>
-              <td class="border px-4 py-2">2,472.22</td>
+            <tr
+              v-for="(report, index) in reportsContainer"
+              :key="index"
+              class="text-center"
+            >
+              <td class="border px-4 py-2">{{ report.item_description }}</td>
+              <td class="border px-4 py-2">{{ report.unit }}</td>
+              <td class="border px-4 py-2">{{ report.unit_cost }}</td>
 
-              <td class="border px-4 py-2">beg csr_quantity</td>
+              <td class="border px-4 py-2">{{ report.beg_bal_csr_quantity }}</td>
               <!-- <td class="border  px-4 py-2 bg-yellow-100">-</td> -->
 
-              <td class="border px-4 py-2">beg ward_quantity</td>
-              <td class="border px-4 py-2">beg Total quantity</td>
+              <td class="border px-4 py-2">{{ report.beg_bal_ward_quantity }}</td>
+              <td class="border px-4 py-2">{{ report.beg_bal_total_quantity }}</td>
 
-              <td class="border px-4 py-2">beg total cost</td>
+              <td class="border px-4 py-2">{{ report.beg_bal_total_cost }}</td>
               <!-- <td class="border  px-4 py-2 bg-yellow-500">-</td> -->
 
-              <td class="border px-4 py-2">mms quantity</td>
-              <td class="border px-4 py-2">mms cost</td>
+              <td class="border px-4 py-2">{{ report.received_mms_qty }}</td>
+              <td class="border px-4 py-2">{{ report.received_mms_total_cost }}</td>
 
-              <td class="border px-4 py-2">issued quantity</td>
-              <td class="border px-4 py-2">issued cost</td>
+              <td class="border px-4 py-2">{{ report.issued_qty }}</td>
+              <td class="border px-4 py-2">{{ report.issued_total_cost }}</td>
 
-              <td class="border px-4 py-2">consump qty</td>
-              <td class="border px-4 py-2">consump cost</td>
+              <td class="border px-4 py-2">{{ report.consump_quantity }}</td>
+              <td class="border px-4 py-2">{{ report.consump_total_cost }}</td>
 
-              <td class="border px-4 py-2">end total qty</td>
-              <td class="border px-4 py-2">end total cost</td>
+              <td class="border px-4 py-2">{{ report.end_bal_csr_quantity }}</td>
+              <td class="border px-4 py-2">{{ report.end_bal_ward_quantity }}</td>
+              <td class="border px-4 py-2">{{ report.end_bal_total_quantity }}</td>
+              <td class="border px-4 py-2">{{ report.end_bal_total_cost }}</td>
             </tr>
 
             <!-- Grand Total Row -->
@@ -225,7 +249,7 @@ export default {
     Link,
   },
   props: {
-    reports: Object,
+    reports: Array,
   },
   data() {
     return {
@@ -244,29 +268,32 @@ export default {
   methods: {
     storeReportsInContainer() {
       this.reports.forEach((e) => {
+        console.log(e);
         this.reportsContainer.push({
-          cl2comb: e.cl2comb,
-          item_description: e.item_description,
-          unit: e.unit,
-          unit_cost: e.unit_cost,
-          beg_bal_csr_quantity: e.beg_bal_csr_quantity, // csr beginning balance
-          csr_total_cost: e.csr_total_cost,
-          ward_beginning_balance: e.ward_beginning_balance, // ward beginning balance
-          ward_total_cost: e.ward_total_cost,
-          received_mms_qty: 0,
-          received_mms_total_cost: 0,
-          supplies_issued_to_wards_quantity: e.supplies_issued_to_wards_quantity,
-          supplies_issued_to_wards_total_cost: e.supplies_issued_to_wards_total_cost,
-          total_beg_total_quantity: e.total_beg_total_quantity,
-          total_beg_total_cost: e.total_beg_total_cost,
-          consumption_quantity: e.consumption_quantity,
-          consumption_total_cost: e.consumption_total_cost,
-          csr_quantity_ending_bal: e.csr_quantity_ending_bal,
-          csr_total_cost_ending_bal: e.csr_total_cost_ending_bal,
-          ward_quantity_ending_bal: e.ward_quantity_ending_bal,
-          ward_total_cost_ending_bal: e.ward_total_cost_ending_bal,
-          total_end_total_quantity: e.total_end_total_quantity,
-          total_end_total_cost: e.total_end_total_cost,
+          cl2comb: e.cl2comb, // *
+          item_description: e.item_description, // *
+          unit: e.unit, // *
+          unit_cost: e.unit_cost, // *
+
+          beg_bal_csr_quantity: e.beg_bal_csr_quantity, // *
+          beg_bal_ward_quantity: e.beg_bal_ward_quantity, // *
+          beg_bal_total_quantity: e.beg_bal_total_quantity, // *
+          beg_bal_total_cost: 0,
+
+          received_mms_qty: e.received_mms_qty, // *
+          received_mms_total_cost: e.received_mms_total_cost, // *
+
+          issued_qty: e.issued_qty, // *
+          issued_total_cost: e.issued_total_cost, // *
+
+          consump_quantity: e.consump_quantity, // *
+          consump_total_cost: e.consump_total_cost, // *
+
+          end_bal_csr_quantity: e.end_bal_csr_quantity, // *
+          end_bal_ward_quantity: e.end_bal_ward_quantity, // *
+
+          end_bal_total_quantity: e.end_bal_total_quantity, // *
+          end_bal_total_cost: e.end_bal_total_cost,
         });
       });
 
