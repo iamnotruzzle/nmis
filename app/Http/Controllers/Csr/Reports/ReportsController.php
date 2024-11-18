@@ -174,11 +174,27 @@ class ReportsController extends Controller
         }
         // dd($aggregatedResults);
 
+        $beg_bal_dates = DB::select(
+            "SELECT CAST(beg_bal_created_at as DATE) AS date
+                FROM csrw_stock_bal_date_logs
+                ORDER BY created_at DESC;"
+        );
+
+        $end_bal_dates = DB::select(
+            "SELECT CAST(end_bal_created_at AS DATE) AS date
+                FROM csrw_stock_bal_date_logs
+                WHERE end_bal_created_at IS NOT NULL
+                ORDER BY created_at DESC;
+                "
+        );
+
         // Remove keys and re-index the array
         $aggregatedResults = array_values($aggregatedResults);
 
         return Inertia::render('Csr/Reports/Index', [
-            'reports' => $aggregatedResults
+            'reports' => $aggregatedResults,
+            'beg_bal_dates' => $beg_bal_dates,
+            'end_bal_dates' => $end_bal_dates
         ]);
 
         // return Inertia::render('UnderMaintenancePage', [
