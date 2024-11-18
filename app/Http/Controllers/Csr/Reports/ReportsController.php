@@ -179,6 +179,7 @@ class ReportsController extends Controller
                 FROM csrw_stock_bal_date_logs
                 ORDER BY created_at DESC;"
         );
+        // dd($beg_bal_dates);
 
         $end_bal_dates = DB::select(
             "SELECT CAST(end_bal_created_at AS DATE) AS date

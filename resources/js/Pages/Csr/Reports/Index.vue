@@ -10,7 +10,7 @@
         <span class="font-bold text-4xl text-primary">Reports</span>
         <div class="flex flex-row align-items-center">
           <div class="flex flex-row">
-            <Calendar
+            <!-- <Calendar
               v-model="from"
               dateFormat="mm-dd-yy"
               placeholder="FROM"
@@ -19,15 +19,25 @@
               :manualInput="false"
               :hideOnDateTimeSelect="true"
               class="mr-2"
+            /> -->
+            <Dropdown
+              v-model="from"
+              :options="beg_bal_dates_list"
+              optionLabel="name"
+              optionValue="code"
+              placeholder="Select beg. bal date"
+              checkmark
+              :highlightOnSelect="true"
+              class="mr-2"
             />
-            <Calendar
+            <Dropdown
               v-model="to"
-              dateFormat="mm-dd-yy"
-              placeholder="TO"
-              showIcon
-              showButtonBar
-              :manualInput="false"
-              :hideOnDateTimeSelect="true"
+              :options="end_bal_dates_list"
+              optionLabel="name"
+              optionValue="code"
+              placeholder="Select end bal date"
+              checkmark
+              :highlightOnSelect="true"
               class="mr-2"
             />
           </div>
@@ -237,6 +247,7 @@ import { Head } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Calendar from 'primevue/calendar';
 import Button from 'primevue/button';
+import Dropdown from 'primevue/dropdown';
 import moment from 'moment';
 import { Link } from '@inertiajs/vue3';
 
@@ -246,10 +257,13 @@ export default {
     Head,
     Calendar,
     Button,
+    Dropdown,
     Link,
   },
   props: {
     reports: Array,
+    beg_bal_dates: Array,
+    end_bal_dates: Array,
   },
   data() {
     return {
@@ -258,17 +272,19 @@ export default {
       from: null,
       to: null,
       reportsContainer: [],
+      beg_bal_dates_list: [],
+      end_bal_dates_list: [],
     };
   },
   mounted() {
-    console.log(this.reports);
+    // console.log(this.beg_bal_dates);
 
     this.storeReportsInContainer();
+    this.storeDatesInContainer();
   },
   methods: {
     storeReportsInContainer() {
       this.reports.forEach((e) => {
-        console.log(e);
         this.reportsContainer.push({
           cl2comb: e.cl2comb, // *
           item_description: e.item_description, // *
@@ -298,6 +314,21 @@ export default {
       });
 
       //   console.log('container', this.reportsContainer);
+    },
+    storeDatesInContainer() {
+      this.beg_bal_dates.forEach((e) => {
+        this.beg_bal_dates_list.push({
+          name: e.date, // *
+          code: e.date, // *
+        });
+      });
+      this.end_bal_dates.forEach((e) => {
+        this.end_bal_dates_list.push({
+          name: e.date, // *
+          code: e.date, // *
+        });
+      });
+      console.log(this.end_bal_dates_list);
     },
 
     updateData() {
@@ -329,25 +360,11 @@ export default {
   },
   watch: {
     from: function (val) {
-      if (val != null) {
-        let from = moment(val).format('YYYY-MM-DD 12:00:00');
-        // console.log('from', from);
-        this.params.from = from;
-      } else {
-        this.params.from = null;
-        this.from = null;
-      }
+      this.params.from = val;
       this.updateData();
     },
     to: function (val) {
-      if (val != null) {
-        let to = moment(val).format('YYYY-MM-DD 11:59:59');
-        // console.log('to', to);
-        this.params.to = to;
-      } else {
-        this.params.to = null;
-        this.to = null;
-      }
+      this.params.to = val;
       this.updateData();
     },
   },
