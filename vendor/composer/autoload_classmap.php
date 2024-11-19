@@ -80,6 +80,7 @@ return array(
     'App\\Models\\CsrItemConversionLogs' => $baseDir . '/app/Models/CsrItemConversionLogs.php',
     'App\\Models\\CsrManualReport' => $baseDir . '/app/Models/CsrManualReport.php',
     'App\\Models\\CsrStockBalance' => $baseDir . '/app/Models/CsrStockBalance.php',
+    'App\\Models\\CsrStockbalDateLogs' => $baseDir . '/app/Models/CsrStockbalDateLogs.php',
     'App\\Models\\CsrStocks' => $baseDir . '/app/Models/CsrStocks.php',
     'App\\Models\\CsrStocksLogs' => $baseDir . '/app/Models/CsrStocksLogs.php',
     'App\\Models\\CsrwCode' => $baseDir . '/app/Models/CsrwCode.php',

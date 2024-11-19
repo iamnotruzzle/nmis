@@ -18,5 +18,6 @@ class CsrStockBalance extends Model
         "beg_bal_created_at",
         "end_bal_created_at",
         "entry_by",
-    ]
+        "price_id",
+    ];
 }

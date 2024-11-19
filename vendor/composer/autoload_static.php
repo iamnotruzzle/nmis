@@ -759,6 +759,7 @@ class ComposerStaticInita35f14ec21fb126801fb4364978bffb6
         'App\\Models\\CsrItemConversionLogs' => __DIR__ . '/../..' . '/app/Models/CsrItemConversionLogs.php',
         'App\\Models\\CsrManualReport' => __DIR__ . '/../..' . '/app/Models/CsrManualReport.php',
         'App\\Models\\CsrStockBalance' => __DIR__ . '/../..' . '/app/Models/CsrStockBalance.php',
+        'App\\Models\\CsrStockbalDateLogs' => __DIR__ . '/../..' . '/app/Models/CsrStockbalDateLogs.php',
         'App\\Models\\CsrStocks' => __DIR__ . '/../..' . '/app/Models/CsrStocks.php',
         'App\\Models\\CsrStocksLogs' => __DIR__ . '/../..' . '/app/Models/CsrStocksLogs.php',
         'App\\Models\\CsrwCode' => __DIR__ . '/../..' . '/app/Models/CsrwCode.php',

@@ -67,6 +67,13 @@ export default {
               prefix: 'csrdashboard',
               comp: 'Csr/Dashboard/Index',
             },
+            {
+              label: 'Stock balance',
+              icon: 'la-boxes-solid',
+              to: 'csrstockbal',
+              prefix: 'csrstockbal',
+              comp: 'Balance/Index',
+            },
             // {
             //   label: 'Dashboard',
             //   icon: 'co-chart-line',
@@ -347,6 +354,11 @@ export default {
       if (this.$page.props.user.designation == 'ward') {
         this.menu[1].items = this.menu[1].items.filter(function (obj) {
           return obj.to !== 'categories' && obj.to !== 'items' && obj.to !== 'csrstocks';
+        });
+      }
+      if (this.$page.props.user.designation == 'ward') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'csrstockbal';
         });
       }
       if (this.$page.props.user.designation == 'ward') {

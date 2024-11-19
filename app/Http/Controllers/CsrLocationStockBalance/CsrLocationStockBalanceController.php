@@ -26,18 +26,9 @@ class CsrLocationStockBalanceController extends Controller
         $locationStockBalance = null;
         $now = Carbon::now()->format('Y-m-d');
 
-        // get auth wardcode
-        $authWardcode = DB::table('csrw_users')
-            ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
-            ->select('csrw_login_history.wardcode')
-            ->where('csrw_login_history.employeeid', Auth::user()->employeeid)
-            ->orderBy('csrw_login_history.created_at', 'desc')
-            ->first();
-        // dd($authWardcode);
-
         $stockBalDates = DB::select(
             "SELECT CAST(beg_bal_created_at as DATE) AS beg_bal_date, CAST(end_bal_created_at AS DATE) AS end_bal_date
-            FROM csrw_stock_bal_date_logs
+            FROM csrw_csr_stock_bal_date_logs
             oRDER BY created_at DESC;"
         );
         // dd($stockBalDates);
@@ -77,27 +68,26 @@ class CsrLocationStockBalanceController extends Controller
                 MIN(balance.beg_bal_created_at) AS beg_bal_created_at,
                 MAX(balance.end_bal_created_at) AS end_bal_created_at,
                 price.price_per_unit
-            FROM
-                csrw_location_stock_balance AS balance
-            JOIN
-                hclass2 AS item ON item.cl2comb = balance.cl2comb
-            JOIN
-                csrw_item_prices AS price ON price.cl2comb = balance.cl2comb
-                AND price.id = balance.price_id  -- Ensure price matching by ID
-            WHERE
-                balance.location = '$authWardcode->wardcode'
-                AND (
-                    (CAST(balance.beg_bal_created_at AS DATE) BETWEEN '$default_beg_bal_date' AND '$now')
-                    OR balance.beg_bal_created_at IS NULL
-                )
-                AND (
-                    (CAST(balance.end_bal_created_at AS DATE) BETWEEN '$default_beg_bal_date' AND '$now')
-                    OR balance.end_bal_created_at IS NULL
-                )
-            GROUP BY
-                balance.cl2comb,
-                item.cl2desc,
-                price.price_per_unit;"
+                FROM
+                    csrw_csr_stock_balance AS balance
+                JOIN
+                    hclass2 AS item ON item.cl2comb = balance.cl2comb
+                JOIN
+                    csrw_item_prices AS price ON price.cl2comb = balance.cl2comb
+                    AND price.id = balance.price_id  -- Ensure price matching by ID
+                WHERE
+                    (
+                        (CAST(balance.beg_bal_created_at AS DATE) BETWEEN '$default_beg_bal_date' AND '$now')
+                        OR balance.beg_bal_created_at IS NULL
+                    )
+                    AND (
+                        (CAST(balance.end_bal_created_at AS DATE) BETWEEN '$default_beg_bal_date' AND '$now')
+                        OR balance.end_bal_created_at IS NULL
+                    )
+                GROUP BY
+                    balance.cl2comb,
+                    item.cl2desc,
+                    price.price_per_unit;"
             );
         } else {
             $locationStockBalance = DB::select(
@@ -110,27 +100,26 @@ class CsrLocationStockBalanceController extends Controller
                 MIN(balance.beg_bal_created_at) AS beg_bal_created_at,
                 MAX(balance.end_bal_created_at) AS end_bal_created_at,
                 price.price_per_unit
-            FROM
-                csrw_location_stock_balance AS balance
-            JOIN
-                hclass2 AS item ON item.cl2comb = balance.cl2comb
-            JOIN
-                csrw_item_prices AS price ON price.cl2comb = balance.cl2comb
-                AND price.id = balance.price_id  -- Ensure price matching by ID
-            WHERE
-                balance.location = '$authWardcode->wardcode'
-                AND (
-                    (CAST(balance.beg_bal_created_at AS DATE) BETWEEN '$from' AND '$to')
-                    OR balance.beg_bal_created_at IS NULL
-                )
-                AND (
-                    (CAST(balance.end_bal_created_at AS DATE) BETWEEN '$from' AND '$to')
-                    OR balance.end_bal_created_at IS NULL
-                )
-            GROUP BY
-                balance.cl2comb,
-                item.cl2desc,
-                price.price_per_unit;"
+                FROM
+                    csrw_csr_stock_balance AS balance
+                JOIN
+                    hclass2 AS item ON item.cl2comb = balance.cl2comb
+                JOIN
+                    csrw_item_prices AS price ON price.cl2comb = balance.cl2comb
+                    AND price.id = balance.price_id  -- Ensure price matching by ID
+                WHERE
+                    (
+                        (CAST(balance.beg_bal_created_at AS DATE) BETWEEN '$from' AND '$now')
+                        OR balance.beg_bal_created_at IS NULL
+                    )
+                    AND (
+                        (CAST(balance.end_bal_created_at AS DATE) BETWEEN '$from' AND '$now')
+                        OR balance.end_bal_created_at IS NULL
+                    )
+                GROUP BY
+                    balance.cl2comb,
+                    item.cl2desc,
+                    price.price_per_unit;"
             );
         }
 

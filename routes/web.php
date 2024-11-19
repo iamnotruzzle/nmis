@@ -18,6 +18,7 @@ use App\Http\Controllers\Csr\Reports\ReportsController;
 use App\Http\Controllers\Csr\ReturnedItems\ReturnedItemsController;
 use App\Http\Controllers\Csr\Utility\ManualAddStocks\ManualAddStocksController;
 use App\Http\Controllers\Csr\WardsInventory\WardsInventoryController;
+use App\Http\Controllers\CsrLocationStockBalance\CsrLocationStockBalanceController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\LocationStockBalance\LocationStockBalanceController;
 use App\Http\Controllers\Reports\Csr\CsrManualReportExportController;
@@ -36,6 +37,7 @@ use App\Http\Controllers\Wards\Reports\ReportController;
 use App\Http\Controllers\Wards\RequestStocks\RequestStocksController;
 use App\Http\Controllers\Wards\RequestStocks\RequestStocksLogs\RequestStocksLogsController;
 use App\Http\Controllers\Wards\TransferStock\TransferStockController;
+use App\Models\CsrStockBalance;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -81,6 +83,7 @@ Route::middleware(['web', 'auth', 'verified'])->group(
         Route::get('csrstocks/export/', [CsrStocksReportController::class, 'export']);
         // Route::get('csrmanualreports/export/', [CsrManualReportExportController::class, 'export']);
         Route::resource('stockbal', LocationStockBalanceController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('csrstockbal', CsrLocationStockBalanceController::class)->middleware(['verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('risdetails', CsrDashboardController::class)->middleware(['verified', 'designation_csr_or_admin'])->only(['index', 'show']);
         // end csr routes
 
