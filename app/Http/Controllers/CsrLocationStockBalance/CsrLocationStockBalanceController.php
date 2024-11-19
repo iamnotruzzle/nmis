@@ -130,8 +130,8 @@ class CsrLocationStockBalanceController extends Controller
         $currentStocks = DB::select(
             "SELECT stock.id, stock.cl2comb_after as cl2comb, stock.quantity_after as quantity, stock.ris_no, price.id as price_id
                 FROM csrw_csr_item_conversion as stock
-                JOIN csrw_item_prices AS price ON price.item_conversion_id = stock.id
-                WHERE stock.quantity_after > 0"
+                JOIN csrw_item_prices as price ON price.ris_no = stock.ris_no
+                WHERE stock.quantity_after > 0;"
         );
 
         // If no balance has been declared before the 12th, create the balance
@@ -145,7 +145,7 @@ class CsrLocationStockBalanceController extends Controller
                     'ris_no' => $stock->ris_no,
                     'price_id' => $stock->price_id,
                     'entry_by' => $request->entry_by,
-                    'ward_stock_id' => $stock->id,
+                    'converted_id' => $stock->id,
                     'beg_bal_created_at' => $dateTime,
                 ]);
             }

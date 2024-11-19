@@ -20,5 +20,6 @@ class CsrStockBalance extends Model
         "entry_by",
         "price_id",
         "ris_no",
+        "converted_id",
     ];
 }
