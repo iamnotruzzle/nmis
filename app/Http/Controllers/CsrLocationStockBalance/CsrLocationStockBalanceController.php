@@ -4,6 +4,7 @@ namespace App\Http\Controllers\CsrLocationStockBalance;
 
 use App\Http\Controllers\Controller;
 use App\Models\CsrStockBalance;
+use App\Models\CsrStockbalDateLogs;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -118,10 +119,10 @@ class CsrLocationStockBalanceController extends Controller
             );
         }
 
-        return Inertia::render('Balance/Index', [
+        return Inertia::render('CsrStockBal/Index', [
             'locationStockBalance' => $locationStockBalance,
-            // 'canBeginBalance' => $canBeginBalance,
-            // 'stockBalDates' => $stockBalDates,
+            'canBeginBalance' => $canBeginBalance,
+            'stockBalDates' => $stockBalDates,
         ]);
     }
 
@@ -133,6 +134,7 @@ class CsrLocationStockBalanceController extends Controller
                 JOIN csrw_item_prices as price ON price.ris_no = stock.ris_no
                 WHERE stock.quantity_after > 0;"
         );
+        // dd($currentStocks);
 
         // If no balance has been declared before the 12th, create the balance
         $dateTime = Carbon::now();
@@ -150,28 +152,25 @@ class CsrLocationStockBalanceController extends Controller
                 ]);
             }
 
-            LocationStockBalanceDateLogs::create([
-                'wardcode' => $request->location,
+            CsrStockbalDateLogs::create([
                 'beg_bal_created_at' => $dateTime,
             ]);
         } else {
             // ending balance
             foreach ($currentStocks as $stock) {
-                LocationStockBalance::create([
-                    'location' => $request->location,
+                CsrStockBalance::create([
                     'cl2comb' => $stock->cl2comb,
                     'ending_balance' => $stock->quantity,
                     'ris_no' => $stock->ris_no,
                     'price_id' => $stock->price_id,
                     'entry_by' => $request->entry_by,
-                    'ward_stock_id' => $stock->id,
+                    'converted_id' => $stock->id,
                     'end_bal_created_at' => $dateTime,
                 ]);
             }
 
             // Find the last row where wardcode matches and end_bal_created_at is null
-            $lastRecord = LocationStockBalanceDateLogs::where('wardcode', $request->location)
-                ->whereNull('end_bal_created_at')
+            $lastRecord = CsrStockbalDateLogs::whereNull('end_bal_created_at')
                 ->latest('id') // or specify another column if 'id' is not the latest indicator
                 ->first();
 

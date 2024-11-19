@@ -257,7 +257,6 @@ export default {
         isAbleToGenerate: null,
         id: null,
         ris_no: null,
-        location: null,
         cl2comb: null,
         ending_balance: null,
         beginning_balance: null,
@@ -274,7 +273,6 @@ export default {
 
     this.loading = false;
 
-    this.form.location = this.$page.props.auth.user.location.location_name.wardcode;
     this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid;
   },
   computed: {
@@ -323,7 +321,7 @@ export default {
       this.balanceContainer = [];
       this.loading = true;
 
-      this.$inertia.get('stockbal', this.params, {
+      this.$inertia.get('csrstockbal', this.params, {
         preserveState: true,
         preserveScroll: true,
         onFinish: (visit) => {
@@ -350,14 +348,13 @@ export default {
       this.form.beg_bal = true;
 
       this.form.isAbleToGenerate = true;
-      this.form.location = this.$page.props.auth.user.location.location_name.wardcode;
       this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid;
 
       if (this.form.processing && this.form.isAbleToGenerate != true) {
         return false;
       }
 
-      this.form.post(route('stockbal.store'), {
+      this.form.post(route('csrstockbal.store'), {
         preserveScroll: true,
         onSuccess: () => {
           this.cancel();
@@ -374,14 +371,13 @@ export default {
       this.form.end_bal = true;
 
       this.form.isAbleToGenerate = true;
-      this.form.location = this.$page.props.auth.user.location.location_name.wardcode;
       this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid;
 
       if (this.form.processing && this.form.isAbleToGenerate != true) {
         return false;
       }
 
-      this.form.post(route('stockbal.store'), {
+      this.form.post(route('csrstockbal.store'), {
         preserveScroll: true,
         onSuccess: () => {
           this.cancel();
@@ -402,7 +398,6 @@ export default {
         (this.cl2desc = ''),
         this.form.clearErrors(),
         this.form.reset(),
-        (this.form.location = this.$page.props.auth.user.location.location_name.wardcode),
         (this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid)
       );
     },
@@ -413,7 +408,7 @@ export default {
 
       let id = this.form.id;
       if (this.isUpdate) {
-        this.form.put(route('stockbal.update', id), {
+        this.form.put(route('csrstockbal.update', id), {
           preserveScroll: true,
           onSuccess: () => {
             this.cancel();
@@ -422,7 +417,7 @@ export default {
           },
         });
       } else {
-        this.form.post(route('stockbal.store'), {
+        this.form.post(route('csrstockbal.store'), {
           preserveScroll: true,
           onSuccess: () => {
             this.cancel();
@@ -438,7 +433,6 @@ export default {
         (this.isUpdate = false),
         this.form.clearErrors(),
         this.form.reset(),
-        (this.form.location = this.$page.props.auth.user.location.location_name.wardcode),
         (this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid)
       );
     },
@@ -452,7 +446,7 @@ export default {
       this.deleteItemDialog = true;
     },
     deleteItem() {
-      this.form.delete(route('stockbal.destroy', this.form.id), {
+      this.form.delete(route('csrstockbal.destroy', this.form.id), {
         preserveScroll: true,
         onSuccess: () => {
           this.balanceContainer = [];
@@ -461,7 +455,6 @@ export default {
           this.form.reset();
           this.updateData();
           this.deletedMsg();
-          this.form.location = this.$page.props.auth.user.location.location_name.wardcode;
           this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid;
         },
       });
@@ -471,7 +464,6 @@ export default {
       this.isUpdate = false;
       this.form.reset();
       this.form.clearErrors();
-      this.form.location = this.$page.props.auth.user.location.location_name.wardcode;
       this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid;
     },
     createdMsg() {
