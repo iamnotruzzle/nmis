@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateCsrwStockBalDateLogsColumn extends Migration
+class CreateCsrwCsrStockBalDateLogsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class UpdateCsrwStockBalDateLogsColumn extends Migration
      */
     public function up()
     {
-        Schema::table('csrw_stock_bal_date_logs', function (Blueprint $table) {
+        Schema::create('csrw_csr_stock_bal_date_logs', function (Blueprint $table) {
+            $table->id();
             $table->string('beg_bal_created_at')->nullable()->change(); // Adjust type if needed
+            $table->dateTime('end_bal_created_at')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ class UpdateCsrwStockBalDateLogsColumn extends Migration
      */
     public function down()
     {
-        Schema::table('csrw_stock_bal_date_logs', function (Blueprint $table) {
-            $table->string('beg_bal_created_at')->nullable(false)->change(); // Or change to the original type if necessary
-        });
+        Schema::dropIfExists('csrw_csr_stock_bal_date_logs');
     }
 }
