@@ -21,31 +21,95 @@ class ReportsController extends Controller
         $from = Carbon::parse($request->from)->startOfDay();
         $to = Carbon::parse($request->to)->endOfDay();
 
-        $csr_report = DB::select(
+        // // OLD and working
+        // $csr_report = DB::select(
+        //     "SELECT
+        //     csr_stock.csr_stock_id,
+        //     item.cl2comb,
+        //     item.cl2desc AS item_description,
+        //     uom.uomdesc AS unit,
+        //     price.price_per_unit AS unit_cost,
+        //     (csr_stock.total_issued_qty + csr_stock.quantity_after) AS beg_bal_csr_quantity,
+        //     (csr_stock.total_issued_qty + csr_stock.quantity_after) AS received_mms_qty,
+        //     (csr_stock.total_issued_qty + csr_stock.quantity_after) * price.price_per_unit AS received_mms_total_cost,
+        //     csr_stock.total_issued_qty as issued_qty,
+        //     (csr_stock.total_issued_qty * price.price_per_unit) AS issued_total_cost, --
+        //     pat_charge.quantity AS consump_quantity,
+        //     pat_charge.price_total AS consump_total_cost,
+        //     csr_stock.created_at,
+        //     csr_stock.quantity_after AS end_bal_csr_quantity
+        // FROM
+        //     csrw_csr_item_conversion AS csr_stock
+        // JOIN hclass2 AS item ON item.cl2comb = csr_stock.cl2comb_after
+        // JOIN csrw_item_prices AS price ON price.item_conversion_id = csr_stock.csr_stock_id
+        // JOIN huom AS uom ON uom.uomcode = item.uomcode
+        // LEFT JOIN csrw_wards_stocks AS ward_stock ON ward_stock.stock_id = csr_stock.csr_stock_id
+        // LEFT JOIN csrw_patient_charge_logs AS pat_charge ON pat_charge.ward_stocks_id = ward_stock.id;"
+        // );
+
+        $csr_report_raw = DB::select(
             "SELECT
                 csr_stock.csr_stock_id,
                 item.cl2comb,
                 item.cl2desc AS item_description,
                 uom.uomdesc AS unit,
                 price.price_per_unit AS unit_cost,
-                (csr_stock.total_issued_qty + csr_stock.quantity_after) AS beg_bal_csr_quantity,
+                stock_bal.beginning_balance AS beg_bal_csr_quantity,
                 (csr_stock.total_issued_qty + csr_stock.quantity_after) AS received_mms_qty,
                 (csr_stock.total_issued_qty + csr_stock.quantity_after) * price.price_per_unit AS received_mms_total_cost,
-                csr_stock.total_issued_qty as issued_qty,
-                (csr_stock.total_issued_qty * price.price_per_unit) AS issued_total_cost, --
+                csr_stock.total_issued_qty AS issued_qty,
+                (csr_stock.total_issued_qty * price.price_per_unit) AS issued_total_cost,
                 pat_charge.quantity AS consump_quantity,
                 pat_charge.price_total AS consump_total_cost,
                 csr_stock.created_at,
-                csr_stock.quantity_after AS end_bal_csr_quantity
+                stock_bal.ending_balance AS end_bal_csr_quantity
             FROM
                 csrw_csr_item_conversion AS csr_stock
             JOIN hclass2 AS item ON item.cl2comb = csr_stock.cl2comb_after
             JOIN csrw_item_prices AS price ON price.item_conversion_id = csr_stock.csr_stock_id
             JOIN huom AS uom ON uom.uomcode = item.uomcode
             LEFT JOIN csrw_wards_stocks AS ward_stock ON ward_stock.stock_id = csr_stock.csr_stock_id
-            LEFT JOIN csrw_patient_charge_logs AS pat_charge ON pat_charge.ward_stocks_id = ward_stock.id;"
+            LEFT JOIN csrw_patient_charge_logs AS pat_charge ON pat_charge.ward_stocks_id = ward_stock.id
+            LEFT JOIN csrw_csr_stock_balance AS stock_bal ON stock_bal.converted_id = csr_stock.id;"
         );
-        // dd($csr_report);
+
+        // Step 1: Initialize an empty array to hold grouped data
+        $csr_report = [];
+        // Step 2: Group and merge quantities
+        foreach ($csr_report_raw as $record) {
+            $id = $record->csr_stock_id;
+
+            // Check if the `csr_stock_id` already exists in the array
+            if (!isset($csr_report[$id])) {
+                // dd($id);
+                // If not, initialize it
+                $csr_report[$id] = [
+                    'csr_stock_id' => $record->csr_stock_id,
+                    'cl2comb' => $record->cl2comb,
+                    'item_description' => $record->item_description,
+                    'unit' => $record->unit,
+                    'unit_cost' => $record->unit_cost,
+                    'beg_bal_csr_quantity' => $record->beg_bal_csr_quantity ?? 0,
+                    'received_mms_qty' => $record->received_mms_qty,
+                    'received_mms_total_cost' => $record->received_mms_total_cost,
+                    'issued_qty' => $record->issued_qty,
+                    'issued_total_cost' => $record->issued_total_cost,
+                    'consump_quantity' => $record->consump_quantity ?? 0,
+                    'consump_total_cost' => $record->consump_total_cost ?? 0,
+                    'created_at' => $record->created_at,
+                    'end_bal_csr_quantity' => $record->end_bal_csr_quantity ?? 0,
+                ];
+            } else {
+                // If exists, merge the `beg_bal_csr_quantity` and `end_bal_csr_quantity`
+                $csr_report[$id]['beg_bal_csr_quantity'] += $record->beg_bal_csr_quantity ?? 0;
+                $csr_report[$id]['end_bal_csr_quantity'] += $record->end_bal_csr_quantity ?? 0;
+            }
+        }
+        // Step 3: Convert associative array to a sequential array if needed
+        // Transform array to array of objects
+        $csr_report = array_map(function ($item) {
+            return (object) $item;
+        }, $csr_report);
 
         $ward_report = DB::select(
             "SELECT
@@ -91,7 +155,6 @@ class ReportsController extends Controller
             ORDER BY
                 hclass2.cl2desc ASC;"
         );
-        // dd($ward_report);
 
         // Step 1: Index second query results by `csr_stock_id`
         $combinedResults = [];
@@ -126,7 +189,6 @@ class ReportsController extends Controller
                 );
             }
         }
-        // dd($combinedResults);
 
         // Step 3: Aggregate results by `cl2comb` and `unit_cost`, removing `csr_stock_id` and `created_at`
         $aggregatedResults = [];
