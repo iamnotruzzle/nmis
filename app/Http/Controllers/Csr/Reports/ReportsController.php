@@ -21,32 +21,6 @@ class ReportsController extends Controller
         $from = Carbon::parse($request->from)->startOfDay();
         $to = Carbon::parse($request->to)->endOfDay();
 
-        // $csr_report = DB::select(
-        //     "SELECT
-        //         csr_stock.csr_stock_id,
-        //         item.cl2comb,
-        //         item.cl2desc AS item_description,
-        //         uom.uomdesc AS unit,
-        //         price.price_per_unit AS unit_cost,
-        //         (csr_stock.total_issued_qty + csr_stock.quantity_after) AS beg_bal_csr_quantity,
-        //         (csr_stock.total_issued_qty + csr_stock.quantity_after) AS received_mms_qty,
-        //         (csr_stock.total_issued_qty + csr_stock.quantity_after) * price.price_per_unit AS received_mms_total_cost,
-        //         csr_stock.total_issued_qty as issued_qty,
-        //         (csr_stock.total_issued_qty * price.price_per_unit) AS issued_total_cost, --
-        //         pat_charge.quantity AS consump_quantity,
-        //         pat_charge.price_total AS consump_total_cost,
-        //         csr_stock.created_at,
-        //         csr_stock.quantity_after AS end_bal_csr_quantity
-        //     FROM
-        //         csrw_csr_item_conversion AS csr_stock
-        //     JOIN hclass2 AS item ON item.cl2comb = csr_stock.cl2comb_after
-        //     JOIN csrw_item_prices AS price ON price.item_conversion_id = csr_stock.csr_stock_id
-        //     JOIN huom AS uom ON uom.uomcode = item.uomcode
-        //     LEFT JOIN csrw_wards_stocks AS ward_stock ON ward_stock.stock_id = csr_stock.csr_stock_id
-        //     LEFT JOIN csrw_patient_charge_logs AS pat_charge ON pat_charge.ward_stocks_id = ward_stock.id
-        //     WHERE
-        //         (CAST(csr_stock.created_at AS DATE) BETWEEN '2024-11-04' AND '2024-11-30';"
-        // );
         $csr_report = DB::select(
             "SELECT
                 csr_stock.csr_stock_id,
