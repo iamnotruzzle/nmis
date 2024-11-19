@@ -12,11 +12,6 @@ use Inertia\Inertia;
 
 class CsrLocationStockBalanceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $searchString = $request->search;
@@ -130,67 +125,72 @@ class CsrLocationStockBalanceController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $currentStocks = DB::select(
+            "SELECT stock.id, stock.cl2comb_after as cl2comb, stock.quantity_after as quantity, stock.ris_no, price.id as price_id
+                FROM csrw_csr_item_conversion as stock
+                JOIN csrw_item_prices AS price ON price.item_conversion_id = stock.id
+                WHERE stock.quantity_after > 0"
+        );
+
+        // If no balance has been declared before the 12th, create the balance
+        $dateTime = Carbon::now();
+        if ($request->beg_bal == true) {
+            // beginning balance
+            foreach ($currentStocks as $stock) {
+                CsrStockBalance::create([
+                    'cl2comb' => $stock->cl2comb,
+                    'beginning_balance' => $stock->quantity,
+                    'ris_no' => $stock->ris_no,
+                    'price_id' => $stock->price_id,
+                    'entry_by' => $request->entry_by,
+                    'ward_stock_id' => $stock->id,
+                    'beg_bal_created_at' => $dateTime,
+                ]);
+            }
+
+            LocationStockBalanceDateLogs::create([
+                'wardcode' => $request->location,
+                'beg_bal_created_at' => $dateTime,
+            ]);
+        } else {
+            // ending balance
+            foreach ($currentStocks as $stock) {
+                LocationStockBalance::create([
+                    'location' => $request->location,
+                    'cl2comb' => $stock->cl2comb,
+                    'ending_balance' => $stock->quantity,
+                    'ris_no' => $stock->ris_no,
+                    'price_id' => $stock->price_id,
+                    'entry_by' => $request->entry_by,
+                    'ward_stock_id' => $stock->id,
+                    'end_bal_created_at' => $dateTime,
+                ]);
+            }
+
+            // Find the last row where wardcode matches and end_bal_created_at is null
+            $lastRecord = LocationStockBalanceDateLogs::where('wardcode', $request->location)
+                ->whereNull('end_bal_created_at')
+                ->latest('id') // or specify another column if 'id' is not the latest indicator
+                ->first();
+
+            if ($lastRecord) {
+                // Update the end_bal_created_at column
+                $lastRecord->update([
+                    'end_bal_created_at' => $dateTime, // or specify a custom date if needed
+                ]);
+            }
+        }
+
+        return redirect()->back()->with('success', 'Balance set successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         //
