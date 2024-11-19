@@ -301,6 +301,8 @@ export default {
           code: `[ ${e.beg_bal_date} ] - [ ${e.end_bal_date || 'ONGOING'} ]`, // Use 'ONGOING' for null end dates
         });
       });
+
+      //   console.log(this.stockBalDatesList);
     },
     storeStockBalanceInContainer() {
       this.locationStockBalance.forEach((e) => {
