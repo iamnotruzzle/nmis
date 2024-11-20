@@ -171,6 +171,24 @@ class ReportsController extends Controller
         }
 
         // Step 2: Merge the first result set with the second
+        // foreach ($csr_report as $row) {
+        //     $csr_stock_id = $row->csr_stock_id;
+
+        //     if (isset($combinedResults[$csr_stock_id])) {
+        //         $combinedResults[$csr_stock_id] = array_merge(
+        //             $combinedResults[$csr_stock_id],
+        //             (array)$row
+        //         );
+        //     } else {
+        //         $combinedResults[$csr_stock_id] = array_merge(
+        //             (array)$row,
+        //             [
+        //                 'beg_bal_ward_quantity' => 0,
+        //                 'end_bal_ward_quantity' => 0
+        //             ]
+        //         );
+        //     }
+        // }
         foreach ($csr_report as $row) {
             $csr_stock_id = $row->csr_stock_id;
 
@@ -188,7 +206,14 @@ class ReportsController extends Controller
                     ]
                 );
             }
+
+            // Fix floating-point issue for consump_total_cost
+            $combinedResults[$csr_stock_id]['consump_total_cost'] = round(
+                (float)$combinedResults[$csr_stock_id]['consump_quantity'] * (float)$combinedResults[$csr_stock_id]['unit_cost'],
+                2
+            );
         }
+        // dd($combinedResults);
 
         // Step 3: Aggregate results by `cl2comb` and `unit_cost`, removing `csr_stock_id` and `created_at`
         $aggregatedResults = [];
@@ -214,8 +239,10 @@ class ReportsController extends Controller
                     'end_bal_csr_quantity' => $record['end_bal_csr_quantity'] ?? 0,
                     'beg_bal_total_quantity' => ($record['beg_bal_ward_quantity'] ?? 0) + ($record['beg_bal_csr_quantity'] ?? 0), // New calculation
                     'end_bal_total_quantity' => ($record['end_bal_ward_quantity'] ?? 0) + ($record['end_bal_csr_quantity'] ?? 0), // New calculation
-                    'beg_bal_total_cost' => (($record['beg_bal_ward_quantity'] ?? 0) + ($record['beg_bal_csr_quantity'] ?? 0)) * ($record['unit_cost'] ?? 0), // New calculation
-                    'end_bal_total_cost' => (($record['end_bal_ward_quantity'] ?? 0) + ($record['end_bal_csr_quantity'] ?? 0)) * ($record['unit_cost'] ?? 0),
+                    // 'beg_bal_total_cost' => (($record['beg_bal_ward_quantity'] ?? 0) + ($record['beg_bal_csr_quantity'] ?? 0)) * ($record['unit_cost'] ?? 0), // New calculation
+                    // 'end_bal_total_cost' => (($record['end_bal_ward_quantity'] ?? 0) + ($record['end_bal_csr_quantity'] ?? 0)) * ($record['unit_cost'] ?? 0),
+                    'beg_bal_total_cost' => round((($record['beg_bal_ward_quantity'] ?? 0) + ($record['beg_bal_csr_quantity'] ?? 0)) * ($record['unit_cost'] ?? 0), 2), // Round beg_bal_total_cost
+                    'end_bal_total_cost' => round((($record['end_bal_ward_quantity'] ?? 0) + ($record['end_bal_csr_quantity'] ?? 0)) * ($record['unit_cost'] ?? 0), 2), // Round end_bal_total_cost
                 ];
             } else {
                 // Sum the values for the existing entry
@@ -225,6 +252,7 @@ class ReportsController extends Controller
                 $aggregatedResults[$key]['issued_qty'] += $record['issued_qty'] ?? 0;
                 $aggregatedResults[$key]['issued_total_cost'] += $record['issued_total_cost'] ?? 0;
                 $aggregatedResults[$key]['consump_quantity'] += $record['consump_quantity'] ?? 0;
+                // $aggregatedResults[$key]['consump_total_cost'] += $record['consump_total_cost'] ?? 0;
                 $aggregatedResults[$key]['consump_total_cost'] += $record['consump_total_cost'] ?? 0;
                 $aggregatedResults[$key]['beg_bal_ward_quantity'] += $record['beg_bal_ward_quantity'];
                 $aggregatedResults[$key]['end_bal_ward_quantity'] += $record['end_bal_ward_quantity'];
@@ -256,6 +284,8 @@ class ReportsController extends Controller
 
         // Remove keys and re-index the array
         $aggregatedResults = array_values($aggregatedResults);
+
+        // dd($aggregatedResults);
 
         return Inertia::render('Csr/Reports/Index', [
             'reports' => $aggregatedResults,

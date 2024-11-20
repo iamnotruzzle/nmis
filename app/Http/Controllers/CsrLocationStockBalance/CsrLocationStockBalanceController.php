@@ -128,11 +128,17 @@ class CsrLocationStockBalanceController extends Controller
 
     public function store(Request $request)
     {
+        // orig query
+        // $currentStocks = DB::select(
+        //     "SELECT stock.id, stock.cl2comb_after as cl2comb, stock.quantity_after as quantity, stock.ris_no, price.id as price_id
+        //         FROM csrw_csr_item_conversion as stock
+        //         JOIN csrw_item_prices as price ON price.ris_no = stock.ris_no
+        //         WHERE stock.quantity_after > 0;"
+        // );
         $currentStocks = DB::select(
             "SELECT stock.id, stock.cl2comb_after as cl2comb, stock.quantity_after as quantity, stock.ris_no, price.id as price_id
                 FROM csrw_csr_item_conversion as stock
-                JOIN csrw_item_prices as price ON price.ris_no = stock.ris_no
-                WHERE stock.quantity_after > 0;"
+                JOIN csrw_item_prices as price ON price.ris_no = stock.ris_no;"
         );
         // dd($currentStocks);
 

@@ -146,13 +146,21 @@ class LocationStockBalanceController extends Controller
 
     public function store(Request $request)
     {
+        // orig query
+        // $currentStocks = DB::select(
+        //     "SELECT ward.id, ward.location, ward.cl2comb, ward.quantity, ward.ris_no, price.id as price_id
+        //         FROM csrw_wards_stocks as ward
+        //         JOIN csrw_item_prices as price ON price.ris_no = ward.ris_no
+        //         WHERE ward.location = '$request->location'
+        //         -- AND ward.[from] = 'CSR'
+        //         AND ward.quantity > 0"
+        // );
         $currentStocks = DB::select(
             "SELECT ward.id, ward.location, ward.cl2comb, ward.quantity, ward.ris_no, price.id as price_id
                 FROM csrw_wards_stocks as ward
                 JOIN csrw_item_prices as price ON price.ris_no = ward.ris_no
                 WHERE ward.location = '$request->location'
-                -- AND ward.[from] = 'CSR'
-                AND ward.quantity > 0"
+                AND ward.[from] = 'CSR'"
         );
         // dd($currentStocks);
 
