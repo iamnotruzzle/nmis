@@ -200,15 +200,20 @@ class RequestStocksController extends Controller
 
     public function updatedeliverystatus(RequestStocks $requeststock, Request $request)
     {
-        // update status
-        RequestStocks::where('id', $request->request_stock_id)
-            ->update([
-                'status' => $request->status,
-                'received_date' => Carbon::now(),
-            ]);
+        $requestStock = RequestStocks::where('id', $request->request_stock_id)->first();
+        // dd($x);
 
-        // the parameters result will be send into the frontend
-        event(new RequestStock('Item requested.'));
+        if ($requestStock->status == 'FILLED') {
+            // update status
+            RequestStocks::where('id', $request->request_stock_id)
+                ->update([
+                    'status' => $request->status,
+                    'received_date' => Carbon::now(),
+                ]);
+
+            // the parameters result will be send into the frontend
+            event(new RequestStock('Item requested.'));
+        }
 
         return Redirect::route('requeststocks.index');
     }
