@@ -21,6 +21,18 @@
               class="w-full"
             />
           </div>
+
+          <i
+            v-if="selectedDate == null || selectedDate == ''"
+            class="pi pi-file-excel"
+            :style="{ color: 'gray', 'font-size': '2rem' }"
+          ></i>
+          <i
+            v-else
+            class="pi pi-file-excel"
+            :style="{ color: 'green', 'font-size': '2rem' }"
+            @click="fnExcelReport"
+          ></i>
         </div>
       </div>
 
@@ -28,7 +40,10 @@
         id="print"
         style="overflow-x: auto"
       >
-        <table style="width: 100%; border-collapse: collapse; text-align: center">
+        <table
+          id="theTable"
+          style="width: 100%; border-collapse: collapse; text-align: center"
+        >
           <tr>
             <td
               rowspan="2"
@@ -322,94 +337,31 @@ export default {
       console.log('container', this.reportsContainer);
     },
 
-    // print using windows word
-    print() {
-      //   console.log(data);
-      //   console.log('Opening print dialog...');
-      setTimeout(() => {
-        this.$nextTick(() => {
-          const printWindow = window.open('', '_blank');
-          if (printWindow) {
-            printWindow.document.write(`
-            <html>
-              <head>
-                <title>Print</title>
-                <style>
-                    /* Print-specific styles */
-                    body, #print {
-                        font-family: Calibri, sans-serif;
-                    }
-                    table {
-                        width: 100%;
-                        border-collapse: collapse;
-                    }
-                    th, td {
-                        padding: 5px;
-                        border: 1px solid black;
-                        text-align: left;
-                    }
-                </style>
-              </head>
-              <body>
-                ${document.getElementById('print').innerHTML}
-              </body>
-            </html>
-          `);
-            printWindow.document.close();
-            printWindow.focus();
-            printWindow.print();
-            printWindow.close();
-          } else {
-            console.error('Failed to open print window.');
-          }
-        });
-      }, 200); // Slightly longer delay to ensure rendering
-    },
-    // export to excel
-    exportToExcel() {
-      const tableHTML = document.getElementById('print').outerHTML;
-      const dataType = 'application/vnd.ms-excel';
-      const tableStyle = `
-        <style>
-        body, table {
-            font-family: Calibri, sans-serif;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: center;
-        }
-        th, td {
-            padding: 5px;
-            border: 1px solid black;
-            text-align: center;
-        }
-        </style>
-    `;
+    fnExcelReport() {
+      const table = document.getElementById('theTable');
+      let tableHTML = table.outerHTML;
+      const fileName = 'download.xls';
 
-      const excelHTML = `
-        <html xmlns:o="urn:schemas-microsoft-com:office:office"
-            xmlns:x="urn:schemas-microsoft-com:office:excel"
-            xmlns="http://www.w3.org/TR/REC-html40">
-        <head>
-            <meta charset="UTF-8">
-            <title>Export HTML to Excel</title>
-            ${tableStyle}
-        </head>
-        <body>
-            ${tableHTML}
-        </body>
-        </html>
-    `;
+      const msie = window.navigator.userAgent.indexOf('MSIE ');
 
-      const blob = new Blob([excelHTML], { type: dataType });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = 'exported_table.xls';
-
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      // If Internet Explorer
+      if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+        const dummyFrame = document.getElementById('dummyFrame').contentWindow;
+        dummyFrame.document.open('txt/html', 'replace');
+        dummyFrame.document.write(tableHTML);
+        dummyFrame.document.close();
+        dummyFrame.focus();
+        dummyFrame.document.execCommand('SaveAs', true, fileName);
+      } else {
+        // Other browsers
+        const a = document.createElement('a');
+        tableHTML = tableHTML.replace(/  /g, '').replace(/ /g, '%20'); // Replaces spaces
+        a.href = 'data:application/vnd.ms-excel,' + tableHTML;
+        a.setAttribute('download', fileName);
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
     },
 
     updateData() {
