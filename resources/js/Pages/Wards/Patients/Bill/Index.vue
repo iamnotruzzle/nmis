@@ -856,12 +856,6 @@ export default {
       }),
     };
   },
-  // created will be initialize before mounted
-  //   created() {
-  //     this.totalRecords = this.bills.total;
-  //     this.params.page = this.bills.current_page;
-  //     this.rows = this.bills.per_page;
-  //   },
   mounted() {
     // console.log(this.canCharge); //
 
@@ -889,13 +883,6 @@ export default {
           }
         }
       }
-
-      //   console.log(total);
-
-      //   total.toLocaleString('en-PH', {
-      //     style: 'currency',
-      //     currency: 'PHP',
-      //   });
 
       return total.toFixed(2);
     },
@@ -957,23 +944,6 @@ export default {
       //   console.log('bill list', this.billList);
     },
     storeMedicalSuppliesInContainer() {
-      //   OLD;
-      //   this.medicalSupplies.forEach((med) => {
-      //     this.medicalSuppliesList.push({
-      //       id: med.id,
-      //       is_consumable: med.is_consumable,
-      //       cl2comb: med.cl2comb,
-      //       cl2desc: med.cl2desc,
-      //       uomcode: med.uomcode == null ? null : med.uomcode,
-      //       quantity: med.is_consumable != 'y' ? med.quantity : med.total_usage,
-      //       average: med.average,
-      //       total_usage: med.total_usage,
-      //       price: med.price,
-      //       expiration_date: med.expiration_date,
-      //     });
-      //   });
-
-      // NEW
       let combinedSupplies = [];
       this.medicalSupplies.forEach((med) => {
         // Find if the item with the same cl2desc and price already exists in the combinedSupplies array
@@ -1043,20 +1013,6 @@ export default {
         }
       });
       this.itemList = Object.values(combinedItems);
-
-      // uncomment this if you want to show misc items
-      // misc
-      //   this.misc.forEach((misc) => {
-      //     this.itemList.push({
-      //       id: null,
-      //       typeOfCharge: 'MISC',
-      //       itemCode: misc.hmcode,
-      //       itemDesc: misc.hmdesc,
-      //       unit: misc.uomcode == null ? null : misc.uomcode,
-      //       quantity: 99999,
-      //       price: misc.hmamt,
-      //     });
-      //   });
 
       this.itemList.sort((a, b) => {
         let cl2descA = a.itemDesc;
@@ -1211,8 +1167,6 @@ export default {
       );
     },
     print(data) {
-      //   console.log(data);
-      //   console.log('Opening print dialog...');
       setTimeout(() => {
         if (data != null) {
           this.printForm.no = data.charge_slip_no;
