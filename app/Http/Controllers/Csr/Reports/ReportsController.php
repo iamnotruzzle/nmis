@@ -72,6 +72,7 @@ class ReportsController extends Controller
             LEFT JOIN csrw_patient_charge_logs AS pat_charge ON pat_charge.ward_stocks_id = ward_stock.id
             LEFT JOIN csrw_csr_stock_balance AS stock_bal ON stock_bal.converted_id = csr_stock.id;"
         );
+        // dd($csr_report_raw);
 
         // Step 1: Initialize an empty array to hold grouped data
         $csr_report = [];
@@ -81,7 +82,6 @@ class ReportsController extends Controller
 
             // Check if the `csr_stock_id` already exists in the array
             if (!isset($csr_report[$id])) {
-                // dd($id);
                 // If not, initialize it
                 $csr_report[$id] = [
                     'csr_stock_id' => $record->csr_stock_id,
@@ -89,7 +89,6 @@ class ReportsController extends Controller
                     'item_description' => $record->item_description,
                     'unit' => $record->unit,
                     'unit_cost' => $record->unit_cost,
-                    'beg_bal_csr_quantity' => $record->beg_bal_csr_quantity ?? 0,
                     'received_mms_qty' => $record->received_mms_qty,
                     'received_mms_total_cost' => $record->received_mms_total_cost,
                     'issued_qty' => $record->issued_qty,
@@ -97,19 +96,33 @@ class ReportsController extends Controller
                     'consump_quantity' => $record->consump_quantity ?? 0,
                     'consump_total_cost' => $record->consump_total_cost ?? 0,
                     'created_at' => $record->created_at,
+                    'beg_bal_csr_quantity' => $record->beg_bal_csr_quantity ?? 0,
                     'end_bal_csr_quantity' => $record->end_bal_csr_quantity ?? 0,
                 ];
             } else {
-                // If exists, merge the `beg_bal_csr_quantity` and `end_bal_csr_quantity`
-                $csr_report[$id]['beg_bal_csr_quantity'] += $record->beg_bal_csr_quantity ?? 0;
-                $csr_report[$id]['end_bal_csr_quantity'] += $record->end_bal_csr_quantity ?? 0;
+                // If `beg_bal_csr_quantity` is not null and not already set, add it
+                if ($record->beg_bal_csr_quantity !== null) {
+                    // Only add if not already set
+                    if ($csr_report[$id]['beg_bal_csr_quantity'] === 0) {
+                        $csr_report[$id]['beg_bal_csr_quantity'] = $record->beg_bal_csr_quantity;
+                    }
+                }
+
+                // If `end_bal_csr_quantity` is not null and not already set, add it
+                if ($record->end_bal_csr_quantity !== null) {
+                    // Only add if not already set
+                    if ($csr_report[$id]['end_bal_csr_quantity'] === 0) {
+                        $csr_report[$id]['end_bal_csr_quantity'] = $record->end_bal_csr_quantity;
+                    }
+                }
             }
         }
-        // Step 3: Convert associative array to a sequential array if needed
-        // Transform array to array of objects
+        // dd($csr_report_raw);
+
         $csr_report = array_map(function ($item) {
             return (object) $item;
         }, $csr_report);
+        // dd($csr_report);
 
         $ward_report = DB::select(
             "SELECT
@@ -155,40 +168,28 @@ class ReportsController extends Controller
             ORDER BY
                 hclass2.cl2desc ASC;"
         );
+        // dd($ward_report);
 
         // Step 1: Index second query results by `csr_stock_id`
         $combinedResults = [];
 
-        // Index the second result set by csr_stock_id
+        // Index the results by csr_stock_id and sum the quantities
         foreach ($ward_report as $row) {
-            $combinedResults[$row->csr_stock_id] = array_merge(
-                (array)$row,
-                [
-                    'beg_bal_ward_quantity' => $row->beg_bal_ward_quantity ?? 0,
-                    'end_bal_ward_quantity' => $row->end_bal_ward_quantity ?? 0
-                ]
-            );
+            $csr_stock_id = $row->csr_stock_id;
+
+            if (!isset($combinedResults[$csr_stock_id])) {
+                $combinedResults[$csr_stock_id] = [
+                    'csr_stock_id' => $csr_stock_id,
+                    'beg_bal_ward_quantity' => (int)$row->beg_bal_ward_quantity ?? 0,
+                    'end_bal_ward_quantity' => (int)$row->end_bal_ward_quantity ?? 0,
+                ];
+            } else {
+                $combinedResults[$csr_stock_id]['beg_bal_ward_quantity'] += (int)$row->beg_bal_ward_quantity ?? 0;
+                $combinedResults[$csr_stock_id]['end_bal_ward_quantity'] += (int)$row->end_bal_ward_quantity ?? 0;
+            }
         }
 
-        // Step 2: Merge the first result set with the second
-        // foreach ($csr_report as $row) {
-        //     $csr_stock_id = $row->csr_stock_id;
-
-        //     if (isset($combinedResults[$csr_stock_id])) {
-        //         $combinedResults[$csr_stock_id] = array_merge(
-        //             $combinedResults[$csr_stock_id],
-        //             (array)$row
-        //         );
-        //     } else {
-        //         $combinedResults[$csr_stock_id] = array_merge(
-        //             (array)$row,
-        //             [
-        //                 'beg_bal_ward_quantity' => 0,
-        //                 'end_bal_ward_quantity' => 0
-        //             ]
-        //         );
-        //     }
-        // }
+        // oid
         foreach ($csr_report as $row) {
             $csr_stock_id = $row->csr_stock_id;
 
@@ -197,6 +198,7 @@ class ReportsController extends Controller
                     $combinedResults[$csr_stock_id],
                     (array)$row
                 );
+                // dd($combinedResults);
             } else {
                 $combinedResults[$csr_stock_id] = array_merge(
                     (array)$row,
@@ -239,20 +241,17 @@ class ReportsController extends Controller
                     'end_bal_csr_quantity' => $record['end_bal_csr_quantity'] ?? 0,
                     'beg_bal_total_quantity' => ($record['beg_bal_ward_quantity'] ?? 0) + ($record['beg_bal_csr_quantity'] ?? 0), // New calculation
                     'end_bal_total_quantity' => ($record['end_bal_ward_quantity'] ?? 0) + ($record['end_bal_csr_quantity'] ?? 0), // New calculation
-                    // 'beg_bal_total_cost' => (($record['beg_bal_ward_quantity'] ?? 0) + ($record['beg_bal_csr_quantity'] ?? 0)) * ($record['unit_cost'] ?? 0), // New calculation
-                    // 'end_bal_total_cost' => (($record['end_bal_ward_quantity'] ?? 0) + ($record['end_bal_csr_quantity'] ?? 0)) * ($record['unit_cost'] ?? 0),
                     'beg_bal_total_cost' => round((($record['beg_bal_ward_quantity'] ?? 0) + ($record['beg_bal_csr_quantity'] ?? 0)) * ($record['unit_cost'] ?? 0), 2), // Round beg_bal_total_cost
                     'end_bal_total_cost' => round((($record['end_bal_ward_quantity'] ?? 0) + ($record['end_bal_csr_quantity'] ?? 0)) * ($record['unit_cost'] ?? 0), 2), // Round end_bal_total_cost
                 ];
             } else {
                 // Sum the values for the existing entry
-                $aggregatedResults[$key]['beg_bal_csr_quantity'] += $record['beg_bal_csr_quantity'] ?? 0;
+                $aggregatedResults[$key]['beg_bal_csr_quantity'] += $record['beg_bal_csr_quantity'];
                 $aggregatedResults[$key]['received_mms_qty'] += $record['received_mms_qty'] ?? 0;
                 $aggregatedResults[$key]['received_mms_total_cost'] += $record['received_mms_total_cost'] ?? 0;
                 $aggregatedResults[$key]['issued_qty'] += $record['issued_qty'] ?? 0;
                 $aggregatedResults[$key]['issued_total_cost'] += $record['issued_total_cost'] ?? 0;
                 $aggregatedResults[$key]['consump_quantity'] += $record['consump_quantity'] ?? 0;
-                // $aggregatedResults[$key]['consump_total_cost'] += $record['consump_total_cost'] ?? 0;
                 $aggregatedResults[$key]['consump_total_cost'] += $record['consump_total_cost'] ?? 0;
                 $aggregatedResults[$key]['beg_bal_ward_quantity'] += $record['beg_bal_ward_quantity'];
                 $aggregatedResults[$key]['end_bal_ward_quantity'] += $record['end_bal_ward_quantity'];
