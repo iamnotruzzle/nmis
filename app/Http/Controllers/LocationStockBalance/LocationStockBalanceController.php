@@ -164,53 +164,59 @@ class LocationStockBalanceController extends Controller
         );
         // dd($currentStocks);
 
-        // If no balance has been declared before the 12th, create the balance
-        $dateTime = Carbon::now();
-        if ($request->beg_bal == true) {
-            // beginning balance
-            foreach ($currentStocks as $stock) {
-                LocationStockBalance::create([
-                    'location' => $request->location,
-                    'cl2comb' => $stock->cl2comb,
-                    'beginning_balance' => $stock->quantity,
-                    'ris_no' => $stock->ris_no,
-                    'price_id' => $stock->price_id,
-                    'entry_by' => $request->entry_by,
-                    'ward_stock_id' => $stock->id,
+        $itemCount = DB::select(
+            "SELECT COUNT(*) as count FROM csrw_wards_stocks;"
+        );
+
+        if ($itemCount[0]->count != 0) {
+            // If no balance has been declared before the 12th, create the balance
+            $dateTime = Carbon::now();
+            if ($request->beg_bal == true) {
+                // beginning balance
+                foreach ($currentStocks as $stock) {
+                    LocationStockBalance::create([
+                        'location' => $request->location,
+                        'cl2comb' => $stock->cl2comb,
+                        'beginning_balance' => $stock->quantity,
+                        'ris_no' => $stock->ris_no,
+                        'price_id' => $stock->price_id,
+                        'entry_by' => $request->entry_by,
+                        'ward_stock_id' => $stock->id,
+                        'beg_bal_created_at' => $dateTime,
+                    ]);
+                }
+
+                LocationStockBalanceDateLogs::create([
+                    'wardcode' => $request->location,
                     'beg_bal_created_at' => $dateTime,
                 ]);
-            }
+            } else {
+                // ending balance
+                foreach ($currentStocks as $stock) {
+                    LocationStockBalance::create([
+                        'location' => $request->location,
+                        'cl2comb' => $stock->cl2comb,
+                        'ending_balance' => $stock->quantity,
+                        'ris_no' => $stock->ris_no,
+                        'price_id' => $stock->price_id,
+                        'entry_by' => $request->entry_by,
+                        'ward_stock_id' => $stock->id,
+                        'end_bal_created_at' => $dateTime,
+                    ]);
+                }
 
-            LocationStockBalanceDateLogs::create([
-                'wardcode' => $request->location,
-                'beg_bal_created_at' => $dateTime,
-            ]);
-        } else {
-            // ending balance
-            foreach ($currentStocks as $stock) {
-                LocationStockBalance::create([
-                    'location' => $request->location,
-                    'cl2comb' => $stock->cl2comb,
-                    'ending_balance' => $stock->quantity,
-                    'ris_no' => $stock->ris_no,
-                    'price_id' => $stock->price_id,
-                    'entry_by' => $request->entry_by,
-                    'ward_stock_id' => $stock->id,
-                    'end_bal_created_at' => $dateTime,
-                ]);
-            }
+                // Find the last row where wardcode matches and end_bal_created_at is null
+                $lastRecord = LocationStockBalanceDateLogs::where('wardcode', $request->location)
+                    ->whereNull('end_bal_created_at')
+                    ->latest('id') // or specify another column if 'id' is not the latest indicator
+                    ->first();
 
-            // Find the last row where wardcode matches and end_bal_created_at is null
-            $lastRecord = LocationStockBalanceDateLogs::where('wardcode', $request->location)
-                ->whereNull('end_bal_created_at')
-                ->latest('id') // or specify another column if 'id' is not the latest indicator
-                ->first();
-
-            if ($lastRecord) {
-                // Update the end_bal_created_at column
-                $lastRecord->update([
-                    'end_bal_created_at' => $dateTime, // or specify a custom date if needed
-                ]);
+                if ($lastRecord) {
+                    // Update the end_bal_created_at column
+                    $lastRecord->update([
+                        'end_bal_created_at' => $dateTime, // or specify a custom date if needed
+                    ]);
+                }
             }
         }
 
