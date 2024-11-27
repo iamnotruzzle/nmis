@@ -18,21 +18,22 @@
               placeholder="Select a date"
               checkmark
               :highlightOnSelect="true"
-              class="w-full"
+              class="w-full mr-2"
             />
           </div>
 
-          <i
+          <Button
             v-if="selectedDate == null || selectedDate == ''"
-            class="pi pi-file-excel"
-            :style="{ color: 'gray', 'font-size': '2rem' }"
-          ></i>
-          <i
+            label="Download"
+            icon="pi pi-download"
+            disabled="true"
+          />
+          <Button
             v-else
-            class="pi pi-file-excel"
-            :style="{ color: 'green', 'font-size': '2rem' }"
+            label="Download"
+            icon="pi pi-download"
             @click="fnExcelReport"
-          ></i>
+          />
         </div>
       </div>
 
@@ -340,7 +341,7 @@ export default {
     fnExcelReport() {
       const table = document.getElementById('theTable');
       let tableHTML = table.outerHTML;
-      const fileName = 'download.xls';
+      const fileName = `${this.selectedDate}.xls`;
 
       const msie = window.navigator.userAgent.indexOf('MSIE ');
 

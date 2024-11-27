@@ -48,17 +48,18 @@
             </div>
           </div>
 
-          <i
+          <Button
             v-if="from == null || to == null"
-            class="pi pi-file-excel"
-            :style="{ color: 'gray', 'font-size': '2rem' }"
-          ></i>
-          <i
+            label="Download"
+            icon="pi pi-download"
+            disabled="true"
+          />
+          <Button
             v-else
-            class="pi pi-file-excel"
-            :style="{ color: 'green', 'font-size': '2rem' }"
+            label="Download"
+            icon="pi pi-download"
             @click="fnExcelReport"
-          ></i>
+          />
         </div>
       </div>
 
@@ -325,7 +326,7 @@ export default {
     fnExcelReport() {
       const table = document.getElementById('theTable');
       let tableHTML = table.outerHTML;
-      const fileName = 'download.xls';
+      const fileName = `${this.from}-to-${this.to}.xls`;
 
       const msie = window.navigator.userAgent.indexOf('MSIE ');
 
