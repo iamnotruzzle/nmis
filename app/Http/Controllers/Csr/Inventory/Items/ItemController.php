@@ -157,6 +157,7 @@ class ItemController extends Controller
 
     public function update(Item $item, Request $request)
     {
+        // dd($request);
         $entry_by = Auth::user()->employeeid;
 
         $request->validate([
@@ -170,6 +171,7 @@ class ItemController extends Controller
             'catID' => $request->mainCategory, // main category
             'cl2comb' => trim($request->cl1comb) . '-' . trim($request->cl2code),
             'cl1comb' => trim($request->cl1comb), // sub category
+            'itemcode' => $request->itemcode,
             'cl2desc' => trim($request->cl2desc), // item desc
             'uomcode' => $request->unit, // unit
             'cl2stat' => $request->cl2stat,

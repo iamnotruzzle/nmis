@@ -84,6 +84,7 @@ class RequestStocksController extends Controller
             ORDER BY
                 item.cl2desc ASC;"
         );
+        // dd($medicalGas);
 
         $requestedStocks = RequestStocks::with(['requested_at_details', 'requested_by_details', 'approved_by_details', 'request_stocks_details.item_details'])
             ->where('location', '=', $authWardcode->wardcode)
