@@ -213,7 +213,7 @@
                       Prices for <span class="text-primary">[ {{ slotProps.data.cl2desc }} ]</span>
                     </div>
                   </div>
-                  <div class="flex justify-content-end">
+                  <!-- <div class="flex justify-content-end">
                     <Button
                       label="Add price"
                       severity="success"
@@ -221,7 +221,7 @@
                       iconPos="right"
                       @click="openPriceDialog(slotProps.data)"
                     />
-                  </div>
+                  </div> -->
                 </template>
                 <Column
                   field="price_per_unit"
