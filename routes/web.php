@@ -31,6 +31,7 @@ use App\Http\Controllers\Users\UserController;
 use App\Http\Controllers\Wards\CsrInventory\CsrInventoryController;
 use App\Http\Controllers\Wards\MedicalGases\WardMedicalGasesController;
 use App\Http\Controllers\Wards\Dashboard\DashboardController as WardDashboardController;
+use App\Http\Controllers\Wards\Faq\FaqController;
 use App\Http\Controllers\Wards\Patients\PatientChargeController;
 use App\Http\Controllers\Wards\Patients\WardPatientsController;
 use App\Http\Controllers\Wards\Reports\ReportController;
@@ -108,6 +109,8 @@ Route::middleware(['web', 'auth', 'verified'])->group(
 
         Route::resource('transferstock', TransferStockController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         Route::put('transferstock', [TransferStockController::class, 'updatetransferstatus', 'designation_ward'])->name('transferstock.updatetransferstatus');
+
+        Route::resource('faq', FaqController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         // end ward routes
     }
 );
