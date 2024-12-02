@@ -11,7 +11,7 @@ class FaqController extends Controller
 
     public function index()
     {
-        return Inertia::render('Csr/Inventory/Faq/Index', []);
+        return Inertia::render('Wards/Faq/Index', []);
     }
 
     // /**

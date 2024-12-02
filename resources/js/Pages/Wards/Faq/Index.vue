@@ -2,11 +2,34 @@
   <app-layout>
     <Head title="NMIS - Faq" />
 
-    <div
-      class="card"
-      style="border-top-left-radius: 0; border-top-right-radius: 0"
-    >
-      sadsad
+    <div class="card">
+      <Fieldset
+        legend="Adding stocks to inventory"
+        :toggleable="true"
+      >
+        <p class="m-0">
+          1. Go to the sidebar and click on <span class="font-bold text-yellow-500">Inventory</span> tab.
+        </p>
+        <p class="m-0">
+          2. <span class="font-bold text-yellow-500">Click Request Stocks</span>, and a modal will appear.
+        </p>
+        <img
+          src="images/req_stock_1.png"
+          class="w-10 h-10"
+        />
+        <p class="m-0">
+          3. Click the <span class="font-bold text-yellow-500">Available Items</span> dropdown to view the items
+          available in the Central Supply Unit's inventory.
+        </p>
+        <p class="m-0">
+          4. After selecting an item, specify the quantity you want to request, then press the Enter key on your
+          keyboard to add it to the Requested Stock List.
+        </p>
+        <p class="m-0">
+          5. Note that clicking the <span class="font-bold text-error">X</span> button beside an item on the list will
+          remove it.
+        </p>
+      </Fieldset>
     </div>
   </app-layout>
 </template>
@@ -18,6 +41,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
+import Fieldset from 'primevue/fieldset';
 import { Link } from '@inertiajs/vue3';
 
 export default {
@@ -28,6 +52,7 @@ export default {
     Button,
     Dialog,
     Link,
+    Fieldset,
   },
   props: {},
   data() {
