@@ -5,33 +5,19 @@
     <div
       class="card"
       style="border-top-left-radius: 0; border-top-right-radius: 0"
-    ></div>
+    >
+      sadsad
+    </div>
   </app-layout>
 </template>
 
 <script>
-import { FilterMatchMode } from 'primevue/api';
 import { router } from '@inertiajs/vue3';
 import { Head } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import InputText from 'primevue/inputtext';
-import Password from 'primevue/password';
-import Column from 'primevue/column';
-import DataTable from 'primevue/datatable';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
-import FileUpload from 'primevue/fileupload';
-import Toast from 'primevue/toast';
-import Avatar from 'primevue/avatar';
-import Calendar from 'primevue/calendar';
-import Dropdown from 'primevue/dropdown';
-import AutoComplete from 'primevue/autocomplete';
-import InputNumber from 'primevue/inputnumber';
-import TextArea from 'primevue/textarea';
-import Tag from 'primevue/tag';
-import moment from 'moment';
-import NProgress from 'nprogress';
-import Echo from 'laravel-echo';
 import { Link } from '@inertiajs/vue3';
 
 export default {
@@ -39,107 +25,14 @@ export default {
     AppLayout,
     Head,
     InputText,
-    Column,
-    Password,
-    DataTable,
     Button,
     Dialog,
-    FileUpload,
-    Toast,
-    Avatar,
-    Calendar,
-    Dropdown,
-    AutoComplete,
-    Tag,
-    TextArea,
     Link,
-    InputNumber,
   },
-  props: {
-    authWardcode: Object,
-    items: Object,
-    medicalGas: Object,
-    requestedStocks: Object,
-    currentWardStocks: Object,
-    currentWardStocks2: Object,
-    // typeOfCharge: Object,
-    fundSource: Object,
-  },
+  props: {},
   data() {
     return {
-      expandedRow: [],
-      // paginator
-      loading: false,
-      totalRecords: null,
-      rows: null,
-      // end paginator
-      requestStockId: null,
-      isUpdate: false,
-      createRequestStocksDialog: false,
-      medicalGasesDialog: false,
-      returnToCsrDialog: false,
-      editAverageOfStocksDialog: false,
-      editStatusDialog: false,
-      cancelItemDialog: false,
-      search: '',
-      selectedItemsUomDesc: null,
-      oldQuantity: 0,
-      options: {},
-      params: {},
-      from: null,
-      to: null,
-      stockBalanceDeclared: false,
-      itemsList: [],
-      medicalGasList: [],
-      requestStockList: [],
-      currentWardStocksList: [],
-      // stock list details
-      requestStockListDetailsFilter: {
-        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      },
-      currentWardStocksFilter: {
-        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      },
-      requestStockListDetails: [],
-      fundSourceList: [],
-      item: null,
-      cl2desc: null,
-      requested_qty: null,
-      approved_qty: null,
-      itemNotSelected: false,
-      itemNotSelectedMsg: null,
-      // end stock list details
-      filters: {
-        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      },
-      form: this.$inertia.form({
-        request_stocks_id: null,
-        location: null,
-        requested_by: null,
-        requestStockListDetails: [],
-      }),
-      formUpdateStatus: this.$inertia.form({
-        request_stock_id: null,
-        status: null,
-      }),
-      formMedicalGases: this.$inertia.form({
-        authLocation: null,
-        fund_source: null,
-        cl2comb: null,
-        uomcode: null,
-        quantity: null,
-        average: null,
-        delivered_date: null,
-      }),
-      formReturnToCsr: this.$inertia.form({
-        ward_stock_id: null,
-        item: null,
-        quantity: null,
-        expiration_date: null,
-        remarks: null,
-      }),
-      previousQty: 0,
-      targetItemDesc: null,
+      expand: false,
     };
   },
 };

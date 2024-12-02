@@ -182,6 +182,13 @@ export default {
               comp: 'Wards/RequestStocks/Index',
             },
             {
+              label: 'FAQ',
+              icon: 'bi-question-circle',
+              to: 'faq',
+              prefix: 'faq',
+              comp: 'Wards/Faq/Index',
+            },
+            {
               label: 'Deliveries',
               icon: 'la-truck-moving-solid',
               to: 'csrstocks',
