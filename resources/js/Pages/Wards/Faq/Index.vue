@@ -18,7 +18,7 @@
         </p>
         <img
           src="images/req_stock_1.png"
-          class="w-10 h-10"
+          class="w-10 h-10 my-2"
         />
         <p class="m-0">
           3. Click the <span class="font-bold text-yellow-500">Available Items</span> dropdown to view the items
@@ -35,16 +35,17 @@
       </Fieldset>
 
       <Fieldset
-        legend="Header"
+        legend="VIEW PATIENT'S BILL"
         :toggleable="true"
       >
+        <p class="m-0">1. Go to the sidebar and click on <span class="font-bold">Patients</span>.</p>
         <p class="m-0">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-          magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
-          est laborum.
+          2. In the <span class="font-bold">Action</span> column, click on <span class="font-bold">Bills</span>.
         </p>
+        <img
+          src="images/patient_list.png"
+          class="w-10 h-10 my-2"
+        />
       </Fieldset>
     </div>
   </app-layout>

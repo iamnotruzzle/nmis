@@ -51,6 +51,13 @@
           header="HOSP. #"
           style="width: 5%"
         >
+          <template #body="{ data }">
+            <div class="flex flex-row align-items-center">
+              <div class="">
+                <span class="text-green-500">{{ data.hpercode }}</span>
+              </div>
+            </div>
+          </template>
         </Column>
         <Column
           field="patient"
@@ -62,7 +69,7 @@
         >
           <template #body="{ data }">
             <div class="flex flex-row align-items-center">
-              <div class="mr-2">
+              <div class="">
                 <span>{{ data.patient }}</span>
               </div>
             </div>
@@ -76,10 +83,9 @@
             <!-- {{ data }} -->
             <div class="flex justify-content-center">
               <Button
+                class="m-1"
                 icon="pi pi-money-bill"
-                rounded
-                text
-                size="large"
+                label="Bills"
                 severity="success"
                 @click="goToPatientCharge(data)"
               />
