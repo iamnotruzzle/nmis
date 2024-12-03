@@ -217,7 +217,7 @@
               <div class="text-primary text-xl font-bold">CHARGE PATIENT</div>
             </template>
             <div class="field mb-3">
-              <label>Item</label>
+              <label>Available items</label>
               <Dropdown
                 required="true"
                 v-model="item"

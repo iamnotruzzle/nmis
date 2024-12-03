@@ -32,11 +32,16 @@
           5. Note that clicking the <span class="font-bold text-error">X</span> button beside an item on the list will
           remove it.
         </p>
+        <img
+          src="images/req_stock_2.png"
+          class="w-10 h-10 my-2"
+        />
       </Fieldset>
 
       <Fieldset
         legend="VIEW PATIENT'S BILL"
         :toggleable="true"
+        collapsed
       >
         <p class="m-0">1. Go to the sidebar and click on <span class="font-bold text-yellow-500">Patients</span>.</p>
         <p class="m-0">
