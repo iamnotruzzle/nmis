@@ -38,9 +38,10 @@
         legend="VIEW PATIENT'S BILL"
         :toggleable="true"
       >
-        <p class="m-0">1. Go to the sidebar and click on <span class="font-bold">Patients</span>.</p>
+        <p class="m-0">1. Go to the sidebar and click on <span class="font-bold text-yellow-500">Patients</span>.</p>
         <p class="m-0">
-          2. In the <span class="font-bold">Action</span> column, click on <span class="font-bold">Bills</span>.
+          2. In the <span class="font-bold text-yellow-500">Action</span> column, click on
+          <span class="font-bold text-yellow-500">Bills</span>.
         </p>
         <img
           src="images/patient_list.png"
