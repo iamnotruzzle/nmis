@@ -53,6 +53,37 @@
           class="w-10 h-10 my-2"
         />
       </Fieldset>
+
+      <Fieldset
+        legend="CHARGE A PATIENT"
+        :toggleable="true"
+        collapsed
+      >
+        <p class="m-0">1. Go to patient’s <span class="font-bold text-yellow-500">bills</span>.</p>
+        <p class="m-0">
+          2. <span class="font-bold text-yellow-500">Click Charge patient button</span>, and a modal will appear.
+        </p>
+        <img
+          src="images/patient_charge_1.png"
+          class="w-10 h-10 my-2"
+        />
+        <p class="m-0">
+          3. Click the <span class="font-bold text-yellow-500">Available Items</span> dropdown to view the items
+          available in the inventory.
+        </p>
+        <p class="m-0">
+          4. After selecting an item, specify the quantity you want to charge, then press the Enter key on your keyboard
+          to add it to the <span class="font-bold text-yellow-500">ITEMS/SERVICES TO CHARGE</span>.
+        </p>
+        <p class="m-0">
+          5. Note that clicking the <span class="font-bold text-error">X</span> button beside an item on the list will
+          remove it.
+        </p>
+        <img
+          src="images/patient_charge_2.png"
+          class="w-10 h-10 my-2"
+        />
+      </Fieldset>
     </div>
   </app-layout>
 </template>
