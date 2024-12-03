@@ -67,7 +67,7 @@
           src="images/patient_charge_1.png"
           class="w-10 h-10 my-2"
         />
-        <p class="m-0">
+        <p class="m-0 mt-2">
           3. Click the <span class="font-bold text-yellow-500">Available Items</span> dropdown to view the items
           available in the inventory.
         </p>
@@ -75,7 +75,7 @@
           4. After selecting an item, specify the quantity you want to charge, then press the Enter key on your keyboard
           to add it to the <span class="font-bold text-yellow-500">ITEMS/SERVICES TO CHARGE</span>.
         </p>
-        <p class="m-0">
+        <p class="m-0 mb-2">
           5. Note that clicking the <span class="font-bold text-error">X</span> button beside an item on the list will
           remove it.
         </p>
