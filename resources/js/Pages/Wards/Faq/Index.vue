@@ -10,32 +10,64 @@
         :toggleable="true"
         collapsed
       >
-        <p class="m-0">
-          1. Go to the sidebar and click on <span class="font-bold text-yellow-500">Inventory</span> tab.
-        </p>
-        <p class="m-0">
-          2. <span class="font-bold text-yellow-500">Click Request Stocks</span>, and a modal will appear.
-        </p>
-        <img
-          src="images/req_stock_1.png"
-          class="w-10 h-10 my-2"
-        />
-        <p class="m-0">
-          3. Click the <span class="font-bold text-yellow-500">Available Items</span> dropdown to view the items
-          available in the Central Supply Unit's inventory.
-        </p>
-        <p class="m-0">
-          4. After selecting an item, specify the quantity you want to request, then press the Enter key on your
-          keyboard to add it to the Requested Stock List.
-        </p>
-        <p class="m-0">
-          5. Note that clicking the <span class="font-bold text-error">X</span> button beside an item on the list will
-          remove it.
-        </p>
-        <img
-          src="images/req_stock_2.png"
-          class="w-10 h-10 my-2"
-        />
+        <div class="text-xl">
+          <p class="m-0">
+            1. Go to the sidebar and click on <span class="font-bold text-yellow-500">Inventory</span> tab.
+          </p>
+          <p class="m-0">
+            2. <span class="font-bold text-yellow-500">Click Request Stocks</span>, and a modal will appear.
+          </p>
+          <img
+            src="images/req_stock_1.png"
+            class="w-10 h-10 my-2"
+          />
+          <p class="m-0">
+            3. Click the <span class="font-bold text-yellow-500">Available Items</span> dropdown to view the items
+            available in the Central Supply Unit's inventory.
+          </p>
+          <p class="m-0">
+            4. After selecting an item, specify the quantity you want to request, then press the Enter key on your
+            keyboard to add it to the Requested Stock List.
+          </p>
+          <p class="m-0">
+            5. Note that clicking the <span class="font-bold text-error">X</span> button beside an item on the list will
+            remove it.
+          </p>
+          <img
+            src="images/req_stock_modal.png"
+            class="w-8 h-8 my-2"
+          />
+          <p class="m-0">
+            6. After requesting an item, the order will have a
+            <span class="font-bold text-yellow-500">pending</span> status.
+          </p>
+          <p class="m-0 flex justify-center align-center">
+            <span class="font-bold text-error mr-1">NOTE:</span>
+            You can only update the requested items if the order status is still
+            <Tag
+              value="PENDING"
+              severity="contrast"
+              class="mx-1"
+            />
+            or
+            <Tag
+              value="ACKNOWLEDGED"
+              severity="primary"
+              class="ml-1"
+            />.
+          </p>
+          <img
+            src="images/req_stock_pending.png"
+            class="w-8 h-8 my-2"
+          />
+          <p class="m-0">
+            When status is
+            <Tag
+              value="ACKNOWLEDGED"
+              severity="primary"
+            />, it means Central supply unit is preparing your order.
+          </p>
+        </div>
       </Fieldset>
 
       <Fieldset
@@ -43,15 +75,17 @@
         :toggleable="true"
         collapsed
       >
-        <p class="m-0">1. Go to the sidebar and click on <span class="font-bold text-yellow-500">Patients</span>.</p>
-        <p class="m-0">
-          2. In the <span class="font-bold text-yellow-500">Action</span> column, click on
-          <span class="font-bold text-yellow-500">Bills</span>.
-        </p>
-        <img
-          src="images/patient_list.png"
-          class="w-10 h-10 my-2"
-        />
+        <div class="text-xl">
+          <p class="m-0">1. Go to the sidebar and click on <span class="font-bold text-yellow-500">Patients</span>.</p>
+          <p class="m-0">
+            2. In the <span class="font-bold text-yellow-500">Action</span> column, click on
+            <span class="font-bold text-yellow-500">Bills</span>.
+          </p>
+          <img
+            src="images/patient_list.png"
+            class="w-10 h-10 my-2"
+          />
+        </div>
       </Fieldset>
 
       <Fieldset
@@ -59,30 +93,32 @@
         :toggleable="true"
         collapsed
       >
-        <p class="m-0">1. Go to patient’s <span class="font-bold text-yellow-500">bills</span>.</p>
-        <p class="m-0">
-          2. <span class="font-bold text-yellow-500">Click Charge patient button</span>, and a modal will appear.
-        </p>
-        <img
-          src="images/patient_charge_1.png"
-          class="w-10 h-10 my-2"
-        />
-        <p class="m-0 mt-2">
-          3. Click the <span class="font-bold text-yellow-500">Available Items</span> dropdown to view the items
-          available in the inventory.
-        </p>
-        <p class="m-0">
-          4. After selecting an item, specify the quantity you want to charge, then press the Enter key on your keyboard
-          to add it to the <span class="font-bold text-yellow-500">ITEMS/SERVICES TO CHARGE</span>.
-        </p>
-        <p class="m-0 mb-2">
-          5. Note that clicking the <span class="font-bold text-error">X</span> button beside an item on the list will
-          remove it.
-        </p>
-        <img
-          src="images/patient_charge_2.png"
-          class="w-10 h-10 my-2"
-        />
+        <div class="text-xl">
+          <p class="m-0">1. Go to patient’s <span class="font-bold text-yellow-500">bills</span>.</p>
+          <p class="m-0">
+            2. <span class="font-bold text-yellow-500">Click Charge patient button</span>, and a modal will appear.
+          </p>
+          <img
+            src="images/patient_charge_1.png"
+            class="w-10 h-10 my-2"
+          />
+          <p class="m-0 mt-2">
+            3. Click the <span class="font-bold text-yellow-500">Available Items</span> dropdown to view the items
+            available in the inventory.
+          </p>
+          <p class="m-0">
+            4. After selecting an item, specify the quantity you want to charge, then press the Enter key on your
+            keyboard to add it to the <span class="font-bold text-yellow-500">ITEMS/SERVICES TO CHARGE</span>.
+          </p>
+          <p class="m-0 mb-2">
+            5. Note that clicking the <span class="font-bold text-error">X</span> button beside an item on the list will
+            remove it.
+          </p>
+          <img
+            src="images/patient_charge_2.png"
+            class="w-10 h-10 my-2"
+          />
+        </div>
       </Fieldset>
     </div>
   </app-layout>
@@ -95,6 +131,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
+import Tag from 'primevue/tag';
 import Fieldset from 'primevue/fieldset';
 import { Link } from '@inertiajs/vue3';
 
@@ -107,6 +144,7 @@ export default {
     Dialog,
     Link,
     Fieldset,
+    Tag,
   },
   props: {},
   data() {
