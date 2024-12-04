@@ -19,7 +19,7 @@
           </p>
           <img
             src="images/req_stock_1.png"
-            class="w-10 h-10 my-2"
+            class="w-10 h-10 my-2 border-3 border-blue-500"
           />
           <p class="m-0">
             3. Click the <span class="font-bold text-yellow-500">Available Items</span> dropdown to view the items
@@ -35,7 +35,7 @@
           </p>
           <img
             src="images/req_stock_modal.png"
-            class="w-8 h-8 my-2"
+            class="w-8 h-8 my-2 border-3 border-blue-500"
           />
           <p class="m-0">
             6. After requesting an item, the order will have a
@@ -58,14 +58,38 @@
           </p>
           <img
             src="images/req_stock_pending.png"
-            class="w-8 h-8 my-2"
+            class="w-8 h-8 my-2 border-3 border-blue-500"
           />
           <p class="m-0">
-            When status is
+            7. When status is
             <Tag
               value="ACKNOWLEDGED"
               severity="primary"
             />, it means Central supply unit is preparing your order.
+          </p>
+          <p class="m-0">
+            8. When status is
+            <Tag
+              value="FILLED"
+              severity="info"
+            />, it means the order is ready to be deploy and a
+            <Button
+              label="Receive"
+              class="ml-2"
+              icon="pi pi-check"
+              iconPos="right"
+              severity="success"
+            />
+            button will appear. By clicking it, the items will be added to your inventory.
+          </p>
+          <img
+            src="images/req_stock_filled.png"
+            class="w-8 h-8 my-2 border-3 border-blue-500"
+          />
+          <p class="m-0">
+            <span class="font-bold text-error mr-1 mt-3">NOTE:</span> Remember that clicking the button means you have
+            counted the items you received, and your information will be saved in the order logs. This certifies that
+            you are the one who received the items and acknowledged that they are correct.
           </p>
         </div>
       </Fieldset>
@@ -83,7 +107,7 @@
           </p>
           <img
             src="images/patient_list.png"
-            class="w-10 h-10 my-2"
+            class="w-10 h-10 my-2 border-3 border-blue-500"
           />
         </div>
       </Fieldset>
@@ -100,7 +124,7 @@
           </p>
           <img
             src="images/patient_charge_1.png"
-            class="w-10 h-10 my-2"
+            class="w-10 h-10 my-2 border-3 border-blue-500"
           />
           <p class="m-0 mt-2">
             3. Click the <span class="font-bold text-yellow-500">Available Items</span> dropdown to view the items
@@ -116,7 +140,7 @@
           </p>
           <img
             src="images/patient_charge_2.png"
-            class="w-10 h-10 my-2"
+            class="w-10 h-10 my-2 border-3 border-blue-500"
           />
         </div>
       </Fieldset>
