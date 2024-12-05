@@ -80,8 +80,8 @@ yarn.lock
 /tests/*.log
 
 # theme
-/public/fonts/vendor/primevue/resources/themes/aura-dark-indigo/Inter-italic.var.woff2
-/public/fonts/vendor/primevue/resources/themes/aura-dark-indigo/Inter-roman.var.woff2
+# /public/fonts/vendor/primevue/resources/themes/aura-dark-indigo/Inter-italic.var.woff2
+# /public/fonts/vendor/primevue/resources/themes/aura-dark-indigo/Inter-roman.var.woff2
 
 
 # Laravel Passport
