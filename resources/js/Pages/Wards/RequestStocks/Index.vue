@@ -985,18 +985,18 @@ export default {
   },
   mounted() {
     // console.log(this.requestedStocks);
-    window.Echo.channel('issued').listen('ItemIssued', (args) => {
-      if (args.message[0] == this.$page.props.authWardcode.wardcode) {
-        router.reload({
-          onFinish: (e) => {
-            this.requestStockList = [];
-            this.storeRequestedStocksInContainer();
-            this.createRequestStocksDialog = false;
-            this.loading = false;
-          },
-        });
-      }
-    });
+    // window.Echo.channel('issued').listen('ItemIssued', (args) => {
+    //   if (args.message[0] == this.$page.props.authWardcode.wardcode) {
+    //     router.reload({
+    //       onFinish: (e) => {
+    //         this.requestStockList = [];
+    //         this.storeRequestedStocksInContainer();
+    //         this.createRequestStocksDialog = false;
+    //         this.loading = false;
+    //       },
+    //     });
+    //   }
+    // });
 
     this.storeFundSourceInContainer();
     this.storeItemsInController();
