@@ -36,7 +36,7 @@
                 </div> -->
               </div>
               <Button
-                v-if="$page.props.auth.user.roles[0] == 'super-admin'"
+                v-if="$page.props.auth.user.roles[0] !== 'ward'"
                 label="Add item"
                 icon="pi pi-plus"
                 iconPos="right"
