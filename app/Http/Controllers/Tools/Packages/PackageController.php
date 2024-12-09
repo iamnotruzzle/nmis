@@ -14,11 +14,10 @@ class PackageController extends Controller
         $items = Item::where('cl2stat', 'A')
             ->orderBy('cl2desc', 'ASC')
             ->get(['cl2comb', 'cl2desc']);
-
-        dd($items);
+        // dd($items);
 
         return Inertia::render('Tools/Packages/Index', [
-            // 'pending_requests' => $pending_requests,
+            'items' => $items,
         ]);
     }
 
