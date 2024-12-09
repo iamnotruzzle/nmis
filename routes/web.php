@@ -26,6 +26,7 @@ use App\Http\Controllers\Reports\Csr\CsrStocksReportController;
 use App\Http\Controllers\Reports\Csr\IssuedItems\IssuedItemsReportController;
 use App\Http\Controllers\Reports\Ward\WardsManualReportExportController;
 use App\Http\Controllers\Reports\Ward\WardStocksReportController;
+use App\Http\Controllers\Tools\Packages\PackageController;
 use App\Http\Controllers\Users\User\ProfileController;
 use App\Http\Controllers\Users\UserController;
 use App\Http\Controllers\Wards\CsrInventory\CsrInventoryController;
@@ -112,5 +113,8 @@ Route::middleware(['web', 'auth', 'verified'])->group(
 
         Route::resource('faq', FaqController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         // end ward routes
+
+        // tools
+        Route::resource('packages', PackageController::class)->middleware(['verified', 'designation_admin'])->only(['index', 'store', 'update', 'destroy']);
     }
 );

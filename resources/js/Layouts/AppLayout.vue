@@ -148,6 +148,13 @@ export default {
               prefix: 'users',
               comp: 'Users/Index',
             },
+            {
+              label: 'Packages',
+              icon: 'oi-package',
+              to: 'packages',
+              prefix: 'packages',
+              comp: 'Tools/Packages/Index',
+            },
           ],
         },
         {
@@ -283,6 +290,13 @@ export default {
             comp: 'Csr/Inventory/Items/Index',
           },
           {
+            label: 'Packages',
+            icon: 'oi-package',
+            to: 'packages',
+            prefix: 'packages',
+            comp: 'Tools/Packages/Index',
+          },
+          {
             label: 'Users',
             icon: 'la-users-solid',
             to: 'users',
@@ -342,6 +356,11 @@ export default {
       }
       if (this.$page.props.user.designation == 'csr') {
         this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'packages';
+        });
+      }
+      if (this.$page.props.user.designation == 'csr') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
           return obj.to !== 'wardreports';
         });
       }
@@ -376,6 +395,11 @@ export default {
       if (this.$page.props.user.designation == 'ward') {
         this.menu[0].items = this.menu[0].items.filter(function (obj) {
           return obj.to !== 'users';
+        });
+      }
+      if (this.$page.props.user.designation == 'ward') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'packages';
         });
       }
       if (this.$page.props.user.designation == 'ward') {
