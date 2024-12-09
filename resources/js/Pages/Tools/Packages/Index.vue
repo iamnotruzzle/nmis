@@ -75,115 +75,123 @@
         <Dialog
           v-model:visible="createPackageDialog"
           :modal="true"
-          :style="{ width: '400px' }"
           class="p-fluid"
+          :style="{ width: '1000px' }"
           @hide="whenDialogIsHidden"
         >
           <template #header>
-            <div class="text-primary text-xl font-bold">PACKAGES</div>
+            <div class="text-primary text-xl font-bold">PACKAGE DETAILS</div>
           </template>
 
-          <div class="field">
-            <label for="description">Package Description</label>
-            <InputText
-              id="description"
-              v-model="packageDescription"
-              required
-            />
-          </div>
-
-          <!-- Status -->
-          <div class="field">
-            <label>Status</label>
-            <Dropdown
-              required="true"
-              v-model="packageStatus"
-              :options="statusList"
-              optionLabel="name"
-              optionValue="code"
-              class="w-full"
-            >
-              <template #option="slotProps">
-                <Tag
-                  :value="slotProps.option.name"
-                  :severity="statusSeverity(slotProps.option)"
+          <div class="grid">
+            <!-- Packages -->
+            <div class="col-4">
+              <div class="text-primary text-xl font-bold">PACKAGES</div>
+              <div class="field">
+                <label for="description">Package Description</label>
+                <InputText
+                  id="description"
+                  v-model="packageDescription"
+                  required
                 />
-              </template>
-            </Dropdown>
-            <small
-              class="text-error"
-              v-if="form.errors.status"
-            >
-              {{ form.errors.status }}
-            </small>
-          </div>
+              </div>
 
-          <div class="border-2 my-4"></div>
-
-          <div class="field">
-            <div class="text-primary text-xl font-bold mb-4">PACKAGE ITEMS</div>
-
-            <label for="item">Select Item</label>
-            <Dropdown
-              v-model="selectedItem"
-              required="true"
-              :options="itemsList"
-              :virtualScrollerOptions="{ itemSize: 38 }"
-              filter
-              optionLabel="cl2desc"
-              class="w-full mb-3"
-              :class="{ 'p-invalid': form.cl2comb == '' }"
-            />
-          </div>
-
-          <div class="field flex justify-content-between gap-4">
-            <div>
-              <label for="quantity">Quantity</label>
-              <InputNumber
-                class="mt-2"
-                id="quantity"
-                v-model="itemQuantity"
-                inputId="minmax"
-                :min="0"
-                required
-              />
+              <!-- Status -->
+              <div class="field">
+                <label>Status</label>
+                <Dropdown
+                  required="true"
+                  v-model="packageStatus"
+                  :options="statusList"
+                  optionLabel="name"
+                  optionValue="code"
+                  class="w-full"
+                >
+                  <template #option="slotProps">
+                    <Tag
+                      :value="slotProps.option.name"
+                      :severity="statusSeverity(slotProps.option)"
+                    />
+                  </template>
+                </Dropdown>
+                <small
+                  class="text-error"
+                  v-if="form.errors.status"
+                >
+                  {{ form.errors.status }}
+                </small>
+              </div>
             </div>
 
-            <Button
-              icon="pi pi-plus"
-              @click="addItem"
-              class="h-0 w-2"
-            />
-          </div>
+            <!-- Package item -->
+            <div class="col-8">
+              <div class="text-primary text-xl font-bold">PACKAGE ITEMS</div>
 
-          <div>
-            <h5 class="mb-2">Items in Package</h5>
-            <DataTable
-              :value="packageItems"
-              showGridlines
-            >
-              <Column
-                field="cl2desc"
-                header="Item Description"
-              />
-              <Column
-                field="quantity"
-                header="Quantity"
-              />
-              <Column header="Actions">
-                <template #body="slotProps">
-                  <div class="flex justify-content-center align-center">
-                    <Button
-                      icon="pi pi-times"
-                      text
-                      rounded
-                      severity="danger"
-                      @click="removeItem(slotProps.data)"
-                    />
-                  </div>
-                </template>
-              </Column>
-            </DataTable>
+              <div class="field w-full">
+                <label for="item">Select Item</label>
+                <Dropdown
+                  v-model="selectedItem"
+                  required="true"
+                  :options="itemsList"
+                  :virtualScrollerOptions="{ itemSize: 38 }"
+                  filter
+                  optionLabel="cl2desc"
+                  class="w-full mb-3"
+                  :class="{ 'p-invalid': form.cl2comb == '' }"
+                  style="width: 100%"
+                />
+              </div>
+
+              <div class="field flex justify-content-between gap-4">
+                <div>
+                  <label for="quantity">Quantity</label>
+                  <InputNumber
+                    class="mt-2"
+                    id="quantity"
+                    v-model="itemQuantity"
+                    inputId="minmax"
+                    :min="0"
+                    required
+                  />
+                </div>
+
+                <Button
+                  icon="pi pi-plus"
+                  @click="addItem"
+                  class="h-0 w-2"
+                />
+              </div>
+
+              <div>
+                <h5 class="mb-2">Items in Package</h5>
+                <DataTable
+                  :value="packageItems"
+                  showGridlines
+                >
+                  <Column
+                    field="cl2desc"
+                    header="Item Description"
+                  />
+                  <Column
+                    field="quantity"
+                    header="Quantity"
+                  />
+                  <Column header="Actions">
+                    <template #body="slotProps">
+                      <div class="flex justify-content-center align-center">
+                        <Button
+                          icon="pi pi-times"
+                          text
+                          rounded
+                          severity="danger"
+                          @click="removeItem(slotProps.data)"
+                        />
+                      </div>
+                    </template>
+                  </Column>
+                </DataTable>
+              </div>
+            </div>
           </div>
 
           <template #footer>
@@ -316,11 +324,27 @@ export default {
     cancel() {
       this.isUpdate = false;
       this.createPackageDialog = false;
+      this.packageDescription = '';
+      this.packageStatus = null;
+      this.selectedItem = null;
+      this.itemQuantity = 0;
+      this.packageItems = [];
       this.form.reset();
       this.form.clearErrors();
     },
     whenDialogIsHidden() {
-      this.$emit('hide', (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
+      this.$emit(
+        'hide',
+        (this.isUpdate = false),
+        (this.createPackageDialog = false),
+        (this.packageDescription = ''),
+        (this.packageStatus = null),
+        (this.selectedItem = null),
+        (this.itemQuantity = 0),
+        (this.packageItems = []),
+        this.form.clearErrors(),
+        this.form.reset()
+      );
     },
     addItem() {
       if (this.selectedItem && this.itemQuantity > 0) {
