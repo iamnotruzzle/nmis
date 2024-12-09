@@ -157,8 +157,11 @@
           </div>
 
           <div>
-            <h5>Items in Package</h5>
-            <DataTable :value="packageItems">
+            <h5 class="mb-2">Items in Package</h5>
+            <DataTable
+              :value="packageItems"
+              showGridlines
+            >
               <Column
                 field="cl2desc"
                 header="Item Description"
@@ -167,7 +170,19 @@
                 field="quantity"
                 header="Quantity"
               />
-              <Column header="Actions" />
+              <Column header="Actions">
+                <template #body="slotProps">
+                  <div class="flex justify-content-center align-center">
+                    <Button
+                      icon="pi pi-times"
+                      text
+                      rounded
+                      severity="danger"
+                      @click="removeItem(slotProps.data)"
+                    />
+                  </div>
+                </template>
+              </Column>
             </DataTable>
           </div>
 
@@ -309,17 +324,27 @@ export default {
     },
     addItem() {
       if (this.selectedItem && this.itemQuantity > 0) {
+        // Check for duplicates
+        const isDuplicate = this.packageItems.some((item) => item.cl2comb === this.selectedItem.cl2comb);
+
+        if (isDuplicate) {
+          alert('This item is already in the package, remove it first to update the quantity.');
+          return;
+        }
+
+        // Add item if no duplicates
         this.packageItems.push({
           cl2comb: this.selectedItem.cl2comb,
           cl2desc: this.selectedItem.cl2desc,
           quantity: this.itemQuantity,
         });
+
         // Reset fields
         this.selectedItem = null;
         this.itemQuantity = 0;
+      } else {
+        alert('Please select an item and enter a valid quantity.');
       }
-
-      console.log(this.packageItems);
     },
     removeItem(item) {
       this.packageItems = this.packageItems.filter((i) => i.cl2comb !== item.cl2comb);
