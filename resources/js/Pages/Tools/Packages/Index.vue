@@ -80,7 +80,7 @@
           @hide="whenDialogIsHidden"
         >
           <template #header>
-            <div class="text-primary text-xl font-bold">Packages</div>
+            <div class="text-primary text-xl font-bold">PACKAGES</div>
           </template>
 
           <div class="field">
@@ -92,44 +92,69 @@
             />
           </div>
 
+          <!-- Status -->
           <div class="field">
-            <label for="status">Status</label>
+            <label>Status</label>
             <Dropdown
-              id="status"
+              required="true"
               v-model="packageStatus"
-              :options="statusOptions"
-              optionLabel="label"
-              required
+              :options="statusList"
+              optionLabel="name"
+              optionValue="code"
+              class="w-full"
+            >
+              <template #option="slotProps">
+                <Tag
+                  :value="slotProps.option.name"
+                  :severity="statusSeverity(slotProps.option)"
+                />
+              </template>
+            </Dropdown>
+            <small
+              class="text-error"
+              v-if="form.errors.status"
+            >
+              {{ form.errors.status }}
+            </small>
+          </div>
+
+          <div class="border-2 my-4"></div>
+
+          <div class="field">
+            <div class="text-primary text-xl font-bold mb-4">PACKAGE ITEMS</div>
+
+            <label for="item">Select Item</label>
+            <Dropdown
+              v-model="selectedItem"
+              required="true"
+              :options="itemsList"
+              :virtualScrollerOptions="{ itemSize: 38 }"
+              filter
+              optionLabel="cl2desc"
+              class="w-full mb-3"
+              :class="{ 'p-invalid': form.cl2comb == '' }"
             />
           </div>
 
-          <div class="field">
-            <h4>Package Items</h4>
+          <div class="field flex justify-content-between gap-4">
             <div>
-              <label for="item">Select Item</label>
-              <Dropdown
-                id="item"
-                v-model="selectedItem"
-                :options="itemsList"
-                optionLabel="cl2desc"
+              <label for="quantity">Quantity</label>
+              <InputNumber
+                class="mt-2"
+                id="quantity"
+                v-model="itemQuantity"
+                inputId="minmax"
+                :min="0"
                 required
               />
             </div>
-          </div>
 
-          <div class="field">
-            <label for="quantity">Quantity</label>
-            <InputNumber
-              id="quantity"
-              v-model="itemQuantity"
-              required
+            <Button
+              icon="pi pi-plus"
+              @click="addItem"
+              class="h-0 w-2"
             />
           </div>
-
-          <Button
-            label="Add Item"
-            @click="addItem"
-          />
 
           <div>
             <h5>Items in Package</h5>
@@ -142,10 +167,7 @@
                 field="quantity"
                 header="Quantity"
               />
-              <Column
-                header="Actions"
-                :body="actionTemplate"
-              />
+              <Column header="Actions" />
             </DataTable>
           </div>
 
@@ -157,7 +179,7 @@
               text
               @click="cancel"
             />
-            <Button
+            <!-- <Button
               v-if="isUpdate == true"
               label="Update"
               icon="pi pi-check"
@@ -175,7 +197,7 @@
               type="submit"
               :disabled="form.processing"
               @click="submit"
-            />
+            /> -->
           </template>
         </Dialog>
       </div>
@@ -227,29 +249,48 @@ export default {
       itemsList: [],
       isUpdate: false,
       createPackageDialog: false,
+      packageDescription: '',
+      packageStatus: null,
+      selectedItem: null,
+      itemQuantity: 0,
+      packageItems: [],
+      statusList: [
+        {
+          name: 'Active',
+          code: 'A',
+        },
+        {
+          name: 'Inactive',
+          code: 'I',
+        },
+      ],
 
-      form: this.$inertia.form({
-        description: null,
-        cl2comb: null,
-        quantity: null,
-      }),
+      form: this.$inertia.form({}),
     };
   },
   mounted() {
     this.storeItemsInContainer();
   },
   methods: {
+    statusSeverity(status) {
+      //   console.log(status);
+      switch (status.code) {
+        case 'I':
+          return 'danger';
+
+        case 'A':
+          return 'success';
+      }
+    },
     storeItemsInContainer() {
       this.itemsList = []; // reset
 
-      this.items.forEach((e) => {
-        this.itemsList.push({
-          cl2comb: e.cl2comb,
-          cl2desc: e.cl2desc,
-        });
-      });
+      this.itemsList = this.items.map((e) => ({
+        cl2comb: e.cl2comb,
+        cl2desc: e.cl2desc,
+      }));
 
-      console.log('item list', this.itemsList);
+      //   console.log('item list', this.itemsList);
     },
     openCreatePackageDialog() {
       this.isUpdate = false;
@@ -265,6 +306,23 @@ export default {
     },
     whenDialogIsHidden() {
       this.$emit('hide', (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
+    },
+    addItem() {
+      if (this.selectedItem && this.itemQuantity > 0) {
+        this.packageItems.push({
+          cl2comb: this.selectedItem.cl2comb,
+          cl2desc: this.selectedItem.cl2desc,
+          quantity: this.itemQuantity,
+        });
+        // Reset fields
+        this.selectedItem = null;
+        this.itemQuantity = 0;
+      }
+
+      console.log(this.packageItems);
+    },
+    removeItem(item) {
+      this.packageItems = this.packageItems.filter((i) => i.cl2comb !== item.cl2comb);
     },
     updateData() {
       this.$inertia.get('package', this.params, {
