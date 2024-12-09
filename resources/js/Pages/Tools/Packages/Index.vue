@@ -86,7 +86,7 @@
           <div class="grid">
             <!-- Packages -->
             <div class="col-4">
-              <div class="text-primary text-xl font-bold">PACKAGES</div>
+              <div class="text-primary text-xl font-bold mb-2">PACKAGES</div>
               <div class="field">
                 <label for="description">Package Description</label>
                 <InputText
@@ -125,7 +125,7 @@
 
             <!-- Package item -->
             <div class="col-8">
-              <div class="text-primary text-xl font-bold">PACKAGE ITEMS</div>
+              <div class="text-primary text-xl font-bold mb-2">PACKAGE ITEMS</div>
 
               <div class="field w-full">
                 <label for="item">Select Item</label>
@@ -142,7 +142,7 @@
                 />
               </div>
 
-              <div class="field flex justify-content-between gap-4">
+              <div class="field">
                 <div>
                   <label for="quantity">Quantity</label>
                   <InputNumber
@@ -156,9 +156,10 @@
                 </div>
 
                 <Button
+                  class="mt-2 p-3"
+                  label="ADD ITEM"
                   icon="pi pi-plus"
                   @click="addItem"
-                  class="h-0 w-2"
                 />
               </div>
 
