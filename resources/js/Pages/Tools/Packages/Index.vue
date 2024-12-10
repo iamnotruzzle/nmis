@@ -9,68 +9,147 @@
         class="card"
         style="width: 100%"
       >
-        <Button
-          label="Create package"
-          icon="pi pi-plus"
-          iconPos="right"
-          @click="openCreatePackageDialog"
-        />
-
-        <!-- <DataTable
-          class="p-datatable-sm w-full"
+        <DataTable
+          class="p-datatable-sm"
           v-model:filters="filters"
-          :value="itemsList"
+          v-model:expandedRows="expandedRow"
+          :value="packagesList"
           paginator
           :rows="20"
-          :rowsPerPageOptions="[20, 30, 40]"
           dataKey="id"
-          sortField="item_desc"
+          filterDisplay="row"
+          sortField="description"
           :sortOrder="1"
-          removableSort
-          :globalFilterFields="['item_desc']"
           showGridlines
+          removableSort
         >
           <template #header>
             <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-              <span class="text-xl text-900 font-bold text-primary">CSR INVENTORY</span>
+              <span class="text-xl text-900 font-bold text-primary">PACKAGES</span>
               <div class="flex">
                 <div class="mr-2">
-                  <div class="p-inputgroup">
-                    <span class="p-inputgroup-addon">
-                      <i class="pi pi-search"></i>
-                    </span>
-                    <InputText
-                      id="searchInput"
-                      v-model="filters['global'].value"
-                      placeholder="Search"
-                    />
-                  </div>
+                  <Button
+                    label="Create package"
+                    icon="pi pi-plus"
+                    iconPos="right"
+                    @click="openCreatePackageDialog"
+                  />
                 </div>
               </div>
             </div>
           </template>
-          <template #empty> No data found. </template>
-          <template #loading> Loading data. Please wait. </template>
+          <template #empty> No item found. </template>
+          <template #loading> Loading item data. Please wait. </template>
+          <Column expander />
           <Column
-            field="item_desc"
-            header="ITEM"
-            sortable
-          >
-          </Column>
-          <Column
-            field="quantity"
-            header="QUANTITY"
-            sortable
-            style="width: 5%; text-align: right"
-            :pt="{ headerContent: 'justify-content-end' }"
+            field="description"
+            header="PACKAGE"
+            :showFilterMenu="false"
           >
             <template #body="{ data }">
-              <p class="text-right">
-                {{ data.quantity }}
-              </p>
+              {{ data.description }}
             </template>
           </Column>
-        </DataTable> -->
+          <Column
+            field="status"
+            header="STATUS"
+            :showFilterMenu="false"
+            sortable=""
+          >
+            <template #body="{ data }">
+              <div class="text-center">
+                <Tag
+                  v-if="data.status == 'A'"
+                  value="ACTIVE"
+                  severity="success"
+                />
+                <Tag
+                  v-else
+                  value="INACTIVE"
+                  severity="danger"
+                />
+              </div>
+            </template>
+          </Column>
+
+          <!-- <Column
+            header="ACTION"
+            style="width: 5%"
+          >
+            <template #body="slotProps">
+              <div class="flex flex-row justify-content-between align-content-around">
+                <Button
+                  v-tooltip.top="'Update'"
+                  icon="pi pi-pencil"
+                  class="mr-2"
+                  rounded
+                  severity="warning"
+                  @click="editItem(slotProps.data)"
+                />
+                <Button
+                  v-if="slotProps.data.uomcode == 'box'"
+                  v-tooltip.top="'Convert'"
+                  rounded
+                  severity="success"
+                  @click="convertItem(slotProps.data)"
+                >
+                  <template #icon>
+                    <v-icon name="bi-arrow-left-right"></v-icon>
+                  </template>
+                </Button>
+                <Button
+                  v-if="slotProps.data.uomcode != 'box'"
+                  icon="pi pi-trash"
+                  rounded
+                  severity="danger"
+                  @click="confirmDeleteItem(slotProps.data)"
+                />
+              </div>
+            </template>
+          </Column> -->
+          <template #expansion="slotProps">
+            <div class="max-w-full flex justify-content-center">
+              <div class="w-11 flex flex-column align-items-center">
+                <DataTable
+                  paginator
+                  :rows="5"
+                  class="w-8 mt-2"
+                  showGridlines
+                  :value="slotProps.data.package_details"
+                  size="small"
+                  sortField="created_at"
+                  :sortOrder="-1"
+                  removableSort
+                >
+                  <template #header>
+                    <div class="w-full flex flex-row justify-content-start">
+                      <div class="text-lg font-bold my-3">
+                        Package details for <span class="text-primary">[ {{ slotProps.data.description }} ]</span>
+                      </div>
+                    </div>
+                  </template>
+                  <Column
+                    header="ITEM"
+                    style="width: 20%"
+                    sortable
+                  >
+                    <template #body="{ data }">
+                      <span class="text-green-500"> {{ data.cl2desc }}</span>
+                    </template>
+                  </Column>
+                  <Column
+                    header="QUANTITY"
+                    style="width: 20%"
+                  >
+                    <template #body="{ data }">
+                      <span> {{ data.quantity }}</span>
+                    </template>
+                  </Column>
+                </DataTable>
+              </div>
+            </div>
+          </template>
+        </DataTable>
 
         <Dialog
           v-model:visible="createPackageDialog"
@@ -273,10 +352,17 @@ export default {
   },
   props: {
     items: Object,
+    packages: Array,
   },
   data() {
     return {
       itemsList: [],
+      packagesList: [],
+      filters: {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        description: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      },
+      expandedRow: [],
       isUpdate: false,
       createPackageDialog: false,
       description: '',
@@ -304,6 +390,7 @@ export default {
   },
   mounted() {
     this.storeItemsInContainer();
+    this.storePackagesInContainer();
   },
   methods: {
     statusSeverity(status) {
@@ -323,8 +410,38 @@ export default {
         cl2comb: e.cl2comb,
         cl2desc: e.cl2desc,
       }));
+    },
+    storePackagesInContainer() {
+      this.packagesList = []; // reset
 
-      //   console.log('item list', this.itemsList);
+      this.packagesList = this.packages.reduce((acc, curr) => {
+        const existingPackage = acc.find((p) => p.id === curr.id);
+
+        if (existingPackage) {
+          existingPackage.package_details.push({
+            cl2comb: curr.cl2comb,
+            cl2desc: curr.cl2desc,
+            quantity: curr.quantity,
+          });
+        } else {
+          acc.push({
+            id: curr.id,
+            description: curr.description,
+            status: curr.status,
+            package_details: [
+              {
+                cl2comb: curr.cl2comb,
+                cl2desc: curr.cl2desc,
+                quantity: curr.quantity,
+              },
+            ],
+          });
+        }
+
+        return acc;
+      }, []);
+
+      console.log(this.packagesList);
     },
     openCreatePackageDialog() {
       this.isUpdate = false;
@@ -400,7 +517,6 @@ export default {
           onSuccess: () => {
             this.createPackageDialog = false;
             this.cancel();
-            // this.updateData();
             this.updatedMsg();
           },
         });
@@ -411,7 +527,6 @@ export default {
             this.createPackageDialog = false;
             this.cancel();
             this.storeItemsInContainer();
-            // this.updateData();
             this.createdMsg();
           },
         });
