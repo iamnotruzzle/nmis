@@ -45,6 +45,7 @@
             field="description"
             header="PACKAGE"
             :showFilterMenu="false"
+            sortable
           >
             <template #body="{ data }">
               {{ data.description }}
