@@ -91,7 +91,7 @@
                 <label for="description">Package Description</label>
                 <InputText
                   id="description"
-                  v-model="packageDescription"
+                  v-model="description"
                   required
                 />
               </div>
@@ -101,7 +101,7 @@
                 <label>Status</label>
                 <Dropdown
                   required="true"
-                  v-model="packageStatus"
+                  v-model="status"
                   :options="statusList"
                   optionLabel="name"
                   optionValue="code"
@@ -148,7 +148,7 @@
                   <InputNumber
                     class="mt-2"
                     id="quantity"
-                    v-model="itemQuantity"
+                    v-model="quantity"
                     inputId="minmax"
                     :min="0"
                     required
@@ -273,10 +273,10 @@ export default {
       itemsList: [],
       isUpdate: false,
       createPackageDialog: false,
-      packageDescription: '',
-      packageStatus: null,
+      description: '',
+      status: null,
       selectedItem: null,
-      itemQuantity: 0,
+      quantity: 0,
       packageItems: [],
       statusList: [
         {
@@ -325,10 +325,10 @@ export default {
     cancel() {
       this.isUpdate = false;
       this.createPackageDialog = false;
-      this.packageDescription = '';
-      this.packageStatus = null;
+      this.description = '';
+      this.status = null;
       this.selectedItem = null;
-      this.itemQuantity = 0;
+      this.quantity = 0;
       this.packageItems = [];
       this.form.reset();
       this.form.clearErrors();
@@ -338,17 +338,17 @@ export default {
         'hide',
         (this.isUpdate = false),
         (this.createPackageDialog = false),
-        (this.packageDescription = ''),
-        (this.packageStatus = null),
+        (this.description = ''),
+        (this.status = null),
         (this.selectedItem = null),
-        (this.itemQuantity = 0),
+        (this.quantity = 0),
         (this.packageItems = []),
         this.form.clearErrors(),
         this.form.reset()
       );
     },
     addItem() {
-      if (this.selectedItem && this.itemQuantity > 0) {
+      if (this.selectedItem && this.quantity > 0) {
         // Check for duplicates
         const isDuplicate = this.packageItems.some((item) => item.cl2comb === this.selectedItem.cl2comb);
 
@@ -361,12 +361,12 @@ export default {
         this.packageItems.push({
           cl2comb: this.selectedItem.cl2comb,
           cl2desc: this.selectedItem.cl2desc,
-          quantity: this.itemQuantity,
+          quantity: this.quantity,
         });
 
         // Reset fields
         this.selectedItem = null;
-        this.itemQuantity = 0;
+        this.quantity = 0;
       } else {
         alert('Please select an item and enter a valid quantity.');
       }
