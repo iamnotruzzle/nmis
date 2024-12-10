@@ -94,6 +94,12 @@
                   v-model="description"
                   required
                 />
+                <small
+                  class="text-error"
+                  v-if="form.errors.description"
+                >
+                  {{ form.errors.description }}
+                </small>
               </div>
 
               <!-- Status -->
@@ -203,7 +209,7 @@
               text
               @click="cancel"
             />
-            <!-- <Button
+            <Button
               v-if="isUpdate == true"
               label="Update"
               icon="pi pi-check"
@@ -221,7 +227,7 @@
               type="submit"
               :disabled="form.processing"
               @click="submit"
-            /> -->
+            />
           </template>
         </Dialog>
       </div>
@@ -245,7 +251,7 @@ import Dropdown from 'primevue/dropdown';
 import InputNumber from 'primevue/inputnumber';
 import IconField from 'primevue/iconField';
 import Tag from 'primevue/tag';
-import moment from 'moment';
+import moment, { updateLocale } from 'moment';
 import { Link } from '@inertiajs/vue3';
 
 export default {
@@ -289,7 +295,11 @@ export default {
         },
       ],
 
-      form: this.$inertia.form({}),
+      form: this.$inertia.form({
+        description: '',
+        status: null,
+        packageItems: null,
+      }),
     };
   },
   mounted() {
@@ -374,6 +384,40 @@ export default {
     removeItem(item) {
       this.packageItems = this.packageItems.filter((i) => i.cl2comb !== item.cl2comb);
     },
+    submit() {
+      // initialize value
+      this.form.description = this.description;
+      this.form.status = this.status;
+      this.form.packageItems = this.packageItems;
+
+      if (this.form.processing) {
+        return false;
+      }
+
+      if (this.isUpdate) {
+        this.form.put(route('packages.update', this.itemId), {
+          preserveScroll: true,
+          onSuccess: () => {
+            this.createPackageDialog = false;
+            this.cancel();
+            // this.updateData();
+            this.updatedMsg();
+          },
+        });
+      } else {
+        this.form.post(route('packages.store'), {
+          preserveScroll: true,
+          onSuccess: () => {
+            this.createPackageDialog = false;
+            this.cancel();
+            this.storeItemsInContainer();
+            // this.updateData();
+            this.createdMsg();
+          },
+        });
+      }
+      //   console.log(this.$page.props.errors);
+    },
     updateData() {
       this.$inertia.get('package', this.params, {
         preserveState: true,
@@ -383,6 +427,12 @@ export default {
           this.storeItemsInContainer();
         },
       });
+    },
+    createdMsg() {
+      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Package created.', life: 3000 });
+    },
+    updatedMsg() {
+      this.$toast.add({ severity: 'info', summary: 'Updated', detail: 'Package updated.', life: 3000 });
     },
   },
 };
