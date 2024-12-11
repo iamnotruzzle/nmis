@@ -38,7 +38,7 @@
                   <InputText
                     id="searchInput"
                     v-model="search"
-                    placeholder="Search"
+                    placeholder="Search employee ID"
                   />
                 </div>
               </div>
@@ -62,7 +62,7 @@
             {{ data.employeeid }}
           </template>
         </Column>
-        <Column header="Avatar">
+        <!-- <Column header="Avatar">
           <template #body="{ data }">
             <Avatar
               v-if="data.image != null"
@@ -77,7 +77,7 @@
               size="large"
             />
           </template>
-        </Column>
+        </Column> -->
         <Column
           field="lastname"
           header="LAST NAME"
@@ -272,7 +272,7 @@
           </small>
         </div>
 
-        <div class="field">
+        <!-- <div class="field">
           <label for="image">Upload image</label>
           <FileUpload
             id="image"
@@ -282,7 +282,7 @@
             :maxFileSize="7000000"
           >
           </FileUpload>
-        </div>
+        </div> -->
         <template #footer>
           <Button
             label="Cancel"
@@ -437,7 +437,7 @@ export default {
         },
       ],
       form: this.$inertia.form({
-        image: null,
+        // image: null,
         role: null,
         employeeid: null,
         password: null,
@@ -454,6 +454,10 @@ export default {
   mounted() {
     this.storeUserInContainer();
 
+    console.log(this.users);
+
+    // console.log(this.employeeids);
+
     this.loading = false;
   },
   methods: {
@@ -465,10 +469,10 @@ export default {
         if (e.user_detail != null || e.user_detail == '') {
           this.usersList.push({
             id: e.id,
-            image: e.image,
+            // image: e.image,
             employeeid: e.employeeid,
             designation: e.designation,
-            role: e.roles[0].name,
+            role: e.roles.length > 0 ? e.roles[0].name : '',
             lastname: e.user_detail.lastname,
             firstname: e.user_detail.firstname,
             middlename: e.user_detail.middlename == null ? null : e.user_detail.middlename,
@@ -478,10 +482,10 @@ export default {
         } else {
           this.usersList.push({
             id: e.id,
-            image: e.image,
+            // image: e.image,
             employeeid: e.employeeid,
             designation: e.designation,
-            role: e.roles[0].name,
+            role: e.roles.length > 0 ? e.roles[0].name : '',
             created_at: e.created_at,
           });
         }
@@ -526,7 +530,7 @@ export default {
     },
     // assign image name to form.image
     onUpload(event) {
-      this.form.image = event.target.files[0];
+      //   this.form.image = event.target.files[0];
     },
     openCreateItemDialog() {
       this.isUpdate = false;
@@ -565,7 +569,7 @@ export default {
             employeeid: this.form.employeeid,
             designation: this.form.designation,
             password: this.form.password,
-            image: this.form.image,
+            // image: this.form.image,
           },
           {
             onSuccess: () => {

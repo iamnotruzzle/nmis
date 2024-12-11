@@ -52,8 +52,11 @@ class UserController extends Controller
                     $query->whereDate('created_at', '<=', $to);
                 }
             )
+            // ->where('employeeid', '000040')
             ->orderBy('employeeid', 'asc')
             ->paginate(15);
+
+        // dd($users);
 
         return Inertia::render('Users/Index', [
             'users' => $users,

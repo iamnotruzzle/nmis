@@ -94,7 +94,7 @@
     @hide="clickOutsideDialog"
     dismissableMask
   >
-    <div class="field">
+    <!-- <div class="field">
       <label for="image">Upload image</label>
       <FileUpload
         id="image"
@@ -104,7 +104,7 @@
         :maxFileSize="7000000"
       >
       </FileUpload>
-    </div>
+    </div> -->
     <div class="field">
       <label for="password">Password</label>
       <Password
