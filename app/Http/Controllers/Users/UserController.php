@@ -37,22 +37,13 @@ class UserController extends Controller
         $to = Carbon::parse($request->to)->endOfDay();
 
         $users = User::with(['roles', 'permissions', 'userDetail'])
-            ->when($request->search, function ($query, $value) {
-                $query->where('employeeid', 'LIKE', '%' . $value . '%');
+            ->when($request->search, function ($query) use ($request) {
+                $query->where('employeeid', 'LIKE', '%' . $request->search . '%')
+                    ->orWhereHas('userDetail', function ($query) use ($request) {
+                        $query->where('firstname', 'LIKE', '%' . $request->search . '%')
+                            ->orWhere('lastname', 'LIKE', '%' . $request->search . '%');
+                    });
             })
-            ->when(
-                $request->from,
-                function ($query, $value) use ($from) {
-                    $query->whereDate('created_at', '>=', $from);
-                }
-            )
-            ->when(
-                $request->to,
-                function ($query, $value) use ($to) {
-                    $query->whereDate('created_at', '<=', $to);
-                }
-            )
-            // ->where('employeeid', '000040')
             ->orderBy('employeeid', 'asc')
             ->paginate(15);
 
