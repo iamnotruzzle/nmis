@@ -23,7 +23,7 @@ class User extends Authenticatable
     use TwoFactorAuthenticatable;
 
 
-    protected $table = 'csrw_users';
+    protected $table = 'user_acc';
 
     protected $fillable = [
         // 'firstName',
@@ -32,7 +32,7 @@ class User extends Authenticatable
         // 'suffix',
         // 'email',
         'employeeid',
-        'password',
+        'user_pass',
         'image',
         'designation'
     ];

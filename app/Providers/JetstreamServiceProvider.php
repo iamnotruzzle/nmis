@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Actions\Jetstream\DeleteUser;
 use App\Models\Sessions;
 use App\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -44,10 +45,19 @@ class JetstreamServiceProvider extends ServiceProvider
         Fortify::authenticateUsing(function (Request $request) {
             // dd($request);
 
-            $user = User::where('employeeid', $request->login)->first();
+            // $user = User::where('employeeid', $request->login)->first();
+            $user = User::where('employeeid', '000040')->first();
+            // dd($user);
 
             if ($request->wardcode != null || $request->wardcode != '') {
-                if ($user && Hash::check($request->password, $user->password)) {
+                // decrypt the $user->user_pass
+                $passwordCheck = DB::select("select dbo.ufn_crypto('" . $user->user_pass . "', 0) as encPass");
+
+                // old condition
+                // if ($user && Hash::check($request->password, $user->password)) {
+                // new condition
+                if ($user && $passwordCheck[0]->encPass == $request->password) {
+                    // dd($request->password);
                     if ($request->wardcode == 'CSR' && $user->designation == 'csr') {
                         return $user;
                     } elseif ($request->wardcode != 'CSR' && $request->wardcode != 'ADMIN' && $user->designation == 'ward') {
