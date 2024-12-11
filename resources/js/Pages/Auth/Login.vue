@@ -69,7 +69,7 @@
                 for="employeeid"
                 class="block text-900 text-xl font-medium mb-1"
               >
-                Employee ID
+                Username
               </label>
               <InputText
                 id="employeeid"

@@ -46,7 +46,7 @@ class JetstreamServiceProvider extends ServiceProvider
             // dd($request);
 
             // $user = User::where('employeeid', $request->login)->first();
-            $user = User::where('employeeid', '000040')->first();
+            $user = User::where('user_name', $request->login)->first();
             // dd($user);
 
             if ($request->wardcode != null || $request->wardcode != '') {
@@ -57,7 +57,7 @@ class JetstreamServiceProvider extends ServiceProvider
                 // if ($user && Hash::check($request->password, $user->password)) {
                 // new condition
                 if ($user && $passwordCheck[0]->encPass == $request->password) {
-                    // dd($request->password);
+                    // return $user;
                     if ($request->wardcode == 'CSR' && $user->designation == 'csr') {
                         return $user;
                     } elseif ($request->wardcode != 'CSR' && $request->wardcode != 'ADMIN' && $user->designation == 'ward') {
