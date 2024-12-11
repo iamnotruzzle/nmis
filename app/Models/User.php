@@ -25,6 +25,10 @@ class User extends Authenticatable
 
     protected $table = 'user_acc';
 
+    protected $primaryKey = 'employeeid'; // Specify custom primary key
+    protected $keyType = 'string'; // If your primary key is not an integer
+    public $incrementing = false; // If the key is not auto-incrementing
+
     protected $fillable = [
         'user_name',
         'user_level',
