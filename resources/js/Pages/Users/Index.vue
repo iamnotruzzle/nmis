@@ -42,12 +42,12 @@
                   />
                 </div>
               </div>
-              <Button
+              <!-- <Button
                 label="Add user"
                 icon="pi pi-user-plus"
                 iconPos="right"
                 @click="openCreateItemDialog"
-              />
+              /> -->
             </div>
           </div>
         </template>
@@ -132,7 +132,7 @@
             {{ data.designation }}
           </template>
         </Column>
-        <Column
+        <!-- <Column
           header="CREATED AT"
           filterField="created_at"
           style="min-width: 10rem"
@@ -162,28 +162,24 @@
               :hideOnDateTimeSelect="true"
             />
           </template>
-        </Column>
-        <Column
-          header="ACTION"
-          style="min-width: 12rem"
-        >
+        </Column> -->
+        <Column header="ACTION">
           <template #body="slotProps">
-            <Button
-              icon="pi pi-pencil"
-              class="mr-1"
-              rounded
-              text
-              severity="warning"
-              @click="editItem(slotProps.data)"
-            />
+            <div>
+              <Button
+                label="UPDATE"
+                severity="warning"
+                @click="editItem(slotProps.data)"
+              />
+            </div>
 
-            <Button
+            <!-- <Button
               icon="pi pi-trash"
               rounded
               text
               severity="danger"
               @click="confirmDeleteItem(slotProps.data)"
-            />
+            /> -->
           </template>
         </Column>
       </DataTable>
@@ -191,7 +187,7 @@
       <!-- create & edit dialog -->
       <Dialog
         v-model:visible="createItemDialog"
-        :style="{ width: '450px' }"
+        :style="{ width: '350px' }"
         :modal="true"
         class="p-fluid"
         @hide="clickOutsideDialog"
@@ -200,7 +196,7 @@
         <template #header>
           <div class="text-primary text-xl font-bold">USER DETAIL</div>
         </template>
-        <div class="field">
+        <!-- <div class="field">
           <label for="employeeid">Employee ID</label>
           <AutoComplete
             id="employeeid"
@@ -219,8 +215,8 @@
           >
             {{ form.errors.employeeid }}
           </small>
-        </div>
-        <div class="field">
+        </div> -->
+        <!-- <div class="field">
           <label for="password">Password</label>
           <Password
             id="password"
@@ -237,7 +233,7 @@
           >
             {{ form.errors.password }}
           </small>
-        </div>
+        </div> -->
         <div class="field">
           <label for="role">Role</label>
           <Dropdown
@@ -246,7 +242,7 @@
             optionLabel="name"
             optionValue="value"
             placeholder="Role"
-            class="w-full md:w-14rem"
+            class="w-full"
           />
           <small
             class="text-error"
@@ -262,7 +258,7 @@
             v-model="form.designation"
             :options="designation"
             placeholder="Designation"
-            class="w-full md:w-14rem"
+            class="w-full"
           />
           <small
             class="text-error"
@@ -440,7 +436,7 @@ export default {
         // image: null,
         role: null,
         employeeid: null,
-        password: null,
+        // password: null,
         designation: null,
       }),
     };
@@ -548,7 +544,7 @@ export default {
 
       this.isUpdate = true;
       this.createItemDialog = true;
-      this.itemId = item.id;
+      this.itemId = item.employeeid;
       this.form.role = item.role;
       this.form.designation = item.designation;
       this.form.employeeid = item.employeeid;
@@ -568,7 +564,7 @@ export default {
             role: this.form.role,
             employeeid: this.form.employeeid,
             designation: this.form.designation,
-            password: this.form.password,
+            // password: this.form.password,
             // image: this.form.image,
           },
           {

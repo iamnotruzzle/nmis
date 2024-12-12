@@ -97,59 +97,67 @@ class UserController extends Controller
     {
         // dd($request);
 
-        $image = $user->image;
+        // $image = $user->image;
+        // if ($request->password != null || $request->password != '') {
+        //     $request->validate([
+        //         'image' => 'nullable|image|mimes:jpeg,jpg,png,gif,svg|max:5048',
+        //         'role' => 'required',
+        //         // 'permissions' => 'required',
+        //         'employeeid' => [
+        //             'required',
+        //             'string',
+        //             'max:14',
+        //             Rule::unique('csrw_users')->ignore($user->id)
+        //         ],
+        //         'password' => 'required|min:8',
+        //         'designation' => 'required',
+        //     ]);
 
-        if ($request->password != null || $request->password != '') {
-            $request->validate([
-                'image' => 'nullable|image|mimes:jpeg,jpg,png,gif,svg|max:5048',
-                'role' => 'required',
-                // 'permissions' => 'required',
-                'employeeid' => [
-                    'required',
-                    'string',
-                    'max:14',
-                    Rule::unique('csrw_users')->ignore($user->id)
-                ],
-                'password' => 'required|min:8',
-                'designation' => 'required',
-            ]);
+        //     if ($request->hasFile('image')) {
+        //         Storage::delete('public/' . $user->image);
+        //         $image = $request->file('image')->store('image', 'public');
+        //     }
 
-            if ($request->hasFile('image')) {
-                Storage::delete('public/' . $user->image);
-                $image = $request->file('image')->store('image', 'public');
-            }
+        //     $user->update([
+        //         'employeeid' => $request->employeeid,
+        //         'password' => bcrypt($request->password),
+        //         'image' => $image,
+        //         'designation' => $request->designation,
+        //     ]);
+        // } else {
+        //     $request->validate([
+        //         'image' => 'nullable|image|mimes:jpeg,jpg,png,gif,svg|max:5048',
+        //         'role' => 'required',
+        //         // 'permissions' => 'required',
+        //         'employeeid' => [
+        //             'required',
+        //             'string',
+        //             'max:14',
+        //             Rule::unique('csrw_users')->ignore($user->id)
+        //         ],
+        //         'designation' => 'required',
+        //     ]);
 
-            $user->update([
-                'employeeid' => $request->employeeid,
-                'password' => bcrypt($request->password),
-                'image' => $image,
-                'designation' => $request->designation,
-            ]);
-        } else {
-            $request->validate([
-                'image' => 'nullable|image|mimes:jpeg,jpg,png,gif,svg|max:5048',
-                'role' => 'required',
-                // 'permissions' => 'required',
-                'employeeid' => [
-                    'required',
-                    'string',
-                    'max:14',
-                    Rule::unique('csrw_users')->ignore($user->id)
-                ],
-                'designation' => 'required',
-            ]);
+        //     if ($request->hasFile('image')) {
+        //         Storage::delete('public/' . $user->image);
+        //         $image = $request->file('image')->store('image', 'public');
+        //     }
 
-            if ($request->hasFile('image')) {
-                Storage::delete('public/' . $user->image);
-                $image = $request->file('image')->store('image', 'public');
-            }
+        //     $user->update([
+        //         'employeeid' => $request->employeeid,
+        //         'image' => $image,
+        //         'designation' => $request->designation,
+        //     ]);
+        // }
 
-            $user->update([
-                'employeeid' => $request->employeeid,
-                'image' => $image,
-                'designation' => $request->designation,
-            ]);
-        }
+        $request->validate([
+            'role' => 'required',
+            'designation' => 'required',
+        ]);
+
+        $user->update([
+            'designation' => $request->designation,
+        ]);
 
         // update user role
         $user->syncRoles($request->role);
