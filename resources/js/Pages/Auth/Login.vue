@@ -76,7 +76,7 @@
                 v-model="form.login"
                 name="login"
                 type="text"
-                class="w-full"
+                class="w-full uppercase"
                 style="padding: 1rem"
               />
             </div>
@@ -92,7 +92,7 @@
                 id="password"
                 v-model="form.password"
                 :toggleMask="true"
-                class="w-full"
+                class="w-full uppercase"
                 inputClass="w-full"
                 :feedback="false"
                 @keyup.enter="submit"
@@ -167,6 +167,7 @@ export default {
       });
     },
     submit() {
+      this.form.password = this.form.password.toUpperCase();
       this.form.post(this.route('login'), {
         onFinish: () => this.form.reset('password'),
       });
