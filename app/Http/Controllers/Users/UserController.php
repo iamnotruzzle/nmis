@@ -39,6 +39,7 @@ class UserController extends Controller
         $users = User::with(['roles', 'permissions', 'userDetail'])
             ->when($request->search, function ($query) use ($request) {
                 $query->where('employeeid', 'LIKE', '%' . $request->search . '%')
+                    ->orWhere('user_name', 'LIKE', '%' . $request->search . '%')
                     ->orWhereHas('userDetail', function ($query) use ($request) {
                         $query->where('firstname', 'LIKE', '%' . $request->search . '%')
                             ->orWhere('lastname', 'LIKE', '%' . $request->search . '%');

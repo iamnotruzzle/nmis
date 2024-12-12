@@ -54,6 +54,15 @@
         <template #empty> No user found. </template>
         <template #loading> Loading user data. Please wait. </template>
         <Column
+          field="user_name"
+          header="USERNAME"
+          style="min-width: 12rem"
+        >
+          <template #body="{ data }">
+            {{ data.user_name }}
+          </template>
+        </Column>
+        <Column
           field="employeeid"
           header="EMPLOYEE ID"
           style="min-width: 12rem"
@@ -79,39 +88,11 @@
           </template>
         </Column> -->
         <Column
-          field="lastname"
-          header="LAST NAME"
+          header="NAME"
           style="min-width: 12rem"
         >
           <template #body="{ data }">
-            {{ data.lastname }}
-          </template>
-        </Column>
-        <Column
-          field="firstname"
-          header="FIRST NAME"
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ data.firstname }}
-          </template>
-        </Column>
-        <Column
-          field="middlename"
-          header="MIDDLE NAME"
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ data.middlename }}
-          </template>
-        </Column>
-        <Column
-          field="empsuffix"
-          header="SUFFIX"
-          style="min-width: 12rem"
-        >
-          <template #body="{ data }">
-            {{ data.empsuffix }}
+            {{ data.firstname }} {{ data.middlename }} {{ data.lastname }} {{ data.empsuffix }}
           </template>
         </Column>
         <Column
@@ -235,6 +216,9 @@
           </small>
         </div> -->
         <div class="field">
+          <h3 class="font-bold">{{ form.name }}</h3>
+        </div>
+        <div class="field">
           <label for="role">Role</label>
           <Dropdown
             v-model="form.role"
@@ -324,7 +308,7 @@
           />
           <span v-if="form"
             >Are you sure you want to delete
-            <b>{{ form.firstName }} {{ form.middleName }} {{ form.lastName }} </b> ?</span
+            <b>{{ form.firstName }} {{ form.middleName }} {{ form.lastName }} {{ data.empsuffix }} </b> ?</span
           >
         </div>
         <template #footer>
@@ -434,6 +418,7 @@ export default {
       ],
       form: this.$inertia.form({
         // image: null,
+        name: null,
         role: null,
         employeeid: null,
         // password: null,
@@ -450,7 +435,7 @@ export default {
   mounted() {
     this.storeUserInContainer();
 
-    console.log(this.users);
+    // console.log(this.users);
 
     // console.log(this.employeeids);
 
@@ -464,8 +449,8 @@ export default {
       this.users.data.forEach((e) => {
         if (e.user_detail != null || e.user_detail == '') {
           this.usersList.push({
-            id: e.id,
             // image: e.image,
+            user_name: e.user_name,
             employeeid: e.employeeid,
             designation: e.designation,
             role: e.roles.length > 0 ? e.roles[0].name : '',
@@ -477,8 +462,8 @@ export default {
           });
         } else {
           this.usersList.push({
-            id: e.id,
             // image: e.image,
+            user_name: e.user_name,
             employeeid: e.employeeid,
             designation: e.designation,
             role: e.roles.length > 0 ? e.roles[0].name : '',
@@ -486,6 +471,7 @@ export default {
           });
         }
       });
+      console.log(this.usersList);
     },
     autoCompleteEmployeeID(event) {
       setTimeout(() => {
@@ -545,6 +531,7 @@ export default {
       this.isUpdate = true;
       this.createItemDialog = true;
       this.itemId = item.employeeid;
+      this.form.name = item.firstname + ' ' + item.middlename + ' ' + item.lastname;
       this.form.role = item.role;
       this.form.designation = item.designation;
       this.form.employeeid = item.employeeid;
