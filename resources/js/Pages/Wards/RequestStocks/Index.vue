@@ -142,7 +142,7 @@
           >
             <template #body="{ data }">
               <div class="flex flex-row align-items-center">
-                <img
+                <!-- <img
                   v-if="data.requested_by_image != null"
                   :src="`storage/${data.requested_by_image}`"
                   class="w-3rem h-3rem rounded-card"
@@ -151,7 +151,7 @@
                   v-else
                   src="images/no_profile.png"
                   class="w-3rem h-3rem rounded-card"
-                />
+                /> -->
 
                 <span class="font-semibold text-xl pl-3">
                   {{ data.requested_by }}
@@ -166,7 +166,7 @@
           >
             <template #body="{ data }">
               <div class="flex flex-row align-items-center">
-                <img
+                <!-- <img
                   v-if="data.approved_by_image != null"
                   :src="`storage/${data.approved_by_image}`"
                   class="w-3rem h-3rem rounded-card"
@@ -176,7 +176,7 @@
                   v-if="data.approved_by != null && data.approved_by_image == null"
                   src="images/no_profile.png"
                   class="w-3rem h-3rem rounded-card"
-                />
+                /> -->
 
                 <span class="font-semibold text-xl pl-3">
                   {{ data.approved_by }}
@@ -1085,12 +1085,13 @@ export default {
           id: e.id,
           status: e.status,
           requested_by: e.requested_by_details.firstname + ' ' + e.requested_by_details.lastname,
-          requested_by_image: e.requested_by_details.user_account.image,
+          //   requested_by_image: e.requested_by_details.user_account.image,
           approved_by:
             e.approved_by_details != null
               ? e.approved_by_details.firstname + ' ' + e.approved_by_details.lastname
               : null,
-          approved_by_image: e.approved_by_details != null ? e.approved_by_details.user_account.image : null,
+          //   approved_by_image: e.approved_by_details != null ? e.approved_by_details.user_account.image : null,
+          approved_by_image: null,
           created_at: e.created_at,
           request_stocks_details: e.request_stocks_details,
         });

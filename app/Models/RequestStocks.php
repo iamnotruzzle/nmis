@@ -27,12 +27,16 @@ class RequestStocks extends Model
 
     public function requested_by_details()
     {
-        return $this->hasOne(UserDetail::class, 'employeeid', 'requested_by')->with('user_account:id,employeeid,image');
+        // old eloquent where id and image is still an active column
+        // return $this->hasOne(UserDetail::class, 'employeeid', 'requested_by')->with('user_account:id,employeeid,image');
+        return $this->hasOne(UserDetail::class, 'employeeid', 'requested_by')->with('user_account:employeeid');
     }
 
     public function approved_by_details()
     {
-        return $this->hasOne(UserDetail::class, 'employeeid', 'approved_by')->with('user_account:id,employeeid,image');
+        // old eloquent where id and image is still an active column
+        // return $this->hasOne(UserDetail::class, 'employeeid', 'approved_by')->with('user_account:id,employeeid,image');
+        return $this->hasOne(UserDetail::class, 'employeeid', 'approved_by')->with('user_account:employeeid');
     }
 
     public function request_stocks_details()

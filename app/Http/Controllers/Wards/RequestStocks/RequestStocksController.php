@@ -111,6 +111,7 @@ class RequestStocksController extends Controller
             ->where('location', '=', $authWardcode->wardcode)
             ->orderBy('created_at', 'desc')
             ->paginate(15);
+        // dd($requestedStocks);
 
         $currentWardStocks = WardsStocks::with(['item_details:cl2comb,cl2desc', 'request_stocks', 'unit_of_measurement:uomcode,uomdesc'])
             ->where('location', $authWardcode->wardcode)
