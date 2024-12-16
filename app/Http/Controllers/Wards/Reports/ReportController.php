@@ -65,8 +65,10 @@ class ReportController extends Controller
             WHERE wardcode = '$authCode'
             oRDER BY created_at DESC;"
         );
+        // dd($stockBalDates);
         $default_beg_bal_date = $stockBalDates == [] ? Carbon::now()->format('Y-m-d') : Carbon::parse($stockBalDates[0]->beg_bal_date)->format('Y-m-d');
         // dd($default_beg_bal_date);
+
         preg_match('/\[\s*(\d{4}-\d{2}-\d{2})\s*\] - \[\s*(\d{4}-\d{2}-\d{2}|ONGOING)\s*\]/', $dateRange, $matches);
         if ($matches) {
             $from = $matches[1]; // "2024-11-04"
