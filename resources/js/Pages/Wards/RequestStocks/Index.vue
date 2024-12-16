@@ -1091,7 +1091,7 @@ export default {
               ? e.approved_by_details.firstname + ' ' + e.approved_by_details.lastname
               : null,
           //   approved_by_image: e.approved_by_details != null ? e.approved_by_details.user_account.image : null,
-          approved_by_image: null,
+          //   approved_by_image: null,
           created_at: e.created_at,
           request_stocks_details: e.request_stocks_details,
         });

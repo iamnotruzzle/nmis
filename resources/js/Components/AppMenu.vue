@@ -2,7 +2,7 @@
   <div class="layout-menu-container">
     <div class="flex justify-content-center w-full">
       <div class="flex justify-content-center align-content-center flex-column">
-        <div class="flex flex-column align-items-center">
+        <!-- <div class="flex flex-column align-items-center">
           <img
             v-if="image != null"
             :src="`storage/${image}`"
@@ -13,7 +13,7 @@
             src="images/no_profile.png"
             class="w-10rem h-10rem rounded-card"
           />
-        </div>
+        </div> -->
         <div class="flex flex-column align-items-center mt-2">
           <!-- <p class="text-lg my-0 py-0">{{ employeeId }}</p> -->
           <p class="text-2xl text-primary font-bold my-1 py-0">{{ name }}</p>
@@ -53,7 +53,7 @@ export default {
   },
   created() {
     // console.log(this.$page.props.auth.user);
-    this.image = this.$page.props.user.image;
+    // this.image = this.$page.props.user.image;
     this.employeeId = this.$page.props.auth.user.userDetail.employeeid;
     this.name = this.$page.props.auth.user.userDetail.firstname + ' ' + this.$page.props.auth.user.userDetail.lastname;
     this.authLocation = this.$page.props.auth.user.location.location_name.wardname;
