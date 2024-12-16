@@ -85,7 +85,7 @@
     </ul>
   </div>
 
-  <Dialog
+  <!-- <Dialog
     v-model:visible="createItemDialog"
     :style="{ width: '450px' }"
     header="Update profile"
@@ -94,17 +94,6 @@
     @hide="clickOutsideDialog"
     dismissableMask
   >
-    <!-- <div class="field">
-      <label for="image">Upload image</label>
-      <FileUpload
-        id="image"
-        mode="basic"
-        @input="onUpload"
-        accept="image/*"
-        :maxFileSize="7000000"
-      >
-      </FileUpload>
-    </div> -->
     <div class="field">
       <label for="password">Password</label>
       <Password
@@ -140,7 +129,7 @@
         @click="submit"
       />
     </template>
-  </Dialog>
+  </Dialog> -->
 </template>
 
 <script>
