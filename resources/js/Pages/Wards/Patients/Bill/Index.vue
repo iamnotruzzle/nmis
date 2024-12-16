@@ -977,7 +977,7 @@ export default {
       this.misc.forEach((misc) => {
         this.miscList.push({
           hmcode: misc.hmcode,
-          hmdesc: '(MISC)' + ' ' + misc.hmdesc,
+          hmdesc: misc.hmdesc,
           hmamt: misc.hmamt,
           uomcode: misc.uomcode == null ? null : misc.uomcode,
         });
@@ -1020,7 +1020,7 @@ export default {
           id: null,
           typeOfCharge: 'MISC',
           itemCode: misc.hmcode,
-          itemDesc: misc.hmdesc,
+          itemDesc: '(MISC)' + ' - ' + misc.hmdesc,
           unit: misc.uomcode == null ? null : misc.uomcode,
           quantity: 99999,
           price: misc.hmamt,
