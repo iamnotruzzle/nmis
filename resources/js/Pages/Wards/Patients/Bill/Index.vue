@@ -977,12 +977,12 @@ export default {
       this.misc.forEach((misc) => {
         this.miscList.push({
           hmcode: misc.hmcode,
-          hmdesc: misc.hmdesc,
+          hmdesc: '(MISC)' + ' ' + misc.hmdesc,
           hmamt: misc.hmamt,
           uomcode: misc.uomcode == null ? null : misc.uomcode,
         });
       });
-      //   console.log('misc list container', this.miscList);
+      console.log('misc list container', this.miscList);
     },
     storeItemsInContainer() {
       // medical supplies
@@ -1014,6 +1014,19 @@ export default {
       });
       this.itemList = Object.values(combinedItems);
 
+      // misc
+      this.misc.forEach((misc) => {
+        this.itemList.push({
+          id: null,
+          typeOfCharge: 'MISC',
+          itemCode: misc.hmcode,
+          itemDesc: misc.hmdesc,
+          unit: misc.uomcode == null ? null : misc.uomcode,
+          quantity: 99999,
+          price: misc.hmamt,
+        });
+      });
+
       this.itemList.sort((a, b) => {
         let cl2descA = a.itemDesc;
         let cl2descB = b.itemDesc;
@@ -1026,6 +1039,7 @@ export default {
         }
         return 0;
       });
+      console.log('item list', this.itemList);
     },
     medicalSuppliesQtyValidation() {
       //   console.log(this.item);

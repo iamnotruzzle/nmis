@@ -534,10 +534,10 @@ class PatientChargeController extends Controller
         } else {
             // dd($request);
 
-            $stock = WardsStocks::where('id', $request->upd_ward_stocks_id)->first();
-            // dd($stock->is_consumable);
-            // return / void charge
-            if ($request->charge_log_from != 'MEDICAL GASES' && $stock->is_consumable == null) {
+            // void/return MISC item
+            if ($request->upd_type_of_charge_code == 'MISC') {
+                // dd($request);
+
                 $previousCharge = null;
                 $previousPatientChargeLogs = null;
                 $previousWardStocks = null;
@@ -545,394 +545,487 @@ class PatientChargeController extends Controller
                 $authID = Auth::user()->employeeid;
                 $authWard = $authCode;
 
-                // medical supplies
-                if ($request->upd_type_of_charge_code == 'DRUMN') {
-                    $patientCharge = PatientCharge::where('enccode', $request->upd_enccode)
-                        ->where('itemcode', $request->upd_itemcode)
-                        ->where('pcchrgdte', $request->upd_pcchrgdte)
-                        ->first();
-                    $previousCharge = $patientCharge;
+                $patientCharge = PatientCharge::where('enccode', $request->upd_enccode)
+                    ->where('itemcode', $request->upd_itemcode)
+                    ->where('pcchrgdte', $request->upd_pcchrgdte)
+                    ->first();
+                $previousCharge = $patientCharge;
 
-                    $patientChargeLogs = PatientChargeLogs::where('id', $request->upd_id)->first();
-                    $previousPatientChargeLogs = $patientChargeLogs;
+                $patientChargeLogs = PatientChargeLogs::where('id', $request->upd_id)->first();
+                $previousPatientChargeLogs = $patientChargeLogs;
 
-                    $wardStocks = WardsStocks::where('id', $request->upd_ward_stocks_id)->first();
-                    $previousWardStocks = $wardStocks;
+                // delete the patient charge log
+                $patientChargeLogs->delete();
 
-                    // update the ward stock
-                    $wardStocks->update([
-                        'quantity' => (int)$previousWardStocks->quantity + (int)$upd_QtyToReturn,
-                    ]);
-
-                    PatientChargeReturnLogs::create([
-                        'enccode' => $request->enccode,
-                        'location' => $authWard,
-                        'hpercode' => $request->hospitalNumber,
+                if ((int)$previousPatientChargeLogs->quantity != (int)$upd_QtyToReturn) {
+                    PatientChargeLogs::create([
+                        'enccode' => $previousPatientChargeLogs->enccode,
+                        'acctno' => $previousPatientChargeLogs->acctno,
+                        'ward_stocks_id' => $previousPatientChargeLogs->ward_stocks_id,
                         'itemcode' => $previousPatientChargeLogs->itemcode,
-                        'returned_qty' => (int)$upd_QtyToReturn,
-                        'entry_by' => Auth::user()->employeeid,
+                        'from' => $previousPatientChargeLogs->from,
+                        'manufactured_date' => Carbon::parse($previousPatientChargeLogs->manufactured_date)->format('Y-m-d H:i:s.v'),
+                        'delivery_date' => Carbon::parse($previousPatientChargeLogs->delivered_date)->format('Y-m-d H:i:s.v'),
+                        'expiration_date' => Carbon::parse($previousPatientChargeLogs->expiration_date)->format('Y-m-d H:i:s.v'),
+                        'quantity' => (int)$previousPatientChargeLogs->quantity - (int)$upd_QtyToReturn,
+                        'price_per_piece' => $previousPatientChargeLogs->price_per_piece,
+                        'price_total' => ((float)$previousPatientChargeLogs->quantity - (float)$upd_QtyToReturn) * (float)$previousPatientChargeLogs->price_per_piece,
+                        'pcchrgdte' => $previousPatientChargeLogs->pcchrgdte,
+                        'tscode' => $request->tscode,
+                        'entry_at' => $authWard,
+                        'entry_by' => $authID,
+                        'created_at' => $previousPatientChargeLogs->created_at,
+                        'updated_at' => $previousPatientChargeLogs->updated_at,
                     ]);
-
-                    // delete the patient charge log
-                    $patientChargeLogs->delete();
-
-                    if ((int)$previousPatientChargeLogs->quantity != (int)$upd_QtyToReturn) {
-                        PatientChargeLogs::create([
-                            'enccode' => $previousPatientChargeLogs->enccode,
-                            'acctno' => $previousPatientChargeLogs->acctno,
-                            'ward_stocks_id' => $previousPatientChargeLogs->ward_stocks_id,
-                            'itemcode' => $previousPatientChargeLogs->itemcode,
-                            'from' => $previousPatientChargeLogs->from,
-                            'manufactured_date' => Carbon::parse($previousPatientChargeLogs->manufactured_date)->format('Y-m-d H:i:s.v'),
-                            'delivery_date' => Carbon::parse($previousPatientChargeLogs->delivered_date)->format('Y-m-d H:i:s.v'),
-                            'expiration_date' => Carbon::parse($previousPatientChargeLogs->expiration_date)->format('Y-m-d H:i:s.v'),
-                            'quantity' => (int)$previousPatientChargeLogs->quantity - (int)$upd_QtyToReturn,
-                            'price_per_piece' => $previousPatientChargeLogs->price_per_piece,
-                            'price_total' => ((float)$previousPatientChargeLogs->quantity - (float)$upd_QtyToReturn) * (float)$previousPatientChargeLogs->price_per_piece,
-                            'pcchrgdte' => $previousPatientChargeLogs->pcchrgdte,
-                            'tscode' => $request->tscode,
-                            'entry_at' => $authWard,
-                            'entry_by' => $authID,
-                            'created_at' => $previousPatientChargeLogs->created_at,
-                            'updated_at' => $previousPatientChargeLogs->updated_at,
-                        ]);
-                    }
-
-                    if (((int)$previousCharge->pchrgqty - (int)$upd_QtyToReturn) == 0) {
-                        PatientCharge::where('enccode', $request->upd_enccode)
-                            ->where('itemcode', $request->upd_itemcode)
-                            ->where('pcchrgdte', $request->upd_pcchrgdte)
-                            ->delete();
-                    } else {
-                        PatientCharge::where('enccode', $request->upd_enccode)
-                            ->where('itemcode', $request->upd_itemcode)
-                            ->where('pcchrgdte', $request->upd_pcchrgdte)
-                            ->update([
-                                'enccode' => $previousCharge->enccode,
-                                'hpercode' => $previousCharge->hpercode,
-                                'upicode' => null,
-                                'pcchrgcod' => $previousCharge->pcchrgcod, // charge slip no.
-                                'pcchrgdte' => $previousCharge->pcchrgdte,
-                                'chargcode' => $previousCharge->chargcode, // type of charge (chrgcode from hcharge)
-                                'uomcode' => $previousCharge->uomcode, // unit
-                                'pchrgqty' =>  (int)$previousCharge->pchrgqty - (int)$upd_QtyToReturn,
-                                'pchrgup' => $previousCharge->pchrgup,
-                                'pcchrgamt' => ((float)$previousCharge->pchrgqty - (float)$upd_QtyToReturn) * (float)$previousCharge->pchrgup,
-                                'pcstat' => 'A', // always A
-                                'pclock' => 'N', // always N
-                                'updsw' => 'N', // always N
-                                'confdl' => 'N', // always N
-                                'srcchrg' => $previousCharge->srcchrg,
-                                'pcdisch' => 'Y',
-                                'acctno' => $previousCharge->acctno, // SELECT * FROM hpatacct --pacctno
-                                'itemcode' => $previousCharge->itemcode, // cl2comb or hmisc hmcode
-                                'entryby' => $authID,
-                                'orinclst' => null, // null
-                                'compense' => null, // always null
-                                'proccode' => null, // always null
-                                'discount' => null, // always null
-                                'disamt' => null, // always null
-                                'discbal' => null, // always null
-                                'phicamt' => null, // always null
-                                'rvscode' => null, // always null
-                                'licno' => null, // always null
-                                'hpatkey' => null, // always null
-                                'time_frequency' => null, // always null
-                                'unit_frequency' => null, // always null
-                                'qtyintake' => null, // always null
-                                'uomintake' => null, // always null
-                            ]);
-                    }
                 }
-                // misc
-                else {
-                    $patientCharge = PatientCharge::where('enccode', $request->upd_enccode)
+
+                if (((int)$previousCharge->pchrgqty - (int)$upd_QtyToReturn) == 0) {
+                    PatientCharge::where('enccode', $request->upd_enccode)
                         ->where('itemcode', $request->upd_itemcode)
                         ->where('pcchrgdte', $request->upd_pcchrgdte)
-                        ->first();
-                    $previousCharge = $patientCharge;
-
-                    $patientChargeLogs = PatientChargeLogs::where('id', $request->upd_id)->first();
-                    $previousPatientChargeLogs = $patientChargeLogs;
-
-                    // delete the patient charge log
-                    $patientChargeLogs->delete();
-
-                    if ((int)$previousPatientChargeLogs->quantity != (int)$upd_QtyToReturn) {
-                        PatientChargeLogs::create([
-                            'enccode' => $previousPatientChargeLogs->enccode,
-                            'acctno' => $previousPatientChargeLogs->acctno,
-                            'ward_stocks_id' => $previousPatientChargeLogs->ward_stocks_id,
-                            'itemcode' => $previousPatientChargeLogs->itemcode,
-                            'from' => $previousPatientChargeLogs->from,
-                            'manufactured_date' => Carbon::parse($previousPatientChargeLogs->manufactured_date)->format('Y-m-d H:i:s.v'),
-                            'delivery_date' => Carbon::parse($previousPatientChargeLogs->delivered_date)->format('Y-m-d H:i:s.v'),
-                            'expiration_date' => Carbon::parse($previousPatientChargeLogs->expiration_date)->format('Y-m-d H:i:s.v'),
-                            'quantity' => (int)$previousPatientChargeLogs->quantity - (int)$upd_QtyToReturn,
-                            'price_per_piece' => $previousPatientChargeLogs->price_per_piece,
-                            'price_total' => ((float)$previousPatientChargeLogs->quantity - (float)$upd_QtyToReturn) * (float)$previousPatientChargeLogs->price_per_piece,
-                            'pcchrgdte' => $previousPatientChargeLogs->pcchrgdte,
-                            'tscode' => $request->tscode,
-                            'entry_at' => $authWard,
-                            'entry_by' => $authID,
-                            'created_at' => $previousPatientChargeLogs->created_at,
-                            'updated_at' => $previousPatientChargeLogs->updated_at,
+                        ->delete();
+                } else {
+                    PatientCharge::where('enccode', $request->upd_enccode)
+                        ->where('itemcode', $request->upd_itemcode)
+                        ->where('pcchrgdte', $request->upd_pcchrgdte)
+                        ->update([
+                            'enccode' => $previousCharge->enccode,
+                            'hpercode' => $previousCharge->hpercode,
+                            'upicode' => null,
+                            'pcchrgcod' => $previousCharge->pcchrgcod, // charge slip no.
+                            'pcchrgdte' => $previousCharge->pcchrgdte,
+                            'chargcode' => $previousCharge->chargcode, // type of charge (chrgcode from hcharge)
+                            'uomcode' => $previousCharge->uomcode, // unit
+                            'pchrgqty' =>  (int)$previousCharge->pchrgqty - (int)$upd_QtyToReturn,
+                            'pchrgup' => $previousCharge->pchrgup,
+                            'pcchrgamt' => ((float)$previousCharge->pchrgqty - (float)$upd_QtyToReturn) * (float)$previousCharge->pchrgup,
+                            'pcstat' => 'A', // always A
+                            'pclock' => 'N', // always N
+                            'updsw' => 'N', // always N
+                            'confdl' => 'N', // always N
+                            'srcchrg' => $previousCharge->srcchrg,
+                            'pcdisch' => 'Y',
+                            'acctno' => $previousCharge->acctno, // SELECT * FROM hpatacct --pacctno
+                            'itemcode' => $previousCharge->itemcode, // cl2comb or hmisc hmcode
+                            'entryby' => $authID,
+                            'orinclst' => null, // null
+                            'compense' => null, // always null
+                            'proccode' => null, // always null
+                            'discount' => null, // always null
+                            'disamt' => null, // always null
+                            'discbal' => null, // always null
+                            'phicamt' => null, // always null
+                            'rvscode' => null, // always null
+                            'licno' => null, // always null
+                            'hpatkey' => null, // always null
+                            'time_frequency' => null, // always null
+                            'unit_frequency' => null, // always null
+                            'qtyintake' => null, // always null
+                            'uomintake' => null, // always null
                         ]);
-                    }
-
-                    if (((int)$previousCharge->pchrgqty - (int)$upd_QtyToReturn) == 0) {
-                        PatientCharge::where('enccode', $request->upd_enccode)
-                            ->where('itemcode', $request->upd_itemcode)
-                            ->where('pcchrgdte', $request->upd_pcchrgdte)
-                            ->delete();
-                    } else {
-                        PatientCharge::where('enccode', $request->upd_enccode)
-                            ->where('itemcode', $request->upd_itemcode)
-                            ->where('pcchrgdte', $request->upd_pcchrgdte)
-                            ->update([
-                                'enccode' => $previousCharge->enccode,
-                                'hpercode' => $previousCharge->hpercode,
-                                'upicode' => null,
-                                'pcchrgcod' => $previousCharge->pcchrgcod, // charge slip no.
-                                'pcchrgdte' => $previousCharge->pcchrgdte,
-                                'chargcode' => $previousCharge->chargcode, // type of charge (chrgcode from hcharge)
-                                'uomcode' => $previousCharge->uomcode, // unit
-                                'pchrgqty' =>  (int)$previousCharge->pchrgqty - (int)$upd_QtyToReturn,
-                                'pchrgup' => $previousCharge->pchrgup,
-                                'pcchrgamt' => ((float)$previousCharge->pchrgqty - (float)$upd_QtyToReturn) * (float)$previousCharge->pchrgup,
-                                'pcstat' => 'A', // always A
-                                'pclock' => 'N', // always N
-                                'updsw' => 'N', // always N
-                                'confdl' => 'N', // always N
-                                'srcchrg' => $previousCharge->srcchrg,
-                                'pcdisch' => 'Y',
-                                'acctno' => $previousCharge->acctno, // SELECT * FROM hpatacct --pacctno
-                                'itemcode' => $previousCharge->itemcode, // cl2comb or hmisc hmcode
-                                'entryby' => $authID,
-                                'orinclst' => null, // null
-                                'compense' => null, // always null
-                                'proccode' => null, // always null
-                                'discount' => null, // always null
-                                'disamt' => null, // always null
-                                'discbal' => null, // always null
-                                'phicamt' => null, // always null
-                                'rvscode' => null, // always null
-                                'licno' => null, // always null
-                                'hpatkey' => null, // always null
-                                'time_frequency' => null, // always null
-                                'unit_frequency' => null, // always null
-                                'qtyintake' => null, // always null
-                                'uomintake' => null, // always null
-                            ]);
-                    }
                 }
             } else {
-                // RETURN CONSUMABLE ITEMS
-                // dd($request);
-                $previousCharge = null;
-                $previousPatientChargeLogs = null;
-                $previousWardStocks = null;
-                $upd_QtyToReturn = ltrim($request->upd_QtyToReturn, '0'); // removed leading zeroes if there's any
-                $authID = Auth::user()->employeeid;
-                $authWard = $authCode;
+                $stock = WardsStocks::where('id', $request->upd_ward_stocks_id)->first();
+                // dd($stock);
+                // return / void charge
+                if ($request->charge_log_from != 'MEDICAL GASES' && $stock->is_consumable == null) {
+                    // dd($stock);
+                    $previousCharge = null;
+                    $previousPatientChargeLogs = null;
+                    $previousWardStocks = null;
+                    $upd_QtyToReturn = ltrim($request->upd_QtyToReturn, '0'); // removed leading zeroes if theres any
+                    $authID = Auth::user()->employeeid;
+                    $authWard = $authCode;
 
-                // medical supplies
-                if ($request->upd_type_of_charge_code == 'DRUMN') {
-                    $patientCharge = PatientCharge::where('enccode', $request->upd_enccode)
-                        ->where('itemcode', $request->upd_itemcode)
-                        ->where(
-                            'pcchrgdte',
-                            $request->upd_pcchrgdte
-                        )
-                        ->first();
-                    $previousCharge = $patientCharge;
+                    // medical supplies
+                    if ($request->upd_type_of_charge_code == 'DRUMN') {
+                        $patientCharge = PatientCharge::where('enccode', $request->upd_enccode)
+                            ->where('itemcode', $request->upd_itemcode)
+                            ->where('pcchrgdte', $request->upd_pcchrgdte)
+                            ->first();
+                        $previousCharge = $patientCharge;
 
-                    $patientChargeLogs = PatientChargeLogs::where('id', $request->upd_id)->first();
-                    $previousPatientChargeLogs = $patientChargeLogs;
+                        $patientChargeLogs = PatientChargeLogs::where('id', $request->upd_id)->first();
+                        $previousPatientChargeLogs = $patientChargeLogs;
 
-                    $wardStocks = WardsStocks::where('id', $request->upd_ward_stocks_id)->first();
-                    $previousWardStocks = $wardStocks;
+                        $wardStocks = WardsStocks::where('id', $request->upd_ward_stocks_id)->first();
+                        $previousWardStocks = $wardStocks;
 
-                    // Update the ward stock total_usage
-                    $newTotalUsage = (int)$previousWardStocks->total_usage + (int)$upd_QtyToReturn;
-
-                    // Calculate the number of full tanks left
-                    $fullTanks = (int) floor($newTotalUsage / $wardStocks->average);
-
-                    // Determine if there's a partial tank left
-                    $remainingInLastTank = $newTotalUsage % $wardStocks->average;
-
-                    // Update the quantity: full tanks + 1 if there's a partial tank
-                    $newQuantity = $fullTanks + ($remainingInLastTank > 0 ? 1 : 0);
-
-                    // Update the ward stock with the new total_usage and quantity
-                    $wardStocks->update([
-                        'total_usage' => $newTotalUsage,
-                        'quantity' => $newQuantity,
-                    ]);
-
-                    // Log the return
-                    PatientChargeReturnLogs::create([
-                        'enccode' => $request->enccode,
-                        'location' => $authWard,
-                        'hpercode' => $request->hospitalNumber,
-                        'itemcode' => $previousPatientChargeLogs->itemcode,
-                        'returned_qty' => (int)$upd_QtyToReturn,
-                        'entry_by' => Auth::user()->employeeid,
-                    ]);
-
-                    // Delete the patient charge log
-                    $patientChargeLogs->delete();
-
-                    // If the entire quantity wasn't returned, create a new log for the remaining quantity
-                    if ((int)$previousPatientChargeLogs->quantity != (int)$upd_QtyToReturn) {
-                        PatientChargeLogs::create([
-                            'enccode' => $previousPatientChargeLogs->enccode,
-                            'acctno' => $previousPatientChargeLogs->acctno,
-                            'ward_stocks_id' => $previousPatientChargeLogs->ward_stocks_id,
-                            'itemcode' => $previousPatientChargeLogs->itemcode,
-                            'from' => $previousPatientChargeLogs->from,
-                            'manufactured_date' => Carbon::parse($previousPatientChargeLogs->manufactured_date)->format('Y-m-d H:i:s.v'),
-                            'delivery_date' => Carbon::parse($previousPatientChargeLogs->delivered_date)->format('Y-m-d H:i:s.v'),
-                            'expiration_date' => Carbon::parse($previousPatientChargeLogs->expiration_date)->format('Y-m-d H:i:s.v'),
-                            'quantity' => (int)$previousPatientChargeLogs->quantity - (int)$upd_QtyToReturn,
-                            'price_per_piece' => $previousPatientChargeLogs->price_per_piece,
-                            'price_total' => ((float)$previousPatientChargeLogs->quantity - (float)$upd_QtyToReturn) * (float)$previousPatientChargeLogs->price_per_piece,
-                            'pcchrgdte' => $previousPatientChargeLogs->pcchrgdte,
-                            'tscode' => $request->tscode,
-                            'entry_at' => $authWard,
-                            'entry_by' => $authID,
-                            'created_at' => $previousPatientChargeLogs->created_at,
-                            'updated_at' => $previousPatientChargeLogs->updated_at,
+                        // update the ward stock
+                        $wardStocks->update([
+                            'quantity' => (int)$previousWardStocks->quantity + (int)$upd_QtyToReturn,
                         ]);
-                    }
-                    // s
-                    // Update or delete the patient charge based on the remaining quantity
-                    if (((int)$previousCharge->pchrgqty - (int)$upd_QtyToReturn) == 0) {
-                        PatientCharge::where('enccode', $request->upd_enccode)
-                            ->where('itemcode', $request->upd_itemcode)
-                            ->where('pcchrgdte', $request->upd_pcchrgdte)
-                            ->delete();
-                    } else {
-                        PatientCharge::where('enccode', $request->upd_enccode)
-                            ->where('itemcode', $request->upd_itemcode)
-                            ->where('pcchrgdte', $request->upd_pcchrgdte)
-                            ->update([
-                                'enccode' => $previousCharge->enccode,
-                                'hpercode' => $previousCharge->hpercode,
-                                'upicode' => null,
-                                'pcchrgcod' => $previousCharge->pcchrgcod, // charge slip no.
-                                'pcchrgdte' => $previousCharge->pcchrgdte,
-                                'chargcode' => $previousCharge->chargcode, // type of charge (chrgcode from hcharge)
-                                'uomcode' => $previousCharge->uomcode, // unit
-                                'pchrgqty' =>  (int)$previousCharge->pchrgqty - (int)$upd_QtyToReturn,
-                                'pchrgup' => $previousCharge->pchrgup,
-                                'pcchrgamt' => ((float)$previousCharge->pchrgqty - (float)$upd_QtyToReturn) * (float)$previousCharge->pchrgup,
-                                'pcstat' => 'A', // always A
-                                'pclock' => 'N', // always N
-                                'updsw' => 'N', // always N
-                                'confdl' => 'N', // always N
-                                'srcchrg' => $previousCharge->srcchrg,
-                                'pcdisch' => 'Y',
-                                'acctno' => $previousCharge->acctno, // SELECT * FROM hpatacct --pacctno
-                                'itemcode' => $previousCharge->itemcode, // cl2comb or hmisc hmcode
-                                'entryby' => $authID,
-                                'orinclst' => null, // null
-                                'compense' => null, // always null
-                                'proccode' => null, // always null
-                                'discount' => null, // always null
-                                'disamt' => null, // always null
-                                'discbal' => null, // always null
-                                'phicamt' => null, // always null
-                                'rvscode' => null, // always null
-                                'licno' => null, // always null
-                                'hpatkey' => null, // always null
-                                'time_frequency' => null, // always null
-                                'unit_frequency' => null, // always null
-                                'qtyintake' => null, // always null
-                                'uomintake' => null, // always null
+
+                        PatientChargeReturnLogs::create([
+                            'enccode' => $request->enccode,
+                            'location' => $authWard,
+                            'hpercode' => $request->hospitalNumber,
+                            'itemcode' => $previousPatientChargeLogs->itemcode,
+                            'returned_qty' => (int)$upd_QtyToReturn,
+                            'entry_by' => Auth::user()->employeeid,
+                        ]);
+
+                        // delete the patient charge log
+                        $patientChargeLogs->delete();
+
+                        if ((int)$previousPatientChargeLogs->quantity != (int)$upd_QtyToReturn) {
+                            PatientChargeLogs::create([
+                                'enccode' => $previousPatientChargeLogs->enccode,
+                                'acctno' => $previousPatientChargeLogs->acctno,
+                                'ward_stocks_id' => $previousPatientChargeLogs->ward_stocks_id,
+                                'itemcode' => $previousPatientChargeLogs->itemcode,
+                                'from' => $previousPatientChargeLogs->from,
+                                'manufactured_date' => Carbon::parse($previousPatientChargeLogs->manufactured_date)->format('Y-m-d H:i:s.v'),
+                                'delivery_date' => Carbon::parse($previousPatientChargeLogs->delivered_date)->format('Y-m-d H:i:s.v'),
+                                'expiration_date' => Carbon::parse($previousPatientChargeLogs->expiration_date)->format('Y-m-d H:i:s.v'),
+                                'quantity' => (int)$previousPatientChargeLogs->quantity - (int)$upd_QtyToReturn,
+                                'price_per_piece' => $previousPatientChargeLogs->price_per_piece,
+                                'price_total' => ((float)$previousPatientChargeLogs->quantity - (float)$upd_QtyToReturn) * (float)$previousPatientChargeLogs->price_per_piece,
+                                'pcchrgdte' => $previousPatientChargeLogs->pcchrgdte,
+                                'tscode' => $request->tscode,
+                                'entry_at' => $authWard,
+                                'entry_by' => $authID,
+                                'created_at' => $previousPatientChargeLogs->created_at,
+                                'updated_at' => $previousPatientChargeLogs->updated_at,
                             ]);
+                        }
+
+                        if (((int)$previousCharge->pchrgqty - (int)$upd_QtyToReturn) == 0) {
+                            PatientCharge::where('enccode', $request->upd_enccode)
+                                ->where('itemcode', $request->upd_itemcode)
+                                ->where('pcchrgdte', $request->upd_pcchrgdte)
+                                ->delete();
+                        } else {
+                            PatientCharge::where('enccode', $request->upd_enccode)
+                                ->where('itemcode', $request->upd_itemcode)
+                                ->where('pcchrgdte', $request->upd_pcchrgdte)
+                                ->update([
+                                    'enccode' => $previousCharge->enccode,
+                                    'hpercode' => $previousCharge->hpercode,
+                                    'upicode' => null,
+                                    'pcchrgcod' => $previousCharge->pcchrgcod, // charge slip no.
+                                    'pcchrgdte' => $previousCharge->pcchrgdte,
+                                    'chargcode' => $previousCharge->chargcode, // type of charge (chrgcode from hcharge)
+                                    'uomcode' => $previousCharge->uomcode, // unit
+                                    'pchrgqty' =>  (int)$previousCharge->pchrgqty - (int)$upd_QtyToReturn,
+                                    'pchrgup' => $previousCharge->pchrgup,
+                                    'pcchrgamt' => ((float)$previousCharge->pchrgqty - (float)$upd_QtyToReturn) * (float)$previousCharge->pchrgup,
+                                    'pcstat' => 'A', // always A
+                                    'pclock' => 'N', // always N
+                                    'updsw' => 'N', // always N
+                                    'confdl' => 'N', // always N
+                                    'srcchrg' => $previousCharge->srcchrg,
+                                    'pcdisch' => 'Y',
+                                    'acctno' => $previousCharge->acctno, // SELECT * FROM hpatacct --pacctno
+                                    'itemcode' => $previousCharge->itemcode, // cl2comb or hmisc hmcode
+                                    'entryby' => $authID,
+                                    'orinclst' => null, // null
+                                    'compense' => null, // always null
+                                    'proccode' => null, // always null
+                                    'discount' => null, // always null
+                                    'disamt' => null, // always null
+                                    'discbal' => null, // always null
+                                    'phicamt' => null, // always null
+                                    'rvscode' => null, // always null
+                                    'licno' => null, // always null
+                                    'hpatkey' => null, // always null
+                                    'time_frequency' => null, // always null
+                                    'unit_frequency' => null, // always null
+                                    'qtyintake' => null, // always null
+                                    'uomintake' => null, // always null
+                                ]);
+                        }
                     }
-                } else {
                     // misc
-                    $patientCharge = PatientCharge::where('enccode', $request->upd_enccode)
-                        ->where('itemcode', $request->upd_itemcode)
-                        ->where('pcchrgdte', $request->upd_pcchrgdte)
-                        ->first();
-                    $previousCharge = $patientCharge;
+                    // else {
+                    //     $patientCharge = PatientCharge::where('enccode', $request->upd_enccode)
+                    //         ->where('itemcode', $request->upd_itemcode)
+                    //         ->where('pcchrgdte', $request->upd_pcchrgdte)
+                    //         ->first();
+                    //     $previousCharge = $patientCharge;
 
-                    $patientChargeLogs = PatientChargeLogs::where('id', $request->upd_id)->first();
-                    $previousPatientChargeLogs = $patientChargeLogs;
+                    //     $patientChargeLogs = PatientChargeLogs::where('id', $request->upd_id)->first();
+                    //     $previousPatientChargeLogs = $patientChargeLogs;
 
-                    // delete the patient charge log
-                    $patientChargeLogs->delete();
+                    //     // delete the patient charge log
+                    //     $patientChargeLogs->delete();
 
-                    if ((int)$previousPatientChargeLogs->quantity != (int)$upd_QtyToReturn) {
-                        PatientChargeLogs::create([
-                            'enccode' => $previousPatientChargeLogs->enccode,
-                            'acctno' => $previousPatientChargeLogs->acctno,
-                            'ward_stocks_id' => $previousPatientChargeLogs->ward_stocks_id,
-                            'itemcode' => $previousPatientChargeLogs->itemcode,
-                            'from' => $previousPatientChargeLogs->from,
-                            'manufactured_date' => Carbon::parse($previousPatientChargeLogs->manufactured_date)->format('Y-m-d H:i:s.v'),
-                            'delivery_date' => Carbon::parse($previousPatientChargeLogs->delivered_date)->format('Y-m-d H:i:s.v'),
-                            'expiration_date' => Carbon::parse($previousPatientChargeLogs->expiration_date)->format('Y-m-d H:i:s.v'),
-                            'quantity' => (int)$previousPatientChargeLogs->quantity - (int)$upd_QtyToReturn,
-                            'price_per_piece' => $previousPatientChargeLogs->price_per_piece,
-                            'price_total' => ((float)$previousPatientChargeLogs->quantity - (float)$upd_QtyToReturn) * (float)$previousPatientChargeLogs->price_per_piece,
-                            'pcchrgdte' => $previousPatientChargeLogs->pcchrgdte,
-                            'tscode' => $request->tscode,
-                            'entry_at' => $authWard,
-                            'entry_by' => $authID,
-                            'created_at' => $previousPatientChargeLogs->created_at,
-                            'updated_at' => $previousPatientChargeLogs->updated_at,
+                    //     if ((int)$previousPatientChargeLogs->quantity != (int)$upd_QtyToReturn) {
+                    //         PatientChargeLogs::create([
+                    //             'enccode' => $previousPatientChargeLogs->enccode,
+                    //             'acctno' => $previousPatientChargeLogs->acctno,
+                    //             'ward_stocks_id' => $previousPatientChargeLogs->ward_stocks_id,
+                    //             'itemcode' => $previousPatientChargeLogs->itemcode,
+                    //             'from' => $previousPatientChargeLogs->from,
+                    //             'manufactured_date' => Carbon::parse($previousPatientChargeLogs->manufactured_date)->format('Y-m-d H:i:s.v'),
+                    //             'delivery_date' => Carbon::parse($previousPatientChargeLogs->delivered_date)->format('Y-m-d H:i:s.v'),
+                    //             'expiration_date' => Carbon::parse($previousPatientChargeLogs->expiration_date)->format('Y-m-d H:i:s.v'),
+                    //             'quantity' => (int)$previousPatientChargeLogs->quantity - (int)$upd_QtyToReturn,
+                    //             'price_per_piece' => $previousPatientChargeLogs->price_per_piece,
+                    //             'price_total' => ((float)$previousPatientChargeLogs->quantity - (float)$upd_QtyToReturn) * (float)$previousPatientChargeLogs->price_per_piece,
+                    //             'pcchrgdte' => $previousPatientChargeLogs->pcchrgdte,
+                    //             'tscode' => $request->tscode,
+                    //             'entry_at' => $authWard,
+                    //             'entry_by' => $authID,
+                    //             'created_at' => $previousPatientChargeLogs->created_at,
+                    //             'updated_at' => $previousPatientChargeLogs->updated_at,
+                    //         ]);
+                    //     }
+
+                    //     if (((int)$previousCharge->pchrgqty - (int)$upd_QtyToReturn) == 0) {
+                    //         PatientCharge::where('enccode', $request->upd_enccode)
+                    //             ->where('itemcode', $request->upd_itemcode)
+                    //             ->where('pcchrgdte', $request->upd_pcchrgdte)
+                    //             ->delete();
+                    //     } else {
+                    //         PatientCharge::where('enccode', $request->upd_enccode)
+                    //             ->where('itemcode', $request->upd_itemcode)
+                    //             ->where('pcchrgdte', $request->upd_pcchrgdte)
+                    //             ->update([
+                    //                 'enccode' => $previousCharge->enccode,
+                    //                 'hpercode' => $previousCharge->hpercode,
+                    //                 'upicode' => null,
+                    //                 'pcchrgcod' => $previousCharge->pcchrgcod, // charge slip no.
+                    //                 'pcchrgdte' => $previousCharge->pcchrgdte,
+                    //                 'chargcode' => $previousCharge->chargcode, // type of charge (chrgcode from hcharge)
+                    //                 'uomcode' => $previousCharge->uomcode, // unit
+                    //                 'pchrgqty' =>  (int)$previousCharge->pchrgqty - (int)$upd_QtyToReturn,
+                    //                 'pchrgup' => $previousCharge->pchrgup,
+                    //                 'pcchrgamt' => ((float)$previousCharge->pchrgqty - (float)$upd_QtyToReturn) * (float)$previousCharge->pchrgup,
+                    //                 'pcstat' => 'A', // always A
+                    //                 'pclock' => 'N', // always N
+                    //                 'updsw' => 'N', // always N
+                    //                 'confdl' => 'N', // always N
+                    //                 'srcchrg' => $previousCharge->srcchrg,
+                    //                 'pcdisch' => 'Y',
+                    //                 'acctno' => $previousCharge->acctno, // SELECT * FROM hpatacct --pacctno
+                    //                 'itemcode' => $previousCharge->itemcode, // cl2comb or hmisc hmcode
+                    //                 'entryby' => $authID,
+                    //                 'orinclst' => null, // null
+                    //                 'compense' => null, // always null
+                    //                 'proccode' => null, // always null
+                    //                 'discount' => null, // always null
+                    //                 'disamt' => null, // always null
+                    //                 'discbal' => null, // always null
+                    //                 'phicamt' => null, // always null
+                    //                 'rvscode' => null, // always null
+                    //                 'licno' => null, // always null
+                    //                 'hpatkey' => null, // always null
+                    //                 'time_frequency' => null, // always null
+                    //                 'unit_frequency' => null, // always null
+                    //                 'qtyintake' => null, // always null
+                    //                 'uomintake' => null, // always null
+                    //             ]);
+                    //     }
+                    // }
+                } else {
+                    // RETURN CONSUMABLE ITEMS
+                    // dd($request);
+                    $previousCharge = null;
+                    $previousPatientChargeLogs = null;
+                    $previousWardStocks = null;
+                    $upd_QtyToReturn = ltrim($request->upd_QtyToReturn, '0'); // removed leading zeroes if there's any
+                    $authID = Auth::user()->employeeid;
+                    $authWard = $authCode;
+
+                    // medical supplies
+                    if ($request->upd_type_of_charge_code == 'DRUMN') {
+                        $patientCharge = PatientCharge::where('enccode', $request->upd_enccode)
+                            ->where('itemcode', $request->upd_itemcode)
+                            ->where(
+                                'pcchrgdte',
+                                $request->upd_pcchrgdte
+                            )
+                            ->first();
+                        $previousCharge = $patientCharge;
+
+                        $patientChargeLogs = PatientChargeLogs::where('id', $request->upd_id)->first();
+                        $previousPatientChargeLogs = $patientChargeLogs;
+
+                        $wardStocks = WardsStocks::where('id', $request->upd_ward_stocks_id)->first();
+                        $previousWardStocks = $wardStocks;
+
+                        // Update the ward stock total_usage
+                        $newTotalUsage = (int)$previousWardStocks->total_usage + (int)$upd_QtyToReturn;
+
+                        // Calculate the number of full tanks left
+                        $fullTanks = (int) floor($newTotalUsage / $wardStocks->average);
+
+                        // Determine if there's a partial tank left
+                        $remainingInLastTank = $newTotalUsage % $wardStocks->average;
+
+                        // Update the quantity: full tanks + 1 if there's a partial tank
+                        $newQuantity = $fullTanks + ($remainingInLastTank > 0 ? 1 : 0);
+
+                        // Update the ward stock with the new total_usage and quantity
+                        $wardStocks->update([
+                            'total_usage' => $newTotalUsage,
+                            'quantity' => $newQuantity,
                         ]);
-                    }
 
-                    if (((int)$previousCharge->pchrgqty - (int)$upd_QtyToReturn) == 0) {
-                        PatientCharge::where('enccode', $request->upd_enccode)
-                            ->where('itemcode', $request->upd_itemcode)
-                            ->where('pcchrgdte', $request->upd_pcchrgdte)
-                            ->delete();
-                    } else {
-                        PatientCharge::where('enccode', $request->upd_enccode)
-                            ->where('itemcode', $request->upd_itemcode)
-                            ->where('pcchrgdte', $request->upd_pcchrgdte)
-                            ->update([
-                                'enccode' => $previousCharge->enccode,
-                                'hpercode' => $previousCharge->hpercode,
-                                'upicode' => null,
-                                'pcchrgcod' => $previousCharge->pcchrgcod, // charge slip no.
-                                'pcchrgdte' => $previousCharge->pcchrgdte,
-                                'chargcode' => $previousCharge->chargcode, // type of charge (chrgcode from hcharge)
-                                'uomcode' => $previousCharge->uomcode, // unit
-                                'pchrgqty' =>  (int)$previousCharge->pchrgqty - (int)$upd_QtyToReturn,
-                                'pchrgup' => $previousCharge->pchrgup,
-                                'pcchrgamt' => ((float)$previousCharge->pchrgqty - (float)$upd_QtyToReturn) * (float)$previousCharge->pchrgup,
-                                'pcstat' => 'A', // always A
-                                'pclock' => 'N', // always N
-                                'updsw' => 'N', // always N
-                                'confdl' => 'N', // always N
-                                'srcchrg' => $previousCharge->srcchrg,
-                                'pcdisch' => 'Y',
-                                'acctno' => $previousCharge->acctno, // SELECT * FROM hpatacct --pacctno
-                                'itemcode' => $previousCharge->itemcode, // cl2comb or hmisc hmcode
-                                'entryby' => $authID,
-                                'orinclst' => null, // null
-                                'compense' => null, // always null
-                                'proccode' => null, // always null
-                                'discount' => null, // always null
-                                'disamt' => null, // always null
-                                'discbal' => null, // always null
-                                'phicamt' => null, // always null
-                                'rvscode' => null, // always null
-                                'licno' => null, // always null
-                                'hpatkey' => null, // always null
-                                'time_frequency' => null, // always null
-                                'unit_frequency' => null, // always null
-                                'qtyintake' => null, // always null
-                                'uomintake' => null, // always null
+                        // Log the return
+                        PatientChargeReturnLogs::create([
+                            'enccode' => $request->enccode,
+                            'location' => $authWard,
+                            'hpercode' => $request->hospitalNumber,
+                            'itemcode' => $previousPatientChargeLogs->itemcode,
+                            'returned_qty' => (int)$upd_QtyToReturn,
+                            'entry_by' => Auth::user()->employeeid,
+                        ]);
+
+                        // Delete the patient charge log
+                        $patientChargeLogs->delete();
+
+                        // If the entire quantity wasn't returned, create a new log for the remaining quantity
+                        if ((int)$previousPatientChargeLogs->quantity != (int)$upd_QtyToReturn) {
+                            PatientChargeLogs::create([
+                                'enccode' => $previousPatientChargeLogs->enccode,
+                                'acctno' => $previousPatientChargeLogs->acctno,
+                                'ward_stocks_id' => $previousPatientChargeLogs->ward_stocks_id,
+                                'itemcode' => $previousPatientChargeLogs->itemcode,
+                                'from' => $previousPatientChargeLogs->from,
+                                'manufactured_date' => Carbon::parse($previousPatientChargeLogs->manufactured_date)->format('Y-m-d H:i:s.v'),
+                                'delivery_date' => Carbon::parse($previousPatientChargeLogs->delivered_date)->format('Y-m-d H:i:s.v'),
+                                'expiration_date' => Carbon::parse($previousPatientChargeLogs->expiration_date)->format('Y-m-d H:i:s.v'),
+                                'quantity' => (int)$previousPatientChargeLogs->quantity - (int)$upd_QtyToReturn,
+                                'price_per_piece' => $previousPatientChargeLogs->price_per_piece,
+                                'price_total' => ((float)$previousPatientChargeLogs->quantity - (float)$upd_QtyToReturn) * (float)$previousPatientChargeLogs->price_per_piece,
+                                'pcchrgdte' => $previousPatientChargeLogs->pcchrgdte,
+                                'tscode' => $request->tscode,
+                                'entry_at' => $authWard,
+                                'entry_by' => $authID,
+                                'created_at' => $previousPatientChargeLogs->created_at,
+                                'updated_at' => $previousPatientChargeLogs->updated_at,
                             ]);
+                        }
+                        // s
+                        // Update or delete the patient charge based on the remaining quantity
+                        if (((int)$previousCharge->pchrgqty - (int)$upd_QtyToReturn) == 0) {
+                            PatientCharge::where('enccode', $request->upd_enccode)
+                                ->where('itemcode', $request->upd_itemcode)
+                                ->where('pcchrgdte', $request->upd_pcchrgdte)
+                                ->delete();
+                        } else {
+                            PatientCharge::where('enccode', $request->upd_enccode)
+                                ->where('itemcode', $request->upd_itemcode)
+                                ->where('pcchrgdte', $request->upd_pcchrgdte)
+                                ->update([
+                                    'enccode' => $previousCharge->enccode,
+                                    'hpercode' => $previousCharge->hpercode,
+                                    'upicode' => null,
+                                    'pcchrgcod' => $previousCharge->pcchrgcod, // charge slip no.
+                                    'pcchrgdte' => $previousCharge->pcchrgdte,
+                                    'chargcode' => $previousCharge->chargcode, // type of charge (chrgcode from hcharge)
+                                    'uomcode' => $previousCharge->uomcode, // unit
+                                    'pchrgqty' =>  (int)$previousCharge->pchrgqty - (int)$upd_QtyToReturn,
+                                    'pchrgup' => $previousCharge->pchrgup,
+                                    'pcchrgamt' => ((float)$previousCharge->pchrgqty - (float)$upd_QtyToReturn) * (float)$previousCharge->pchrgup,
+                                    'pcstat' => 'A', // always A
+                                    'pclock' => 'N', // always N
+                                    'updsw' => 'N', // always N
+                                    'confdl' => 'N', // always N
+                                    'srcchrg' => $previousCharge->srcchrg,
+                                    'pcdisch' => 'Y',
+                                    'acctno' => $previousCharge->acctno, // SELECT * FROM hpatacct --pacctno
+                                    'itemcode' => $previousCharge->itemcode, // cl2comb or hmisc hmcode
+                                    'entryby' => $authID,
+                                    'orinclst' => null, // null
+                                    'compense' => null, // always null
+                                    'proccode' => null, // always null
+                                    'discount' => null, // always null
+                                    'disamt' => null, // always null
+                                    'discbal' => null, // always null
+                                    'phicamt' => null, // always null
+                                    'rvscode' => null, // always null
+                                    'licno' => null, // always null
+                                    'hpatkey' => null, // always null
+                                    'time_frequency' => null, // always null
+                                    'unit_frequency' => null, // always null
+                                    'qtyintake' => null, // always null
+                                    'uomintake' => null, // always null
+                                ]);
+                        }
+                    } else {
+                        // misc
+                        $patientCharge = PatientCharge::where('enccode', $request->upd_enccode)
+                            ->where('itemcode', $request->upd_itemcode)
+                            ->where('pcchrgdte', $request->upd_pcchrgdte)
+                            ->first();
+                        $previousCharge = $patientCharge;
+
+                        $patientChargeLogs = PatientChargeLogs::where('id', $request->upd_id)->first();
+                        $previousPatientChargeLogs = $patientChargeLogs;
+
+                        // delete the patient charge log
+                        $patientChargeLogs->delete();
+
+                        if ((int)$previousPatientChargeLogs->quantity != (int)$upd_QtyToReturn) {
+                            PatientChargeLogs::create([
+                                'enccode' => $previousPatientChargeLogs->enccode,
+                                'acctno' => $previousPatientChargeLogs->acctno,
+                                'ward_stocks_id' => $previousPatientChargeLogs->ward_stocks_id,
+                                'itemcode' => $previousPatientChargeLogs->itemcode,
+                                'from' => $previousPatientChargeLogs->from,
+                                'manufactured_date' => Carbon::parse($previousPatientChargeLogs->manufactured_date)->format('Y-m-d H:i:s.v'),
+                                'delivery_date' => Carbon::parse($previousPatientChargeLogs->delivered_date)->format('Y-m-d H:i:s.v'),
+                                'expiration_date' => Carbon::parse($previousPatientChargeLogs->expiration_date)->format('Y-m-d H:i:s.v'),
+                                'quantity' => (int)$previousPatientChargeLogs->quantity - (int)$upd_QtyToReturn,
+                                'price_per_piece' => $previousPatientChargeLogs->price_per_piece,
+                                'price_total' => ((float)$previousPatientChargeLogs->quantity - (float)$upd_QtyToReturn) * (float)$previousPatientChargeLogs->price_per_piece,
+                                'pcchrgdte' => $previousPatientChargeLogs->pcchrgdte,
+                                'tscode' => $request->tscode,
+                                'entry_at' => $authWard,
+                                'entry_by' => $authID,
+                                'created_at' => $previousPatientChargeLogs->created_at,
+                                'updated_at' => $previousPatientChargeLogs->updated_at,
+                            ]);
+                        }
+
+                        if (((int)$previousCharge->pchrgqty - (int)$upd_QtyToReturn) == 0) {
+                            PatientCharge::where('enccode', $request->upd_enccode)
+                                ->where('itemcode', $request->upd_itemcode)
+                                ->where('pcchrgdte', $request->upd_pcchrgdte)
+                                ->delete();
+                        } else {
+                            PatientCharge::where('enccode', $request->upd_enccode)
+                                ->where('itemcode', $request->upd_itemcode)
+                                ->where('pcchrgdte', $request->upd_pcchrgdte)
+                                ->update([
+                                    'enccode' => $previousCharge->enccode,
+                                    'hpercode' => $previousCharge->hpercode,
+                                    'upicode' => null,
+                                    'pcchrgcod' => $previousCharge->pcchrgcod, // charge slip no.
+                                    'pcchrgdte' => $previousCharge->pcchrgdte,
+                                    'chargcode' => $previousCharge->chargcode, // type of charge (chrgcode from hcharge)
+                                    'uomcode' => $previousCharge->uomcode, // unit
+                                    'pchrgqty' =>  (int)$previousCharge->pchrgqty - (int)$upd_QtyToReturn,
+                                    'pchrgup' => $previousCharge->pchrgup,
+                                    'pcchrgamt' => ((float)$previousCharge->pchrgqty - (float)$upd_QtyToReturn) * (float)$previousCharge->pchrgup,
+                                    'pcstat' => 'A', // always A
+                                    'pclock' => 'N', // always N
+                                    'updsw' => 'N', // always N
+                                    'confdl' => 'N', // always N
+                                    'srcchrg' => $previousCharge->srcchrg,
+                                    'pcdisch' => 'Y',
+                                    'acctno' => $previousCharge->acctno, // SELECT * FROM hpatacct --pacctno
+                                    'itemcode' => $previousCharge->itemcode, // cl2comb or hmisc hmcode
+                                    'entryby' => $authID,
+                                    'orinclst' => null, // null
+                                    'compense' => null, // always null
+                                    'proccode' => null, // always null
+                                    'discount' => null, // always null
+                                    'disamt' => null, // always null
+                                    'discbal' => null, // always null
+                                    'phicamt' => null, // always null
+                                    'rvscode' => null, // always null
+                                    'licno' => null, // always null
+                                    'hpatkey' => null, // always null
+                                    'time_frequency' => null, // always null
+                                    'unit_frequency' => null, // always null
+                                    'qtyintake' => null, // always null
+                                    'uomintake' => null, // always null
+                                ]);
+                        }
                     }
                 }
             }
