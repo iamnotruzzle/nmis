@@ -18,12 +18,29 @@ class WardPatientsController extends Controller
         $searchString = $request->search;
 
         // get auth wardcode
-        $authWardcode = DB::table('csrw_users')
-            ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
-            ->select('csrw_login_history.wardcode')
-            ->where('csrw_login_history.employeeid', Auth::user()->employeeid)
-            ->orderBy('csrw_login_history.created_at', 'desc')
-            ->first();
+        // $authWardcode = DB::table('csrw_users')
+        //     ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
+        //     ->select('csrw_login_history.wardcode')
+        //     ->where('csrw_login_history.employeeid', Auth::user()->employeeid)
+        //     ->orderBy('csrw_login_history.created_at', 'desc')
+        //     ->first();
+        // dd($authWardcode);
+
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+            FROM
+                user_acc u
+            INNER JOIN
+                csrw_login_history l ON u.employeeid = l.employeeid
+            WHERE
+                l.employeeid = ?
+            ORDER BY
+                l.created_at DESC;
+            ",
+            [Auth::user()->employeeid]
+        );
+        // dd($authWardcode[0]->wardcode);
 
         // $patients = PatientRoom::with([
         //     // when selecting an eager load table,
@@ -79,7 +96,8 @@ class WardPatientsController extends Controller
             AND pat_room.patrmstat = 'A'
             AND adm.admstat = 'A'
             ORDER BY pt.patlast ASC;",
-            [$authWardcode->wardcode]
+            // [$authWardcode->wardcode]
+            [$authWardcode[0]->wardcode]
         );
 
         //   [$authWardcode->wardcode]
