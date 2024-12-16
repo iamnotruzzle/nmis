@@ -29,25 +29,34 @@ class LocationStockBalanceController extends Controller
         $now = Carbon::now()->format('Y-m-d');
 
         // get auth wardcode
-        $authWardcode = DB::table('csrw_users')
-            ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
-            ->select('csrw_login_history.wardcode')
-            ->where('csrw_login_history.employeeid', Auth::user()->employeeid)
-            ->orderBy('csrw_login_history.created_at', 'desc')
-            ->first();
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+            FROM
+                user_acc u
+            INNER JOIN
+                csrw_login_history l ON u.employeeid = l.employeeid
+            WHERE
+                l.employeeid = ?
+            ORDER BY
+                l.created_at DESC;
+            ",
+            [Auth::user()->employeeid]
+        );
         // dd($authWardcode);
+        $authCode = $authWardcode[0]->wardcode;
 
         $stockBalDates = DB::select(
             "SELECT CAST(beg_bal_created_at as DATE) AS beg_bal_date, CAST(end_bal_created_at AS DATE) AS end_bal_date
             FROM csrw_stock_bal_date_logs
-            WHERE wardcode = '$authWardcode->wardcode'
+            WHERE wardcode = '$authCode'
             oRDER BY created_at DESC;"
         );
         // dd($stockBalDates);
         $default_beg_bal_date = $stockBalDates == [] ? Carbon::now()->format('Y-m-d') : Carbon::parse($stockBalDates[0]->beg_bal_date)->format('Y-m-d');
 
         // check if the latest has a beg bal or ending bal
-        $balanceDecChecker = LocationStockBalance::where('location', $authWardcode->wardcode)->OrderBy('created_at', 'DESC')->first();
+        $balanceDecChecker = LocationStockBalance::where('location', $authCode)->OrderBy('created_at', 'DESC')->first();
         // dd($balanceDecChecker);
         $canBeginBalance = null;
 
@@ -88,7 +97,7 @@ class LocationStockBalanceController extends Controller
                 csrw_item_prices AS price ON price.cl2comb = balance.cl2comb
                 AND price.id = balance.price_id  -- Ensure price matching by ID
             WHERE
-                balance.location = '$authWardcode->wardcode'
+                balance.location = '$authCode'
                 AND (
                     (CAST(balance.beg_bal_created_at AS DATE) BETWEEN '$default_beg_bal_date' AND '$now')
                     OR balance.beg_bal_created_at IS NULL
@@ -121,7 +130,7 @@ class LocationStockBalanceController extends Controller
                 csrw_item_prices AS price ON price.cl2comb = balance.cl2comb
                 AND price.id = balance.price_id  -- Ensure price matching by ID
             WHERE
-                balance.location = '$authWardcode->wardcode'
+                balance.location = '$authCode'
                 AND (
                     (CAST(balance.beg_bal_created_at AS DATE) BETWEEN '$from' AND '$to')
                     OR balance.beg_bal_created_at IS NULL

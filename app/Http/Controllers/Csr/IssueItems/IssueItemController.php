@@ -31,12 +31,20 @@ class IssueItemController extends Controller
         // dd(Carbon::today());
 
         // get auth wardcode
-        $authWardcode = DB::table('csrw_users')
-            ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
-            ->select('csrw_login_history.wardcode')
-            ->where('csrw_login_history.employeeid', Auth::user()->employeeid)
-            ->orderBy('csrw_login_history.created_at', 'desc')
-            ->first();
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+            FROM
+                user_acc u
+            INNER JOIN
+                csrw_login_history l ON u.employeeid = l.employeeid
+            WHERE
+                l.employeeid = ?
+            ORDER BY
+                l.created_at DESC;
+            ",
+            [Auth::user()->employeeid]
+        );
 
         $items = DB::select(
             "SELECT converted.cl2comb_after as cl2comb, item.cl2desc, item.uomcode
@@ -90,7 +98,7 @@ class IssueItemController extends Controller
         return Inertia::render('Csr/IssueItems/Index', [
             'items' => $items,
             'requestedStocks' => $requestedStocks,
-            'authWardcode' => $authWardcode,
+            'authWardcode' => $authWardcode[0],
         ]);
     }
 
