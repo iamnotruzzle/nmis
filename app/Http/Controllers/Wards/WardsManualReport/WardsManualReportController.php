@@ -22,12 +22,21 @@ class WardsManualReportController extends Controller
         $to = Carbon::parse($request->to)->endOfDay();
 
         // get auth wardcode
-        $authWardcode = DB::table('csrw_users')
-            ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
-            ->select('csrw_login_history.wardcode')
-            ->where('csrw_login_history.employeeid', Auth::user()->employeeid)
-            ->orderBy('csrw_login_history.created_at', 'desc')
-            ->first();
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+            FROM
+                user_acc u
+            INNER JOIN
+                csrw_login_history l ON u.employeeid = l.employeeid
+            WHERE
+                l.employeeid = ?
+            ORDER BY
+                l.created_at DESC;
+            ",
+            [Auth::user()->employeeid]
+        );
+        $authCode = $authWardcode[0]->wardcode;
 
         $manual_reports = WardsManualReport::with('item_description:cl2comb,cl2desc', 'unit:uomcode,uomdesc', 'entryBy:employeeid,firstname,lastname', 'updatedBy:employeeid,firstname,lastname', 'ward:wardcode,wardname')
             ->whereHas('item_description', function ($q) use ($searchString) {
@@ -45,7 +54,7 @@ class WardsManualReportController extends Controller
                     $query->whereDate('created_at', '<=', $to);
                 }
             )
-            ->where('wardcode', '=', $authWardcode->wardcode)
+            ->where('wardcode', '=', $authCode)
             ->paginate(15);
 
         $items = Item::with('unit:uomcode,uomdesc')->where('cl2stat', 'A')->orderBy('cl2desc', 'ASC')->get();

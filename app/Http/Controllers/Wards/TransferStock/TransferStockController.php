@@ -22,17 +22,26 @@ class TransferStockController extends Controller
     public function index(Request $request)
     {
         // get auth wardcode
-        $authWardcode = DB::table('csrw_users')
-            ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
-            ->select('csrw_login_history.wardcode')
-            ->where('csrw_login_history.employeeid', Auth::user()->employeeid)
-            ->orderBy('csrw_login_history.created_at', 'desc')
-            ->first();
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+            FROM
+                user_acc u
+            INNER JOIN
+                csrw_login_history l ON u.employeeid = l.employeeid
+            WHERE
+                l.employeeid = ?
+            ORDER BY
+                l.created_at DESC;
+            ",
+            [Auth::user()->employeeid]
+        );
+        $authCode = $authWardcode[0]->wardcode;
 
         // FROM CSR
         $wardStocks = WardsStocks::with(['item_details:cl2comb,cl2desc', 'request_stocks'])
             ->where('quantity', '!=', 0)
-            ->where('location', '=', $authWardcode->wardcode)
+            ->where('location', '=', $authCode)
             ->whereHas('request_stocks', function ($query) {
                 return $query->where('status', 'RECEIVED');
             })
@@ -42,7 +51,7 @@ class TransferStockController extends Controller
         // FROM TRANSFERRED STOCKS
         $wardStocks2 = WardsStocks::with(['item_details:cl2comb,cl2desc'])
             ->where('quantity', '!=', 0)
-            ->where('location', '=', $authWardcode->wardcode)
+            ->where('location', '=', $authCode)
             ->where('from', 'WARD')
             ->get();
         // dd($wardStocks);
@@ -54,13 +63,13 @@ class TransferStockController extends Controller
             'requested_by:employeeid,firstname,lastname',
             'approved_by:employeeid,firstname,lastname'
         )
-            ->where('from', '=', $authWardcode->wardcode)
-            ->orWhere('to', '=', $authWardcode->wardcode)
+            ->where('from', '=', $authCode)
+            ->orWhere('to', '=', $authCode)
             ->orderBy('created_at', 'DESC')
             ->get();
 
         // check if the latest has a beg bal or ending bal
-        $balanceDecChecker = LocationStockBalance::where('location', $authWardcode->wardcode)->OrderBy('created_at', 'DESC')->first();
+        $balanceDecChecker = LocationStockBalance::where('location', $authCode)->OrderBy('created_at', 'DESC')->first();
         // dd($balanceDecChecker);
         $canTransfer = null;
 
@@ -76,7 +85,7 @@ class TransferStockController extends Controller
         $employees = UserDetail::where('empstat', 'A')->orderBy('employeeid', 'ASC')->get(['employeeid', 'empstat', 'firstname', 'lastname']);
 
         return Inertia::render('Wards/TransferStock/Index', [
-            'authWardcode' => $authWardcode,
+            'authWardcode' => $authWardcode[0],
             'wardStocks' => $wardStocks,
             'wardStocks2' => $wardStocks2,
             // 'wardStocksMedicalGasess' => $wardStocksMedicalGasess,
@@ -91,12 +100,21 @@ class TransferStockController extends Controller
     {
         // dd($request);
 
-        $authWardcode = DB::table('csrw_users')
-            ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
-            ->select('csrw_login_history.wardcode')
-            ->where('csrw_login_history.employeeid', Auth::user()->employeeid)
-            ->orderBy('csrw_login_history.created_at', 'desc')
-            ->first();
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+            FROM
+                user_acc u
+            INNER JOIN
+                csrw_login_history l ON u.employeeid = l.employeeid
+            WHERE
+                l.employeeid = ?
+            ORDER BY
+                l.created_at DESC;
+            ",
+            [Auth::user()->employeeid]
+        );
+        $authCode = $authWardcode[0]->wardcode;
 
         $request->validate([
             'quantity' => 'required',
@@ -107,7 +125,7 @@ class TransferStockController extends Controller
 
         $transferredStocks = WardTransferStock::create([
             'ward_stock_id' => $request->ward_stock_id,
-            'from' => $authWardcode->wardcode,
+            'from' => $authCode,
             'to' => $request->to,
             'requested_by' => $request->requested_by,
             'approved_by' => Auth::user()->employeeid,
@@ -136,12 +154,21 @@ class TransferStockController extends Controller
     public function updatetransferstatus(WardTransferStock $wardtransferstock, Request $request)
     {
         // get auth wardcode
-        $authWardcode = DB::table('csrw_users')
-            ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
-            ->select('csrw_login_history.wardcode')
-            ->where('csrw_login_history.employeeid', Auth::user()->employeeid)
-            ->orderBy('csrw_login_history.created_at', 'desc')
-            ->first();
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+            FROM
+                user_acc u
+            INNER JOIN
+                csrw_login_history l ON u.employeeid = l.employeeid
+            WHERE
+                l.employeeid = ?
+            ORDER BY
+                l.created_at DESC;
+            ",
+            [Auth::user()->employeeid]
+        );
+        $authCode = $authWardcode[0]->wardcode;
 
         // dd($authWardcode->wardcode);
 
@@ -186,7 +213,7 @@ class TransferStockController extends Controller
             'stock_id' => $wardStock->stock_id,
             'cl2comb' => $wardStock->cl2comb,
             'ris_no' => $wardStock->ris_no,
-            'location' => $authWardcode->wardcode,
+            'location' => $authCode,
         ])->first();
         // dd($existingWardStock);
 
@@ -195,7 +222,7 @@ class TransferStockController extends Controller
                 'request_stocks_id' => $wardStock->request_stocks_id,
                 'request_stocks_detail_id' => $wardStock->request_stocks_detail_id,
                 'stock_id' => $wardStock->stock_id,
-                'location' => $authWardcode->wardcode,
+                'location' => $authCode,
                 'cl2comb' => $wardStock->cl2comb,
                 'chrgcode' => $wardStock->chrgcode,
                 'quantity' => $transferredStock->quantity,
@@ -217,7 +244,7 @@ class TransferStockController extends Controller
                         'request_stocks_id' => $wardStock->request_stocks_id,
                         'request_stocks_detail_id' => $wardStock->request_stocks_detail_id,
                         'stock_id' => $wardStock->stock_id,
-                        'location' => $authWardcode->wardcode,
+                        'location' => $authCode,
                         'cl2comb' => $wardStock->cl2comb,
                         'chrgcode' => $wardStock->chrgcode,
                         'quantity' => $existingWardStock->quantity + $transferredStock->quantity,

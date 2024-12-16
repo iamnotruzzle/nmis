@@ -19,12 +19,21 @@ class WardStocksReportController extends Controller
         $from = Carbon::parse($request->from)->startOfDay();
         $to = Carbon::parse($request->to)->endOfDay();
 
-        $authWardcode = DB::table('csrw_users')
-            ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
-            ->select('csrw_login_history.wardcode')
-            ->where('csrw_login_history.employeeid', Auth::user()->employeeid)
-            ->orderBy('csrw_login_history.created_at', 'desc')
-            ->first();
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+            FROM
+                user_acc u
+            INNER JOIN
+                csrw_login_history l ON u.employeeid = l.employeeid
+            WHERE
+                l.employeeid = ?
+            ORDER BY
+                l.created_at DESC;
+            ",
+            [Auth::user()->employeeid]
+        );
+        $authCode = $authWardcode[0]->wardcode;
         // dd($authWardcode->wardcode);
 
         if (is_null($request->from) || is_null($request->to)) {
@@ -59,10 +68,10 @@ class WardStocksReportController extends Controller
                 LEFT JOIN (
                     SELECT stockbal.cl2comb, SUM(stockbal.ending_balance) as ending_balance, SUM(stockbal.beginning_balance) as beginning_balance
                     FROM csrw_location_stock_balance as stockbal
-                    WHERE stockbal.location LIKE '$authWardcode->wardcode'
+                    WHERE stockbal.location LIKE '$authCode'
                     GROUP BY stockbal.cl2comb
                 ) csrw_location_stock_balance ON ward.cl2comb = csrw_location_stock_balance.cl2comb
-                WHERE ward.location LIKE '$authWardcode->wardcode' AND ward.created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
+                WHERE ward.location LIKE '$authCode' AND ward.created_at BETWEEN DATEADD(month, DATEDIFF(month, 0, getdate()), 0) AND getdate()
                 AND ward.is_consumable IS NULL
                 GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc, csrw_patient_charge_logs.charge_quantity, csrw_location_stock_balance.ending_balance, csrw_location_stock_balance.beginning_balance
                 ORDER BY hclass2.cl2desc ASC;"
@@ -99,10 +108,10 @@ class WardStocksReportController extends Controller
                 LEFT JOIN (
                     SELECT stockbal.cl2comb, SUM(stockbal.ending_balance) as ending_balance, SUM(stockbal.beginning_balance) as beginning_balance
                     FROM csrw_location_stock_balance as stockbal
-                    WHERE stockbal.location LIKE '$authWardcode->wardcode'
+                    WHERE stockbal.location LIKE '$authCode'
                     GROUP BY stockbal.cl2comb
                 ) csrw_location_stock_balance ON ward.cl2comb = csrw_location_stock_balance.cl2comb
-                WHERE ward.location LIKE '$authWardcode->wardcode' AND ward.created_at BETWEEN '$from' AND '$to'
+                WHERE ward.location LIKE '$authCode AND ward.created_at BETWEEN '$from' AND '$to'
                 AND ward.is_consumable IS NULL
                 GROUP BY hclass2.cl2comb, hclass2.cl2desc, huom.uomdesc, csrw_patient_charge_logs.charge_quantity, csrw_location_stock_balance.ending_balance, csrw_location_stock_balance.beginning_balance
                 ORDER BY hclass2.cl2desc ASC;"

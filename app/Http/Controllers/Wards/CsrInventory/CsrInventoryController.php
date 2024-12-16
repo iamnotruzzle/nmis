@@ -12,12 +12,21 @@ class CsrInventoryController extends Controller
 {
     public function index()
     {
-        $authWardcode = DB::table('csrw_users')
-            ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
-            ->select('csrw_login_history.wardcode')
-            ->where('csrw_login_history.employeeid', Auth::user()->employeeid)
-            ->orderBy('csrw_login_history.created_at', 'desc')
-            ->first();
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+            FROM
+                user_acc u
+            INNER JOIN
+                csrw_login_history l ON u.employeeid = l.employeeid
+            WHERE
+                l.employeeid = ?
+            ORDER BY
+                l.created_at DESC;
+            ",
+            [Auth::user()->employeeid]
+        );
+        $authCode = $authWardcode[0]->wardcode;
 
         $csrInventory = DB::select(
             "SELECT item.cl2desc as item_desc, quantity_after as quantity
@@ -32,7 +41,7 @@ class CsrInventoryController extends Controller
                 FROM csrw_wards_stocks as ward_stock
                 JOIN hclass2 as item ON item.cl2comb = ward_stock.cl2comb
                 WHERE ward_stock.quantity > 0
-                AND location = '$authWardcode->wardcode'
+                AND location = '$authCode'
                 GROUP BY item.cl2desc
                 ORDER BY item.cl2desc ASC;"
         );

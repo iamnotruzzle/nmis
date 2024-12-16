@@ -30,12 +30,21 @@ class RequestStocksController extends Controller
         $to = Carbon::parse($request->to)->endOfDay();
 
         // get auth wardcode
-        $authWardcode = DB::table('csrw_users')
-            ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
-            ->select('csrw_login_history.wardcode')
-            ->where('csrw_login_history.employeeid', Auth::user()->employeeid)
-            ->orderBy('csrw_login_history.created_at', 'desc')
-            ->first();
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+            FROM
+                user_acc u
+            INNER JOIN
+                csrw_login_history l ON u.employeeid = l.employeeid
+            WHERE
+                l.employeeid = ?
+            ORDER BY
+                l.created_at DESC;
+            ",
+            [Auth::user()->employeeid]
+        );
+        $authCode = $authWardcode[0]->wardcode;
 
         // $items = DB::select(
         //     "SELECT item.cl2comb, item.cl2desc, item.uomcode, uom.uomdesc
@@ -87,7 +96,7 @@ class RequestStocksController extends Controller
         // dd($medicalGas);
 
         $requestedStocks = RequestStocks::with(['requested_at_details', 'requested_by_details', 'approved_by_details', 'request_stocks_details.item_details'])
-            ->where('location', '=', $authWardcode->wardcode)
+            ->where('location', '=', $authCode)
             ->whereHas('requested_by_details', function ($q) use ($searchString) {
                 $q->where('firstname', 'LIKE', '%' . $searchString . '%')
                     ->orWhere('middlename', 'LIKE', '%' . $searchString . '%')
@@ -108,13 +117,13 @@ class RequestStocksController extends Controller
                     $query->whereDate('created_at', '<=', $to);
                 }
             )
-            ->where('location', '=', $authWardcode->wardcode)
+            ->where('location', '=', $authCode)
             ->orderBy('created_at', 'desc')
             ->paginate(15);
         // dd($requestedStocks);
 
         $currentWardStocks = WardsStocks::with(['item_details:cl2comb,cl2desc', 'request_stocks', 'unit_of_measurement:uomcode,uomdesc'])
-            ->where('location', $authWardcode->wardcode)
+            ->where('location', $authCode)
             ->where('quantity', '!=', 0)
             ->whereHas(
                 'request_stocks',
@@ -125,7 +134,7 @@ class RequestStocksController extends Controller
             ->get();
         $currentWardStocks2 = WardsStocks::with(['item_details:cl2comb,cl2desc', 'request_stocks', 'unit_of_measurement:uomcode,uomdesc'])
             ->where('request_stocks_id', null)
-            ->where('location', $authWardcode->wardcode)
+            ->where('location', $authCode)
             ->where('quantity', '!=', 0)
             ->get();
         // dd($currentWardStocks);
@@ -141,7 +150,7 @@ class RequestStocksController extends Controller
             'items' => $items,
             'medicalGas' => $medicalGas,
             'requestedStocks' => $requestedStocks,
-            'authWardcode' => $authWardcode,
+            'authWardcode' => $authWardcode[0],
             'currentWardStocks' => $currentWardStocks,
             'currentWardStocks2' => $currentWardStocks2,
             // 'typeOfCharge' => $typeOfCharge,

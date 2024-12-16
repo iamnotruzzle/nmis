@@ -32,19 +32,28 @@ class CsrStockBalanceNotDeclaredYetRule implements Rule
     public function passes($attribute, $value)
     {
         // dd('passes');
-        $authWardcode = DB::table('csrw_users')
-            ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
-            ->select('csrw_login_history.wardcode')
-            ->where('csrw_login_history.employeeid', Auth::user()->employeeid)
-            ->orderBy('csrw_login_history.created_at', 'desc')
-            ->first();
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+            FROM
+                user_acc u
+            INNER JOIN
+                csrw_login_history l ON u.employeeid = l.employeeid
+            WHERE
+                l.employeeid = ?
+            ORDER BY
+                l.created_at DESC;
+            ",
+            [Auth::user()->employeeid]
+        );
+        $authCode = $authWardcode[0]->wardcode;
 
         $date = Carbon::now()->subDays(30); // get last 30 days
 
 
         $stockBalCount = LocationStockBalance::where('cl2comb', $this->cl2comb)
             ->where('created_at', '>=', $date)
-            ->where('location', $authWardcode->wardcode)
+            ->where('location', $authCode)
             ->count();
 
         if ($stockBalCount == 0) {

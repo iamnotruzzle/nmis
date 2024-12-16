@@ -47,15 +47,24 @@ class PatientChargeController extends Controller
         ", [$pat_enccode]);
 
         // get auth wardcode
-        $authWardcode = DB::table('csrw_users')
-            ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
-            ->select('csrw_login_history.wardcode')
-            ->where('csrw_login_history.employeeid', Auth::user()->employeeid)
-            ->orderBy('csrw_login_history.created_at', 'desc')
-            ->first();
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+            FROM
+                user_acc u
+            INNER JOIN
+                csrw_login_history l ON u.employeeid = l.employeeid
+            WHERE
+                l.employeeid = ?
+            ORDER BY
+                l.created_at DESC;
+            ",
+            [Auth::user()->employeeid]
+        );
+        $authCode = $authWardcode[0]->wardcode;
 
         // dd($authWardcode);
-        $wardcode = $authWardcode->wardcode;
+        $wardcode = $authWardcode[0]->wardcode;
 
         $stocksFromCsr = DB::select(
             "SELECT
@@ -140,7 +149,7 @@ class PatientChargeController extends Controller
         );
 
         // check if the latest has a beg bal or ending bal
-        $balanceDecChecker = LocationStockBalance::where('location', $authWardcode->wardcode)->OrderBy('created_at', 'DESC')->first();
+        $balanceDecChecker = LocationStockBalance::where('location', $authCode)->OrderBy('created_at', 'DESC')->first();
         // dd($balanceDecChecker);
         $canCharge = null;
 
@@ -190,12 +199,21 @@ class PatientChargeController extends Controller
         $srcchrg = 'WARD';
 
         // get auth wardcode
-        $authWardcode = DB::table('csrw_users')
-            ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
-            ->select('csrw_login_history.wardcode')
-            ->where('csrw_login_history.employeeid', Auth::user()->employeeid)
-            ->orderBy('csrw_login_history.created_at', 'desc')
-            ->first();
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+            FROM
+                user_acc u
+            INNER JOIN
+                csrw_login_history l ON u.employeeid = l.employeeid
+            WHERE
+                l.employeeid = ?
+            ORDER BY
+                l.created_at DESC;
+            ",
+            [Auth::user()->employeeid]
+        );
+        $authCode = $authWardcode[0]->wardcode;
 
         $enccode = $request->enccode;
         $hospitalNumber = $request->hospitalNumber;
@@ -258,7 +276,7 @@ class PatientChargeController extends Controller
                             // remove stock based on ward stock item id
                             $wardStock = WardsStocks::where('cl2comb', $item['itemCode'])
                                 // ->where('quantity', '!=', 0)
-                                ->where('location', $authWardcode->wardcode)
+                                ->where('location', $authCode)
                                 ->where('id', $item['id'])
                                 ->first(); // 10
 
@@ -280,7 +298,7 @@ class PatientChargeController extends Controller
                                         'price_total' => (float)$remaining_qty_to_charge * (float)$item['price'],
                                         'pcchrgdte' => $patientChargeDate->pcchrgdte,
                                         'tscode' => $request->tscode,
-                                        'entry_at' => $authWardcode->wardcode,
+                                        'entry_at' => $authCode,
                                         'entry_by' => $entryby,
                                     ]);
 
@@ -315,7 +333,7 @@ class PatientChargeController extends Controller
                                         'price_total' => (float)$remaining_qty_to_charge * (float)$item['price'],
                                         'pcchrgdte' => $patientChargeDate->pcchrgdte,
                                         'tscode' => $request->tscode,
-                                        'entry_at' => $authWardcode->wardcode,
+                                        'entry_at' => $authCode,
                                         'entry_by' => $entryby,
                                     ]);
 
@@ -386,7 +404,7 @@ class PatientChargeController extends Controller
                             // remove stock based on ward stock item id
                             $wardStock = WardsStocks::where('cl2comb', $item['itemCode'])
                                 ->where('quantity', '!=', 0)
-                                ->where('location', $authWardcode->wardcode)
+                                ->where('location', $authCode)
                                 ->where('id', $item['id'])
                                 ->first(); // 10
 
@@ -406,7 +424,7 @@ class PatientChargeController extends Controller
                                     'price_total' => (float)$remaining_qty_to_charge * (float)$item['price'],
                                     'pcchrgdte' => $patientChargeDate->pcchrgdte,
                                     'tscode' => $request->tscode,
-                                    'entry_at' => $authWardcode->wardcode,
+                                    'entry_at' => $authCode,
                                     'entry_by' => $entryby,
                                 ]);
 
@@ -438,7 +456,7 @@ class PatientChargeController extends Controller
                                     'price_total' => (float)$qty * (float)$item['price'],
                                     'pcchrgdte' => $patientChargeDate->pcchrgdte,
                                     'tscode' => $request->tscode,
-                                    'entry_at' => $authWardcode->wardcode,
+                                    'entry_at' => $authCode,
                                     'entry_by' => $entryby,
                                 ]);
 
@@ -504,7 +522,7 @@ class PatientChargeController extends Controller
                         'price_total' => (float)$item['qtyToCharge'] * (float)$item['price'],
                         'pcchrgdte' => $patientMiscChargeDate->pcchrgdte,
                         'tscode' => $request->tscode,
-                        'entry_at' => $authWardcode->wardcode,
+                        'entry_at' => $authCode,
                         'entry_by' => $entryby,
                     ]);
                 }
@@ -525,7 +543,7 @@ class PatientChargeController extends Controller
                 $previousWardStocks = null;
                 $upd_QtyToReturn = ltrim($request->upd_QtyToReturn, '0'); // removed leading zeroes if theres any
                 $authID = Auth::user()->employeeid;
-                $authWard = $authWardcode->wardcode;
+                $authWard = $authCode;
 
                 // medical supplies
                 if ($request->upd_type_of_charge_code == 'DRUMN') {
@@ -716,7 +734,7 @@ class PatientChargeController extends Controller
                 $previousWardStocks = null;
                 $upd_QtyToReturn = ltrim($request->upd_QtyToReturn, '0'); // removed leading zeroes if there's any
                 $authID = Auth::user()->employeeid;
-                $authWard = $authWardcode->wardcode;
+                $authWard = $authCode;
 
                 // medical supplies
                 if ($request->upd_type_of_charge_code == 'DRUMN') {

@@ -34,16 +34,25 @@ class ReportController extends Controller
         if ($hasSession) {
             $user = Auth::user();
 
-            $authWardcode = DB::table('csrw_users')
-                ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
-                ->select('csrw_login_history.wardcode')
-                ->where('csrw_login_history.employeeid', $user->employeeid)
-                ->orderBy('csrw_login_history.created_at', 'desc')
-                ->first();
+            $authWardcode = DB::select(
+                "SELECT TOP 1
+                l.wardcode
+            FROM
+                user_acc u
+            INNER JOIN
+                csrw_login_history l ON u.employeeid = l.employeeid
+            WHERE
+                l.employeeid = ?
+            ORDER BY
+                l.created_at DESC;
+            ",
+                [Auth::user()->employeeid]
+            );
+            $authCode = $authWardcode[0]->wardcode;
 
             Sessions::where('id', Session::getId())->update([
                 // 'user_id' => $request->login,
-                'location' => $authWardcode->wardcode,
+                'location' => $authCode,
             ]);
         }
         // end check session
@@ -53,7 +62,7 @@ class ReportController extends Controller
         $stockBalDates = DB::select(
             "SELECT CAST(beg_bal_created_at as DATE) AS beg_bal_date, CAST(end_bal_created_at AS DATE) AS end_bal_date
             FROM csrw_stock_bal_date_logs
-            WHERE wardcode = '$authWardcode->wardcode'
+            WHERE wardcode = '$authCode'
             oRDER BY created_at DESC;"
         );
         $default_beg_bal_date = $stockBalDates == [] ? Carbon::now()->format('Y-m-d') : Carbon::parse($stockBalDates[0]->beg_bal_date)->format('Y-m-d');
@@ -115,7 +124,7 @@ class ReportController extends Controller
                     GROUP BY ward_stock_id
                 ) csrw_ward_transfer_stock ON ward.id = csrw_ward_transfer_stock.ward_stock_id
                 WHERE
-                    ward.location LIKE '$authWardcode->wardcode'
+                    ward.location LIKE '$authCode'
                     AND ward.is_consumable IS NULL
                     AND (
                     (CAST(csrw_location_stock_balance.beg_bal_created_at AS DATE) BETWEEN '$default_beg_bal_date' AND '$now')
@@ -181,7 +190,7 @@ class ReportController extends Controller
                     GROUP BY ward_stock_id
                 ) csrw_ward_transfer_stock ON ward.id = csrw_ward_transfer_stock.ward_stock_id
                 WHERE
-                    ward.location LIKE '$authWardcode->wardcode'
+                    ward.location LIKE '$authCode'
                     AND ward.is_consumable IS NULL
                     AND (
                         (CAST(csrw_location_stock_balance.beg_bal_created_at AS DATE) BETWEEN '$from' AND '$to')
