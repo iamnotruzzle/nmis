@@ -542,6 +542,7 @@
           <div class="text-primary text-xl font-bold">CHARGE SLIP</div>
         </template> -->
 
+      <!-- Charge slip -->
       <div
         id="print"
         style="background-color: white; display: none"
@@ -982,7 +983,7 @@ export default {
           uomcode: misc.uomcode == null ? null : misc.uomcode,
         });
       });
-      console.log('misc list container', this.miscList);
+      //   console.log('misc list container', this.miscList);
     },
     storeItemsInContainer() {
       // medical supplies
@@ -1004,7 +1005,7 @@ export default {
               is_consumable: med.is_consumable,
               typeOfCharge: 'DRUMN',
               itemCode: med.cl2comb,
-              itemDesc: med.cl2desc,
+              itemDesc: '(Medical supply)' + ' - ' + med.cl2desc,
               unit: med.uomcode == null ? null : med.uomcode,
               totalQuantity: medQuantity,
               prices: [{ id: med.id, price: med.price, quantity: medQuantity, expiryDate: med.expiryDate }],
@@ -1039,7 +1040,7 @@ export default {
         }
         return 0;
       });
-      console.log('item list', this.itemList);
+      //   console.log('item list', this.itemList);
     },
     medicalSuppliesQtyValidation() {
       //   console.log(this.item);
