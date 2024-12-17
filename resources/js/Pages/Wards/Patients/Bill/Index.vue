@@ -1015,7 +1015,7 @@ export default {
       });
       this.itemList = Object.values(combinedItems);
 
-      // misc
+      // // misc
       this.misc.forEach((misc) => {
         this.itemList.push({
           id: null,
