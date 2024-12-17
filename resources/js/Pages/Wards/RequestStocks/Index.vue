@@ -1141,7 +1141,7 @@ export default {
         });
       });
 
-      console.log(this.currentWardStocksList);
+      //   console.log(this.currentWardStocksList);
     },
     tzone(date) {
       if (date == null || date == '') {
@@ -1450,7 +1450,7 @@ export default {
       //   console.log(this.formReturnToCsr);
     },
     submitReturnToCsr() {
-      console.log(this.previousQty);
+      //   console.log(this.previousQty);
       if (
         this.formReturnToCsr.processing ||
         this.formReturnToCsr.quantity == null ||
