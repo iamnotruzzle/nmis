@@ -1005,7 +1005,7 @@ export default {
               is_consumable: med.is_consumable,
               typeOfCharge: 'DRUMN',
               itemCode: med.cl2comb,
-              itemDesc: '(Medical supply)' + ' - ' + med.cl2desc,
+              itemDesc: '(MEDICAL SUPPLY)' + ' - ' + med.cl2desc,
               unit: med.uomcode == null ? null : med.uomcode,
               totalQuantity: medQuantity,
               prices: [{ id: med.id, price: med.price, quantity: medQuantity, expiryDate: med.expiryDate }],
