@@ -546,7 +546,13 @@
             </small>
           </div>
           <div class="field">
-            <label>Average</label>
+            <label
+              >Usage
+              <b class="text-error"
+                >NOTE: If 1 tank equals 1800 lbs, declare the usage as 1800 lbs regardless of the number of tanks
+                received, as long as each tank is 1800 lbs.</b
+              ></label
+            >
             <InputText
               id="average"
               v-model.trim="formMedicalGases.average"
