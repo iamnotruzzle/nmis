@@ -993,6 +993,261 @@
         </template>
       </Dialog>
 
+      <!-- edit delivery quantity dialog -->
+      <Dialog
+        v-model:visible="editDeliveryQtyDialog"
+        :style="{ width: '550px' }"
+        :modal="true"
+        class="p-fluid"
+        @hide="clickOutsideDialog"
+      >
+        <template #header>
+          <div class="text-primary text-xl font-bold">CONVERT ITEM</div>
+        </template>
+        <div class="field">
+          <div class="flex align-content-center">
+            <label>RIS no.</label>
+            <span class="ml-2 text-error">*</span>
+          </div>
+          <InputText
+            v-model.trim="formConvertItem.ris_no"
+            readonly
+          />
+        </div>
+        <div class="field">
+          <div class="flex align-content-center">
+            <label>Supplier</label>
+            <!-- <span class="ml-2 text-error">*</span> -->
+          </div>
+          <Dropdown
+            v-model="formConvertItem.supplierID"
+            :options="suppliersList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
+            filter
+            dataKey="supplierID"
+            optionValue="supplierID"
+            optionLabel="suppname"
+            class="w-full"
+            disabled
+          />
+        </div>
+        <div class="field">
+          <div class="flex align-content-center">
+            <label>Fund source</label>
+            <span class="ml-2 text-error">*</span>
+          </div>
+          <Dropdown
+            required="true"
+            v-model="formConvertItem.chrgcode"
+            :options="fundSourceList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
+            filter
+            dataKey="chrgcode"
+            optionValue="chrgcode"
+            optionLabel="chrgdesc"
+            class="w-full"
+            disabled
+          />
+        </div>
+        <div class="field">
+          <div class="flex align-content-center">
+            <label>Item</label>
+            <span class="ml-2 text-error">*</span>
+          </div>
+          <Dropdown
+            required="true"
+            v-model="formConvertItem.cl2comb_before"
+            :options="itemsList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
+            filter
+            dataKey="cl2comb"
+            optionValue="cl2comb"
+            optionLabel="cl2desc"
+            class="w-full"
+            disabled
+          />
+        </div>
+        <div class="field flex flex-row justify-content-between">
+          <div>
+            <div class="flex align-content-center">
+              <label>Delivered date</label>
+              <span class="ml-2 text-error">*</span>
+            </div>
+            <Calendar
+              v-model="formConvertItem.delivered_date"
+              dateFormat="mm-dd-yy"
+              showIcon
+              showButtonBar
+              :manualInput="false"
+              :hideOnDateTimeSelect="true"
+              disabled
+            />
+          </div>
+          <div>
+            <div class="flex">
+              <label>Expiration date</label>
+              <span class="ml-2 text-error">*</span>
+            </div>
+            <div class="flex flex-row">
+              <Calendar
+                required="true"
+                v-model="formConvertItem.expiration_date"
+                dateFormat="mm-dd-yy"
+                showIcon
+                showButtonBar
+                :manualInput="false"
+                :hideOnDateTimeSelect="true"
+                disabled
+              />
+            </div>
+            <!-- <ToggleButton
+              v-model="maxDate"
+              onLabel="Fixed date"
+              offLabel="Custom date"
+              onIcon="pi pi-lock"
+              offIcon="pi pi-lock-open"
+            /> -->
+          </div>
+        </div>
+
+        <div class="field w-6">
+          <div class="flex align-content-center">
+            <label>Quantity</label>
+            <span class="ml-2 text-error">*</span>
+          </div>
+          <InputText
+            required="true"
+            v-model.trim="formConvertItem.quantity_before"
+            inputId="integeronly"
+            @keydown="restrictNonNumericAndPeriod"
+            readonly
+          />
+        </div>
+        <div class="field w-6">
+          <div>
+            <div class="flex align-content-center">
+              <label>Acquisition price</label>
+              <span class="ml-2 text-error">*</span>
+            </div>
+            <InputText
+              required="true"
+              type="number"
+              v-model.trim="formConvertItem.acquisition_price"
+              @keydown="restrictNonNumeric"
+              readonly
+            />
+          </div>
+        </div>
+        <div class="field flex flex-row">
+          <div
+            :style="{ width: '65%' }"
+            class="mr-2"
+          >
+            <div class="flex align-content-center">
+              <label>Convert to</label>
+            </div>
+            <Dropdown
+              required="true"
+              v-model="formConvertItem.cl2comb_after"
+              :options="convertedItemList"
+              :virtualScrollerOptions="{ itemSize: 38 }"
+              filter
+              showClear
+              dataKey="cl2comb"
+              optionValue="cl2comb"
+              optionLabel="cl2desc"
+              class="w-full"
+            />
+          </div>
+          <div :style="{ width: '35%' }">
+            <div class="flex align-content-center">
+              <label>Convert quantity</label>
+            </div>
+            <InputText
+              id="quantity"
+              type="number"
+              v-model="formConvertItem.quantity_after"
+              @keydown="restrictNonNumericAndPeriod"
+              autofocus
+              @keyup.enter="submitAddDelivery"
+              class="w-full"
+            />
+          </div>
+        </div>
+
+        <div class="field">
+          <div>
+            <div class="flex align-content-center">
+              <label class="text-green-500">Hospital price </label>
+            </div>
+            <InputText
+              class="w-full"
+              v-model.trim="formConvertItem.hospital_price"
+              autofocus
+              :maxFractionDigits="2"
+              readonly
+            />
+          </div>
+        </div>
+        <div class="field">
+          <div>
+            <div class="flex align-content-center">
+              <label class="text-blue-500">Price per unit</label>
+            </div>
+            <InputText
+              class="w-full"
+              v-model.trim="formConvertItem.price_per_unit"
+              autofocus
+              :maxFractionDigits="2"
+              readonly
+            />
+          </div>
+        </div>
+
+        <div>
+          <div class="flex align-content-center">
+            <label>Remarks</label>
+            <span class="ml-2 text-error">*</span>
+          </div>
+          <Textarea
+            v-model.trim="formConvertItem.remarks"
+            rows="5"
+            class="w-full"
+          />
+          <small
+            class="text-error"
+            v-if="formConvertItem.errors.remarks"
+          >
+            {{ formConvertItem.errors.remarks }}
+          </small>
+        </div>
+        <template #footer>
+          <Button
+            label="Cancel"
+            icon="pi pi-times"
+            severity="danger"
+            text
+            @click="cancel"
+          />
+          <Button
+            label="Convert"
+            icon="pi pi-check"
+            text
+            type="submit"
+            :disabled="
+              formConvertItem.processing ||
+              formConvertItem.cl2comb_after == '' ||
+              formConvertItem.cl2comb_after == null ||
+              formConvertItem.quantity_after == '' ||
+              formConvertItem.quantity_after == null ||
+              formConvertItem.remarks == '' ||
+              formConvertItem.remarks == null
+            "
+            @click="submitConvertItem"
+          />
+        </template>
+      </Dialog>
+
       <!-- convert dialog -->
       <Dialog
         v-model:visible="convertDialog"
@@ -1248,7 +1503,7 @@
         </template>
       </Dialog>
 
-      <!-- convert dialog -->
+      <!-- edit convert dialog -->
       <Dialog
         v-model:visible="editConvertedItemDialog"
         :style="{ width: '550px' }"
@@ -1471,6 +1726,17 @@
             >
               <template #body="slotProps">
                 <div class="flex justify-content-between">
+                  <Button
+                    v-tooltip.top="'Modify'"
+                    rounded
+                    severity="warning"
+                    @click="editDelivery(slotProps.data)"
+                  >
+                    <template #icon>
+                      <i class="pi pi-pencil"></i>
+                    </template>
+                  </Button>
+
                   <Button
                     v-if="slotProps.data.converted == 'n'"
                     v-tooltip.top="'Convert'"
@@ -1701,6 +1967,7 @@ export default {
       addDeliveryDialog: false,
       updateStockDialog: false,
       deliveryExist: false,
+      editDeliveryQtyDialog: false,
       convertDialog: false,
       editConvertedItemDialog: false,
       deleteConvertedItemDialog: false,
@@ -2327,6 +2594,22 @@ export default {
     },
 
     convertItem(item) {
+      const similarObjects = this.findSimilarIds(item.cl2comb, this.convertedItemSelection);
+
+      this.formConvertItem.csr_stock_id = item.stock_id;
+      this.formConvertItem.ris_no = item.ris_no;
+      this.formConvertItem.supplierID = item.supplierID;
+      this.formConvertItem.chrgcode = item.chrgcode;
+      this.formConvertItem.cl2comb_before = item.cl2comb;
+      this.formConvertItem.delivered_date = item.delivered_date;
+      this.formConvertItem.expiration_date = item.expiration_date;
+      this.formConvertItem.quantity_before = item.quantity;
+      this.formConvertItem.acquisition_price = item.acquisition_price;
+
+      this.convertDialog = true;
+    },
+    editDelivery(item) {
+      console.log(item);
       const similarObjects = this.findSimilarIds(item.cl2comb, this.convertedItemSelection);
 
       this.formConvertItem.csr_stock_id = item.stock_id;
