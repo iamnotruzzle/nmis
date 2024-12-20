@@ -350,7 +350,10 @@
               </div>
             </div>
             <div class="field flex flex-row">
-              <div :style="{ width: '100%' }">
+              <div
+                :style="{ width: '100%' }"
+                class="mt-auto"
+              >
                 <div class="flex align-content-center">
                   <label>Convert to</label>
                 </div>
@@ -369,7 +372,10 @@
               </div>
               <div :style="{ width: '35%' }">
                 <div class="flex align-content-center">
-                  <label>Convert quantity</label>
+                  <label
+                    >Convert quantity
+                    <span class="text-error">(Total converted quantity of delivered item)</span></label
+                  >
                 </div>
                 <InputText
                   id="quantity"
@@ -386,12 +392,12 @@
                 <div class="flex align-content-center">
                   <label class="text-green-500">Hospital price</label>
                 </div>
-                <InputText
+                <InputNumber
                   class="w-full"
                   v-model.trim="formImport.hospital_price"
-                  autofocus
-                  :maxFractionDigits="2"
-                  readonly
+                  inputId="minmaxfraction"
+                  :minFractionDigits="2"
+                  :maxFractionDigits="5"
                 />
               </div>
             </div>
@@ -400,12 +406,12 @@
                 <div class="flex align-content-center">
                   <label class="text-blue-500">Price per unit </label>
                 </div>
-                <InputText
+                <InputNumber
                   class="w-full"
                   v-model.trim="formImport.price_per_unit"
-                  autofocus
-                  :maxFractionDigits="2"
-                  readonly
+                  inputId="minmaxfraction"
+                  :minFractionDigits="2"
+                  :maxFractionDigits="5"
                 />
               </div>
             </div>
@@ -711,10 +717,10 @@
             />
           </div>
         </div>
-        <div class="field flex flex-row">
+        <div class="field flex align-items-center">
           <div
             :style="{ width: '65%' }"
-            class="mr-2"
+            class="mr-2 mt-auto"
           >
             <div class="flex align-content-center">
               <label>Convert to</label>
@@ -734,7 +740,9 @@
           </div>
           <div :style="{ width: '35%' }">
             <div class="flex align-content-center">
-              <label>Convert quantity</label>
+              <label
+                >Convert quantity <span class="text-error">(Total converted quantity of delivered item)</span></label
+              >
             </div>
             <InputText
               id="quantity"
@@ -753,11 +761,12 @@
             <div class="flex align-content-center">
               <label class="text-green-500">Hospital price </label>
             </div>
-            <InputText
+            <InputNumber
               class="w-full"
               v-model.trim="formAddDelivery.hospital_price"
-              autofocus
-              :maxFractionDigits="2"
+              inputId="minmaxfraction"
+              :minFractionDigits="2"
+              :maxFractionDigits="5"
             />
           </div>
         </div>
@@ -766,11 +775,12 @@
             <div class="flex align-content-center">
               <label class="text-blue-500">Price per unit</label>
             </div>
-            <InputText
+            <InputNumber
               class="w-full"
               v-model.trim="formAddDelivery.price_per_unit"
-              autofocus
-              :maxFractionDigits="2"
+              inputId="minmaxfraction"
+              :minFractionDigits="2"
+              :maxFractionDigits="5"
             />
           </div>
         </div>
@@ -1139,7 +1149,7 @@
         <div class="field flex flex-row">
           <div
             :style="{ width: '65%' }"
-            class="mr-2"
+            class="mr-2 mt-auto"
           >
             <div class="flex align-content-center">
               <label>Convert to</label>
@@ -1159,7 +1169,9 @@
           </div>
           <div :style="{ width: '35%' }">
             <div class="flex align-content-center">
-              <label>Convert quantity</label>
+              <label
+                >Convert quantity <span class="text-error">(Total converted quantity of delivered item)</span></label
+              >
             </div>
             <InputText
               id="quantity"
@@ -1178,12 +1190,12 @@
             <div class="flex align-content-center">
               <label class="text-green-500">Hospital price </label>
             </div>
-            <InputText
+            <InputNumber
               class="w-full"
               v-model.trim="formConvertItem.hospital_price"
-              autofocus
-              :maxFractionDigits="2"
-              readonly
+              inputId="minmaxfraction"
+              :minFractionDigits="2"
+              :maxFractionDigits="5"
             />
           </div>
         </div>
@@ -1192,12 +1204,12 @@
             <div class="flex align-content-center">
               <label class="text-blue-500">Price per unit</label>
             </div>
-            <InputText
+            <InputNumber
               class="w-full"
               v-model.trim="formConvertItem.price_per_unit"
-              autofocus
-              :maxFractionDigits="2"
-              readonly
+              inputId="minmaxfraction"
+              :minFractionDigits="2"
+              :maxFractionDigits="5"
             />
           </div>
         </div>
@@ -1394,7 +1406,7 @@
         <div class="field flex flex-row">
           <div
             :style="{ width: '65%' }"
-            class="mr-2"
+            class="mr-2 mt-auto"
           >
             <div class="flex align-content-center">
               <label>Convert to</label>
@@ -1414,7 +1426,9 @@
           </div>
           <div :style="{ width: '35%' }">
             <div class="flex align-content-center">
-              <label>Convert quantity</label>
+              <label
+                >Convert quantity <span class="text-error">(Total converted quantity of delivered item)</span></label
+              >
             </div>
             <InputText
               id="quantity"
@@ -1433,12 +1447,12 @@
             <div class="flex align-content-center">
               <label class="text-green-500">Hospital price </label>
             </div>
-            <InputText
+            <InputNumber
               class="w-full"
               v-model.trim="formConvertItem.hospital_price"
-              autofocus
-              :maxFractionDigits="2"
-              readonly
+              inputId="minmaxfraction"
+              :minFractionDigits="2"
+              :maxFractionDigits="5"
             />
           </div>
         </div>
@@ -1447,12 +1461,12 @@
             <div class="flex align-content-center">
               <label class="text-blue-500">Price per unit</label>
             </div>
-            <InputText
+            <InputNumber
               class="w-full"
               v-model.trim="formConvertItem.price_per_unit"
-              autofocus
-              :maxFractionDigits="2"
-              readonly
+              inputId="minmaxfraction"
+              :minFractionDigits="2"
+              :maxFractionDigits="5"
             />
           </div>
         </div>
