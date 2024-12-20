@@ -398,6 +398,7 @@
                   inputId="minmaxfraction"
                   :minFractionDigits="2"
                   :maxFractionDigits="5"
+                  :disabled="true"
                 />
               </div>
             </div>
@@ -767,6 +768,7 @@
               inputId="minmaxfraction"
               :minFractionDigits="2"
               :maxFractionDigits="5"
+              :disabled="true"
             />
           </div>
         </div>
@@ -1196,6 +1198,7 @@
               inputId="minmaxfraction"
               :minFractionDigits="2"
               :maxFractionDigits="5"
+              :disabled="true"
             />
           </div>
         </div>
@@ -1453,6 +1456,7 @@
               inputId="minmaxfraction"
               :minFractionDigits="2"
               :maxFractionDigits="5"
+              :disabled="true"
             />
           </div>
         </div>
@@ -2920,17 +2924,18 @@ export default {
     },
     formConvertItem: {
       handler(e) {
-        // acquisition price
-        // let acquisition_price = Number(e.acquisition_price);
-        // let hospital_price = (acquisition_price * this.formConvertItem.quantity_before) / 0.7;
-        // let str_hospital_price = hospital_price.toString();
-        // let index = str_hospital_price.indexOf('.');
-        // // Check if there's a decimal point
-        // if (index !== -1) {
-        //   this.formConvertItem.hospital_price = str_hospital_price.slice(0, index + 3); // Include the decimal point and the next two digits
-        // } else {
-        //   this.formConvertItem.hospital_price = str_hospital_price + '.00'; // No decimal point means it's a whole number
-        // }
+        //    acquisition price
+        let acquisition_price = Number(e.acquisition_price);
+        let hospital_price = (acquisition_price * this.formConvertItem.quantity_before) / 0.7;
+        let str_hospital_price = hospital_price.toString();
+        let index = str_hospital_price.indexOf('.');
+        // Check if there's a decimal point
+        if (index !== -1) {
+          this.formConvertItem.hospital_price = str_hospital_price.slice(0, index + 3); // Include the decimal point and the next two digits
+        } else {
+          this.formConvertItem.hospital_price = str_hospital_price + '.00'; // No decimal point means it's a whole number
+        }
+
         // quantity after
         // let quantity_after = Number(e.quantity_after);
         // if (quantity_after == 0 || quantity_after == null || isNaN(quantity_after)) {
@@ -2952,16 +2957,17 @@ export default {
     formImport: {
       handler(e) {
         // acquisition price
-        // let acquisitionPrice = Number(e.acquisitionPrice);
-        // let hospital_price = (acquisitionPrice * this.formImport.quantity) / 0.7;
-        // let str_hospital_price = hospital_price.toString();
-        // let index = str_hospital_price.indexOf('.');
-        // // Check if there's a decimal point
-        // if (index !== -1) {
-        //   this.formImport.hospital_price = str_hospital_price.slice(0, index + 3); // Include the decimal point and the next two digits
-        // } else {
-        //   this.formImport.hospital_price = str_hospital_price + '.00'; // No decimal point means it's a whole number
-        // }
+        let acquisitionPrice = Number(e.acquisitionPrice);
+        let hospital_price = (acquisitionPrice * this.formImport.quantity) / 0.7;
+        let str_hospital_price = hospital_price.toString();
+        let index = str_hospital_price.indexOf('.');
+        // Check if there's a decimal point
+        if (index !== -1) {
+          this.formImport.hospital_price = str_hospital_price.slice(0, index + 3); // Include the decimal point and the next two digits
+        } else {
+          this.formImport.hospital_price = str_hospital_price + '.00'; // No decimal point means it's a whole number
+        }
+
         // quantity after
         // let quantity_after = Number(e.quantity_after);
         // if (quantity_after == 0 || quantity_after == null || isNaN(quantity_after)) {
@@ -2983,16 +2989,17 @@ export default {
     formAddDelivery: {
       handler(e) {
         // // acquisition price
-        // let acquisitionPrice = Number(e.acquisitionPrice);
-        // let hospital_price = (acquisitionPrice * this.formAddDelivery.quantity) / 0.7;
-        // let str_hospital_price = hospital_price.toString();
-        // let index = str_hospital_price.indexOf('.');
-        // // Check if there's a decimal point
-        // if (index !== -1) {
-        //   this.formAddDelivery.hospital_price = str_hospital_price.slice(0, index + 3); // Include the decimal point and the next two digits
-        // } else {
-        //   this.formAddDelivery.hospital_price = str_hospital_price + '.00'; // No decimal point means it's a whole number
-        // }
+        let acquisitionPrice = Number(e.acquisitionPrice);
+        let hospital_price = (acquisitionPrice * this.formAddDelivery.quantity) / 0.7;
+        let str_hospital_price = hospital_price.toString();
+        let index = str_hospital_price.indexOf('.');
+        // Check if there's a decimal point
+        if (index !== -1) {
+          this.formAddDelivery.hospital_price = str_hospital_price.slice(0, index + 3); // Include the decimal point and the next two digits
+        } else {
+          this.formAddDelivery.hospital_price = str_hospital_price + '.00'; // No decimal point means it's a whole number
+        }
+
         // quantity after
         // let quantity_after = Number(e.quantity_after);
         // if (quantity_after == 0 || quantity_after == null) {
