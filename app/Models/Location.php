@@ -15,6 +15,9 @@ class Location extends Model
     // declare primary as string
     protected $keyType = 'string';
 
+    // Disable timestamps
+    public $timestamps = false;
+
     protected $fillable = [
         'wardcode',
         'wardname',
