@@ -15,16 +15,9 @@ class WardPatientsController extends Controller
 {
     public function index(Request $request)
     {
-        $searchString = $request->search;
+        // dd($request);
 
-        // get auth wardcode
-        // $authWardcode = DB::table('csrw_users')
-        //     ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
-        //     ->select('csrw_login_history.wardcode')
-        //     ->where('csrw_login_history.employeeid', Auth::user()->employeeid)
-        //     ->orderBy('csrw_login_history.created_at', 'desc')
-        //     ->first();
-        // dd($authWardcode);
+        $searchString = $request->search;
 
         $authWardcode = DB::select(
             "SELECT TOP 1
@@ -42,33 +35,45 @@ class WardPatientsController extends Controller
         );
         // dd($authWardcode[0]->wardcode);
 
-        // $patients = PatientRoom::with([
-        //     // when selecting an eager load table,
-        //     // don't forget to get the foreign key as well
-        //     'patient:patfirst,patmiddle,patlast,patsuffix,hpercode',
-        //     'ward:wardcode,wardname,wclcode,wardstat',
-        //     'room:rmintkey,wardcode,rmcode,rmname,rmbed,rmstat',
-        //     'bed:bdintkey,wardcode,rmintkey,bdcode,bdname,bdstat'
-        // ])
-        //     // this will filter patients that hasn't been discharge
-        //     ->whereHas('patient.admission', function ($q) {
-        //         $q->where('disdate', null);
-        //     })
-        //     ->whereHas('patient', function ($q) use ($searchString) {
-        //         $q->where('patfirst', 'LIKE', '%' . $searchString . '%')
-        //             ->orWhere('patmiddle', 'LIKE', '%' . $searchString . '%')
-        //             ->orWhere('patlast', 'LIKE', '%' . $searchString . '%');
-        //     })
-        //     ->where('patrmstat', 'a')
-        //     ->where('wardcode', $authWardcode->wardcode)
-        //     // order by patient
-        //     ->join('hperson', 'hpatroom.hpercode', '=', 'hperson.hpercode')->orderBy('hperson.patlast', 'ASC')->select('hpatroom.*')
-        //     ->paginate(10);
+        $locationType = DB::select(
+            "SELECT enctype FROM hward WHERE wardcode = ?;",
+            [$authWardcode[0]->wardcode]
+        );
+        // dd($locationType[0]->enctype);
 
+        if ($locationType[0]->enctype == 'OPD') {
+            // dd('OPD');
 
+            $patients = DB::SELECT(
+                "SELECT hopdlog.enccode, hopdlog.hpercode, hopdlog.opddate, hopdlog.licno,
+                hpersonal.lastname, hpersonal.firstname, hpersonal.empsuffix,
+                hperson.patlast, hperson.patfirst, hperson.patmiddle,
+                htypser.tsdesc, hopdlog.opddtedis, hopdlog.opdstat
 
-        $patients = DB::select(
-            "SELECT enctr.enccode, adm.admdate, enctr.hpercode, pt.patfirst, pt.patmiddle, pt.patlast, pt.patsuffix,
+                FROM hopdlog
+                WITH (NOLOCK)
+
+                INNER JOIN hperson ON hperson.hpercode = hopdlog.hpercode
+                INNER JOIN htypser ON htypser.tscode = hopdlog.tscode
+                LEFT JOIN hdisposition ON hdisposition.dispcode = hopdlog.opddisp
+                LEFT JOIN hprovider ON hprovider.licno = hopdlog.licno
+                LEFT JOIN hpersonal ON hpersonal.employeeid = hprovider.employeeid
+                LEFT JOIN hemr_nurse_notes ON hemr_nurse_notes.enccode = hopdlog.enccode
+
+                WHERE hopdlog.tscode = ? /* tscode here */
+                AND hopdlog.opddate BETWEEN CAST(GETDATE() AS DATE) AND DATEADD(DAY, 1, CAST(GETDATE() AS DATE))
+                AND hopdlog.opdstat = 'A'
+                AND hopdlog.licno IS NOT NULL
+                ORDER BY hopdlog.opddate desc",
+                [$authWardcode[0]->wardcode]
+            );
+
+            return Inertia::render('Wards/Patients/OPD/Index', [
+                'patients' => $patients
+            ]);
+        } else {
+            $patients = DB::select(
+                "SELECT enctr.enccode, adm.admdate, enctr.hpercode, pt.patfirst, pt.patmiddle, pt.patlast, pt.patsuffix,
                 (SELECT TOP 1 vsweight FROM hvsothr WHERE othrstat = 'A' AND enccode = adm.enccode ORDER BY othrdte DESC) as kg,
                 (SELECT TOP 1 vsheight FROM hvsothr WHERE othrstat = 'A' AND enccode = adm.enccode ORDER BY othrdte DESC) as cm,
                 room.rmname, bed.bdname, ward.wardname,
@@ -96,18 +101,14 @@ class WardPatientsController extends Controller
             AND pat_room.patrmstat = 'A'
             AND adm.admstat = 'A'
             ORDER BY pt.patlast ASC;",
-            // [$authWardcode->wardcode]
-            [$authWardcode[0]->wardcode]
-        );
+                // [$authWardcode->wardcode]
+                [$authWardcode[0]->wardcode]
+            );
 
-        //   [$authWardcode->wardcode]
-
-        // dd($authWardcode->wardcode);
-        // dd($patients);
-
-        return Inertia::render('Wards/Patients/Index', [
-            'patients' => $patients
-        ]);
+            return Inertia::render('Wards/Patients/Index', [
+                'patients' => $patients
+            ]);
+        }
     }
 
 
