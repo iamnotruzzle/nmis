@@ -30,6 +30,7 @@ class Location extends Model
         'sex',
         'tacode',
         'dietLock',
-        'dietSeenId'
+        'dietSeenId',
+        'enctype'
     ];
 }
