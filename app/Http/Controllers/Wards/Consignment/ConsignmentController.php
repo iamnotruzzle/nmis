@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Wards\ManualInventory;
+namespace App\Http\Controllers\Wards\Consignment;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
-class WardManualInventoryController extends Controller
+class ConsignmentController extends Controller
 {
     public function index()
     {
