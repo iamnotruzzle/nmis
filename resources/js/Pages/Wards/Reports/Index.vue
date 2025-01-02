@@ -335,7 +335,7 @@ export default {
         });
       });
 
-      console.log('container', this.reportsContainer);
+      //   console.log('container', this.reportsContainer);
     },
 
     fnExcelReport() {

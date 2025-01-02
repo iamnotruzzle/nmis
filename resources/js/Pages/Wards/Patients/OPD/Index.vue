@@ -173,7 +173,7 @@ export default {
     this.rows = this.patients.per_page;
   },
   mounted() {
-    console.log('mounted', this.patients);
+    // console.log('mounted', this.patients);
     this.storePatientsInContainer();
 
     this.loading = false;

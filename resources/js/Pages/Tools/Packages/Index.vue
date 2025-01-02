@@ -442,7 +442,7 @@ export default {
         return acc;
       }, []);
 
-      console.log(this.packagesList);
+      //   console.log(this.packagesList);
     },
     openCreatePackageDialog() {
       this.isUpdate = false;

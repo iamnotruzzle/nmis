@@ -214,7 +214,7 @@ export default {
     };
   },
   mounted() {
-    console.log(this.currentStock);
+    // console.log(this.currentStock);
     this.storeCsrInventoryInContainer();
     this.storeCurrentStockInContainer();
   },
@@ -239,7 +239,7 @@ export default {
         });
       });
 
-      console.log(this.currentStockList);
+      //   console.log(this.currentStockList);
     },
     tzone(date) {
       return moment.tz(date, 'Asia/Manila').format('L');

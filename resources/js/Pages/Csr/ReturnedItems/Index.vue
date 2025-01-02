@@ -365,7 +365,7 @@ export default {
     },
     // ward stocks logs
     addQtyToStock(data) {
-      console.log(data);
+      //   console.log(data);
 
       this.previousQty = data.quantity;
 
@@ -380,7 +380,7 @@ export default {
       this.addQtyToStockDialog = true;
     },
     submitReturnToCsr() {
-      console.log(this.previousQty);
+      //   console.log(this.previousQty);
       if (
         this.formAddQtyToStock.processing ||
         this.formAddQtyToStock.quantity == null ||

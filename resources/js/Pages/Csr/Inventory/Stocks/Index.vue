@@ -2625,7 +2625,7 @@ export default {
       this.convertDialog = true;
     },
     editDelivery(item) {
-      console.log(item);
+      //   console.log(item);
       const similarObjects = this.findSimilarIds(item.cl2comb, this.convertedItemSelection);
 
       this.formConvertItem.csr_stock_id = item.stock_id;
