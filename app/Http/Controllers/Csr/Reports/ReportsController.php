@@ -284,16 +284,14 @@ class ReportsController extends Controller
         // Remove keys and re-index the array
         $aggregatedResults = array_values($aggregatedResults);
 
-        // dd($aggregatedResults);
-
-        return Inertia::render('Csr/Reports/Index', [
-            'reports' => $aggregatedResults,
-            'beg_bal_dates' => $beg_bal_dates,
-            'end_bal_dates' => $end_bal_dates
-        ]);
-
-        // return Inertia::render('UnderMaintenancePage', [
-        //     // 'reports' => $reports
+        // return Inertia::render('Csr/Reports/Index', [
+        //     'reports' => $aggregatedResults,
+        //     'beg_bal_dates' => $beg_bal_dates,
+        //     'end_bal_dates' => $end_bal_dates
         // ]);
+
+        return Inertia::render('UnderMaintenancePage', [
+            // 'reports' => $reports
+        ]);
     }
 }
