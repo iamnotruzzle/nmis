@@ -615,6 +615,120 @@
           </template>
         </Dialog>
 
+        <!-- Consignment -->
+        <Dialog
+          v-model:visible="consignmentDialog"
+          :modal="true"
+          class="p-fluid w-4"
+          @hide="whenDialogIsHidden"
+        >
+          <template #header>
+            <div class="text-primary text-xl font-bold">CONSIGNMENT</div>
+          </template>
+          <div class="field">
+            <label for="fundSource">Fund source</label>
+            <Dropdown
+              id="fundSource"
+              required="true"
+              v-model="formConsignment.fund_source"
+              :options="fundSourceList"
+              filter
+              showClear
+              dataKey="chrgcode"
+              optionLabel="chrgdesc"
+              optionValue="chrgcode"
+              class="w-full"
+              :class="{ 'p-invalid': formConsignment.fund_source == '' }"
+            />
+            <small
+              class="text-error"
+              v-if="formConsignment.errors.fund_source"
+            >
+              {{ formConsignment.errors.fund_source }}
+            </small>
+          </div>
+          <div class="field">
+            <label>Items</label>
+            <Dropdown
+              required="true"
+              v-model="formConsignment.cl2comb"
+              :options="itemsList"
+              :virtualScrollerOptions="{ itemSize: 38 }"
+              filter
+              optionLabel="cl2desc"
+              class="w-full mb-3"
+            />
+          </div>
+          <div class="field">
+            <label for="unit">Unit</label>
+            <InputText
+              id="unit"
+              v-model.trim="selectedItemsUomDesc"
+              readonly
+            />
+          </div>
+          <div class="field">
+            <label>Quantity</label>
+            <InputText
+              id="quantity"
+              v-model.trim="formConsignment.quantity"
+              required="true"
+              autofocus
+              :class="{ 'p-invalid': formConsignment.quantity == '' || formConsignment.quantity == null }"
+              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+              inputId="integeronly"
+            />
+            <small
+              class="text-error"
+              v-if="formConsignment.errors.quantity"
+            >
+              {{ formConsignment.errors.quantity }}
+            </small>
+          </div>
+          <div class="field">
+            <label for="delivered_date">Delivered date</label>
+            <Calendar
+              v-model="formConsignment.delivered_date"
+              dateFormat="mm-dd-yy"
+              showIcon
+              showButtonBar
+              :manualInput="false"
+              :hideOnDateTimeSelect="true"
+            />
+            <small
+              class="text-error"
+              v-if="formConsignment.errors.delivered_date"
+            >
+              {{ formConsignment.errors.delivered_date }}
+            </small>
+          </div>
+
+          <template #footer>
+            <Button
+              label="Cancel"
+              icon="pi pi-times"
+              severity="danger"
+              text
+              @click="cancel"
+            />
+            <Button
+              label="Save"
+              icon="pi pi-check"
+              text
+              type="submit"
+              :disabled="
+                formConsignment.processing ||
+                formConsignment.fund_source == null ||
+                formConsignment.cl2comb == null ||
+                formConsignment.quantity == null ||
+                formConsignment.quantity <= 0 ||
+                formConsignment.delivered_date == null
+              "
+              @click="submitMedicalGases"
+            />
+          </template>
+        </Dialog>
+
         <!-- update stocks -->
         <Dialog
           v-model:visible="returnToCsrDialog"
@@ -733,6 +847,12 @@
                     />
                   </div>
                 </div>
+                <Button
+                  label="CONSIGNMENT"
+                  icon="pi pi-plus"
+                  iconPos="right"
+                  @click="openConsignmentDialog"
+                />
                 <Button
                   label="MEDICAL GASES"
                   icon="pi pi-plus"
@@ -918,6 +1038,7 @@ export default {
       isUpdate: false,
       createRequestStocksDialog: false,
       medicalGasesDialog: false,
+      consignmentDialog: false,
       returnToCsrDialog: false,
       editAverageOfStocksDialog: false,
       editStatusDialog: false,
@@ -970,6 +1091,14 @@ export default {
         uomcode: null,
         quantity: null,
         average: null,
+        delivered_date: null,
+      }),
+      formConsignment: this.$inertia.form({
+        authLocation: null,
+        fund_source: null,
+        cl2comb: null,
+        uomcode: null,
+        quantity: null,
         delivered_date: null,
       }),
       formReturnToCsr: this.$inertia.form({
@@ -1079,6 +1208,8 @@ export default {
           uomdesc: e.uomdesc,
         });
       });
+
+      //   console.log(this.itemsList);
     },
     // use storeRequestedStocksInContainer() function so that every time you make
     // server request such as POST, the data in the table
@@ -1204,6 +1335,11 @@ export default {
       this.formMedicalGases.clearErrors();
       this.formMedicalGases.reset();
       this.medicalGasesDialog = true;
+    },
+    openConsignmentDialog() {
+      this.formMedicalGases.clearErrors();
+      this.formMedicalGases.reset();
+      this.consignmentDialog = true;
     },
     // when dialog is hidden, do this function
     whenDialogIsHidden() {
@@ -1401,9 +1537,11 @@ export default {
       this.returnToCsrDialog = false;
       this.editAverageOfStocksDialog = false;
       this.medicalGasesDialog = false;
+      this.consignmentDialog = false;
       this.editStatusDialog = false;
       this.targetItemDesc = null;
       this.oldQuantity = 0;
+      this.selectedItemsUomDesc = '';
       this.form.reset();
       this.form.clearErrors();
       this.formReturnToCsr.reset();
@@ -1505,12 +1643,12 @@ export default {
     },
     'formMedicalGases.cl2comb': function (val) {
       this.selectedItemsUomDesc = null;
-      //   console.log(this.medicalGasList);
+      console.log(val);
 
       this.medicalGasList.forEach((e) => {
         if (e.cl2comb == val) {
-          if (e.uomdesc != null) {
-            // console.log(e.uomdesc);
+          if (e.uomdesc != null || e.uomdesc == '') {
+            // console.log('if');
             this.selectedItemsUomDesc = e.uomdesc;
             this.formMedicalGases.uomcode = e.uomcode;
           } else {
@@ -1518,6 +1656,24 @@ export default {
           }
         }
       });
+    },
+    'formConsignment.cl2comb': function (val) {
+      this.selectedItemsUomDesc = null;
+      //   console.log(this.itemsList);
+
+      this.itemsList.forEach((e) => {
+        if (e.cl2comb == val.cl2comb) {
+          if (e.uomdesc != null || e.uomdesc == '') {
+            // console.log(e.uomdesc);
+            this.selectedItemsUomDesc = e.uomdesc;
+            this.formConsignment.uomcode = e.uomcode;
+          } else {
+            this.selectedItemsUomDesc = null;
+          }
+        }
+      });
+
+      console.log(this.selectedItemsUomDesc);
     },
   },
 };
