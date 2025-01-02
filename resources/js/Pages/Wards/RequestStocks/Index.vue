@@ -623,7 +623,7 @@
           @hide="whenDialogIsHidden"
         >
           <template #header>
-            <div class="text-primary text-xl font-bold">CONSIGNMENT</div>
+            <div class="text-orange-500 text-xl font-bold">CONSIGNMENT</div>
           </template>
           <div class="field">
             <label for="fundSource">Fund source</label>
@@ -714,6 +714,7 @@
             <Button
               label="Save"
               icon="pi pi-check"
+              severity="warning"
               text
               type="submit"
               :disabled="
@@ -851,8 +852,10 @@
                   label="CONSIGNMENT"
                   icon="pi pi-plus"
                   iconPos="right"
+                  severity="warning"
                   @click="openConsignmentDialog"
                 />
+                <div class="mr-2"></div>
                 <Button
                   label="MEDICAL GASES"
                   icon="pi pi-plus"
@@ -1355,6 +1358,7 @@ export default {
         (this.itemNotSelected = null),
         (this.itemNotSelectedMsg = null),
         (this.targetItemDesc = null),
+        (this.selectedItemsUomDesc = ''),
         (this.oldQuantity = 0),
         this.form.clearErrors(),
         this.form.reset(),
