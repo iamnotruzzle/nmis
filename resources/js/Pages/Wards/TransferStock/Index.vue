@@ -79,7 +79,7 @@
           :pt="{ headerContent: 'justify-content-center' }"
         >
           <template #body="slotProps">
-            <Button
+            <!-- <Button
               v-if="canTransfer == true"
               icon="pi pi-pencil"
               class="mr-1"
@@ -96,6 +96,14 @@
               text
               severity="warning"
               :disabled="true"
+            /> -->
+            <Button
+              icon="pi pi-pencil"
+              class="mr-1"
+              rounded
+              text
+              severity="warning"
+              @click="transferStock(slotProps.data)"
             />
           </template>
         </Column>
@@ -438,14 +446,7 @@
               :pt="{ headerContent: 'justify-content-center' }"
             >
               <template #body="slotProps">
-                <!-- <i
-                  v-if="slotProps.data.status != 'RECEIVED'"
-                  class="pi pi-check"
-                  style="color: skyblue"
-
-                ></i> -->
-
-                <div v-if="canTransfer == true">
+                <!-- <div v-if="canTransfer == true">
                   <Button
                     v-if="slotProps.data.status != 'RECEIVED'"
                     icon="pi pi-check"
@@ -459,6 +460,14 @@
                     icon="pi pi-check"
                     label="Receive"
                     :disabled="true"
+                  />
+                </div> -->
+                <div>
+                  <Button
+                    v-if="slotProps.data.status != 'RECEIVED'"
+                    icon="pi pi-check"
+                    label="Receive"
+                    @click="receivedStock(slotProps)"
                   />
                 </div>
               </template>

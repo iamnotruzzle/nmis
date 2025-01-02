@@ -48,7 +48,7 @@
                       />
                     </div>
                   </div>
-                  <div
+                  <!-- <div
                     class="flex align-items-center"
                     v-if="canCharge == true"
                   >
@@ -66,6 +66,15 @@
                       label="Charge patient"
                       icon="pi pi-money-bill"
                       iconPos="right"
+                    />
+                  </div> -->
+                  <div class="flex align-items-center">
+                    <Button
+                      v-if="is_for_discharge !== 'true'"
+                      label="Charge patient"
+                      icon="pi pi-money-bill"
+                      iconPos="right"
+                      @click="openCreateBillDialog"
                     />
                   </div>
                 </div>
@@ -157,8 +166,7 @@
             >
               <template #body="slotProps">
                 <!-- only show if the item is charge using this system and not HOMIS -->
-                <!-- slotProps.data.is_consumable != 'y' -->
-                <div v-if="slotProps.data.charge_log_id != null">
+                <!-- <div v-if="slotProps.data.charge_log_id != null">
                   <Button
                     v-if="canCharge == true"
                     icon="pi pi-pencil"
@@ -176,6 +184,16 @@
                     text
                     severity="warning"
                     :disabled="true"
+                  />
+                </div> -->
+                <div v-if="slotProps.data.charge_log_id != null">
+                  <Button
+                    icon="pi pi-pencil"
+                    class="mr-1"
+                    rounded
+                    text
+                    severity="warning"
+                    @click="editItem(slotProps.data)"
                   />
                 </div>
               </template>
