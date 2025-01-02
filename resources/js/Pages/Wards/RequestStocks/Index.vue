@@ -725,7 +725,7 @@
                 formConsignment.quantity <= 0 ||
                 formConsignment.delivered_date == null
               "
-              @click="submitMedicalGases"
+              @click="submitConsignment"
             />
           </template>
         </Dialog>
@@ -1506,6 +1506,42 @@ export default {
           preserveScroll: true,
           onFinish: () => {
             this.formMedicalGases.reset();
+            this.cancel();
+            this.updateData();
+            this.createdMsg();
+            this.loading = false;
+          },
+        });
+      }
+    },
+    submitConsignment() {
+      if (
+        this.formConsignment.processing ||
+        this.formConsignment.fund_source == null ||
+        this.formConsignment.cl2comb == null ||
+        this.formConsignment.quantity == null ||
+        this.formConsignment.delivered_date == null
+      ) {
+        return false;
+      }
+
+      this.formConsignment.authLocation = this.$page.props.authWardcode.wardcode;
+      if (
+        this.formConsignment.fund_source != null ||
+        this.formConsignment.fund_source != '' ||
+        this.formConsignment.cl2comb != null ||
+        this.formConsignment.cl2comb != '' ||
+        this.formConsignment.quantity != null ||
+        this.formConsignment.quantity != '' ||
+        this.formConsignment.quantity != 0 ||
+        this.formConsignment.delivered_date != null ||
+        this.formConsignment.delivered_date != ''
+      ) {
+        // console.log('success');
+        this.formConsignment.post(route('consignment.store'), {
+          preserveScroll: true,
+          onFinish: () => {
+            this.formConsignment.reset();
             this.cancel();
             this.updateData();
             this.createdMsg();
