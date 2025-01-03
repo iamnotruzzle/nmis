@@ -31,6 +31,7 @@ class WardsStocksLogs extends Model
         'is_consumable',
         'average',
         'total_usage',
+        'consignment',
     ];
 
     public function unit_of_measurement()

@@ -31,7 +31,7 @@ class WardsStocks extends Model
         'is_consumable',
         'average',
         'total_usage',
-        'total_usage',
+        'consignment',
     ];
 
     public function request_stocks()
