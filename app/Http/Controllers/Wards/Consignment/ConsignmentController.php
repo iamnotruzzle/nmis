@@ -56,37 +56,16 @@ class ConsignmentController extends Controller
 
         $item = Item::where('cl2comb', $request->cl2comb)->first();
 
-        if ($item->itemcode == 'MSMG-1') {
-            $itemPrices = ItemPrices::create([
-                'ris_no' => $tempRisNo,
-                'cl2comb' => $request->cl2comb,
-                'acquisition_price' => 0.48,
-                'hospital_price' =>  0.48,
-                'price_per_unit' =>  0.48,
-                'entry_by' => $entry_by,
-            ]);
-        } else if ($item->itemcode == 'MSMG-2') {
-            $itemPrices = ItemPrices::create([
-                'ris_no' => $tempRisNo,
-                'cl2comb' => $request->cl2comb,
-                'acquisition_price' => 0.35,
-                'hospital_price' =>  0.35,
-                'price_per_unit' =>  0.35,
-                'entry_by' => $entry_by,
-            ]);
-        } else {
-            $itemPrices = ItemPrices::create([
-                'ris_no' => $tempRisNo,
-                'cl2comb' => $request->cl2comb,
-                'acquisition_price' => 0.43,
-                'hospital_price' =>  0.43,
-                'price_per_unit' =>  0.43,
-                'entry_by' => $entry_by,
-            ]);
-        }
+        $itemPrices = ItemPrices::create([
+            'ris_no' => $tempRisNo,
+            'cl2comb' => $request->cl2comb,
+            'acquisition_price' => $request->price_per_unit,
+            'hospital_price' =>  $request->price_per_unit,
+            'price_per_unit' =>  $request->price_per_unit,
+            'entry_by' => $entry_by,
+        ]);
 
-
-        $medicalGases = WardsStocks::create([
+        $consignmentItem = WardsStocks::create([
             'request_stocks_id' => null,
             'request_stocks_detail_id' => null,
             'ris_no' => $tempRisNo,
@@ -97,14 +76,11 @@ class ConsignmentController extends Controller
             'uomcode' => $request->uomcode,
             'chrgcode' => $request->fund_source,
             'quantity' => $request->quantity,
-            'average' => $request->average,
-            'total_usage' => (int)$request->quantity * (int)$request->average,
-            'from' => 'MEDICAL GASES',
+            'from' => 'CONSIGNMENT',
             // 'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
             'delivered_date' =>  Carbon::parse($request->delivered_date)->format('Y-m-d H:i:s.v'),
             'expiration_date' =>  Carbon::maxValue(),
         ]);
-        // dd($medicalGases);
 
         $wardStockLogs = WardsStocksLogs::create([
             'request_stocks_id' => null,
@@ -118,8 +94,6 @@ class ConsignmentController extends Controller
             'chrgcode' => $request->fund_source,
             'prev_qty' => 0,
             'new_qty' => $request->quantity,
-            'average' => $request->average,
-            'total_usage' => (int)$request->quantity * (int)$request->average,
             'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
             'delivered_date' =>  Carbon::parse($request->delivered_date)->format('Y-m-d H:i:s.v'),
             'expiration_date' =>  Carbon::maxValue(),
