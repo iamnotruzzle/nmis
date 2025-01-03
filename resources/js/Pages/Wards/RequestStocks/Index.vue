@@ -971,7 +971,10 @@
             :pt="{ headerContent: 'justify-content-center' }"
           >
             <template #body="slotProps">
-              <div class="flex justify-content-center">
+              <div
+                v-if="slotProps.data.from != 'CONSIGNMENT'"
+                class="flex justify-content-center"
+              >
                 <Button
                   v-if="slotProps.data.is_consumable != 'y' || slotProps.data.is_consumable == null"
                   label="RETURN"

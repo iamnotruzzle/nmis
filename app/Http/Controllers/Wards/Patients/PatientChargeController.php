@@ -626,10 +626,10 @@ class PatientChargeController extends Controller
                 }
             } else {
                 $stock = WardsStocks::where('id', $request->upd_ward_stocks_id)->first();
-                // dd($stock);
-                // return / void charge
+
+                // RETURN NON-CONSUMABLE ITEMS
                 if ($request->charge_log_from != 'MEDICAL GASES' && $stock->is_consumable == null) {
-                    // dd($stock);
+                    // dd('return');
                     $previousCharge = null;
                     $previousPatientChargeLogs = null;
                     $previousWardStocks = null;

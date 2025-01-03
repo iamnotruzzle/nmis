@@ -1334,6 +1334,7 @@ export default {
           },
         });
       } else {
+        console.log('else');
         if (this.form.processing) {
           return false;
         }
