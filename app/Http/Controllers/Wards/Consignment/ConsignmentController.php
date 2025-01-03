@@ -15,7 +15,7 @@ class ConsignmentController extends Controller
 
     public function store(Request $request)
     {
-        dd('consignment');
+        dd($request);
 
         return Redirect::route('requeststocks.index');
     }

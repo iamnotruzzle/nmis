@@ -655,6 +655,7 @@
               :options="itemsList"
               :virtualScrollerOptions="{ itemSize: 38 }"
               filter
+              optionValue="cl2comb"
               optionLabel="cl2desc"
               class="w-full mb-3"
             />
@@ -683,6 +684,24 @@
               v-if="formConsignment.errors.quantity"
             >
               {{ formConsignment.errors.quantity }}
+            </small>
+          </div>
+          <div class="field">
+            <label>Price per unit</label>
+            <InputNumber
+              id="price_per_unit"
+              inputId="minmaxfraction"
+              :minFractionDigits="2"
+              :maxFractionDigits="5"
+              v-model.trim="formConsignment.price_per_unit"
+              required="true"
+              :class="{ 'p-invalid': formConsignment.price_per_unit == '' || formConsignment.price_per_unit == null }"
+            />
+            <small
+              class="text-error"
+              v-if="formConsignment.errors.price_per_unit"
+            >
+              {{ formConsignment.errors.price_per_unit }}
             </small>
           </div>
           <div class="field">
@@ -723,6 +742,8 @@
                 formConsignment.cl2comb == null ||
                 formConsignment.quantity == null ||
                 formConsignment.quantity <= 0 ||
+                formConsignment.price_per_unit == null ||
+                formConsignment.price_per_unit <= 0 ||
                 formConsignment.delivered_date == null
               "
               @click="submitConsignment"
@@ -1102,6 +1123,7 @@ export default {
         cl2comb: null,
         uomcode: null,
         quantity: null,
+        price_per_unit: null,
         delivered_date: null,
       }),
       formReturnToCsr: this.$inertia.form({
@@ -1362,6 +1384,10 @@ export default {
         (this.oldQuantity = 0),
         this.form.clearErrors(),
         this.form.reset(),
+        this.formMedicalGases.clearErrors(),
+        this.formMedicalGases.reset(),
+        this.formConsignment.clearErrors(),
+        this.formConsignment.reset(),
         this.formReturnToCsr.clearErrors(),
         this.formReturnToCsr.reset(),
         this.formUpdateStatus.reset()
@@ -1520,6 +1546,8 @@ export default {
         this.formConsignment.fund_source == null ||
         this.formConsignment.cl2comb == null ||
         this.formConsignment.quantity == null ||
+        this.formConsignment.price_per_unit == null ||
+        this.formConsignment.price_per_unit <= 0 ||
         this.formConsignment.delivered_date == null
       ) {
         return false;
@@ -1534,6 +1562,8 @@ export default {
         this.formConsignment.quantity != null ||
         this.formConsignment.quantity != '' ||
         this.formConsignment.quantity != 0 ||
+        this.formConsignment.price_per_unit != '' ||
+        this.formConsignment.price_per_unit != 0 ||
         this.formConsignment.delivered_date != null ||
         this.formConsignment.delivered_date != ''
       ) {
@@ -1584,6 +1614,10 @@ export default {
       this.selectedItemsUomDesc = '';
       this.form.reset();
       this.form.clearErrors();
+      this.formMedicalGases.reset();
+      this.formMedicalGases.clearErrors();
+      this.formConsignment.reset();
+      this.formConsignment.clearErrors();
       this.formReturnToCsr.reset();
       this.formReturnToCsr.clearErrors();
     },
@@ -1683,7 +1717,7 @@ export default {
     },
     'formMedicalGases.cl2comb': function (val) {
       this.selectedItemsUomDesc = null;
-      console.log(val);
+      //   console.log(val);
 
       this.medicalGasList.forEach((e) => {
         if (e.cl2comb == val) {
@@ -1699,10 +1733,10 @@ export default {
     },
     'formConsignment.cl2comb': function (val) {
       this.selectedItemsUomDesc = null;
-      //   console.log(this.itemsList);
+      //   console.log(val);
 
       this.itemsList.forEach((e) => {
-        if (e.cl2comb == val.cl2comb) {
+        if (e.cl2comb == val) {
           if (e.uomdesc != null || e.uomdesc == '') {
             // console.log(e.uomdesc);
             this.selectedItemsUomDesc = e.uomdesc;
@@ -1713,7 +1747,7 @@ export default {
         }
       });
 
-      console.log(this.selectedItemsUomDesc);
+      //   console.log(this.selectedItemsUomDesc);
     },
   },
 };
