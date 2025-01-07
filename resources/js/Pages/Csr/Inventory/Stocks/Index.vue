@@ -760,11 +760,13 @@
         <div class="field">
           <div>
             <div class="flex align-content-center">
-              <label class="text-green-500">Hospital price </label>
+              <label class="text-green-500"
+                >Hospital price <span class="text-error">((Quantity * Acquisition price) / 0.7)</span></label
+              >
             </div>
             <InputNumber
               class="w-full"
-              v-model.trim="formAddDelivery.hospital_price"
+              v-model="formAddDelivery.hospital_price"
               inputId="minmaxfraction"
               :minFractionDigits="2"
               :maxFractionDigits="5"
@@ -775,14 +777,17 @@
         <div class="field">
           <div>
             <div class="flex align-content-center">
-              <label class="text-blue-500">Price per unit</label>
+              <label class="text-blue-500"
+                >Price per unit <span class="text-error">(Hospital price / Converted qty)</span></label
+              >
             </div>
             <InputNumber
               class="w-full"
-              v-model.trim="formAddDelivery.price_per_unit"
+              v-model="formAddDelivery.price_per_unit"
               inputId="minmaxfraction"
               :minFractionDigits="2"
               :maxFractionDigits="5"
+              :disabled="true"
             />
           </div>
         </div>
@@ -1190,7 +1195,9 @@
         <div class="field">
           <div>
             <div class="flex align-content-center">
-              <label class="text-green-500">Hospital price </label>
+              <label class="text-green-500"
+                >Hospital price <span class="text-error">((Quantity * Acquisition price) / 0.7)</span></label
+              >
             </div>
             <InputNumber
               class="w-full"
@@ -1205,7 +1212,9 @@
         <div class="field">
           <div>
             <div class="flex align-content-center">
-              <label class="text-blue-500">Price per unit</label>
+              <label class="text-blue-500"
+                >Price per unit <span class="text-error">(Hospital price / Converted qty)</span></label
+              >
             </div>
             <InputNumber
               class="w-full"
@@ -2113,12 +2122,12 @@ export default {
         manufactured_date: null,
         delivered_date: null,
         expiration_date: null,
-        quantity: null,
-        acquisitionPrice: null,
-        cl2comb_after: null,
-        quantity_after: null,
-        hospital_price: null,
-        price_per_unit: null,
+        quantity: 0,
+        acquisitionPrice: 0,
+        cl2comb_after: 0,
+        quantity_after: 0,
+        hospital_price: 0,
+        price_per_unit: 0,
       }),
       formConvertItem: this.$inertia.form({
         id: null,
@@ -2129,12 +2138,12 @@ export default {
         cl2comb_before: null,
         delivered_date: null,
         expiration_date: null,
-        quantity_before: null,
-        acquisition_price: null,
+        quantity_before: 0,
+        acquisitionPrice: 0,
         cl2comb_after: null,
-        quantity_after: null,
-        hospital_price: null,
-        price_per_unit: null,
+        quantity_after: 0,
+        hospital_price: 0,
+        price_per_unit: 0,
         remarks: null,
       }),
       formEditConvertedItem: this.$inertia.form({
@@ -2927,30 +2936,10 @@ export default {
         //    acquisition price
         let acquisition_price = Number(e.acquisition_price);
         let hospital_price = (acquisition_price * this.formConvertItem.quantity_before) / 0.7;
-        let str_hospital_price = hospital_price.toString();
-        let index = str_hospital_price.indexOf('.');
-        // Check if there's a decimal point
-        if (index !== -1) {
-          this.formConvertItem.hospital_price = str_hospital_price.slice(0, index + 3); // Include the decimal point and the next two digits
-        } else {
-          this.formConvertItem.hospital_price = str_hospital_price + '.00'; // No decimal point means it's a whole number
-        }
+        this.formConvertItem.hospital_price = Number(hospital_price.toFixed(2));
 
-        // quantity after
-        // let quantity_after = Number(e.quantity_after);
-        // if (quantity_after == 0 || quantity_after == null || isNaN(quantity_after)) {
-        //   this.formConvertItem.price_per_unit = 0;
-        // } else {
-        //   let price_per_unit = this.formConvertItem.hospital_price / quantity_after;
-        //   let str_price_per_unit = price_per_unit.toString();
-        //   let index = str_price_per_unit.indexOf('.');
-        //   // Check if there's a decimal point
-        //   if (index !== -1) {
-        //     this.formConvertItem.price_per_unit = str_price_per_unit.slice(0, index + 3); // Include the decimal point and the next two digits
-        //   } else {
-        //     this.formConvertItem.price_per_unit = str_price_per_unit + '.00'; // No decimal point means it's a whole number
-        //   }
-        // }
+        let price_per_unit = this.formConvertItem.hospital_price / this.formConvertItem.quantity_after;
+        this.formConvertItem.price_per_unit = Number(price_per_unit).toFixed(2);
       },
       deep: true,
     },
@@ -2991,30 +2980,10 @@ export default {
         // // acquisition price
         let acquisitionPrice = Number(e.acquisitionPrice);
         let hospital_price = (acquisitionPrice * this.formAddDelivery.quantity) / 0.7;
-        let str_hospital_price = hospital_price.toString();
-        let index = str_hospital_price.indexOf('.');
-        // Check if there's a decimal point
-        if (index !== -1) {
-          this.formAddDelivery.hospital_price = str_hospital_price.slice(0, index + 3); // Include the decimal point and the next two digits
-        } else {
-          this.formAddDelivery.hospital_price = str_hospital_price + '.00'; // No decimal point means it's a whole number
-        }
+        this.formAddDelivery.hospital_price = Number(hospital_price.toFixed(2));
 
-        // quantity after
-        // let quantity_after = Number(e.quantity_after);
-        // if (quantity_after == 0 || quantity_after == null) {
-        //   this.formAddDelivery.price_per_unit = 0;
-        // } else {
-        //   let price_per_unit = this.formAddDelivery.hospital_price / quantity_after;
-        //   let str_price_per_unit = price_per_unit.toString();
-        //   let index = str_price_per_unit.indexOf('.');
-        //   // Check if there's a decimal point
-        //   if (index !== -1) {
-        //     this.formAddDelivery.price_per_unit = str_price_per_unit.slice(0, index + 3); // Include the decimal point and the next two digits
-        //   } else {
-        //     this.formAddDelivery.price_per_unit = str_price_per_unit + '.00'; // No decimal point means it's a whole number
-        //   }
-        // }
+        let price_per_unit = this.formAddDelivery.hospital_price / this.formAddDelivery.quantity_after;
+        this.formAddDelivery.price_per_unit = Number(price_per_unit).toFixed(2);
       },
       deep: true,
     },
