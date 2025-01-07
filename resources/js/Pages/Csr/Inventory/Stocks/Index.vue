@@ -767,9 +767,6 @@
             <InputNumber
               class="w-full"
               v-model="formAddDelivery.hospital_price"
-              inputId="minmaxfraction"
-              :minFractionDigits="2"
-              :maxFractionDigits="5"
               :disabled="true"
             />
           </div>
@@ -784,9 +781,6 @@
             <InputNumber
               class="w-full"
               v-model="formAddDelivery.price_per_unit"
-              inputId="minmaxfraction"
-              :minFractionDigits="2"
-              :maxFractionDigits="5"
               :disabled="true"
             />
           </div>
@@ -1008,260 +1002,6 @@
         </template>
       </Dialog>
 
-      <!-- edit delivery quantity dialog -->
-      <!-- <Dialog
-        v-model:visible="editDeliveryQtyDialog"
-        :style="{ width: '550px' }"
-        :modal="true"
-        class="p-fluid"
-        @hide="clickOutsideDialog"
-      >
-        <template #header>
-          <div class="text-primary text-xl font-bold">CONVERT ITEM</div>
-        </template>
-        <div class="field">
-          <div class="flex align-content-center">
-            <label>RIS no.</label>
-            <span class="ml-2 text-error">*</span>
-          </div>
-          <InputText
-            v-model.trim="formConvertItem.ris_no"
-            readonly
-          />
-        </div>
-        <div class="field">
-          <div class="flex align-content-center">
-            <label>Supplier</label>
-          </div>
-          <Dropdown
-            v-model="formConvertItem.supplierID"
-            :options="suppliersList"
-            :virtualScrollerOptions="{ itemSize: 38 }"
-            filter
-            dataKey="supplierID"
-            optionValue="supplierID"
-            optionLabel="suppname"
-            class="w-full"
-            disabled
-          />
-        </div>
-        <div class="field">
-          <div class="flex align-content-center">
-            <label>Fund source</label>
-            <span class="ml-2 text-error">*</span>
-          </div>
-          <Dropdown
-            required="true"
-            v-model="formConvertItem.chrgcode"
-            :options="fundSourceList"
-            :virtualScrollerOptions="{ itemSize: 38 }"
-            filter
-            dataKey="chrgcode"
-            optionValue="chrgcode"
-            optionLabel="chrgdesc"
-            class="w-full"
-            disabled
-          />
-        </div>
-        <div class="field">
-          <div class="flex align-content-center">
-            <label>Item</label>
-            <span class="ml-2 text-error">*</span>
-          </div>
-          <Dropdown
-            required="true"
-            v-model="formConvertItem.cl2comb_before"
-            :options="itemsList"
-            :virtualScrollerOptions="{ itemSize: 38 }"
-            filter
-            dataKey="cl2comb"
-            optionValue="cl2comb"
-            optionLabel="cl2desc"
-            class="w-full"
-            disabled
-          />
-        </div>
-        <div class="field flex flex-row justify-content-between">
-          <div>
-            <div class="flex align-content-center">
-              <label>Delivered date</label>
-              <span class="ml-2 text-error">*</span>
-            </div>
-            <Calendar
-              v-model="formConvertItem.delivered_date"
-              dateFormat="mm-dd-yy"
-              showIcon
-              showButtonBar
-              :manualInput="false"
-              :hideOnDateTimeSelect="true"
-              disabled
-            />
-          </div>
-          <div>
-            <div class="flex">
-              <label>Expiration date</label>
-              <span class="ml-2 text-error">*</span>
-            </div>
-            <div class="flex flex-row">
-              <Calendar
-                required="true"
-                v-model="formConvertItem.expiration_date"
-                dateFormat="mm-dd-yy"
-                showIcon
-                showButtonBar
-                :manualInput="false"
-                :hideOnDateTimeSelect="true"
-                disabled
-              />
-            </div>
-          </div>
-        </div>
-
-        <div class="field w-6">
-          <div class="flex align-content-center">
-            <label>Quantity</label>
-            <span class="ml-2 text-error">*</span>
-          </div>
-          <InputText
-            required="true"
-            v-model.trim="formConvertItem.quantity_before"
-            inputId="integeronly"
-            @keydown="restrictNonNumericAndPeriod"
-            readonly
-          />
-        </div>
-        <div class="field w-6">
-          <div>
-            <div class="flex align-content-center">
-              <label>Acquisition price</label>
-              <span class="ml-2 text-error">*</span>
-            </div>
-            <InputText
-              required="true"
-              type="number"
-              v-model.trim="formConvertItem.acquisition_price"
-              @keydown="restrictNonNumeric"
-              readonly
-            />
-          </div>
-        </div>
-        <div class="field flex flex-row">
-          <div
-            :style="{ width: '65%' }"
-            class="mr-2 mt-auto"
-          >
-            <div class="flex align-content-center">
-              <label>Convert to</label>
-            </div>
-            <Dropdown
-              required="true"
-              v-model="formConvertItem.cl2comb_after"
-              :options="convertedItemList"
-              :virtualScrollerOptions="{ itemSize: 38 }"
-              filter
-              showClear
-              dataKey="cl2comb"
-              optionValue="cl2comb"
-              optionLabel="cl2desc"
-              class="w-full"
-            />
-          </div>
-          <div :style="{ width: '35%' }">
-            <div class="flex align-content-center">
-              <label
-                >Convert quantity <span class="text-error">(Total converted quantity of delivered item)</span></label
-              >
-            </div>
-            <InputText
-              id="quantity"
-              type="number"
-              v-model="formConvertItem.quantity_after"
-              @keydown="restrictNonNumericAndPeriod"
-              autofocus
-              @keyup.enter="submitAddDelivery"
-              class="w-full"
-            />
-          </div>
-        </div>
-
-        <div class="field">
-          <div>
-            <div class="flex align-content-center">
-              <label class="text-green-500"
-                >Hospital price<span class="text-green-500">((Quantity * Acquisition price) / 0.7)</span></label
-              >
-            </div>
-            <InputNumber
-              class="w-full"
-              v-model.trim="formConvertItem.hospital_price"
-              inputId="minmaxfraction"
-              :minFractionDigits="2"
-              :maxFractionDigits="5"
-              :disabled="true"
-            />
-          </div>
-        </div>
-        <div class="field">
-          <div>
-            <div class="flex align-content-center">
-              <label class="text-blue-500"
-                >Price per unit <span class="text-error">(Hospital price / Converted qty)</span></label
-              >
-            </div>
-            <InputNumber
-              class="w-full"
-              v-model.trim="formConvertItem.price_per_unit"
-              inputId="minmaxfraction"
-              :minFractionDigits="2"
-              :maxFractionDigits="5"
-            />
-          </div>
-        </div>
-
-        <div>
-          <div class="flex align-content-center">
-            <label>Remarks</label>
-            <span class="ml-2 text-error">*</span>
-          </div>
-          <Textarea
-            v-model.trim="formConvertItem.remarks"
-            rows="5"
-            class="w-full"
-          />
-          <small
-            class="text-error"
-            v-if="formConvertItem.errors.remarks"
-          >
-            {{ formConvertItem.errors.remarks }}
-          </small>
-        </div>
-        <template #footer>
-          <Button
-            label="Cancel"
-            icon="pi pi-times"
-            severity="danger"
-            text
-            @click="cancel"
-          />
-          <Button
-            label="Convert"
-            icon="pi pi-check"
-            text
-            type="submit"
-            :disabled="
-              formConvertItem.processing ||
-              formConvertItem.cl2comb_after == '' ||
-              formConvertItem.cl2comb_after == null ||
-              formConvertItem.quantity_after == '' ||
-              formConvertItem.quantity_after == null ||
-              formConvertItem.remarks == '' ||
-              formConvertItem.remarks == null
-            "
-            @click="submitConvertItem"
-          />
-        </template>
-      </Dialog> -->
-
       <!-- convert dialog -->
       <Dialog
         v-model:visible="convertDialog"
@@ -1455,10 +1195,7 @@
             </div>
             <InputNumber
               class="w-full"
-              v-model.trim="formConvertItem.hospital_price"
-              inputId="minmaxfraction"
-              :minFractionDigits="2"
-              :maxFractionDigits="5"
+              v-model="formConvertItem.hospital_price"
               :disabled="true"
             />
           </div>
@@ -1472,10 +1209,8 @@
             </div>
             <InputNumber
               class="w-full"
-              v-model.trim="formConvertItem.price_per_unit"
-              inputId="minmaxfraction"
-              :minFractionDigits="2"
-              :maxFractionDigits="5"
+              v-model="formConvertItem.price_per_unit"
+              :disabled="true"
             />
           </div>
         </div>
@@ -2136,28 +1871,28 @@ export default {
         expiration_date: null,
         quantity_before: 0,
         acquisitionPrice: 0,
-        cl2comb_after: null,
+        cl2comb_after: 0,
         quantity_after: 0,
         hospital_price: 0,
         price_per_unit: 0,
         remarks: null,
       }),
-      formEditConvertedItem: this.$inertia.form({
-        csr_stock_id: null,
-        ris_no: null,
-        supplierID: null,
-        chrgcode: null,
-        cl2comb_before: null,
-        delivered_date: null,
-        expiration_date: null,
-        quantity_before: null,
-        acquisition_price: null,
-        cl2comb_after: null,
-        quantity_after: null,
-        hospital_price: null,
-        price_per_unit: null,
-        remarks: null,
-      }),
+      //   formEditConvertedItem: this.$inertia.form({
+      //     csr_stock_id: null,
+      //     ris_no: null,
+      //     supplierID: null,
+      //     chrgcode: null,
+      //     cl2comb_before: null,
+      //     delivered_date: null,
+      //     expiration_date: null,
+      //     quantity_before: null,
+      //     acquisition_price: null,
+      //     cl2comb_after: null,
+      //     quantity_after: null,
+      //     hospital_price: null,
+      //     price_per_unit: null,
+      //     remarks: null,
+      //   }),
       stockLvlFilter: [
         {
           name: 'NORMAL',
@@ -2973,6 +2708,7 @@ export default {
     },
     formAddDelivery: {
       handler(e) {
+        // console.log(this.formAddDelivery.price_per_unit);
         // // acquisition price
         let acquisitionPrice = Number(e.acquisitionPrice);
         let hospital_price = (acquisitionPrice * this.formAddDelivery.quantity) / 0.7;
