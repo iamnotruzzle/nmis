@@ -807,7 +807,9 @@
               formAddDelivery.delivered_date == null ||
               formAddDelivery.expiration_date == null ||
               formAddDelivery.quantity == null ||
-              formAddDelivery.acquisitionPrice == null
+              formAddDelivery.quantity == 0 ||
+              formAddDelivery.acquisitionPrice == null ||
+              formAddDelivery.acquisitionPrice == 0
             "
             @click="submitAddDelivery"
           />
@@ -1248,8 +1250,10 @@
             :disabled="
               formConvertItem.processing ||
               formConvertItem.cl2comb_after == '' ||
+              formConvertItem.cl2comb_after == 0 ||
               formConvertItem.cl2comb_after == null ||
               formConvertItem.quantity_after == '' ||
+              formConvertItem.quantity_after == 0 ||
               formConvertItem.quantity_after == null ||
               formConvertItem.remarks == '' ||
               formConvertItem.remarks == null
@@ -2384,8 +2388,10 @@ export default {
       if (
         this.formConvertItem.processing ||
         this.formConvertItem.cl2comb_after == '' ||
+        this.formConvertItem.cl2comb_after == 0 ||
         this.formConvertItem.cl2comb_after == null ||
         this.formConvertItem.quantity_after == '' ||
+        this.formConvertItem.quantity_after == 0 ||
         this.formConvertItem.quantity_after == null ||
         this.formConvertItem.remarks == '' ||
         this.formConvertItem.remarks == null
@@ -2568,7 +2574,9 @@ export default {
         this.formAddDelivery.delivered_date == null ||
         this.formAddDelivery.expiration_date == null ||
         this.formAddDelivery.quantity == null ||
-        this.formAddDelivery.acquisitionPrice == null
+        this.formAddDelivery.quantity == 0 ||
+        this.formAddDelivery.acquisitionPrice == null ||
+        this.formAddDelivery.acquisitionPrice == 0
       ) {
         return false;
       }
