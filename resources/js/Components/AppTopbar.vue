@@ -9,7 +9,7 @@
           src="images/hosp_logo.png"
           alt="Image"
         />
-        <span>NURSE MANAGEMENT INFORMATION SYSTEM</span>
+        <span>NURSING MANAGEMENT INFORMATION SYSTEM</span>
       </div>
     </Link>
     <!--  -->

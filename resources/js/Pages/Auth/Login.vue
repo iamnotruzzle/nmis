@@ -6,7 +6,7 @@
       style="min-width: 80%"
     >
       <div class="col-12 mt-5 xl:mt-0 text-center">
-        <h1>NURSE MANAGEMENT INFORMATION SYSTEM (BETA)</h1>
+        <h1>NURSING MANAGEMENT INFORMATION SYSTEM (BETA)</h1>
       </div>
       <div
         class="col-12 xl:col-6"
