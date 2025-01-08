@@ -235,7 +235,8 @@ class PatientChargeController extends Controller
 
         if ($request->isUpdate == false) {
             // get patient account number
-            $acctno = PatientAccount::where('enccode', $enccode)->first(['paacctno']);
+            // $acctno = PatientAccount::where('enccode', $enccode)->first(['paacctno']);
+            $acctno = 'csrw';
 
             foreach ($itemsToBillList as $item) {
                 if ($item['typeOfCharge'] == 'DRUMN') {
@@ -259,7 +260,8 @@ class PatientChargeController extends Controller
                             'confdl' => 'N', // always N
                             'srcchrg' => $srcchrg,
                             'pcdisch' => 'Y',
-                            'acctno' => $acctno->paacctno, // SELECT * FROM hpatacct --pacctno
+                            // 'acctno' => $acctno->paacctno, // SELECT * FROM hpatacct --pacctno
+                            'acctno' => $acctno, // SELECT * FROM hpatacct --pacctno
                             'itemcode' => $item['itemCode'], // cl2comb or hmisc hmcode
                             'entryby' => $entryby,
                             'orinclst' => null, // null
@@ -295,7 +297,8 @@ class PatientChargeController extends Controller
                                 if ($wardStock->quantity >= $remaining_qty_to_charge) {
                                     PatientChargeLogs::create([
                                         'enccode' => $enccode,
-                                        'acctno' => $acctno->paacctno,
+                                        // 'acctno' => $acctno->paacctno,
+                                        'acctno' => $acctno,
                                         'ward_stocks_id' => $wardStock->id,
                                         'itemcode' => $wardStock->cl2comb,
                                         'from' => $wardStock->from,
@@ -329,7 +332,8 @@ class PatientChargeController extends Controller
                                     // Log the charge for the patient
                                     PatientChargeLogs::create([
                                         'enccode' => $enccode,
-                                        'acctno' => $acctno->paacctno,
+                                        // 'acctno' => $acctno->paacctno,
+                                        'acctno' => $acctno,
                                         'ward_stocks_id' => $wardStock->id,
                                         'itemcode' => $wardStock->cl2comb,
                                         'from' => $wardStock->from,
@@ -387,7 +391,8 @@ class PatientChargeController extends Controller
                             'confdl' => 'N', // always N
                             'srcchrg' => $srcchrg,
                             'pcdisch' => 'Y',
-                            'acctno' => $acctno->paacctno, // SELECT * FROM hpatacct --pacctno
+                            // 'acctno' => $acctno->paacctno, // SELECT * FROM hpatacct --pacctno
+                            'acctno' => $acctno, // SELECT * FROM hpatacct --pacctno
                             'itemcode' => $item['itemCode'], // cl2comb or hmisc hmcode
                             'entryby' => $entryby,
                             'orinclst' => null, // null
@@ -421,7 +426,8 @@ class PatientChargeController extends Controller
                             if ($wardStock->quantity >= $remaining_qty_to_charge) {
                                 PatientChargeLogs::create([
                                     'enccode' => $enccode,
-                                    'acctno' => $acctno->paacctno,
+                                    // 'acctno' => $acctno->paacctno,
+                                    'acctno' => $acctno,
                                     'ward_stocks_id' => $wardStock->id,
                                     'itemcode' => $wardStock->cl2comb,
                                     'from' => $wardStock->from,
@@ -453,7 +459,8 @@ class PatientChargeController extends Controller
 
                                 PatientChargeLogs::create([
                                     'enccode' => $enccode,
-                                    'acctno' => $acctno->paacctno,
+                                    // 'acctno' => $acctno->paacctno,
+                                    'acctno' => $acctno,
                                     'ward_stocks_id' => $wardStock->id,
                                     'itemcode' => $wardStock->cl2comb,
                                     'from' => $wardStock->from,
@@ -499,7 +506,8 @@ class PatientChargeController extends Controller
                         'confdl' => 'N', // always N
                         'srcchrg' => $srcchrg,
                         'pcdisch' => 'Y',
-                        'acctno' => $acctno->paacctno, // SELECT * FROM hpatacct --pacctno
+                        // 'acctno' => $acctno->paacctno, // SELECT * FROM hpatacct --pacctno
+                        'acctno' => $acctno, // SELECT * FROM hpatacct --pacctno
                         'itemcode' => $item['itemCode'], // cl2comb or hmisc hmcode
                         'entryby' => $entryby,
                         'orinclst' => null, // null
@@ -520,7 +528,8 @@ class PatientChargeController extends Controller
                     // dd($item);
                     PatientChargeLogs::create([
                         'enccode' => $enccode,
-                        'acctno' => $acctno->paacctno,
+                        // 'acctno' => $acctno->paacctno,
+                        'acctno' => $acctno,
                         'ward_stocks_id' => null,
                         'itemcode' => $item['itemCode'],
                         'manufactured_date' =>  null,
