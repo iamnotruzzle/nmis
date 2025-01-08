@@ -8,6 +8,7 @@ use App\Models\CsrwCode;
 use App\Models\Item;
 use App\Models\LocationStockBalance;
 use App\Models\Miscellaneous;
+use App\Models\Opdlog;
 use App\Models\Patient;
 use App\Models\PatientAccount;
 use App\Models\PatientCharge;
@@ -36,7 +37,14 @@ class PatientChargeController extends Controller
         $room_bed = $request->room_bed;
         // $patient = $request->patient;
         // dd($patient);
-        $pat_tscode = AdmissionLog::where('enccode', $pat_enccode)->get('tscode')->first();
+        $pat_tscode = '';
+        $admlog_tscode = AdmissionLog::where('enccode', $pat_enccode)->get('tscode')->first();
+        if ($admlog_tscode != null) {
+            $pat_tscode = $admlog_tscode;
+        } else {
+            $pat_tscode = Opdlog::where('enccode', $pat_enccode)->get('tscode')->first();
+        }
+        // dd($pat_tscode);
         $medicalSupplies = array();
 
         // dd($pat_enccode);
@@ -192,6 +200,7 @@ class PatientChargeController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request);
         $data = $request;
 
         $entryby = Auth::user()->employeeid;
