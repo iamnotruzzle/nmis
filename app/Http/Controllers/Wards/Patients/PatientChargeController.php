@@ -235,8 +235,9 @@ class PatientChargeController extends Controller
 
         if ($request->isUpdate == false) {
             // get patient account number
-            // $acctno = PatientAccount::where('enccode', $enccode)->first(['paacctno']);
-            $acctno = 'csrw';
+            $r = PatientAccount::where('enccode', $enccode)->first(['paacctno']);
+            $acctno = $r != null ? $r : '';
+            // $acctno = '';
 
             foreach ($itemsToBillList as $item) {
                 if ($item['typeOfCharge'] == 'DRUMN') {
