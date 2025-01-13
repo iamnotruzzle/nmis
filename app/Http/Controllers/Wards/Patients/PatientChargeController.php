@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Wards\Patients;
 use App\Http\Controllers\Controller;
 use App\Models\AdmissionLog;
 use App\Models\CsrwCode;
+use App\Models\ERlog;
 use App\Models\Item;
 use App\Models\LocationStockBalance;
 use App\Models\Miscellaneous;
@@ -35,8 +36,14 @@ class PatientChargeController extends Controller
         $pat_enccode = $request->enccode;
         $is_for_discharge = $request->disch;
         $room_bed = $request->room_bed;
-        // $patient = $request->patient;
-        // dd($patient);
+
+        // $pat_tscode = '';
+        // $admlog_tscode = AdmissionLog::where('enccode', $pat_enccode)->get('tscode')->first();
+        // $opdlog_tscode = Opdlog::where('enccode', $pat_enccode)->get('tscode')->first();
+        // $erlog_tscode = ERlog::where('enccode', $pat_enccode)->get('tscode')->first();
+        // // enccode is 1 is to 1
+        // $pat_tscode = $admlog_tscode->tscode ?? $opdlog_tscode->tscode ?? $erlog_tscode->tscode ?? null;
+
         $pat_tscode = '';
         $admlog_tscode = AdmissionLog::where('enccode', $pat_enccode)->get('tscode')->first();
         if ($admlog_tscode != null) {
@@ -44,7 +51,6 @@ class PatientChargeController extends Controller
         } else {
             $pat_tscode = Opdlog::where('enccode', $pat_enccode)->get('tscode')->first();
         }
-        // dd($pat_tscode);
         $medicalSupplies = array();
 
         // dd($pat_enccode);
@@ -236,7 +242,7 @@ class PatientChargeController extends Controller
         if ($request->isUpdate == false) {
             // get patient account number
             $r = PatientAccount::where('enccode', $enccode)->first(['paacctno']);
-            $acctno = $r != null ? $r : '';
+            $acctno = $r != null ? $r->paacctno : '';
             // $acctno = '';
 
             foreach ($itemsToBillList as $item) {
