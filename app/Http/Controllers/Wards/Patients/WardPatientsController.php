@@ -58,10 +58,10 @@ class WardPatientsController extends Controller
                 LEFT JOIN hdisposition ON hdisposition.dispcode = hopdlog.opddisp
                 LEFT JOIN hprovider ON hprovider.licno = hopdlog.licno
                 LEFT JOIN hpersonal ON hpersonal.employeeid = hprovider.employeeid
-                LEFT JOIN hemr_nurse_notes ON hemr_nurse_notes.enccode = hopdlog.enccode
 
                 WHERE hopdlog.tscode = ? /* tscode here */
-                AND hopdlog.opddate BETWEEN CAST(GETDATE() AS DATE) AND DATEADD(DAY, 1, CAST(GETDATE() AS DATE))
+                -- AND hopdlog.opddate BETWEEN CAST(GETDATE() AS DATE) AND DATEADD(DAY, 1, CAST(GETDATE() AS DATE)) -- prod
+                AND hopdlog.opddate BETWEEN CAST('2022-11-30' AS DATE) AND DATEADD(DAY, 1, CAST('2022-12-01' AS DATE)) -- test
                 AND hopdlog.opdstat = 'A'
                 AND hopdlog.licno IS NOT NULL
                 ORDER BY hopdlog.opddate desc",
@@ -71,36 +71,64 @@ class WardPatientsController extends Controller
             return Inertia::render('Wards/Patients/OPD/Index', [
                 'patients' => $patients
             ]);
+        } else if ($locationType[0]->enctype == 'ER') {
+            $patients = DB::SELECT(
+                "SELECT herlog.enccode, herlog.hpercode, herlog.erdate, herlog.licno,
+                    hpersonal.lastname, hpersonal.firstname, hpersonal.empsuffix,
+                    hperson.patlast, hperson.patfirst, hperson.patmiddle,
+                    htypser.tsdesc, herlog.erdtedis, herlog.erstat
+
+                    FROM herlog
+                    WITH (NOLOCK)
+
+                    INNER JOIN hperson ON hperson.hpercode = herlog.hpercode
+                    INNER JOIN htypser ON htypser.tscode = herlog.tscode
+                    LEFT JOIN hdisposition ON hdisposition.dispcode = herlog.dispcode
+                    LEFT JOIN hprovider ON hprovider.licno = herlog.licno
+                    LEFT JOIN hpersonal ON hpersonal.employeeid = hprovider.employeeid
+
+                    WHERE
+                    --herlog.tscode = 'FAMED' AND
+                        --herlog.erdate BETWEEN CAST(GETDATE() AS DATE) AND DATEADD(DAY, 1, CAST(GETDATE() AS DATE)) -- prod
+                        herlog.erdate BETWEEN CAST('2022-01-01' AS DATE) AND DATEADD(DAY, 1, CAST('2022-12-01' AS DATE)) -- test
+                    AND herlog.erstat = 'A'
+                    AND herlog.licno IS NOT NULL
+                    ORDER BY herlog.erdate desc;"
+            );
+
+            return Inertia::render('Wards/Patients/OPD/Index', [
+                'patients' => $patients
+            ]);
         } else {
             $patients = DB::select(
                 "SELECT enctr.enccode, adm.admdate, enctr.hpercode, pt.patfirst, pt.patmiddle, pt.patlast, pt.patsuffix,
-                (SELECT TOP 1 vsweight FROM hvsothr WHERE othrstat = 'A' AND enccode = adm.enccode ORDER BY othrdte DESC) as kg,
-                (SELECT TOP 1 vsheight FROM hvsothr WHERE othrstat = 'A' AND enccode = adm.enccode ORDER BY othrdte DESC) as cm,
-                room.rmname, bed.bdname, ward.wardname,
-                adm.licno,
-                (SELECT lastname + ', ' + firstname + ' ' + middlename FROM hpersonal WHERE physician_license_licnof.employeeid = hpersonal.employeeid) as physician_licnof,
-                (SELECT lastname + ', ' + firstname + ' ' + middlename FROM hpersonal WHERE physician_license_licno2.employeeid = hpersonal.employeeid) as physician_licno2,
-                (SELECT lastname + ', ' + firstname + ' ' + middlename FROM hpersonal WHERE physician_license_licno3.employeeid = hpersonal.employeeid) as physician_licno3,
-                (SELECT lastname + ', ' + firstname + ' ' + middlename FROM hpersonal WHERE physician_license_licno4.employeeid = hpersonal.employeeid) as physician_licno4,
-                ha.billstat as bill_stat,
-                (SELECT TOP 1 orcode FROM hdocord WHERE enccode = enctr.enccode ORDER BY dodate DESC) is_for_discharge
-            FROM hospital.dbo.henctr enctr
-                RIGHT JOIN hospital.dbo.hadmlog adm ON enctr.enccode = adm.enccode
-                RIGHT JOIN hospital.dbo.hpatroom pat_room ON enctr.enccode = pat_room.enccode
-                RIGHT JOIN hospital.dbo.hroom room ON pat_room.rmintkey = room.rmintkey
-                RIGHT JOIN hospital.dbo.hbed bed ON bed.bdintkey = pat_room.bdintkey
-                RIGHT JOIN hospital.dbo.hward ward ON pat_room.wardcode = ward.wardcode
-                RIGHT JOIN hospital.dbo.hperson pt ON enctr.hpercode = pt.hpercode
-                LEFT JOIN hospital.dbo.hprovider physician_license_licnof ON adm.licnof = physician_license_licnof.licno
-                LEFT JOIN hospital.dbo.hprovider physician_license_licno2 ON adm.licno2 = physician_license_licno2.licno
-                LEFT JOIN hospital.dbo.hprovider physician_license_licno3 ON adm.licno3 = physician_license_licno3.licno
-                LEFT JOIN hospital.dbo.hprovider physician_license_licno4 ON adm.licno4 = physician_license_licno4.licno
-                LEFT JOIN hospital.dbo.hactrack ha ON adm.enccode = ha.enccode
-            WHERE (enctr.toecode = 'ADM' OR enctr.toecode = 'OPDAD' OR enctr.toecode = 'ERADM')
-            AND pat_room.wardcode = ?
-            AND pat_room.patrmstat = 'A'
-            AND adm.admstat = 'A'
-            ORDER BY pt.patlast ASC;",
+                        (SELECT TOP 1 vsweight FROM hvsothr WHERE othrstat = 'A' AND enccode = adm.enccode ORDER BY othrdte DESC) as kg,
+                        (SELECT TOP 1 vsheight FROM hvsothr WHERE othrstat = 'A' AND enccode = adm.enccode ORDER BY othrdte DESC) as cm,
+                        room.rmname, bed.bdname, ward.wardname,
+                        adm.licno,
+                        (SELECT lastname + ', ' + firstname + ' ' + middlename FROM hpersonal WHERE physician_license_licnof.employeeid = hpersonal.employeeid) as physician_licnof,
+                        (SELECT lastname + ', ' + firstname + ' ' + middlename FROM hpersonal WHERE physician_license_licno2.employeeid = hpersonal.employeeid) as physician_licno2,
+                        (SELECT lastname + ', ' + firstname + ' ' + middlename FROM hpersonal WHERE physician_license_licno3.employeeid = hpersonal.employeeid) as physician_licno3,
+                        (SELECT lastname + ', ' + firstname + ' ' + middlename FROM hpersonal WHERE physician_license_licno4.employeeid = hpersonal.employeeid) as physician_licno4,
+                        ha.billstat as bill_stat,
+                        (SELECT TOP 1 orcode FROM hdocord WHERE enccode = enctr.enccode ORDER BY dodate DESC) is_for_discharge
+                    FROM hospital.dbo.henctr enctr
+                        RIGHT JOIN hospital.dbo.hadmlog adm ON enctr.enccode = adm.enccode
+                        RIGHT JOIN hospital.dbo.hpatroom pat_room ON enctr.enccode = pat_room.enccode
+                        RIGHT JOIN hospital.dbo.hroom room ON pat_room.rmintkey = room.rmintkey
+                        RIGHT JOIN hospital.dbo.hbed bed ON bed.bdintkey = pat_room.bdintkey
+                        RIGHT JOIN hospital.dbo.hward ward ON pat_room.wardcode = ward.wardcode
+                        RIGHT JOIN hospital.dbo.hperson pt ON enctr.hpercode = pt.hpercode
+                        LEFT JOIN hospital.dbo.hprovider physician_license_licnof ON adm.licnof = physician_license_licnof.licno
+                        LEFT JOIN hospital.dbo.hprovider physician_license_licno2 ON adm.licno2 = physician_license_licno2.licno
+                        LEFT JOIN hospital.dbo.hprovider physician_license_licno3 ON adm.licno3 = physician_license_licno3.licno
+                        LEFT JOIN hospital.dbo.hprovider physician_license_licno4 ON adm.licno4 = physician_license_licno4.licno
+                        LEFT JOIN hospital.dbo.hactrack ha ON adm.enccode = ha.enccode
+                    WHERE (enctr.toecode = 'ADM' OR enctr.toecode = 'OPDAD' OR enctr.toecode = 'ERADM')
+                    AND pat_room.wardcode = ?
+                    AND pat_room.patrmstat = 'A'
+                    AND adm.admstat = 'A'
+                    ORDER BY pt.patlast ASC;",
                 // [$authWardcode->wardcode]
                 [$authWardcode[0]->wardcode]
             );
