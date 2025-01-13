@@ -60,8 +60,8 @@ class WardPatientsController extends Controller
                 LEFT JOIN hpersonal ON hpersonal.employeeid = hprovider.employeeid
 
                 WHERE hopdlog.tscode = ? /* tscode here */
-                -- AND hopdlog.opddate BETWEEN CAST(GETDATE() AS DATE) AND DATEADD(DAY, 1, CAST(GETDATE() AS DATE)) -- prod
-                AND hopdlog.opddate BETWEEN CAST('2022-11-30' AS DATE) AND DATEADD(DAY, 1, CAST('2022-12-01' AS DATE)) -- test
+                AND hopdlog.opddate BETWEEN CAST(GETDATE() AS DATE) AND DATEADD(DAY, 1, CAST(GETDATE() AS DATE)) -- prod
+                -- AND hopdlog.opddate BETWEEN CAST('2022-11-30' AS DATE) AND DATEADD(DAY, 1, CAST('2022-12-01' AS DATE)) -- test
                 AND hopdlog.opdstat = 'A'
                 AND hopdlog.licno IS NOT NULL
                 ORDER BY hopdlog.opddate desc",
@@ -89,8 +89,8 @@ class WardPatientsController extends Controller
 
                     WHERE
                     --herlog.tscode = 'FAMED' AND
-                        --herlog.erdate BETWEEN CAST(GETDATE() AS DATE) AND DATEADD(DAY, 1, CAST(GETDATE() AS DATE)) -- prod
-                        herlog.erdate BETWEEN CAST('2022-01-01' AS DATE) AND DATEADD(DAY, 1, CAST('2022-12-01' AS DATE)) -- test
+                        herlog.erdate BETWEEN CAST(GETDATE() AS DATE) AND DATEADD(DAY, 1, CAST(GETDATE() AS DATE)) -- prod
+                        -- herlog.erdate BETWEEN CAST('2022-01-01' AS DATE) AND DATEADD(DAY, 1, CAST('2022-12-01' AS DATE)) -- test
                     AND herlog.erstat = 'A'
                     AND herlog.licno IS NOT NULL
                     ORDER BY herlog.erdate desc;"
