@@ -784,8 +784,10 @@ export default {
   },
   props: {
     pat_name: Array,
-    pat_tscode: Object,
-    // pat_tscode: String,
+    // OLD
+    // pat_tscode: Object,
+    // NEW
+    pat_tscode: String,
     pat_enccode: String,
     // patient: String,
     room_bed: String,

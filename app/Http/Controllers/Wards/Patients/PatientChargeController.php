@@ -37,20 +37,22 @@ class PatientChargeController extends Controller
         $is_for_discharge = $request->disch;
         $room_bed = $request->room_bed;
 
+        // OLD
         // $pat_tscode = '';
         // $admlog_tscode = AdmissionLog::where('enccode', $pat_enccode)->get('tscode')->first();
-        // $opdlog_tscode = Opdlog::where('enccode', $pat_enccode)->get('tscode')->first();
-        // $erlog_tscode = ERlog::where('enccode', $pat_enccode)->get('tscode')->first();
-        // // enccode is 1 is to 1
-        // $pat_tscode = $admlog_tscode->tscode ?? $opdlog_tscode->tscode ?? $erlog_tscode->tscode ?? null;
+        // if ($admlog_tscode != null) {
+        //     $pat_tscode = $admlog_tscode;
+        // } else {
+        //     $pat_tscode = Opdlog::where('enccode', $pat_enccode)->get('tscode')->first();
+        // }
 
+        // NEW
         $pat_tscode = '';
         $admlog_tscode = AdmissionLog::where('enccode', $pat_enccode)->get('tscode')->first();
-        if ($admlog_tscode != null) {
-            $pat_tscode = $admlog_tscode;
-        } else {
-            $pat_tscode = Opdlog::where('enccode', $pat_enccode)->get('tscode')->first();
-        }
+        $opdlog_tscode = Opdlog::where('enccode', $pat_enccode)->get('tscode')->first();
+        $erlog_tscode = ERlog::where('enccode', $pat_enccode)->get('tscode')->first();
+        // enccode is 1 is to 1
+        $pat_tscode = $admlog_tscode->tscode ?? $opdlog_tscode->tscode ?? $erlog_tscode->tscode ?? null;
         $medicalSupplies = array();
 
         // dd($pat_enccode);
