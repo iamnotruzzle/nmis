@@ -47,6 +47,18 @@
         <template #empty> No patients found. </template>
         <template #loading> Loading patients data. Please wait. </template>
         <Column
+          field="department"
+          header="DEPARTMENT"
+          style="width: 5%"
+          sortable
+        >
+          <template #body="{ data }">
+            <div class="flex flex-row align-items-center">
+              {{ data.department }}
+            </div>
+          </template>
+        </Column>
+        <Column
           field="hpercode"
           header="HOSP. #"
           style="width: 5%"
@@ -63,7 +75,7 @@
           field="patient"
           header="PATIENT"
           sortable
-          style="width: 20%"
+          style="width: 15%"
           :showFilterMenu="false"
           :filterMenuStyle="{ width: '14rem' }"
         >
@@ -96,10 +108,20 @@
           field="physician"
           header="PHYSICIAN"
           sortable
-          style="width: 20%"
+          style="width: 10%"
         >
           <template #body="{ data }">
             <span>{{ data.physician }}</span>
+          </template>
+        </Column>
+        <Column
+          field="date"
+          header="DATE"
+          sortable
+          style="width: 10%"
+        >
+          <template #body="{ data }">
+            <span>{{ tzone(data.date) }}</span>
           </template>
         </Column>
       </DataTable>
@@ -161,6 +183,7 @@ export default {
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
         hpercode: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        department: { value: null, matchMode: FilterMatchMode.CONTAINS },
         patient: { value: null, matchMode: FilterMatchMode.CONTAINS },
         physician: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
@@ -180,7 +203,11 @@ export default {
   },
   methods: {
     tzone(date) {
-      return moment.tz(date, 'Asia/Manila').format('LLL');
+      if (date == null) {
+        return '';
+      } else {
+        return moment.tz(date, 'Asia/Manila').format('LLL');
+      }
     },
     setPatient(patient) {
       const suffix = patient.patsuffix == null ? '' : patient.patsuffix;
@@ -217,6 +244,7 @@ export default {
         this.patientsList.push({
           enccode: e.enccode,
           hpercode: e.hpercode,
+          department: e.tsdesc,
           patient:
             e.patlast +
             ',' +
@@ -227,9 +255,10 @@ export default {
             ' ' +
             (e.patsuffix == null ? '' : e.patsuffix),
           physician: e.lastname + ',' + ' ' + e.firstname + ' ' + (e.empsuffix == null ? '' : e.empsuffix),
+          date: e.erdtedis,
         });
       });
-      //   console.log(this.patientsList);
+      console.log(this.patientsList);
     },
     onPage(event) {
       this.params.page = event.page + 1;

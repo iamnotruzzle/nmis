@@ -96,7 +96,7 @@ class WardPatientsController extends Controller
                     ORDER BY herlog.erdate desc;"
             );
 
-            return Inertia::render('Wards/Patients/OPD/Index', [
+            return Inertia::render('Wards/Patients/ER/Index', [
                 'patients' => $patients
             ]);
         } else {
