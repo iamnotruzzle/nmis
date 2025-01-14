@@ -995,6 +995,242 @@
         </DataTable>
         <!-- test -->
       </div>
+
+      <!-- RIS docs -->
+      <div
+        id="print"
+        style="background-color: white; color: black"
+      >
+        <table style="width: 100%; border-collapse: collapse">
+          <tbody>
+            <tr>
+              <td
+                colspan="3"
+                style="border: 1px solid black"
+              >
+                <p><strong>Division: NURSING</strong></p>
+              </td>
+              <td
+                colspan="5"
+                style="border: 1px solid black"
+              >
+                <p><strong>Responsibility Center Code 13-001-14-00017-03-01-06-02</strong></p>
+              </td>
+            </tr>
+            <tr>
+              <td
+                colspan="3"
+                style="border: 1px solid black"
+              >
+                <p><strong>Office: 2FM HLK</strong></p>
+              </td>
+              <td
+                colspan="5"
+                style="border: 1px solid black"
+              >
+                <p><strong>RIS NO.:&nbsp;</strong></p>
+              </td>
+            </tr>
+            <tr>
+              <td
+                colspan="4"
+                style="border: 1px solid black; text-align: center"
+              >
+                <p><strong>Requisition</strong></p>
+              </td>
+              <td
+                colspan="2"
+                style="border: 1px solid black; text-align: center"
+              >
+                <p><strong>Stock Available?</strong></p>
+              </td>
+              <td
+                colspan="2"
+                style="border: 1px solid black; text-align: center"
+              >
+                <p><strong>Issue</strong></p>
+              </td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid black">
+                <p><strong>Stock No.</strong></p>
+              </td>
+              <td style="border: 1px solid black">
+                <p><strong>Unit</strong></p>
+              </td>
+              <td style="border: 1px solid black">
+                <p><strong>Description</strong></p>
+              </td>
+              <td style="border: 1px solid black">
+                <p><strong>Quantity</strong></p>
+              </td>
+              <td style="border: 1px solid black; text-align: center">
+                <p><strong>Yes</strong></p>
+              </td>
+              <td style="border: 1px solid black; text-align: center">
+                <p><strong>No</strong></p>
+              </td>
+              <td style="border: 1px solid black">
+                <p><strong>Quantity</strong></p>
+              </td>
+              <td style="border: 1px solid black">
+                <p><strong>Remarks</strong></p>
+              </td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid black">
+                <p>1</p>
+              </td>
+              <td style="border: 1px solid black">
+                <p>Pcs</p>
+              </td>
+              <td style="border: 1px solid black">
+                <p>Facemask</p>
+              </td>
+              <td style="border: 1px solid black">
+                <p>3</p>
+              </td>
+              <td style="border: 1px solid black">
+                <p>Y</p>
+              </td>
+              <td style="border: 1px solid black">
+                <p>&nbsp;</p>
+              </td>
+              <td style="border: 1px solid black">
+                <p>3</p>
+              </td>
+              <td style="border: 1px solid black">
+                <p>none</p>
+              </td>
+            </tr>
+            <tr>
+              <td
+                colspan="8"
+                style="border: 1px solid black; padding: 10px 0"
+              >
+                <p>
+                  Purpose: <strong><u>FOR 2FM HLK USE ONLY</u></strong>
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid black">
+                <p>&nbsp;</p>
+              </td>
+              <td
+                colspan="2"
+                style="border: 1px solid black; text-align: center"
+              >
+                <p><strong>Requested by:</strong></p>
+              </td>
+              <td style="border: 1px solid black; text-align: center">
+                <p><strong>Approved by:</strong></p>
+              </td>
+              <td style="border: 1px solid black; text-align: center">
+                <p><strong>Issued by:</strong></p>
+              </td>
+              <td
+                colspan="3"
+                style="border: 1px solid black; text-align: center"
+              >
+                <p><strong>Received by:</strong></p>
+              </td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid black">
+                <p><strong>Signature:</strong></p>
+              </td>
+              <td
+                colspan="2"
+                style="border: 1px solid black"
+              >
+                <p>&nbsp;</p>
+              </td>
+              <td style="border: 1px solid black">
+                <p>&nbsp;</p>
+              </td>
+              <td style="border: 1px solid black">
+                <p>&nbsp;</p>
+              </td>
+              <td
+                colspan="3"
+                style="border: 1px solid black"
+              >
+                <p>&nbsp;</p>
+              </td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid black">
+                <p><strong>Printer&nbsp;</strong></p>
+              </td>
+              <td
+                colspan="2"
+                style="border: 1px solid black"
+              >
+                <p>&nbsp;</p>
+              </td>
+              <td style="border: 1px solid black">
+                <p>&nbsp;</p>
+              </td>
+              <td style="border: 1px solid black">
+                <p>&nbsp;</p>
+              </td>
+              <td
+                colspan="3"
+                style="border: 1px solid black"
+              >
+                <p>&nbsp;</p>
+              </td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid black">
+                <p><strong>Designation:</strong></p>
+              </td>
+              <td
+                colspan="2"
+                style="border: 1px solid black"
+              >
+                <p>&nbsp;</p>
+              </td>
+              <td style="border: 1px solid black">
+                <p>&nbsp;</p>
+              </td>
+              <td style="border: 1px solid black">
+                <p>&nbsp;</p>
+              </td>
+              <td
+                colspan="3"
+                style="border: 1px solid black"
+              >
+                <p>&nbsp;</p>
+              </td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid black">
+                <p><strong>Date:</strong></p>
+              </td>
+              <td
+                colspan="2"
+                style="border: 1px solid black"
+              >
+                <p>&nbsp;</p>
+              </td>
+              <td style="border: 1px solid black">
+                <p>&nbsp;</p>
+              </td>
+              <td style="border: 1px solid black">
+                <p>&nbsp;</p>
+              </td>
+              <td
+                colspan="3"
+                style="border: 1px solid black"
+              >
+                <p>&nbsp;</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </app-layout>
 </template>
