@@ -1524,11 +1524,12 @@ export default {
         this.printForm.items = [];
 
         data.request_stocks_details.forEach((e) => {
+          console.log(e.approved_qty);
           this.printForm.items.push({
             stock_no: e.issued_item.length === 0 ? '' : e.issued_item[0].id,
             description: e.item_details.cl2desc,
             req_qty: e.requested_qty,
-            stock_avail: e.approved_qty !== 0 ? 'y' : 'n',
+            stock_avail: e.approved_qty != 0 ? 'y' : 'n',
             issue_qty: e.approved_qty,
             remarks: e.remarks,
           });
