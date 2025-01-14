@@ -1047,7 +1047,9 @@
                 colspan="3"
                 style="border: 1px solid black"
               >
-                <p><strong>Office: 2FM HLK</strong></p>
+                <p>
+                  <strong>Office: {{ printForm.office }}</strong>
+                </p>
               </td>
               <td
                 colspan="5"
@@ -1520,13 +1522,14 @@ export default {
 
     print(data) {
       if (data) {
+        console.log(data);
         // Set up the print form details
-        this.printForm.office = '';
+        this.printForm.office = data.requested_at;
         this.printForm.ris_no = `RIS-${data.id}`;
         this.printForm.items = [];
 
         data.request_stocks_details.forEach((e) => {
-          console.log(e.approved_qty);
+          //   console.log(e);
           this.printForm.items.push({
             stock_no: e.issued_item.length === 0 ? '' : e.issued_item[0].id,
             description: e.item_details.cl2desc,
@@ -1645,11 +1648,13 @@ export default {
       this.requestStockList = []; // reset
 
       this.requestedStocks.data.forEach((e) => {
+        // console.log(e);
         this.requestStockList.push({
           id: e.id,
           status: e.status,
           requested_by: e.requested_by_details.firstname + ' ' + e.requested_by_details.lastname,
           //   requested_by_image: e.requested_by_details.user_account.image,
+          requested_at: e.requested_at_details.wardname,
           approved_by:
             e.approved_by_details != null
               ? e.approved_by_details.firstname + ' ' + e.approved_by_details.lastname
