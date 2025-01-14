@@ -191,6 +191,12 @@
             <template #body="slotProps">
               <div class="flex justify-content-around align-content-center">
                 <v-icon
+                  name="pr-pencil"
+                  class="text-yellow-500 text-xl"
+                  @click="print(slotProps.data)"
+                ></v-icon>
+
+                <v-icon
                   v-if="slotProps.data.status == 'PENDING'"
                   name="pr-pencil"
                   class="text-yellow-500 text-xl"
@@ -999,17 +1005,17 @@
       <!-- RIS docs -->
       <div
         id="print"
-        style="background-color: white; color: black"
+        style="font-family: sans-serif; background-color: white; color: black; white; display: none;"
       >
         <div>
           <div>
-            <h3 class="font-bold text-center">REQUISITION AND ISSUE SLIP</h3>
+            <h3 style="font-weight: bold; text-align: center">REQUISITION AND ISSUE SLIP</h3>
           </div>
-          <div class="flex w-full border-1 border-primary-500 text-xl">
-            <div class="w-6"><span>Entity Name:</span></div>
-            <div class="w-6"><span>Fund Cluster:</span></div>
+          <div style="display: flex; width: 100%; font-size: 1.25rem">
+            <div style="width: 50%"><span>Entity Name:</span></div>
+            <div style="width: 50%"><span>Fund Cluster:</span></div>
           </div>
-          <div class="mt-4">
+          <div style="margin-top: 1rem">
             <h4>MARIANO MARCOS MEMORIAL HOSPITAL AND MEDICAL CENTER</h4>
           </div>
         </div>
@@ -1431,6 +1437,72 @@ export default {
     },
   },
   methods: {
+    print(data) {
+      setTimeout(() => {
+        if (data != null) {
+          //   this.printForm.no = data.charge_slip_no;
+          //   this.printForm.type = 'Ward';
+          //   this.printForm.hospital_number = this.pat_name[0].hpercode;
+          //   this.printForm.date = this.chargeSlipDate(data.charge_date);
+          //   this.printForm.patient_name =
+          //     this.pat_name[0].patlast + ', ' + this.pat_name[0].patfirst + this.pat_name[0].patmiddle;
+          //   this.printForm.location = this.$page.props.auth.user.location.location_name.wardname + ' ' + this.room_bed;
+          //   this.printForm.chargedItems = [];
+          //   this.printForm.entry_by = data.entry_by;
+          //   this.printForm.total = 0;
+
+          //   this.billList.forEach((e) => {
+          //     if (e.charge_slip_no == this.printForm.no) {
+          //       const formattedPrice = e.price.toLocaleString('en-US', {
+          //         minimumFractionDigits: 2,
+          //         maximumFractionDigits: 2,
+          //       });
+          //       const formattedAmount = e.amount.toLocaleString('en-US', {
+          //         minimumFractionDigits: 2,
+          //         maximumFractionDigits: 2,
+          //       });
+
+          //       this.printForm.chargedItems.push({
+          //         item: e.item,
+          //         qty: e.quantity,
+          //         price: formattedPrice,
+          //         amount: formattedAmount,
+          //       });
+
+          //       this.printForm.total += e.amount;
+          //     }
+          //   });
+
+          //   // Fix floating-point precision by formatting the total to 2 decimal places
+          //   this.printForm.total = this.printForm.total.toFixed(2);
+
+          this.$nextTick(() => {
+            const printWindow = window.open('', '_blank');
+            if (printWindow) {
+              printWindow.document.write(`
+            <html>
+              <head>
+                <title>Print</title>
+                <style>
+                  /* Add your print styles here */
+                </style>
+              </head>
+              <body>
+                ${document.getElementById('print').innerHTML}
+              </body>
+            </html>
+          `);
+              printWindow.document.close();
+              printWindow.focus();
+              printWindow.print();
+              printWindow.close();
+            } else {
+              console.error('Failed to open print window.');
+            }
+          });
+        }
+      }, 200); // Slightly longer delay to ensure rendering
+    },
     restrictNonNumericAndPeriod(event) {
       if (
         [46, 8, 9, 27, 13].includes(event.keyCode) ||
