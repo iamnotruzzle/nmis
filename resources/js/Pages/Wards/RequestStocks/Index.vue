@@ -1202,16 +1202,16 @@
           </tr>
           <tr>
             <td style="border: 1px solid black">
-              <p><strong>Printer&nbsp;</strong></p>
+              <p><strong>Printed name:&nbsp;</strong></p>
             </td>
             <td
               colspan="2"
               style="border: 1px solid black"
             >
-              <p>&nbsp;</p>
+              <p>{{ printForm.requested_by }}</p>
             </td>
             <td style="border: 1px solid black">
-              <p>&nbsp;</p>
+              <p>{{ printForm.approved_by }}</p>
             </td>
             <td style="border: 1px solid black">
               <p>&nbsp;</p>
@@ -1420,13 +1420,16 @@ export default {
         office: null, // charge_slip_no
         ris_no: null,
 
-        stock_no: null,
-        unit: null,
-        description: null,
-        req_qty: null,
-        stock_avail: null,
-        issue_qty: null,
-        remarks: null,
+        requested_by: null,
+        approved_by: null,
+
+        // stock_no: null,
+        // unit: null,
+        // description: null,
+        // req_qty: null,
+        // stock_avail: null,
+        // issue_qty: null,
+        // remarks: null,
 
         items: [],
       }),
@@ -1527,6 +1530,8 @@ export default {
         this.printForm.office = data.requested_at;
         this.printForm.ris_no = `RIS-${data.id}`;
         this.printForm.items = [];
+        this.printForm.requested_by = data.requested_by;
+        this.printForm.approved_by = data.approved_by;
 
         data.request_stocks_details.forEach((e) => {
           //   console.log(e);
