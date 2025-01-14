@@ -1105,7 +1105,7 @@
             </tr>
             <tr v-for="(item, index) in this.printForm.items">
               <td style="border: 1px solid black; text-align: center">
-                <p>1</p>
+                <p>{{ item.stock_no }}</p>
               </td>
               <td style="border: 1px solid black; text-align: center">
                 <p>Pcs</p>
@@ -1464,85 +1464,113 @@ export default {
     },
   },
   methods: {
+    // // working print function
+    // print(data) {
+    //   setTimeout(() => {
+    //     if (data != null) {
+    //       //   console.log('data', data);
+    //       this.printForm.office = '';
+    //       this.printForm.ris_no = 'RIS' + '-' + data.id;
+
+    //       this.printForm.items = [];
+
+    //       data.request_stocks_details.forEach((e) => {
+    //         console.log(e.issued_item);
+    //         this.printForm.items.push({
+    //           stock_no: e.issued_item.length === 0 ? '' : e.issued_item[0].id,
+    //           //   unit: e.id,
+    //           description: e.item_details.cl2desc,
+    //           req_qty: e.requested_qty,
+    //           stock_avail: e.approved_qty != 0 ? 'y' : 'n',
+    //           issue_qty: e.approved_qty,
+    //           remarks: e.remarks,
+    //         });
+    //       });
+
+    //         this.$nextTick(() => {
+    //           const printWindow = window.open('', '_blank');
+    //           if (printWindow) {
+    //             printWindow.document.write(`
+    //                   <html>
+    //                   <head>
+    //                       <title>Print</title>
+    //                       <style>
+    //                       /* Add your print styles here */
+    //                       </style>
+    //                   </head>
+    //                   <body>
+    //                       ${document.getElementById('print').innerHTML}
+    //                   </body>
+    //                   </html>
+    //               `);
+    //             printWindow.document.close();
+    //             printWindow.focus();
+    //             printWindow.print();
+    //             printWindow.close();
+    //           } else {
+    //             console.error('Failed to open print window.');
+    //           }
+    //         });
+
+    //   }, 200); // Slightly longer delay to ensure rendering
+    // },
+
     print(data) {
-      setTimeout(() => {
-        if (data != null) {
-          console.log('data', data);
-          this.printForm.office = '';
-          this.printForm.ris_no = 'RIS' + '-' + data.id;
+      if (data) {
+        // Set up the print form details
+        this.printForm.office = '';
+        this.printForm.ris_no = `RIS-${data.id}`;
+        this.printForm.items = [];
 
-          this.printForm.items = [];
-
-          data.request_stocks_details.forEach((e) => {
-            console.log(e);
-            this.printForm.items.push({
-              stock_no: e.id,
-              //   unit: e.id,
-              description: e.item_details.cl2desc,
-              req_qty: e.requested_qty,
-              stock_avail: e.approved_qty != null ? 'y' : 'n',
-              issue_qty: e.approved_qty,
-              remarks: e.remarks,
-            });
+        data.request_stocks_details.forEach((e) => {
+          this.printForm.items.push({
+            stock_no: e.issued_item.length === 0 ? '' : e.issued_item[0].id,
+            description: e.item_details.cl2desc,
+            req_qty: e.requested_qty,
+            stock_avail: e.approved_qty !== 0 ? 'y' : 'n',
+            issue_qty: e.approved_qty,
+            remarks: e.remarks,
           });
+        });
 
-          //   this.printForm.hospital_number = this.pat_name[0].hpercode;
-          //   this.printForm.date = this.chargeSlipDate(data.charge_date);
-          //   this.printForm.patient_name =
-          //     this.pat_name[0].patlast + ', ' + this.pat_name[0].patfirst + this.pat_name[0].patmiddle;
-          //   this.printForm.location = this.$page.props.auth.user.location.location_name.wardname + ' ' + this.room_bed;
-          //   this.printForm.chargedItems = [];
-          //   this.printForm.entry_by = data.entry_by;
-          //   this.printForm.total = 0;
+        this.$nextTick(() => {
+          // Create a hidden iframe for printing
+          const iframe = document.createElement('iframe');
+          iframe.style.position = 'absolute';
+          iframe.style.top = '-9999px';
+          iframe.style.left = '-9999px';
+          iframe.style.width = '0';
+          iframe.style.height = '0';
+          document.body.appendChild(iframe);
 
-          //   this.billList.forEach((e) => {
-          //     if (e.charge_slip_no == this.printForm.no) {
-          //       const formattedPrice = e.price.toLocaleString('en-US', {
-          //         minimumFractionDigits: 2,
-          //         maximumFractionDigits: 2,
-          //       });
-          //       const formattedAmount = e.amount.toLocaleString('en-US', {
-          //         minimumFractionDigits: 2,
-          //         maximumFractionDigits: 2,
-          //       });
+          // Write print content into the iframe
+          const iframeDoc = iframe.contentWindow.document;
+          iframeDoc.open();
+          iframeDoc.write(`
+        <html>
+          <head>
+            <title>Print</title>
+            <style>
+              /* Add your print styles here */
+            </style>
+          </head>
+          <body>
+            ${document.getElementById('print').innerHTML}
+          </body>
+        </html>
+      `);
+          iframeDoc.close();
 
-          //       this.printForm.chargedItems.push({
-          //         item: e.item,
-          //         qty: e.quantity,
-          //         price: formattedPrice,
-          //         amount: formattedAmount,
-          //       });
+          // Trigger the print dialog
+          iframe.contentWindow.focus();
+          iframe.contentWindow.print();
 
-          //       this.printForm.total += e.amount;
-          //     }
-          //   });
-
-          this.$nextTick(() => {
-            const printWindow = window.open('', '_blank');
-            if (printWindow) {
-              printWindow.document.write(`
-            <html>
-              <head>
-                <title>Print</title>
-                <style>
-                  /* Add your print styles here */
-                </style>
-              </head>
-              <body>
-                ${document.getElementById('print').innerHTML}
-              </body>
-            </html>
-          `);
-              printWindow.document.close();
-              printWindow.focus();
-              printWindow.print();
-              printWindow.close();
-            } else {
-              console.error('Failed to open print window.');
-            }
-          });
-        }
-      }, 200); // Slightly longer delay to ensure rendering
+          // Remove the iframe after a delay to ensure proper cleanup
+          setTimeout(() => {
+            document.body.removeChild(iframe);
+          }, 100);
+        });
+      }
     },
     restrictNonNumericAndPeriod(event) {
       if (
