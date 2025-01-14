@@ -1115,7 +1115,7 @@
                 <p>3</p>
               </td>
               <td style="border: 1px solid black; text-align: center">
-                <p>Y</p>
+                <v-icon name="bi-check2"></v-icon>
               </td>
               <td style="border: 1px solid black; text-align: center">
                 <p>&nbsp;</p>
