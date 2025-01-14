@@ -1090,10 +1090,10 @@
               <td style="border: 1px solid black">
                 <p>3</p>
               </td>
-              <td style="border: 1px solid black">
+              <td style="border: 1px solid black; text-align: center">
                 <p>Y</p>
               </td>
-              <td style="border: 1px solid black">
+              <td style="border: 1px solid black; text-align: center">
                 <p>&nbsp;</p>
               </td>
               <td style="border: 1px solid black">
@@ -1113,122 +1113,125 @@
                 </p>
               </td>
             </tr>
-            <tr>
-              <td style="border: 1px solid black">
-                <p>&nbsp;</p>
-              </td>
-              <td
-                colspan="2"
-                style="border: 1px solid black; text-align: center"
-              >
-                <p><strong>Requested by:</strong></p>
-              </td>
-              <td style="border: 1px solid black; text-align: center">
-                <p><strong>Approved by:</strong></p>
-              </td>
-              <td style="border: 1px solid black; text-align: center">
-                <p><strong>Issued by:</strong></p>
-              </td>
-              <td
-                colspan="3"
-                style="border: 1px solid black; text-align: center"
-              >
-                <p><strong>Received by:</strong></p>
-              </td>
-            </tr>
-            <tr>
-              <td style="border: 1px solid black">
-                <p><strong>Signature:</strong></p>
-              </td>
-              <td
-                colspan="2"
-                style="border: 1px solid black"
-              >
-                <p>&nbsp;</p>
-              </td>
-              <td style="border: 1px solid black">
-                <p>&nbsp;</p>
-              </td>
-              <td style="border: 1px solid black">
-                <p>&nbsp;</p>
-              </td>
-              <td
-                colspan="3"
-                style="border: 1px solid black"
-              >
-                <p>&nbsp;</p>
-              </td>
-            </tr>
-            <tr>
-              <td style="border: 1px solid black">
-                <p><strong>Printer&nbsp;</strong></p>
-              </td>
-              <td
-                colspan="2"
-                style="border: 1px solid black"
-              >
-                <p>&nbsp;</p>
-              </td>
-              <td style="border: 1px solid black">
-                <p>&nbsp;</p>
-              </td>
-              <td style="border: 1px solid black">
-                <p>&nbsp;</p>
-              </td>
-              <td
-                colspan="3"
-                style="border: 1px solid black"
-              >
-                <p>&nbsp;</p>
-              </td>
-            </tr>
-            <tr>
-              <td style="border: 1px solid black">
-                <p><strong>Designation:</strong></p>
-              </td>
-              <td
-                colspan="2"
-                style="border: 1px solid black"
-              >
-                <p>&nbsp;</p>
-              </td>
-              <td style="border: 1px solid black">
-                <p>&nbsp;</p>
-              </td>
-              <td style="border: 1px solid black">
-                <p>&nbsp;</p>
-              </td>
-              <td
-                colspan="3"
-                style="border: 1px solid black"
-              >
-                <p>&nbsp;</p>
-              </td>
-            </tr>
-            <tr>
-              <td style="border: 1px solid black">
-                <p><strong>Date:</strong></p>
-              </td>
-              <td
-                colspan="2"
-                style="border: 1px solid black"
-              >
-                <p>&nbsp;</p>
-              </td>
-              <td style="border: 1px solid black">
-                <p>&nbsp;</p>
-              </td>
-              <td style="border: 1px solid black">
-                <p>&nbsp;</p>
-              </td>
-              <td
-                colspan="3"
-                style="border: 1px solid black"
-              >
-                <p>&nbsp;</p>
-              </td>
-            </tr>
           </tbody>
+        </table>
+
+        <table style="border-collapse: collapse; width: 100%">
+          <tr>
+            <td style="border: 1px solid black">
+              <p>&nbsp;</p>
+            </td>
+            <td
+              colspan="2"
+              style="border: 1px solid black; text-align: center"
+            >
+              <p><strong>Requested by:</strong></p>
+            </td>
+            <td style="border: 1px solid black; text-align: center">
+              <p><strong>Approved by:</strong></p>
+            </td>
+            <td style="border: 1px solid black; text-align: center">
+              <p><strong>Issued by:</strong></p>
+            </td>
+            <td
+              colspan="3"
+              style="border: 1px solid black; text-align: center"
+            >
+              <p><strong>Received by:</strong></p>
+            </td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid black">
+              <p><strong>Signature:</strong></p>
+            </td>
+            <td
+              colspan="2"
+              style="border: 1px solid black"
+            >
+              <p>&nbsp;</p>
+            </td>
+            <td style="border: 1px solid black">
+              <p>&nbsp;</p>
+            </td>
+            <td style="border: 1px solid black">
+              <p>&nbsp;</p>
+            </td>
+            <td
+              colspan="3"
+              style="border: 1px solid black"
+            >
+              <p>&nbsp;</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid black">
+              <p><strong>Printer&nbsp;</strong></p>
+            </td>
+            <td
+              colspan="2"
+              style="border: 1px solid black"
+            >
+              <p>&nbsp;</p>
+            </td>
+            <td style="border: 1px solid black">
+              <p>&nbsp;</p>
+            </td>
+            <td style="border: 1px solid black">
+              <p>&nbsp;</p>
+            </td>
+            <td
+              colspan="3"
+              style="border: 1px solid black"
+            >
+              <p>&nbsp;</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid black">
+              <p><strong>Designation:</strong></p>
+            </td>
+            <td
+              colspan="2"
+              style="border: 1px solid black"
+            >
+              <p>&nbsp;</p>
+            </td>
+            <td style="border: 1px solid black">
+              <p>&nbsp;</p>
+            </td>
+            <td style="border: 1px solid black">
+              <p>&nbsp;</p>
+            </td>
+            <td
+              colspan="3"
+              style="border: 1px solid black"
+            >
+              <p>&nbsp;</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid black">
+              <p><strong>Date:</strong></p>
+            </td>
+            <td
+              colspan="2"
+              style="border: 1px solid black"
+            >
+              <p>&nbsp;</p>
+            </td>
+            <td style="border: 1px solid black">
+              <p>&nbsp;</p>
+            </td>
+            <td style="border: 1px solid black">
+              <p>&nbsp;</p>
+            </td>
+            <td
+              colspan="3"
+              style="border: 1px solid black"
+            >
+              <p>&nbsp;</p>
+            </td>
+          </tr>
         </table>
       </div>
     </div>
