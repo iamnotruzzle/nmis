@@ -1052,7 +1052,9 @@
                 colspan="5"
                 style="border: 1px solid black"
               >
-                <p><strong>RIS NO.:&nbsp;</strong></p>
+                <p>
+                  <strong>RIS NO.: {{ printForm.ris_no }}</strong>
+                </p>
               </td>
             </tr>
             <tr>
@@ -1101,7 +1103,7 @@
                 <p><strong>Remarks</strong></p>
               </td>
             </tr>
-            <tr>
+            <tr v-for="(item, index) in this.printForm.items">
               <td style="border: 1px solid black; text-align: center">
                 <p>1</p>
               </td>
@@ -1109,22 +1111,28 @@
                 <p>Pcs</p>
               </td>
               <td style="border: 1px solid black; text-align: center">
-                <p>Facemask</p>
+                <p>{{ item.description }}</p>
               </td>
               <td style="border: 1px solid black; text-align: center">
-                <p>3</p>
+                <p>{{ item.req_qty }}</p>
               </td>
               <td style="border: 1px solid black; text-align: center">
-                <v-icon name="bi-check2"></v-icon>
+                <v-icon
+                  v-if="item.stock_avail == 'y'"
+                  name="bi-check2"
+                ></v-icon>
               </td>
               <td style="border: 1px solid black; text-align: center">
-                <p>&nbsp;</p>
+                <v-icon
+                  v-if="item.stock_avail == 'n'"
+                  name="bi-check2"
+                ></v-icon>
               </td>
               <td style="border: 1px solid black; text-align: center">
-                <p>3</p>
+                <p>{{ item.issue_qty }}</p>
               </td>
               <td style="border: 1px solid black">
-                <p>none</p>
+                <p>{{ item.remarks }}</p>
               </td>
             </tr>
             <tr>
@@ -1403,6 +1411,20 @@ export default {
       }),
       previousQty: 0,
       targetItemDesc: null,
+      printForm: this.$inertia.form({
+        office: null, // charge_slip_no
+        ris_no: null,
+
+        stock_no: null,
+        unit: null,
+        description: null,
+        req_qty: null,
+        stock_avail: null,
+        issue_qty: null,
+        remarks: null,
+
+        items: [],
+      }),
     };
   },
   // created will be initialize before mounted
@@ -1445,8 +1467,25 @@ export default {
     print(data) {
       setTimeout(() => {
         if (data != null) {
-          //   this.printForm.no = data.charge_slip_no;
-          //   this.printForm.type = 'Ward';
+          console.log('data', data);
+          this.printForm.office = '';
+          this.printForm.ris_no = 'RIS' + '-' + data.id;
+
+          this.printForm.items = [];
+
+          data.request_stocks_details.forEach((e) => {
+            console.log(e);
+            this.printForm.items.push({
+              stock_no: e.id,
+              //   unit: e.id,
+              description: e.item_details.cl2desc,
+              req_qty: e.requested_qty,
+              stock_avail: e.approved_qty != null ? 'y' : 'n',
+              issue_qty: e.approved_qty,
+              remarks: e.remarks,
+            });
+          });
+
           //   this.printForm.hospital_number = this.pat_name[0].hpercode;
           //   this.printForm.date = this.chargeSlipDate(data.charge_date);
           //   this.printForm.patient_name =
@@ -1477,9 +1516,6 @@ export default {
           //       this.printForm.total += e.amount;
           //     }
           //   });
-
-          //   // Fix floating-point precision by formatting the total to 2 decimal places
-          //   this.printForm.total = this.printForm.total.toFixed(2);
 
           this.$nextTick(() => {
             const printWindow = window.open('', '_blank');
