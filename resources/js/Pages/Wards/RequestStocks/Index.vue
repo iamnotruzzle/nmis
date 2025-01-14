@@ -1001,6 +1001,19 @@
         id="print"
         style="background-color: white; color: black"
       >
+        <div>
+          <div>
+            <h3 class="font-bold text-center">REQUISITION AND ISSUE SLIP</h3>
+          </div>
+          <div class="flex w-full border-1 border-primary-500 text-xl">
+            <div class="w-6"><span>Entity Name:</span></div>
+            <div class="w-6"><span>Fund Cluster:</span></div>
+          </div>
+          <div class="mt-4">
+            <h4>MARIANO MARCOS MEMORIAL HOSPITAL AND MEDICAL CENTER</h4>
+          </div>
+        </div>
+
         <table style="width: 100%; border-collapse: collapse">
           <tbody>
             <tr>
