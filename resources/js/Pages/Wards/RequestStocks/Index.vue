@@ -188,6 +188,7 @@
             <template #body="slotProps">
               <div class="flex justify-content-around align-content-center">
                 <v-icon
+                  v-if="slotProps.data.status == 'RECEIVED'"
                   name="la-receipt-solid"
                   class="text-green-500 text-8xl"
                   @click="print(slotProps.data)"
