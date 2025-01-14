@@ -1071,16 +1071,16 @@
               </td>
             </tr>
             <tr>
-              <td style="border: 1px solid black">
+              <td style="border: 1px solid black; text-align: center">
                 <p><strong>Stock No.</strong></p>
               </td>
-              <td style="border: 1px solid black">
+              <td style="border: 1px solid black; text-align: center">
                 <p><strong>Unit</strong></p>
               </td>
-              <td style="border: 1px solid black">
+              <td style="border: 1px solid black; text-align: center">
                 <p><strong>Description</strong></p>
               </td>
-              <td style="border: 1px solid black">
+              <td style="border: 1px solid black; text-align: center">
                 <p><strong>Quantity</strong></p>
               </td>
               <td style="border: 1px solid black; text-align: center">
@@ -1089,7 +1089,7 @@
               <td style="border: 1px solid black; text-align: center">
                 <p><strong>No</strong></p>
               </td>
-              <td style="border: 1px solid black">
+              <td style="border: 1px solid black; text-align: center">
                 <p><strong>Quantity</strong></p>
               </td>
               <td style="border: 1px solid black">
@@ -1097,16 +1097,16 @@
               </td>
             </tr>
             <tr>
-              <td style="border: 1px solid black">
+              <td style="border: 1px solid black; text-align: center">
                 <p>1</p>
               </td>
-              <td style="border: 1px solid black">
+              <td style="border: 1px solid black; text-align: center">
                 <p>Pcs</p>
               </td>
-              <td style="border: 1px solid black">
+              <td style="border: 1px solid black; text-align: center">
                 <p>Facemask</p>
               </td>
-              <td style="border: 1px solid black">
+              <td style="border: 1px solid black; text-align: center">
                 <p>3</p>
               </td>
               <td style="border: 1px solid black; text-align: center">
@@ -1115,7 +1115,7 @@
               <td style="border: 1px solid black; text-align: center">
                 <p>&nbsp;</p>
               </td>
-              <td style="border: 1px solid black">
+              <td style="border: 1px solid black; text-align: center">
                 <p>3</p>
               </td>
               <td style="border: 1px solid black">
