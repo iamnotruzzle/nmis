@@ -184,18 +184,23 @@
               </div>
             </template>
           </Column>
+          <Column header="PRINT">
+            <template #body="slotProps">
+              <div class="flex justify-content-around align-content-center">
+                <v-icon
+                  name="la-receipt-solid"
+                  class="text-green-500 text-8xl"
+                  @click="print(slotProps.data)"
+                ></v-icon>
+              </div>
+            </template>
+          </Column>
           <Column
             header="ACTION"
             style="width: 5%"
           >
             <template #body="slotProps">
               <div class="flex justify-content-around align-content-center">
-                <v-icon
-                  name="pr-pencil"
-                  class="text-yellow-500 text-xl"
-                  @click="print(slotProps.data)"
-                ></v-icon>
-
                 <v-icon
                   v-if="slotProps.data.status == 'PENDING'"
                   name="pr-pencil"
@@ -1092,7 +1097,7 @@
               <td style="border: 1px solid black; text-align: center">
                 <p><strong>Quantity</strong></p>
               </td>
-              <td style="border: 1px solid black">
+              <td style="border: 1px solid black; text-align: center">
                 <p><strong>Remarks</strong></p>
               </td>
             </tr>
