@@ -1082,9 +1082,10 @@
               <td style="border: 1px solid black; text-align: center">
                 <p><strong>Stock No.</strong></p>
               </td>
-              <td style="border: 1px solid black; text-align: center">
+              <!-- uncomment -->
+              <!-- <td style="border: 1px solid black; text-align: center">
                 <p><strong>Unit</strong></p>
-              </td>
+              </td> -->
               <td style="border: 1px solid black; text-align: center">
                 <p><strong>Description</strong></p>
               </td>
@@ -1108,9 +1109,10 @@
               <td style="border: 1px solid black; text-align: center">
                 <p>{{ item.stock_no }}</p>
               </td>
-              <td style="border: 1px solid black; text-align: center">
+              <!-- uncomment -->
+              <!-- <td style="border: 1px solid black; text-align: center">
                 <p>Pcs</p>
-              </td>
+              </td> -->
               <td style="border: 1px solid black; text-align: center">
                 <p>{{ item.description }}</p>
               </td>
