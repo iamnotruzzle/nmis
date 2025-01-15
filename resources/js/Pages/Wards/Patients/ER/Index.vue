@@ -105,6 +105,29 @@
           </template>
         </Column>
         <Column
+          field="disposition"
+          header="DISPOSITION"
+          sortable
+          style="width: 10%"
+        >
+          <template #body="{ data }">
+            <Tag
+              v-if="data.disposition == 'ADMIT'"
+              value="ADMITTED"
+              severity="info"
+            />
+            <Tag
+              v-else-if="data.disposition == 'TRASH'"
+              value="TREATED AND SENT HOME"
+              severity="success"
+            />
+            <Tag
+              v-else
+              value=""
+            ></Tag>
+          </template>
+        </Column>
+        <Column
           field="physician"
           header="PHYSICIAN"
           sortable
@@ -240,6 +263,7 @@ export default {
     //   });
     // },
     storePatientsInContainer() {
+      console.log(this.patients);
       this.patients.forEach((e) => {
         this.patientsList.push({
           enccode: e.enccode,
@@ -254,11 +278,11 @@ export default {
             (e.patmiddle == null ? '' : e.patmiddle) +
             ' ' +
             (e.patsuffix == null ? '' : e.patsuffix),
+          disposition: e.dispcode,
           physician: e.lastname + ',' + ' ' + e.firstname + ' ' + (e.empsuffix == null ? '' : e.empsuffix),
           date: e.erdtedis,
         });
       });
-      console.log(this.patientsList);
     },
     onPage(event) {
       this.params.page = event.page + 1;
