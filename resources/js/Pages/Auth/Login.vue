@@ -160,10 +160,12 @@ export default {
   methods: {
     initializeLocation() {
       this.locations.forEach((e) => {
-        this.locationsList.push({
-          wardcode: e.wardcode,
-          wardname: e.wardname,
-        });
+        if (e.wardcode != 'SICU' && e.wardcode != 'SICUB' && e.wardcode != 'SICUC') {
+          this.locationsList.push({
+            wardcode: e.wardcode,
+            wardname: e.wardname,
+          });
+        }
       });
     },
     submit() {
