@@ -2194,6 +2194,7 @@ export default {
       this.editAverageOfStocksDialog = false;
       this.medicalGasesDialog = false;
       this.consignmentDialog = false;
+      this.existingDialog = false;
       this.editStatusDialog = false;
       this.targetItemDesc = null;
       this.oldQuantity = 0;

@@ -10,6 +10,7 @@ use App\Models\WardsStocksLogs;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 
 class ExistingStockController extends Controller
@@ -51,21 +52,27 @@ class ExistingStockController extends Controller
             'cl2comb' => 'required',
             'quantity' => 'required',
             'delivered_date' => 'required',
-            'price_per_unit' => 'required',
         ]);
 
-        $item = Item::where('cl2comb', $request->cl2comb)->first();
+        // $item = Item::where('cl2comb', $request->cl2comb)->first();
+
+        $currentItemPrice = DB::select(
+            "SELECT TOP 1 * FROM csrw_item_prices WHERE cl2comb = ?
+                ORDER BY created_at DESC;",
+            [$request->cl2comb]
+        );
+        // dd($currentItemPrice[0]->price_per_unit);
 
         $itemPrices = ItemPrices::create([
             'ris_no' => $tempRisNo,
             'cl2comb' => $request->cl2comb,
             'acquisition_price' => $request->price_per_unit,
             'hospital_price' =>  $request->price_per_unit,
-            'price_per_unit' =>  $request->price_per_unit,
+            'price_per_unit' =>  $currentItemPrice[0]->price_per_unit,
             'entry_by' => $entry_by,
         ]);
 
-        $consignmentItem = WardsStocks::create([
+        $existingStock = WardsStocks::create([
             'request_stocks_id' => null,
             'request_stocks_detail_id' => null,
             'ris_no' => $tempRisNo,
