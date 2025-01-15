@@ -33,6 +33,7 @@ use App\Http\Controllers\Wards\Consignment\ConsignmentController;
 use App\Http\Controllers\Wards\CsrInventory\CsrInventoryController;
 use App\Http\Controllers\Wards\MedicalGases\WardMedicalGasesController;
 use App\Http\Controllers\Wards\Dashboard\DashboardController as WardDashboardController;
+use App\Http\Controllers\Wards\ExistingStock\ExistingStockController;
 use App\Http\Controllers\Wards\Faq\FaqController;
 use App\Http\Controllers\Wards\ManualInventory\WardManualInventoryController;
 use App\Http\Controllers\Wards\Patients\PatientChargeController;
@@ -102,6 +103,7 @@ Route::middleware(['web', 'auth', 'verified'])->group(
 
         Route::resource('medicalGases', WardMedicalGasesController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('consignment', ConsignmentController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('existingstock', ExistingStockController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('wardreports', ReportController::class)->middleware(['verified', 'designation_ward'])->only(['index']);
         Route::get('wardstocks/export/', [WardStocksReportController::class, 'export']);
         // Route::resource('wardsmanualreports', WardsManualReportController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);

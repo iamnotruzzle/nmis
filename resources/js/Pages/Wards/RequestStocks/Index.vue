@@ -763,6 +763,122 @@
           </template>
         </Dialog>
 
+        <!-- Existing -->
+        <Dialog
+          v-model:visible="existingDialog"
+          :modal="true"
+          class="p-fluid w-4"
+          @hide="whenDialogIsHidden"
+        >
+          <template #header>
+            <div class="text-orange-500 text-xl font-bold">EXISTING STOCK</div>
+          </template>
+          <div class="field">
+            <label for="fundSource">Fund source</label>
+            <Dropdown
+              id="fundSource"
+              required="true"
+              v-model="formExisting.fund_source"
+              :options="fundSourceList"
+              filter
+              showClear
+              dataKey="chrgcode"
+              optionLabel="chrgdesc"
+              optionValue="chrgcode"
+              class="w-full"
+              :class="{ 'p-invalid': formExisting.fund_source == '' }"
+            />
+            <small
+              class="text-error"
+              v-if="formExisting.errors.fund_source"
+            >
+              {{ formExisting.errors.fund_source }}
+            </small>
+          </div>
+          <div class="field">
+            <label>Items</label>
+            <Dropdown
+              required="true"
+              v-model="formExisting.cl2comb"
+              :options="itemsList"
+              :virtualScrollerOptions="{ itemSize: 38 }"
+              filter
+              optionValue="cl2comb"
+              optionLabel="cl2desc"
+              class="w-full mb-3"
+            />
+          </div>
+          <div class="field">
+            <label for="unit">Unit</label>
+            <InputText
+              id="unit"
+              v-model.trim="selectedItemsUomDesc"
+              readonly
+            />
+          </div>
+          <div class="field">
+            <label>Quantity</label>
+            <InputText
+              id="quantity"
+              v-model.trim="formExisting.quantity"
+              required="true"
+              autofocus
+              :class="{ 'p-invalid': formExisting.quantity == '' || formExisting.quantity == null }"
+              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+              inputId="integeronly"
+            />
+            <small
+              class="text-error"
+              v-if="formExisting.errors.quantity"
+            >
+              {{ formExisting.errors.quantity }}
+            </small>
+          </div>
+          <div class="field">
+            <label for="delivered_date">Delivered date</label>
+            <Calendar
+              v-model="formExisting.delivered_date"
+              dateFormat="mm-dd-yy"
+              showIcon
+              showButtonBar
+              :manualInput="false"
+              :hideOnDateTimeSelect="true"
+            />
+            <small
+              class="text-error"
+              v-if="formExisting.errors.delivered_date"
+            >
+              {{ formExisting.errors.delivered_date }}
+            </small>
+          </div>
+
+          <template #footer>
+            <Button
+              label="Cancel"
+              icon="pi pi-times"
+              severity="danger"
+              text
+              @click="cancel"
+            />
+            <Button
+              label="Save"
+              icon="pi pi-check"
+              severity="warning"
+              text
+              type="submit"
+              :disabled="
+                formExisting.processing ||
+                formExisting.fund_source == null ||
+                formExisting.cl2comb == null ||
+                formExisting.quantity == null ||
+                formExisting.quantity <= 0 ||
+                formExisting.delivered_date == null
+              "
+              @click="submitExisting"
+            />
+          </template>
+        </Dialog>
+
         <!-- update stocks -->
         <Dialog
           v-model:visible="returnToCsrDialog"
@@ -881,6 +997,14 @@
                     />
                   </div>
                 </div>
+                <Button
+                  label="EXISTING STOCK"
+                  icon="pi pi-plus"
+                  iconPos="right"
+                  severity="info"
+                  @click="openExistingDialog"
+                />
+                <div class="mr-2"></div>
                 <Button
                   label="CONSIGNMENT"
                   icon="pi pi-plus"
@@ -1344,6 +1468,7 @@ export default {
       createRequestStocksDialog: false,
       medicalGasesDialog: false,
       consignmentDialog: false,
+      existingDialog: false,
       returnToCsrDialog: false,
       editAverageOfStocksDialog: false,
       editStatusDialog: false,
@@ -1405,6 +1530,14 @@ export default {
         uomcode: null,
         quantity: null,
         price_per_unit: null,
+        delivered_date: null,
+      }),
+      formExisting: this.$inertia.form({
+        authLocation: null,
+        fund_source: null,
+        cl2comb: null,
+        uomcode: null,
+        quantity: null,
         delivered_date: null,
       }),
       formReturnToCsr: this.$inertia.form({
@@ -1778,6 +1911,11 @@ export default {
       this.formMedicalGases.reset();
       this.consignmentDialog = true;
     },
+    openExistingDialog() {
+      this.formMedicalGases.clearErrors();
+      this.formMedicalGases.reset();
+      this.existingDialog = true;
+    },
     // when dialog is hidden, do this function
     whenDialogIsHidden() {
       this.$emit(
@@ -1992,6 +2130,42 @@ export default {
         });
       }
     },
+    submitExisting() {
+      if (
+        this.formExisting.processing ||
+        this.formExisting.fund_source == null ||
+        this.formExisting.cl2comb == null ||
+        this.formExisting.quantity == null ||
+        this.formExisting.delivered_date == null
+      ) {
+        return false;
+      }
+
+      this.formExisting.authLocation = this.$page.props.authWardcode.wardcode;
+      if (
+        this.formExisting.fund_source != null ||
+        this.formExisting.fund_source != '' ||
+        this.formExisting.cl2comb != null ||
+        this.formExisting.cl2comb != '' ||
+        this.formExisting.quantity != null ||
+        this.formExisting.quantity != '' ||
+        this.formExisting.quantity != 0 ||
+        this.formExisting.delivered_date != null ||
+        this.formExisting.delivered_date != ''
+      ) {
+        // console.log('success');
+        this.formExisting.post(route('existingstock.store'), {
+          preserveScroll: true,
+          onFinish: () => {
+            this.formExisting.reset();
+            this.cancel();
+            this.updateData();
+            this.createdMsg();
+            this.loading = false;
+          },
+        });
+      }
+    },
     confirmCancelItem(item) {
       //   console.log(item);
       this.requestStockId = item.id;
@@ -2030,6 +2204,8 @@ export default {
       this.formMedicalGases.clearErrors();
       this.formConsignment.reset();
       this.formConsignment.clearErrors();
+      this.formExisting.reset();
+      this.formExisting.clearErrors();
       this.formReturnToCsr.reset();
       this.formReturnToCsr.clearErrors();
     },
@@ -2153,6 +2329,24 @@ export default {
             // console.log(e.uomdesc);
             this.selectedItemsUomDesc = e.uomdesc;
             this.formConsignment.uomcode = e.uomcode;
+          } else {
+            this.selectedItemsUomDesc = null;
+          }
+        }
+      });
+
+      //   console.log(this.selectedItemsUomDesc);
+    },
+    'formExisting.cl2comb': function (val) {
+      this.selectedItemsUomDesc = null;
+      //   console.log(val);
+
+      this.itemsList.forEach((e) => {
+        if (e.cl2comb == val) {
+          if (e.uomdesc != null || e.uomdesc == '') {
+            // console.log(e.uomdesc);
+            this.selectedItemsUomDesc = e.uomdesc;
+            this.formExisting.uomcode = e.uomcode;
           } else {
             this.selectedItemsUomDesc = null;
           }

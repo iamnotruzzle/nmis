@@ -74,6 +74,7 @@ class RequestStocksController extends Controller
             ORDER BY
                 item.cl2desc ASC;"
         );
+        // dd($items);
 
         $medicalGas = DB::select(
             "SELECT
