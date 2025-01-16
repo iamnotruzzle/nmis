@@ -76,27 +76,6 @@ class WardPatientsController extends Controller
             // herlog.erdate > '$pastSevenDays' --prod: filter past 7 days including today
 
             $patients = DB::SELECT(
-                // this query does not include patients that was transferred from ER to WARD for admission.
-                // "SELECT herlog.enccode, herlog.hpercode, herlog.erdate, herlog.licno,
-                //     hpersonal.lastname, hpersonal.firstname, hpersonal.empsuffix,
-                //     hperson.patlast, hperson.patfirst, hperson.patmiddle,
-                //     htypser.tsdesc, herlog.erdtedis, herlog.erstat
-
-                //     FROM herlog
-                //     WITH (NOLOCK)
-
-                //     INNER JOIN hperson ON hperson.hpercode = herlog.hpercode
-                //     INNER JOIN htypser ON htypser.tscode = herlog.tscode
-                //     LEFT JOIN hdisposition ON hdisposition.dispcode = herlog.dispcode
-                //     LEFT JOIN hprovider ON hprovider.licno = herlog.licno
-                //     LEFT JOIN hpersonal ON hpersonal.employeeid = hprovider.employeeid
-
-                //     WHERE
-                //         -- herlog.erdate BETWEEN CAST('2022-01-01' AS DATE) AND DATEADD(DAY, 1, CAST('2022-12-01' AS DATE)) -- test
-                //         herlog.erdate BETWEEN CAST(GETDATE() AS DATE) AND DATEADD(DAY, 1, CAST(GETDATE() AS DATE)) -- prod
-                //     AND (herlog.dispcode IS NULL OR herlog.dispcode = 'TRASH')
-                //     ORDER BY herlog.erdate desc"
-
                 // this query includes all patients of ER, including patients that was transferred from ER to WARD for admission.
                 "SELECT herlog.enccode, herlog.hpercode, herlog.erdate, herlog.licno,
                     hpersonal.lastname, hpersonal.firstname, hpersonal.empsuffix,
