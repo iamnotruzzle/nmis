@@ -348,7 +348,7 @@ export default {
     Dropdown,
     Tag,
     Link,
-    IconField,
+    // IconField,
     InputNumber,
   },
   props: {

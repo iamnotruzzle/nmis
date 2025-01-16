@@ -335,7 +335,7 @@ export default {
     AutoComplete,
     Tag,
     Link,
-    IconField,
+    // IconField,
   },
   props: {
     csrSuppliesSubCategory: Object,

@@ -280,7 +280,7 @@ export default {
     AutoComplete,
     Tag,
     Link,
-    IconField,
+    // IconField,
     TextArea,
   },
   props: {

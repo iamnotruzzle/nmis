@@ -150,7 +150,7 @@ export default {
     AutoComplete,
     Tag,
     Link,
-    IconField,
+    // IconField,
   },
   props: {
     wardsInventory: Object,
