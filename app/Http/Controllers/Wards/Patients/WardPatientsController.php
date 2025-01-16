@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Sessions;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 
@@ -19,9 +18,6 @@ class WardPatientsController extends Controller
         // dd($request);
 
         $searchString = $request->search;
-
-        $pastSevenDays = Carbon::parse(now())->subDays(7)->format('Y-m-d H:i');
-        // dd($pastSevenDays);
 
         $authWardcode = DB::select(
             "SELECT TOP 1
@@ -76,6 +72,9 @@ class WardPatientsController extends Controller
                 'patients' => $patients
             ]);
         } else if ($locationType[0]->enctype == 'ER') {
+            // $pastSevenDays = Carbon::parse(now())->subDays(7)->format('Y-m-d H:i');
+            // herlog.erdate > '$pastSevenDays' --prod: filter past 7 days including today
+
             $patients = DB::SELECT(
                 // this query does not include patients that was transferred from ER to WARD for admission.
                 // "SELECT herlog.enccode, herlog.hpercode, herlog.erdate, herlog.licno,
@@ -116,7 +115,7 @@ class WardPatientsController extends Controller
 
                     WHERE
                         -- herlog.erdate BETWEEN CAST('2022-06-01' AS DATE) AND DATEADD(DAY, 1, CAST('2022-06-02' AS DATE)) -- test 1 day
-                        herlog.erdate > '$pastSevenDays' --prod: filter past 7 days including today
+                        herlog.erdate BETWEEN CAST(GETDATE() AS DATE) AND DATEADD(DAY, 1, CAST(GETDATE() AS DATE)) -- prod
                     ORDER BY herlog.erdate desc"
             );
 
