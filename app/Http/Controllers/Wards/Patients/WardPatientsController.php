@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Sessions;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 
@@ -18,6 +19,9 @@ class WardPatientsController extends Controller
         // dd($request);
 
         $searchString = $request->search;
+
+        $pastSevenDays = Carbon::parse(now())->subDays(7)->format('Y-m-d H:i');
+        // dd($pastSevenDays);
 
         $authWardcode = DB::select(
             "SELECT TOP 1
@@ -111,8 +115,8 @@ class WardPatientsController extends Controller
                     LEFT JOIN hpersonal ON hpersonal.employeeid = hprovider.employeeid
 
                     WHERE
-                        -- herlog.erdate BETWEEN CAST('2022-06-01' AS DATE) AND DATEADD(DAY, 1, CAST('2022-06-02' AS DATE)) -- test
-                        herlog.erdate BETWEEN CAST(GETDATE() AS DATE) AND DATEADD(DAY, 1, CAST(GETDATE() AS DATE)) -- prod
+                        -- herlog.erdate BETWEEN CAST('2022-06-01' AS DATE) AND DATEADD(DAY, 1, CAST('2022-06-02' AS DATE)) -- test 1 day
+                        herlog.erdate > '$pastSevenDays' --prod: filter past 7 days including today
                     ORDER BY herlog.erdate desc"
             );
 
