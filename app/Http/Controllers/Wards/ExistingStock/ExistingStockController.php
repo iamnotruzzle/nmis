@@ -42,13 +42,11 @@ class ExistingStockController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request);
         $tempRisNo = $this->generateTempRisNo();
 
         $entry_by = Auth::user()->employeeid;
 
         $request->validate([
-            'fund_source' => 'required',
             'cl2comb' => 'required',
             'quantity' => 'required',
             'delivered_date' => 'required',
@@ -81,7 +79,7 @@ class ExistingStockController extends Controller
             'location' => $request->authLocation,
             'cl2comb' => $request->cl2comb,
             'uomcode' => $request->uomcode,
-            'chrgcode' => $request->fund_source,
+            'chrgcode' => '8',
             'quantity' => $request->quantity,
             'from' => 'EXISTING_STOCKS',
             // 'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
@@ -98,7 +96,7 @@ class ExistingStockController extends Controller
             'location' => $request->authLocation,
             'cl2comb' => $request->cl2comb,
             'uomcode' => $request->uomcode,
-            'chrgcode' => $request->fund_source,
+            'chrgcode' => '8',
             'prev_qty' => 0,
             'new_qty' => $request->quantity,
             'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),

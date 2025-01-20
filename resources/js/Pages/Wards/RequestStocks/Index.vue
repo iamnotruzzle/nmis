@@ -774,28 +774,6 @@
             <div class="text-orange-500 text-xl font-bold">EXISTING STOCK</div>
           </template>
           <div class="field">
-            <label for="fundSource">Fund source</label>
-            <Dropdown
-              id="fundSource"
-              required="true"
-              v-model="formExisting.fund_source"
-              :options="fundSourceList"
-              filter
-              showClear
-              dataKey="chrgcode"
-              optionLabel="chrgdesc"
-              optionValue="chrgcode"
-              class="w-full"
-              :class="{ 'p-invalid': formExisting.fund_source == '' }"
-            />
-            <small
-              class="text-error"
-              v-if="formExisting.errors.fund_source"
-            >
-              {{ formExisting.errors.fund_source }}
-            </small>
-          </div>
-          <div class="field">
             <label>Items</label>
             <Dropdown
               required="true"
@@ -868,7 +846,6 @@
               type="submit"
               :disabled="
                 formExisting.processing ||
-                formExisting.fund_source == null ||
                 formExisting.cl2comb == null ||
                 formExisting.quantity == null ||
                 formExisting.quantity <= 0 ||
@@ -1118,7 +1095,7 @@
                   v-if="slotProps.data.from == 'CONSIGNMENT' || slotProps.data.from == 'EXISTING_STOCKS'"
                   label="UPDATE"
                   severity="info"
-                  @click="returnToCsr(slotProps.data)"
+                  @click="openUpdateNotFromCsr(slotProps.data)"
                 />
               </div>
             </template>
@@ -1463,6 +1440,7 @@ export default {
       createRequestStocksDialog: false,
       medicalGasesDialog: false,
       consignmentDialog: false,
+      isUpdateExisting: false,
       existingDialog: false,
       returnToCsrDialog: false,
       editAverageOfStocksDialog: false,
@@ -1528,11 +1506,13 @@ export default {
         delivered_date: null,
       }),
       formExisting: this.$inertia.form({
+        id: null,
         authLocation: null,
         fund_source: null,
         cl2comb: null,
         uomcode: null,
         quantity: null,
+        prev_quantity: null,
         delivered_date: null,
       }),
       formReturnToCsr: this.$inertia.form({
@@ -1659,6 +1639,21 @@ export default {
             document.body.removeChild(iframe);
           }, 100);
         });
+      }
+    },
+    openUpdateNotFromCsr(data) {
+      console.log(data);
+
+      if (data.from == 'EXISTING_STOCKS') {
+        this.isUpdateExisting = true;
+        this.existingDialog = true;
+
+        this.formExisting.id = data.ward_stock_id;
+        this.formExisting.cl2comb = data.cl2comb;
+        this.formExisting.quantity = data.quantity;
+        // this.forme;
+      } else {
+        // data.from == "CONSIGNMENT"
       }
     },
     restrictNonNumericAndPeriod(event) {
@@ -2077,7 +2072,6 @@ export default {
     submitExisting() {
       if (
         this.formExisting.processing ||
-        this.formExisting.fund_source == null ||
         this.formExisting.cl2comb == null ||
         this.formExisting.quantity == null ||
         this.formExisting.delivered_date == null
@@ -2087,8 +2081,6 @@ export default {
 
       this.formExisting.authLocation = this.$page.props.authWardcode.wardcode;
       if (
-        this.formExisting.fund_source != null ||
-        this.formExisting.fund_source != '' ||
         this.formExisting.cl2comb != null ||
         this.formExisting.cl2comb != '' ||
         this.formExisting.quantity != null ||
@@ -2133,6 +2125,7 @@ export default {
     cancel() {
       this.requestStockId = null;
       this.isUpdate = false;
+      this.isUpdateExisting = false;
       this.createRequestStocksDialog = false;
       this.returnToCsrDialog = false;
       this.editAverageOfStocksDialog = false;
