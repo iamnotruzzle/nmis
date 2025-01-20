@@ -1007,6 +1007,30 @@
             style="width: 20%"
             sortable
           >
+            <template #body="{ data }">
+              <!-- <span> {{ data.from }}</span> -->
+
+              <Tag
+                v-if="data.from == 'CSR'"
+                value="CSR"
+                severity="primary"
+              />
+              <Tag
+                v-if="data.from == 'MEDICAL GASES'"
+                value="MEDICAL GASES"
+                severity="success"
+              />
+              <Tag
+                v-if="data.from == 'CONSIGNMENT'"
+                value="CONSIGNMENT"
+                severity="warning"
+              />
+              <Tag
+                v-if="data.from == 'EXISTING_STOCKS'"
+                value="EXISTING STOCK"
+                severity="info"
+              />
+            </template>
           </Column>
           <Column
             field="item"
@@ -1092,10 +1116,10 @@
                   @click="returnToCsr(slotProps.data)"
                 />
                 <Button
-                  v-if="slotProps.data.from == 'CONSIGNMENT' || slotProps.data.from == 'EXISTING_STOCKS'"
+                  v-if="slotProps.data.from == 'EXISTING_STOCKS'"
                   label="UPDATE"
                   severity="info"
-                  @click="openUpdateNotFromCsr(slotProps.data)"
+                  @click="openUpdateStock(slotProps.data)"
                 />
               </div>
             </template>
@@ -1441,6 +1465,7 @@ export default {
       medicalGasesDialog: false,
       consignmentDialog: false,
       isUpdateExisting: false,
+      isUpdateConsignment: false,
       existingDialog: false,
       returnToCsrDialog: false,
       editAverageOfStocksDialog: false,
@@ -1497,6 +1522,7 @@ export default {
         delivered_date: null,
       }),
       formConsignment: this.$inertia.form({
+        id: null,
         authLocation: null,
         fund_source: null,
         cl2comb: null,
@@ -1641,19 +1667,26 @@ export default {
         });
       }
     },
-    openUpdateNotFromCsr(data) {
+    openUpdateStock(data) {
       console.log(data);
 
       if (data.from == 'EXISTING_STOCKS') {
-        this.isUpdateExisting = true;
-        this.existingDialog = true;
-
         this.formExisting.id = data.ward_stock_id;
         this.formExisting.cl2comb = data.cl2comb;
         this.formExisting.quantity = data.quantity;
-        // this.forme;
+
+        this.isUpdateExisting = true;
+        this.existingDialog = true;
       } else {
         // data.from == "CONSIGNMENT"
+        // this.formConsignment.id = data.ward_stock_id;
+        // this.formConsignment.fund_source = data.fund_source;
+        // this.formConsignment.cl2comb = data.cl2comb;
+        // this.formConsignment.quantity = data.quantity;
+        // this.formConsignment.price_per_unit = data.price_per_unit;
+        // this.formConsignment.delivered_date = data.delivered_date;
+        // this.isUpdateConsignment = true;
+        // this.consignmentDialog = true;
       }
     },
     restrictNonNumericAndPeriod(event) {
@@ -1862,6 +1895,7 @@ export default {
         (this.requestStockId = null),
         (this.isUpdate = false),
         (this.isUpdateExisting = false),
+        (this.isUpdateConsignment = false),
         (this.requestStockListDetails = []),
         (this.item = null),
         (this.cl2desc = null),
@@ -1880,7 +1914,9 @@ export default {
         this.formConsignment.reset(),
         this.formReturnToCsr.clearErrors(),
         this.formReturnToCsr.reset(),
-        this.formUpdateStatus.reset()
+        this.formUpdateStatus.reset(),
+        this.formExisting.clearErrors(),
+        this.formExisting.reset()
       );
     },
     fillRequestContainer() {
@@ -2131,6 +2167,7 @@ export default {
       this.requestStockId = null;
       this.isUpdate = false;
       this.isUpdateExisting = false;
+      this.isUpdateConsignment = false;
       this.createRequestStocksDialog = false;
       this.returnToCsrDialog = false;
       this.editAverageOfStocksDialog = false;

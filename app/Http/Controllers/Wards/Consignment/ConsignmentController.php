@@ -106,9 +106,15 @@ class ConsignmentController extends Controller
     }
 
 
-    public function update(Request $request, $id)
+    public function update(WardsStocks $wardsstock, Request $request)
     {
-        //
+        // dd($request);
+
+        WardsStocks::where('id', $request->id)->update([
+            'quantity' => $request->quantity,
+        ]);
+
+        return Redirect::route('requeststocks.index');
     }
 
     public function destroy($id)
