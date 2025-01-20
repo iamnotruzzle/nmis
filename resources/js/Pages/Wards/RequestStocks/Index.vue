@@ -784,6 +784,7 @@
               optionValue="cl2comb"
               optionLabel="cl2desc"
               class="w-full mb-3"
+              :disabled="isUpdateExisting == true"
             />
           </div>
           <div class="field">
@@ -792,6 +793,7 @@
               id="unit"
               v-model.trim="selectedItemsUomDesc"
               readonly
+              :disabled="isUpdateExisting == true"
             />
           </div>
           <div class="field">
@@ -812,23 +814,6 @@
               {{ formExisting.errors.quantity }}
             </small>
           </div>
-          <div class="field">
-            <label for="delivered_date">Delivered date</label>
-            <Calendar
-              v-model="formExisting.delivered_date"
-              dateFormat="mm-dd-yy"
-              showIcon
-              showButtonBar
-              :manualInput="false"
-              :hideOnDateTimeSelect="true"
-            />
-            <small
-              class="text-error"
-              v-if="formExisting.errors.delivered_date"
-            >
-              {{ formExisting.errors.delivered_date }}
-            </small>
-          </div>
 
           <template #footer>
             <Button
@@ -839,6 +824,7 @@
               @click="cancel"
             />
             <Button
+              v-if="isUpdateExisting == false"
               label="Save"
               icon="pi pi-check"
               severity="warning"
@@ -848,8 +834,22 @@
                 formExisting.processing ||
                 formExisting.cl2comb == null ||
                 formExisting.quantity == null ||
-                formExisting.quantity <= 0 ||
-                formExisting.delivered_date == null
+                formExisting.quantity <= 0
+              "
+              @click="submitExisting"
+            />
+            <Button
+              v-else
+              label="Update"
+              icon="pi pi-check"
+              severity="warning"
+              text
+              type="submit"
+              :disabled="
+                formExisting.processing ||
+                formExisting.cl2comb == null ||
+                formExisting.quantity == null ||
+                formExisting.quantity <= 0
               "
               @click="submitExisting"
             />
@@ -1861,6 +1861,7 @@ export default {
         'hide',
         (this.requestStockId = null),
         (this.isUpdate = false),
+        (this.isUpdateExisting = false),
         (this.requestStockListDetails = []),
         (this.item = null),
         (this.cl2desc = null),
@@ -2070,12 +2071,7 @@ export default {
       }
     },
     submitExisting() {
-      if (
-        this.formExisting.processing ||
-        this.formExisting.cl2comb == null ||
-        this.formExisting.quantity == null ||
-        this.formExisting.delivered_date == null
-      ) {
+      if (this.formExisting.processing || this.formExisting.cl2comb == null || this.formExisting.quantity == null) {
         return false;
       }
 
@@ -2085,21 +2081,30 @@ export default {
         this.formExisting.cl2comb != '' ||
         this.formExisting.quantity != null ||
         this.formExisting.quantity != '' ||
-        this.formExisting.quantity != 0 ||
-        this.formExisting.delivered_date != null ||
-        this.formExisting.delivered_date != ''
+        this.formExisting.quantity != 0
       ) {
-        // console.log('success');
-        this.formExisting.post(route('existingstock.store'), {
-          preserveScroll: true,
-          onFinish: () => {
-            this.formExisting.reset();
-            this.cancel();
-            this.updateData();
-            this.createdMsg();
-            this.loading = false;
-          },
-        });
+        // check if in update mode
+        if (this.isUpdateExisting == false) {
+          this.formExisting.post(route('existingstock.store'), {
+            preserveScroll: true,
+            onFinish: () => {
+              this.formExisting.reset();
+              this.cancel();
+              this.updateData();
+              this.createdMsg();
+              this.loading = false;
+            },
+          });
+        } else {
+          this.formExisting.put(route('existingstock.update', this.formExisting.id), {
+            preserveScroll: true,
+            onSuccess: () => {
+              this.cancel();
+              this.updateData();
+              this.updateExistingMessage();
+            },
+          });
+        }
       }
     },
     confirmCancelItem(item) {
@@ -2155,6 +2160,9 @@ export default {
     },
     updatedMsg() {
       this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Stock request updated', life: 3000 });
+    },
+    updateExistingMessage() {
+      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Stock updated', life: 3000 });
     },
     updatedStatusMsg() {
       this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Changed requested stocks status', life: 3000 });

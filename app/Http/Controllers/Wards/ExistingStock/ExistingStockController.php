@@ -83,7 +83,7 @@ class ExistingStockController extends Controller
             'quantity' => $request->quantity,
             'from' => 'EXISTING_STOCKS',
             // 'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
-            'delivered_date' =>  Carbon::parse($request->delivered_date)->format('Y-m-d H:i:s.v'),
+            'delivered_date' =>  Carbon::now(),
             'expiration_date' =>  Carbon::maxValue(),
         ]);
 
@@ -100,7 +100,7 @@ class ExistingStockController extends Controller
             'prev_qty' => 0,
             'new_qty' => $request->quantity,
             'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
-            'delivered_date' =>  Carbon::parse($request->delivered_date)->format('Y-m-d H:i:s.v'),
+            'delivered_date' =>  Carbon::now(),
             'expiration_date' =>  Carbon::maxValue(),
             'action' => 'CREATE',
             'remarks' => null,
@@ -111,9 +111,15 @@ class ExistingStockController extends Controller
     }
 
 
-    public function update(Request $request, $id)
+    public function update(WardsStocks $wardsstock, Request $request)
     {
-        //
+        // dd($request);
+
+        WardsStocks::where('id', $request->id)->update([
+            'quantity' => $request->quantity,
+        ]);
+
+        return Redirect::route('requeststocks.index');
     }
 
     public function destroy($id)
