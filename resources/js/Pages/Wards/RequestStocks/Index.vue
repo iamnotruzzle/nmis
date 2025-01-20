@@ -1111,17 +1111,15 @@
                 <Button
                   v-if="slotProps.data.from == 'CSR'"
                   label="RETURN"
-                  severity="warning"
+                  severity="primary"
                   @click="returnToCsr(slotProps.data)"
-                >
-                  <!-- <template #default="">
-                    <v-icon
-                      name="pr-pencil"
-                      class="text-yellow-500"
-                    ></v-icon>
-                  </template> -->
-                  <!-- s -->
-                </Button>
+                />
+                <Button
+                  v-if="slotProps.data.from == 'CONSIGNMENT' || slotProps.data.from == 'EXISTING_STOCKS'"
+                  label="UPDATE"
+                  severity="info"
+                  @click="returnToCsr(slotProps.data)"
+                />
               </div>
             </template>
           </Column>
