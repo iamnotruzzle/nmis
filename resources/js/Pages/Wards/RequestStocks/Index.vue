@@ -1600,57 +1600,6 @@ export default {
     },
   },
   methods: {
-    // // working print function
-    // print(data) {
-    //   setTimeout(() => {
-    //     if (data != null) {
-    //       //   console.log('data', data);
-    //       this.printForm.office = '';
-    //       this.printForm.ris_no = 'RIS' + '-' + data.id;
-
-    //       this.printForm.items = [];
-
-    //       data.request_stocks_details.forEach((e) => {
-    //         console.log(e.issued_item);
-    //         this.printForm.items.push({
-    //           stock_no: e.issued_item.length === 0 ? '' : e.issued_item[0].id,
-    //           //   unit: e.id,
-    //           description: e.item_details.cl2desc,
-    //           req_qty: e.requested_qty,
-    //           stock_avail: e.approved_qty != 0 ? 'y' : 'n',
-    //           issue_qty: e.approved_qty,
-    //           remarks: e.remarks,
-    //         });
-    //       });
-
-    //         this.$nextTick(() => {
-    //           const printWindow = window.open('', '_blank');
-    //           if (printWindow) {
-    //             printWindow.document.write(`
-    //                   <html>
-    //                   <head>
-    //                       <title>Print</title>
-    //                       <style>
-    //                       /* Add your print styles here */
-    //                       </style>
-    //                   </head>
-    //                   <body>
-    //                       ${document.getElementById('print').innerHTML}
-    //                   </body>
-    //                   </html>
-    //               `);
-    //             printWindow.document.close();
-    //             printWindow.focus();
-    //             printWindow.print();
-    //             printWindow.close();
-    //           } else {
-    //             console.error('Failed to open print window.');
-    //           }
-    //         });
-
-    //   }, 200); // Slightly longer delay to ensure rendering
-    // },
-
     print(data) {
       if (data) {
         console.log(data);
