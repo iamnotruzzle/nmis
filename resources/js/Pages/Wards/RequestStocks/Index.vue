@@ -188,7 +188,7 @@
             <template #body="slotProps">
               <div class="flex justify-content-around align-content-center">
                 <v-icon
-                  v-if="slotProps.data.status == 'RECEIVED'"
+                  v-if="slotProps.data.status == 'ACKNOWLEDGED'"
                   name="la-receipt-solid"
                   class="text-green-500 text-8xl"
                   @click="print(slotProps.data)"
@@ -1266,7 +1266,10 @@
                 style="border: 1px solid black; padding: 10px 0"
               >
                 <p>
-                  Purpose: <strong><u>FOR 2FM HLK USE ONLY</u></strong>
+                  Purpose:
+                  <strong>
+                    <u>{{ printForm.office }}</u>
+                  </strong>
                 </p>
               </td>
             </tr>
@@ -1331,10 +1334,10 @@
               <p>{{ printForm.requested_by }}</p>
             </td>
             <td style="border: 1px solid black">
-              <p>{{ printForm.approved_by }}</p>
+              <p>Efleda Sarah V. Marders, RN, MAN</p>
             </td>
             <td style="border: 1px solid black">
-              <p>&nbsp;</p>
+              <p>David Bagaoisan</p>
             </td>
             <td
               colspan="3"
