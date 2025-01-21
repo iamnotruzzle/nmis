@@ -1131,9 +1131,9 @@
       <!-- RIS docs -->
       <div
         id="print"
-        style="font-family: sans-serif; background-color: white; color: black; white; display: none;"
+        style="font-family: Arial, sans-serif; background-color: white; color: black; white; display: none;"
       >
-        <div>
+        <div style="font-family: Arial, sans-serif">
           <div>
             <h3 style="font-weight: bold; text-align: center">REQUISITION AND ISSUE SLIP</h3>
           </div>
@@ -1146,7 +1146,7 @@
           </div>
         </div>
 
-        <table style="width: 100%; border-collapse: collapse">
+        <table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif">
           <tbody>
             <tr>
               <td
@@ -1276,7 +1276,7 @@
           </tbody>
         </table>
 
-        <table style="border-collapse: collapse; width: 100%">
+        <table style="border-collapse: collapse; width: 100%; font-family: Arial, sans-serif">
           <tr>
             <td style="border: 1px solid black">
               <p>&nbsp;</p>
@@ -1301,47 +1301,47 @@
             </td>
           </tr>
           <tr>
-            <td style="border: 1px solid black">
+            <td style="border: 1px solid black; padding: 20px 0px">
               <p><strong>Signature:</strong></p>
             </td>
             <td
               colspan="2"
-              style="border: 1px solid black"
+              style="border: 1px solid black; padding: 20px 0px"
             >
               <p>&nbsp;</p>
             </td>
-            <td style="border: 1px solid black">
+            <td style="border: 1px solid black; padding: 20px 0px">
               <p>&nbsp;</p>
             </td>
-            <td style="border: 1px solid black">
+            <td style="border: 1px solid black; padding: 20px 0px">
               <p>&nbsp;</p>
             </td>
             <td
               colspan="3"
-              style="border: 1px solid black"
+              style="border: 1px solid black; padding: 20px 0px"
             >
               <p>&nbsp;</p>
             </td>
           </tr>
           <tr>
-            <td style="border: 1px solid black; padding-top: 40px">
+            <td style="border: 1px solid black">
               <p><strong>Printed name:&nbsp;</strong></p>
             </td>
             <td
               colspan="2"
-              style="border: 1px solid black; padding-top: 40px"
+              style="border: 1px solid black; text-align: center"
             >
               <p>{{ printForm.requested_by }}</p>
             </td>
-            <td style="border: 1px solid black; text-align: center; padding-top: 40px">
+            <td style="border: 1px solid black; text-align: center">
               <span>Efleda Sarah V. Marders, RN, MAN</span>
             </td>
-            <td style="border: 1px solid black; padding-top: 40px">
+            <td style="border: 1px solid black; text-align: center">
               <p>David Bagaoisan</p>
             </td>
             <td
               colspan="3"
-              style="border: 1px solid black; padding-top: 40px"
+              style="border: 1px solid black"
             >
               <p>&nbsp;</p>
             </td>
