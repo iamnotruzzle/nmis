@@ -1182,7 +1182,7 @@
             </tr>
             <tr>
               <td
-                colspan="4"
+                colspan="3"
                 style="border: 1px solid black; text-align: center"
               >
                 <p><strong>Requisition</strong></p>
@@ -1242,16 +1242,16 @@
                 <p>{{ item.req_qty }}</p>
               </td>
               <td style="border: 1px solid black; text-align: center">
-                <v-icon
+                <!-- <v-icon
                   v-if="item.stock_avail == 'y'"
                   name="bi-check2"
-                ></v-icon>
+                ></v-icon> -->
               </td>
               <td style="border: 1px solid black; text-align: center">
-                <v-icon
+                <!-- <v-icon
                   v-if="item.stock_avail == 'n'"
                   name="bi-check2"
-                ></v-icon>
+                ></v-icon> -->
               </td>
               <td style="border: 1px solid black; text-align: center">
                 <p>{{ item.issue_qty }}</p>
@@ -1324,24 +1324,24 @@
             </td>
           </tr>
           <tr>
-            <td style="border: 1px solid black">
+            <td style="border: 1px solid black; padding-top: 40px">
               <p><strong>Printed name:&nbsp;</strong></p>
             </td>
             <td
               colspan="2"
-              style="border: 1px solid black"
+              style="border: 1px solid black; padding-top: 40px"
             >
               <p>{{ printForm.requested_by }}</p>
             </td>
-            <td style="border: 1px solid black">
-              <p>Efleda Sarah V. Marders, RN, MAN</p>
+            <td style="border: 1px solid black; text-align: center; padding-top: 40px">
+              <span>Efleda Sarah V. Marders, RN, MAN</span>
             </td>
-            <td style="border: 1px solid black">
+            <td style="border: 1px solid black; padding-top: 40px">
               <p>David Bagaoisan</p>
             </td>
             <td
               colspan="3"
-              style="border: 1px solid black"
+              style="border: 1px solid black; padding-top: 40px"
             >
               <p>&nbsp;</p>
             </td>
@@ -1356,8 +1356,8 @@
             >
               <p>&nbsp;</p>
             </td>
-            <td style="border: 1px solid black">
-              <p>&nbsp;</p>
+            <td style="border: 1px solid black; text-align: center">
+              <span>CHIEF NURSE VII</span>
             </td>
             <td style="border: 1px solid black">
               <p>&nbsp;</p>
