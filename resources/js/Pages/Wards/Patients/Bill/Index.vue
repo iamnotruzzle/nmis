@@ -565,7 +565,15 @@
         id="print"
         style="background-color: white; display: none"
       >
-        <div style="width: 100%; display: flex; justify-content: center; align-items: center">
+        <div
+          style="
+            font-family: Arial, sans-serif;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          "
+        >
           <div style="padding: 0 2rem; color: #1f2937; margin: 0">
             <div
               style="
@@ -1242,28 +1250,41 @@ export default {
           this.printForm.total = this.printForm.total.toFixed(2);
 
           this.$nextTick(() => {
-            const printWindow = window.open('', '_blank');
-            if (printWindow) {
-              printWindow.document.write(`
-            <html>
-              <head>
-                <title>Print</title>
-                <style>
-                  /* Add your print styles here */
-                </style>
-              </head>
-              <body>
-                ${document.getElementById('print').innerHTML}
-              </body>
-            </html>
-          `);
-              printWindow.document.close();
-              printWindow.focus();
-              printWindow.print();
-              printWindow.close();
-            } else {
-              console.error('Failed to open print window.');
-            }
+            // Create a hidden iframe for printing
+            const iframe = document.createElement('iframe');
+            iframe.style.position = 'absolute';
+            iframe.style.top = '-9999px';
+            iframe.style.left = '-9999px';
+            iframe.style.width = '0';
+            iframe.style.height = '0';
+            document.body.appendChild(iframe);
+
+            // Write print content into the iframe
+            const iframeDoc = iframe.contentWindow.document;
+            iframeDoc.open();
+            iframeDoc.write(`
+                <html>
+                <head>
+                    <title>Print</title>
+                    <style>
+                    /* Add your print styles here */
+                    </style>
+                </head>
+                <body>
+                    ${document.getElementById('print').innerHTML}
+                </body>
+                </html>
+            `);
+            iframeDoc.close();
+
+            // Trigger the print dialog
+            iframe.contentWindow.focus();
+            iframe.contentWindow.print();
+
+            // Remove the iframe after a delay to ensure proper cleanup
+            setTimeout(() => {
+              document.body.removeChild(iframe);
+            }, 100);
           });
         }
       }, 200); // Slightly longer delay to ensure rendering
