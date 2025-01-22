@@ -2,7 +2,88 @@
   <app-layout>
     <Head title="NMIS - Patients" />
 
-    <div class="card"></div>
+    <div class="w-full flex align-items-center justify-content-center">
+      <div class="card w-8">
+        <DataTable
+          :value="encounterList"
+          tableStyle="min-width: 50rem"
+          removableSort
+        >
+          <template #header>
+            <h3 class="text-xl text-900 font-bold text-primary">SEARCH PATIENT</h3>
+
+            <div class="flex justify-content-end">
+              <div class="p-inputgroup">
+                <span class="p-inputgroup-addon">
+                  <i class="pi pi-search"></i>
+                </span>
+                <InputText
+                  id="searchInput"
+                  v-model="search"
+                  size="large"
+                  placeholder="Hospital #"
+                />
+              </div>
+            </div>
+
+            <h1>PATIENT: {{ patientName.patient }}</h1>
+          </template>
+          <Column
+            field="toecode"
+            header="TYPE OF ENCOUNTER"
+            sortable
+          >
+            <template #body="{ data }">
+              <!-- <span v-if="data.toecode == 'ADM'">ADMITTING</span>
+              <span v-else-if="data.toecode == 'OPD'">OUT-PATIENT</span>
+              <span v-else>EMERGENCY ROOM</span> -->
+
+              <Tag
+                v-if="data.toecode == 'ADM'"
+                severity="success"
+                value="ADMITTING"
+              />
+              <Tag
+                v-else-if="data.toecode == 'OPD'"
+                severity="warning"
+                value="OUT-PATIENT"
+              />
+              <Tag
+                v-else
+                severity="danger"
+                value="EMERGENCY ROOM"
+              />
+            </template>
+          </Column>
+          <Column
+            field="encdate"
+            header="DATE"
+            sortable
+          >
+            <template #body="{ data }">
+              {{ tzone(data.encdate) }}
+            </template>
+          </Column>
+          <Column
+            header="ACTION"
+            style="width: 5%"
+          >
+            <template #body="{ data }">
+              <!-- {{ data }} -->
+              <div class="flex justify-content-center">
+                <Button
+                  class="m-1"
+                  icon="pi pi-money-bill"
+                  label="Bills"
+                  severity="success"
+                  @click="goToPatientCharge(data)"
+                />
+              </div>
+            </template>
+          </Column>
+        </DataTable>
+      </div>
+    </div>
   </app-layout>
 </template>
 
@@ -23,6 +104,7 @@ import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
 import AutoComplete from 'primevue/autocomplete';
 import RadioButton from 'primevue/radiobutton';
+import Card from 'primevue/card';
 import Tag from 'primevue/tag';
 import moment from 'moment';
 
@@ -44,21 +126,56 @@ export default {
     AutoComplete,
     Tag,
     RadioButton,
+    Card,
   },
-  props: {},
+  props: {
+    encounters: Array,
+  },
   data() {
     return {
-      search: null,
+      search: '',
       options: {},
       params: {},
+      encounterList: [],
+      search: '',
+      patientName: '',
+      form: this.$inertia.form({}),
     };
   },
   // created will be initialize before mounted
   created() {},
-  mounted() {},
+  mounted() {
+    // console.log(this.encounters);
+    this.storeEncounterList();
+  },
   methods: {
     tzone(date) {
       return moment.tz(date, 'Asia/Manila').format('LLL');
+    },
+    storeEncounterList() {
+      if (this.search != '') {
+        this.encounters.forEach((e) => {
+          this.encounterList.push({
+            enccode: e.enccode,
+            toecode: e.toecode,
+            hpercode: e.hpercode,
+            encdate: e.encdate,
+            patient:
+              e.patlast +
+              ',' +
+              ' ' +
+              e.patfirst +
+              ' ' +
+              (e.patmiddle == null ? '' : e.patmiddle) +
+              ' ' +
+              (e.patsuffix == null ? '' : e.patsuffix),
+          });
+        });
+
+        this.patientName = this.encounterList[0];
+
+        console.log(this.patientName.patient);
+      }
     },
     updateData() {
       this.patientsList = [];
@@ -68,7 +185,8 @@ export default {
         preserveState: true,
         preserveScroll: true,
         onFinish: (visit) => {
-          //   this.storePatientsInContainer();
+          this.encounterList = [];
+          this.storeEncounterList();
         },
       });
     },

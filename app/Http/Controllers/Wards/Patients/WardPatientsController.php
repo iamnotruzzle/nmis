@@ -102,22 +102,39 @@ class WardPatientsController extends Controller
                 'patients' => $patients
             ]);
         } else if ($locationType[0]->enctype == 'OR') {
-            $patients = DB::SELECT(
-                "SELECT TOP 1 henctr.enccode, henctr.toecode,
-                                hperson.patfirst, hperson.patmiddle, hperson.patlast, hperson.patsuffix,
-                                henctr.encdate
+            $encounters = DB::SELECT(
+                "WITH RankedRecords AS (
+                    SELECT
+                        henctr.enccode,
+                        henctr.toecode,
+                        hperson.hpercode,
+                        hperson.patfirst,
+                        hperson.patmiddle,
+                        hperson.patlast,
+                        hperson.patsuffix,
+                        henctr.encdate,
+                        ROW_NUMBER() OVER (PARTITION BY henctr.toecode ORDER BY henctr.encdate DESC) AS RowNum
                     FROM hperson
                     JOIN henctr ON henctr.hpercode = hperson.hpercode
-                    WHERE hperson.hpercode LIKE '%?%'
-                    OR hperson.patfirst LIKE '%?%'
-                    OR hperson.patmiddle LIKE '%?%'
-                    OR hperson.patlast LIKE '%?%'
-                    ORDER BY henctr.encdate DESC",
-                [$search]
+                    WHERE hperson.hpercode LIKE ?
+                    AND henctr.toecode IN ('ADM', 'OPD', 'ER')
+                )
+                SELECT
+                    enccode,
+                    toecode,
+                    patfirst,
+                    patmiddle,
+                    patlast,
+                    patsuffix,
+                    encdate
+                FROM RankedRecords
+                WHERE RowNum = 1
+                ORDER BY encdate DESC;",
+                [$request->search]
             );
 
             return Inertia::render('Wards/Patients/OR/Index', [
-                'patients' => $patients
+                'encounters' => $encounters
             ]);
         } else {
             $patients = DB::select(
