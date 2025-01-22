@@ -17,7 +17,7 @@ class WardPatientsController extends Controller
     {
         // dd($request);
 
-        $searchString = $request->search;
+        $search = $request->search;
 
         $authWardcode = DB::select(
             "SELECT TOP 1
@@ -99,6 +99,24 @@ class WardPatientsController extends Controller
             );
 
             return Inertia::render('Wards/Patients/ER/Index', [
+                'patients' => $patients
+            ]);
+        } else if ($locationType[0]->enctype == 'OR') {
+            $patients = DB::SELECT(
+                "SELECT TOP 1 henctr.enccode, henctr.toecode,
+                                hperson.patfirst, hperson.patmiddle, hperson.patlast, hperson.patsuffix,
+                                henctr.encdate
+                    FROM hperson
+                    JOIN henctr ON henctr.hpercode = hperson.hpercode
+                    WHERE hperson.hpercode LIKE '%?%'
+                    OR hperson.patfirst LIKE '%?%'
+                    OR hperson.patmiddle LIKE '%?%'
+                    OR hperson.patlast LIKE '%?%'
+                    ORDER BY henctr.encdate DESC",
+                [$search]
+            );
+
+            return Inertia::render('Wards/Patients/OR/Index', [
                 'patients' => $patients
             ]);
         } else {
