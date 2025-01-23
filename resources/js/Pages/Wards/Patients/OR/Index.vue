@@ -238,7 +238,12 @@ export default {
       }
     },
     searchError() {
-      this.$toast.add({ severity: 'warn', summary: '', detail: 'Fill up both first name and last name', life: 3000 });
+      this.$toast.add({
+        severity: 'warn',
+        summary: '',
+        detail: 'Please fill in both the first and last name fields.',
+        life: 3000,
+      });
     },
   },
   watch: {
