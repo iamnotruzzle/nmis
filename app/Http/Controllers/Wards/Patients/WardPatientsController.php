@@ -18,6 +18,7 @@ class WardPatientsController extends Controller
         // dd($request);
 
         $search = $request->search;
+        $hpercode = $request->hpercode;
         $patfirst = $request->patfirst;
         $patlast = $request->patlast;
 
@@ -136,35 +137,71 @@ class WardPatientsController extends Controller
             //     [$patfirst]
             // );
 
-            if ($patfirst != null && $patlast != null) {
+            // $hpercode != null && $hpercode != '' ||
+            if ($hpercode != null && $hpercode != '') {
                 $encounters = DB::SELECT(
                     "WITH RankedRecords AS (
-                    SELECT
-                        henctr.enccode,
-                        henctr.toecode,
-                        hperson.hpercode,
-                        hperson.patfirst,
-                        hperson.patmiddle,
-                        hperson.patlast,
-                        hperson.patsuffix,
-                        henctr.encdate,
-                        ROW_NUMBER() OVER (PARTITION BY henctr.toecode ORDER BY henctr.encdate DESC) AS RowNum
-                    FROM hperson
-                    JOIN henctr ON henctr.hpercode = hperson.hpercode
-                    WHERE (hperson.patfirst LIKE ? AND hperson.patlast LIKE ?)
-                    AND henctr.toecode IN ('ADM', 'OPD', 'ER')
-                )
-                SELECT
-                    enccode,
-                    toecode,
-                    patfirst,
-                    patmiddle,
-                    patlast,
-                    patsuffix,
-                    encdate
-                FROM RankedRecords
-                WHERE RowNum = 1
-                ORDER BY encdate DESC;",
+                            SELECT
+                                henctr.enccode,
+                                henctr.toecode,
+                                hperson.hpercode,
+                                hperson.patfirst,
+                                hperson.patmiddle,
+                                hperson.patlast,
+                                hperson.patsuffix,
+                                henctr.encdate,
+                                ROW_NUMBER() OVER (PARTITION BY henctr.toecode ORDER BY henctr.encdate DESC) AS RowNum
+                            FROM hperson
+                            JOIN henctr ON henctr.hpercode = hperson.hpercode
+                            WHERE hperson.hpercode LIKE ?
+                            AND henctr.toecode IN ('ADM', 'OPD', 'ER')
+                        )
+                            SELECT
+                                enccode,
+                                toecode,
+                                hpercode,
+                                patfirst,
+                                patmiddle,
+                                patlast,
+                                patsuffix,
+                                encdate
+                            FROM RankedRecords
+                            WHERE RowNum = 1
+                            ORDER BY encdate DESC;",
+                    [
+                        $hpercode . '%'
+                    ]
+                );
+            } else if (($patfirst != null && $patlast != null)) {
+                $encounters = DB::SELECT(
+                    "WITH RankedRecords AS (
+                            SELECT
+                                henctr.enccode,
+                                henctr.toecode,
+                                hperson.hpercode,
+                                hperson.patfirst,
+                                hperson.patmiddle,
+                                hperson.patlast,
+                                hperson.patsuffix,
+                                henctr.encdate,
+                                ROW_NUMBER() OVER (PARTITION BY henctr.toecode ORDER BY henctr.encdate DESC) AS RowNum
+                            FROM hperson
+                            JOIN henctr ON henctr.hpercode = hperson.hpercode
+                            WHERE (hperson.patfirst LIKE ? AND hperson.patlast LIKE ?)
+                            AND henctr.toecode IN ('ADM', 'OPD', 'ER')
+                        )
+                            SELECT
+                                enccode,
+                                toecode,
+                                hpercode,
+                                patfirst,
+                                patmiddle,
+                                patlast,
+                                patsuffix,
+                                encdate
+                            FROM RankedRecords
+                            WHERE RowNum = 1
+                            ORDER BY encdate DESC;",
                     [
                         $patfirst . '%',
                         $patlast . '%'
@@ -173,6 +210,8 @@ class WardPatientsController extends Controller
             } else {
                 $encounters = [];
             }
+
+            // dd($encounters);
 
             return Inertia::render('Wards/Patients/OR/Index', [
                 'encounters' => $encounters

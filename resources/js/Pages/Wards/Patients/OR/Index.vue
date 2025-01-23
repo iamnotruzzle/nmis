@@ -5,16 +5,30 @@
     <div class="w-full flex align-items-center justify-content-center">
       <Toast />
 
-      <div class="card w-10">
+      <div class="card w-7">
         <DataTable
           :value="encounterList"
-          tableStyle="min-width: 50rem"
           removableSort
         >
           <template #header>
-            <h3 class="text-xl text-900 font-bold text-primary">SEARCH PATIENT</h3>
+            <h1 class="font-bold text-primary">SEARCH PATIENT</h1>
+            <h3 class="text-yellow-500">(EITHER SEARCH HOSP. # ONLY OR FIRST AND LAST NAME)</h3>
 
-            <div class="flex">
+            <div class="w-auto flex justify-content-between">
+              <div class="p-inputgroup w-auto">
+                <span class="p-inputgroup-addon">
+                  <i class="pi pi-search"></i>
+                </span>
+                <InputText
+                  id="searchInput"
+                  v-model="hpercode"
+                  size="large"
+                  placeholder="HOSP. #"
+                />
+              </div>
+
+              <!-- <div class="mx-2"></div> -->
+
               <div class="p-inputgroup w-auto">
                 <span class="p-inputgroup-addon">
                   <i class="pi pi-search"></i>
@@ -27,7 +41,7 @@
                 />
               </div>
 
-              <div class="mx-2"></div>
+              <!-- <div class="mx-2"></div> -->
 
               <div class="p-inputgroup w-auto">
                 <span class="p-inputgroup-addon">
@@ -41,18 +55,21 @@
                 />
               </div>
 
-              <div class="mx-2"></div>
+              <!-- <div class="mx-2"></div> -->
 
               <Button
                 class="w-auto"
                 icon="pi pi-search"
                 label="SEARCH"
                 severity="info"
-                @click="searchPatient(patfirst, patlast)"
+                @click="searchPatient(hpercode, patfirst, patlast)"
               />
             </div>
 
-            <h1 v-if="patientName != null">PATIENT: {{ patientName.patient }}</h1>
+            <div class="border-1 my-4"></div>
+
+            <h4 v-if="patient != null">HOSP. #: {{ patient.hpercode }}</h4>
+            <h4 v-if="patient != null">PATIENT: {{ patient.patient }}</h4>
           </template>
           <Column
             field="toecode"
@@ -164,7 +181,9 @@ export default {
       params: {},
       encounterList: [],
       search: '',
-      patientName: '',
+      patientHospitalNumber: '',
+      patient: '',
+      hpercode: '',
       patfirst: '',
       patlast: '',
       form: this.$inertia.form({}),
@@ -181,8 +200,9 @@ export default {
       return moment.tz(date, 'Asia/Manila').format('LLL');
     },
     storeEncounterList() {
-      if (this.patfirst && this.patlast) {
+      if (this.hpercode) {
         this.encounters.forEach((e) => {
+          console.log(e);
           this.encounterList.push({
             enccode: e.enccode,
             toecode: e.toecode,
@@ -200,7 +220,28 @@ export default {
           });
         });
 
-        this.patientName = this.encounterList[0];
+        this.patient = this.encounterList[0];
+      } else if (this.patfirst && this.patlast) {
+        this.encounters.forEach((e) => {
+          console.log(e);
+          this.encounterList.push({
+            enccode: e.enccode,
+            toecode: e.toecode,
+            hpercode: e.hpercode,
+            encdate: e.encdate,
+            patient:
+              e.patlast +
+              ',' +
+              ' ' +
+              e.patfirst +
+              ' ' +
+              (e.patmiddle == null ? '' : e.patmiddle) +
+              ' ' +
+              (e.patsuffix == null ? '' : e.patsuffix),
+          });
+        });
+
+        this.patient = this.encounterList[0];
       } else {
         this.encounterList = [];
       }
@@ -226,15 +267,20 @@ export default {
         preserveScroll: true,
       });
     },
-    searchPatient(firstname, lastname) {
-      console.log(firstname);
+    searchPatient(hpercode, firstname, lastname) {
+      //   console.log(firstname);
+      this.params.hpercode = hpercode;
       this.params.patfirst = firstname;
       this.params.patlast = lastname;
 
-      if (firstname != null && firstname != '' && lastname != null && lastname != '') {
+      if (hpercode != null && hpercode != '') {
         this.updateData();
       } else {
-        this.searchError();
+        if (firstname != null && firstname != '' && lastname != null && lastname != '') {
+          this.updateData();
+        } else {
+          this.searchError();
+        }
       }
     },
     searchError() {
