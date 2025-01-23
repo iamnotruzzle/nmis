@@ -42,6 +42,8 @@ class ExistingStockController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request);
+
         $tempRisNo = $this->generateTempRisNo();
 
         $entry_by = Auth::user()->employeeid;
@@ -49,7 +51,7 @@ class ExistingStockController extends Controller
         $request->validate([
             'cl2comb' => 'required',
             'quantity' => 'required',
-            'delivered_date' => 'required',
+            // 'delivered_date' => 'required',
         ]);
 
         // $item = Item::where('cl2comb', $request->cl2comb)->first();
