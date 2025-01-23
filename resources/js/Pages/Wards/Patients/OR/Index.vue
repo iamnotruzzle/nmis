@@ -21,12 +21,20 @@
                   id="searchInput"
                   v-model="search"
                   size="large"
-                  placeholder="Hospital #"
+                  placeholder="Hospital # (PRESS ENTER)"
+                  @keydown.enter="searchPatient(search)"
+                />
+                <Button
+                  class="m-1"
+                  icon="pi pi-search"
+                  label="SEARCH"
+                  severity="info"
+                  @click="searchPatient(search)"
                 />
               </div>
             </div>
 
-            <h1>PATIENT: {{ patientName.patient }}</h1>
+            <h1 v-if="patientName != null">PATIENT: {{ patientName.patient }}</h1>
           </template>
           <Column
             field="toecode"
@@ -173,8 +181,8 @@ export default {
         });
 
         this.patientName = this.encounterList[0];
-
-        console.log(this.patientName.patient);
+      } else {
+        this.encounterList = [];
       }
     },
     updateData() {
@@ -198,12 +206,16 @@ export default {
         preserveScroll: true,
       });
     },
-  },
-  watch: {
-    search: function (val, oldVal) {
-      this.params.search = val;
+    searchPatient(e) {
+      this.params.search = e;
       this.updateData();
     },
+  },
+  watch: {
+    // search: function (val, oldVal) {
+    //   this.params.search = val;
+    //   this.updateData();
+    // },
   },
 };
 </script>
