@@ -3,7 +3,9 @@
     <Head title="NMIS - Patients" />
 
     <div class="w-full flex align-items-center justify-content-center">
-      <div class="card w-8">
+      <Toast />
+
+      <div class="card w-10">
         <DataTable
           :value="encounterList"
           tableStyle="min-width: 50rem"
@@ -12,26 +14,42 @@
           <template #header>
             <h3 class="text-xl text-900 font-bold text-primary">SEARCH PATIENT</h3>
 
-            <div class="flex justify-content-end">
-              <div class="p-inputgroup">
+            <div class="flex">
+              <div class="p-inputgroup w-auto">
                 <span class="p-inputgroup-addon">
                   <i class="pi pi-search"></i>
                 </span>
                 <InputText
                   id="searchInput"
-                  v-model="search"
+                  v-model="patfirst"
                   size="large"
-                  placeholder="Hospital # (PRESS ENTER)"
-                  @keydown.enter="searchPatient(search)"
-                />
-                <Button
-                  class="m-1"
-                  icon="pi pi-search"
-                  label="SEARCH"
-                  severity="info"
-                  @click="searchPatient(search)"
+                  placeholder="First name"
                 />
               </div>
+
+              <div class="mx-2"></div>
+
+              <div class="p-inputgroup w-auto">
+                <span class="p-inputgroup-addon">
+                  <i class="pi pi-search"></i>
+                </span>
+                <InputText
+                  id="searchInput"
+                  v-model="patlast"
+                  size="large"
+                  placeholder="Last name"
+                />
+              </div>
+
+              <div class="mx-2"></div>
+
+              <Button
+                class="w-auto"
+                icon="pi pi-search"
+                label="SEARCH"
+                severity="info"
+                @click="searchPatient(patfirst, patlast)"
+              />
             </div>
 
             <h1 v-if="patientName != null">PATIENT: {{ patientName.patient }}</h1>
@@ -147,6 +165,8 @@ export default {
       encounterList: [],
       search: '',
       patientName: '',
+      patfirst: '',
+      patlast: '',
       form: this.$inertia.form({}),
     };
   },
@@ -161,7 +181,7 @@ export default {
       return moment.tz(date, 'Asia/Manila').format('LLL');
     },
     storeEncounterList() {
-      if (this.search != '') {
+      if (this.patfirst && this.patlast) {
         this.encounters.forEach((e) => {
           this.encounterList.push({
             enccode: e.enccode,
@@ -206,9 +226,19 @@ export default {
         preserveScroll: true,
       });
     },
-    searchPatient(e) {
-      this.params.search = e;
-      this.updateData();
+    searchPatient(firstname, lastname) {
+      console.log(firstname);
+      this.params.patfirst = firstname;
+      this.params.patlast = lastname;
+
+      if (firstname != null && firstname != '' && lastname != null && lastname != '') {
+        this.updateData();
+      } else {
+        this.searchError();
+      }
+    },
+    searchError() {
+      this.$toast.add({ severity: 'warn', summary: '', detail: 'Fill up both first name and last name', life: 3000 });
     },
   },
   watch: {

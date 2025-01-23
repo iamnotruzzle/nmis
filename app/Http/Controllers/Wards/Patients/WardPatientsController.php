@@ -18,6 +18,8 @@ class WardPatientsController extends Controller
         // dd($request);
 
         $search = $request->search;
+        $patfirst = $request->patfirst;
+        $patlast = $request->patlast;
 
         $authWardcode = DB::select(
             "SELECT TOP 1
@@ -102,8 +104,41 @@ class WardPatientsController extends Controller
                 'patients' => $patients
             ]);
         } else if ($locationType[0]->enctype == 'OR') {
-            $encounters = DB::SELECT(
-                "WITH RankedRecords AS (
+
+            // $encounters = DB::SELECT(
+            //     "WITH RankedRecords AS (
+            //         SELECT
+            //             henctr.enccode,
+            //             henctr.toecode,
+            //             hperson.hpercode,
+            //             hperson.patfirst,
+            //             hperson.patmiddle,
+            //             hperson.patlast,
+            //             hperson.patsuffix,
+            //             henctr.encdate,
+            //             ROW_NUMBER() OVER (PARTITION BY henctr.toecode ORDER BY henctr.encdate DESC) AS RowNum
+            //         FROM hperson
+            //         JOIN henctr ON henctr.hpercode = hperson.hpercode
+            //         WHERE hperson.patfirst LIKE ?
+            //         AND henctr.toecode IN ('ADM', 'OPD', 'ER')
+            //     )
+            //     SELECT
+            //         enccode,
+            //         toecode,
+            //         patfirst,
+            //         patmiddle,
+            //         patlast,
+            //         patsuffix,
+            //         encdate
+            //     FROM RankedRecords
+            //     WHERE RowNum = 1
+            //     ORDER BY encdate DESC;",
+            //     [$patfirst]
+            // );
+
+            if ($patfirst != null && $patlast != null) {
+                $encounters = DB::SELECT(
+                    "WITH RankedRecords AS (
                     SELECT
                         henctr.enccode,
                         henctr.toecode,
@@ -116,7 +151,7 @@ class WardPatientsController extends Controller
                         ROW_NUMBER() OVER (PARTITION BY henctr.toecode ORDER BY henctr.encdate DESC) AS RowNum
                     FROM hperson
                     JOIN henctr ON henctr.hpercode = hperson.hpercode
-                    WHERE hperson.hpercode LIKE ?
+                    WHERE (hperson.patfirst LIKE ? AND hperson.patlast LIKE ?)
                     AND henctr.toecode IN ('ADM', 'OPD', 'ER')
                 )
                 SELECT
@@ -130,8 +165,14 @@ class WardPatientsController extends Controller
                 FROM RankedRecords
                 WHERE RowNum = 1
                 ORDER BY encdate DESC;",
-                [$request->search]
-            );
+                    [
+                        $patfirst . '%',
+                        $patlast . '%'
+                    ]
+                );
+            } else {
+                $encounters = [];
+            }
 
             return Inertia::render('Wards/Patients/OR/Index', [
                 'encounters' => $encounters
