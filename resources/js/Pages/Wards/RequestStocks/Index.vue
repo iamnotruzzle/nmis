@@ -830,12 +830,7 @@
               severity="warning"
               text
               type="submit"
-              :disabled="
-                formExisting.processing ||
-                formExisting.cl2comb == null ||
-                formExisting.quantity == null ||
-                formExisting.quantity <= 0
-              "
+              :disabled="formExisting.processing || formExisting.cl2comb == null || formExisting.quantity == null"
               @click="submitExisting"
             />
             <Button
@@ -845,12 +840,7 @@
               severity="warning"
               text
               type="submit"
-              :disabled="
-                formExisting.processing ||
-                formExisting.cl2comb == null ||
-                formExisting.quantity == null ||
-                formExisting.quantity <= 0
-              "
+              :disabled="formExisting.processing || formExisting.cl2comb == null || formExisting.quantity == null"
               @click="submitExisting"
             />
           </template>
@@ -2119,8 +2109,7 @@ export default {
         this.formExisting.cl2comb != null ||
         this.formExisting.cl2comb != '' ||
         this.formExisting.quantity != null ||
-        this.formExisting.quantity != '' ||
-        this.formExisting.quantity != 0
+        this.formExisting.quantity != ''
       ) {
         // check if in update mode
         if (this.isUpdateExisting == false) {
