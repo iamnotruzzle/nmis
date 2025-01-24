@@ -63,53 +63,59 @@ class ExistingStockController extends Controller
         );
         // dd($currentItemPrice[0]->price_per_unit);
 
-        $itemPrices = ItemPrices::create([
-            'ris_no' => $tempRisNo,
-            'cl2comb' => $request->cl2comb,
-            'acquisition_price' => $request->price_per_unit,
-            'hospital_price' =>  $request->price_per_unit,
-            'price_per_unit' =>  $currentItemPrice[0]->price_per_unit,
-            'entry_by' => $entry_by,
-        ]);
+        if (empty($currentItemPrice)) {
+            return redirect()->back()->with([
+                'noItemPrice' => 'foo',
+            ]);
+        } else {
+            $itemPrices = ItemPrices::create([
+                'ris_no' => $tempRisNo,
+                'cl2comb' => $request->cl2comb,
+                'acquisition_price' => $request->price_per_unit,
+                'hospital_price' =>  $request->price_per_unit,
+                'price_per_unit' =>  $currentItemPrice[0]->price_per_unit,
+                'entry_by' => $entry_by,
+            ]);
 
-        $existingStock = WardsStocks::create([
-            'request_stocks_id' => null,
-            'request_stocks_detail_id' => null,
-            'ris_no' => $tempRisNo,
-            'stock_id' => null,
-            'is_consumable' => null,
-            'location' => $request->authLocation,
-            'cl2comb' => $request->cl2comb,
-            'uomcode' => $request->uomcode,
-            'chrgcode' => '8',
-            'quantity' => $request->quantity,
-            'from' => 'EXISTING_STOCKS',
-            // 'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
-            'delivered_date' =>  Carbon::now(),
-            'expiration_date' =>  Carbon::maxValue(),
-        ]);
+            $existingStock = WardsStocks::create([
+                'request_stocks_id' => null,
+                'request_stocks_detail_id' => null,
+                'ris_no' => $tempRisNo,
+                'stock_id' => null,
+                'is_consumable' => null,
+                'location' => $request->authLocation,
+                'cl2comb' => $request->cl2comb,
+                'uomcode' => $request->uomcode,
+                'chrgcode' => '8',
+                'quantity' => $request->quantity,
+                'from' => 'EXISTING_STOCKS',
+                // 'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
+                'delivered_date' =>  Carbon::now(),
+                'expiration_date' =>  Carbon::maxValue(),
+            ]);
 
-        $wardStockLogs = WardsStocksLogs::create([
-            'request_stocks_id' => null,
-            'request_stocks_detail_id' => null,
-            'ris_no' => $tempRisNo,
-            'stock_id' => null,
-            'is_consumable' => null,
-            'location' => $request->authLocation,
-            'cl2comb' => $request->cl2comb,
-            'uomcode' => $request->uomcode,
-            'chrgcode' => '8',
-            'prev_qty' => 0,
-            'new_qty' => $request->quantity,
-            'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
-            'delivered_date' =>  Carbon::now(),
-            'expiration_date' =>  Carbon::maxValue(),
-            'action' => 'CREATE',
-            'remarks' => null,
-            'entry_by' => $entry_by,
-        ]);
+            $wardStockLogs = WardsStocksLogs::create([
+                'request_stocks_id' => null,
+                'request_stocks_detail_id' => null,
+                'ris_no' => $tempRisNo,
+                'stock_id' => null,
+                'is_consumable' => null,
+                'location' => $request->authLocation,
+                'cl2comb' => $request->cl2comb,
+                'uomcode' => $request->uomcode,
+                'chrgcode' => '8',
+                'prev_qty' => 0,
+                'new_qty' => $request->quantity,
+                'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
+                'delivered_date' =>  Carbon::now(),
+                'expiration_date' =>  Carbon::maxValue(),
+                'action' => 'CREATE',
+                'remarks' => null,
+                'entry_by' => $entry_by,
+            ]);
 
-        return Redirect::route('requeststocks.index');
+            return Redirect::route('requeststocks.index');
+        }
     }
 
 

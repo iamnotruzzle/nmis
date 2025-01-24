@@ -2115,12 +2115,19 @@ export default {
         if (this.isUpdateExisting == false) {
           this.formExisting.post(route('existingstock.store'), {
             preserveScroll: true,
-            onFinish: () => {
-              this.formExisting.reset();
-              this.cancel();
-              this.updateData();
-              this.createdMsg();
-              this.loading = false;
+            onFinish: (e) => {
+              //   console.log('$page', this.$page.props.flash.noItemPrice);
+
+              if (this.$page.props.flash.noItemPrice != null) {
+                // this.cancel();
+                this.noItemPriceMsg();
+              } else {
+                this.formExisting.reset();
+                this.cancel();
+                this.updateData();
+                this.createdMsg();
+                this.loading = false;
+              }
             },
           });
         } else {
@@ -2189,6 +2196,15 @@ export default {
     },
     updatedMsg() {
       this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Stock request updated', life: 3000 });
+    },
+    noItemPriceMsg() {
+      this.$toast.add({
+        severity: 'error',
+        summary: 'Failed',
+        detail:
+          'Items do not have a price assigned yet, which is why they are not being added to your existing stock. Please contact CSR for further assistance.',
+        life: 10000,
+      });
     },
     updateExistingMessage() {
       this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Stock updated', life: 3000 });
