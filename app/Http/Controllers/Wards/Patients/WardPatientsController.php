@@ -105,38 +105,6 @@ class WardPatientsController extends Controller
                 'patients' => $patients
             ]);
         } else if ($locationType[0]->enctype == 'OR') {
-
-            // $encounters = DB::SELECT(
-            //     "WITH RankedRecords AS (
-            //         SELECT
-            //             henctr.enccode,
-            //             henctr.toecode,
-            //             hperson.hpercode,
-            //             hperson.patfirst,
-            //             hperson.patmiddle,
-            //             hperson.patlast,
-            //             hperson.patsuffix,
-            //             henctr.encdate,
-            //             ROW_NUMBER() OVER (PARTITION BY henctr.toecode ORDER BY henctr.encdate DESC) AS RowNum
-            //         FROM hperson
-            //         JOIN henctr ON henctr.hpercode = hperson.hpercode
-            //         WHERE hperson.patfirst LIKE ?
-            //         AND henctr.toecode IN ('ADM', 'OPD', 'ER')
-            //     )
-            //     SELECT
-            //         enccode,
-            //         toecode,
-            //         patfirst,
-            //         patmiddle,
-            //         patlast,
-            //         patsuffix,`
-            //         encdate
-            //     FROM RankedRecords
-            //     WHERE RowNum = 1
-            //     ORDER BY encdate DESC;",
-            //     [$patfirst]
-            // );
-
             // $hpercode != null && $hpercode != '' ||
             if ($hpercode != null && $hpercode != '') {
                 $encounters = DB::SELECT(
