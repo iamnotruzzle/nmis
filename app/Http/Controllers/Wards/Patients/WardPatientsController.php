@@ -129,7 +129,7 @@ class WardPatientsController extends Controller
             //         patfirst,
             //         patmiddle,
             //         patlast,
-            //         patsuffix,
+            //         patsuffix,`
             //         encdate
             //     FROM RankedRecords
             //     WHERE RowNum = 1

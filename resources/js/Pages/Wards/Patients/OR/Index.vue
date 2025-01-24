@@ -27,7 +27,7 @@
                 />
               </div>
 
-              <!-- <div class="mx-2"></div> -->
+              <div class="mx-1"></div>
 
               <div class="p-inputgroup w-auto">
                 <span class="p-inputgroup-addon">
@@ -41,7 +41,7 @@
                 />
               </div>
 
-              <!-- <div class="mx-2"></div> -->
+              <div class="mx-1"></div>
 
               <div class="p-inputgroup w-auto">
                 <span class="p-inputgroup-addon">
@@ -55,7 +55,7 @@
                 />
               </div>
 
-              <!-- <div class="mx-2"></div> -->
+              <div class="mx-1"></div>
 
               <Button
                 class="w-auto"
@@ -208,15 +208,7 @@ export default {
             toecode: e.toecode,
             hpercode: e.hpercode,
             encdate: e.encdate,
-            patient:
-              e.patlast +
-              ',' +
-              ' ' +
-              e.patfirst +
-              ' ' +
-              (e.patmiddle == null ? '' : e.patmiddle) +
-              ' ' +
-              (e.patsuffix == null ? '' : e.patsuffix),
+            patient: e.patlast + ',' + ' ' + e.patfirst + ' ' + (e.patsuffix == null ? '' : e.patsuffix),
           });
         });
 
@@ -229,15 +221,7 @@ export default {
             toecode: e.toecode,
             hpercode: e.hpercode,
             encdate: e.encdate,
-            patient:
-              e.patlast +
-              ',' +
-              ' ' +
-              e.patfirst +
-              ' ' +
-              (e.patmiddle == null ? '' : e.patmiddle) +
-              ' ' +
-              (e.patsuffix == null ? '' : e.patsuffix),
+            patient: e.patlast + ',' + ' ' + e.patfirst + ' ' + (e.patsuffix == null ? '' : e.patsuffix),
           });
         });
 
