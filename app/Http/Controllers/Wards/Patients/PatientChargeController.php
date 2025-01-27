@@ -106,6 +106,7 @@ class PatientChargeController extends Controller
         //     ORDER BY csrw_wards_stocks.expiration_date ASC;"
         // );
 
+        // this query will show stocks that have the received status but also get the status FROM MEDICAL GASES and EXISTING_STOCKS
         $stocksFromCsr = DB::select(
             "SELECT
                 csrw_wards_stocks.id,
