@@ -82,9 +82,34 @@ class PatientChargeController extends Controller
         // dd($authWardcode);
         $wardcode = $authWardcode[0]->wardcode;
 
+        // old query but this will show items even if they are not received status
+        // $stocksFromCsr = DB::select(
+        //     "SELECT
+        //         csrw_wards_stocks.id,
+        //         csrw_wards_stocks.is_consumable,
+
+        //         item.cl2comb,
+        //         item.cl2desc,
+        //         item.uomcode,
+        //         csrw_wards_stocks.quantity,
+        //         csrw_wards_stocks.average,
+        //         csrw_wards_stocks.total_usage,
+        //         price.price_per_unit as price,
+        //         csrw_wards_stocks.expiration_date
+        //     FROM csrw_wards_stocks
+        //     JOIN hclass2 as item ON item.cl2comb = csrw_wards_stocks.cl2comb
+        //     JOIN csrw_item_prices as price ON csrw_wards_stocks.cl2comb = price.cl2comb
+        //     WHERE csrw_wards_stocks.location = '" . $wardcode . "'
+        //         AND csrw_wards_stocks.ris_no = price.ris_no
+        //         AND csrw_wards_stocks.quantity > 0
+        //         AND csrw_wards_stocks.expiration_date > GETDATE()
+        //     ORDER BY csrw_wards_stocks.expiration_date ASC;"
+        // );
+
         $stocksFromCsr = DB::select(
             "SELECT
                 csrw_wards_stocks.id,
+                csrw_wards_stocks.request_stocks_id,
                 csrw_wards_stocks.is_consumable,
                 item.cl2comb,
                 item.cl2desc,
@@ -92,17 +117,23 @@ class PatientChargeController extends Controller
                 csrw_wards_stocks.quantity,
                 csrw_wards_stocks.average,
                 csrw_wards_stocks.total_usage,
-                price.price_per_unit as price,
+                price.price_per_unit AS price,
                 csrw_wards_stocks.expiration_date
             FROM csrw_wards_stocks
-            JOIN hclass2 as item ON item.cl2comb = csrw_wards_stocks.cl2comb
-            JOIN csrw_item_prices as price ON csrw_wards_stocks.cl2comb = price.cl2comb
+            JOIN hclass2 AS item ON item.cl2comb = csrw_wards_stocks.cl2comb
+            JOIN csrw_item_prices AS price ON csrw_wards_stocks.cl2comb = price.cl2comb
+            LEFT JOIN csrw_request_stocks AS request ON csrw_wards_stocks.request_stocks_id = request.id
             WHERE csrw_wards_stocks.location = '" . $wardcode . "'
                 AND csrw_wards_stocks.ris_no = price.ris_no
                 AND csrw_wards_stocks.quantity > 0
                 AND csrw_wards_stocks.expiration_date > GETDATE()
+                AND (
+                    (request.status = 'RECEIVED') -- Include items with a valid request_stocks_id and status RECEIVED
+                    OR (csrw_wards_stocks.request_stocks_id IS NULL AND csrw_wards_stocks.[from] IN ('MEDICAL SUPPLIES', 'EXISTING_STOCKS'))
+                )
             ORDER BY csrw_wards_stocks.expiration_date ASC;"
         );
+
         // set medicalSupplies value and remove duplicate id
         $medicalSupplies = [];
         $seenIds = [];
