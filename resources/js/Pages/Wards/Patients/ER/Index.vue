@@ -95,7 +95,7 @@
             <!-- {{ data }} -->
             <div class="flex justify-content-center">
               <Button
-                :class="data.logs_id == null ? 'bg-green-500 border-transparent' : 'pulse border-transparent'"
+                :class="data.logs_id == null ? 'pulse border-transparent' : 'bg-green-500 border-transparent'"
                 icon="pi pi-money-bill"
                 label="Bills"
                 @click="goToPatientCharge(data)"
