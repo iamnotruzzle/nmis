@@ -95,10 +95,9 @@
             <!-- {{ data }} -->
             <div class="flex justify-content-center">
               <Button
-                class="m-1"
+                :class="data.logs_id == null ? 'bg-green-500 border-transparent' : 'pulse border-transparent'"
                 icon="pi pi-money-bill"
                 label="Bills"
-                severity="success"
                 @click="goToPatientCharge(data)"
               />
             </div>
@@ -266,6 +265,7 @@ export default {
       console.log(this.patients);
       this.patients.forEach((e) => {
         this.patientsList.push({
+          logs_id: e.logs_id,
           enccode: e.enccode,
           hpercode: e.hpercode,
           department: e.tsdesc,
@@ -315,3 +315,24 @@ export default {
   watch: {},
 };
 </script>
+
+<style scoped>
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.pulse {
+  background-color: #d6ec13;
+  animation: pulse 1s infinite;
+}
+</style>
