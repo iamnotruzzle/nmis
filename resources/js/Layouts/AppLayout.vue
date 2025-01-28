@@ -155,13 +155,13 @@ export default {
               prefix: 'packages',
               comp: 'Tools/Packages/Index',
             },
-            // {
-            //   label: 'Reports',
-            //   icon: 'si-microsoftexcel',
-            //   to: 'wardreports',
-            //   prefix: 'wardreports',
-            //   comp: 'Ward/Census/ECG/Index',
-            // },
+            {
+              label: 'ECG',
+              icon: 'si-microsoftexcel',
+              to: 'ecgreports',
+              prefix: 'ecgreports',
+              comp: 'Ward/Census/ECG/Index',
+            },
           ],
         },
         {
@@ -372,9 +372,15 @@ export default {
       }
       if (this.$page.props.user.designation == 'csr') {
         this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'ecgreports';
+        });
+      }
+      if (this.$page.props.user.designation == 'csr') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
           return obj.to !== 'admindashboard';
         });
       }
+
       //   if (this.$page.props.user.designation == 'csr') {
       //     this.menu[2].items = this.menu[2].items.filter(function (obj) {
       //       return obj.to !== 'wardsmanualreports';

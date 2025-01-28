@@ -29,6 +29,7 @@ use App\Http\Controllers\Reports\Ward\WardStocksReportController;
 use App\Http\Controllers\Tools\Packages\PackageController;
 use App\Http\Controllers\Users\User\ProfileController;
 use App\Http\Controllers\Users\UserController;
+use App\Http\Controllers\Wards\Census\ECG\ECGController;
 use App\Http\Controllers\Wards\Consignment\ConsignmentController;
 use App\Http\Controllers\Wards\CsrInventory\CsrInventoryController;
 use App\Http\Controllers\Wards\MedicalGases\WardMedicalGasesController;
@@ -108,6 +109,7 @@ Route::middleware(['web', 'auth', 'verified'])->group(
         Route::get('wardstocks/export/', [WardStocksReportController::class, 'export']);
         // Route::resource('wardsmanualreports', WardsManualReportController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         // Route::get('wardsmanualreports/export/', [WardsManualReportExportController::class, 'export']);
+        Route::resource('ecgreports', ECGController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
 
         Route::resource('wardspatients', WardPatientsController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('patientcharge', PatientChargeController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
