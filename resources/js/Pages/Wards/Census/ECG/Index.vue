@@ -59,48 +59,83 @@
         <template #empty> No data found. </template>
         <template #loading> Loading data. Please wait. </template>
         <Column
-          field="tscode"
-          header="TSCODE"
-          style="width: 5%"
+          header="TOTAL ECG DONE"
           sortable
         >
           <template #body="{ data }">
             <div class="flex flex-row align-items-center">
-              {{ data.tscode }}
+              {{ data.total_ecg_done }}
             </div>
           </template>
         </Column>
         <Column
-          field="tsdesc"
-          header="Type of service"
-          style="width: 5%"
+          header="Internal Medicine"
+          sortable
         >
           <template #body="{ data }">
             <div class="flex flex-row align-items-center">
-              <div class="">
-                <span class="text-green-500">{{ data.tscode }}</span>
-              </div>
+              {{ data.internal_medicine }}
             </div>
           </template>
         </Column>
         <Column
-          field="total_quantity"
-          header="Quantity"
+          header="Surgery"
           sortable
-          style="width: 10%"
         >
           <template #body="{ data }">
-            <span>{{ data.total_quantity }}</span>
+            <div class="flex flex-row align-items-center">
+              {{ data.surgery }}
+            </div>
           </template>
         </Column>
         <Column
-          field="total_cost"
+          header="Internal Medicine"
+          sortable
+        >
+          <template #body="{ data }">
+            <div class="flex flex-row align-items-center">
+              {{ data.internal_medicine }}
+            </div>
+          </template>
+        </Column>
+        <Column
+          header="Family medicine"
+          sortable
+        >
+          <template #body="{ data }">
+            <div class="flex flex-row align-items-center">
+              {{ data.family_medicine }}
+            </div>
+          </template>
+        </Column>
+        <Column
+          header="Pediatrics"
+          sortable
+        >
+          <template #body="{ data }">
+            <div class="flex flex-row align-items-center">
+              {{ data.pediatrics }}
+            </div>
+          </template>
+        </Column>
+        <Column
+          header="Gynecology"
+          sortable
+        >
+          <template #body="{ data }">
+            <div class="flex flex-row align-items-center">
+              {{ data.gynecology }}
+            </div>
+          </template>
+        </Column>
+        <Column
           header="Total cost"
           sortable
-          style="width: 10%"
         >
           <template #body="{ data }">
-            <span>{{ data.total_cost }}</span>
+            <div class="flex flex-row align-items-center">
+              {{ data.total_cost }}
+            </div>
           </template>
         </Column>
       </DataTable>
@@ -170,8 +205,8 @@ export default {
     this.rows = this.census.per_page;
   },
   mounted() {
-    console.log('mounted', this.census);
-    this.storeCensusInController();
+    // console.log('mounted', this.census);
+    this.storeCensusInContainer();
 
     this.loading = false;
   },
@@ -197,16 +232,37 @@ export default {
         String(date.getMinutes()).padStart(2, '0')
       );
     },
-    storeCensusInController() {
-      console.log(this.census);
+    storeCensusInContainer() {
+      //   console.log(this.census);
+
+      // Initialize structure to hold pivoted data
+      const result = {
+        total_ecg_done: 0,
+        internal_medicine: 0,
+        surgery: 0,
+        family_medicine: 0,
+        pediatrics: 0,
+        gynecology: 0,
+        total_cost: 0,
+      };
+
+      // Helper function to convert text to snake_case
+      const toSnakeCase = (str) => str.toLowerCase().replace(/\s+/g, '_'); // Lowercase and replace spaces with underscores
+
+      // Loop through the census data and populate the result
       this.census.forEach((e) => {
-        this.censusList.push({
-          tscode: e.tscode,
-          tsdesc: e.tsdesc,
-          total_quantity: e.total_quantity,
-          total_cost: e.total_cost,
-        });
+        const key = toSnakeCase(e.tsdesc); // Convert tsdesc to snake_case
+        result.total_ecg_done += parseInt(e.total_quantity, 10); // Add to total ECG done
+        result[key] = parseInt(e.total_quantity, 10); // Assign quantity to specific department
+        result.total_cost += parseFloat(e.total_cost); // Add to total cost
       });
+
+      // Format total_cost to 2 decimal points
+      result.total_cost = result.total_cost.toFixed(2);
+
+      // Assign the final structured data
+      //   console.log(result);
+      this.censusList = [result]; // Store as an array with a single object
     },
     updateData() {
       this.censusList = [];
@@ -218,7 +274,7 @@ export default {
         onFinish: (visit) => {
           this.totalRecords = this.census.total;
           this.censusList = [];
-          this.storeCensusInController();
+          this.storeCensusInContainer();
           this.loading = false;
         },
       });
