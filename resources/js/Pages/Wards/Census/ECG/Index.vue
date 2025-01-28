@@ -154,11 +154,36 @@
             text-align: center;
             display: flex;
             flex-direction: column;
-            margin: 25px 50px;
+            margin: 15px 0px;
           "
         >
-          ELECTROCARDIOGRAM REPORT
+          <h2>ELECTROCARDIOGRAM REPORT</h2>
         </div>
+
+        <table style="width: 100%; border-collapse: collapse; text-align: center; font-family: Arial">
+          <thead style="text-transform: uppercase; font-size: 15px">
+            <tr>
+              <th style="border: 1px solid #ddd; padding: 6px; background-color: #f4f4f4">ECG Done</th>
+              <th style="border: 1px solid #ddd; padding: 6px; background-color: #f4f4f4">Internal Medicine</th>
+              <th style="border: 1px solid #ddd; padding: 6px; background-color: #f4f4f4">Surgery</th>
+              <th style="border: 1px solid #ddd; padding: 6px; background-color: #f4f4f4">Gynecology</th>
+              <th style="border: 1px solid #ddd; padding: 6px; background-color: #f4f4f4">Family Medicine</th>
+              <th style="border: 1px solid #ddd; padding: 6px; background-color: #f4f4f4">Pediatrics</th>
+              <th style="border: 1px solid #ddd; padding: 6px; background-color: #f4f4f4">Total Cost</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background-color: #f9f9f9; white-space: nowrap">
+              <td style="border: 1px solid #ddd; padding: 8px">{{ printForm.total_ecg_done }}</td>
+              <td style="border: 1px solid #ddd; padding: 8px">{{ printForm.internal_medicine }}</td>
+              <td style="border: 1px solid #ddd; padding: 8px">{{ printForm.surgery }}</td>
+              <td style="border: 1px solid #ddd; padding: 8px">{{ printForm.gynecology }}</td>
+              <td style="border: 1px solid #ddd; padding: 8px">{{ printForm.family_medicine }}</td>
+              <td style="border: 1px solid #ddd; padding: 8px">{{ printForm.pediatrics }}</td>
+              <td style="border: 1px solid #ddd; padding: 8px">₱ {{ printForm.total_cost }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </app-layout>
@@ -220,7 +245,13 @@ export default {
       printForm: this.$inertia.form({
         from: null,
         to: null,
-        items: [],
+        total_ecg_done: null,
+        internal_medicine: null,
+        surgery: null,
+        gynecology: null,
+        family_medicine: null,
+        pediatrics: null,
+        total_cost: null,
       }),
     };
   },
@@ -264,17 +295,13 @@ export default {
         // Set up the print form details
         this.printForm.from = this.from;
         this.printForm.to = this.to;
-        this.printForm.items = [];
-
-        this.printForm.items.push({
-          total_ecg_done: this.censusList[0].total_ecg_done,
-          internal_medicine: this.censusList[0].internal_medicine,
-          surgery: this.censusList[0].surgery,
-          gynecology: this.censusList[0].gynecology,
-          family_medicine: this.censusList[0].family_medicine,
-          pediatrics: this.censusList[0].pediatrics,
-          total_cost: this.censusList[0].total_cost,
-        });
+        this.printForm.total_ecg_done = this.censusList[0].total_ecg_done;
+        this.printForm.internal_medicine = this.censusList[0].internal_medicine;
+        this.printForm.surgery = this.censusList[0].surgery;
+        this.printForm.gynecology = this.censusList[0].gynecology;
+        this.printForm.family_medicine = this.censusList[0].family_medicine;
+        this.printForm.pediatrics = this.censusList[0].pediatrics;
+        this.printForm.total_cost = this.censusList[0].total_cost;
 
         this.$nextTick(() => {
           // Create a hidden iframe for printing
