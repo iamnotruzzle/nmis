@@ -43,17 +43,20 @@
           </div>
         </div>
 
-        <div class="flex justify-content-end align-content-center">
-          <!-- <v-icon
-            name="la-receipt-solid"
-            class="text-green-500 text-8xl"
-            @click="print()"
-          ></v-icon> -->
+        <div class="flex justify-content-between align-items-center mt-4 mb-1">
+          <div class="text-yellow-500 text-xl">
+            NOTE:
+            <span class="text-white">
+              By default, the date filter is set to today's date. Please ensure that you have selected the correct date
+              filter before proceeding with the print operation
+            </span>
+          </div>
 
           <Button
             type="button"
             icon="pi pi-print"
-            label="Print"
+            label="PRINT"
+            class="bg-green-500 border-transparent hover:bg-green-300"
             @click="print()"
           />
         </div>
@@ -63,8 +66,6 @@
           :value="censusList"
           dataKey="tsdesc"
           sortField="tsdesc"
-          :sortOrder="1"
-          removableSort
           showGridlines
         >
           <template #header>
@@ -128,23 +129,44 @@
         id="print"
         style="font-family: Arial, sans-serif; background-color: white; color: black; white; display: none;"
       >
-        <div
-          style="
-            font-family: 'Times New Roman', Times, serif;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-          "
-        >
-          <span>Republic of the Philippines</span>
-          <span>Department of Health</span>
-          <span style="font-style: italic">Regional Office I</span>
-          <span style="font-weight: bold">MARIANO MARCOS MEMORIAL HOSPITAL AND MEDICAL CENTER</span>
-          <span>City of Batac, Ilocos Norte</span>
-          <span>Trunk line 077-792-3144; Fax line 077-792-3133</span>
-          <span>E-mail address: <span style="text-decoration: underline">mmmh.doh@gmail.com</span></span>
-          <span style="font-weight: bold"> "PHIC Accredited Health Care Provider" </span>
-          <span style="font-weight: bold">"ISO 9001:2015 Certified"</span>
+        <div style="display: flex; justify-content: center; align-items: center">
+          <div>
+            <img
+              src="images/hosp_logo.png"
+              alt="Image"
+              style="width: 90px; height: 90px"
+            />
+          </div>
+
+          <div
+            style="
+              font-family: 'Times New Roman', Times, serif;
+              text-align: center;
+              display: flex;
+              flex-direction: column;
+            "
+          >
+            <span>Republic of the Philippines</span>
+            <span>Department of Health</span>
+            <span style="font-style: italic">Regional Office I</span>
+            <span style="font-weight: bold">MARIANO MARCOS MEMORIAL HOSPITAL AND MEDICAL CENTER</span>
+            <span>City of Batac, Ilocos Norte</span>
+            <span>Trunk line 077-792-3144; Fax line 077-792-3133</span>
+            <span>E-mail address: <span style="text-decoration: underline">mmmh.doh@gmail.com</span></span>
+            <span style="font-weight: bold"> "PHIC Accredited Health Care Provider" </span>
+            <span style="font-weight: bold">"ISO 9001:2015 Certified"</span>
+            <div>
+              DATE: <span>{{ printForm.from }} - {{ printForm.to }}</span>
+            </div>
+          </div>
+
+          <div>
+            <img
+              src="images/bagong_pilipinas.png"
+              alt="Image"
+              style="width: 90px; height: 90px"
+            />
+          </div>
         </div>
 
         <div
@@ -269,6 +291,7 @@ export default {
   },
   methods: {
     tzone(date) {
+      console.log(date);
       if (date == null) {
         return '';
       } else {
@@ -293,8 +316,8 @@ export default {
       if (this.censusList) {
         // console.log(this.censusList[0]);
         // Set up the print form details
-        this.printForm.from = this.from;
-        this.printForm.to = this.to;
+        this.printForm.from = moment.tz(this.from, 'Asia/Manila').format('MM-DD-YYYY');
+        this.printForm.to = moment.tz(this.to, 'Asia/Manila').format('MM-DD-YYYY');
         this.printForm.total_ecg_done = this.censusList[0].total_ecg_done;
         this.printForm.internal_medicine = this.censusList[0].internal_medicine;
         this.printForm.surgery = this.censusList[0].surgery;
