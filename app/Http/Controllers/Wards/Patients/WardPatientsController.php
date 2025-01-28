@@ -120,8 +120,8 @@ class WardPatientsController extends Controller
                     LEFT JOIN csrw_patient_charge_logs ON csrw_patient_charge_logs.enccode = herlog.enccode
 
                     WHERE
-                        herlog.erdate BETWEEN CAST('2022-07-01' AS DATE) AND DATEADD(DAY, 1, CAST('2022-07-01' AS DATE)) -- test 1 day
-                        -- herlog.erdate BETWEEN CAST(GETDATE() AS DATE) AND DATEADD(DAY, 1, CAST(GETDATE() AS DATE)) -- prod
+                        -- herlog.erdate BETWEEN CAST('2022-07-01' AS DATE) AND DATEADD(DAY, 1, CAST('2022-07-01' AS DATE)) -- test 1 day
+                        herlog.erdate BETWEEN CAST(GETDATE() AS DATE) AND DATEADD(DAY, 1, CAST(GETDATE() AS DATE)) -- prod
                     ORDER BY herlog.erdate desc;"
             );
 
