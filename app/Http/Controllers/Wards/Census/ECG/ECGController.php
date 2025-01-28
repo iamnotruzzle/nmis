@@ -13,8 +13,8 @@ class ECGController extends Controller
 {
     public function index(Request $request)
     {
-        $from = Carbon::parse($request->from)->startOfDay();
-        $to = Carbon::parse($request->to)->endOfDay();
+        $from = $request->from ? Carbon::parse($request->from)->startOfDay() : Carbon::today()->startOfDay();
+        $to = $request->to ? Carbon::parse($request->to)->endOfDay() : Carbon::today()->endOfDay();
 
         // get auth wardcode
         $authWardcode = DB::select(
