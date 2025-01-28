@@ -3,7 +3,7 @@
     <Head title="NMIS - ECG report" />
 
     <div class="w-full flex align-items-center justify-content-center">
-      <div class="card w-8 w-full">
+      <div class="card w-6 w-full">
         <h1 class="text-center my-4">ECG Consumption Report</h1>
         <div class="flex flex-row justify-content-center">
           <div class="flex flex-column w-2">
@@ -43,12 +43,12 @@
           </div>
         </div>
 
-        <div class="flex justify-content-between align-items-center mt-4 mb-1">
+        <div class="flex justify-content-between align-items-center my-4">
           <div class="text-yellow-500 text-xl">
             NOTE:
             <span class="text-white">
               By default, the date filter is set to today's date. Please ensure that you have selected the correct date
-              filter before proceeding with the print operation
+              filter before proceeding with the print operation.
             </span>
           </div>
 
@@ -62,7 +62,7 @@
         </div>
 
         <DataTable
-          class="p-datatable-sm"
+          class="p-datatable-sm text-900"
           :value="censusList"
           dataKey="tsdesc"
           sortField="tsdesc"
@@ -73,51 +73,75 @@
           </template>
           <template #empty> No data found. </template>
           <template #loading> Loading data. Please wait. </template>
-          <Column header="TOTAL ECG DONE">
+          <Column
+            header="TOTAL ECG DONE"
+            :headerStyle="{ fontSize: '18px' }"
+          >
             <template #body="{ data }">
-              <div>
+              <div style="font-size: 16px">
                 {{ data.total_ecg_done }}
               </div>
             </template>
           </Column>
-          <Column header="INTERNAL MEDICINE">
+          <Column
+            header="INTERNAL MEDICINE"
+            :headerStyle="{ fontSize: '18px' }"
+          >
             <template #body="{ data }">
-              <div>
+              <div style="font-size: 16px">
                 {{ data.internal_medicine }}
               </div>
             </template>
           </Column>
-          <Column header="SURGERY">
+          <Column
+            header="SURGERY"
+            :headerStyle="{ fontSize: '18px' }"
+          >
             <template #body="{ data }">
-              <div>
+              <div style="font-size: 16px">
                 {{ data.surgery }}
               </div>
             </template>
           </Column>
-          <Column header="GYNECOLOGY">
+          <Column
+            header="GYNECOLOGY"
+            :headerStyle="{ fontSize: '18px' }"
+          >
             <template #body="{ data }">
-              <div>
+              <div style="font-size: 16px">
                 {{ data.gynecology }}
               </div>
             </template>
           </Column>
-          <Column header="FAMILY MEDICINE">
+          <Column
+            header="FAMILY MEDICINE"
+            :headerStyle="{ fontSize: '18px' }"
+          >
             <template #body="{ data }">
-              <div>
+              <div style="font-size: 16px">
                 {{ data.family_medicine }}
               </div>
             </template>
           </Column>
-          <Column header="PEDIATRICS">
+          <Column
+            header="PEDIATRICS"
+            :headerStyle="{ fontSize: '18px' }"
+          >
             <template #body="{ data }">
-              <div>
+              <div style="font-size: 16px">
                 {{ data.pediatrics }}
               </div>
             </template>
           </Column>
-          <Column header="TOTAL COST">
+          <Column
+            header="TOTAL COST"
+            :headerStyle="{ fontSize: '18px' }"
+          >
             <template #body="{ data }">
-              <div class="text-right my-2">
+              <div
+                class="text-right my-2"
+                style="font-size: 16px"
+              >
                 <span class="text-green-500"> ₱ {{ data.total_cost }}</span>
               </div>
             </template>
