@@ -42,6 +42,22 @@
             />
           </div>
         </div>
+
+        <div class="flex justify-content-end align-content-center">
+          <!-- <v-icon
+            name="la-receipt-solid"
+            class="text-green-500 text-8xl"
+            @click="print()"
+          ></v-icon> -->
+
+          <Button
+            type="button"
+            icon="pi pi-print"
+            label="Print"
+            @click="print()"
+          />
+        </div>
+
         <DataTable
           class="p-datatable-sm"
           :value="censusList"
@@ -107,6 +123,43 @@
           </Column>
         </DataTable>
       </div>
+
+      <div
+        id="print"
+        style="font-family: Arial, sans-serif; background-color: white; color: black; white; display: none;"
+      >
+        <div
+          style="
+            font-family: 'Times New Roman', Times, serif;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+          "
+        >
+          <span>Republic of the Philippines</span>
+          <span>Department of Health</span>
+          <span style="font-style: italic">Regional Office I</span>
+          <span style="font-weight: bold">MARIANO MARCOS MEMORIAL HOSPITAL AND MEDICAL CENTER</span>
+          <span>City of Batac, Ilocos Norte</span>
+          <span>Trunk line 077-792-3144; Fax line 077-792-3133</span>
+          <span>E-mail address: <span style="text-decoration: underline">mmmh.doh@gmail.com</span></span>
+          <span style="font-weight: bold"> "PHIC Accredited Health Care Provider" </span>
+          <span style="font-weight: bold">"ISO 9001:2015 Certified"</span>
+        </div>
+
+        <div
+          style="
+            font-family: 'Times New Roman', Times, serif;
+            font-weight: bold;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            margin: 25px 50px;
+          "
+        >
+          ELECTROCARDIOGRAM REPORT
+        </div>
+      </div>
     </div>
   </app-layout>
 </template>
@@ -164,6 +217,11 @@ export default {
       censusList: [],
       from: null,
       to: null,
+      printForm: this.$inertia.form({
+        from: null,
+        to: null,
+        items: [],
+      }),
     };
   },
   // created will be initialize before mounted
@@ -200,15 +258,72 @@ export default {
         String(date.getMinutes()).padStart(2, '0')
       );
     },
+    print() {
+      if (this.censusList) {
+        // console.log(this.censusList[0]);
+        // Set up the print form details
+        this.printForm.from = this.from;
+        this.printForm.to = this.to;
+        this.printForm.items = [];
+
+        this.printForm.items.push({
+          total_ecg_done: this.censusList[0].total_ecg_done,
+          internal_medicine: this.censusList[0].internal_medicine,
+          surgery: this.censusList[0].surgery,
+          gynecology: this.censusList[0].gynecology,
+          family_medicine: this.censusList[0].family_medicine,
+          pediatrics: this.censusList[0].pediatrics,
+          total_cost: this.censusList[0].total_cost,
+        });
+
+        this.$nextTick(() => {
+          // Create a hidden iframe for printing
+          const iframe = document.createElement('iframe');
+          iframe.style.position = 'absolute';
+          iframe.style.top = '-9999px';
+          iframe.style.left = '-9999px';
+          iframe.style.width = '0';
+          iframe.style.height = '0';
+          document.body.appendChild(iframe);
+
+          // Write print content into the iframe
+          const iframeDoc = iframe.contentWindow.document;
+          iframeDoc.open();
+          iframeDoc.write(`
+                <html>
+                <head>
+                    <title>Print</title>
+                    <style>
+                    /* Add your print styles here */
+                    </style>
+                </head>
+                <body>
+                    ${document.getElementById('print').innerHTML}
+                </body>
+                </html>
+            `);
+          iframeDoc.close();
+
+          // Trigger the print dialog
+          iframe.contentWindow.focus();
+          iframe.contentWindow.print();
+
+          // Remove the iframe after a delay to ensure proper cleanup
+          setTimeout(() => {
+            document.body.removeChild(iframe);
+          }, 100);
+        });
+      }
+    },
     storeCensusInContainer() {
       // Initialize structure to hold pivoted data
       const result = {
         total_ecg_done: 0,
         internal_medicine: 0,
         surgery: 0,
+        gynecology: 0,
         family_medicine: 0,
         pediatrics: 0,
-        gynecology: 0,
         total_cost: 0,
       };
 
