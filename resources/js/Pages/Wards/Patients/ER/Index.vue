@@ -17,7 +17,7 @@
         sortField="patient"
         :sortOrder="1"
         removableSort
-        :globalFilterFields="['hpercode', 'patient', 'status', 'physician']"
+        :globalFilterFields="['hpercode', 'department', 'patient', 'status', 'physician']"
         showGridlines
       >
         <template #header>
@@ -76,8 +76,6 @@
           header="PATIENT"
           sortable
           style="width: 15%"
-          :showFilterMenu="false"
-          :filterMenuStyle="{ width: '14rem' }"
         >
           <template #body="{ data }">
             <div class="flex flex-row align-items-center">
