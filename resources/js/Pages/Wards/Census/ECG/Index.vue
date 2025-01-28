@@ -2,140 +2,111 @@
   <app-layout>
     <Head title="NMIS - ECG report" />
 
-    <div class="card">
-      <h2 class="text-center my-4">ECG Consumption Report</h2>
-      <div class="flex flex-row justify-content-center">
-        <div class="flex flex-column w-2">
-          <label
-            for="from"
-            class="mb-2"
-            >FROM</label
-          >
-          <Calendar
-            id="from"
-            v-model="from"
-            dateFormat="mm-dd-yy"
-            placeholder="mm-dd-yyyy"
-            showIcon
-            showButtonBar
-            :manualInput="true"
-            :hideOnDateTimeSelect="true"
-          />
+    <div class="w-full flex align-items-center justify-content-center">
+      <div class="card w-8 w-full">
+        <h1 class="text-center my-4">ECG Consumption Report</h1>
+        <div class="flex flex-row justify-content-center">
+          <div class="flex flex-column w-2">
+            <label
+              for="from"
+              class="mb-2"
+              >FROM</label
+            >
+            <Calendar
+              id="from"
+              v-model="from"
+              dateFormat="mm-dd-yy"
+              placeholder="mm-dd-yyyy"
+              showIcon
+              showButtonBar
+              :manualInput="true"
+              :hideOnDateTimeSelect="true"
+            />
+          </div>
+          <div class="mx-2"></div>
+          <div class="flex flex-column w-2">
+            <label
+              for="to"
+              class="mb-2"
+              >TO</label
+            >
+            <Calendar
+              id="to"
+              v-model="to"
+              dateFormat="mm-dd-yy"
+              placeholder="mm-dd-yyyy"
+              showIcon
+              showButtonBar
+              :manualInput="true"
+              :hideOnDateTimeSelect="true"
+            />
+          </div>
         </div>
-        <div class="mx-2"></div>
-        <div class="flex flex-column w-2">
-          <label
-            for="to"
-            class="mb-2"
-            >TO</label
-          >
-          <Calendar
-            id="to"
-            v-model="to"
-            dateFormat="mm-dd-yy"
-            placeholder="mm-dd-yyyy"
-            showIcon
-            showButtonBar
-            :manualInput="true"
-            :hideOnDateTimeSelect="true"
-          />
-        </div>
+        <DataTable
+          class="p-datatable-sm"
+          :value="censusList"
+          dataKey="tsdesc"
+          sortField="tsdesc"
+          :sortOrder="1"
+          removableSort
+          showGridlines
+        >
+          <template #header>
+            <div class="flex flex-wrap align-items-center justify-content-end"></div>
+          </template>
+          <template #empty> No data found. </template>
+          <template #loading> Loading data. Please wait. </template>
+          <Column header="TOTAL ECG DONE">
+            <template #body="{ data }">
+              <div>
+                {{ data.total_ecg_done }}
+              </div>
+            </template>
+          </Column>
+          <Column header="INTERNAL MEDICINE">
+            <template #body="{ data }">
+              <div>
+                {{ data.internal_medicine }}
+              </div>
+            </template>
+          </Column>
+          <Column header="SURGERY">
+            <template #body="{ data }">
+              <div>
+                {{ data.surgery }}
+              </div>
+            </template>
+          </Column>
+          <Column header="GYNECOLOGY">
+            <template #body="{ data }">
+              <div>
+                {{ data.gynecology }}
+              </div>
+            </template>
+          </Column>
+          <Column header="FAMILY MEDICINE">
+            <template #body="{ data }">
+              <div>
+                {{ data.family_medicine }}
+              </div>
+            </template>
+          </Column>
+          <Column header="PEDIATRICS">
+            <template #body="{ data }">
+              <div>
+                {{ data.pediatrics }}
+              </div>
+            </template>
+          </Column>
+          <Column header="TOTAL COST">
+            <template #body="{ data }">
+              <div class="text-right my-2">
+                <span class="text-green-500"> ₱ {{ data.total_cost }}</span>
+              </div>
+            </template>
+          </Column>
+        </DataTable>
       </div>
-      <DataTable
-        class="p-datatable-sm"
-        :value="censusList"
-        dataKey="tsdesc"
-        sortField="tsdesc"
-        :sortOrder="1"
-        removableSort
-        showGridlines
-      >
-        <template #header>
-          <div class="flex flex-wrap align-items-center justify-content-end"></div>
-        </template>
-        <template #empty> No data found. </template>
-        <template #loading> Loading data. Please wait. </template>
-        <Column
-          header="TOTAL ECG DONE"
-          sortable
-        >
-          <template #body="{ data }">
-            <div class="flex flex-row align-items-center">
-              {{ data.total_ecg_done }}
-            </div>
-          </template>
-        </Column>
-        <Column
-          header="Internal Medicine"
-          sortable
-        >
-          <template #body="{ data }">
-            <div class="flex flex-row align-items-center">
-              {{ data.internal_medicine }}
-            </div>
-          </template>
-        </Column>
-        <Column
-          header="Surgery"
-          sortable
-        >
-          <template #body="{ data }">
-            <div class="flex flex-row align-items-center">
-              {{ data.surgery }}
-            </div>
-          </template>
-        </Column>
-        <Column
-          header="Internal Medicine"
-          sortable
-        >
-          <template #body="{ data }">
-            <div class="flex flex-row align-items-center">
-              {{ data.internal_medicine }}
-            </div>
-          </template>
-        </Column>
-        <Column
-          header="Family medicine"
-          sortable
-        >
-          <template #body="{ data }">
-            <div class="flex flex-row align-items-center">
-              {{ data.family_medicine }}
-            </div>
-          </template>
-        </Column>
-        <Column
-          header="Pediatrics"
-          sortable
-        >
-          <template #body="{ data }">
-            <div class="flex flex-row align-items-center">
-              {{ data.pediatrics }}
-            </div>
-          </template>
-        </Column>
-        <Column
-          header="Gynecology"
-          sortable
-        >
-          <template #body="{ data }">
-            <div class="flex flex-row align-items-center">
-              {{ data.gynecology }}
-            </div>
-          </template>
-        </Column>
-        <Column
-          header="Total cost"
-          sortable
-        >
-          <template #body="{ data }">
-            <div class="flex flex-row align-items-center">
-              {{ data.total_cost }}
-            </div>
-          </template>
-        </Column>
-      </DataTable>
     </div>
   </app-layout>
 </template>
@@ -230,8 +201,6 @@ export default {
       );
     },
     storeCensusInContainer() {
-      //   console.log(this.census);
-
       // Initialize structure to hold pivoted data
       const result = {
         total_ecg_done: 0,

@@ -44,6 +44,13 @@ class ECGController extends Controller
             WHERE logs.entry_at = '$authCode'
             AND logs.itemcode = 'ECG'
             AND CAST(logs.created_at AS DATE) BETWEEN '$from' AND '$to'
+            AND (
+                logs.tscode = 'FAMED'
+                OR logs.tscode = 'GYNE'
+                OR logs.tscode = 'MED'
+                OR logs.tscode = 'PEDIA'
+                OR logs.tscode = 'SURG'
+            )
             GROUP BY htypser.tscode, htypser.tsdesc;"
         );
 
