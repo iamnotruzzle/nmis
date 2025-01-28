@@ -155,13 +155,13 @@ export default {
               prefix: 'packages',
               comp: 'Tools/Packages/Index',
             },
-            {
-              label: 'ECG',
-              icon: 'si-microsoftexcel',
-              to: 'ecgreports',
-              prefix: 'ecgreports',
-              comp: 'Ward/Census/ECG/Index',
-            },
+            // {
+            //   label: 'ECG',
+            //   icon: 'si-microsoftexcel',
+            //   to: 'ecgreports',
+            //   prefix: 'ecgreports',
+            //   comp: 'Ward/Census/ECG/Index',
+            // },
           ],
         },
         {
@@ -211,25 +211,18 @@ export default {
             },
           ],
         },
-        // {
-        //   label: 'Tools',
-        //   items: [
-        //     {
-        //       label: 'Manual report',
-        //       icon: 'si-microsoftexcel',
-        //       to: 'csrmanualreports',
-        //       prefix: 'csrmanualreports',
-        //       comp: 'Csr/ManualReport/Index',
-        //     },
-        //     {
-        //       label: 'Manual report',
-        //       icon: 'si-microsoftexcel',
-        //       to: 'wardsmanualreports',
-        //       prefix: 'wardsmanualreports',
-        //       comp: 'Wards/ManualReport/Index',
-        //     },
-        //   ],
-        // },
+        {
+          label: 'CENSUS',
+          items: [
+            {
+              label: 'ECG',
+              icon: 'si-microsoftexcel',
+              to: 'ecgreports',
+              prefix: 'ecgreports',
+              comp: 'Ward/Census/ECG/Index',
+            },
+          ],
+        },
       ],
     };
   },
@@ -371,9 +364,8 @@ export default {
         });
       }
       if (this.$page.props.user.designation == 'csr') {
-        this.menu[0].items = this.menu[0].items.filter(function (obj) {
-          return obj.to !== 'ecgreports';
-        });
+        // Remove the 'CENSUS' menu
+        this.menu = this.menu.filter((menu) => menu.label !== 'CENSUS');
       }
       if (this.$page.props.user.designation == 'csr') {
         this.menu[0].items = this.menu[0].items.filter(function (obj) {
