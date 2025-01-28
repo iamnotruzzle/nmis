@@ -130,7 +130,7 @@ class PatientChargeController extends Controller
                 AND csrw_wards_stocks.expiration_date > GETDATE()
                 AND (
                     (request.status = 'RECEIVED') -- Include items with a valid request_stocks_id and status RECEIVED
-                    OR (csrw_wards_stocks.request_stocks_id IS NULL AND csrw_wards_stocks.[from] IN ('MEDICAL SUPPLIES', 'EXISTING_STOCKS'))
+                    OR (csrw_wards_stocks.request_stocks_id IS NULL AND csrw_wards_stocks.[from] IN ('MEDICAL GASES', 'EXISTING_STOCKS'))
                 )
             ORDER BY csrw_wards_stocks.expiration_date ASC;"
         );
