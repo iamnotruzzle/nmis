@@ -55,6 +55,8 @@ class PatientChargeController extends Controller
         $pat_tscode = $admlog_tscode->tscode ?? $opdlog_tscode->tscode ?? $erlog_tscode->tscode ?? null;
         $medicalSupplies = array();
 
+        // dd($pat_tscode);
+
         // dd($pat_enccode);
 
         $pat_name = DB::select("SELECT hperson.hpercode, hperson.patfirst, hperson.patmiddle, hperson.patlast FROM henctr
@@ -240,7 +242,7 @@ class PatientChargeController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request);
+        // dd($request->tscode);
         $data = $request;
 
         $entryby = Auth::user()->employeeid;

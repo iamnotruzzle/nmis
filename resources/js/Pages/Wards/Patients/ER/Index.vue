@@ -260,7 +260,7 @@ export default {
     //   });
     // },
     storePatientsInContainer() {
-      console.log(this.patients);
+      //   console.log(this.patients);
       this.patients.forEach((e) => {
         this.patientsList.push({
           logs_id: e.logs_id,

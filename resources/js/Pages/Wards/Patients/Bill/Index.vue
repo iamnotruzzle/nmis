@@ -887,7 +887,7 @@ export default {
     };
   },
   mounted() {
-    // console.log(this.canCharge); //
+    // console.log(this.pat_tscode); //
 
     this.storeBillsInContainer();
     this.getTotalAmount();
@@ -1328,7 +1328,7 @@ export default {
         this.form.enccode = this.pat_enccode;
         this.form.hospitalNumber = this.pat_name[0].hpercode;
         this.form.itemsToBillList = this.itemsToBillList;
-        this.form.tscode = this.pat_tscode.tscode;
+        this.form.tscode = this.pat_tscode;
 
         this.form.post(route('patientcharge.store'), {
           preserveState: true,
@@ -1367,7 +1367,7 @@ export default {
         this.form.enccode = this.pat_enccode;
         this.form.hospitalNumber = this.pat_name[0].hpercode;
         this.form.itemsToBillList = this.itemsToBillList;
-        this.form.tscode = this.pat_tscode.tscode;
+        this.form.tscode = this.pat_tscode;
 
         this.form.post(route('patientcharge.store'), {
           preserveState: true,
