@@ -271,7 +271,7 @@ class ReportController extends Controller
         $reports = array_values($combinedReports);
         // dd($loopCount);
 
-        // return Inertia::render('Wards/Reports/Index', [
+        // return Inertia::render('Wards/Reports/Consumption/Index', [
         //     'reports' => $reports,
         //     'locationStockBalance' => $locationStockBalance,
         //     'stockBalDates' => $stockBalDates,

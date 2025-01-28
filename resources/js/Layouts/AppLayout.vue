@@ -155,6 +155,13 @@ export default {
               prefix: 'packages',
               comp: 'Tools/Packages/Index',
             },
+            // {
+            //   label: 'Reports',
+            //   icon: 'si-microsoftexcel',
+            //   to: 'wardreports',
+            //   prefix: 'wardreports',
+            //   comp: 'Ward/Census/ECG/Index',
+            // },
           ],
         },
         {
@@ -224,7 +231,6 @@ export default {
         //   ],
         // },
       ],
-      menuForNonAdmin: null,
     };
   },
   watch: {
