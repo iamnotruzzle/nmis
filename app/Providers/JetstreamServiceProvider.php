@@ -50,10 +50,11 @@ class JetstreamServiceProvider extends ServiceProvider
             // dd($user);
 
             if ($request->wardcode != null || $request->wardcode != '') {
-                // decrypt the $user->user_pass
+                // 1st step: decrypt password
                 $decrypted_pass = DB::select("select dbo.ufn_crypto('" . $user->user_pass . "', 0) as decrypted_pass");
                 // dd($decrypted_pass[0]->decrypted_pass);
 
+                // 2nd step: decrypt the password again motherfucker, but directly from the table and where user_name is $request login
                 $decrypted_pass_from_db = DB::select("SELECT dbo.ufn_crypto(user_pass, 0) AS decrypted_pass_from_db FROM user_acc WHERE user_name = ?", [$request->login]);
                 // dd($decrypted_pass_from_db[0]->decrypted_pass_from_db);
 
