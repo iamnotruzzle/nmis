@@ -12,10 +12,10 @@
         paginator
         :rows="20"
         :rowsPerPageOptions="[20, 30, 40]"
-        dataKey="hpercode"
-        filterDisplay="row"
-        sortField="patient"
-        :sortOrder="1"
+        dataKey="enccode"
+        filterDisplay="date"
+        sortField="date"
+        :sortOrder="-1"
         removableSort
         :globalFilterFields="['hpercode', 'department', 'patient', 'status', 'physician']"
         showGridlines
@@ -62,6 +62,7 @@
           field="hpercode"
           header="HOSP. #"
           style="width: 5%"
+          sortable
         >
           <template #body="{ data }">
             <div class="flex flex-row align-items-center">
@@ -93,7 +94,7 @@
             <!-- {{ data }} -->
             <div class="flex justify-content-center">
               <Button
-                :class="data.logs_id == null ? 'pulse border-transparent' : 'bg-green-500 border-transparent'"
+                :class="data.bill_status == null ? 'pulse border-transparent' : 'bg-green-500 border-transparent'"
                 icon="pi pi-money-bill"
                 label="Bills"
                 @click="goToPatientCharge(data)"
@@ -109,7 +110,7 @@
         >
           <template #body="{ data }">
             <Tag
-              v-if="data.disposition == 'ADMIT'"
+              v-if="data.bill_status == 'ADMIT'"
               value="ADMITTED"
               severity="info"
             />
@@ -278,7 +279,8 @@ export default {
             (e.patsuffix == null ? '' : e.patsuffix),
           disposition: e.dispcode,
           physician: e.lastname + ',' + ' ' + e.firstname + ' ' + (e.empsuffix == null ? '' : e.empsuffix),
-          date: e.erdtedis,
+          date: e.erdate,
+          bill_status: e.bill_status,
         });
       });
     },

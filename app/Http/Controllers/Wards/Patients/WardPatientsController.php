@@ -75,31 +75,9 @@ class WardPatientsController extends Controller
                 'patients' => $patients
             ]);
         } else if ($locationType[0]->enctype == 'ER') {
-            $patients = DB::SELECT(
-                // this query includes all patients of ER, including patients that was transferred from ER to WARD for admission.
-                "SELECT herlog.enccode, herlog.hpercode, herlog.erdate, herlog.licno,
-                    hpersonal.lastname, hpersonal.firstname, hpersonal.empsuffix,
-                    hperson.patlast, hperson.patfirst, hperson.patmiddle,
-                    htypser.tsdesc, herlog.erdtedis, herlog.erstat, herlog.dispcode, henctr.toecode
-
-                    FROM herlog
-                    WITH (NOLOCK)
-
-                    JOIN henctr ON henctr.enccode = herlog.enccode
-                    INNER JOIN hperson ON hperson.hpercode = herlog.hpercode
-                    INNER JOIN htypser ON htypser.tscode = herlog.tscode
-                    LEFT JOIN hdisposition ON hdisposition.dispcode = herlog.dispcode
-                    LEFT JOIN hprovider ON hprovider.licno = herlog.licno
-                    LEFT JOIN hpersonal ON hpersonal.employeeid = hprovider.employeeid
-
-                    WHERE
-                        --herlog.erdate BETWEEN CAST('2022-07-01' AS DATE) AND DATEADD(DAY, 1, CAST('2022-07-01' AS DATE)) -- test 1 day
-                        herlog.erdate BETWEEN CAST(GETDATE() AS DATE) AND DATEADD(DAY, 1, CAST(GETDATE() AS DATE))  -- prod
-
-                    ORDER BY herlog.erdate desc;"
-            );
-
             // $patients = DB::SELECT(
+            //     // this query includes all patients of ER, including patients that was transferred from ER to WARD for admission.
+            //     // 1 day filter only
             //     "SELECT herlog.enccode, herlog.hpercode, herlog.erdate, herlog.licno,
             //         hpersonal.lastname, hpersonal.firstname, hpersonal.empsuffix,
             //         hperson.patlast, hperson.patfirst, hperson.patmiddle,
@@ -116,11 +94,50 @@ class WardPatientsController extends Controller
             //         LEFT JOIN hpersonal ON hpersonal.employeeid = hprovider.employeeid
 
             //         WHERE
-            //             -- herlog.erdate BETWEEN CAST('2022-07-01' AS DATE) AND DATEADD(DAY, 1, CAST('2022-07-01' AS DATE)) -- test 1 day
-            //             herlog.erdate BETWEEN DATEADD(DAY, -1, CAST(GETDATE() AS DATE)) AND DATEADD(DAY, 1, CAST(GETDATE() AS DATE)) -- prod
+            //             --herlog.erdate BETWEEN CAST('2022-07-01' AS DATE) AND DATEADD(DAY, 1, CAST('2022-07-01' AS DATE)) -- test 1 day
+            //             herlog.erdate BETWEEN CAST(GETDATE() AS DATE) AND DATEADD(DAY, 1, CAST(GETDATE() AS DATE))  -- prod
 
             //         ORDER BY herlog.erdate desc;"
             // );
+
+            // 2 days filter
+            $patients = DB::SELECT(
+                "SELECT
+                    herlog.enccode,
+                    herlog.hpercode,
+                    herlog.erdate,
+                    herlog.licno,
+                    hpersonal.lastname,
+                    hpersonal.firstname,
+                    hpersonal.empsuffix,
+                    hperson.patlast,
+                    hperson.patfirst,
+                    hperson.patmiddle,
+                    htypser.tsdesc,
+                    herlog.erdate,
+                    herlog.erstat,
+                    herlog.dispcode,
+                    henctr.toecode,
+                    -- Custom Bill Status Column
+                    (SELECT TOP 1 'BILLED'
+                    FROM csrw_patient_charge_logs
+                    WHERE csrw_patient_charge_logs.enccode = herlog.enccode
+                    AND csrw_patient_charge_logs.entry_at = 'ER') AS bill_status
+
+                FROM herlog WITH (NOLOCK)
+                JOIN henctr ON henctr.enccode = herlog.enccode
+                INNER JOIN hperson ON hperson.hpercode = herlog.hpercode
+                INNER JOIN htypser ON htypser.tscode = herlog.tscode
+                LEFT JOIN hdisposition ON hdisposition.dispcode = herlog.dispcode
+                LEFT JOIN hprovider ON hprovider.licno = herlog.licno
+                LEFT JOIN hpersonal ON hpersonal.employeeid = hprovider.employeeid
+
+                WHERE
+                    herlog.erdate BETWEEN DATEADD(DAY, -1, CAST(GETDATE() AS DATE))
+                                    AND DATEADD(DAY, 1, CAST(GETDATE() AS DATE))
+
+                ORDER BY herlog.erdate DESC;"
+            );
 
             return Inertia::render('Wards/Patients/ER/Index', [
                 'patients' => $patients
