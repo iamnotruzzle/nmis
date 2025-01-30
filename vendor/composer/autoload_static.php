@@ -727,6 +727,7 @@ class ComposerStaticInita35f14ec21fb126801fb4364978bffb6
         'App\\Http\\Controllers\\Tools\\Packages\\PackageController' => __DIR__ . '/../..' . '/app/Http/Controllers/Tools/Packages/PackageController.php',
         'App\\Http\\Controllers\\Users\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/Users/UserController.php',
         'App\\Http\\Controllers\\Users\\User\\ProfileController' => __DIR__ . '/../..' . '/app/Http/Controllers/Users/User/ProfileController.php',
+        'App\\Http\\Controllers\\Wards\\Census\\ECG\\ECGController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/Census/ECG/ECGController.php',
         'App\\Http\\Controllers\\Wards\\Consignment\\ConsignmentController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/Consignment/ConsignmentController.php',
         'App\\Http\\Controllers\\Wards\\CsrInventory\\CsrInventoryController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/CsrInventory/CsrInventoryController.php',
         'App\\Http\\Controllers\\Wards\\Dashboard\\DashboardController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/Dashboard/DashboardController.php',

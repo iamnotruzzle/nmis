@@ -355,6 +355,7 @@ class PatientChargeController extends Controller
                                         'tscode' => $request->tscode,
                                         'entry_at' => $authCode,
                                         'entry_by' => $entryby,
+                                        'pcchrgcod' => $patientChargeDate->pcchrgcod, // charge slip no.
                                     ]);
 
                                     // newStockQty = (($wardStock->quantity * $wardStock->average) - $wardStock->total_usage) - $remaining_qty_to_charge;
@@ -391,6 +392,7 @@ class PatientChargeController extends Controller
                                         'tscode' => $request->tscode,
                                         'entry_at' => $authCode,
                                         'entry_by' => $entryby,
+                                        'pcchrgcod' => $patientChargeDate->pcchrgcod, // charge slip no.
                                     ]);
 
                                     // Calculate the new total_usage after charging the patient
@@ -484,6 +486,7 @@ class PatientChargeController extends Controller
                                     'tscode' => $request->tscode,
                                     'entry_at' => $authCode,
                                     'entry_by' => $entryby,
+                                    'pcchrgcod' => $patientChargeDate->pcchrgcod, // charge slip no.
                                 ]);
 
                                 // getting the new qty of current editing ward stock
@@ -517,6 +520,7 @@ class PatientChargeController extends Controller
                                     'tscode' => $request->tscode,
                                     'entry_at' => $authCode,
                                     'entry_by' => $entryby,
+                                    'pcchrgcod' => $patientChargeDate->pcchrgcod, // charge slip no.
                                 ]);
 
                                 $remaining_qty_to_charge = $remaining_qty_to_charge - $wardStock->quantity;
@@ -585,6 +589,7 @@ class PatientChargeController extends Controller
                         'tscode' => $request->tscode,
                         'entry_at' => $authCode,
                         'entry_by' => $entryby,
+                        'pcchrgcod' => $patientMiscChargeDate->pcchrgcod, // charge slip no.
                     ]);
                 }
 
@@ -637,6 +642,7 @@ class PatientChargeController extends Controller
                         'entry_by' => $authID,
                         'created_at' => $previousPatientChargeLogs->created_at,
                         'updated_at' => $previousPatientChargeLogs->updated_at,
+                        'pcchrgcod' => $previousPatientChargeLogs->pcchrgcod, // charge slip no.
                     ]);
                 }
 
@@ -748,6 +754,7 @@ class PatientChargeController extends Controller
                                 'entry_by' => $authID,
                                 'created_at' => $previousPatientChargeLogs->created_at,
                                 'updated_at' => $previousPatientChargeLogs->updated_at,
+                                'pcchrgcod' => $previousPatientChargeLogs->pcchrgcod, // charge slip no.
                             ]);
                         }
 
@@ -957,6 +964,7 @@ class PatientChargeController extends Controller
                                 'entry_by' => $authID,
                                 'created_at' => $previousPatientChargeLogs->created_at,
                                 'updated_at' => $previousPatientChargeLogs->updated_at,
+                                'pcchrgcod' => $previousPatientChargeLogs->pcchrgcod, // charge slip no.
                             ]);
                         }
                         // s
@@ -1039,6 +1047,7 @@ class PatientChargeController extends Controller
                                 'entry_by' => $authID,
                                 'created_at' => $previousPatientChargeLogs->created_at,
                                 'updated_at' => $previousPatientChargeLogs->updated_at,
+                                'pcchrgcod' => $previousPatientChargeLogs->pcchrgcod, // charge slip no.
                             ]);
                         }
 

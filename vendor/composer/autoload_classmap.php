@@ -48,6 +48,7 @@ return array(
     'App\\Http\\Controllers\\Tools\\Packages\\PackageController' => $baseDir . '/app/Http/Controllers/Tools/Packages/PackageController.php',
     'App\\Http\\Controllers\\Users\\UserController' => $baseDir . '/app/Http/Controllers/Users/UserController.php',
     'App\\Http\\Controllers\\Users\\User\\ProfileController' => $baseDir . '/app/Http/Controllers/Users/User/ProfileController.php',
+    'App\\Http\\Controllers\\Wards\\Census\\ECG\\ECGController' => $baseDir . '/app/Http/Controllers/Wards/Census/ECG/ECGController.php',
     'App\\Http\\Controllers\\Wards\\Consignment\\ConsignmentController' => $baseDir . '/app/Http/Controllers/Wards/Consignment/ConsignmentController.php',
     'App\\Http\\Controllers\\Wards\\CsrInventory\\CsrInventoryController' => $baseDir . '/app/Http/Controllers/Wards/CsrInventory/CsrInventoryController.php',
     'App\\Http\\Controllers\\Wards\\Dashboard\\DashboardController' => $baseDir . '/app/Http/Controllers/Wards/Dashboard/DashboardController.php',
