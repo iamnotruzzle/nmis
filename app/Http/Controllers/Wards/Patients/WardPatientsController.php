@@ -75,15 +75,13 @@ class WardPatientsController extends Controller
                 'patients' => $patients
             ]);
         } else if ($locationType[0]->enctype == 'ER') {
-            // $pastSevenDays = Carbon::parse(now())->subDays(7)->format('Y-m-d H:i');
-            // herlog.erdate > '$pastSevenDays' --prod: filter past 7 days including today
-
             // $patients = DB::SELECT(
             //     // this query includes all patients of ER, including patients that was transferred from ER to WARD for admission.
             //     "SELECT herlog.enccode, herlog.hpercode, herlog.erdate, herlog.licno,
             //         hpersonal.lastname, hpersonal.firstname, hpersonal.empsuffix,
             //         hperson.patlast, hperson.patfirst, hperson.patmiddle,
-            //         htypser.tsdesc, herlog.erdtedis, herlog.erstat, herlog.dispcode, henctr.toecode
+            //         htypser.tsdesc, herlog.erdtedis, herlog.erstat, herlog.dispcode, henctr.toecode,
+            //         csrw_patient_charge_logs.id as logs_id
 
             //         FROM herlog
             //         WITH (NOLOCK)
@@ -94,19 +92,19 @@ class WardPatientsController extends Controller
             //         LEFT JOIN hdisposition ON hdisposition.dispcode = herlog.dispcode
             //         LEFT JOIN hprovider ON hprovider.licno = herlog.licno
             //         LEFT JOIN hpersonal ON hpersonal.employeeid = hprovider.employeeid
+            //         LEFT JOIN csrw_patient_charge_logs ON csrw_patient_charge_logs.enccode = herlog.enccode
 
             //         WHERE
-            //             herlog.erdate BETWEEN CAST('2022-06-01' AS DATE) AND DATEADD(DAY, 1, CAST('2022-06-02' AS DATE)) -- test 1 day
-            //             -- herlog.erdate BETWEEN CAST(GETDATE() AS DATE) AND DATEADD(DAY, 1, CAST(GETDATE() AS DATE)) -- prod
-            //         ORDER BY herlog.erdate desc"
+            //             -- herlog.erdate BETWEEN CAST('2022-07-01' AS DATE) AND DATEADD(DAY, 1, CAST('2022-07-01' AS DATE)) -- test 1 day
+            //             herlog.erdate BETWEEN CAST(GETDATE() AS DATE) AND DATEADD(DAY, 1, CAST(GETDATE() AS DATE)) -- prod
+            //         ORDER BY herlog.erdate desc;"
             // );
+
             $patients = DB::SELECT(
-                // this query includes all patients of ER, including patients that was transferred from ER to WARD for admission.
                 "SELECT herlog.enccode, herlog.hpercode, herlog.erdate, herlog.licno,
                     hpersonal.lastname, hpersonal.firstname, hpersonal.empsuffix,
                     hperson.patlast, hperson.patfirst, hperson.patmiddle,
-                    htypser.tsdesc, herlog.erdtedis, herlog.erstat, herlog.dispcode, henctr.toecode,
-                    csrw_patient_charge_logs.id as logs_id
+                    htypser.tsdesc, herlog.erdtedis, herlog.erstat, herlog.dispcode, henctr.toecode
 
                     FROM herlog
                     WITH (NOLOCK)
@@ -117,11 +115,11 @@ class WardPatientsController extends Controller
                     LEFT JOIN hdisposition ON hdisposition.dispcode = herlog.dispcode
                     LEFT JOIN hprovider ON hprovider.licno = herlog.licno
                     LEFT JOIN hpersonal ON hpersonal.employeeid = hprovider.employeeid
-                    LEFT JOIN csrw_patient_charge_logs ON csrw_patient_charge_logs.enccode = herlog.enccode
 
                     WHERE
                         -- herlog.erdate BETWEEN CAST('2022-07-01' AS DATE) AND DATEADD(DAY, 1, CAST('2022-07-01' AS DATE)) -- test 1 day
-                        herlog.erdate BETWEEN CAST(GETDATE() AS DATE) AND DATEADD(DAY, 1, CAST(GETDATE() AS DATE)) -- prod
+                        herlog.erdate BETWEEN DATEADD(DAY, -1, CAST(GETDATE() AS DATE)) AND DATEADD(DAY, 1, CAST(GETDATE() AS DATE)) -- prod
+
                     ORDER BY herlog.erdate desc;"
             );
 
