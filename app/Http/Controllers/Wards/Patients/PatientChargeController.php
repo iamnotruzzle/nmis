@@ -275,6 +275,7 @@ class PatientChargeController extends Controller
         $pcchrgcod = $this->generateUniqueChargeCode();
         $previousItem = '';
 
+        // charge the patient else void charge
         if ($request->isUpdate == false) {
             // get patient account number
             $r = PatientAccount::where('enccode', $enccode)->first(['paacctno']);
@@ -602,8 +603,6 @@ class PatientChargeController extends Controller
 
             // void/return MISC item
             if ($request->upd_type_of_charge_code == 'MISC') {
-                // dd($request);
-
                 $previousCharge = null;
                 $previousPatientChargeLogs = null;
                 $previousWardStocks = null;
@@ -623,6 +622,7 @@ class PatientChargeController extends Controller
                 // delete the patient charge log
                 $patientChargeLogs->delete();
 
+                // check if it only updates the quantity of charged items
                 if ((int)$previousPatientChargeLogs->quantity != (int)$upd_QtyToReturn) {
                     PatientChargeLogs::create([
                         'enccode' => $previousPatientChargeLogs->enccode,
@@ -646,6 +646,7 @@ class PatientChargeController extends Controller
                     ]);
                 }
 
+                // if previous charge minus the quantity to return = 0 then void the charge (delete charge)
                 if (((int)$previousCharge->pchrgqty - (int)$upd_QtyToReturn) == 0) {
                     PatientCharge::where('enccode', $request->upd_enccode)
                         ->where('itemcode', $request->upd_itemcode)
