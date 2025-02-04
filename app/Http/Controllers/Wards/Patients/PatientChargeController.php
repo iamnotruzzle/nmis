@@ -111,6 +111,7 @@ class PatientChargeController extends Controller
         // this query will show stocks that have the received status but also get the status FROM MEDICAL GASES and EXISTING_STOCKS
         $stocksFromCsr = DB::select(
             "SELECT
+                csrw_wards_stocks.[from],
                 csrw_wards_stocks.id,
                 csrw_wards_stocks.request_stocks_id,
                 csrw_wards_stocks.is_consumable,
@@ -144,6 +145,7 @@ class PatientChargeController extends Controller
         foreach ($stocksFromCsr as $s) {
             if (!in_array($s->id, $seenIds)) {
                 $medicalSupplies[] = (object) [
+                    'from' => $s->from,
                     'id' => $s->id,
                     'is_consumable' => $s->is_consumable,
                     'cl2comb' => $s->cl2comb,
