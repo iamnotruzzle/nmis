@@ -358,7 +358,7 @@ class PatientChargeController extends Controller
                                         'entry_by' => $entryby,
                                         'pcchrgcod' => $patientChargeDate->pcchrgcod, // charge slip no.
                                     ]);
-
+                                    //
                                     // newStockQty = (($wardStock->quantity * $wardStock->average) - $wardStock->total_usage) - $remaining_qty_to_charge;
                                     // getting the new qty of current editing ward stock
                                     $newStockQty = $wardStock->quantity - $remaining_qty_to_charge;
