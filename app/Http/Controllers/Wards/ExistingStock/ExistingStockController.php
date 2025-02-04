@@ -58,6 +58,7 @@ class ExistingStockController extends Controller
 
         $currentItemPrice = DB::select(
             "SELECT TOP 1 * FROM csrw_item_prices WHERE cl2comb = ?
+                AND item_conversion_id IS NOT NULL
                 ORDER BY created_at DESC;",
             [$request->cl2comb]
         );
