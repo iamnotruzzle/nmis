@@ -12,7 +12,7 @@
       >
         <DataTable
           class="p-datatable-sm card"
-          style="border-top-right-radius: 0px; border-bottom-right-radius: 0px"
+          style="border-top-right-radius: 0px; border-bottom-right-radius: 0px; width: 90%"
           dataKey="uid"
           v-model:filters="filters"
           :value="billList"
