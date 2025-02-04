@@ -158,7 +158,7 @@ class PatientChargeController extends Controller
                 $seenIds[] = $s->id;
             }
         }
-        dd($medicalSupplies);
+        // dd($medicalSupplies);
 
         // get miscellaneous / miscellaneous
         $misc = Miscellaneous::with('unit')
