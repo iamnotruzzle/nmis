@@ -43,25 +43,27 @@ class JetstreamServiceProvider extends ServiceProvider
         );
 
         Fortify::authenticateUsing(function (Request $request) {
-            // dd($request);
+            // dd($request->password);
 
             // $user = User::where('employeeid', $request->login)->first();
             $user = User::where('user_name', $request->login)->first();
             // dd($user);
 
             if ($request->wardcode != null || $request->wardcode != '') {
-                // 1st step: decrypt password
-                $decrypted_pass = DB::select("select dbo.ufn_crypto('" . $user->user_pass . "', 0) as decrypted_pass");
-                // dd($decrypted_pass[0]->decrypted_pass);
+                // 1st step: encrypt inputted password password
+                $enc = DB::select("select dbo.ufn_crypto('" . $request->password . "', 1) as decrypted_pass");
+                // dd($enc[0]->decrypted_pass);
 
-                // 2nd step: decrypt the password again motherfucker, but directly from the table and where user_name is $request login
+                // 2nd step: decrypt the newly encrypted password
+                $dec = DB::select("select dbo.ufn_crypto('" . $enc[0]->decrypted_pass . "', 0) as decrypted_pass");
+                // dd($dec[0]->decrypted_pass);
+
+                // 3rd step: decrypt the password again motherfucker, but directly from the table and where user_name is $request login
                 $decrypted_pass_from_db = DB::select("SELECT dbo.ufn_crypto(user_pass, 0) AS decrypted_pass_from_db FROM user_acc WHERE user_name = ?", [$request->login]);
                 // dd($decrypted_pass_from_db[0]->decrypted_pass_from_db);
 
-                // old condition
-                // if ($user && Hash::check($request->password, $user->password)) {
-                // new condition
-                if ($user && $decrypted_pass[0]->decrypted_pass == $decrypted_pass_from_db[0]->decrypted_pass_from_db) {
+
+                if ($user && $dec[0]->decrypted_pass == $decrypted_pass_from_db[0]->decrypted_pass_from_db) {
                     // return $user;
                     if ($request->wardcode == 'CSR' && $user->designation == 'csr') {
                         return $user;
