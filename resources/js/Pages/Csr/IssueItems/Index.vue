@@ -602,7 +602,7 @@
           </div>
           <div class="field">
             <label
-              >Usage
+              >Usage/Average
               <b class="text-error"
                 >NOTE: If 1 tank equals 1800 lbs, declare the usage as 1800 lbs regardless of the number of tanks
                 received, as long as each tank is 1800 lbs.</b
@@ -742,6 +742,7 @@ export default {
       createRequestStocksDialog: false,
       issuedItemsDialog: false,
       editStatusDialog: false,
+      selectedItemsUomDesc: null,
       search: '',
       options: {},
       params: {},
@@ -1005,6 +1006,7 @@ export default {
         (this.issuedItemList = []),
         (this.issuedItemsDialog = false),
         (this.medicalGasDialog = false),
+        (this.selectedItemsUomDesc = null),
         this.form.clearErrors(),
         this.form.reset()
       );
@@ -1137,12 +1139,54 @@ export default {
         }
       }
     },
+    submitMedicalGases() {
+      if (
+        this.formMedicalGas.processing ||
+        this.formMedicalGas.wardcode == null ||
+        this.formMedicalGas.fund_source == null ||
+        this.formMedicalGas.cl2comb == null ||
+        this.formMedicalGas.quantity == null ||
+        this.formMedicalGas.average == null ||
+        this.formMedicalGas.delivered_date == null
+      ) {
+        return false;
+      }
+
+      if (
+        this.formMedicalGas.wardcode != null ||
+        this.formMedicalGas.wardcode != '' ||
+        this.formMedicalGas.fund_source != null ||
+        this.formMedicalGas.fund_source != '' ||
+        this.formMedicalGas.cl2comb != null ||
+        this.formMedicalGas.cl2comb != '' ||
+        this.formMedicalGas.quantity != null ||
+        this.formMedicalGas.quantity != '' ||
+        this.formMedicalGas.quantity != 0 ||
+        this.formMedicalGas.average != '' ||
+        this.formMedicalGas.average != 0 ||
+        this.formMedicalGas.delivered_date != null ||
+        this.formMedicalGas.delivered_date != ''
+      ) {
+        // console.log('success');
+        this.formMedicalGas.post(route('medicalgastoward.store'), {
+          preserveScroll: true,
+          onFinish: () => {
+            this.formMedicalGas.reset();
+            this.cancel();
+            this.updateData();
+            this.createdMsg();
+            this.loading = false;
+          },
+        });
+      }
+    },
     cancel() {
       //   this.stockBalanceDeclared = false;
       this.requestStockId = null;
       this.isUpdate = false;
       this.createRequestStocksDialog = false;
       this.medicalGasDialog = false;
+      this.selectedItemsUomDesc = null;
       this.form.reset();
       this.form.clearErrors();
     },
@@ -1191,6 +1235,23 @@ export default {
     },
   },
   watch: {
+    'formMedicalGas.cl2comb': function (val) {
+      this.selectedItemsUomDesc = null;
+      //   console.log(val);
+
+      this.medicalGasList.forEach((e) => {
+        // console.log(e);
+        if (e.cl2comb == val) {
+          if (e.uomdesc != null || e.uomdesc == '') {
+            // console.log('if');
+            this.selectedItemsUomDesc = e.uomdesc;
+            this.formMedicalGas.uomcode = e.uomcode;
+          } else {
+            this.selectedItemsUomDesc = null;
+          }
+        }
+      });
+    },
     search: function (val, oldVal) {
       this.params.search = val;
       this.updateData();

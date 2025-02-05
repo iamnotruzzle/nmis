@@ -980,12 +980,12 @@
                   @click="openConsignmentDialog"
                 />
                 <div class="mr-2"></div>
-                <Button
+                <!-- <Button
                   label="MEDICAL GASES"
                   icon="pi pi-plus"
                   iconPos="right"
                   @click="openMedicalGasesDialog"
-                />
+                /> -->
               </div>
             </div>
           </template>
