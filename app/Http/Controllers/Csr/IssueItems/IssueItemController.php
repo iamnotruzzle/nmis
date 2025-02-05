@@ -6,6 +6,7 @@ use App\Events\ItemIssued;
 use App\Http\Controllers\Controller;
 use App\Models\CsrItemConversion;
 use App\Models\CsrStocks;
+use App\Models\FundSource;
 use App\Models\Item;
 use App\Models\RequestStocks;
 use App\Models\RequestStocksDetails;
@@ -94,10 +95,33 @@ class IssueItemController extends Controller
             ->paginate(10);
         // dd($requestedStocks);
 
+        $medicalGas = DB::select(
+            "SELECT
+                item.cl2comb,
+                item.cl2desc,
+                item.uomcode,
+                uom.uomdesc
+            FROM
+                hclass2 AS item
+            FULL OUTER JOIN
+                huom AS uom
+                ON uom.uomcode = item.uomcode
+            WHERE
+                item.catID = 1
+                AND item.uomcode != 'box'
+                AND item.itemcode LIKE 'MSMG-%'
+            ORDER BY
+                item.cl2desc ASC;"
+        );
+
+        $fundSource = FundSource::orderBy('fsName')
+            ->get(['id', 'fsid', 'fsName', 'cluster_code']);
 
         return Inertia::render('Csr/IssueItems/Index', [
             'items' => $items,
             'requestedStocks' => $requestedStocks,
+            'medicalGas' => $medicalGas,
+            'fundSource' => $fundSource,
             'authWardcode' => $authWardcode[0],
         ]);
     }

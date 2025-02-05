@@ -498,6 +498,172 @@
             />
           </template>
         </Dialog>
+
+        <!-- MedicalGases -->
+        <Dialog
+          v-model:visible="medicalGasDialog"
+          :modal="true"
+          class="p-fluid w-4"
+          @hide="whenDialogIsHidden"
+        >
+          <template #header>
+            <div class="text-primary text-xl font-bold">MEDICAL GASES</div>
+          </template>
+          <div class="field">
+            <label
+              for="location"
+              class="block text-900 text-xl font-medium mb-1"
+            >
+              Location
+            </label>
+            <Dropdown
+              v-model="formMedicalGas.wardcode"
+              :options="locationsList"
+              :virtualScrollerOptions="{ itemSize: 38 }"
+              optionLabel="wardname"
+              optionValue="wardcode"
+              filter
+              class="w-full"
+              style="padding: 0.5rem"
+            >
+            </Dropdown>
+          </div>
+          <div class="field">
+            <label for="fundSource">Fund source</label>
+            <Dropdown
+              id="fundSource"
+              required="true"
+              v-model="formMedicalGas.fund_source"
+              :options="fundSourceList"
+              filter
+              showClear
+              dataKey="chrgcode"
+              optionLabel="chrgdesc"
+              optionValue="chrgcode"
+              class="w-full"
+              :class="{ 'p-invalid': formMedicalGas.fund_source == '' }"
+            />
+            <small
+              class="text-error"
+              v-if="formMedicalGas.errors.fund_source"
+            >
+              {{ formMedicalGas.errors.fund_source }}
+            </small>
+          </div>
+          <div class="field">
+            <label>Item</label>
+            <Dropdown
+              required="true"
+              v-model="formMedicalGas.cl2comb"
+              :options="medicalGasList"
+              :virtualScrollerOptions="{ itemSize: 38 }"
+              filter
+              optionValue="cl2comb"
+              optionLabel="cl2desc"
+              class="w-full mb-3"
+            />
+            <small
+              class="text-error"
+              v-if="formMedicalGas.errors.cl2comb"
+            >
+              {{ formMedicalGas.errors.cl2comb }}
+            </small>
+          </div>
+          <div class="field">
+            <label for="unit">Unit</label>
+            <InputText
+              id="unit"
+              v-model.trim="selectedItemsUomDesc"
+              readonly
+            />
+          </div>
+          <div class="field">
+            <label>Quantity</label>
+            <InputText
+              id="quantity"
+              v-model.trim="formMedicalGas.quantity"
+              required="true"
+              autofocus
+              :class="{ 'p-invalid': formMedicalGas.quantity == '' || formMedicalGas.quantity == null }"
+              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+              inputId="integeronly"
+            />
+            <small
+              class="text-error"
+              v-if="formMedicalGas.errors.quantity"
+            >
+              {{ formMedicalGas.errors.quantity }}
+            </small>
+          </div>
+          <div class="field">
+            <label
+              >Usage
+              <b class="text-error"
+                >NOTE: If 1 tank equals 1800 lbs, declare the usage as 1800 lbs regardless of the number of tanks
+                received, as long as each tank is 1800 lbs.</b
+              ></label
+            >
+            <InputText
+              id="average"
+              v-model.trim="formMedicalGas.average"
+              required="true"
+              autofocus
+              :class="{ 'p-invalid': formMedicalGas.average == '' || formMedicalGas.average == null }"
+              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+              inputId="integeronly"
+            />
+            <small
+              class="text-error"
+              v-if="formMedicalGas.errors.average"
+            >
+              {{ formMedicalGas.errors.average }}
+            </small>
+          </div>
+          <div class="field">
+            <label for="delivered_date">Delivered date</label>
+            <Calendar
+              v-model="formMedicalGas.delivered_date"
+              dateFormat="mm-dd-yy"
+              showIcon
+              showButtonBar
+              :manualInput="false"
+              :hideOnDateTimeSelect="true"
+            />
+            <small
+              class="text-error"
+              v-if="formMedicalGas.errors.delivered_date"
+            >
+              {{ formMedicalGas.errors.delivered_date }}
+            </small>
+          </div>
+
+          <template #footer>
+            <Button
+              label="Cancel"
+              icon="pi pi-times"
+              severity="danger"
+              text
+              @click="cancel"
+            />
+            <Button
+              label="Save"
+              icon="pi pi-check"
+              text
+              type="submit"
+              :disabled="
+                formMedicalGas.processing ||
+                formMedicalGas.fund_source == null ||
+                formMedicalGas.cl2comb == null ||
+                formMedicalGas.quantity == null ||
+                formMedicalGas.quantity <= 0 ||
+                formMedicalGas.average == null ||
+                formMedicalGas.average <= 0 ||
+                formMedicalGas.delivered_date == null
+              "
+              @click="submitMedicalGases"
+            />
+          </template>
+        </Dialog>
       </div>
     </div>
   </app-layout>
@@ -552,6 +718,8 @@ export default {
     authWardcode: Object,
     items: Array,
     requestedStocks: Object,
+    fundSource: Object,
+    medicalGas: Object,
   },
   data() {
     return {
@@ -565,6 +733,7 @@ export default {
       // end paginator
       requestStockId: null,
       isUpdate: false,
+      medicalGasDialog: false,
       createRequestStocksDialog: false,
       issuedItemsDialog: false,
       editStatusDialog: false,
@@ -576,6 +745,9 @@ export default {
       itemsList: [],
       requestStockList: [],
       issuedItemList: [],
+      medicalGasList: [],
+      fundSourceList: [],
+      wardList: [],
       // stock list details
       requestStockListDetailsFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -605,6 +777,15 @@ export default {
         remarks: null,
         requestStockListDetails: [],
       }),
+      formMedicalGas: this.$inertia.form({
+        wardcode: null,
+        fund_source: null,
+        cl2comb: null,
+        uomcode: null,
+        quantity: null,
+        average: null,
+        delivered_date: null,
+      }),
       formUpdateStatus: this.$inertia.form({
         request_stock_id: null,
       }),
@@ -626,6 +807,16 @@ export default {
     this.rows = this.requestedStocks.per_page;
   },
   mounted() {
+    // store ward list
+    this.$page.props.locations.forEach((e) => {
+      if (e.wardcode != 'CSR' && e.wardcode != 'ADMIN') {
+        this.wardList.push({
+          wardcode: e.wardcode,
+          wardname: e.wardname,
+        });
+      }
+    });
+
     window.Echo.channel('request').listen('RequestStock', (args) => {
       router.reload({
         onSuccess: (e) => {
@@ -637,6 +828,7 @@ export default {
 
     this.storeItemsInController();
     this.storeRequestedStocksInContainer();
+    this.storeFundSourceInContainer();
 
     this.loading = false;
   },
@@ -658,6 +850,26 @@ export default {
         this.itemsList.push({
           cl2comb: e.cl2comb,
           cl2desc: e.cl2desc,
+        });
+      });
+
+      this.medicalGasList = []; // reset
+      this.medicalGas.forEach((e) => {
+        this.medicalGasList.push({
+          cl2comb: e.cl2comb,
+          cl2desc: e.cl2desc,
+          uomcode: e.uomcode,
+          uomdesc: e.uomdesc,
+        });
+      });
+    },
+    storeFundSourceInContainer() {
+      this.fundSource.forEach((e) => {
+        this.fundSourceList.push({
+          chrgcode: e.fsid,
+          chrgdesc: e.fsName,
+          bentypcod: null,
+          chrgtable: null,
         });
       });
     },
@@ -783,6 +995,7 @@ export default {
         (this.itemNotSelectedMsg = null),
         (this.issuedItemList = []),
         (this.issuedItemsDialog = false),
+        (this.medicalGasDialog = false),
         this.form.clearErrors(),
         this.form.reset()
       );
@@ -920,6 +1133,7 @@ export default {
       this.requestStockId = null;
       this.isUpdate = false;
       this.createRequestStocksDialog = false;
+      this.medicalGasDialog = false;
       this.form.reset();
       this.form.clearErrors();
     },

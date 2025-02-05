@@ -14,6 +14,7 @@ use App\Http\Controllers\Csr\IssueItems\IssueItemController;
 use App\Http\Controllers\Csr\CsrManualReport\CsrManualReportController;
 use App\Http\Controllers\Csr\Inventory\CsrConvertItem\CsrConvertItemController;
 use App\Http\Controllers\Csr\Inventory\ItemConversion\CsrItemConversionController;
+use App\Http\Controllers\Csr\IssueItems\MedicalGasController;
 use App\Http\Controllers\Csr\Reports\ReportsController;
 use App\Http\Controllers\Csr\ReturnedItems\ReturnedItemsController;
 use App\Http\Controllers\Csr\Utility\ManualAddStocks\ManualAddStocksController;
@@ -80,6 +81,7 @@ Route::middleware(['web', 'auth', 'verified'])->group(
         Route::resource('returneditems', ReturnedItemsController::class)->middleware(['verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('csrmanualadd', ManualAddStocksController::class)->middleware(['verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('issueitems', IssueItemController::class)->middleware(['verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('medicalgastoward', MedicalGasController::class)->middleware(['verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('wardsinv', WardsInventoryController::class)->middleware(['verified', 'designation_csr_or_admin'])->only(['index', 'store', 'update', 'destroy']);
         Route::get('issueitems/issued/', [IssuedItemsReportController::class, 'export']);
         Route::put('issueitems', [IssueItemController::class, 'acknowledgedrequest'])->name('issueitems.acknowledgedrequest');
