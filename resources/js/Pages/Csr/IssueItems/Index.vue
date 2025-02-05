@@ -42,6 +42,12 @@
                     />
                   </div>
                 </div>
+                <Button
+                  label="MEDICAL GASES"
+                  icon="pi pi-plus"
+                  iconPos="right"
+                  @click="openMedicalGasesDialog"
+                />
               </div>
             </div>
           </template>
@@ -518,13 +524,12 @@
             </label>
             <Dropdown
               v-model="formMedicalGas.wardcode"
-              :options="locationsList"
+              :options="wardList"
               :virtualScrollerOptions="{ itemSize: 38 }"
               optionLabel="wardname"
               optionValue="wardcode"
               filter
               class="w-full"
-              style="padding: 0.5rem"
             >
             </Dropdown>
           </div>
@@ -844,6 +849,10 @@ export default {
       } else {
         return moment.tz(date, 'Asia/Manila').format('L');
       }
+    },
+    openMedicalGasesDialog() {
+      this.formMedicalGas.reset();
+      this.medicalGasDialog = true;
     },
     storeItemsInController() {
       this.items.forEach((e) => {
