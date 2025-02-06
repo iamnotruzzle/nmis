@@ -117,11 +117,21 @@ class IssueItemController extends Controller
         $fundSource = FundSource::orderBy('fsName')
             ->get(['id', 'fsid', 'fsName', 'cluster_code']);
 
+        $wardsMedicalGasStock = DB::select(
+            "SELECT stock.id as stock_id, ward.wardname, stock.cl2comb, item.cl2desc, stock.quantity, stock.average, stock.total_usage
+                FROM csrw_wards_stocks as stock
+                JOIN hward as ward ON ward.wardcode = stock.location
+                JOIN hclass2 as item ON item.cl2comb = stock.cl2comb
+                WHERE stock.[from] = 'MEDICAL GASES'
+                AND stock.quantity > 0"
+        );
+
         return Inertia::render('Csr/IssueItems/Index', [
             'items' => $items,
             'requestedStocks' => $requestedStocks,
             'medicalGas' => $medicalGas,
             'fundSource' => $fundSource,
+            'wardsMedicalGasStock' => $wardsMedicalGasStock,
             'authWardcode' => $authWardcode[0],
         ]);
     }

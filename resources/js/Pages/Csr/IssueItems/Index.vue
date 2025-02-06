@@ -3,10 +3,7 @@
     <Head title="NMIS - RIS" />
 
     <div>
-      <div
-        class="card"
-        style="border-top-left-radius: 0; border-top-right-radius: 0"
-      >
+      <div class="card">
         <Toast />
 
         <DataTable
@@ -267,409 +264,559 @@
             </div>
           </template>
         </DataTable>
+      </div>
 
-        <!-- @hide="clickOutsideDialog" -->
-        <!-- create & edit dialog -->
-        <Dialog
-          v-model:visible="createRequestStocksDialog"
-          :modal="true"
-          class="p-fluid"
-          @hide="whenDialogIsHidden"
+      <div class="card">
+        <DataTable
+          class="p-datatable-sm w-full"
+          v-model:filters="medicalGasFilter"
+          :value="wardsMedicalGasStockList"
+          paginator
+          :rows="20"
+          dataKey="stock_id"
+          sortField="quantity"
+          :sortOrder="1"
+          removableSort
+          :globalFilterFields="['wardname', 'cl2desc']"
+          showGridlines
         >
           <template #header>
-            <div class="text-primary text-xl font-bold">REQUESTED STOCKS</div>
-          </template>
-          <div class="field">
-            <DataTable
-              v-model:filters="requestStockListDetailsFilter"
-              :globalFilterFields="['cl2desc']"
-              :value="requestStockListDetails"
-              class="p-datatable-sm"
-              paginator
-              showGridlines
-              removableSort
-              :rows="7"
-            >
-              <template #header>
-                <div>
-                  <div class="mr-2">
-                    <div class="p-inputgroup">
-                      <span class="p-inputgroup-addon">
-                        <i class="pi pi-search"></i>
-                      </span>
-                      <InputText
-                        id="searchInput"
-                        v-model="requestStockListDetailsFilter['global'].value"
-                        placeholder="Search item"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <!-- <p
-                  class="text-error text-xl font-semibold my-1"
-                  v-if="stockBalanceDeclared != false"
-                >
-                  {{ $page.props.errors['requestStockListDetails.0.cl2comb'].toUpperCase() }}
-                </p> -->
-              </template>
-              <Column
-                field="cl2desc"
-                header="PENDING ITEM"
-                style="width: 50%"
-                sortable
-              ></Column>
-              <Column
-                field="requested_qty"
-                header="PENDING QTY"
-                style="text-align: right; width: 10%"
-              ></Column>
-              <Column
-                v-if="isUpdate"
-                field="stock_qty"
-                header="Current stock including approved qty"
-                style="text-align: right; width: 10%"
-              >
-                <template #body="{ data }">
-                  {{ data.stock_w_approved }}
-                </template>
-              </Column>
-              <Column
-                v-else
-                field="stock_qty"
-                header="TOTAL STOCK"
-                style="text-align: right; width: 10%"
-              ></Column>
-              <Column
-                field="approved_qty"
-                header="APPROVED QTY"
-                style="text-align: right; width: 10%"
-              >
-                <template #body="slotProps">
-                  <InputText
-                    id="quantity"
-                    v-model="slotProps.data.approved_qty"
-                    required="true"
-                    autofocus
-                    @keyup.enter="submit"
-                    type="number"
-                    onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-                    inputId="integeronly"
-                  />
-                </template>
-              </Column>
-              <Column
-                field="remarks"
-                header="REMARKS (OPTIONAL)"
-                style="width: 20%"
-              >
-                <template #body="slotProps">
-                  <Textarea
-                    v-model.trim="slotProps.data.remarks"
-                    rows="2"
-                    cols="30"
-                  />
-                </template>
-              </Column>
-            </DataTable>
-          </div>
-
-          <template #footer>
-            <Button
-              label="Cancel"
-              icon="pi pi-times"
-              severity="danger"
-              text
-              @click="cancel"
-            />
-            <Button
-              v-if="isUpdate == true"
-              label="Update"
-              icon="pi pi-check"
-              severity="warning"
-              text
-              type="submit"
-              :disabled="form.processing"
-              @click="submit"
-            />
-            <Button
-              v-else
-              label="Save"
-              icon="pi pi-check"
-              text
-              type="submit"
-              :disabled="form.processing"
-              @click="submit"
-            />
-          </template>
-        </Dialog>
-
-        <!-- view issued items -->
-        <Dialog
-          v-model:visible="issuedItemsDialog"
-          :modal="true"
-          class="p-fluid w-5"
-          @hide="whenDialogIsHidden"
-        >
-          <template #header>
-            <div class="text-primary text-xl font-bold">ISSUED ITEMS</div>
-          </template>
-          <div class="field">
-            <DataTable
-              v-model:filters="issuedItemsFilter"
-              :globalFilterFields="['cl2desc']"
-              :value="issuedItemList"
-              class="p-datatable-sm w-full"
-              paginator
-              showGridlines
-              removableSort
-              :rows="7"
-            >
-              <template #header>
-                <div>
+            <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+              <span class="text-xl text-900 font-bold text-primary">DISTRIBUTED MEDICAL GAS</span>
+              <div class="flex">
+                <div class="mr-2">
                   <div class="p-inputgroup">
                     <span class="p-inputgroup-addon">
                       <i class="pi pi-search"></i>
                     </span>
                     <InputText
                       id="searchInput"
-                      v-model="issuedItemsFilter['global'].value"
-                      placeholder="Search issued item"
+                      v-model="medicalGasFilter['global'].value"
+                      placeholder="Search"
                     />
                   </div>
                 </div>
-              </template>
-              <Column
-                field="ris_no"
-                header="RIS NO."
-                sortable
-                style="width: 10%"
-              ></Column>
-              <Column
-                field="cl2desc"
-                header="ITEM"
-                sortable
-                style="width: 60%"
-              ></Column>
-              <Column
-                field="quantity"
-                header="QTY"
-                sortable
-                style="width: 10%"
-              ></Column>
-              <Column
-                field="expiration_date"
-                header="EXP. DATE"
-                sortable
-                style="width: 20%"
-              >
-                <template #body="{ data }">
-                  {{ tzone(data.expiration_date) }}
-                </template>
-              </Column>
-            </DataTable>
-          </div>
-        </Dialog>
-
-        <!-- edit status -->
-        <Dialog
-          v-model:visible="editStatusDialog"
-          :style="{ width: '450px' }"
-          header="Confirm"
-          :modal="true"
-          dismissableMask
-        >
-          <div class="flex align-items-center justify-content-center">
-            <i
-              class="pi pi-exclamation-triangle mr-3"
-              style="font-size: 2rem"
-            />
-            <span v-if="form">
-              Are you sure you want to <b>update</b> the status of this requested stocks to <b>ACKNOWLEDGED</b>?
-            </span>
-          </div>
-          <template #footer>
-            <Button
-              label="No"
-              icon="pi pi-times"
-              class="p-button-text"
-              @click="editStatusDialog = false"
-            />
-            <Button
-              label="Yes"
-              icon="pi pi-check"
-              severity="danger"
-              text
-              :disabled="formUpdateStatus.processing"
-              @click="updateStatus"
-            />
+              </div>
+            </div>
           </template>
-        </Dialog>
-
-        <!-- MedicalGases -->
-        <Dialog
-          v-model:visible="medicalGasDialog"
-          :modal="true"
-          class="p-fluid w-4"
-          @hide="whenDialogIsHidden"
-        >
-          <template #header>
-            <div class="text-primary text-xl font-bold">MEDICAL GASES</div>
-          </template>
-          <div class="field">
-            <label
-              for="location"
-              class="block text-900 text-xl font-medium mb-1"
-            >
-              Location
-            </label>
-            <Dropdown
-              v-model="formMedicalGas.wardcode"
-              :options="wardList"
-              :virtualScrollerOptions="{ itemSize: 38 }"
-              optionLabel="wardname"
-              optionValue="wardcode"
-              filter
-              class="w-full"
-            >
-            </Dropdown>
-          </div>
-          <div class="field">
-            <label for="fundSource">Fund source</label>
-            <Dropdown
-              id="fundSource"
-              required="true"
-              v-model="formMedicalGas.fund_source"
-              :options="fundSourceList"
-              filter
-              showClear
-              dataKey="chrgcode"
-              optionLabel="chrgdesc"
-              optionValue="chrgcode"
-              class="w-full"
-              :class="{ 'p-invalid': formMedicalGas.fund_source == '' }"
-            />
-            <small
-              class="text-error"
-              v-if="formMedicalGas.errors.fund_source"
-            >
-              {{ formMedicalGas.errors.fund_source }}
-            </small>
-          </div>
-          <div class="field">
-            <label>Item</label>
-            <Dropdown
-              required="true"
-              v-model="formMedicalGas.cl2comb"
-              :options="medicalGasList"
-              :virtualScrollerOptions="{ itemSize: 38 }"
-              filter
-              optionValue="cl2comb"
-              optionLabel="cl2desc"
-              class="w-full mb-3"
-            />
-            <small
-              class="text-error"
-              v-if="formMedicalGas.errors.cl2comb"
-            >
-              {{ formMedicalGas.errors.cl2comb }}
-            </small>
-          </div>
-          <div class="field">
-            <label for="unit">Unit</label>
-            <InputText
-              id="unit"
-              v-model.trim="selectedItemsUomDesc"
-              readonly
-            />
-          </div>
-          <div class="field">
-            <label>Quantity</label>
-            <InputText
-              id="quantity"
-              v-model.trim="formMedicalGas.quantity"
-              required="true"
-              autofocus
-              :class="{ 'p-invalid': formMedicalGas.quantity == '' || formMedicalGas.quantity == null }"
-              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-              inputId="integeronly"
-            />
-            <small
-              class="text-error"
-              v-if="formMedicalGas.errors.quantity"
-            >
-              {{ formMedicalGas.errors.quantity }}
-            </small>
-          </div>
-          <div class="field">
-            <label
-              >Usage/Average
-              <b class="text-error"
-                >NOTE: If 1 tank equals 1800 lbs, declare the usage as 1800 lbs regardless of the number of tanks
-                received, as long as each tank is 1800 lbs.</b
-              ></label
-            >
-            <InputText
-              id="average"
-              v-model.trim="formMedicalGas.average"
-              required="true"
-              autofocus
-              :class="{ 'p-invalid': formMedicalGas.average == '' || formMedicalGas.average == null }"
-              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-              inputId="integeronly"
-            />
-            <small
-              class="text-error"
-              v-if="formMedicalGas.errors.average"
-            >
-              {{ formMedicalGas.errors.average }}
-            </small>
-          </div>
-          <div class="field">
-            <label for="delivered_date">Delivered date</label>
-            <Calendar
-              v-model="formMedicalGas.delivered_date"
-              dateFormat="mm-dd-yy"
-              showIcon
-              showButtonBar
-              :manualInput="false"
-              :hideOnDateTimeSelect="true"
-            />
-            <small
-              class="text-error"
-              v-if="formMedicalGas.errors.delivered_date"
-            >
-              {{ formMedicalGas.errors.delivered_date }}
-            </small>
-          </div>
-
-          <template #footer>
-            <Button
-              label="Cancel"
-              icon="pi pi-times"
-              severity="danger"
-              text
-              @click="cancel"
-            />
-            <Button
-              label="Save"
-              icon="pi pi-check"
-              text
-              type="submit"
-              :disabled="
-                formMedicalGas.processing ||
-                formMedicalGas.fund_source == null ||
-                formMedicalGas.cl2comb == null ||
-                formMedicalGas.quantity == null ||
-                formMedicalGas.quantity <= 0 ||
-                formMedicalGas.average == null ||
-                formMedicalGas.average <= 0 ||
-                formMedicalGas.delivered_date == null
-              "
-              @click="submitMedicalGases"
-            />
-          </template>
-        </Dialog>
+          <template #empty> No data found. </template>
+          <template #loading> Loading data. Please wait. </template>
+          <Column
+            field="stock_id"
+            header="STOCK ID"
+          >
+          </Column>
+          <Column
+            field="wardname"
+            header="WARD"
+            sortable
+          >
+          </Column>
+          <Column
+            field="cl2desc"
+            header="GAS"
+            sortable
+          >
+          </Column>
+          <Column
+            field="quantity"
+            header="QUANTITY"
+            sortable
+            style="width: 5%; text-align: right"
+            :pt="{ headerContent: 'justify-content-end' }"
+          >
+            <template #body="{ data }">
+              <p class="text-right">
+                {{ data.quantity }}
+              </p>
+            </template>
+          </Column>
+          <Column header="ACTION">
+            <template #body="slotProps">
+              <div class="text-center">
+                <Button
+                  icon="pi pi-pencil"
+                  rounded
+                  text
+                  severity="warning"
+                  @click="editMedicalGas(slotProps.data)"
+                />
+              </div>
+            </template>
+          </Column>
+        </DataTable>
       </div>
+
+      <!-- @hide="clickOutsideDialog" -->
+      <!-- create & edit dialog -->
+      <Dialog
+        v-model:visible="createRequestStocksDialog"
+        :modal="true"
+        class="p-fluid"
+        @hide="whenDialogIsHidden"
+      >
+        <template #header>
+          <div class="text-primary text-xl font-bold">REQUESTED STOCKS</div>
+        </template>
+        <div class="field">
+          <DataTable
+            v-model:filters="requestStockListDetailsFilter"
+            :globalFilterFields="['cl2desc']"
+            :value="requestStockListDetails"
+            class="p-datatable-sm"
+            paginator
+            showGridlines
+            removableSort
+            :rows="7"
+          >
+            <template #header>
+              <div>
+                <div class="mr-2">
+                  <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon">
+                      <i class="pi pi-search"></i>
+                    </span>
+                    <InputText
+                      id="searchInput"
+                      v-model="requestStockListDetailsFilter['global'].value"
+                      placeholder="Search item"
+                    />
+                  </div>
+                </div>
+              </div>
+              <!-- <p
+                  class="text-error text-xl font-semibold my-1"
+                  v-if="stockBalanceDeclared != false"
+                >
+                  {{ $page.props.errors['requestStockListDetails.0.cl2comb'].toUpperCase() }}
+                </p> -->
+            </template>
+            <Column
+              field="cl2desc"
+              header="PENDING ITEM"
+              style="width: 50%"
+              sortable
+            ></Column>
+            <Column
+              field="requested_qty"
+              header="PENDING QTY"
+              style="text-align: right; width: 10%"
+            ></Column>
+            <Column
+              v-if="isUpdate"
+              field="stock_qty"
+              header="Current stock including approved qty"
+              style="text-align: right; width: 10%"
+            >
+              <template #body="{ data }">
+                {{ data.stock_w_approved }}
+              </template>
+            </Column>
+            <Column
+              v-else
+              field="stock_qty"
+              header="TOTAL STOCK"
+              style="text-align: right; width: 10%"
+            ></Column>
+            <Column
+              field="approved_qty"
+              header="APPROVED QTY"
+              style="text-align: right; width: 10%"
+            >
+              <template #body="slotProps">
+                <InputText
+                  id="quantity"
+                  v-model="slotProps.data.approved_qty"
+                  required="true"
+                  autofocus
+                  @keyup.enter="submit"
+                  type="number"
+                  onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                  inputId="integeronly"
+                />
+              </template>
+            </Column>
+            <Column
+              field="remarks"
+              header="REMARKS (OPTIONAL)"
+              style="width: 20%"
+            >
+              <template #body="slotProps">
+                <Textarea
+                  v-model.trim="slotProps.data.remarks"
+                  rows="2"
+                  cols="30"
+                />
+              </template>
+            </Column>
+          </DataTable>
+        </div>
+
+        <template #footer>
+          <Button
+            label="Cancel"
+            icon="pi pi-times"
+            severity="danger"
+            text
+            @click="cancel"
+          />
+          <Button
+            v-if="isUpdate == true"
+            label="Update"
+            icon="pi pi-check"
+            severity="warning"
+            text
+            type="submit"
+            :disabled="form.processing"
+            @click="submit"
+          />
+          <Button
+            v-else
+            label="Save"
+            icon="pi pi-check"
+            text
+            type="submit"
+            :disabled="form.processing"
+            @click="submit"
+          />
+        </template>
+      </Dialog>
+
+      <!-- view issued items -->
+      <Dialog
+        v-model:visible="issuedItemsDialog"
+        :modal="true"
+        class="p-fluid w-5"
+        @hide="whenDialogIsHidden"
+      >
+        <template #header>
+          <div class="text-primary text-xl font-bold">ISSUED ITEMS</div>
+        </template>
+        <div class="field">
+          <DataTable
+            v-model:filters="issuedItemsFilter"
+            :globalFilterFields="['cl2desc']"
+            :value="issuedItemList"
+            class="p-datatable-sm w-full"
+            paginator
+            showGridlines
+            removableSort
+            :rows="7"
+          >
+            <template #header>
+              <div>
+                <div class="p-inputgroup">
+                  <span class="p-inputgroup-addon">
+                    <i class="pi pi-search"></i>
+                  </span>
+                  <InputText
+                    id="searchInput"
+                    v-model="issuedItemsFilter['global'].value"
+                    placeholder="Search issued item"
+                  />
+                </div>
+              </div>
+            </template>
+            <Column
+              field="ris_no"
+              header="RIS NO."
+              sortable
+              style="width: 10%"
+            ></Column>
+            <Column
+              field="cl2desc"
+              header="ITEM"
+              sortable
+              style="width: 60%"
+            ></Column>
+            <Column
+              field="quantity"
+              header="QTY"
+              sortable
+              style="width: 10%"
+            ></Column>
+            <Column
+              field="expiration_date"
+              header="EXP. DATE"
+              sortable
+              style="width: 20%"
+            >
+              <template #body="{ data }">
+                {{ tzone(data.expiration_date) }}
+              </template>
+            </Column>
+          </DataTable>
+        </div>
+      </Dialog>
+
+      <!-- edit status -->
+      <Dialog
+        v-model:visible="editStatusDialog"
+        :style="{ width: '450px' }"
+        header="Confirm"
+        :modal="true"
+        dismissableMask
+      >
+        <div class="flex align-items-center justify-content-center">
+          <i
+            class="pi pi-exclamation-triangle mr-3"
+            style="font-size: 2rem"
+          />
+          <span v-if="form">
+            Are you sure you want to <b>update</b> the status of this requested stocks to <b>ACKNOWLEDGED</b>?
+          </span>
+        </div>
+        <template #footer>
+          <Button
+            label="No"
+            icon="pi pi-times"
+            class="p-button-text"
+            @click="editStatusDialog = false"
+          />
+          <Button
+            label="Yes"
+            icon="pi pi-check"
+            severity="danger"
+            text
+            :disabled="formUpdateStatus.processing"
+            @click="updateStatus"
+          />
+        </template>
+      </Dialog>
+
+      <!-- MedicalGases -->
+      <Dialog
+        v-model:visible="medicalGasDialog"
+        :modal="true"
+        class="p-fluid w-4"
+        @hide="whenDialogIsHidden"
+      >
+        <template #header>
+          <div class="text-primary text-xl font-bold">MEDICAL GASES</div>
+        </template>
+        <div class="field">
+          <label
+            for="location"
+            class="block text-900 text-xl font-medium mb-1"
+          >
+            Location
+          </label>
+          <Dropdown
+            v-model="formMedicalGas.wardcode"
+            :options="wardList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
+            optionLabel="wardname"
+            optionValue="wardcode"
+            filter
+            class="w-full"
+          >
+          </Dropdown>
+        </div>
+        <div class="field">
+          <label for="fundSource">Fund source</label>
+          <Dropdown
+            id="fundSource"
+            required="true"
+            v-model="formMedicalGas.fund_source"
+            :options="fundSourceList"
+            filter
+            showClear
+            dataKey="chrgcode"
+            optionLabel="chrgdesc"
+            optionValue="chrgcode"
+            class="w-full"
+            :class="{ 'p-invalid': formMedicalGas.fund_source == '' }"
+          />
+          <small
+            class="text-error"
+            v-if="formMedicalGas.errors.fund_source"
+          >
+            {{ formMedicalGas.errors.fund_source }}
+          </small>
+        </div>
+        <div class="field">
+          <label>Item</label>
+          <Dropdown
+            required="true"
+            v-model="formMedicalGas.cl2comb"
+            :options="medicalGasList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
+            filter
+            optionValue="cl2comb"
+            optionLabel="cl2desc"
+            class="w-full mb-3"
+          />
+          <small
+            class="text-error"
+            v-if="formMedicalGas.errors.cl2comb"
+          >
+            {{ formMedicalGas.errors.cl2comb }}
+          </small>
+        </div>
+        <div class="field">
+          <label for="unit">Unit</label>
+          <InputText
+            id="unit"
+            v-model.trim="selectedItemsUomDesc"
+            readonly
+          />
+        </div>
+        <div class="field">
+          <label>Quantity</label>
+          <InputText
+            id="quantity"
+            v-model.trim="formMedicalGas.quantity"
+            required="true"
+            autofocus
+            :class="{ 'p-invalid': formMedicalGas.quantity == '' || formMedicalGas.quantity == null }"
+            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+            inputId="integeronly"
+          />
+          <small
+            class="text-error"
+            v-if="formMedicalGas.errors.quantity"
+          >
+            {{ formMedicalGas.errors.quantity }}
+          </small>
+        </div>
+        <div class="field">
+          <label
+            >Usage/Average
+            <b class="text-error"
+              >NOTE: If 1 tank equals 1800 lbs, declare the usage as 1800 lbs regardless of the number of tanks
+              received, as long as each tank is 1800 lbs.</b
+            ></label
+          >
+          <InputText
+            id="average"
+            v-model.trim="formMedicalGas.average"
+            required="true"
+            autofocus
+            :class="{ 'p-invalid': formMedicalGas.average == '' || formMedicalGas.average == null }"
+            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+            inputId="integeronly"
+          />
+          <small
+            class="text-error"
+            v-if="formMedicalGas.errors.average"
+          >
+            {{ formMedicalGas.errors.average }}
+          </small>
+        </div>
+        <div class="field">
+          <label for="delivered_date">Delivered date</label>
+          <Calendar
+            v-model="formMedicalGas.delivered_date"
+            dateFormat="mm-dd-yy"
+            showIcon
+            showButtonBar
+            :manualInput="false"
+            :hideOnDateTimeSelect="true"
+          />
+          <small
+            class="text-error"
+            v-if="formMedicalGas.errors.delivered_date"
+          >
+            {{ formMedicalGas.errors.delivered_date }}
+          </small>
+        </div>
+
+        <template #footer>
+          <Button
+            label="Cancel"
+            icon="pi pi-times"
+            severity="danger"
+            text
+            @click="cancel"
+          />
+          <Button
+            label="Save"
+            icon="pi pi-check"
+            text
+            type="submit"
+            :disabled="
+              formMedicalGas.processing ||
+              formMedicalGas.fund_source == null ||
+              formMedicalGas.cl2comb == null ||
+              formMedicalGas.quantity == null ||
+              formMedicalGas.quantity <= 0 ||
+              formMedicalGas.average == null ||
+              formMedicalGas.average <= 0 ||
+              formMedicalGas.delivered_date == null
+            "
+            @click="submitMedicalGases"
+          />
+        </template>
+      </Dialog>
+
+      <!-- MedicalGases -->
+      <Dialog
+        v-model:visible="updateMedicalGasDialog"
+        :modal="true"
+        class="p-fluid w-4"
+        @hide="whenDialogIsHidden"
+      >
+        <template #header>
+          <div class="text-primary text-xl font-bold">
+            Update medical gases of <span class="text-yellow-500">{{ formUpdateMedicalGas.wardname }}</span>
+          </div>
+        </template>
+        <div class="field">
+          <label for="item">Item</label>
+          <InputText
+            id="item"
+            v-model.trim="formUpdateMedicalGas.cl2desc"
+            readonly
+          />
+        </div>
+        <div class="field">
+          <label>Quantity to remove (TANK)</label>
+          <InputText
+            id="quantity"
+            v-model.trim="formUpdateMedicalGas.quantity"
+            required="true"
+            autofocus
+            :class="{
+              'p-invalid':
+                formUpdateMedicalGas.quantity == '' ||
+                formUpdateMedicalGas.quantity == null ||
+                formUpdateMedicalGas.quantity <= 0 ||
+                Number(formUpdateMedicalGas.quantity) > Number(formUpdateMedicalGas.prev_quantity),
+            }"
+            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+            inputId="integeronly"
+          />
+          <small
+            class="text-error"
+            v-if="formUpdateMedicalGas.errors.quantity"
+          >
+            {{ formUpdateMedicalGas.errors.quantity }}
+          </small>
+        </div>
+
+        <template #footer>
+          <Button
+            label="Cancel"
+            icon="pi pi-times"
+            severity="danger"
+            text
+            @click="cancel"
+          />
+          <Button
+            label="Save"
+            icon="pi pi-check"
+            text
+            type="submit"
+            :disabled="
+              formUpdateMedicalGas.processing ||
+              formUpdateMedicalGas.quantity == null ||
+              formUpdateMedicalGas.quantity <= 0 ||
+              Number(formUpdateMedicalGas.quantity) > Number(formUpdateMedicalGas.prev_quantity)
+            "
+            @click="updateMedicalGas"
+          />
+        </template>
+      </Dialog>
     </div>
   </app-layout>
 </template>
@@ -725,6 +872,7 @@ export default {
     requestedStocks: Object,
     fundSource: Object,
     medicalGas: Object,
+    wardsMedicalGasStock: Object,
   },
   data() {
     return {
@@ -743,6 +891,7 @@ export default {
       issuedItemsDialog: false,
       editStatusDialog: false,
       selectedItemsUomDesc: null,
+      updateMedicalGasDialog: false,
       search: '',
       options: {},
       params: {},
@@ -753,8 +902,14 @@ export default {
       issuedItemList: [],
       medicalGasList: [],
       fundSourceList: [],
+      wardsMedicalGasStockList: [],
       wardList: [],
       // stock list details
+      medicalGasFilter: {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        wardname: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        cl2desc: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      },
       requestStockListDetailsFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
@@ -791,6 +946,13 @@ export default {
         quantity: null,
         average: null,
         delivered_date: null,
+      }),
+      formUpdateMedicalGas: this.$inertia.form({
+        stock_id: null,
+        cl2desc: null,
+        quantity: null,
+        prev_quantity: null,
+        wardname: null,
       }),
       formUpdateStatus: this.$inertia.form({
         request_stock_id: null,
@@ -835,6 +997,7 @@ export default {
     this.storeItemsInController();
     this.storeRequestedStocksInContainer();
     this.storeFundSourceInContainer();
+    this.storeWardsMedicalGasStock();
 
     this.loading = false;
   },
@@ -880,6 +1043,19 @@ export default {
           chrgdesc: e.fsName,
           bentypcod: null,
           chrgtable: null,
+        });
+      });
+    },
+    storeWardsMedicalGasStock() {
+      this.wardsMedicalGasStock.forEach((e) => {
+        this.wardsMedicalGasStockList.push({
+          stock_id: e.stock_id,
+          wardname: e.wardname,
+          cl2comb: e.cl2comb,
+          cl2desc: e.cl2desc,
+          quantity: e.quantity,
+          average: e.average,
+          total_usage: e.total_usage,
         });
       });
     },
@@ -958,7 +1134,9 @@ export default {
           this.totalRecords = this.requestedStocks.total;
           this.requestStockList = [];
           this.expandedRow = [];
+          this.medicalGasList = [];
           this.storeRequestedStocksInContainer();
+          this.storeWardsMedicalGasStock();
           this.loading = false;
         },
       });
@@ -1006,6 +1184,7 @@ export default {
         (this.issuedItemList = []),
         (this.issuedItemsDialog = false),
         (this.medicalGasDialog = false),
+        (this.updateMedicalGasDialog = false),
         (this.selectedItemsUomDesc = null),
         this.form.clearErrors(),
         this.form.reset()
@@ -1180,6 +1359,40 @@ export default {
         });
       }
     },
+    updateMedicalGas() {
+      //   console.log(item);
+      //   this.formUpdateStatus.status = item;
+
+      if (
+        this.formUpdateMedicalGas.processing ||
+        this.formUpdateMedicalGas.quantity == '' ||
+        this.formUpdateMedicalGas.quantity == null ||
+        this.formUpdateMedicalGas.quantity <= 0 ||
+        Number(this.formUpdateMedicalGas.quantity) > Number(this.formUpdateMedicalGas.prev_quantity)
+      ) {
+        return false;
+      }
+
+      this.formUpdateMedicalGas.put(route('medicalgastoward.update', this.formUpdateMedicalGas.stock_id), {
+        preserveScroll: true,
+        onSuccess: () => {
+          this.updateMedicalGasDialog = false;
+          this.cancel();
+          this.updateData();
+        },
+      });
+    },
+    editMedicalGas(data) {
+      console.log(data);
+
+      this.updateMedicalGasDialog = true;
+
+      this.formUpdateMedicalGas.stock_id = data.stock_id;
+      this.formUpdateMedicalGas.cl2desc = data.cl2desc;
+      this.formUpdateMedicalGas.quantity = Number(data.quantity);
+      this.formUpdateMedicalGas.prev_quantity = Number(data.quantity);
+      this.formUpdateMedicalGas.wardname = data.wardname;
+    },
     cancel() {
       //   this.stockBalanceDeclared = false;
       this.requestStockId = null;
@@ -1187,6 +1400,7 @@ export default {
       this.createRequestStocksDialog = false;
       this.medicalGasDialog = false;
       this.selectedItemsUomDesc = null;
+      this.updateMedicalGasDialog = false;
       this.form.reset();
       this.form.clearErrors();
     },
@@ -1251,6 +1465,9 @@ export default {
           }
         }
       });
+    },
+    formUpdateMedicalGas: function (val) {
+      console.log(val);
     },
     search: function (val, oldVal) {
       this.params.search = val;

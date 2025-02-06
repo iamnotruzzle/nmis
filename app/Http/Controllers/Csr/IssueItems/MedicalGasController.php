@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Csr\IssueItems;
 
+use App\Events\RequestStock;
 use App\Http\Controllers\Controller;
 use App\Models\Item;
 use App\Models\ItemPrices;
@@ -10,6 +11,7 @@ use App\Models\WardsStocksLogs;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 
 class MedicalGasController extends Controller
@@ -131,8 +133,23 @@ class MedicalGasController extends Controller
         return Redirect::route('issueitems.index');
     }
 
-    public function update(Request $request)
+    public function update(WardsStocks $wardstock, Request $request)
     {
+        // dd($request);
+
+        $stock = DB::select(
+            "SELECT * FROM csrw_wards_stocks WHERE id = $request->stock_id"
+        );
+        // dd($stock[0]);
+
+        $average = (int)$stock[0]->average;
+        $total_usage = (int)$stock[0]->total_usage;
+
+        $updatedItem =  WardsStocks::where('id', $request->stock_id)
+            ->update([
+                'quantity' => (int)$stock[0]->quantity - (int)$request->quantity,
+                'total_usage' => $total_usage - ((int)$request->quantity * $average)
+            ]);
 
         return Redirect::route('issueitems.index');
     }
