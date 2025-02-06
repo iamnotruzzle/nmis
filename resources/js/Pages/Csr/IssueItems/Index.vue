@@ -1030,7 +1030,6 @@ export default {
         });
       });
 
-      this.medicalGasList = []; // reset
       this.medicalGas.forEach((e) => {
         this.medicalGasList.push({
           cl2comb: e.cl2comb,
@@ -1138,10 +1137,11 @@ export default {
           this.totalRecords = this.requestedStocks.total;
           this.requestStockList = [];
           this.expandedRow = [];
-          this.medicalGasList = [];
           this.wardsMedicalGasStockList = [];
+          this.medicalGasList = [];
           this.storeRequestedStocksInContainer();
           this.storeWardsMedicalGasStock();
+          this.storeItemsInController();
           this.loading = false;
         },
       });

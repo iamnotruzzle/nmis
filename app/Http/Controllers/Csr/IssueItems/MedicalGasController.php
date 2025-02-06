@@ -152,6 +152,20 @@ class MedicalGasController extends Controller
                 'total_usage' => $total_usage - ((int)$request->quantity * $average)
             ]);
 
+        $stock_logs = DB::select(
+            "SELECT * FROM csrw_wards_stocks_logs WHERE wards_stocks_id = $request->stock_id"
+        );
+        // dd($stock_logs[0]);
+
+        $logs_orig_quantity = (int)$stock_logs[0]->new_qty;
+        $logs_total_usage = (int)$stock_logs[0]->total_usage;
+
+        $updatedItemLogs =  WardsStocksLogs::where('wards_stocks_id', $stock_logs[0]->wards_stocks_id)
+            ->update([
+                'new_qty' => (int)$logs_orig_quantity - (int)$request->quantity,
+                'total_usage' => $logs_total_usage - ((int)$request->quantity) * $average
+            ]);
+
         return Redirect::route('issueitems.index');
     }
 
