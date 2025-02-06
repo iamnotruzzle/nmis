@@ -713,6 +713,7 @@ class ComposerStaticInita35f14ec21fb126801fb4364978bffb6
         'App\\Http\\Controllers\\Csr\\Inventory\\Items\\ItemController' => __DIR__ . '/../..' . '/app/Http/Controllers/Csr/Inventory/Items/ItemController.php',
         'App\\Http\\Controllers\\Csr\\Inventory\\Stocks\\CsrStocksControllers' => __DIR__ . '/../..' . '/app/Http/Controllers/Csr/Inventory/Stocks/CsrStocksControllers.php',
         'App\\Http\\Controllers\\Csr\\IssueItems\\IssueItemController' => __DIR__ . '/../..' . '/app/Http/Controllers/Csr/IssueItems/IssueItemController.php',
+        'App\\Http\\Controllers\\Csr\\IssueItems\\MedicalGasController' => __DIR__ . '/../..' . '/app/Http/Controllers/Csr/IssueItems/MedicalGasController.php',
         'App\\Http\\Controllers\\Csr\\Reports\\ReportsController' => __DIR__ . '/../..' . '/app/Http/Controllers/Csr/Reports/ReportsController.php',
         'App\\Http\\Controllers\\Csr\\ReturnedItems\\ReturnedItemsController' => __DIR__ . '/../..' . '/app/Http/Controllers/Csr/ReturnedItems/ReturnedItemsController.php',
         'App\\Http\\Controllers\\Csr\\Utility\\ManualAddStocks\\ManualAddStocksController' => __DIR__ . '/../..' . '/app/Http/Controllers/Csr/Utility/ManualAddStocks/ManualAddStocksController.php',

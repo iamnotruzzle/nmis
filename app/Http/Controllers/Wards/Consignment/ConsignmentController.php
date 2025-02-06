@@ -87,6 +87,7 @@ class ConsignmentController extends Controller
             'request_stocks_detail_id' => null,
             'ris_no' => $tempRisNo,
             'stock_id' => null,
+            'wards_stocks_id' => $consignmentItem->id,
             'is_consumable' => null,
             'location' => $request->authLocation,
             'cl2comb' => $request->cl2comb,

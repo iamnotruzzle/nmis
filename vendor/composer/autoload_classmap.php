@@ -34,6 +34,7 @@ return array(
     'App\\Http\\Controllers\\Csr\\Inventory\\Items\\ItemController' => $baseDir . '/app/Http/Controllers/Csr/Inventory/Items/ItemController.php',
     'App\\Http\\Controllers\\Csr\\Inventory\\Stocks\\CsrStocksControllers' => $baseDir . '/app/Http/Controllers/Csr/Inventory/Stocks/CsrStocksControllers.php',
     'App\\Http\\Controllers\\Csr\\IssueItems\\IssueItemController' => $baseDir . '/app/Http/Controllers/Csr/IssueItems/IssueItemController.php',
+    'App\\Http\\Controllers\\Csr\\IssueItems\\MedicalGasController' => $baseDir . '/app/Http/Controllers/Csr/IssueItems/MedicalGasController.php',
     'App\\Http\\Controllers\\Csr\\Reports\\ReportsController' => $baseDir . '/app/Http/Controllers/Csr/Reports/ReportsController.php',
     'App\\Http\\Controllers\\Csr\\ReturnedItems\\ReturnedItemsController' => $baseDir . '/app/Http/Controllers/Csr/ReturnedItems/ReturnedItemsController.php',
     'App\\Http\\Controllers\\Csr\\Utility\\ManualAddStocks\\ManualAddStocksController' => $baseDir . '/app/Http/Controllers/Csr/Utility/ManualAddStocks/ManualAddStocksController.php',

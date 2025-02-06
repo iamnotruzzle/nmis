@@ -680,13 +680,7 @@
           </small>
         </div>
         <div class="field">
-          <label
-            >Usage/Average
-            <b class="text-error"
-              >NOTE: If 1 tank equals 1800 lbs, declare the usage as 1800 lbs regardless of the number of tanks
-              received, as long as each tank is 1800 lbs.</b
-            ></label
-          >
+          <label>Pounds per tank</label>
           <InputText
             id="average"
             v-model.trim="formMedicalGas.average"
@@ -702,6 +696,13 @@
           >
             {{ formMedicalGas.errors.average }}
           </small>
+        </div>
+        <div class="field">
+          <label>Total pounds <span class="text-error">(Quantity * pounds per tank)</span></label>
+          <InputText
+            v-model="totalUsage"
+            readonly
+          />
         </div>
         <div class="field">
           <label for="delivered_date">Delivered date</label>
@@ -1004,6 +1005,9 @@ export default {
   computed: {
     user() {
       return this.$page.props.auth.user;
+    },
+    totalUsage() {
+      return Number(this.formMedicalGas.quantity) * Number(this.formMedicalGas.average);
     },
   },
   methods: {
@@ -1383,7 +1387,7 @@ export default {
       });
     },
     editMedicalGas(data) {
-      console.log(data);
+      //   console.log(data);
 
       this.updateMedicalGasDialog = true;
 

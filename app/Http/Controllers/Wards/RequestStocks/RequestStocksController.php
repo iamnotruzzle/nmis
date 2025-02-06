@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use App\Models\Sessions;
+use App\Models\WardsStocksLogs;
 use Illuminate\Support\Facades\Session;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -213,7 +214,8 @@ class RequestStocksController extends Controller
     public function updatedeliverystatus(RequestStocks $requeststock, Request $request)
     {
         $requestStock = RequestStocks::where('id', $request->request_stock_id)->first();
-        // dd($x);
+
+        $entry_by = Auth::user()->employeeid;
 
         if ($requestStock->status == 'FILLED') {
             // update status
@@ -222,6 +224,58 @@ class RequestStocksController extends Controller
                     'status' => $request->status,
                     'received_date' => Carbon::now(),
                 ]);
+
+            $stocks = WardsStocks::where('request_stocks_id', $request->request_stock_id)
+                ->get();
+            // dd($stocks);
+
+            foreach ($stocks as $stk) {
+                $wardStockLogs = WardsStocksLogs::create([
+                    'request_stocks_id' => $stk->request_stocks_id,
+                    'request_stocks_detail_id' => $stk->request_stocks_detail_id,
+                    'ris_no' => $stk->ris_no,
+                    'stock_id' => $stk->stock_id,
+                    'wards_stocks_id' => $stk->id,
+                    'is_consumable' => $stk->is_consumable,
+                    'location' => $stk->location,
+                    'cl2comb' => $stk->cl2comb,
+                    'uomcode' => $stk->uomcode,
+                    'chrgcode' => $stk->chrgcode,
+                    'prev_qty' => 0,
+                    'new_qty' => $stk->quantity,
+                    'average' => $stk->average,
+                    'total_usage' => $stk->total_usage,
+                    'manufactured_date' => Carbon::parse($stk->manufactured_date)->format('Y-m-d H:i:s.v'),
+                    'delivered_date' =>  Carbon::parse($stk->delivered_date)->format('Y-m-d H:i:s.v'),
+                    'expiration_date' => Carbon::parse($stk->expiration_date)->format('Y-m-d H:i:s.v'),
+                    'action' => 'CREATE',
+                    'remarks' => null,
+                    'entry_by' => $entry_by,
+                ]);
+            }
+
+            // $wardStockLogs = WardsStocksLogs::create([
+            //     'request_stocks_id' => null,
+            //     'request_stocks_detail_id' => null,
+            //     'ris_no' => $tempRisNo,
+            //     'stock_id' => null,
+            //     'wards_stocks_id' => $medicalGases->id,
+            //     'is_consumable' => 'y',
+            //     'location' => $request->wardcode,
+            //     'cl2comb' => $request->cl2comb,
+            //     'uomcode' => $request->uomcode,
+            //     'chrgcode' => $request->fund_source,
+            //     'prev_qty' => 0,
+            //     'new_qty' => $request->quantity,
+            //     'average' => $request->average,
+            //     'total_usage' => (int)$request->quantity * (int)$request->average,
+            //     'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
+            //     'delivered_date' =>  Carbon::parse($request->delivered_date)->format('Y-m-d H:i:s.v'),
+            //     'expiration_date' =>  Carbon::maxValue(),
+            //     'action' => 'CREATE',
+            //     'remarks' => null,
+            //     'entry_by' => $entry_by,
+            // ]);
 
             // the parameters result will be send into the frontend
             event(new RequestStock('Item requested.'));

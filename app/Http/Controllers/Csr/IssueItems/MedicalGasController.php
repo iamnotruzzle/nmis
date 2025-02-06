@@ -113,6 +113,7 @@ class MedicalGasController extends Controller
             'request_stocks_detail_id' => null,
             'ris_no' => $tempRisNo,
             'stock_id' => null,
+            'wards_stocks_id' => $medicalGases->id,
             'is_consumable' => 'y',
             'location' => $request->wardcode,
             'cl2comb' => $request->cl2comb,
