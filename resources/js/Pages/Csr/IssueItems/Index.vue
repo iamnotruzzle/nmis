@@ -1139,6 +1139,7 @@ export default {
           this.requestStockList = [];
           this.expandedRow = [];
           this.medicalGasList = [];
+          this.wardsMedicalGasStockList = [];
           this.storeRequestedStocksInContainer();
           this.storeWardsMedicalGasStock();
           this.loading = false;
@@ -1405,8 +1406,13 @@ export default {
       this.medicalGasDialog = false;
       this.selectedItemsUomDesc = null;
       this.updateMedicalGasDialog = false;
+      this.medicalGasList = [];
       this.form.reset();
       this.form.clearErrors();
+      this.formMedicalGas.reset();
+      this.formMedicalGas.clearErrors();
+      this.formUpdateMedicalGas.reset();
+      this.formUpdateMedicalGas.clearErrors();
     },
     editStatus(item) {
       //   console.log(item);
