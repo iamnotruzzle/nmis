@@ -55,6 +55,34 @@ class ECGController extends Controller
             GROUP BY htypser.tscode, htypser.tsdesc;"
         );
 
+        // IF MONTHLY IS NEEDED
+        // $census_monthly = DB::select(
+        //     "SELECT
+        //             --htypser.tscode,
+        //             DATENAME(MONTH, pcchrgdte) AS MONTH,
+        //             MONTH(pcchrgdte) as M,
+        //             htypser.tsdesc AS DEPARTMENT,
+        //             SUM(charge.pchrgqty) AS QUANTITY,
+        //             charge.pchrgup as 'UNIT COST',
+        //             SUM(charge.pcchrgamt) AS 'TOTAL COST'
+        //         FROM hpatchrg AS charge
+        //         JOIN herlog AS erlog ON erlog.enccode = charge.enccode
+        //         JOIN htypser ON htypser.tscode = erlog.tscode
+        //         WHERE pcchrgcod LIKE 'ER%'
+        //         AND charge.itemcode = 'ECG'
+        //         AND pcchrgdte BETWEEN '2024-01-01' AND '2024-12-31'
+        //         AND (
+        //             erlog.tscode = 'FAMED'
+        //             OR erlog.tscode = 'GYNE'
+        //             OR erlog.tscode = 'OB'
+        //             OR erlog.tscode = 'MED'
+        //             OR erlog.tscode = 'PEDIA'
+        //             OR erlog.tscode = 'SURG'
+        //         )
+        //         GROUP BY htypser.tscode, htypser.tsdesc, charge.pchrgup, DATENAME(MONTH, pcchrgdte), MONTH(pcchrgdte)
+        //         ORDER BY DEPARTMENT, M; -- sort department and month"
+        // );
+
         return Inertia::render('Wards/Census/ECG/Index', [
             'census' => $census,
         ]);
