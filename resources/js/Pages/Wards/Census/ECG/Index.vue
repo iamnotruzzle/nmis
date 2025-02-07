@@ -114,6 +114,16 @@
             </template>
           </Column>
           <Column
+            header="OBSTETRICS"
+            :headerStyle="{ fontSize: '18px' }"
+          >
+            <template #body="{ data }">
+              <div style="font-size: 16px">
+                {{ data.obstetrics }}
+              </div>
+            </template>
+          </Column>
+          <Column
             header="FAMILY MEDICINE"
             :headerStyle="{ fontSize: '18px' }"
           >
@@ -213,6 +223,7 @@
               <th style="border: 1px solid #ddd; padding: 6px; background-color: #f4f4f4">Internal Medicine</th>
               <th style="border: 1px solid #ddd; padding: 6px; background-color: #f4f4f4">Surgery</th>
               <th style="border: 1px solid #ddd; padding: 6px; background-color: #f4f4f4">Gynecology</th>
+              <th style="border: 1px solid #ddd; padding: 6px; background-color: #f4f4f4">Obstetrics</th>
               <th style="border: 1px solid #ddd; padding: 6px; background-color: #f4f4f4">Family Medicine</th>
               <th style="border: 1px solid #ddd; padding: 6px; background-color: #f4f4f4">Pediatrics</th>
               <th style="border: 1px solid #ddd; padding: 6px; background-color: #f4f4f4">Total Cost</th>
@@ -224,6 +235,7 @@
               <td style="border: 1px solid #ddd; padding: 8px">{{ printForm.internal_medicine }}</td>
               <td style="border: 1px solid #ddd; padding: 8px">{{ printForm.surgery }}</td>
               <td style="border: 1px solid #ddd; padding: 8px">{{ printForm.gynecology }}</td>
+              <td style="border: 1px solid #ddd; padding: 8px">{{ printForm.obstetrics }}</td>
               <td style="border: 1px solid #ddd; padding: 8px">{{ printForm.family_medicine }}</td>
               <td style="border: 1px solid #ddd; padding: 8px">{{ printForm.pediatrics }}</td>
               <td style="border: 1px solid #ddd; padding: 8px">₱ {{ printForm.total_cost }}</td>
@@ -295,6 +307,7 @@ export default {
         internal_medicine: null,
         surgery: null,
         gynecology: null,
+        obstetrics: null,
         family_medicine: null,
         pediatrics: null,
         total_cost: null,
@@ -346,6 +359,7 @@ export default {
         this.printForm.internal_medicine = this.censusList[0].internal_medicine;
         this.printForm.surgery = this.censusList[0].surgery;
         this.printForm.gynecology = this.censusList[0].gynecology;
+        this.printForm.obstetrics = this.censusList[0].obstetrics;
         this.printForm.family_medicine = this.censusList[0].family_medicine;
         this.printForm.pediatrics = this.censusList[0].pediatrics;
         this.printForm.total_cost = this.censusList[0].total_cost;
@@ -396,6 +410,7 @@ export default {
         internal_medicine: 0,
         surgery: 0,
         gynecology: 0,
+        obstetrics: 0,
         family_medicine: 0,
         pediatrics: 0,
         total_cost: 0,
