@@ -47,7 +47,7 @@ class ECGController extends Controller
             AND (
                 logs.tscode = 'FAMED'
                 OR logs.tscode = 'GYNE'
-                OR erlog.tscode = 'OB'
+                OR logs.tscode = 'OB'
                 OR logs.tscode = 'MED'
                 OR logs.tscode = 'PEDIA'
                 OR logs.tscode = 'SURG'
