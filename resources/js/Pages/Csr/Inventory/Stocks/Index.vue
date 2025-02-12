@@ -567,7 +567,7 @@
         v-model:visible="addDeliveryDialog"
         :modal="true"
         class="p-fluid overflow-hidden"
-        :style="{ width: '550px' }"
+        :style="{ width: '800px' }"
         @hide="clickOutsideDialog"
         :draggable="true"
         :closeOnEscape="false"
@@ -650,12 +650,13 @@
             class="w-full"
           />
         </div>
-        <div class="field flex flex-row justify-content-between">
-          <div>
-            <div class="flex align-content-center">
-              <label>Delivered date</label>
-              <span class="ml-2 text-error">*</span>
-            </div>
+
+        <div>
+          <div class="flex">
+            <label>Delivered date</label>
+            <span class="ml-2 text-error">*</span>
+          </div>
+          <div class="flex flex-row">
             <Calendar
               v-model="formAddDelivery.delivered_date"
               dateFormat="mm-dd-yy"
@@ -665,31 +666,31 @@
               :hideOnDateTimeSelect="true"
             />
           </div>
-          <div>
-            <div class="flex">
-              <label>Expiration date</label>
-              <span class="ml-2 text-error">*</span>
-            </div>
-            <div class="flex flex-row">
-              <Calendar
-                required="true"
-                v-model="formAddDelivery.expiration_date"
-                dateFormat="mm-dd-yy"
-                showIcon
-                showButtonBar
-                :manualInput="false"
-                :hideOnDateTimeSelect="true"
-                :disabled="maxDate"
-              />
-            </div>
-            <ToggleButton
-              v-model="maxDate"
-              onLabel="Fixed date"
-              offLabel="Custom date"
-              onIcon="pi pi-lock"
-              offIcon="pi pi-lock-open"
+        </div>
+        <div class="mb-3">
+          <div class="flex">
+            <label>Expiration date</label>
+            <span class="ml-2 text-error">*</span>
+          </div>
+          <div class="flex flex-row">
+            <Calendar
+              required="true"
+              v-model="formAddDelivery.expiration_date"
+              dateFormat="mm-dd-yy"
+              showIcon
+              showButtonBar
+              :manualInput="false"
+              :hideOnDateTimeSelect="true"
+              :disabled="maxDate"
             />
           </div>
+          <ToggleButton
+            v-model="maxDate"
+            onLabel="Fixed date"
+            offLabel="Custom date"
+            onIcon="pi pi-lock"
+            offIcon="pi pi-lock-open"
+          />
         </div>
 
         <div class="field w-6">
@@ -2684,33 +2685,14 @@ export default {
     },
     formImport: {
       handler(e) {
-        // acquisition price
+        // console.log(this.formAddDelivery.price_per_unit);
+        // // acquisition price
         let acquisitionPrice = Number(e.acquisitionPrice);
         let hospital_price = (acquisitionPrice * this.formImport.quantity) / 0.7;
-        let str_hospital_price = hospital_price.toString();
-        let index = str_hospital_price.indexOf('.');
-        // Check if there's a decimal point
-        if (index !== -1) {
-          this.formImport.hospital_price = str_hospital_price.slice(0, index + 3); // Include the decimal point and the next two digits
-        } else {
-          this.formImport.hospital_price = str_hospital_price + '.00'; // No decimal point means it's a whole number
-        }
+        this.formImport.hospital_price = Number(hospital_price.toFixed(2));
 
-        // quantity after
-        // let quantity_after = Number(e.quantity_after);
-        // if (quantity_after == 0 || quantity_after == null || isNaN(quantity_after)) {
-        //   this.formImport.price_per_unit = 0;
-        // } else {
-        //   let price_per_unit = this.formImport.hospital_price / quantity_after;
-        //   let str_price_per_unit = price_per_unit.toString();
-        //   let index = str_price_per_unit.indexOf('.');
-        //   // Check if there's a decimal point
-        //   if (index !== -1) {
-        //     this.formImport.price_per_unit = str_price_per_unit.slice(0, index + 3); // Include the decimal point and the next two digits
-        //   } else {
-        //     this.formImport.price_per_unit = str_price_per_unit + '.00'; // No decimal point means it's a whole number
-        //   }
-        // }
+        let price_per_unit = this.formImport.hospital_price / this.formImport.quantity_after;
+        this.formImport.price_per_unit = Number(price_per_unit).toFixed(2);
       },
       deep: true,
     },
