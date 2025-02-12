@@ -95,12 +95,17 @@ class ECGController extends Controller
 
         // // change the toecode filter if needed
         // $no_of_consultation_or_admission = DB::select(
-        //     "SELECT count(herlog.enccode)
-        //         FROM henctr
-        //         INNER JOIN herlog ON  herlog.enccode = henctr.enccode
-        //         AND (henctr.toecode = 'ER') -- ER CONSULTATION
-        //         --AND (henctr.toecode = 'ERADM') -- ER ADMISSION
-        //         AND(henctr.encdate BETWEEN '2024-01-01' AND '2024-12-31');"
+        //     "SELECT
+        //         htypser.tsdesc AS DEPARTMENT,
+        //         COUNT(*) AS TOTAL_COUNT
+        //     FROM henctr
+        //     INNER JOIN herlog AS erlog ON erlog.enccode = henctr.enccode
+        //     JOIN htypser ON htypser.tscode = erlog.tscode
+        //     WHERE henctr.toecode = 'ER' -- ER CONSULTATION
+        //     --WHERE henctr.toecode = 'ERADM' -- ER ADMISSION
+        //     AND henctr.encdate BETWEEN '2023-01-01' AND '2023-12-31'
+        //     GROUP BY htypser.tsdesc
+        //     ORDER BY TOTAL_COUNT DESC;"
         // );
 
         return Inertia::render('Wards/Census/ECG/Index', [
