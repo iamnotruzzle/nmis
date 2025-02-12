@@ -413,6 +413,7 @@
                   inputId="minmaxfraction"
                   :minFractionDigits="2"
                   :maxFractionDigits="5"
+                  :disabled="true"
                 />
               </div>
             </div>
