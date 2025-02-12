@@ -56,6 +56,20 @@ class TransferStockController extends Controller
             ->get();
         // dd($wardStocks);
 
+        // FROM CONSIGNMENT AND EXISTING STOCK
+        $wardStocks3 = WardsStocks::with(['item_details:cl2comb,cl2desc'])
+            ->where(
+                'quantity',
+                '!=',
+                0
+            )
+            ->where('location', '=', $authCode)
+            ->where('from', 'CONSIGNMENT')
+            ->orWhere('from', 'EXISTING_STOCKS')
+            ->get();
+
+        // dd($wardStocks3);
+
         $transferredStock = WardTransferStock::with(
             'ward_stock',
             'ward_from:wardcode,wardname',
@@ -88,6 +102,7 @@ class TransferStockController extends Controller
             'authWardcode' => $authWardcode[0],
             'wardStocks' => $wardStocks,
             'wardStocks2' => $wardStocks2,
+            'wardStocks3' => $wardStocks3,
             // 'wardStocksMedicalGasess' => $wardStocksMedicalGasess,
             'transferredStock' => $transferredStock,
             'employees' => $employees,
