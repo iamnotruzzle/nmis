@@ -40,7 +40,7 @@ class TransferStockController extends Controller
 
         // FROM CSR
         $wardStocks = WardsStocks::with(['item_details:cl2comb,cl2desc', 'request_stocks'])
-            ->where('quantity', '!=', 0)
+            ->where('quantity', '>', 0)
             ->where('location', '=', $authCode)
             ->whereHas('request_stocks', function ($query) {
                 return $query->where('status', 'RECEIVED');
@@ -50,23 +50,15 @@ class TransferStockController extends Controller
 
         // FROM TRANSFERRED STOCKS
         $wardStocks2 = WardsStocks::with(['item_details:cl2comb,cl2desc'])
-            ->where('quantity', '!=', 0)
+            ->where('quantity', '>', 0)
             ->where('location', '=', $authCode)
-            ->where('from', 'WARD')
+            ->where(function ($query) {
+                $query->where('from', 'WARD')
+                    ->orWhere('from', 'CONSIGNMENT')
+                    ->orWhere('from', 'EXISTING_STOCKS');
+            })
             ->get();
         // dd($wardStocks);
-
-        // FROM CONSIGNMENT AND EXISTING STOCK
-        $wardStocks3 = WardsStocks::with(['item_details:cl2comb,cl2desc'])
-            ->where(
-                'quantity',
-                '!=',
-                0
-            )
-            ->where('location', '=', $authCode)
-            ->where('from', 'CONSIGNMENT')
-            ->orWhere('from', 'EXISTING_STOCKS')
-            ->get();
 
         // dd($wardStocks3);
 
@@ -102,7 +94,6 @@ class TransferStockController extends Controller
             'authWardcode' => $authWardcode[0],
             'wardStocks' => $wardStocks,
             'wardStocks2' => $wardStocks2,
-            'wardStocks3' => $wardStocks3,
             // 'wardStocksMedicalGasess' => $wardStocksMedicalGasess,
             'transferredStock' => $transferredStock,
             'employees' => $employees,

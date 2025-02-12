@@ -528,7 +528,6 @@ export default {
     authWardcode: Object,
     wardStocks: Object,
     wardStocks2: Object,
-    wardStocks3: Object,
     // wardStocksMedicalGasess: Object,
     transferredStock: Object,
     employees: Object,
@@ -701,33 +700,6 @@ export default {
           expiration_date: e.expiration_date,
         });
       });
-
-      // FROM CONSIGNMENT AND EXISTING STOCK
-      this.wardStocks3.forEach((e) => {
-        // let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
-
-        this.wardStocksList.push({
-          ward_stock_id: e.id,
-          from: e.from,
-          cl2comb: e.item_details.cl2comb,
-          cl2desc: e.item_details.cl2desc,
-          quantity: e.quantity,
-          expiration_date: e.expiration_date,
-        });
-      });
-
-      //   this.wardStocksMedicalGasess.forEach((e) => {
-      //     // let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
-
-      //     this.wardStocksList.push({
-      //       ward_stock_id: e.id,
-      //       from: e.from,
-      //       cl2comb: e.item_details.cl2comb,
-      //       cl2desc: e.item_details.cl2desc,
-      //       quantity: e.quantity,
-      //       expiration_date: e.expiration_date,
-      //     });
-      //   });
     },
     updateData() {
       this.transferredStocksList = [];
