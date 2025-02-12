@@ -29,10 +29,11 @@ class CsrInventoryController extends Controller
         $authCode = $authWardcode[0]->wardcode;
 
         $csrInventory = DB::select(
-            "SELECT item.cl2desc as item_desc, quantity_after as quantity
+            "SELECT item_conver.cl2comb_after, item.cl2desc as item_desc, SUM(quantity_after) as quantity
                 FROM csrw_csr_item_conversion as item_conver
                 JOIN hclass2 as item ON item.cl2comb = item_conver.cl2comb_after
                 WHERE quantity_after > 0
+                GROUP BY item_conver.cl2comb_after, item.cl2desc
                 ORDER BY item.cl2desc ASC;"
         );
 
