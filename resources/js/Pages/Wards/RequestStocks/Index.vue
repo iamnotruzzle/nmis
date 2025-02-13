@@ -631,8 +631,8 @@
         <Dialog
           v-model:visible="consignmentDialog"
           :modal="true"
+          :closeOnEscape="false"
           class="p-fluid w-4"
-          @hide="whenDialogIsHidden"
         >
           <template #header>
             <div class="text-orange-500 text-xl font-bold">CONSIGNMENT</div>
@@ -769,7 +769,7 @@
                 formConsignment.price_per_unit <= 0 ||
                 formConsignment.delivered_date == null
               "
-              @click="submitConsignment"
+              @click="openConfirmConsignmentDialog"
             />
             <Button
               v-else
@@ -781,6 +781,57 @@
               :disabled="formConsignment.processing || formConsignment.quantity == null"
               @click="submitConsignment"
             />
+          </template>
+        </Dialog>
+
+        <!-- confirm consignment -->
+        <Dialog
+          v-model:visible="confirmConsignmentDialog"
+          :modal="true"
+          :closeOnEscape="false"
+          class="p-fluid w-4"
+          persist
+        >
+          <template #header>
+            <div class="text-error uppercase text-xl font-bold">Are you sure you have entered the correct data?</div>
+          </template>
+
+          <div class="text-xl text-justify">
+            <p>
+              Please double-check the data you have entered, especially the fund source and the item details, as these
+              cannot be reversed.
+            </p>
+
+            <p>
+              Imagine saving an item with its price, only to realize later that it was incorrect after someone has
+              already charged it. Since this data cannot be undone, any mistakes will directly impact the patient’s
+              statement of account and charge logs.
+            </p>
+
+            <p>
+              If you are unsure, <b>do not proceed</b>. Every time an item is added, your user account will be recorded
+              in the logs.
+            </p>
+          </div>
+
+          <template #footer>
+            <Button
+              label="Cancel"
+              icon="pi pi-times"
+              severity="danger"
+              text
+              @click="cancel"
+            />
+            <Button
+              icon="pi pi-check"
+              severity="warning"
+              text
+              type="submit"
+              :disabled="formConsignment.processing || countdown > 0"
+              @click="submitConsignment"
+            >
+              {{ countdown > 0 ? `YES, I'M SURE (${countdown})` : "YES, I'M SURE" }}
+            </Button>
           </template>
         </Dialog>
 
@@ -1478,12 +1529,14 @@ export default {
       loading: false,
       totalRecords: null,
       rows: null,
-      // end paginator
+      // end paginator,
+      countdown: 0,
       requestStockId: null,
       isUpdate: false,
       createRequestStocksDialog: false,
       medicalGasesDialog: false,
       consignmentDialog: false,
+      confirmConsignmentDialog: false,
       isUpdateExisting: false,
       isUpdateConsignment: false,
       existingDialog: false,
@@ -1596,20 +1649,6 @@ export default {
     this.rows = this.requestedStocks.per_page;
   },
   mounted() {
-    // console.log(this.requestedStocks);
-    // window.Echo.channel('issued').listen('ItemIssued', (args) => {
-    //   if (args.message[0] == this.$page.props.authWardcode.wardcode) {
-    //     router.reload({
-    //       onFinish: (e) => {
-    //         this.requestStockList = [];
-    //         this.storeRequestedStocksInContainer();
-    //         this.createRequestStocksDialog = false;
-    //         this.loading = false;
-    //       },
-    //     });
-    //   }
-    // });
-
     this.storeFundSourceInContainer();
     this.storeItemsInController();
     this.storeRequestedStocksInContainer();
@@ -1710,6 +1749,10 @@ export default {
         this.isUpdateConsignment = true;
         this.consignmentDialog = true;
       }
+    },
+    openConfirmConsignmentDialog() {
+      console.log('openConfirmConsignmentDialog');
+      this.confirmConsignmentDialog = true;
     },
     restrictNonNumericAndPeriod(event) {
       if (
@@ -1918,6 +1961,7 @@ export default {
         (this.isUpdate = false),
         (this.isUpdateExisting = false),
         (this.isUpdateConsignment = false),
+        (this.confirmConsignmentDialog = false),
         (this.requestStockListDetails = []),
         (this.item = null),
         (this.cl2desc = null),
@@ -1932,8 +1976,8 @@ export default {
         this.form.reset(),
         this.formMedicalGases.clearErrors(),
         this.formMedicalGases.reset(),
-        this.formConsignment.reset(),
-        this.formConsignment.clearErrors(),
+        // this.formConsignment.reset(),
+        // this.formConsignment.clearErrors(),
         this.formReturnToCsr.clearErrors(),
         this.formReturnToCsr.reset(),
         this.formUpdateStatus.reset(),
@@ -2208,6 +2252,7 @@ export default {
     },
     cancel() {
       this.requestStockId = null;
+      this.confirmConsignmentDialog = false;
       this.isUpdate = false;
       this.isUpdateExisting = false;
       this.isUpdateConsignment = false;
@@ -2317,6 +2362,22 @@ export default {
     // end ward stocks logs
   },
   watch: {
+    confirmConsignmentDialog(newVal) {
+      if (newVal) {
+        this.countdown = 10; // Reset countdown when dialog is opened
+        this.timer = setInterval(() => {
+          if (this.countdown > 0) {
+            this.countdown--;
+          } else {
+            clearInterval(this.timer);
+            this.timer = null;
+          }
+        }, 1000);
+      } else {
+        clearInterval(this.timer); // Stop countdown if dialog closes early
+        this.timer = null;
+      }
+    },
     search: function (val, oldVal) {
       this.params.search = val;
       this.updateData();
