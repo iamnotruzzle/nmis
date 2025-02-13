@@ -633,6 +633,7 @@
           :modal="true"
           :closeOnEscape="false"
           class="p-fluid w-4"
+          @hide="whenDialogIsHidden"
         >
           <template #header>
             <div class="text-orange-500 text-xl font-bold">CONSIGNMENT</div>
@@ -1976,8 +1977,8 @@ export default {
         this.form.reset(),
         this.formMedicalGases.clearErrors(),
         this.formMedicalGases.reset(),
-        // this.formConsignment.reset(),
-        // this.formConsignment.clearErrors(),
+        this.formConsignment.reset(),
+        this.formConsignment.clearErrors(),
         this.formReturnToCsr.clearErrors(),
         this.formReturnToCsr.reset(),
         this.formUpdateStatus.reset(),
