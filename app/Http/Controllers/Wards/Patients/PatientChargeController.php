@@ -373,7 +373,9 @@ class PatientChargeController extends Controller
                                             'quantity' => $newStockQty,
                                         ]);
                                 }
-                            } else {
+                            }
+                            // item is medical gas
+                            else {
                                 // CHARGE CONSUMABLE ITEMS
                                 // execute if row selected qty is enough
                                 if ($wardStock->total_usage >= $remaining_qty_to_charge) {
