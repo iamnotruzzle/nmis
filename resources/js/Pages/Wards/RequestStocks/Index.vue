@@ -1668,7 +1668,7 @@ export default {
   methods: {
     print(data) {
       if (data) {
-        console.log(data);
+        // console.log(data);
         // Set up the print form details
         this.printForm.office = data.requested_at;
         this.printForm.ris_no = `RIS-${data.id}`;
@@ -1728,7 +1728,7 @@ export default {
       }
     },
     openUpdateStock(data) {
-      console.log(data);
+      //   console.log(data);
 
       if (data.from == 'EXISTING_STOCKS') {
         this.formExisting.id = data.ward_stock_id;
@@ -1740,7 +1740,7 @@ export default {
       }
     },
     openUpdateConsignment(data) {
-      console.log('consignment', data);
+      //   console.log('consignment', data);
 
       if (data.from == 'CONSIGNMENT') {
         this.formConsignment.id = data.ward_stock_id;
@@ -1752,7 +1752,7 @@ export default {
       }
     },
     openConfirmConsignmentDialog() {
-      console.log('openConfirmConsignmentDialog');
+      //   console.log('openConfirmConsignmentDialog');
       this.confirmConsignmentDialog = true;
     },
     restrictNonNumericAndPeriod(event) {
