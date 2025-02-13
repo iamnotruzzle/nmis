@@ -244,7 +244,7 @@ class PatientChargeController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->tscode);
+        // return $request;
         $data = $request;
 
         $entryby = Auth::user()->employeeid;
@@ -277,7 +277,7 @@ class PatientChargeController extends Controller
         $pcchrgcod = $this->generateUniqueChargeCode();
         $previousItem = '';
 
-        // charge the patient else void charge
+        // if charging a patient
         if ($request->isUpdate == false) {
             // get patient account number
             $r = PatientAccount::where('enccode', $enccode)->first(['paacctno']);
@@ -285,6 +285,7 @@ class PatientChargeController extends Controller
             // $acctno = '';
 
             foreach ($itemsToBillList as $item) {
+                // if items are medical suppl;ies
                 if ($item['typeOfCharge'] == 'DRUMN') {
                     array_push($itemsInBillList, $item['itemCode']);
 
@@ -337,7 +338,7 @@ class PatientChargeController extends Controller
                                 ->where('id', $item['id'])
                                 ->first(); // 10
 
-                            // check if item is consumable
+                            // check if item is medical gas
                             if ($wardStock->is_consumable != 'y') {
                                 // execute if row selected qty is enough
                                 if ($wardStock->quantity >= $remaining_qty_to_charge) {
@@ -600,9 +601,10 @@ class PatientChargeController extends Controller
                 // this will make sure that there will be no duplicate item with the same price
                 $previousItem = $item['itemCode'];
             }
-        } else {
-            // dd($request);
+        }
 
+        // if modifying a charge
+        if ($request->isUpdate == true) {
             // void/return MISC item
             if ($request->upd_type_of_charge_code == 'MISC') {
                 $previousCharge = null;
