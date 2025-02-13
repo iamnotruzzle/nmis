@@ -2168,6 +2168,7 @@ export default {
           this.formExisting.put(route('existingstock.update', this.formExisting.id), {
             preserveScroll: true,
             onSuccess: () => {
+              this.formExisting.reset();
               this.cancel();
               this.updateData();
               this.updateExistingMessage();
@@ -2224,6 +2225,7 @@ export default {
         this.formConsignment.put(route('consignment.update', this.formConsignment.id), {
           preserveScroll: true,
           onSuccess: () => {
+            +this.formConsignment.reset();
             this.cancel();
             this.updateData();
             this.updateConsignmentMessage();
