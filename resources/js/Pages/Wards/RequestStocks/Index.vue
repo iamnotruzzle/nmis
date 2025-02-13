@@ -637,7 +637,10 @@
           <template #header>
             <div class="text-orange-500 text-xl font-bold">CONSIGNMENT</div>
           </template>
-          <div class="field">
+          <div
+            v-if="isUpdateConsignment != true"
+            class="field"
+          >
             <label for="fundSource">Fund source</label>
             <Dropdown
               id="fundSource"
@@ -670,6 +673,7 @@
               optionValue="cl2comb"
               optionLabel="cl2desc"
               class="w-full mb-3"
+              :disabled="isUpdateConsignment == true"
             />
           </div>
           <div class="field">
@@ -698,7 +702,10 @@
               {{ formConsignment.errors.quantity }}
             </small>
           </div>
-          <div class="field">
+          <div
+            v-if="isUpdateConsignment != true"
+            class="field"
+          >
             <label>Price per unit</label>
             <InputNumber
               id="price_per_unit"
@@ -716,7 +723,10 @@
               {{ formConsignment.errors.price_per_unit }}
             </small>
           </div>
-          <div class="field">
+          <div
+            v-if="isUpdateConsignment != true"
+            class="field"
+          >
             <label for="delivered_date">Delivered date</label>
             <Calendar
               v-model="formConsignment.delivered_date"
@@ -743,6 +753,7 @@
               @click="cancel"
             />
             <Button
+              v-if="isUpdateConsignment == false"
               label="Save"
               icon="pi pi-check"
               severity="warning"
@@ -758,6 +769,16 @@
                 formConsignment.price_per_unit <= 0 ||
                 formConsignment.delivered_date == null
               "
+              @click="submitConsignment"
+            />
+            <Button
+              v-else
+              label="Save"
+              icon="pi pi-check"
+              severity="warning"
+              text
+              type="submit"
+              :disabled="formConsignment.processing || formConsignment.quantity == null"
               @click="submitConsignment"
             />
           </template>
@@ -1110,6 +1131,12 @@
                   label="UPDATE"
                   severity="info"
                   @click="openUpdateStock(slotProps.data)"
+                />
+                <Button
+                  v-if="slotProps.data.from == 'CONSIGNMENT'"
+                  label="UPDATE"
+                  severity="info"
+                  @click="openUpdateConsignment(slotProps.data)"
                 />
               </div>
             </template>
@@ -1670,16 +1697,18 @@ export default {
 
         this.isUpdateExisting = true;
         this.existingDialog = true;
-      } else {
-        // data.from == "CONSIGNMENT"
-        // this.formConsignment.id = data.ward_stock_id;
-        // this.formConsignment.fund_source = data.fund_source;
-        // this.formConsignment.cl2comb = data.cl2comb;
-        // this.formConsignment.quantity = data.quantity;
-        // this.formConsignment.price_per_unit = data.price_per_unit;
-        // this.formConsignment.delivered_date = data.delivered_date;
-        // this.isUpdateConsignment = true;
-        // this.consignmentDialog = true;
+      }
+    },
+    openUpdateConsignment(data) {
+      console.log('consignment', data);
+
+      if (data.from == 'CONSIGNMENT') {
+        this.formConsignment.id = data.ward_stock_id;
+        this.formConsignment.cl2comb = data.cl2comb;
+        this.formConsignment.quantity = data.quantity;
+
+        this.isUpdateConsignment = true;
+        this.consignmentDialog = true;
       }
     },
     restrictNonNumericAndPeriod(event) {
@@ -2059,46 +2088,6 @@ export default {
         });
       }
     },
-    submitConsignment() {
-      if (
-        this.formConsignment.processing ||
-        this.formConsignment.fund_source == null ||
-        this.formConsignment.cl2comb == null ||
-        this.formConsignment.quantity == null ||
-        this.formConsignment.price_per_unit == null ||
-        this.formConsignment.price_per_unit <= 0 ||
-        this.formConsignment.delivered_date == null
-      ) {
-        return false;
-      }
-
-      this.formConsignment.authLocation = this.$page.props.authWardcode.wardcode;
-      if (
-        this.formConsignment.fund_source != null ||
-        this.formConsignment.fund_source != '' ||
-        this.formConsignment.cl2comb != null ||
-        this.formConsignment.cl2comb != '' ||
-        this.formConsignment.quantity != null ||
-        this.formConsignment.quantity != '' ||
-        this.formConsignment.quantity != 0 ||
-        this.formConsignment.price_per_unit != '' ||
-        this.formConsignment.price_per_unit != 0 ||
-        this.formConsignment.delivered_date != null ||
-        this.formConsignment.delivered_date != ''
-      ) {
-        // console.log('success');
-        this.formConsignment.post(route('consignment.store'), {
-          preserveScroll: true,
-          onFinish: () => {
-            this.formConsignment.reset();
-            this.cancel();
-            this.updateData();
-            this.createdMsg();
-            this.loading = false;
-          },
-        });
-      }
-    },
     submitExisting() {
       if (this.formExisting.processing || this.formExisting.cl2comb == null || this.formExisting.quantity == null) {
         return false;
@@ -2140,6 +2129,61 @@ export default {
             },
           });
         }
+      }
+    },
+    submitConsignment() {
+      this.formConsignment.authLocation = this.$page.props.authWardcode.wardcode;
+      if (this.isUpdateConsignment != true) {
+        if (
+          this.formConsignment.processing ||
+          this.formConsignment.fund_source == null ||
+          this.formConsignment.cl2comb == null ||
+          this.formConsignment.quantity == null ||
+          this.formConsignment.price_per_unit == null ||
+          this.formConsignment.price_per_unit <= 0 ||
+          this.formConsignment.delivered_date == null
+        ) {
+          return false;
+        }
+
+        if (
+          this.formConsignment.fund_source != null ||
+          this.formConsignment.fund_source != '' ||
+          this.formConsignment.cl2comb != null ||
+          this.formConsignment.cl2comb != '' ||
+          this.formConsignment.quantity != null ||
+          this.formConsignment.quantity != '' ||
+          this.formConsignment.quantity != 0 ||
+          this.formConsignment.price_per_unit != '' ||
+          this.formConsignment.price_per_unit != 0 ||
+          this.formConsignment.delivered_date != null ||
+          this.formConsignment.delivered_date != ''
+        ) {
+          // console.log('success');
+          this.formConsignment.post(route('consignment.store'), {
+            preserveScroll: true,
+            onFinish: () => {
+              this.formConsignment.reset();
+              this.cancel();
+              this.updateData();
+              this.createdMsg();
+              this.loading = false;
+            },
+          });
+        }
+      } else {
+        if (this.formConsignment.processing || this.formConsignment.quantity == null) {
+          return false;
+        }
+
+        this.formConsignment.put(route('consignment.update', this.formConsignment.id), {
+          preserveScroll: true,
+          onSuccess: () => {
+            this.cancel();
+            this.updateData();
+            this.updateConsignmentMessage();
+          },
+        });
       }
     },
     confirmCancelItem(item) {
@@ -2207,6 +2251,9 @@ export default {
       });
     },
     updateExistingMessage() {
+      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Stock updated', life: 3000 });
+    },
+    updateConsignmentMessage() {
       this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Stock updated', life: 3000 });
     },
     updatedStatusMsg() {
