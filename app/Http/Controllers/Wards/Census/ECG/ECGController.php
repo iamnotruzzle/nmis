@@ -57,40 +57,32 @@ class ECGController extends Controller
 
         // $ecg_census_monthly = DB::select(
         //     "SELECT
-        //         --htypser.tscode,
-        //         DATENAME(MONTH, pcchrgdte) AS MONTH,
-        //         MONTH(pcchrgdte) as M,
-        //         htypser.tsdesc AS DEPARTMENT,
-        //         SUM(charge.pchrgqty) AS QUANTITY,
-        //         charge.pchrgup as 'UNIT COST',
-        //         SUM(charge.pcchrgamt) AS 'TOTAL COST'
-        //     FROM hpatchrg AS charge
-        //     JOIN herlog AS erlog ON erlog.enccode = charge.enccode
-        //     JOIN htypser ON htypser.tscode = erlog.tscode
-        //     AND charge.pcchrgcod LIKE 'ER%'
-        //     AND charge.itemcode = 'ECG'
-        //     AND CAST(charge.pcchrgdte as DATE) BETWEEN '2023-01-01' AND '2023-12-31' -- change date filter
-        //     GROUP BY htypser.tscode, htypser.tsdesc, charge.pchrgup, DATENAME(MONTH, pcchrgdte), MONTH(pcchrgdte)
-        //     ORDER BY DEPARTMENT, M; -- sort department and month"
+        //     htypser.tsdesc AS DEPARTMENT,
+        //     SUM(charge.pchrgqty) AS QUANTITY,
+        //     charge.pchrgup as 'UNIT COST',
+        //     SUM(charge.pcchrgamt) AS 'TOTAL COST'
+        // FROM hpatchrg AS charge
+        // JOIN herlog AS erlog ON erlog.enccode = charge.enccode
+        // JOIN htypser ON htypser.tscode = erlog.tscode
+        // WHERE charge.pcchrgcod LIKE 'ER%'
+        // AND charge.itemcode = 'ECG' -- EROPH = Emergency room fee
+        // AND CAST(charge.pcchrgdte AS DATE) BETWEEN '2023-01-01' AND '2023-12-31'
+        // GROUP BY htypser.tsdesc, charge.pchrgup;"
         // );
 
         // $er_fee_monthly = DB::select(
         //     "SELECT
-        //         --htypser.tscode,
-        //         DATENAME(MONTH, pcchrgdte) AS MONTH,
-        //         MONTH(pcchrgdte) as M,
-        //         htypser.tsdesc AS DEPARTMENT,
-        //         SUM(charge.pchrgqty) AS QUANTITY,
-        //         charge.pchrgup as 'UNIT COST',
-        //         SUM(charge.pcchrgamt) AS 'TOTAL COST'
-        //     FROM hpatchrg AS charge
-        //     JOIN herlog AS erlog ON erlog.enccode = charge.enccode
-        //     JOIN htypser ON htypser.tscode = erlog.tscode
-        //     AND charge.pcchrgcod LIKE 'ER%'
-        //     AND charge.itemcode = '04-A'
-        //     AND CAST(charge.pcchrgdte as DATE) BETWEEN '2024-01-01' AND '2024-12-31' -- change date filter
-        //     GROUP BY htypser.tscode, htypser.tsdesc, charge.pchrgup, DATENAME(MONTH, pcchrgdte), MONTH(pcchrgdte)
-        //     ORDER BY DEPARTMENT, M; -- sort department and month"
+        //     htypser.tsdesc AS DEPARTMENT,
+        //     SUM(charge.pchrgqty) AS QUANTITY,
+        //     charge.pchrgup as 'UNIT COST',
+        //     SUM(charge.pcchrgamt) AS 'TOTAL COST'
+        // FROM hpatchrg AS charge
+        // JOIN herlog AS erlog ON erlog.enccode = charge.enccode
+        // JOIN htypser ON htypser.tscode = erlog.tscode
+        // WHERE charge.pcchrgcod LIKE 'ER%'
+        // AND charge.itemcode = 'EROPH' -- EROPH = Emergency room fee
+        // AND CAST(charge.pcchrgdte AS DATE) BETWEEN '2024-01-01' AND '2024-12-31'
+        // GROUP BY htypser.tsdesc, charge.pchrgup;"
         // );
 
         // // change the toecode filter if needed
