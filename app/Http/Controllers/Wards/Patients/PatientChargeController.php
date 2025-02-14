@@ -338,7 +338,7 @@ class PatientChargeController extends Controller
                                 ->where('id', $item['id'])
                                 ->first(); // 10
 
-                            // check if item is medical gas
+                            // IF ITEM IS NOT MEDICAL GAS
                             if ($wardStock->is_consumable != 'y') {
                                 // execute if row selected qty is enough
                                 if ($wardStock->quantity >= $remaining_qty_to_charge) {
@@ -374,7 +374,7 @@ class PatientChargeController extends Controller
                                         ]);
                                 }
                             }
-                            // item is medical gas
+                            // IT ITEM IS MEDICAL GAS
                             else {
                                 // CHARGE CONSUMABLE ITEMS
                                 // execute if row selected qty is enough
