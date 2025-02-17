@@ -906,8 +906,6 @@ export default {
     },
     storeBillsInContainer() {
       this.bills.forEach((e) => {
-        // only push item when chargcode are medical supplies or misc
-        // if (e.type_of_charge_code == 'MISC' || e.type_of_charge_code == 'DRUMN') {
         this.billList.push({
           uid: ++this.uid,
           charge_slip_no: e.charge_slip_no,
@@ -925,9 +923,6 @@ export default {
           charge_date: e.charge_date,
           entry_by: e.entry_by,
         });
-        // } else {
-        //   return null;
-        // }
       });
       // **Sort billList by charge_slip_no in descending order**
       this.billList.sort((a, b) => b.charge_slip_no - a.charge_slip_no);
@@ -937,7 +932,6 @@ export default {
     storeMedicalSuppliesInContainer() {
       let combinedSupplies = [];
       this.medicalSupplies.forEach((med) => {
-        // console.log(med);
         // Find if the item with the same cl2desc and price already exists in the combinedSupplies array
         let existingItem = combinedSupplies.find(
           (item) => item.cl2desc === med.cl2desc && Number(item.price) === Number(med.price)
@@ -975,7 +969,6 @@ export default {
           uomcode: misc.uomcode == null ? null : misc.uomcode,
         });
       });
-      //   console.log('misc list container', this.miscList);
     },
     storeItemsInContainer() {
       // medical supplies
@@ -1034,123 +1027,6 @@ export default {
       });
       //   console.log('item list', this.itemList);
     },
-    /***  old version DO NOT DELETE */
-    // medicalSuppliesQtyValidation() {
-    //   //   console.log(this.item);
-
-    //   if (this.item.typeOfCharge == 'DRUMN') {
-    //     // Check if an item is selected
-    //     if (this.item == null || this.item == '') {
-    //       this.itemNotSelected = true;
-    //       this.itemNotSelectedMsg = 'Item not selected.';
-    //       return;
-    //     }
-
-    //     // Check if a quantity to charge is provided
-    //     if (this.qtyToCharge == 0 || this.qtyToCharge == null || this.qtyToCharge == '') {
-    //       this.itemNotSelected = true;
-    //       this.itemNotSelectedMsg = 'Please provide quantity.';
-    //       return;
-    //     }
-
-    //     // Calculate the total quantity already billed for this item
-    //     const totalBilledQty = this.itemsToBillList
-    //       .filter((e) => e.itemCode === this.item['itemCode'])
-    //       .reduce((sum, e) => sum + e.qtyToCharge, 0);
-
-    //     // Check if adding the new quantity exceeds the total available quantity
-    //     if (totalBilledQty + this.qtyToCharge > this.item.totalQuantity) {
-    //       this.itemNotSelected = true;
-    //       this.itemNotSelectedMsg = 'Total quantity exceeds available stock.';
-    //       return;
-    //     }
-
-    //     // Check if there are related items in the itemsToBillList
-    //     const relatedItemsExist = this.itemsToBillList.some((e) => e.itemCode === this.item['itemCode']);
-    //     if (relatedItemsExist) {
-    //       this.itemNotSelected = true;
-    //       this.itemNotSelectedMsg = 'Remove all related items first to update the quantity.';
-    //       return;
-    //     }
-
-    //     let qtyRemaining = this.qtyToCharge;
-    //     const newBillItems = [];
-
-    //     // Sort the prices array to prioritize near-expiry items first
-    //     this.item.prices.sort((a, b) => new Date(a.expiryDate) - new Date(b.expiryDate));
-
-    //     for (const priceInfo of this.item.prices) {
-    //       if (qtyRemaining <= 0) break;
-    //       const qtyToCharge = Math.min(priceInfo.quantity, qtyRemaining);
-    //       qtyRemaining -= qtyToCharge;
-
-    //       const existingItem = this.itemsToBillList.find(
-    //         (e) => e.itemCode === this.item['itemCode'] && e.price === priceInfo.price
-    //       );
-
-    //       if (existingItem) {
-    //         existingItem.qtyToCharge += qtyToCharge;
-    //         existingItem.total = (existingItem.price * existingItem.qtyToCharge).toFixed(2);
-    //       } else {
-    //         newBillItems.push({
-    //           id: priceInfo.id, // Use the original ID from the prices array
-    //           typeOfCharge: this.item['typeOfCharge'],
-    //           itemCode: this.item['itemCode'],
-    //           itemDesc: this.item['itemDesc'],
-    //           unit: this.item['unit'],
-    //           currentStock: this.item['typeOfCharge'] == 'DRUMN' ? this.item['totalQuantity'] : 'Infinite',
-    //           qtyToCharge,
-    //           price: priceInfo.price,
-    //           total: (priceInfo.price * qtyToCharge).toFixed(2),
-    //           expiryDate: priceInfo.expiryDate, // Include expiry date if needed for further processing
-    //         });
-    //       }
-    //     }
-
-    //     // Handle case where not enough quantity was available
-    //     if (qtyRemaining > 0) {
-    //       this.itemNotSelected = true;
-    //       this.itemNotSelectedMsg = 'Not enough quantity available.';
-    //     } else {
-    //       // Ensure there are no items with the same names already in the list before pushing new items
-    //       this.itemsToBillList = this.itemsToBillList.filter((e) => e.itemCode !== this.item['itemCode']);
-    //       this.itemsToBillList.push(...newBillItems);
-    //       this.itemNotSelected = false;
-    //       this.itemNotSelectedMsg = null;
-    //     }
-    //   } else {
-    //     if (this.item == null || this.item == '') {
-    //       this.itemNotSelected = true;
-    //       this.itemNotSelectedMsg = 'Item not selected.';
-    //     } else {
-    //       // check if request qty is not provided
-    //       if (this.qtyToCharge == 0 || this.qtyToCharge == null || this.qtyToCharge == '') {
-    //         this.itemNotSelected = true;
-    //         this.itemNotSelectedMsg = 'Please provide quantity.';
-    //       } else {
-    //         // check if item selected is already on the list
-    //         if (this.itemsToBillList.some((e) => e.itemCode === this.item['itemCode'])) {
-    //           this.itemNotSelected = true;
-    //           this.itemNotSelectedMsg = 'Item is already on the list.';
-    //         } else {
-    //           this.itemNotSelected = false;
-    //           this.itemNotSelectedMsg = null;
-    //           this.itemsToBillList.push({
-    //             id: this.item['id'] != null ? this.item['id'] : null,
-    //             typeOfCharge: this.item['typeOfCharge'],
-    //             itemCode: this.item['itemCode'],
-    //             itemDesc: this.item['itemDesc'],
-    //             unit: this.item['unit'],
-    //             currentStock: this.item['typeOfCharge'] == 'DRUMN' ? this.item['quantity'] : 'Infinite',
-    //             qtyToCharge: this.qtyToCharge,
-    //             price: this.item['price'],
-    //             total: (this.item['price'] * this.qtyToCharge).toFixed(2),
-    //           });
-    //         }
-    //       }
-    //     }
-    //   }
-    // },
     /***  new and optimize version */
     medicalSuppliesQtyValidation() {
       if (!this.item) {
