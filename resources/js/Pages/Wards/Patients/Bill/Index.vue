@@ -927,7 +927,7 @@ export default {
       // Sort the list after async operations
       this.billList.sort((a, b) => moment(b.charge_date, 'MM-DD-YYYY') - moment(a.charge_date, 'MM-DD-YYYY'));
 
-      console.log(this.billList);
+      //   console.log(this.billList);
     },
     storeMedicalSuppliesInContainer() {
       let combinedSupplies = [];
