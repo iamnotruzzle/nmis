@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Sessions;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
+use PhpParser\Node\Stmt\TryCatch;
 use stdClass;
 
 class PatientChargeController extends Controller
@@ -292,41 +293,32 @@ class PatientChargeController extends Controller
                 // STEP 4: Check if items is a medical gas or misc
                 if ($item['typeOfCharge'] == 'DRUMN') {
                     // STEP 5: Charge the item to a patient
-                    $patientChargeDate = PatientCharge::create([
-                        'enccode' => $enccode,
-                        'hpercode' => $hospitalNumber,
-                        'upicode' => null,
-                        'pcchrgcod' => $previousItem == $item['itemCode'] ? $this->generateUniqueChargeCode() : $pcchrgcod, // charge slip no.
-                        'pcchrgdte' => Carbon::now(),
-                        'chargcode' => $item['typeOfCharge'], // type of charge (chrgcode from hcharge)
-                        'uomcode' => $item['unit'], // unit
-                        'pchrgqty' =>  $item['qtyToCharge'],
-                        'pchrgup' => $item['price'],
-                        'pcchrgamt' => $item['total'],
-                        'pcstat' => 'A', // always A
-                        'pclock' => 'N', // always N
-                        'updsw' => 'N', // always N
-                        'confdl' => 'N', // always N
-                        'srcchrg' => $srcchrg,
-                        'pcdisch' => 'Y',
-                        'acctno' => $acctno, // SELECT * FROM hpatacct --pacctno
-                        'itemcode' => $item['itemCode'], // cl2comb or hmisc hmcode
-                        'entryby' => $entryby,
-                        'orinclst' => null, // null
-                        'compense' => null, // always null
-                        'proccode' => null, // always null
-                        'discount' => null, // always null
-                        'disamt' => null, // always null
-                        'discbal' => null, // always null
-                        'phicamt' => null, // always null
-                        'rvscode' => null, // always null
-                        'licno' => null, // always null
-                        'hpatkey' => null, // always null
-                        'time_frequency' => null, // always null
-                        'unit_frequency' => null, // always null
-                        'qtyintake' => null, // always null
-                        'uomintake' => null, // always null
-                    ]);
+                    // try..catch block will prevent further execution if
+                    // the code inside failed. Meaning, deductiong stock and logging also fails
+                    try {
+                        $patientChargeDate = PatientCharge::create([
+                            'enccode' => $enccode,
+                            'hpercode' => $hospitalNumber,
+                            'pcchrgcod' => $previousItem == $item['itemCode'] ? $this->generateUniqueChargeCode() : $pcchrgcod, // charge slip no.
+                            'pcchrgdte' => Carbon::now(),
+                            'chargcode' => $item['typeOfCharge'], // type of charge (chrgcode from hcharge)
+                            'uomcode' => $item['unit'], // unit
+                            'pchrgqty' =>  $item['qtyToCharge'],
+                            'pchrgup' => $item['price'],
+                            'pcchrgamt' => $item['total'],
+                            'pcstat' => 'A', // always A
+                            'pclock' => 'N', // always N
+                            'updsw' => 'N', // always N
+                            'confdl' => 'N', // always N
+                            'srcchrg' => $srcchrg,
+                            'pcdisch' => 'Y',
+                            'acctno' => $acctno, // SELECT * FROM hpatacct --pacctno
+                            'itemcode' => $item['itemCode'], // cl2comb or hmisc hmcode
+                            'entryby' => $entryby,
+                        ]);
+                    } catch (\Throwable $th) {
+                        throw $th;
+                    }
 
                     // declare new stock qty variable
                     $newStockQty = 0;
@@ -337,30 +329,14 @@ class PatientChargeController extends Controller
                         ->where('id', $item['id'])
                         ->first(); // 10
 
-                    // Since medical tank is also considereded as medical gas.
+                    // Since medical gas is also considereded as medical supplies.
                     // STEP 7: check if the item is regular medical supplies or a medical gas
                     if ($wardStock->is_consumable != 'y') {
-                        // STEP 8: Log the charge
-                        PatientChargeLogs::create([
-                            'enccode' => $enccode,
-                            'acctno' => $acctno,
-                            'ward_stocks_id' => $wardStock->id,
-                            'itemcode' => $wardStock->cl2comb,
-                            'from' => $wardStock->from,
-                            'manufactured_date' => $wardStock->manufactured_date == null ? null : Carbon::parse($wardStock->manufactured_date)->format('Y-m-d H:i:s.v'),
-                            'delivery_date' => $wardStock->delivery_date == null ? null : Carbon::parse($wardStock->delivered_date)->format('Y-m-d H:i:s.v'),
-                            'expiration_date' => $wardStock->expiration_date == null ? null : Carbon::parse($wardStock->expiration_date)->format('Y-m-d H:i:s.v'),
-                            'quantity' => $item['qtyToCharge'],
-                            'price_per_piece' => (float)$item['price'] == null ? null : (float)$item['price'],
-                            'price_total' => (float)$item['qtyToCharge'] * (float)$item['price'],
-                            'pcchrgdte' => $patientChargeDate->pcchrgdte,
-                            'tscode' => $request->tscode,
-                            'entry_at' => $authCode,
-                            'entry_by' => $entryby,
-                            'pcchrgcod' => $patientChargeDate->pcchrgcod, // charge slip no.
-                        ]);
+                        // save the quantity because the value of $item['qtyToCharge'] will
+                        // change below
+                        $quantity_to_insert_in_logs = $item['qtyToCharge'];
 
-                        // STEP 9: updating the stocks
+                        // STEP 8: updating the stocks
                         // getting the new qty of current editing ward stock
                         $newStockQty = $wardStock->quantity - $item['qtyToCharge'];
                         // setting the new value of remaining_qty_to_charge
@@ -370,11 +346,8 @@ class PatientChargeController extends Controller
                             ->update([
                                 'quantity' => $newStockQty,
                             ]);
-                    }
-                    // IT ITEM IS MEDICAL GAS
-                    else {
-                        // CHARGE MEDICAL GAS
-                        // Log the charge
+
+                        // STEP 9: Log the charge
                         PatientChargeLogs::create([
                             'enccode' => $enccode,
                             'acctno' => $acctno,
@@ -384,16 +357,22 @@ class PatientChargeController extends Controller
                             'manufactured_date' => $wardStock->manufactured_date == null ? null : Carbon::parse($wardStock->manufactured_date)->format('Y-m-d H:i:s.v'),
                             'delivery_date' => $wardStock->delivery_date == null ? null : Carbon::parse($wardStock->delivered_date)->format('Y-m-d H:i:s.v'),
                             'expiration_date' => $wardStock->expiration_date == null ? null : Carbon::parse($wardStock->expiration_date)->format('Y-m-d H:i:s.v'),
-                            'quantity' => $item['qtyToCharge'],
-                            'total_usage' => $item['qtyToCharge'],
+                            // 'quantity' => $item['qtyToCharge'],
+                            'quantity' => $quantity_to_insert_in_logs,
                             'price_per_piece' => (float)$item['price'] == null ? null : (float)$item['price'],
-                            'price_total' => (float)$item['qtyToCharge'] * (float)$item['price'],
+                            'price_total' => (float)$quantity_to_insert_in_logs * (float)$item['price'],
                             'pcchrgdte' => $patientChargeDate->pcchrgdte,
                             'tscode' => $request->tscode,
                             'entry_at' => $authCode,
                             'entry_by' => $entryby,
                             'pcchrgcod' => $patientChargeDate->pcchrgcod, // charge slip no.
                         ]);
+                    }
+                    // IT ITEM IS MEDICAL GAS
+                    else {
+                        // save the quantity because the value of $item['qtyToCharge'] will
+                        // change below
+                        $quantity_to_insert_in_logs = $item['qtyToCharge'];
 
                         // Calculate the new total_usage after charging the patient
                         $newTotalUsage = $wardStock->total_usage - $item['qtyToCharge'];
@@ -413,50 +392,61 @@ class PatientChargeController extends Controller
                                 'total_usage' => $newTotalUsage,
                                 'quantity' => $newQuantity,
                             ]);
+                        // $item['qtyToCharge'] = 0;
 
-                        $item['qtyToCharge'] = 0;
+                        // CHARGE MEDICAL GAS
+                        // Log the charge
+                        PatientChargeLogs::create([
+                            'enccode' => $enccode,
+                            'acctno' => $acctno,
+                            'ward_stocks_id' => $wardStock->id,
+                            'itemcode' => $wardStock->cl2comb,
+                            'from' => $wardStock->from,
+                            'manufactured_date' => $wardStock->manufactured_date == null ? null : Carbon::parse($wardStock->manufactured_date)->format('Y-m-d H:i:s.v'),
+                            'delivery_date' => $wardStock->delivery_date == null ? null : Carbon::parse($wardStock->delivered_date)->format('Y-m-d H:i:s.v'),
+                            'expiration_date' => $wardStock->expiration_date == null ? null : Carbon::parse($wardStock->expiration_date)->format('Y-m-d H:i:s.v'),
+                            'quantity' => $quantity_to_insert_in_logs,
+                            'price_per_piece' => (float)$item['price'] == null ? null : (float)$item['price'],
+                            'price_total' => (float)$quantity_to_insert_in_logs * (float)$item['price'],
+                            'pcchrgdte' => $patientChargeDate->pcchrgdte,
+                            'tscode' => $request->tscode,
+                            'entry_at' => $authCode,
+                            'entry_by' => $entryby,
+                            'pcchrgcod' => $patientChargeDate->pcchrgcod, // charge slip no.
+                        ]);
                     }
                 }
 
                 // MISC
                 if ($item['typeOfCharge'] == 'MISC') {
-                    $patientMiscChargeDate = PatientCharge::create([
-                        'enccode' => $enccode,
-                        'hpercode' => $hospitalNumber,
-                        'upicode' => null,
-                        'pcchrgcod' => $pcchrgcod, // charge slip no.
-                        'pcchrgdte' => Carbon::now(),
-                        'chargcode' => $item['typeOfCharge'], // type of charge (chrgcode from hcharge)
-                        'uomcode' => $item['unit'], // unit
-                        'pchrgqty' =>  $item['qtyToCharge'],
-                        'pchrgup' => $item['price'],
-                        'pcchrgamt' => $item['total'],
-                        'pcstat' => 'A', // always A
-                        'pclock' => 'N', // always N
-                        'updsw' => 'N', // always N
-                        'confdl' => 'N', // always N
-                        'srcchrg' => $srcchrg,
-                        'pcdisch' => 'Y',
-                        // 'acctno' => $acctno->paacctno, // SELECT * FROM hpatacct --pacctno
-                        'acctno' => $acctno, // SELECT * FROM hpatacct --pacctno
-                        'itemcode' => $item['itemCode'], // cl2comb or hmisc hmcode
-                        'entryby' => $entryby,
-                        'orinclst' => null, // null
-                        'compense' => null, // always null
-                        'proccode' => null, // always null
-                        'discount' => null, // always null
-                        'disamt' => null, // always null
-                        'discbal' => null, // always null
-                        'phicamt' => null, // always null
-                        'rvscode' => null, // always null
-                        'licno' => null, // always null
-                        'hpatkey' => null, // always null
-                        'time_frequency' => null, // always null
-                        'unit_frequency' => null, // always null
-                        'qtyintake' => null, // always null
-                        'uomintake' => null, // always null
-                    ]);
-                    // dd($item);
+                    // try..catch block will prevent further execution if
+                    // the code inside failed. Meaning logging also fails
+                    try {
+                        $patientMiscChargeDate = PatientCharge::create([
+                            'enccode' => $enccode,
+                            'hpercode' => $hospitalNumber,
+                            'pcchrgcod' => $pcchrgcod, // charge slip no.
+                            'pcchrgdte' => Carbon::now(),
+                            'chargcode' => $item['typeOfCharge'], // type of charge (chrgcode from hcharge)
+                            'uomcode' => $item['unit'], // unit
+                            'pchrgqty' =>  $item['qtyToCharge'],
+                            'pchrgup' => $item['price'],
+                            'pcchrgamt' => $item['total'],
+                            'pcstat' => 'A', // always A
+                            'pclock' => 'N', // always N
+                            'updsw' => 'N', // always N
+                            'confdl' => 'N', // always N
+                            'srcchrg' => $srcchrg,
+                            'pcdisch' => 'Y',
+                            'acctno' => $acctno, // SELECT * FROM hpatacct --pacctno
+                            'itemcode' => $item['itemCode'], // cl2comb or hmisc hmcode
+                            'entryby' => $entryby,
+                        ]);
+                    } catch (\Throwable $th) {
+                        throw $th;
+                    }
+
+                    // log the charge
                     PatientChargeLogs::create([
                         'enccode' => $enccode,
                         // 'acctno' => $acctno->paacctno,
