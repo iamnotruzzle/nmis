@@ -19,7 +19,8 @@
           selectionMode="single"
           rowGroupMode="subheader"
           groupRowsBy="charge_slip_no"
-          sortMode="single"
+          sortField="charge_date"
+          :sortOrder="-1"
           removableSort
           showGridlines
           scrollable
@@ -47,26 +48,6 @@
                     />
                   </div>
                 </div>
-                <!-- <div
-                    class="flex align-items-center"
-                    v-if="canCharge == true"
-                  >
-                    <Button
-                      v-if="is_for_discharge !== 'true'"
-                      label="Charge patient"
-                      icon="pi pi-money-bill"
-                      iconPos="right"
-                      @click="openCreateBillDialog"
-                    />
-                  </div>
-                  <div v-else>
-                    <Button
-                      :disabled="true"
-                      label="Charge patient"
-                      icon="pi pi-money-bill"
-                      iconPos="right"
-                    />
-                  </div> -->
                 <div class="flex align-items-center">
                   <Button
                     v-if="is_for_discharge !== 'true'"
@@ -84,9 +65,6 @@
             header="CHARGE SLIP #"
             sortable
           >
-            <!-- <template #body="{ data }">
-              {{ data.charge_slip_no }}
-            </template> -->
           </Column>
           <Column
             field="type_of_charge_description"
@@ -164,27 +142,6 @@
             style="width: 5%"
           >
             <template #body="slotProps">
-              <!-- only show if the item is charge using this system and not HOMIS -->
-              <!-- <div v-if="slotProps.data.charge_log_id != null">
-                  <Button
-                    v-if="canCharge == true"
-                    icon="pi pi-pencil"
-                    class="mr-1"
-                    rounded
-                    text
-                    severity="warning"
-                    @click="editItem(slotProps.data)"
-                  />
-                  <Button
-                    v-else
-                    icon="pi pi-pencil"
-                    class="mr-1"
-                    rounded
-                    text
-                    severity="warning"
-                    :disabled="true"
-                  />
-                </div> -->
               <div v-if="slotProps.data.charge_log_id != null">
                 <Button
                   icon="pi pi-pencil"
@@ -949,40 +906,38 @@ export default {
     },
     storeBillsInContainer() {
       this.bills.forEach((e) => {
-        // console.log(e);
-
         // only push item when chargcode are medical supplies or misc
-        if (e.type_of_charge_code == 'MISC' || e.type_of_charge_code == 'DRUMN') {
-          this.billList.push({
-            uid: ++this.uid,
-            charge_slip_no: e.charge_slip_no,
-            type_of_charge_code: e.type_of_charge_code,
-            type_of_charge_description: e.type_of_charge_description,
-            item: e.misc != null ? e.misc : e.category + ' ' + e.item,
-            charge_log_id: e.charge_log_id,
-            charge_log_from: e.charge_log_from,
-            charge_log_ward_stocks_id: e.charge_log_ward_stocks_id,
-            charge_log_quantity: e.charge_log_quantity,
-            itemcode: e.itemcode,
-            quantity: Math.trunc(e.quantity),
-            // price: e.pchrgup,
-            price: Math.round(e.price * 100) / 100,
-            amount: (Math.trunc(e.quantity) * Math.round(e.price * 100)) / 100,
-            charge_date: e.charge_date,
-            charge_date: e.charge_date,
-            entry_by: e.entry_by,
-            // patient_charge_logs: e.patient_charge_logs.length == 0 ? null : e.patient_charge_logs,
-          });
-        } else {
-          return null;
-        }
+        // if (e.type_of_charge_code == 'MISC' || e.type_of_charge_code == 'DRUMN') {
+        this.billList.push({
+          uid: ++this.uid,
+          charge_slip_no: e.charge_slip_no,
+          type_of_charge_code: e.type_of_charge_code,
+          type_of_charge_description: e.type_of_charge_description,
+          item: e.misc != null ? e.misc : e.category + ' ' + e.item,
+          charge_log_id: e.charge_log_id,
+          charge_log_from: e.charge_log_from,
+          charge_log_ward_stocks_id: e.charge_log_ward_stocks_id,
+          charge_log_quantity: e.charge_log_quantity,
+          itemcode: e.itemcode,
+          quantity: Math.trunc(e.quantity),
+          price: Math.round(e.price * 100) / 100,
+          amount: (Math.trunc(e.quantity) * Math.round(e.price * 100)) / 100,
+          charge_date: e.charge_date,
+          entry_by: e.entry_by,
+        });
+        // } else {
+        //   return null;
+        // }
       });
-      console.log('bill list', this.billList);
+      // **Sort billList by charge_slip_no in descending order**
+      this.billList.sort((a, b) => b.charge_slip_no - a.charge_slip_no);
+
+      console.log(this.billList);
     },
     storeMedicalSuppliesInContainer() {
       let combinedSupplies = [];
       this.medicalSupplies.forEach((med) => {
-        console.log(med);
+        // console.log(med);
         // Find if the item with the same cl2desc and price already exists in the combinedSupplies array
         let existingItem = combinedSupplies.find(
           (item) => item.cl2desc === med.cl2desc && Number(item.price) === Number(med.price)
@@ -1464,7 +1419,7 @@ export default {
           },
         });
       } else {
-        console.log('else');
+        // console.log('else');
         if (this.form.processing) {
           return false;
         }

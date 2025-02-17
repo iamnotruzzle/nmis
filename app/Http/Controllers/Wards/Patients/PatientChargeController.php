@@ -180,7 +180,8 @@ class PatientChargeController extends Controller
                             pat_charge.pchrgqty as quantity,
                             pat_charge.pchrgup as price,
                             pat_charge.uomcode as uomcode,
-                            pat_charge.pcchrgdte as charge_date,
+                            -- pat_charge.pcchrgdte as charge_date,
+                            FORMAT(pat_charge.pcchrgdte, 'MMMM dd, yyyy') AS charge_date,
                             charge_log.id as charge_log_id,
                             charge_log.[from] as charge_log_from,
                             charge_log.ward_stocks_id as charge_log_ward_stocks_id,
@@ -198,7 +199,7 @@ class PatientChargeController extends Controller
                                                                                         AND pat_charge.itemcode = charge_log.itemcode
                             WHERE pat_charge.enccode = '" . $pat_enccode . "'
                             AND  (type_of_charge.chrgcode = 'DRUMD' OR type_of_charge.chrgcode = 'DRUMN' OR type_of_charge.chrgcode = 'MISC')
-                            ORDER BY pat_charge.pcchrgdte DESC;"
+                            ORDER BY pat_charge.pcchrgcod DESC;"
         );
 
         // check if the latest has a beg bal or ending bal
@@ -277,10 +278,10 @@ class PatientChargeController extends Controller
         usort($itemsToBillList, function ($a, $b) {
             return strcmp($a["itemDesc"], $b["itemDesc"]); // Ascending order
         });
-        // dd($itemsToBillList);
 
         $pcchrgcod = $this->generateUniqueChargeCode();
-        $previousItem = '';
+        $processedItems = []; // Store processed item codes with their pcchrgcod
+
 
         // STEP 1: check if the request is a new charge or modifying a charge
         if ($request->isUpdate == false) {
@@ -290,6 +291,15 @@ class PatientChargeController extends Controller
 
             // STEP 3: Loop through the items to charge
             foreach ($itemsToBillList as $item) {
+                // STEP 3.1: Check if itemCOde is already charge with the same pcchrgcod
+                if (!isset($processedItems[$item['itemCode']])) {
+                    // Assign the main pcchrgcod to the first occurrence of an itemCode
+                    $processedItems[$item['itemCode']] = $pcchrgcod;
+                } else {
+                    // If the itemCode has already been used, generate a new charge code for duplicates
+                    $processedItems[$item['itemCode']] = $this->generateUniqueChargeCode();
+                }
+
                 // STEP 4: Check if items is a medical gas or misc
                 if ($item['typeOfCharge'] == 'DRUMN') {
                     // STEP 5: Charge the item to a patient
@@ -299,7 +309,7 @@ class PatientChargeController extends Controller
                         $patientChargeDate = PatientCharge::create([
                             'enccode' => $enccode,
                             'hpercode' => $hospitalNumber,
-                            'pcchrgcod' => $previousItem == $item['itemCode'] ? $this->generateUniqueChargeCode() : $pcchrgcod, // charge slip no.
+                            'pcchrgcod' => $processedItems[$item['itemCode']],
                             'pcchrgdte' => Carbon::now(),
                             'chargcode' => $item['typeOfCharge'], // type of charge (chrgcode from hcharge)
                             'uomcode' => $item['unit'], // unit
@@ -425,7 +435,7 @@ class PatientChargeController extends Controller
                         $patientMiscChargeDate = PatientCharge::create([
                             'enccode' => $enccode,
                             'hpercode' => $hospitalNumber,
-                            'pcchrgcod' => $pcchrgcod, // charge slip no.
+                            'pcchrgcod' => $processedItems[$item['itemCode']],
                             'pcchrgdte' => Carbon::now(),
                             'chargcode' => $item['typeOfCharge'], // type of charge (chrgcode from hcharge)
                             'uomcode' => $item['unit'], // unit
@@ -466,10 +476,6 @@ class PatientChargeController extends Controller
                         'pcchrgcod' => $patientMiscChargeDate->pcchrgcod, // charge slip no.
                     ]);
                 }
-
-                // set the item code the previous item
-                // this will make sure that there will be no duplicate item with the same price
-                $previousItem = $item['itemCode'];
             }
         }
 
