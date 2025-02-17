@@ -181,7 +181,6 @@ class PatientChargeController extends Controller
                             pat_charge.pchrgup as price,
                             pat_charge.uomcode as uomcode,
                             pat_charge.pcchrgdte as charge_date,
-                            -- FORMAT(pat_charge.pcchrgdte, 'MMMM dd, yyyy') AS charge_date,
                             charge_log.id as charge_log_id,
                             charge_log.[from] as charge_log_from,
                             charge_log.ward_stocks_id as charge_log_ward_stocks_id,
@@ -299,7 +298,7 @@ class PatientChargeController extends Controller
                     $processedItems[$item['itemCode']] = $this->generateUniqueChargeCode();
                 }
 
-                // STEP 4: Check if items is a medical gas or misc
+                // STEP 4: Check if items is a medical supply or misc
                 if ($item['typeOfCharge'] == 'DRUMN') {
                     // STEP 5: Charge the item to a patient
                     // try..catch block will prevent further execution if
