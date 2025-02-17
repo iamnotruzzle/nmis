@@ -198,8 +198,7 @@ class PatientChargeController extends Controller
                                                                                         AND pat_charge.pcchrgdte = charge_log.pcchrgdte
                                                                                         AND pat_charge.itemcode = charge_log.itemcode
                             WHERE pat_charge.enccode = '" . $pat_enccode . "'
-                            AND  (type_of_charge.chrgcode = 'DRUMD' OR type_of_charge.chrgcode = 'DRUMN' OR type_of_charge.chrgcode = 'MISC')
-                            ORDER BY pat_charge.pcchrgcod DESC;"
+                            AND  (type_of_charge.chrgcode = 'DRUMD' OR type_of_charge.chrgcode = 'DRUMN' OR type_of_charge.chrgcode = 'MISC')"
         );
 
         // check if the latest has a beg bal or ending bal

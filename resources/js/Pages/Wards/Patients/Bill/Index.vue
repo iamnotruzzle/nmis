@@ -19,8 +19,6 @@
           selectionMode="single"
           rowGroupMode="subheader"
           groupRowsBy="charge_slip_no"
-          sortField="charge_date"
-          :sortOrder="-1"
           removableSort
           showGridlines
           scrollable
@@ -905,6 +903,7 @@ export default {
       return truncated.toFixed(2);
     },
     storeBillsInContainer() {
+      // Add bills (no async here, just a sync operation)
       this.bills.forEach((e) => {
         this.billList.push({
           uid: ++this.uid,
@@ -920,12 +919,13 @@ export default {
           quantity: Math.trunc(e.quantity),
           price: Math.round(e.price * 100) / 100,
           amount: (Math.trunc(e.quantity) * Math.round(e.price * 100)) / 100,
-          charge_date: e.charge_date,
+          charge_date: moment(e.charge_date).format('MM-DD-YYYY'),
           entry_by: e.entry_by,
         });
       });
-      // **Sort billList by charge_slip_no in descending order**
-      this.billList.sort((a, b) => b.charge_slip_no - a.charge_slip_no);
+
+      // Sort the list after async operations
+      this.billList.sort((a, b) => moment(b.charge_date, 'MM-DD-YYYY') - moment(a.charge_date, 'MM-DD-YYYY'));
 
       console.log(this.billList);
     },
