@@ -25,6 +25,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // \Illuminate\Support\Facades\DB::listen(function ($query) {
+        //     logger($query->sql);
+        // });
+
         Sheet::macro('setOrientation', function (Sheet $sheet, $orientation) {
             $sheet->getDelegate()->getPageSetup()->setOrientation($orientation);
         });

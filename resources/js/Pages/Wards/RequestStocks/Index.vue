@@ -2367,7 +2367,7 @@ export default {
   watch: {
     confirmConsignmentDialog(newVal) {
       if (newVal) {
-        this.countdown = 10; // Reset countdown when dialog is opened
+        this.countdown = 1; // Reset countdown when dialog is opened
         this.timer = setInterval(() => {
           if (this.countdown > 0) {
             this.countdown--;

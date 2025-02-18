@@ -20,7 +20,7 @@ class PatientChargeLogs extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
-        'id',
+        // 'id',
         'enccode',
         'acctno',
         'ward_stocks_id',

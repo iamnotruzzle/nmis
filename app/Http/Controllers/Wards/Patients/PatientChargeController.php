@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Wards\Patients;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\CreatePatientChargeLogsJobs;
 use App\Models\AdmissionLog;
 use App\Models\CsrwCode;
 use App\Models\ERlog;
@@ -289,6 +290,9 @@ class PatientChargeController extends Controller
 
             // STEP 3: Loop through the items to charge
             foreach ($itemsToBillList as $item) {
+                // init tscode
+                $tscode = $request->tscode;
+
                 // STEP 3.1: Check if itemCOde is already charge with the same pcchrgcod
                 if (!isset($processedItems[$item['itemCode']])) {
                     // Assign the main pcchrgcod to the first occurrence of an itemCode
@@ -354,27 +358,65 @@ class PatientChargeController extends Controller
                             ->update([
                                 'quantity' => $newStockQty,
                             ]);
+                        // dd($wardStock->id);
+
+                        $enccode = $enccode;
+                        $acctno = $acctno;
+                        $ward_stocks_id = $wardStock->id;
+                        $itemcode = $wardStock->cl2comb;
+                        $from = $wardStock->from;
+                        $manufactured_date = $wardStock->manufactured_date;
+                        $delivery_date = $wardStock->delivery_date;
+                        $expiration_date = $wardStock->expiration_date;
+                        $quantity = $quantity_to_insert_in_logs;
+                        $price_per_piece = (float)$item['price'] == null ? null : (float)$item['price'];
+                        $price_total = (float)$quantity_to_insert_in_logs * (float)$item['price'];
+                        $pcchrgdte = $patientChargeDate->pcchrgdte;
+                        $entry_at = $authCode;
+                        $entry_by = $entryby;
+                        $pcchrgcod = $patientChargeDate->pcchrgcod;
 
                         // STEP 9: Log the charge
-                        PatientChargeLogs::create([
-                            'enccode' => $enccode,
-                            'acctno' => $acctno,
-                            'ward_stocks_id' => $wardStock->id,
-                            'itemcode' => $wardStock->cl2comb,
-                            'from' => $wardStock->from,
-                            'manufactured_date' => $wardStock->manufactured_date == null ? null : Carbon::parse($wardStock->manufactured_date)->format('Y-m-d H:i:s.v'),
-                            'delivery_date' => $wardStock->delivery_date == null ? null : Carbon::parse($wardStock->delivered_date)->format('Y-m-d H:i:s.v'),
-                            'expiration_date' => $wardStock->expiration_date == null ? null : Carbon::parse($wardStock->expiration_date)->format('Y-m-d H:i:s.v'),
-                            // 'quantity' => $item['qtyToCharge'],
-                            'quantity' => $quantity_to_insert_in_logs,
-                            'price_per_piece' => (float)$item['price'] == null ? null : (float)$item['price'],
-                            'price_total' => (float)$quantity_to_insert_in_logs * (float)$item['price'],
-                            'pcchrgdte' => $patientChargeDate->pcchrgdte,
-                            'tscode' => $request->tscode,
-                            'entry_at' => $authCode,
-                            'entry_by' => $entryby,
-                            'pcchrgcod' => $patientChargeDate->pcchrgcod, // charge slip no.
-                        ]);
+                        CreatePatientChargeLogsJobs::dispatch(
+                            $enccode,
+                            $acctno,
+                            $ward_stocks_id,
+                            $itemcode,
+                            $from,
+                            $manufactured_date,
+                            $delivery_date,
+                            $expiration_date,
+                            $quantity,
+                            $price_per_piece,
+                            $price_total,
+                            $pcchrgdte, // charge date
+                            $entry_at,
+                            $entry_by,
+                            $tscode,
+                            $pcchrgcod
+                        )->delay(now()->addSeconds(5));
+
+
+                        // // STEP 9: Log the charge
+                        // PatientChargeLogs::create([
+                        //     'enccode' => $enccode,
+                        //     'acctno' => $acctno,
+                        //     'ward_stocks_id' => $wardStock->id,
+                        //     'itemcode' => $wardStock->cl2comb,
+                        //     'from' => $wardStock->from,
+                        //     'manufactured_date' => $wardStock->manufactured_date == null ? null : Carbon::parse($wardStock->manufactured_date)->format('Y-m-d H:i:s.v'),
+                        //     'delivery_date' => $wardStock->delivery_date == null ? null : Carbon::parse($wardStock->delivered_date)->format('Y-m-d H:i:s.v'),
+                        //     'expiration_date' => $wardStock->expiration_date == null ? null : Carbon::parse($wardStock->expiration_date)->format('Y-m-d H:i:s.v'),
+                        //     // 'quantity' => $item['qtyToCharge'],
+                        //     'quantity' => $quantity_to_insert_in_logs,
+                        //     'price_per_piece' => (float)$item['price'] == null ? null : (float)$item['price'],
+                        //     'price_total' => (float)$quantity_to_insert_in_logs * (float)$item['price'],
+                        //     'pcchrgdte' => $patientChargeDate->pcchrgdte,
+                        //     'tscode' => $request->tscode,
+                        //     'entry_at' => $authCode,
+                        //     'entry_by' => $entryby,
+                        //     'pcchrgcod' => $patientChargeDate->pcchrgcod, // charge slip no.
+                        // ]);
                     }
                     // IT ITEM IS MEDICAL GAS
                     else {
