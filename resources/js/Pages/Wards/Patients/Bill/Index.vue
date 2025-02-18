@@ -84,7 +84,7 @@
             </template>
           </Column>
           <Column
-            field="charge_date"
+            field="charge_date_viewer"
             header="DATE"
             sortable
             style="text-align: right"
@@ -919,13 +919,16 @@ export default {
           quantity: Math.trunc(e.quantity),
           price: Math.round(e.price * 100) / 100,
           amount: (Math.trunc(e.quantity) * Math.round(e.price * 100)) / 100,
-          charge_date: moment(e.charge_date).format('MM-DD-YYYY'),
+          charge_date_viewer: moment(e.charge_date).format('MM-DD-YYYY'),
+          charge_date: e.charge_date,
           entry_by: e.entry_by,
         });
       });
 
       // Sort the list after async operations
-      this.billList.sort((a, b) => moment(b.charge_date, 'MM-DD-YYYY') - moment(a.charge_date, 'MM-DD-YYYY'));
+      this.billList.sort(
+        (a, b) => moment(b.charge_date_viewer, 'MM-DD-YYYY') - moment(a.charge_date_viewer, 'MM-DD-YYYY')
+      );
 
       //   console.log(this.billList);
     },

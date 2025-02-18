@@ -493,6 +493,7 @@ class PatientChargeController extends Controller
                     ->where('pcchrgdte', $request->upd_pcchrgdte)
                     ->first();
                 $previousCharge = $patientCharge;
+                // dd($request);
 
                 $patientChargeLogs = PatientChargeLogs::where('id', $request->upd_id)->first();
                 $previousPatientChargeLogs = $patientChargeLogs;
