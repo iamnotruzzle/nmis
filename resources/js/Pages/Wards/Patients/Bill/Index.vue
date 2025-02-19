@@ -91,7 +91,7 @@
             :pt="{ headerContent: 'justify-content-end' }"
           >
             <template #body="{ data }">
-              {{ tzone(data.charge_date) }}
+              {{ data.charge_date }}
             </template>
           </Column>
           <Column
@@ -932,7 +932,7 @@ export default {
           quantity: Math.trunc(e.quantity),
           price: Math.round(e.price * 100) / 100,
           amount: (Math.trunc(e.quantity) * Math.round(e.price * 100)) / 100,
-          charge_date_viewer: moment(e.charge_date).format('MM-DD-YYYY'),
+          charge_date_viewer: moment(e.charge_date).format('MM-DD-YYYY: hh:mm:ss'),
           charge_date: e.charge_date,
           entry_by: e.entry_by,
         });
