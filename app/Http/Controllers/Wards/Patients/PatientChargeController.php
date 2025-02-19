@@ -362,6 +362,7 @@ class PatientChargeController extends Controller
                             ]);
                         // dd($wardStock->id);
 
+                        // parameters of the job
                         $enccode = $enccode;
                         $acctno = $acctno;
                         $ward_stocks_id = $wardStock->id;
@@ -378,7 +379,7 @@ class PatientChargeController extends Controller
                         $entry_by = $entryby;
                         $pcchrgcod = $patientChargeDate->pcchrgcod;
 
-                        // STEP 9: Log the charge
+                        // STEP 9: Log the charge in a JOBS
                         CreatePatientChargeLogsJobs::dispatch(
                             $enccode,
                             $acctno,
@@ -443,28 +444,63 @@ class PatientChargeController extends Controller
                                 'total_usage' => $newTotalUsage,
                                 'quantity' => $newQuantity,
                             ]);
-                        // $item['qtyToCharge'] = 0;
+
+                        // parameters of the job
+                        $enccode = $enccode;
+                        $acctno = $acctno;
+                        $ward_stocks_id = $wardStock->id;
+                        $itemcode = $wardStock->cl2comb;
+                        $from = $wardStock->from;
+                        $manufactured_date = $wardStock->manufactured_date;
+                        $delivery_date = $wardStock->delivery_date;
+                        $expiration_date = $wardStock->expiration_date;
+                        $quantity = $quantity_to_insert_in_logs;
+                        $price_per_piece = (float)$item['price'] == null ? null : (float)$item['price'];
+                        $price_total = (float)$quantity_to_insert_in_logs * (float)$item['price'];
+                        $pcchrgdte = $patientChargeDate->pcchrgdte;
+                        $entry_at = $authCode;
+                        $entry_by = $entryby;
+                        $pcchrgcod = $patientChargeDate->pcchrgcod;
+
+                        CreatePatientChargeLogsJobs::dispatch(
+                            $enccode,
+                            $acctno,
+                            $ward_stocks_id,
+                            $itemcode,
+                            $from,
+                            $manufactured_date,
+                            $delivery_date,
+                            $expiration_date,
+                            $quantity,
+                            $price_per_piece,
+                            $price_total,
+                            $pcchrgdte, // charge date
+                            $entry_at,
+                            $entry_by,
+                            $tscode,
+                            $pcchrgcod
+                        )->delay(now()->addSeconds(3));
 
                         // CHARGE MEDICAL GAS
                         // Log the charge
-                        PatientChargeLogs::create([
-                            'enccode' => $enccode,
-                            'acctno' => $acctno,
-                            'ward_stocks_id' => $wardStock->id,
-                            'itemcode' => $wardStock->cl2comb,
-                            'from' => $wardStock->from,
-                            'manufactured_date' => $wardStock->manufactured_date == null ? null : Carbon::parse($wardStock->manufactured_date)->format('Y-m-d H:i:s.v'),
-                            'delivery_date' => $wardStock->delivery_date == null ? null : Carbon::parse($wardStock->delivered_date)->format('Y-m-d H:i:s.v'),
-                            'expiration_date' => $wardStock->expiration_date == null ? null : Carbon::parse($wardStock->expiration_date)->format('Y-m-d H:i:s.v'),
-                            'quantity' => $quantity_to_insert_in_logs,
-                            'price_per_piece' => (float)$item['price'] == null ? null : (float)$item['price'],
-                            'price_total' => (float)$quantity_to_insert_in_logs * (float)$item['price'],
-                            'pcchrgdte' => $patientChargeDate->pcchrgdte,
-                            'tscode' => $request->tscode,
-                            'entry_at' => $authCode,
-                            'entry_by' => $entryby,
-                            'pcchrgcod' => $patientChargeDate->pcchrgcod, // charge slip no.
-                        ]);
+                        // PatientChargeLogs::create([
+                        //     'enccode' => $enccode,
+                        //     'acctno' => $acctno,
+                        //     'ward_stocks_id' => $wardStock->id,
+                        //     'itemcode' => $wardStock->cl2comb,
+                        //     'from' => $wardStock->from,
+                        //     'manufactured_date' => $wardStock->manufactured_date == null ? null : Carbon::parse($wardStock->manufactured_date)->format('Y-m-d H:i:s.v'),
+                        //     'delivery_date' => $wardStock->delivery_date == null ? null : Carbon::parse($wardStock->delivered_date)->format('Y-m-d H:i:s.v'),
+                        //     'expiration_date' => $wardStock->expiration_date == null ? null : Carbon::parse($wardStock->expiration_date)->format('Y-m-d H:i:s.v'),
+                        //     'quantity' => $quantity_to_insert_in_logs,
+                        //     'price_per_piece' => (float)$item['price'] == null ? null : (float)$item['price'],
+                        //     'price_total' => (float)$quantity_to_insert_in_logs * (float)$item['price'],
+                        //     'pcchrgdte' => $patientChargeDate->pcchrgdte,
+                        //     'tscode' => $request->tscode,
+                        //     'entry_at' => $authCode,
+                        //     'entry_by' => $entryby,
+                        //     'pcchrgcod' => $patientChargeDate->pcchrgcod, // charge slip no.
+                        // ]);
                     }
                 }
 
