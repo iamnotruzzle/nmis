@@ -401,7 +401,7 @@ class PatientChargeController extends Controller
                             $entry_by,
                             $tscode,
                             $pcchrgcod
-                        )->delay(now()->addSeconds(3));
+                        );
 
                         // // STEP 9: Log the charge
                         // PatientChargeLogs::create([
@@ -484,7 +484,7 @@ class PatientChargeController extends Controller
                             $entry_by,
                             $tscode,
                             $pcchrgcod
-                        )->delay(now()->addSeconds(3));
+                        );
 
                         // Log the charge
                         // PatientChargeLogs::create([
@@ -574,7 +574,7 @@ class PatientChargeController extends Controller
                         $entry_by,
                         $tscode,
                         $pcchrgcod
-                    )->delay(now()->addSeconds(3));
+                    );
 
                     // log the charge
                     //     PatientChargeLogs::create([
