@@ -262,15 +262,12 @@ class IssueItemController extends Controller
                     }
                 }
             }
-
-            // pass this the parameter in the frontends mounted
-            event(new ItemIssued(
-                [
-                    $location->location,
-                    'Item/s issued.'
-                ]
-            ));
         }
+
+        // pass this the parameter in the frontends mounted
+        event(new ItemIssued(
+            $location->location
+        ));
 
         return Redirect::route('issueitems.index');
     }
@@ -468,10 +465,7 @@ class IssueItemController extends Controller
 
         // pass this the parameter in the frontends mounted
         event(new ItemIssued(
-            [
-                $location->location,
-                'Item/s issued.'
-            ]
+            $location->location
         ));
 
         return Redirect::route('issueitems.index');
@@ -490,10 +484,7 @@ class IssueItemController extends Controller
 
         // pass this the parameter in the frontends mounted
         event(new ItemIssued(
-            [
-                $location->location,
-                'Request acknowledged.'
-            ]
+            $location->location
         ));
 
         return Redirect::route('issueitems.index');

@@ -1488,7 +1488,6 @@ import InputNumber from 'primevue/inputnumber';
 import TextArea from 'primevue/textarea';
 import Tag from 'primevue/tag';
 import moment from 'moment';
-import NProgress from 'nprogress';
 import Echo from 'laravel-echo';
 import { Link } from '@inertiajs/vue3';
 
@@ -1650,6 +1649,22 @@ export default {
     this.rows = this.requestedStocks.per_page;
   },
   mounted() {
+    // console.log(this.$page.props.auth.user.location.location_name.wardcode);
+    window.Echo.channel('issued').listen('ItemIssued', (event) => {
+      //   console.log('Received event:', event);
+      console.log('Location:', event.location); // Access the location data
+
+      if (event.location == this.$page.props.auth.user.location.location_name.wardcode) {
+        router.reload({
+          onSuccess: () => {
+            console.log('Data reloaded successfully');
+            this.requestStockList = []; // Reset
+            this.storeRequestedStocksInContainer();
+          },
+        });
+      }
+    });
+
     this.storeFundSourceInContainer();
     this.storeItemsInController();
     this.storeRequestedStocksInContainer();

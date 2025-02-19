@@ -773,7 +773,6 @@ import InputNumber from 'primevue/inputnumber';
 import TextArea from 'primevue/textarea';
 import Tag from 'primevue/tag';
 import moment from 'moment';
-import NProgress from 'nprogress';
 import Echo from 'laravel-echo';
 import axios from 'axios';
 import { Link } from '@inertiajs/vue3';

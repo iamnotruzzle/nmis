@@ -12,11 +12,11 @@ class ItemIssued implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $message;
+    public $location;
 
-    public function __construct($message)
+    public function __construct($location)
     {
-        $this->message = $message;
+        $this->location = $location;
     }
 
 
@@ -26,11 +26,10 @@ class ItemIssued implements ShouldBroadcast
         return new Channel('issued');
     }
 
-    // this function allows us to share data in the frontend
-    // public function broadcastWith()
-    // {
-    //     $latestIssuedRequest = RequestStocks::orderBy('id', 'DESC')->first();
-
-    //     return ['latestIssuedRequest' => $latestIssuedRequest];
-    // }
+    public function broadcastWith()
+    {
+        return [
+            'location' => $this->location
+        ];
+    }
 }
