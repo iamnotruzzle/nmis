@@ -87,6 +87,7 @@ addIcons(
 moment.tz.setDefault('Asia/Manila');
 
 createInertiaApp({
+  progress: false,
   // progress bar
   //   progress: {
   //     progress: false,
