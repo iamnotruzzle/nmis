@@ -727,7 +727,9 @@ import InputNumber from 'primevue/inputnumber';
 import Checkbox from 'primevue/checkbox';
 import SpeedDial from 'primevue/speeddial';
 import Tag from 'primevue/tag';
+import Echo from 'laravel-echo';
 import moment from 'moment';
+import { router } from '@inertiajs/vue3';
 import { Link } from '@inertiajs/vue3';
 
 export default {
@@ -850,6 +852,19 @@ export default {
     };
   },
   mounted() {
+    // window.Echo.channel('charges').listen('.ChargeLogsProcessed', (args) => {
+    window.Echo.channel('charges').listen('.ChargeLogsProcessed', (args) => {
+      console.log('Received event from Laravel:', args);
+
+      router.reload({
+        onSuccess: () => {
+          console.log('Data reloaded successfully');
+          this.billList = [];
+          this.storeBillsInContainer();
+        },
+      });
+    });
+
     this.storeBillsInContainer();
     this.getTotalAmount();
     this.storeMedicalSuppliesInContainer();

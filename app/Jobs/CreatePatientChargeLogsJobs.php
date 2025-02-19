@@ -2,6 +2,8 @@
 
 namespace App\Jobs;
 
+use App\Events\ChargeLogsProcessed;
+use App\Events\RequestStock;
 use App\Models\PatientCharge;
 use App\Models\PatientChargeLogs;
 use Carbon\Carbon;
@@ -91,5 +93,9 @@ class CreatePatientChargeLogsJobs implements ShouldQueue
             'entry_by' => $this->entry_by,
             'pcchrgcod' => $this->pcchrgcod, // charge slip no.
         ]);
+
+        broadcast(new ChargeLogsProcessed([
+            'message' => "Patient charge logs processed."
+        ]));
     }
 }

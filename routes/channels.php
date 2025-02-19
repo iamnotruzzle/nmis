@@ -24,3 +24,7 @@ Broadcast::channel('issued', function () {
 Broadcast::channel('request', function () {
     return true;
 });
+
+Broadcast::channel('charges', function () {
+    return true;
+});

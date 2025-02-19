@@ -989,6 +989,7 @@ export default {
     window.Echo.channel('request').listen('RequestStock', (args) => {
       router.reload({
         onSuccess: (e) => {
+          console.log(e);
           this.requestStockList = [];
           this.storeRequestedStocksInContainer();
         },

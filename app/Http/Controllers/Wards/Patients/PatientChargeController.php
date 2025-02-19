@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Wards\Patients;
 
+use App\Events\ChargeLogsProcessed;
+use App\Events\RequestStock;
 use App\Http\Controllers\Controller;
 use App\Jobs\CreatePatientChargeLogsJobs;
 use App\Models\AdmissionLog;
@@ -394,7 +396,7 @@ class PatientChargeController extends Controller
                             $entry_by,
                             $tscode,
                             $pcchrgcod
-                        )->delay(now()->addSeconds(5));
+                        )->delay(now()->addSeconds(3));
 
 
                         // // STEP 9: Log the charge
