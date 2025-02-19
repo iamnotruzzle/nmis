@@ -91,7 +91,7 @@
             :pt="{ headerContent: 'justify-content-end' }"
           >
             <template #body="{ data }">
-              {{ data.charge_date }}
+              {{ data.charge_date_viewer }}
             </template>
           </Column>
           <Column
@@ -939,9 +939,7 @@ export default {
       });
 
       // Sort the list after async operations
-      this.billList.sort(
-        (a, b) => moment(b.charge_date_viewer, 'MM-DD-YYYY') - moment(a.charge_date_viewer, 'MM-DD-YYYY')
-      );
+      this.billList.sort((a, b) => moment(b.charge_date, 'MM-DD-YYYY') - moment(a.charge_date, 'MM-DD-YYYY'));
 
       //   console.log(this.billList);
     },
