@@ -398,7 +398,6 @@ class PatientChargeController extends Controller
                             $pcchrgcod
                         )->delay(now()->addSeconds(3));
 
-
                         // // STEP 9: Log the charge
                         // PatientChargeLogs::create([
                         //     'enccode' => $enccode,

@@ -730,6 +730,7 @@ import Tag from 'primevue/tag';
 import Echo from 'laravel-echo';
 import moment from 'moment';
 import { router } from '@inertiajs/vue3';
+import { usePage } from '@inertiajs/vue3';
 import { Link } from '@inertiajs/vue3';
 
 export default {
@@ -852,10 +853,7 @@ export default {
     };
   },
   mounted() {
-    // window.Echo.channel('charges').listen('.ChargeLogsProcessed', (args) => {
     window.Echo.channel('charges').listen('.ChargeLogsProcessed', (args) => {
-      console.log('Received event from Laravel:', args);
-
       router.reload({
         onSuccess: () => {
           console.log('Data reloaded successfully');

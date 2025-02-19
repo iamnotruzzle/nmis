@@ -3,8 +3,6 @@
 namespace App\Jobs;
 
 use App\Events\ChargeLogsProcessed;
-use App\Events\RequestStock;
-use App\Models\PatientCharge;
 use App\Models\PatientChargeLogs;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
@@ -13,6 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class CreatePatientChargeLogsJobs implements ShouldQueue
 {
@@ -94,7 +93,7 @@ class CreatePatientChargeLogsJobs implements ShouldQueue
             'pcchrgcod' => $this->pcchrgcod, // charge slip no.
         ]);
 
-        broadcast(new ChargeLogsProcessed([
+        event(new ChargeLogsProcessed([
             'message' => "Patient charge logs processed."
         ]));
     }
