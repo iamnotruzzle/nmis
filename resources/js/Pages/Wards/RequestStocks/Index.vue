@@ -1920,7 +1920,7 @@ export default {
       this.$inertia.get('requeststocks', this.params, {
         preserveState: true,
         preserveScroll: true,
-        onFinish: (visit) => {
+        onSuccess: (visit) => {
           this.totalRecords = this.requestedStocks.total;
           this.requestStockList = [];
           this.currentWardStocksList = [];
@@ -1945,13 +1945,13 @@ export default {
       this.medicalGasesDialog = true;
     },
     openConsignmentDialog() {
-      this.formMedicalGases.clearErrors();
-      this.formMedicalGases.reset();
+      this.formConsignment.clearErrors();
+      this.formConsignment.reset();
       this.consignmentDialog = true;
     },
     openExistingDialog() {
-      this.formMedicalGases.clearErrors();
-      this.formMedicalGases.reset();
+      this.formExisting.clearErrors();
+      this.formExisting.reset();
       this.existingDialog = true;
     },
     // when dialog is hidden, do this function
@@ -2048,7 +2048,7 @@ export default {
 
       this.formUpdateStatus.put(route('requeststocks.updatedeliverystatus', this.formUpdateStatus), {
         preserveScroll: true,
-        onFinish: () => {
+        onSuccess: () => {
           this.requestStockId = null;
           this.editStatusDialog = false;
           this.cancel();
@@ -2071,7 +2071,7 @@ export default {
       if (this.isUpdate) {
         this.form.put(route('requeststocks.update', this.requestStockId), {
           preserveScroll: true,
-          onFinish: () => {
+          onSuccess: () => {
             this.requestStockId = null;
             this.createRequestStocksDialog = false;
             this.cancel();
@@ -2083,7 +2083,7 @@ export default {
       } else {
         this.form.post(route('requeststocks.store'), {
           preserveScroll: true,
-          onFinish: () => {
+          onSuccess: () => {
             this.requestStockId = null;
             this.createRequestStocksDialog = false;
             this.cancel();
@@ -2123,7 +2123,7 @@ export default {
         // console.log('success');
         this.formMedicalGases.post(route('medicalGases.store'), {
           preserveScroll: true,
-          onFinish: () => {
+          onSuccess: () => {
             this.formMedicalGases.reset();
             this.cancel();
             this.updateData();
@@ -2149,7 +2149,7 @@ export default {
         if (this.isUpdateExisting == false) {
           this.formExisting.post(route('existingstock.store'), {
             preserveScroll: true,
-            onFinish: (e) => {
+            onSuccess: (e) => {
               //   console.log('$page', this.$page.props.flash.noItemPrice);
 
               if (this.$page.props.flash.noItemPrice != null) {
@@ -2208,7 +2208,7 @@ export default {
           // console.log('success');
           this.formConsignment.post(route('consignment.store'), {
             preserveScroll: true,
-            onFinish: () => {
+            onSuccess: () => {
               this.formConsignment.reset();
               this.cancel();
               this.updateData();
@@ -2241,7 +2241,7 @@ export default {
     cancelItem() {
       this.form.delete(route('requeststocks.destroy', this.requestStockId), {
         preserveScroll: true,
-        onFinish: () => {
+        onSuccess: () => {
           this.loading = false;
           this.requestStockList = [];
           this.cancelItemDialog = false;
@@ -2350,7 +2350,7 @@ export default {
 
       this.formReturnToCsr.post(route('wardsstockslogs.store'), {
         preserveScroll: true,
-        onFinish: () => {
+        onSuccess: () => {
           this.returnToCsrDialog = false;
           this.cancel();
           this.updateData();
