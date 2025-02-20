@@ -88,11 +88,7 @@ moment.tz.setDefault('Asia/Manila');
 
 createInertiaApp({
   progress: false,
-  // progress bar
-  //   progress: {
-  //     progress: false,
-  //     color: '#29d',
-  //   },
+
   resolve: (name) => require(`./Pages/${name}.vue`),
   setup({ el, App, props, plugin }) {
     return createApp({ render: () => h(App, props) })
