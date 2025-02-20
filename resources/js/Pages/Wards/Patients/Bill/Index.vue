@@ -49,7 +49,7 @@
                 <div class="flex align-items-center">
                   <Button
                     v-if="is_for_discharge !== 'true'"
-                    label="Charge patient"
+                    label="CHARGE PATIENT"
                     icon="pi pi-money-bill"
                     iconPos="right"
                     @click="openCreateBillDialog"
@@ -312,7 +312,7 @@
           <Column header="">
             <template #body="slotProps">
               <Button
-                label="Remove"
+                label="REMOVE"
                 icon="pi pi-times"
                 severity="danger"
                 @click="removeFromToBillContainer(slotProps.data)"
@@ -324,18 +324,17 @@
 
       <template #footer>
         <Button
-          label="Cancel"
+          :label="!form.processing ? 'CANCEL' : 'CANCEL'"
           icon="pi pi-times"
+          :disabled="form.processing"
           severity="danger"
-          text
           @click="cancel"
         />
 
         <Button
           :disabled="itemsToBillList.length == 0 || form.processing"
-          label="Charge"
-          icon="pi pi-check"
-          text
+          :label="!form.processing ? 'CHARGE' : 'CHARGE'"
+          :icon="form.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
           type="submit"
           @click="submit"
         />
@@ -401,15 +400,12 @@
 
       <template #footer>
         <Button
-          label="Cancel"
+          :label="!form.processing ? 'CANCEL' : 'CANCEL'"
           icon="pi pi-times"
+          :disabled="form.processing"
           severity="danger"
-          text
           @click="cancel"
         />
-        <!-- form.upd_QtyToReturn == null ||
-                form.upd_QtyToReturn == 0 ||
-                form.upd_QtyToReturn == '' -->
         <Button
           :disabled="
             Number(form.upd_QtyToReturn) > Number(form.upd_currentChargeQty) ||
@@ -418,10 +414,9 @@
             form.upd_QtyToReturn == '' ||
             form.processing
           "
-          label="Return"
-          icon="pi pi-check"
+          :label="!form.processing ? 'RETURN' : 'RETURN'"
+          :icon="form.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
           severity="warning"
-          text
           type="submit"
           @click="submit"
         />
@@ -1286,8 +1281,13 @@ export default {
           preserveScroll: true,
           onSuccess: () => {
             this.createBillDialog = false;
-            this.cancel();
-            this.createdMsg();
+            if (this.form.isUpdate != true) {
+              this.createdMsg();
+              this.cancel();
+            } else {
+              this.updatedMsg();
+              this.cancel();
+            }
           },
           onError: (errors) => {
             this.stockBalanceDeclared = true;
@@ -1325,8 +1325,13 @@ export default {
           preserveScroll: true,
           onSuccess: () => {
             this.createBillDialog = false;
-            this.cancel();
-            this.createdMsg();
+            if (this.form.isUpdate != true) {
+              this.createdMsg();
+              this.cancel();
+            } else {
+              this.updatedMsg();
+              this.cancel();
+            }
           },
           onError: (errors) => {
             this.stockBalanceDeclared = true;
