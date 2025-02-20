@@ -2,6 +2,7 @@ import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/vue3';
 import PrimeVue from 'primevue/config';
 import ToastService from 'primevue/toastservice';
+// import { InertiaProgress } from '@inertiajs/progress';
 import moment from 'moment-timezone';
 import Tooltip from 'primevue/tooltip';
 
@@ -85,6 +86,10 @@ addIcons(
 );
 
 moment.tz.setDefault('Asia/Manila');
+
+// InertiaProgress.init({
+//   show: false, // This disables automatic progress bar showing
+// });
 
 createInertiaApp({
   progress: false,

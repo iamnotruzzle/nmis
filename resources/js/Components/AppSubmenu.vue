@@ -22,7 +22,6 @@
           ></appsubmenu>
         </template>
         <template v-else>
-          <!-- { 'router-link-exact-active': activeIndex === i }, -->
           <Link
             v-if="item.to"
             :href="item.to"
@@ -40,19 +39,12 @@
             exact
             role="menuitem"
           >
-            <!-- <i :class="item.icon"></i> -->
             <v-icon :name="item.icon" />
             <span>{{ item.label }}</span>
             <i
               v-if="item.items"
               class="pi pi-fw pi-angle-down menuitem-toggle-icon"
             ></i>
-            <!-- <span
-              v-if="item.badge"
-              class="menuitem-badge"
-            >
-              {{ item.badge }}
-            </span> -->
             <Badge
               v-if="item.badge"
               :value="item.badge"
