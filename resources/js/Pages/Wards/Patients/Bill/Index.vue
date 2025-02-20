@@ -752,12 +752,8 @@ export default {
   },
   props: {
     pat_name: Array,
-    // OLD
-    // pat_tscode: Object,
-    // NEW
     pat_tscode: String,
     pat_enccode: String,
-    // patient: String,
     room_bed: String,
     is_for_discharge: String,
     bills: Object,
@@ -852,7 +848,6 @@ export default {
       router.reload({
         onSuccess: () => {
           console.log('Data reloaded successfully');
-          this.billList = [];
           this.storeBillsInContainer();
         },
       });
@@ -911,6 +906,8 @@ export default {
       return truncated.toFixed(2);
     },
     storeBillsInContainer() {
+      this.billList = [];
+
       // Add bills (no async here, just a sync operation)
       this.bills.forEach((e) => {
         this.billList.push({
@@ -939,6 +936,8 @@ export default {
       //   console.log(this.billList);
     },
     storeMedicalSuppliesInContainer() {
+      this.medicalSuppliesList = [];
+
       let combinedSupplies = [];
       this.medicalSupplies.forEach((med) => {
         // Find if the item with the same cl2desc and price already exists in the combinedSupplies array
@@ -970,6 +969,8 @@ export default {
       this.medicalSuppliesList = combinedSupplies;
     },
     storeMiscInContainer() {
+      this.miscList = [];
+
       this.misc.forEach((misc) => {
         this.miscList.push({
           hmcode: misc.hmcode,
@@ -980,6 +981,9 @@ export default {
       });
     },
     storeItemsInContainer() {
+      this.itemList = [];
+      this.miscList = [];
+
       // medical supplies
       const combinedItems = {};
       this.medicalSupplies.forEach((med) => {
@@ -1271,43 +1275,30 @@ export default {
       this.form.tscode = this.pat_tscode;
 
       this.form.post(route('patientcharge.store'), {
-        preserveState: true,
+        // preserveState: true,
         preserveScroll: true,
+        onFinish: () => {
+          this.cancel();
+        },
         onSuccess: () => {
           this.createBillDialog = false;
           if (this.form.isUpdate != true) {
+            this.cancel();
             this.createdMsg();
-            this.cancel();
           } else {
-            this.updatedMsg();
             this.cancel();
+            this.updatedMsg();
           }
-        },
-        onError: (errors) => {
-          this.stockBalanceDeclared = true;
-        },
-        onFinish: (visit) => {
-          //   console.log('object');
-          if (this.stockBalanceDeclared != true) {
-            this.billList = [];
-            this.medicalSuppliesList = [];
-            this.miscList = [];
-            this.itemList = [];
-            this.itemsToBillList = [];
-            this.storeBillsInContainer();
-            this.getTotalAmount();
-            this.storeMedicalSuppliesInContainer();
-            this.storeMiscInContainer();
-            this.storeItemsInContainer();
-          }
+
+          this.storeBillsInContainer();
+          this.getTotalAmount();
+          this.storeMedicalSuppliesInContainer();
+          this.storeMiscInContainer();
+          this.storeItemsInContainer();
         },
       });
-
-      //   console.log(this.$page.props.errors);
     },
     editItem(e) {
-      //   console.log('charge', e);
-
       this.form.isUpdate = true;
       this.form.upd_id = e.charge_log_id;
       this.form.upd_ward_stocks_id = e.charge_log_ward_stocks_id;
@@ -1323,8 +1314,6 @@ export default {
       this.form.upd_pcchrgdte = e.charge_date;
       this.form.charge_log_from = e.charge_log_from;
       this.updateBillDialog = true;
-
-      //   console.log('form', this.form);
     },
     cancel() {
       this.stockBalanceDeclared = false;
@@ -1347,9 +1336,6 @@ export default {
     updatedMsg() {
       this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Charge updated', life: 3000 });
     },
-    // deletedMsg() {
-    //   this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Category deleted', life: 3000 });
-    // },
   },
 };
 </script>
