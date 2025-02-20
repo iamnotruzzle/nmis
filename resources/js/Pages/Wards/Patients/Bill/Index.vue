@@ -1259,100 +1259,49 @@ export default {
       this.$emit('hide', this.form.clearErrors(), this.form.reset());
     },
     submit() {
-      if (this.form.charge_log_from == 'MEDICAL GASES') {
-        if (
-          this.form.processing ||
-          Number(this.form.upd_QtyToReturn) > Number(this.form.upd_currentChargeQty) ||
-          this.form.upd_QtyToReturn == null ||
-          this.form.upd_QtyToReturn == 0 ||
-          this.form.upd_QtyToReturn == ''
-        ) {
-          return false;
-        }
-
-        // set form data
-        this.form.enccode = this.pat_enccode;
-        this.form.hospitalNumber = this.pat_name[0].hpercode;
-        this.form.itemsToBillList = this.itemsToBillList;
-        this.form.tscode = this.pat_tscode;
-
-        this.form.post(route('patientcharge.store'), {
-          preserveState: true,
-          preserveScroll: true,
-          onSuccess: () => {
-            this.createBillDialog = false;
-            if (this.form.isUpdate != true) {
-              this.createdMsg();
-              this.cancel();
-            } else {
-              this.updatedMsg();
-              this.cancel();
-            }
-          },
-          onError: (errors) => {
-            this.stockBalanceDeclared = true;
-          },
-          onFinish: (visit) => {
-            //   console.log('object');
-            if (this.stockBalanceDeclared != true) {
-              this.billList = [];
-              this.medicalSuppliesList = [];
-              this.miscList = [];
-              this.itemList = [];
-              this.itemsToBillList = [];
-              this.storeBillsInContainer();
-              this.getTotalAmount();
-              this.storeMedicalSuppliesInContainer();
-              this.storeMiscInContainer();
-              this.storeItemsInContainer();
-            }
-          },
-        });
-      } else {
-        // console.log('else');
-        if (this.form.processing) {
-          return false;
-        }
-
-        // set form data
-        this.form.enccode = this.pat_enccode;
-        this.form.hospitalNumber = this.pat_name[0].hpercode;
-        this.form.itemsToBillList = this.itemsToBillList;
-        this.form.tscode = this.pat_tscode;
-
-        this.form.post(route('patientcharge.store'), {
-          preserveState: true,
-          preserveScroll: true,
-          onSuccess: () => {
-            this.createBillDialog = false;
-            if (this.form.isUpdate != true) {
-              this.createdMsg();
-              this.cancel();
-            } else {
-              this.updatedMsg();
-              this.cancel();
-            }
-          },
-          onError: (errors) => {
-            this.stockBalanceDeclared = true;
-          },
-          onFinish: (visit) => {
-            //   console.log('object');
-            if (this.stockBalanceDeclared != true) {
-              this.billList = [];
-              this.medicalSuppliesList = [];
-              this.miscList = [];
-              this.itemList = [];
-              this.itemsToBillList = [];
-              this.storeBillsInContainer();
-              this.getTotalAmount();
-              this.storeMedicalSuppliesInContainer();
-              this.storeMiscInContainer();
-              this.storeItemsInContainer();
-            }
-          },
-        });
+      // console.log('else');
+      if (this.form.processing) {
+        return false;
       }
+
+      // set form data
+      this.form.enccode = this.pat_enccode;
+      this.form.hospitalNumber = this.pat_name[0].hpercode;
+      this.form.itemsToBillList = this.itemsToBillList;
+      this.form.tscode = this.pat_tscode;
+
+      this.form.post(route('patientcharge.store'), {
+        preserveState: true,
+        preserveScroll: true,
+        onSuccess: () => {
+          this.createBillDialog = false;
+          if (this.form.isUpdate != true) {
+            this.createdMsg();
+            this.cancel();
+          } else {
+            this.updatedMsg();
+            this.cancel();
+          }
+        },
+        onError: (errors) => {
+          this.stockBalanceDeclared = true;
+        },
+        onFinish: (visit) => {
+          //   console.log('object');
+          if (this.stockBalanceDeclared != true) {
+            this.billList = [];
+            this.medicalSuppliesList = [];
+            this.miscList = [];
+            this.itemList = [];
+            this.itemsToBillList = [];
+            this.storeBillsInContainer();
+            this.getTotalAmount();
+            this.storeMedicalSuppliesInContainer();
+            this.storeMiscInContainer();
+            this.storeItemsInContainer();
+          }
+        },
+      });
 
       //   console.log(this.$page.props.errors);
     },
