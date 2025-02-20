@@ -2,9 +2,11 @@ import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/vue3';
 import PrimeVue from 'primevue/config';
 import ToastService from 'primevue/toastservice';
-// import { InertiaProgress } from '@inertiajs/progress';
 import moment from 'moment-timezone';
 import Tooltip from 'primevue/tooltip';
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css'; // Import default styles
+import { router } from '@inertiajs/vue3';
 
 import Echo from 'laravel-echo';
 
@@ -87,9 +89,7 @@ addIcons(
 
 moment.tz.setDefault('Asia/Manila');
 
-// InertiaProgress.init({
-//   show: false, // This disables automatic progress bar showing
-// });
+NProgress.configure({ showSpinner: false, speed: 400 });
 
 createInertiaApp({
   progress: false,
@@ -105,4 +105,33 @@ createInertiaApp({
       .mixin({ methods: { route } })
       .mount(el);
   },
+});
+
+// // // Handle Inertia navigation events
+// document.addEventListener('inertia:start', (event) => {
+//   // Only start progress bar if it's a link click (not a form submission)
+//   if (event.detail.visit.method === 'get') {
+//     NProgress.start();
+//   }
+// });
+
+// document.addEventListener('inertia:finish', (event) => {
+//   if (!event.detail.visit.completed) return;
+//   NProgress.done();
+// });
+
+// Global flag to prevent NProgress during Echo reloads
+window.skipNProgress = false;
+
+// Handle Inertia navigation events
+document.addEventListener('inertia:start', (event) => {
+  if (!window.skipNProgress && event.detail.visit.method === 'get') {
+    NProgress.start();
+  }
+});
+
+document.addEventListener('inertia:finish', (event) => {
+  if (!event.detail.visit.completed) return;
+  NProgress.done();
+  window.skipNProgress = false; // Reset flag after navigation
 });

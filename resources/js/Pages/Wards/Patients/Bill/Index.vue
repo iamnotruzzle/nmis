@@ -843,11 +843,26 @@ export default {
     };
   },
   mounted() {
+    // window.Echo.channel('charges').listen('.ChargeLogsProcessed', (args) => {
+    //   router.reload({
+    //     onSuccess: () => {
+    //       console.log('Data reloaded successfully');
+    //       this.storeBillsInContainer();
+    //     },
+    //   });
+    // });
     window.Echo.channel('charges').listen('.ChargeLogsProcessed', (args) => {
+      window.skipNProgress = true; // Prevent NProgress
+
       router.reload({
         onSuccess: () => {
           console.log('Data reloaded successfully');
           this.storeBillsInContainer();
+          window.skipNProgress = false; // Reset flag after reload
+        },
+        onError: () => {
+          NProgress.done();
+          window.skipNProgress = false; // Reset flag on error
         },
       });
     });
