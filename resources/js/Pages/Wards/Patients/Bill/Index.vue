@@ -798,7 +798,6 @@ export default {
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
         charge_slip_no: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        // type_of_charge_code: { value: null, matchMode: FilterMatchMode.CONTAINS },
         type_of_charge_description: { value: null, matchMode: FilterMatchMode.CONTAINS },
         item: { value: null, matchMode: FilterMatchMode.CONTAINS },
         quantity: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -1275,7 +1274,6 @@ export default {
       this.form.tscode = this.pat_tscode;
 
       this.form.post(route('patientcharge.store'), {
-        // preserveState: true,
         preserveScroll: true,
         onFinish: () => {
           this.cancel();
