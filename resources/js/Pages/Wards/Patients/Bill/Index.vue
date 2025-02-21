@@ -47,13 +47,23 @@
                   </div>
                 </div>
                 <div class="flex align-items-center">
+                  <!-- uncomment when stock balance function is now working -->
                   <Button
                     v-if="is_for_discharge !== 'true'"
+                    :disabled="canCharge == false"
                     label="CHARGE PATIENT"
                     icon="pi pi-money-bill"
                     iconPos="right"
                     @click="openCreateBillDialog"
                   />
+                  <!-- uncomment if stock balance function is not implemented yet -->
+                  <!-- <Button
+                    v-if="is_for_discharge !== 'true'"
+                    label="CHARGE PATIENT"
+                    icon="pi pi-money-bill"
+                    iconPos="right"
+                    @click="openCreateBillDialog"
+                  /> -->
                 </div>
               </div>
             </div>
@@ -857,6 +867,7 @@ export default {
       router.reload({
         onSuccess: () => {
           console.log('Data reloaded successfully');
+          this.storeMedicalSuppliesInContainer();
           this.storeBillsInContainer();
           window.skipNProgress = false; // Reset flag after reload
         },

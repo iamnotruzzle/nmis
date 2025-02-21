@@ -83,9 +83,6 @@ class PatientChargeController extends Controller
             ",
             [Auth::user()->employeeid]
         );
-        $authCode = $authWardcode[0]->wardcode;
-
-        // dd($authWardcode);
         $wardcode = $authWardcode[0]->wardcode;
 
         // old query but this will show items even if they are not received status
@@ -205,18 +202,19 @@ class PatientChargeController extends Controller
         );
 
         // check if the latest has a beg bal or ending bal
-        $balanceDecChecker = LocationStockBalance::where('location', $authCode)->OrderBy('created_at', 'DESC')->first();
+        $balanceDecChecker = LocationStockBalance::where('location', $wardcode)->OrderBy('created_at', 'DESC')->first();
         // dd($balanceDecChecker);
         $canCharge = null;
 
-        // if true, it can generate beginning balance else it can generate ending balance
-        if ($balanceDecChecker !== null) {
+        // Check if ward a;lready declared their stock balance
+        if ($balanceDecChecker['beg_bal_created_at'] !== null) {
             $canCharge = true;
         } else if ($balanceDecChecker == null) {
             $canCharge = false;
         } else {
             $canCharge = false;
         }
+        // dd($canCharge);
 
         return Inertia::render('Wards/Patients/Bill/Index', [
             'pat_name' => $pat_name,

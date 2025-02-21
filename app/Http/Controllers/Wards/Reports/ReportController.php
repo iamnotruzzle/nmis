@@ -136,6 +136,9 @@ class ReportController extends Controller
                         (CAST(csrw_location_stock_balance.end_bal_created_at AS DATE) BETWEEN '$default_beg_bal_date' AND '$now')
                         OR csrw_location_stock_balance.end_bal_created_at IS NULL
                     )
+                    AND (
+                        ward.[from] = 'CSR' OR  ward.[from] = 'WARD'
+                    )
                 GROUP BY
                     hclass2.cl2comb,
                     hclass2.cl2desc,
@@ -202,6 +205,9 @@ class ReportController extends Controller
                         (CAST(csrw_location_stock_balance.end_bal_created_at AS DATE) BETWEEN '$from' AND '$to')
                         OR csrw_location_stock_balance.end_bal_created_at IS NULL
                     AND ward.is_consumable IS NULL)
+                    AND (
+                        ward.[from] = 'CSR' OR  ward.[from] = 'WARD'
+                    )
                 GROUP BY
                     hclass2.cl2comb,
                     hclass2.cl2desc,
@@ -271,15 +277,15 @@ class ReportController extends Controller
         $reports = array_values($combinedReports);
         // dd($loopCount);
 
-        // return Inertia::render('Wards/Reports/Consumption/Index', [
-        //     'reports' => $reports,
-        //     'locationStockBalance' => $locationStockBalance,
-        //     'stockBalDates' => $stockBalDates,
-        // ]);
-
-        // maintenance page
-        return Inertia::render('UnderMaintenancePage', [
-            'reports' => $reports
+        return Inertia::render('Wards/Reports/Consumption/Index', [
+            'reports' => $reports,
+            'locationStockBalance' => $locationStockBalance,
+            'stockBalDates' => $stockBalDates,
         ]);
+
+        // // maintenance page
+        // return Inertia::render('UnderMaintenancePage', [
+        //     'reports' => $reports
+        // ]);
     }
 }

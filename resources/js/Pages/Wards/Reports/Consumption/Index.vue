@@ -328,7 +328,7 @@ export default {
           ent: e.ent,
           //   neuro: e.neuro,
           total_consumption: e.total_consumption,
-          total_cons_estimated_cost: e.total_cons_estimated_cost,
+          total_cons_estimated_cost: Number(e.total_cons_estimated_cost).toFixed(2),
           transferred_qty: e.transferred_qty,
           ending_balance: e.ending_balance,
           actual_inventory: e.actual_inventory,
