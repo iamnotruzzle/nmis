@@ -125,10 +125,9 @@
 
                 <Button
                   v-if="data.status == 'FILLED'"
-                  label="Receive"
-                  class="ml-2"
+                  label="RECEIVE"
                   icon="pi pi-check"
-                  iconPos="right"
+                  class="ml-2"
                   severity="success"
                   @click="editStatus(data)"
                 />
@@ -209,14 +208,6 @@
                   @click="editRequestedStock(slotProps.data)"
                 ></v-icon>
 
-                <!-- <Button
-              v-if="slotProps.data.status == 'PENDING'"
-              icon="fc fc-cancel"
-              rounded
-              text
-              severity="danger"
-              @click="confirmCancelItem(slotProps.data)"
-            /> -->
                 <v-icon
                   v-if="slotProps.data.status == 'PENDING' || slotProps.data.status == 'ACKNOWLEDGED'"
                   name="fc-cancel"
@@ -365,8 +356,7 @@
                 <template #body="slotProps">
                   <Button
                     icon="pi pi-times"
-                    rounded
-                    text
+                    label="REMOVE"
                     severity="danger"
                     @click="removeFromRequestContainer(slotProps.data)"
                   />
@@ -377,29 +367,28 @@
 
           <template #footer>
             <Button
-              label="Cancel"
+              :label="!form.processing ? 'CANCEL' : 'CANCEL'"
               icon="pi pi-times"
+              :disabled="form.processing"
               severity="danger"
-              text
               @click="cancel"
             />
+
             <Button
               v-if="isUpdate == true"
-              label="Update"
-              icon="pi pi-check"
-              severity="warning"
-              text
-              type="submit"
               :disabled="form.processing || requestStockListDetails == '' || requestStockListDetails == null"
+              :label="!form.processing ? 'UPDATE' : 'UPDATE'"
+              :icon="form.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
+              severity="warning"
+              type="submit"
               @click="submit"
             />
             <Button
               v-else
-              label="Request"
-              icon="pi pi-check"
-              text
-              type="submit"
+              :label="!form.processing ? 'REQUEST' : 'REQUEST'"
+              :icon="form.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
               :disabled="form.processing || requestStockListDetails == '' || requestStockListDetails == null"
+              type="submit"
               @click="submit"
             />
           </template>
@@ -431,17 +420,18 @@
           </div>
           <template #footer>
             <Button
-              label="No"
+              :label="!formUpdateStatus.processing ? 'CANCEL' : 'CANCEL'"
               icon="pi pi-times"
-              class="p-button-text"
+              :disabled="formUpdateStatus.processing"
+              severity="danger"
               @click="editStatusDialog = false"
             />
+
             <Button
-              label="Yes"
-              icon="pi pi-check"
-              severity="success"
-              text
               :disabled="formUpdateStatus.processing"
+              :label="!formUpdateStatus.processing ? 'YES' : 'YES'"
+              :icon="formUpdateStatus.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
+              severity="success"
               @click="updateStatus"
             />
           </template>
@@ -464,19 +454,29 @@
           </div>
           <template #footer>
             <Button
-              label="No"
+              label="NO"
               icon="pi pi-times"
-              class="p-button-text"
+              :disabled="form.processing"
+              severity="danger"
               @click="cancelItemDialog = false"
             />
+
             <Button
+              :disabled="form.processing"
+              :label="!form.processing ? 'YES' : 'YES'"
+              :icon="form.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
+              type="submit"
+              @click="cancelItem"
+            />
+
+            <!-- <Button
               label="Yes"
               icon="pi pi-check"
               severity="danger"
               text
               :disabled="form.processing"
               @click="cancelItem"
-            />
+            /> -->
           </template>
         </Dialog>
 
@@ -747,19 +747,15 @@
 
           <template #footer>
             <Button
-              label="Cancel"
+              :label="!formConsignment.processing ? 'CANCEL' : 'CANCEL'"
               icon="pi pi-times"
+              :disabled="formConsignment.processing"
               severity="danger"
-              text
               @click="cancel"
             />
+
             <Button
               v-if="isUpdateConsignment == false"
-              label="Save"
-              icon="pi pi-check"
-              severity="warning"
-              text
-              type="submit"
               :disabled="
                 formConsignment.processing ||
                 formConsignment.fund_source == null ||
@@ -770,14 +766,18 @@
                 formConsignment.price_per_unit <= 0 ||
                 formConsignment.delivered_date == null
               "
+              :label="!formConsignment.processing ? 'SAVE' : 'SAVE'"
+              :icon="formConsignment.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
+              severity="warning"
+              type="submit"
               @click="openConfirmConsignmentDialog"
             />
+
             <Button
               v-else
-              label="Save"
+              :label="!formConsignment.processing ? 'SAVE' : 'SAVE'"
               icon="pi pi-check"
               severity="warning"
-              text
               type="submit"
               :disabled="formConsignment.processing || formConsignment.quantity == null"
               @click="submitConsignment"
@@ -817,18 +817,17 @@
 
           <template #footer>
             <Button
-              label="Cancel"
+              :label="!formConsignment.processing ? 'CANCEL' : 'CANCEL'"
               icon="pi pi-times"
+              :disabled="formConsignment.processing"
               severity="danger"
-              text
               @click="cancel"
             />
+
             <Button
-              icon="pi pi-check"
-              severity="warning"
-              text
-              type="submit"
               :disabled="formConsignment.processing || countdown > 0"
+              :icon="formConsignment.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
+              type="submit"
               @click="submitConsignment"
             >
               {{ countdown > 0 ? `YES, I'M SURE (${countdown})` : "YES, I'M SURE" }}
@@ -844,7 +843,7 @@
           @hide="whenDialogIsHidden"
         >
           <template #header>
-            <div class="text-orange-500 text-xl font-bold">EXISTING STOCK</div>
+            <div class="text-blue-500 text-xl font-bold">EXISTING STOCK</div>
           </template>
           <div class="field">
             <label>Items</label>
@@ -890,30 +889,30 @@
 
           <template #footer>
             <Button
-              label="Cancel"
+              :label="!formExisting.processing ? 'CANCEL' : 'CANCEL'"
               icon="pi pi-times"
+              :disabled="formExisting.processing || formExisting.cl2comb == null || formExisting.quantity == null"
               severity="danger"
-              text
               @click="cancel"
             />
+
             <Button
               v-if="isUpdateExisting == false"
-              label="Save"
-              icon="pi pi-check"
-              severity="warning"
-              text
-              type="submit"
               :disabled="formExisting.processing || formExisting.cl2comb == null || formExisting.quantity == null"
+              :label="!formExisting.processing ? 'SAVE' : 'SAVE'"
+              :icon="formExisting.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
+              severity="info"
+              type="submit"
               @click="submitExisting"
             />
+
             <Button
               v-else
-              label="Update"
-              icon="pi pi-check"
-              severity="warning"
-              text
-              type="submit"
               :disabled="formExisting.processing || formExisting.cl2comb == null || formExisting.quantity == null"
+              :label="!formExisting.processing ? 'UPDATE' : 'UPDATE'"
+              :icon="formExisting.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
+              severity="info"
+              type="submit"
               @click="submitExisting"
             />
           </template>
@@ -981,23 +980,23 @@
 
           <template #footer>
             <Button
-              label="Cancel"
+              :label="!formReturnToCsr.processing ? 'CANCEL' : 'CANCEL'"
               icon="pi pi-times"
+              :disabled="formReturnToCsr.processing"
               severity="danger"
-              text
               @click="cancel"
             />
+
             <Button
-              label="Save"
-              icon="pi pi-check"
-              text
-              type="submit"
               :disabled="
                 formReturnToCsr.processing ||
                 formReturnToCsr.quantity == null ||
                 formReturnToCsr.remarks == '' ||
                 formReturnToCsr.remarks == null
               "
+              :label="!formReturnToCsr.processing ? 'RETURN' : 'RETURN'"
+              :icon="formReturnToCsr.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
+              type="submit"
               @click="submitReturnToCsr"
             />
           </template>
@@ -2382,7 +2381,7 @@ export default {
   watch: {
     confirmConsignmentDialog(newVal) {
       if (newVal) {
-        this.countdown = 1; // Reset countdown when dialog is opened
+        this.countdown = 5; // Reset countdown when dialog is opened
         this.timer = setInterval(() => {
           if (this.countdown > 0) {
             this.countdown--;
