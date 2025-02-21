@@ -763,6 +763,7 @@ export default {
   },
   data() {
     return {
+      isSubmitting: false, // Flag to track form submission
       domUpdater: null,
       stockBalanceDeclared: false,
       expandedRow: [],
@@ -842,15 +843,14 @@ export default {
       }),
     };
   },
+  beforeUnmount() {
+    window.removeEventListener('beforeunload', this.preventRefresh);
+    window.removeEventListener('keydown', this.preventKeys);
+  },
   mounted() {
-    // window.Echo.channel('charges').listen('.ChargeLogsProcessed', (args) => {
-    //   router.reload({
-    //     onSuccess: () => {
-    //       console.log('Data reloaded successfully');
-    //       this.storeBillsInContainer();
-    //     },
-    //   });
-    // });
+    window.addEventListener('beforeunload', this.preventRefresh);
+    window.addEventListener('keydown', this.preventKeys);
+
     window.Echo.channel('charges').listen('.ChargeLogsProcessed', (args) => {
       window.skipNProgress = true; // Prevent NProgress
 
@@ -1276,11 +1276,25 @@ export default {
     clickOutsideDialog() {
       this.$emit('hide', this.form.clearErrors(), this.form.reset());
     },
+    preventRefresh(event) {
+      if (this.isSubmitting) {
+        event.preventDefault();
+        event.returnValue = 'Changes you made may not be saved.';
+      }
+    },
+    preventKeys(event) {
+      if (this.isSubmitting && (event.key === 'F5' || (event.ctrlKey && event.key === 'r'))) {
+        event.preventDefault();
+        alert('Submission in progress. Please wait.');
+      }
+    },
     submit() {
       // console.log('else');
-      if (this.form.processing) {
+      if (this.form.processing || this.isSubmitting) {
         return false;
       }
+
+      this.isSubmitting = true; // Prevent F5 and closing
 
       // set form data
       this.form.enccode = this.pat_enccode;
@@ -1292,6 +1306,7 @@ export default {
         preserveScroll: true,
         onFinish: () => {
           this.cancel();
+          this.isSubmitting = false; // Allow navigation again
         },
         onSuccess: () => {
           this.createBillDialog = false;
@@ -1308,6 +1323,8 @@ export default {
           this.storeMedicalSuppliesInContainer();
           this.storeMiscInContainer();
           this.storeItemsInContainer();
+
+          this.isSubmitting = false; // Allow navigation again
         },
       });
     },
