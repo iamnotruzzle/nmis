@@ -79,24 +79,6 @@
           :pt="{ headerContent: 'justify-content-center' }"
         >
           <template #body="slotProps">
-            <!-- <Button
-              v-if="canTransfer == true"
-              icon="pi pi-pencil"
-              class="mr-1"
-              rounded
-              text
-              severity="warning"
-              @click="transferStock(slotProps.data)"
-            />
-            <Button
-              v-else
-              icon="pi pi-pencil"
-              class="mr-1"
-              rounded
-              text
-              severity="warning"
-              :disabled="true"
-            /> -->
             <Button
               icon="pi pi-pencil"
               class="mr-1"
@@ -228,27 +210,18 @@
 
         <template #footer>
           <Button
-            label="Cancel"
+            :label="!form.processing ? 'CANCEL' : 'CANCEL'"
             icon="pi pi-times"
+            :disabled="form.processing"
             severity="danger"
-            text
             @click="cancel"
           />
 
           <Button
-            label="Save"
-            icon="pi pi-check"
-            text
+            :disabled="form.processing"
+            :label="!form.processing ? 'SAVE' : 'SAVE'"
+            :icon="form.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
             type="submit"
-            :disabled="
-              form.processing ||
-              form.quantity == null ||
-              Number(form.quantity) == 0 ||
-              Number(form.quantity) > Number(form.prevQuantity) ||
-              form.to == null ||
-              form.requested_by == null ||
-              form.remarks == null
-            "
             @click="submit"
           />
         </template>
@@ -271,17 +244,17 @@
         </div>
         <template #footer>
           <Button
-            label="No"
+            :label="!formReceiveStock.processing ? 'NO' : 'NO'"
             icon="pi pi-times"
-            class="p-button-text"
+            :disabled="formReceiveStock.processing"
+            severity="danger"
             @click="receivedItemDialog = false"
           />
+
           <Button
-            label="Yes"
-            icon="pi pi-check"
-            severity="danger"
-            text
             :disabled="formReceiveStock.processing"
+            :label="!formReceiveStock.processing ? 'YES' : 'YES'"
+            :icon="formReceiveStock.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
             @click="updateReceivedStockStatus"
           />
         </template>
@@ -446,27 +419,11 @@
               :pt="{ headerContent: 'justify-content-center' }"
             >
               <template #body="slotProps">
-                <!-- <div v-if="canTransfer == true">
-                  <Button
-                    v-if="slotProps.data.status != 'RECEIVED'"
-                    icon="pi pi-check"
-                    label="Receive"
-                    @click="receivedStock(slotProps)"
-                  />
-                </div>
-                <div v-else>
-                  <Button
-                    v-if="slotProps.data.status != 'RECEIVED'"
-                    icon="pi pi-check"
-                    label="Receive"
-                    :disabled="true"
-                  />
-                </div> -->
                 <div>
                   <Button
                     v-if="slotProps.data.status != 'RECEIVED'"
-                    icon="pi pi-check"
-                    label="Receive"
+                    label="RECEIVE"
+                    :icon="form.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
                     @click="receivedStock(slotProps)"
                   />
                 </div>
