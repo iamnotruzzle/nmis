@@ -277,15 +277,15 @@ class ReportController extends Controller
         $reports = array_values($combinedReports);
         // dd($loopCount);
 
-        return Inertia::render('Wards/Reports/Consumption/Index', [
-            'reports' => $reports,
-            'locationStockBalance' => $locationStockBalance,
-            'stockBalDates' => $stockBalDates,
-        ]);
-
-        // // maintenance page
-        // return Inertia::render('UnderMaintenancePage', [
-        //     'reports' => $reports
+        // return Inertia::render('Wards/Reports/Consumption/Index', [
+        //     'reports' => $reports,
+        //     'locationStockBalance' => $locationStockBalance,
+        //     'stockBalDates' => $stockBalDates,
         // ]);
+
+        // maintenance page
+        return Inertia::render('UnderMaintenancePage', [
+            'reports' => $reports
+        ]);
     }
 }
