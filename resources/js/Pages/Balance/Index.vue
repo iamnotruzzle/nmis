@@ -42,7 +42,7 @@
               />
             </div>
 
-            <div class="w-full md:w-auto mt-2 md:mt-0">
+            <div class="w-5 mt-2 md:mt-0">
               <Dropdown
                 v-model="selectedDate"
                 :options="stockBalDatesList"
@@ -268,6 +268,7 @@ export default {
   mounted() {
     // console.log(moment().format('YYYY-MM-DD HH:mm:ss'));
     // console.log(this.stockBalDates);
+    // console.log(this.selectedDate = this.stockBalDates[0]);
 
     this.storeStockBalDatesInContainer();
     this.storeStockBalanceInContainer();
@@ -276,6 +277,9 @@ export default {
 
     this.form.location = this.$page.props.auth.user.location.location_name.wardcode;
     this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid;
+
+    // declare default filter
+    // this.selectedDate = this.stockBalDatesList[0];
   },
   computed: {
     isBetween10thAndLastDay() {
