@@ -149,27 +149,18 @@ class LocationStockBalanceController extends Controller
             );
         }
 
-        // return Inertia::render('Balance/Index', [
-        //     'locationStockBalance' => $locationStockBalance,
-        //     'canBeginBalance' => $canBeginBalance,
-        //     'stockBalDates' => $stockBalDates,
-        // ]);
+        return Inertia::render('Balance/Index', [
+            'locationStockBalance' => $locationStockBalance,
+            'canBeginBalance' => $canBeginBalance,
+            'stockBalDates' => $stockBalDates,
+        ]);
 
-        // maintenance page
-        return Inertia::render('UnderMaintenancePage', []);
+        // // maintenance page
+        // return Inertia::render('UnderMaintenancePage', []);
     }
 
     public function store(Request $request)
     {
-        // orig query
-        // $currentStocks = DB::select(
-        //     "SELECT ward.id, ward.location, ward.cl2comb, ward.quantity, ward.ris_no, price.id as price_id
-        //         FROM csrw_wards_stocks as ward
-        //         JOIN csrw_item_prices as price ON price.ris_no = ward.ris_no
-        //         WHERE ward.location = '$request->location'
-        //         -- AND ward.[from] = 'CSR'
-        //         AND ward.quantity > 0"
-        // );
         $currentStocks = DB::select(
             "SELECT ward.id, ward.location, ward.cl2comb, ward.quantity, ward.ris_no, price.id as price_id
                 FROM csrw_wards_stocks as ward
@@ -177,14 +168,13 @@ class LocationStockBalanceController extends Controller
                 WHERE ward.location = '$request->location'
                 AND ward.[from] = 'CSR'"
         );
-        // dd($currentStocks);
 
         $itemCount = DB::select(
-            "SELECT COUNT(*) as count FROM csrw_wards_stocks;"
+            "SELECT COUNT(*) as count FROM csrw_wards_stocks WHERE location = ?",
+            [$request->location]
         );
 
         if ($itemCount[0]->count != 0) {
-            // If no balance has been declared before the 12th, create the balance
             $dateTime = Carbon::now();
             if ($request->beg_bal == true) {
                 // beginning balance
@@ -206,6 +196,7 @@ class LocationStockBalanceController extends Controller
                     'beg_bal_created_at' => $dateTime,
                 ]);
             } else {
+                // dd('ending');
 
                 $dateTime = Carbon::now();
 
@@ -237,40 +228,15 @@ class LocationStockBalanceController extends Controller
                 }
                 //endregion
 
-                //region get the beginning balance date
-                $authWardcode = DB::select(
-                    "SELECT TOP 1
-                        l.wardcode
-                    FROM
-                        user_acc u
-                    INNER JOIN
-                        csrw_login_history l ON u.employeeid = l.employeeid
-                    WHERE
-                        l.employeeid = ?
-                    ORDER BY
-                        l.created_at DESC;
-                    ",
-                    [Auth::user()->employeeid]
-                );
-                // dd($authWardcode);
-                $authCode = $authWardcode[0]->wardcode;
-
                 $stockBalDates = DB::select(
                     "SELECT CAST(beg_bal_created_at as DATE) AS beg_bal_date, CAST(end_bal_created_at AS DATE) AS end_bal_date
                         FROM csrw_stock_bal_date_logs
-                        WHERE wardcode = '$authCode'
-                        oRDER BY created_at DESC;"
+                        WHERE wardcode = ?
+                        ORDER BY created_at DESC;",
+                    [$request->location]
                 );
                 $default_beg_bal_date = $stockBalDates == [] ? Carbon::now()->format('Y-m-d') : Carbon::parse($stockBalDates[0]->beg_bal_date)->format('Y-m-d');
                 // dd($default_beg_bal_date);
-                //endregion
-
-                //region get beginning and ending date
-                // preg_match('/\[\s*(\d{4}-\d{2}-\d{2})\s*\] - \[\s*(\d{4}-\d{2}-\d{2}|ONGOING)\s*\]/', $dateRange, $matches);
-                // if ($matches) {
-                //     $from = $matches[1]; // "2024-11-04"
-                //     $to = $matches[2] === 'ONGOING' ? $default_beg_bal_date : $matches[2]; // "2024-11-05" or null if "ONGOING"
-                // }
                 //endregion
 
                 //region get ward report (LATEST report)
@@ -319,7 +285,7 @@ class LocationStockBalanceController extends Controller
                         GROUP BY ward_stock_id
                     ) csrw_ward_transfer_stock ON ward.id = csrw_ward_transfer_stock.ward_stock_id
                     WHERE
-                        ward.location LIKE '$authCode'
+                        ward.location LIKE ?
                         AND ward.is_consumable IS NULL
                         AND (
                             (CAST(csrw_location_stock_balance.beg_bal_created_at AS DATE) BETWEEN '$default_beg_bal_date' AND '$dateTime')
@@ -337,35 +303,35 @@ class LocationStockBalanceController extends Controller
                         ward.ris_no,
                         csrw_patient_charge_logs.charge_quantity
                     ORDER BY
-                        hclass2.cl2desc ASC;"
+                        hclass2.cl2desc ASC;",
+                    [$request->location]
                 );
                 //endregion
 
-
                 $result = $this->processReport($ward_report);
 
-                $logs = WardStockBalanceSnapshot::create([
-                    'cl2comb' => $result[0]->cl2comb,
-                    'item_description' => $result[0]->item_description,
-                    'unit' => $result[0]->unit,
-                    'unit_cost' => $result[0]->unit_cost,
-                    'beginning_balance' => $result[0]->beginning_balance,
-                    'from_csr' => $result[0]->from_csr,
-                    'from_ward' => $result[0]->from_ward,
-                    'total_beg_bal' => $result[0]->total_beg_bal,
-                    'surgery' => $result[0]->surgery,
-                    'obgyne' => $result[0]->obgyne,
-                    'ortho' => $result[0]->ortho,
-                    'pedia' => $result[0]->pedia,
-                    'ent' => $result[0]->ent,
-                    'total_consumption' => $result[0]->total_consumption,
-                    'total_cons_estimated_cost' => $result[0]->total_cons_estimated_cost,
-                    'transferred_qty' => $result[0]->transferred_qty,
-                    'ending_balance' => $result[0]->ending_balance,
-                    'wardcode' => $result[0]->wardcode,
-                ]);
-
-                // dd($result);
+                foreach ($result as $row) {
+                    $logs[] = WardStockBalanceSnapshot::create([
+                        'cl2comb' => $row->cl2comb,
+                        'item_description' => $row->item_description,
+                        'unit' => $row->unit,
+                        'unit_cost' => $row->unit_cost,
+                        'beginning_balance' => $row->beginning_balance,
+                        'from_csr' => $row->from_csr,
+                        'from_ward' => $row->from_ward,
+                        'total_beg_bal' => $row->total_beg_bal,
+                        'surgery' => $row->surgery,
+                        'obgyne' => $row->obgyne,
+                        'ortho' => $row->ortho,
+                        'pedia' => $row->pedia,
+                        'ent' => $row->ent,
+                        'total_consumption' => $row->total_consumption,
+                        'total_cons_estimated_cost' => $row->total_cons_estimated_cost,
+                        'transferred_qty' => $row->transferred_qty,
+                        'ending_balance' => $row->ending_balance,
+                        'wardcode' => $row->wardcode,
+                    ]);
+                }
             }
         }
 
