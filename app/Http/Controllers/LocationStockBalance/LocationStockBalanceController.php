@@ -285,9 +285,6 @@ class LocationStockBalanceController extends Controller
                     LEFT JOIN (
                         SELECT ward_stocks_id, SUM(quantity) AS charge_quantity
                         FROM csrw_patient_charge_logs
-                        -- OLD
-                        -- WHERE CAST(pcchrgdte AS DATE) BETWEEN '$from' AND '$to'
-                        -- NEW
                         WHERE pcchrgdte BETWEEN '$from' AND '$to'
                         GROUP BY ward_stocks_id
                     ) csrw_patient_charge_logs ON ward.id = csrw_patient_charge_logs.ward_stocks_id

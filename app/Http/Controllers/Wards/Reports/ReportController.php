@@ -64,8 +64,8 @@ class ReportController extends Controller
             WHERE wardcode = '$authCode'
             oRDER BY created_at DESC;"
         );
-
-        $default_beg_bal_date = $stockBalDates == null ? null : $stockBalDates[0]->beg_bal_date;
+        $default_from = $stockBalDates[0]->beg_bal_date;
+        $default_to = $stockBalDates[0]->end_bal_date;
 
         preg_match('/\[\s*(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d+)\s*\] - \[\s*(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d+|ONGOING)\s*\]/', $dateRange, $matches);
         if ($matches) {
@@ -113,7 +113,7 @@ class ReportController extends Controller
                 LEFT JOIN (
                     SELECT ward_stocks_id, SUM(quantity) AS charge_quantity
                     FROM csrw_patient_charge_logs
-                    WHERE CAST(pcchrgdte AS DATE) BETWEEN '$default_beg_bal_date' AND '$now'
+                    WHERE pcchrgdte BETWEEN '$default_from' AND '$default_to'
                     GROUP BY ward_stocks_id
                 ) csrw_patient_charge_logs ON ward.id = csrw_patient_charge_logs.ward_stocks_id
                 LEFT JOIN csrw_location_stock_balance ON csrw_location_stock_balance.ward_stock_id = ward.id
@@ -127,11 +127,11 @@ class ReportController extends Controller
                     ward.location LIKE '$authCode'
                     AND ward.is_consumable IS NULL
                     AND (
-                        (csrw_location_stock_balance.beg_bal_created_at BETWEEN '$default_beg_bal_date' AND '$now')
+                        (csrw_location_stock_balance.beg_bal_created_at BETWEEN '$default_from' AND '$default_to')
                         OR csrw_location_stock_balance.beg_bal_created_at IS NULL
                     )
                     AND (
-                        (csrw_location_stock_balance.end_bal_created_at BETWEEN '$default_beg_bal_date' AND '$now')
+                        (csrw_location_stock_balance.end_bal_created_at BETWEEN '$default_from' AND '$default_to')
                         OR csrw_location_stock_balance.end_bal_created_at IS NULL
                     )
                     AND ward.is_consumable IS NULL
@@ -184,9 +184,6 @@ class ReportController extends Controller
                 LEFT JOIN (
                     SELECT ward_stocks_id, SUM(quantity) AS charge_quantity
                     FROM csrw_patient_charge_logs
-                    -- OLD
-                    -- WHERE CAST(pcchrgdte AS DATE) BETWEEN '$from' AND '$to'
-                    -- NEW
                     WHERE pcchrgdte BETWEEN '$from' AND '$to'
                     GROUP BY ward_stocks_id
                 ) csrw_patient_charge_logs ON ward.id = csrw_patient_charge_logs.ward_stocks_id
