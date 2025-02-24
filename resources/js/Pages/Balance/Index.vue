@@ -299,7 +299,7 @@ export default {
   },
   methods: {
     storeStockBalDatesInContainer() {
-      //   this.stockBalDatesList = []; // Clear the list to avoid duplicates
+      this.balanceContainer = []; // Clear the list to avoid duplicates
 
       this.stockBalDates.forEach((e) => {
         this.stockBalDatesList.push({
@@ -309,6 +309,8 @@ export default {
       });
     },
     storeStockBalanceInContainer() {
+      this.balanceContainer = [];
+
       this.locationStockBalance.forEach((e) => {
         this.balanceContainer.push({
           ris_no: e.ris_no,

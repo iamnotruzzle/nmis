@@ -22,7 +22,7 @@ class ReportController extends Controller
         $from = null;
         $to = null;
         $locationStockBalance = null;
-        $now = Carbon::now()->format('Y-m-d');
+        $now = Carbon::now();
 
         $authWardcode = DB::table('csrw_users')
             ->join('csrw_login_history', 'csrw_users.employeeid', '=', 'csrw_login_history.employeeid')
@@ -59,20 +59,37 @@ class ReportController extends Controller
 
         $reports = array();
 
+        // OLD
+        // $stockBalDates = DB::select(
+        //     "SELECT CAST(beg_bal_created_at as DATE) AS beg_bal_date, CAST(end_bal_created_at AS DATE) AS end_bal_date
+        //     FROM csrw_stock_bal_date_logs
+        //     WHERE wardcode = '$authCode'
+        //     oRDER BY created_at DESC;"
+        // );
+        // NEW
         $stockBalDates = DB::select(
-            "SELECT CAST(beg_bal_created_at as DATE) AS beg_bal_date, CAST(end_bal_created_at AS DATE) AS end_bal_date
+            "SELECT beg_bal_created_at AS beg_bal_date, end_bal_created_at AS end_bal_date
             FROM csrw_stock_bal_date_logs
             WHERE wardcode = '$authCode'
             oRDER BY created_at DESC;"
         );
-        // dd($stockBalDates);
-        $default_beg_bal_date = $stockBalDates == [] ? Carbon::now()->format('Y-m-d') : Carbon::parse($stockBalDates[0]->beg_bal_date)->format('Y-m-d');
-        // dd($default_beg_bal_date);
 
-        preg_match('/\[\s*(\d{4}-\d{2}-\d{2})\s*\] - \[\s*(\d{4}-\d{2}-\d{2}|ONGOING)\s*\]/', $dateRange, $matches);
+        // OLD
+        // $default_beg_bal_date = $stockBalDates == [] ? Carbon::now()->format('Y-m-d') : Carbon::parse($stockBalDates[0]->beg_bal_date)->format('Y-m-d');
+        // NEW
+        $default_beg_bal_date = $stockBalDates == null ? null : $stockBalDates[0]->beg_bal_date;
+
+        // OLD
+        // preg_match('/\[\s*(\d{4}-\d{2}-\d{2})\s*\] - \[\s*(\d{4}-\d{2}-\d{2}|ONGOING)\s*\]/', $dateRange, $matches);
+        // if ($matches) {
+        //     $from = $matches[1]; // "2024-11-04"
+        //     $to = $matches[2] === 'ONGOING' ? $default_beg_bal_date : $matches[2]; // "2024-11-05" or null if "ONGOING"
+        // }
+        // NEW
+        preg_match('/\[\s*(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d+)\s*\] - \[\s*(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d+|ONGOING)\s*\]/', $dateRange, $matches);
         if ($matches) {
-            $from = $matches[1]; // "2024-11-04"
-            $to = $matches[2] === 'ONGOING' ? $default_beg_bal_date : $matches[2]; // "2024-11-05" or null if "ONGOING"
+            $from = $matches[1]; // "2025-02-24 11:42:52.846"
+            $to = $matches[2] === 'ONGOING' ? Carbon::now() : $matches[2]; // "2025-02-24 11:43:41.783" or null if "ONGOING"
         }
 
         //#region NOTES
@@ -129,13 +146,15 @@ class ReportController extends Controller
                     ward.location LIKE '$authCode'
                     AND ward.is_consumable IS NULL
                     AND (
-                    (CAST(csrw_location_stock_balance.beg_bal_created_at AS DATE) BETWEEN '$default_beg_bal_date' AND '$now')
-                    OR csrw_location_stock_balance.beg_bal_created_at IS NULL
+                        (csrw_location_stock_balance.beg_bal_created_at BETWEEN '$default_beg_bal_date' AND '$now')
+                        OR csrw_location_stock_balance.beg_bal_created_at IS NULL
                     )
                     AND (
-                        (CAST(csrw_location_stock_balance.end_bal_created_at AS DATE) BETWEEN '$default_beg_bal_date' AND '$now')
+                        (csrw_location_stock_balance.end_bal_created_at BETWEEN '$default_beg_bal_date' AND '$now')
                         OR csrw_location_stock_balance.end_bal_created_at IS NULL
                     )
+                    AND ward.is_consumable IS NULL
+
                     AND (
                         ward.[from] = 'CSR' OR  ward.[from] = 'WARD'
                     )
@@ -184,7 +203,10 @@ class ReportController extends Controller
                 LEFT JOIN (
                     SELECT ward_stocks_id, SUM(quantity) AS charge_quantity
                     FROM csrw_patient_charge_logs
-                    WHERE CAST(pcchrgdte AS DATE) BETWEEN '$from' AND '$to'
+                    -- OLD
+                    -- WHERE CAST(pcchrgdte AS DATE) BETWEEN '$from' AND '$to'
+                    -- NEW
+                    WHERE pcchrgdte BETWEEN '$from' AND '$to'
                     GROUP BY ward_stocks_id
                 ) csrw_patient_charge_logs ON ward.id = csrw_patient_charge_logs.ward_stocks_id
                 LEFT JOIN csrw_location_stock_balance ON csrw_location_stock_balance.ward_stock_id = ward.id
@@ -198,13 +220,14 @@ class ReportController extends Controller
                     ward.location LIKE '$authCode'
                     AND ward.is_consumable IS NULL
                     AND (
-                        (CAST(csrw_location_stock_balance.beg_bal_created_at AS DATE) BETWEEN '$from' AND '$to')
+                        (csrw_location_stock_balance.beg_bal_created_at BETWEEN '$from' AND '$to')
                         OR csrw_location_stock_balance.beg_bal_created_at IS NULL
                     )
                     AND (
-                        (CAST(csrw_location_stock_balance.end_bal_created_at AS DATE) BETWEEN '$from' AND '$to')
+                        (csrw_location_stock_balance.end_bal_created_at BETWEEN '$from' AND '$to')
                         OR csrw_location_stock_balance.end_bal_created_at IS NULL
-                    AND ward.is_consumable IS NULL)
+                    )
+                    AND ward.is_consumable IS NULL
                     AND (
                         ward.[from] = 'CSR' OR  ward.[from] = 'WARD'
                     )
