@@ -236,7 +236,7 @@ class ReportController extends Controller
                 // $combinedReports[$key]->from_csr += $e->from_csr + $e->total_consumption;
                 $combinedReports[$key]->from_ward += $e->from_ward;
                 // total stocks
-                $combinedReports[$key]->total_beg_bal += $e->from_csr + $e->from_ward + $e->total_consumption;
+                $combinedReports[$key]->total_beg_bal += $e->from_csr + $e->from_ward;
                 $combinedReports[$key]->surgery += $e->surgery;
                 $combinedReports[$key]->obgyne += $e->obgyne;
                 $combinedReports[$key]->ortho += $e->ortho;

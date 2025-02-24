@@ -166,7 +166,7 @@ class LocationStockBalanceController extends Controller
                 FROM csrw_wards_stocks as ward
                 JOIN csrw_item_prices as price ON price.ris_no = ward.ris_no
                 WHERE ward.location = '$request->location'
-                AND ward.[from] = 'CSR'"
+                AND ward.[from] = 'CSR' OR ward.[from] = 'WARD'"
         );
 
         $itemCount = DB::select(
@@ -200,7 +200,6 @@ class LocationStockBalanceController extends Controller
 
                 $dateTime = Carbon::now();
 
-                //region record ending balance
                 foreach ($currentStocks as $stock) {
                     LocationStockBalance::create([
                         'location' => $request->location,
@@ -226,7 +225,6 @@ class LocationStockBalanceController extends Controller
                         'end_bal_created_at' => $dateTime, // or specify a custom date if needed
                     ]);
                 }
-                //endregion
 
                 $stockBalDates = DB::select(
                     "SELECT CAST(beg_bal_created_at as DATE) AS beg_bal_date, CAST(end_bal_created_at AS DATE) AS end_bal_date
@@ -237,9 +235,8 @@ class LocationStockBalanceController extends Controller
                 );
                 $default_beg_bal_date = $stockBalDates == [] ? Carbon::now()->format('Y-m-d') : Carbon::parse($stockBalDates[0]->beg_bal_date)->format('Y-m-d');
                 // dd($default_beg_bal_date);
-                //endregion
 
-                //region get ward report (LATEST report)
+                //get ward report (LATEST report)
                 $ward_report = DB::select(
                     "SELECT
                         ward.ris_no,
@@ -295,6 +292,9 @@ class LocationStockBalanceController extends Controller
                             (CAST(csrw_location_stock_balance.end_bal_created_at AS DATE) BETWEEN '$default_beg_bal_date' AND '$dateTime')
                             OR csrw_location_stock_balance.end_bal_created_at IS NULL
                         AND ward.is_consumable IS NULL)
+                        AND (
+                            ward.[from] = 'CSR' OR  ward.[from] = 'WARD'
+                        )
                     GROUP BY
                         hclass2.cl2comb,
                         hclass2.cl2desc,
@@ -306,7 +306,6 @@ class LocationStockBalanceController extends Controller
                         hclass2.cl2desc ASC;",
                     [$request->location]
                 );
-                //endregion
 
                 $result = $this->processReport($ward_report);
 
@@ -375,7 +374,7 @@ class LocationStockBalanceController extends Controller
                 // $combinedReports[$key]->from_csr += $e->from_csr + $e->total_consumption;
                 $combinedReports[$key]->from_ward += $e->from_ward;
                 // total stocks
-                $combinedReports[$key]->total_beg_bal += $e->from_csr + $e->from_ward + $e->total_consumption;
+                $combinedReports[$key]->total_beg_bal += $e->from_csr + $e->from_ward;
                 $combinedReports[$key]->surgery += $e->surgery;
                 $combinedReports[$key]->obgyne += $e->obgyne;
                 $combinedReports[$key]->ortho += $e->ortho;

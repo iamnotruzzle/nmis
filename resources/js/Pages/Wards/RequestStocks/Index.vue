@@ -1078,6 +1078,11 @@
                 severity="primary"
               />
               <Tag
+                v-if="data.from == 'WARD'"
+                value="WARD"
+                severity="secondary"
+              />
+              <Tag
                 v-if="data.from == 'MEDICAL GASES'"
                 value="MEDICAL GASES"
                 severity="success"
