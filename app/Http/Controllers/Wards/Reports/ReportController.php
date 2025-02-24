@@ -37,21 +37,20 @@ class ReportController extends Controller
             $authWardcode = DB::select(
                 "SELECT TOP 1
                 l.wardcode
-            FROM
-                user_acc u
-            INNER JOIN
-                csrw_login_history l ON u.employeeid = l.employeeid
-            WHERE
-                l.employeeid = ?
-            ORDER BY
-                l.created_at DESC;
-            ",
+                FROM
+                    user_acc u
+                INNER JOIN
+                    csrw_login_history l ON u.employeeid = l.employeeid
+                WHERE
+                    l.employeeid = ?
+                ORDER BY
+                    l.created_at DESC;
+                ",
                 [Auth::user()->employeeid]
             );
             $authCode = $authWardcode[0]->wardcode;
 
             Sessions::where('id', Session::getId())->update([
-                // 'user_id' => $request->login,
                 'location' => $authCode,
             ]);
         }
@@ -59,14 +58,6 @@ class ReportController extends Controller
 
         $reports = array();
 
-        // OLD
-        // $stockBalDates = DB::select(
-        //     "SELECT CAST(beg_bal_created_at as DATE) AS beg_bal_date, CAST(end_bal_created_at AS DATE) AS end_bal_date
-        //     FROM csrw_stock_bal_date_logs
-        //     WHERE wardcode = '$authCode'
-        //     oRDER BY created_at DESC;"
-        // );
-        // NEW
         $stockBalDates = DB::select(
             "SELECT beg_bal_created_at AS beg_bal_date, end_bal_created_at AS end_bal_date
             FROM csrw_stock_bal_date_logs
@@ -74,18 +65,8 @@ class ReportController extends Controller
             oRDER BY created_at DESC;"
         );
 
-        // OLD
-        // $default_beg_bal_date = $stockBalDates == [] ? Carbon::now()->format('Y-m-d') : Carbon::parse($stockBalDates[0]->beg_bal_date)->format('Y-m-d');
-        // NEW
         $default_beg_bal_date = $stockBalDates == null ? null : $stockBalDates[0]->beg_bal_date;
 
-        // OLD
-        // preg_match('/\[\s*(\d{4}-\d{2}-\d{2})\s*\] - \[\s*(\d{4}-\d{2}-\d{2}|ONGOING)\s*\]/', $dateRange, $matches);
-        // if ($matches) {
-        //     $from = $matches[1]; // "2024-11-04"
-        //     $to = $matches[2] === 'ONGOING' ? $default_beg_bal_date : $matches[2]; // "2024-11-05" or null if "ONGOING"
-        // }
-        // NEW
         preg_match('/\[\s*(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d+)\s*\] - \[\s*(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d+|ONGOING)\s*\]/', $dateRange, $matches);
         if ($matches) {
             $from = $matches[1]; // "2025-02-24 11:42:52.846"
@@ -256,9 +237,7 @@ class ReportController extends Controller
             if (isset($combinedReports[$key])) {
                 $combinedReports[$key]->beginning_balance += $e->beginning_balance;
                 $combinedReports[$key]->from_csr += $e->from_csr;
-                // $combinedReports[$key]->from_csr += $e->from_csr + $e->total_consumption;
                 $combinedReports[$key]->from_ward += $e->from_ward;
-                // total stocks
                 $combinedReports[$key]->total_beg_bal += $e->from_csr + $e->from_ward;
                 $combinedReports[$key]->surgery += $e->surgery;
                 $combinedReports[$key]->obgyne += $e->obgyne;
@@ -278,7 +257,6 @@ class ReportController extends Controller
                     'unit' => $e->uomdesc,
                     'unit_cost' => $e->unit_cost,
                     'beginning_balance' => $e->beginning_balance,
-                    // 'from_csr' => $e->from_csr + $e->total_consumption,
                     'from_csr' => $e->from_csr,
                     'from_ward' => $e->from_ward,
                     'total_beg_bal' => $e->from_csr + $e->from_ward,

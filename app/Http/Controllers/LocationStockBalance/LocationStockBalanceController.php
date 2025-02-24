@@ -53,13 +53,12 @@ class LocationStockBalanceController extends Controller
             WHERE wardcode = '$authCode'
             oRDER BY created_at DESC;"
         );
-        // dd($stockBalDates);
+
         $default_beg_bal_date = $stockBalDates == null ? null : $stockBalDates[0]->beg_bal_date;
-        // dd($default_beg_bal_date);
 
         // check if the latest has a beg bal or ending bal
         $balanceDecChecker = LocationStockBalance::where('location', $authCode)->OrderBy('created_at', 'DESC')->first();
-        // dd($balanceDecChecker);
+
         $canBeginBalance = null;
 
         // if true, it can generate beginning balance else it can generate ending balance
@@ -76,7 +75,6 @@ class LocationStockBalanceController extends Controller
             $from = $matches[1]; // "2025-02-24 11:42:52.846"
             $to = $matches[2] === 'ONGOING' ? Carbon::now() : $matches[2]; // "2025-02-24 11:43:41.783" or null if "ONGOING"
         }
-        // dd($from);
 
         if ($from == null) {
             $locationStockBalance = DB::select(
@@ -145,7 +143,6 @@ class LocationStockBalanceController extends Controller
                 price.price_per_unit;"
             );
         }
-        // dd($from);
 
         return Inertia::render('Balance/Index', [
             'locationStockBalance' => $locationStockBalance,
@@ -197,6 +194,8 @@ class LocationStockBalanceController extends Controller
                 // dd('ending');
 
                 $dateTime = Carbon::now();
+                $from = null;
+                $to = null;
 
                 foreach ($currentStocks as $stock) {
                     LocationStockBalance::create([
@@ -224,17 +223,34 @@ class LocationStockBalanceController extends Controller
                     ]);
                 }
 
+
                 $stockBalDates = DB::select(
-                    "SELECT CAST(beg_bal_created_at as DATE) AS beg_bal_date, CAST(end_bal_created_at AS DATE) AS end_bal_date
-                        FROM csrw_stock_bal_date_logs
-                        WHERE wardcode = ?
-                        ORDER BY created_at DESC;",
+                    "SELECT beg_bal_created_at AS beg_bal_date, end_bal_created_at AS end_bal_date
+                    FROM csrw_stock_bal_date_logs
+                    WHERE wardcode = ?
+                    oRDER BY created_at DESC;",
                     [$request->location]
                 );
-                $default_beg_bal_date = $stockBalDates == [] ? Carbon::now()->format('Y-m-d') : Carbon::parse($stockBalDates[0]->beg_bal_date)->format('Y-m-d');
-                // dd($default_beg_bal_date);
+                // dd($stockBalDates[0]);
+                $from = $stockBalDates[0]->beg_bal_date;
+                $to = $stockBalDates[0]->end_bal_date;
 
-                //get ward report (LATEST report)
+                $authWardcode = DB::select(
+                    "SELECT TOP 1
+                    l.wardcode
+                    FROM
+                        user_acc u
+                    INNER JOIN
+                        csrw_login_history l ON u.employeeid = l.employeeid
+                    WHERE
+                        l.employeeid = ?
+                    ORDER BY
+                        l.created_at DESC;
+                    ",
+                    [Auth::user()->employeeid]
+                );
+                $authCode = $authWardcode[0]->wardcode;
+
                 $ward_report = DB::select(
                     "SELECT
                         ward.ris_no,
@@ -269,7 +285,10 @@ class LocationStockBalanceController extends Controller
                     LEFT JOIN (
                         SELECT ward_stocks_id, SUM(quantity) AS charge_quantity
                         FROM csrw_patient_charge_logs
-                        WHERE CAST(pcchrgdte AS DATE) BETWEEN '$default_beg_bal_date' AND '$dateTime'
+                        -- OLD
+                        -- WHERE CAST(pcchrgdte AS DATE) BETWEEN '$from' AND '$to'
+                        -- NEW
+                        WHERE pcchrgdte BETWEEN '$from' AND '$to'
                         GROUP BY ward_stocks_id
                     ) csrw_patient_charge_logs ON ward.id = csrw_patient_charge_logs.ward_stocks_id
                     LEFT JOIN csrw_location_stock_balance ON csrw_location_stock_balance.ward_stock_id = ward.id
@@ -280,16 +299,17 @@ class LocationStockBalanceController extends Controller
                         GROUP BY ward_stock_id
                     ) csrw_ward_transfer_stock ON ward.id = csrw_ward_transfer_stock.ward_stock_id
                     WHERE
-                        ward.location LIKE ?
+                        ward.location LIKE '$authCode'
                         AND ward.is_consumable IS NULL
                         AND (
-                            (CAST(csrw_location_stock_balance.beg_bal_created_at AS DATE) BETWEEN '$default_beg_bal_date' AND '$dateTime')
+                            (csrw_location_stock_balance.beg_bal_created_at BETWEEN '$from' AND '$to')
                             OR csrw_location_stock_balance.beg_bal_created_at IS NULL
                         )
                         AND (
-                            (CAST(csrw_location_stock_balance.end_bal_created_at AS DATE) BETWEEN '$default_beg_bal_date' AND '$dateTime')
+                            (csrw_location_stock_balance.end_bal_created_at BETWEEN '$from' AND '$to')
                             OR csrw_location_stock_balance.end_bal_created_at IS NULL
-                        AND ward.is_consumable IS NULL)
+                        )
+                        AND ward.is_consumable IS NULL
                         AND (
                             ward.[from] = 'CSR' OR  ward.[from] = 'WARD'
                         )
@@ -301,8 +321,7 @@ class LocationStockBalanceController extends Controller
                         ward.ris_no,
                         csrw_patient_charge_logs.charge_quantity
                     ORDER BY
-                        hclass2.cl2desc ASC;",
-                    [$request->location]
+                        hclass2.cl2desc ASC;"
                 );
 
                 $result = $this->processReport($ward_report);
@@ -314,18 +333,19 @@ class LocationStockBalanceController extends Controller
                         'unit' => $row->unit,
                         'unit_cost' => $row->unit_cost,
                         'beginning_balance' => $row->beginning_balance,
-                        'from_csr' => $row->from_csr,
-                        'from_ward' => $row->from_ward,
-                        'total_beg_bal' => $row->total_beg_bal,
-                        'surgery' => $row->surgery,
-                        'obgyne' => $row->obgyne,
-                        'ortho' => $row->ortho,
-                        'pedia' => $row->pedia,
-                        'ent' => $row->ent,
-                        'total_consumption' => $row->total_consumption,
-                        'total_cons_estimated_cost' => $row->total_cons_estimated_cost,
-                        'transferred_qty' => $row->transferred_qty,
-                        'ending_balance' => $row->ending_balance,
+                        'from_csr' => $row->from_csr == null ? 0 : $row->from_csr,
+                        'from_ward' => $row->from_ward == null ? 0 : $row->from_ward,
+                        'total_beg_bal' => $row->total_beg_bal == null ? 0 : $row->total_beg_bal,
+                        'surgery' => $row->surgery == null ? 0 : $row->surgery,
+                        'obgyne' => $row->obgyne == null ? 0 : $row->obgyne,
+                        'ortho' => $row->ortho == null ? 0 : $row->ortho,
+                        'pedia' => $row->pedia == null ? 0 : $row->pedia,
+                        'optha' => $row->optha == null ? 0 : $row->optha,
+                        'ent' => $row->ent == null ? 0 : $row->ent,
+                        'total_consumption' => $row->total_consumption == null ? 0 : $row->total_consumption,
+                        'total_cons_estimated_cost' => $row->total_cons_estimated_cost == null ? 0 : $row->total_cons_estimated_cost,
+                        'transferred_qty' => $row->transferred_qty == null ? 0 : $row->transferred_qty,
+                        'ending_balance' => $row->ending_balance == null ? 0 : $row->ending_balance,
                         'wardcode' => $row->wardcode,
                     ]);
                 }
@@ -341,25 +361,25 @@ class LocationStockBalanceController extends Controller
         //region get auth ward code
         $authWardcode = DB::select(
             "SELECT TOP 1
-                        l.wardcode
-                    FROM
-                        user_acc u
-                    INNER JOIN
-                        csrw_login_history l ON u.employeeid = l.employeeid
-                    WHERE
-                        l.employeeid = ?
-                    ORDER BY
-                        l.created_at DESC;
-                    ",
+                l.wardcode
+                FROM
+                    user_acc u
+                INNER JOIN
+                    csrw_login_history l ON u.employeeid = l.employeeid
+                WHERE
+                    l.employeeid = ?
+                ORDER BY
+                    l.created_at DESC;
+                ",
             [Auth::user()->employeeid]
         );
         // dd($authWardcode);
         $authCode = $authWardcode[0]->wardcode;
         //endregion
 
-
         $combinedReports = [];
         $loopCount  = 0;
+
         foreach ($ward_report as $e) {
             $loopCount++;
             // Create a unique key based on cl2comb and unit_cost
@@ -369,9 +389,7 @@ class LocationStockBalanceController extends Controller
             if (isset($combinedReports[$key])) {
                 $combinedReports[$key]->beginning_balance += $e->beginning_balance;
                 $combinedReports[$key]->from_csr += $e->from_csr;
-                // $combinedReports[$key]->from_csr += $e->from_csr + $e->total_consumption;
                 $combinedReports[$key]->from_ward += $e->from_ward;
-                // total stocks
                 $combinedReports[$key]->total_beg_bal += $e->from_csr + $e->from_ward;
                 $combinedReports[$key]->surgery += $e->surgery;
                 $combinedReports[$key]->obgyne += $e->obgyne;
@@ -391,7 +409,6 @@ class LocationStockBalanceController extends Controller
                     'unit' => $e->uomdesc,
                     'unit_cost' => $e->unit_cost,
                     'beginning_balance' => $e->beginning_balance,
-                    // 'from_csr' => $e->from_csr + $e->total_consumption,
                     'from_csr' => $e->from_csr,
                     'from_ward' => $e->from_ward,
                     'total_beg_bal' => $e->from_csr + $e->from_ward,

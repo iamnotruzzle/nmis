@@ -24,6 +24,7 @@ class WardStockBalanceSnapshot extends Model
         'obgyne',
         'ortho',
         'pedia',
+        'optha',
         'ent',
         'total_consumption',
         'total_cons_estimated_cost',

@@ -299,7 +299,7 @@ export default {
   },
   methods: {
     storeStockBalDatesInContainer() {
-      this.balanceContainer = []; // Clear the list to avoid duplicates
+      this.stockBalDatesList = []; // Clear the list to avoid duplicates
 
       this.stockBalDates.forEach((e) => {
         this.stockBalDatesList.push({
@@ -334,7 +334,8 @@ export default {
         preserveScroll: true,
         onFinish: (visit) => {
           //   this.totalRecords = this.users.total;
-          this.balanceContainer = [];
+          //   this.balanceContainer = [];
+          this.storeStockBalDatesInContainer();
           this.storeStockBalanceInContainer();
           this.loading = false;
         },
