@@ -30,14 +30,14 @@
                 icon="pi pi-save"
                 label="Beginning balance"
                 class="mr-2"
-                @click="generateBegBalance"
+                @click="openConfirmBeginningDialog()"
                 :disabled="canBeginBalance !== true"
               />
               <Button
                 severity="danger"
                 icon="pi pi-save"
                 label="Ending balance"
-                @click="generateEndBalance"
+                @click="openConfirmEndingDialog()"
                 :disabled="canBeginBalance !== false"
               />
             </div>
@@ -125,55 +125,91 @@
             <span class="text-error text-bold"> {{ tzone(data.end_bal_created_at) }}</span>
           </template>
         </Column>
-        <!-- <Column
-          header="ACTION"
-          style="text-align: center; width: 5%"
-        >
-          <template #body="slotProps">
-            <div class="flex flex-row justify-content-center">
-              <Button
-                icon="pi pi-trash"
-                rounded
-                text
-                severity="danger"
-                @click="confirmDeleteItem(slotProps.data)"
-              />
-            </div>
-          </template>
-        </Column> -->
       </DataTable>
 
+      <!-- beg bal -->
       <Dialog
-        v-model:visible="deleteItemDialog"
-        :style="{ width: '450px' }"
-        header="Confirm"
+        v-model:visible="confirmBeginningDialog"
         :modal="true"
-        dismissableMask
+        :closeOnEscape="false"
+        class="p-fluid w-4"
+        persist
       >
-        <div class="flex align-items-center justify-content-center">
-          <i
-            class="pi pi-exclamation-triangle mr-3"
-            style="font-size: 2rem"
-          />
-          <span v-if="form"
-            >Are you sure you want to delete <b>{{ form.cl2desc }} </b> ?</span
-          >
+        <template #header>
+          <div class="text-green-500 uppercase text-xl font-bold">Declare beginning balance</div>
+        </template>
+
+        <div class="text-xl text-justify">
+          <p>
+            <span class="text-error uppercase"> Warning:</span> This process will take some time as it records your
+            current stock levels. To prevent discrepancies, please pause all ongoing transactions, including patient
+            charges, stock additions, transferring of stock, and stock requests, until the process is complete.
+          </p>
         </div>
+
         <template #footer>
           <Button
-            label="No"
+            :label="!form.processing ? 'CANCEL' : 'CANCEL'"
             icon="pi pi-times"
-            class="p-button-text"
-            @click="deleteItemDialog = false"
-          />
-          <Button
-            label="Yes"
-            icon="pi pi-check"
-            severity="danger"
-            text
             :disabled="form.processing"
-            @click="deleteItem"
+            severity="danger"
+            @click="cancel"
           />
+
+          <Button
+            :disabled="form.processing || countdown > 0"
+            type="submit"
+            @click="generateBegBalance()"
+          >
+            <i
+              :class="form.processing ? 'pi pi-spin pi-spinner' : 'mx-1 pi pi-check'"
+              style="font-size: 1rem"
+            ></i>
+            {{ countdown > 0 ? `YES, I'M SURE (${countdown})` : "YES, I'M SURE" }}
+          </Button>
+        </template>
+      </Dialog>
+
+      <!-- end bal -->
+      <Dialog
+        v-model:visible="confirmEndDIalog"
+        :modal="true"
+        :closeOnEscape="false"
+        class="p-fluid w-4"
+        persist
+      >
+        <template #header>
+          <div class="text-error uppercase text-xl font-bold">Declare ending balance</div>
+        </template>
+
+        <div class="text-xl text-justify">
+          <p>
+            <span class="text-error uppercase"> Warning:</span> This process will take some time as it records your
+            current stock levels. To prevent discrepancies, please pause all ongoing transactions, including patient
+            charges, stock additions, transferring of stock, and stock requests, until the process is complete.
+          </p>
+        </div>
+
+        <template #footer>
+          <Button
+            :label="!form.processing ? 'CANCEL' : 'CANCEL'"
+            icon="pi pi-times"
+            :disabled="form.processing"
+            severity="danger"
+            @click="cancel"
+          />
+
+          <Button
+            :disabled="form.processing || countdown > 0"
+            type="submit"
+            @click="generateEndBalance()"
+          >
+            <i
+              :class="form.processing ? 'pi pi-spin pi-spinner' : 'mx-1 pi pi-check'"
+              style="font-size: 1rem"
+            ></i>
+            {{ countdown > 0 ? `YES, I'M SURE (${countdown})` : "YES, I'M SURE" }}
+          </Button>
         </template>
       </Dialog>
     </div>
@@ -240,8 +276,11 @@ export default {
       // end paginator
       itemId: null,
       isUpdate: false,
+      countdown: 0,
       cl2desc: '',
       deleteItemDialog: false,
+      confirmBeginningDialog: false,
+      confirmEndDIalog: false,
       selectedDate: '',
       stockBalDatesList: [],
       search: '',
@@ -298,6 +337,24 @@ export default {
     },
   },
   methods: {
+    openConfirmBeginningDialog() {
+      //   console.log('openConfirmConsignmentDialog');
+      this.confirmBeginningDialog = true;
+    },
+    openConfirmEndingDialog() {
+      //   console.log('openConfirmConsignmentDialog');
+      this.confirmEndDIalog = true;
+    },
+    storeStockBalDatesInContainer() {
+      this.stockBalDatesList = []; // Clear the list to avoid duplicates
+
+      this.stockBalDates.forEach((e) => {
+        this.stockBalDatesList.push({
+          name: `[ ${e.beg_bal_date} ] - [ ${e.end_bal_date === null ? 'ONGOING' : e.end_bal_date} ]`,
+          code: `[ ${e.beg_bal_date} ] - [ ${e.end_bal_date || 'ONGOING'} ]`, // Use 'ONGOING' for null end dates
+        });
+      });
+    },
     storeStockBalDatesInContainer() {
       this.stockBalDatesList = []; // Clear the list to avoid duplicates
 
@@ -332,7 +389,7 @@ export default {
       this.$inertia.get('stockbal', this.params, {
         preserveState: true,
         preserveScroll: true,
-        onFinish: (visit) => {
+        onSuccess: (visit) => {
           //   this.totalRecords = this.users.total;
           //   this.balanceContainer = [];
           this.storeStockBalDatesInContainer();
@@ -476,6 +533,8 @@ export default {
     cancel() {
       this.itemId = null;
       this.isUpdate = false;
+      this.confirmBeginningDialog = false;
+      this.confirmEndDIalog = false;
       this.form.reset();
       this.form.clearErrors();
       this.form.location = this.$page.props.auth.user.location.location_name.wardcode;
@@ -529,6 +588,38 @@ export default {
     },
   },
   watch: {
+    confirmBeginningDialog(newVal) {
+      if (newVal) {
+        this.countdown = 10; // Reset countdown when dialog is opened
+        this.timer = setInterval(() => {
+          if (this.countdown > 0) {
+            this.countdown--;
+          } else {
+            clearInterval(this.timer);
+            this.timer = null;
+          }
+        }, 1000);
+      } else {
+        clearInterval(this.timer); // Stop countdown if dialog closes early
+        this.timer = null;
+      }
+    },
+    confirmEndDIalog(newVal) {
+      if (newVal) {
+        this.countdown = 10; // Reset countdown when dialog is opened
+        this.timer = setInterval(() => {
+          if (this.countdown > 0) {
+            this.countdown--;
+          } else {
+            clearInterval(this.timer);
+            this.timer = null;
+          }
+        }, 1000);
+      } else {
+        clearInterval(this.timer); // Stop countdown if dialog closes early
+        this.timer = null;
+      }
+    },
     search: function (val, oldVal) {
       this.params.search = val;
       this.updateData();
