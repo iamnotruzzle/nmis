@@ -312,10 +312,12 @@ export default {
     this.storeStockBalDatesInContainer();
     this.storeStockBalanceInContainer();
 
-    this.loading = false;
+    // this.loading = false;
 
     this.form.location = this.$page.props.auth.user.location.location_name.wardcode;
     this.form.entry_by = this.$page.props.auth.user.userDetail.employeeid;
+
+    // console.log(this.form.location);
 
     // declare default filter
     // this.selectedDate = this.stockBalDatesList[0];
@@ -355,16 +357,6 @@ export default {
         });
       });
     },
-    storeStockBalDatesInContainer() {
-      this.stockBalDatesList = []; // Clear the list to avoid duplicates
-
-      this.stockBalDates.forEach((e) => {
-        this.stockBalDatesList.push({
-          name: `[ ${e.beg_bal_date} ] - [ ${e.end_bal_date === null ? 'ONGOING' : e.end_bal_date} ]`,
-          code: `[ ${e.beg_bal_date} ] - [ ${e.end_bal_date || 'ONGOING'} ]`, // Use 'ONGOING' for null end dates
-        });
-      });
-    },
     storeStockBalanceInContainer() {
       this.balanceContainer = [];
 
@@ -383,11 +375,11 @@ export default {
       //   console.log('container', this.reportsContainer);
     },
     updateData() {
-      this.balanceContainer = [];
-      this.loading = true;
+      //   this.balanceContainer = [];
+      //   this.loading = true;
 
       this.$inertia.get('stockbal', this.params, {
-        preserveState: true,
+        // preserveState: true,
         preserveScroll: true,
         onSuccess: (visit) => {
           //   this.totalRecords = this.users.total;
@@ -406,10 +398,10 @@ export default {
         return moment.tz(date, 'Asia/Manila').format('L');
       }
     },
-    onPage(event) {
-      this.params.page = event.page + 1;
-      this.updateData();
-    },
+    // onPage(event) {
+    //   this.params.page = event.page + 1;
+    //   this.updateData();
+    // },
     generateBegBalance() {
       this.form.beg_bal = true;
 
@@ -590,7 +582,7 @@ export default {
   watch: {
     confirmBeginningDialog(newVal) {
       if (newVal) {
-        this.countdown = 10; // Reset countdown when dialog is opened
+        this.countdown = 0; // Reset countdown when dialog is opened
         this.timer = setInterval(() => {
           if (this.countdown > 0) {
             this.countdown--;
@@ -606,7 +598,7 @@ export default {
     },
     confirmEndDIalog(newVal) {
       if (newVal) {
-        this.countdown = 10; // Reset countdown when dialog is opened
+        this.countdown = 0; // Reset countdown when dialog is opened
         this.timer = setInterval(() => {
           if (this.countdown > 0) {
             this.countdown--;

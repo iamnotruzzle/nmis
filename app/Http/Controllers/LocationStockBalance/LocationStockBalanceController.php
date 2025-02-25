@@ -160,9 +160,11 @@ class LocationStockBalanceController extends Controller
             "SELECT ward.id, ward.location, ward.cl2comb, ward.quantity, ward.ris_no, price.id as price_id
                 FROM csrw_wards_stocks as ward
                 JOIN csrw_item_prices as price ON price.ris_no = ward.ris_no
-                WHERE ward.location = '$request->location'
-                AND ward.[from] = 'CSR' OR ward.[from] = 'WARD'"
+                WHERE ward.location = ?
+                AND (ward.[from] = 'CSR' OR ward.[from] = 'WARD');",
+            [$request->location]
         );
+        // dd($currentStocks);
 
         $itemCount = DB::select(
             "SELECT COUNT(*) as count FROM csrw_wards_stocks WHERE location = ?",

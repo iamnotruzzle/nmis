@@ -6,34 +6,37 @@
       class="card"
       style="width: 100%"
     >
-      <div class="mb-5 flex justify-content-between">
-        <span class="font-bold text-primary text-4xl">REPORTS</span>
-        <div class="flex flex-row align-items-center">
-          <div class="flex flex-row">
-            <Dropdown
-              v-model="selectedDate"
-              :options="stockBalDatesList"
-              optionLabel="name"
-              optionValue="code"
-              placeholder="Select a date"
-              checkmark
-              :highlightOnSelect="true"
-              class="w-full mr-2"
+      <div class="mb-5 w-full flex flex-row justify-content-between flex-wrap">
+        <div>
+          <span class="font-bold text-primary text-4xl">REPORTS</span>
+        </div>
+
+        <div class="flex w-auto">
+          <Dropdown
+            v-model="selectedDate"
+            :options="stockBalDatesList"
+            optionLabel="name"
+            optionValue="code"
+            placeholder="Select a date"
+            checkmark
+            :highlightOnSelect="true"
+            class="w-full"
+          />
+
+          <div>
+            <Button
+              v-if="selectedDate == null || selectedDate == ''"
+              label="Download"
+              icon="pi pi-download"
+              disabled="true"
+            />
+            <Button
+              v-else
+              label="Download"
+              icon="pi pi-download"
+              @click="fnExcelReport"
             />
           </div>
-
-          <Button
-            v-if="selectedDate == null || selectedDate == ''"
-            label="Download"
-            icon="pi pi-download"
-            disabled="true"
-          />
-          <Button
-            v-else
-            label="Download"
-            icon="pi pi-download"
-            @click="fnExcelReport"
-          />
         </div>
       </div>
 
