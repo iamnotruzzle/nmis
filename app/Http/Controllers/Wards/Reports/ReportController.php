@@ -92,17 +92,17 @@ class ReportController extends Controller
                     SUM(CASE WHEN ward.[from] = 'CSR' THEN csrw_location_stock_balance.ending_balance + COALESCE(csrw_patient_charge_logs.charge_quantity, 0) ELSE 0 END) AS 'from_csr',
                     SUM(CASE WHEN ward.[from] = 'WARD' THEN csrw_location_stock_balance.ending_balance + COALESCE(csrw_patient_charge_logs.charge_quantity, 0) ELSE 0 END) AS 'from_ward',
                     (SELECT SUM(CASE WHEN tscode = 'SURG' THEN quantity ELSE 0 END)
-                    FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'surgery',
+                    FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb AND (cl.created_at BETWEEN '$default_from' AND '$default_to')) as 'surgery',
                     (SELECT SUM(CASE WHEN tscode = 'GYNE' THEN quantity ELSE 0 END)
-                    FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'obgyne',
+                    FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb AND (cl.created_at BETWEEN '$default_from' AND '$default_to')) as 'obgyne',
                     (SELECT SUM(CASE WHEN tscode = 'ORTHO' THEN quantity ELSE 0 END)
-                    FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'ortho',
+                    FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb AND (cl.created_at BETWEEN '$default_from' AND '$default_to')) as 'ortho',
                     (SELECT SUM(CASE WHEN tscode = 'PEDIA' THEN quantity ELSE 0 END)
-                    FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'pedia',
+                    FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb AND (cl.created_at BETWEEN '$default_from' AND '$default_to')) as 'pedia',
                     (SELECT SUM(CASE WHEN tscode = 'OPHTH' THEN quantity ELSE 0 END)
-                    FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'optha',
+                    FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb AND (cl.created_at BETWEEN '$default_from' AND '$default_to')) as 'optha',
                     (SELECT SUM(CASE WHEN tscode = 'ENT' THEN quantity ELSE 0 END)
-                    FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'ent',
+                    FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb AND (cl.created_at BETWEEN '$default_from' AND '$default_to')) as 'ent',
                     csrw_patient_charge_logs.charge_quantity as total_consumption,
                     SUM(csrw_ward_transfer_stock.transferred_qty) as transferred_qty
                 FROM
@@ -163,17 +163,17 @@ class ReportController extends Controller
                     SUM(CASE WHEN ward.[from] = 'CSR' THEN csrw_location_stock_balance.ending_balance + COALESCE(csrw_patient_charge_logs.charge_quantity, 0) ELSE 0 END) AS 'from_csr',
                     SUM(CASE WHEN ward.[from] = 'WARD' THEN csrw_location_stock_balance.ending_balance + COALESCE(csrw_patient_charge_logs.charge_quantity, 0) ELSE 0 END) AS 'from_ward',
                     (SELECT SUM(CASE WHEN tscode = 'SURG' THEN quantity ELSE 0 END)
-                    FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'surgery',
+                    FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb AND (cl.created_at BETWEEN '$from' AND '$to')) as 'surgery',
                     (SELECT SUM(CASE WHEN tscode = 'GYNE' THEN quantity ELSE 0 END)
-                    FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'obgyne',
+                    FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb AND (cl.created_at BETWEEN '$from' AND '$to')) as 'obgyne',
                     (SELECT SUM(CASE WHEN tscode = 'ORTHO' THEN quantity ELSE 0 END)
-                    FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'ortho',
+                    FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb AND (cl.created_at BETWEEN '$from' AND '$to')) as 'ortho',
                     (SELECT SUM(CASE WHEN tscode = 'PEDIA' THEN quantity ELSE 0 END)
-                    FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'pedia',
+                    FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb AND (cl.created_at BETWEEN '$from' AND '$to')) as 'pedia',
                     (SELECT SUM(CASE WHEN tscode = 'OPHTH' THEN quantity ELSE 0 END)
-                    FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'optha',
+                    FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb AND (cl.created_at BETWEEN '$from' AND '$to')) as 'optha',
                     (SELECT SUM(CASE WHEN tscode = 'ENT' THEN quantity ELSE 0 END)
-                    FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'ent',
+                    FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb AND (cl.created_at BETWEEN '$from' AND '$to')) as 'ent',
                     csrw_patient_charge_logs.charge_quantity as total_consumption,
                     SUM(csrw_ward_transfer_stock.transferred_qty) as transferred_qty
                 FROM
@@ -236,12 +236,12 @@ class ReportController extends Controller
                 $combinedReports[$key]->from_csr += $e->from_csr;
                 $combinedReports[$key]->from_ward += $e->from_ward;
                 $combinedReports[$key]->total_beg_bal += $e->from_csr + $e->from_ward;
-                $combinedReports[$key]->surgery += $e->surgery;
-                $combinedReports[$key]->obgyne += $e->obgyne;
-                $combinedReports[$key]->ortho += $e->ortho;
-                $combinedReports[$key]->pedia += $e->pedia;
-                $combinedReports[$key]->optha += $e->optha;
-                $combinedReports[$key]->ent += $e->ent;
+                // $combinedReports[$key]->surgery += $e->surgery;
+                // $combinedReports[$key]->obgyne += $e->obgyne;
+                // $combinedReports[$key]->ortho += $e->ortho;
+                // $combinedReports[$key]->pedia += $e->pedia;
+                // $combinedReports[$key]->optha += $e->optha;
+                // $combinedReports[$key]->ent += $e->ent;
                 $combinedReports[$key]->total_consumption += $e->total_consumption;
                 $combinedReports[$key]->total_cons_estimated_cost += $e->total_consumption * $e->unit_cost;
                 $combinedReports[$key]->transferred_qty += $e->transferred_qty;

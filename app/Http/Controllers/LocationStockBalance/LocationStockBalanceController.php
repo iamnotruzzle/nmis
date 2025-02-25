@@ -156,89 +156,91 @@ class LocationStockBalanceController extends Controller
 
     public function store(Request $request)
     {
+        $dateTime = Carbon::now();
+
         $currentStocks = DB::select(
             "SELECT ward.id, ward.location, ward.cl2comb, ward.quantity, ward.ris_no, price.id as price_id
                 FROM csrw_wards_stocks as ward
                 JOIN csrw_item_prices as price ON price.ris_no = ward.ris_no
                 WHERE ward.location = ?
+                AND ward.quantity > 0
                 AND (ward.[from] = 'CSR' OR ward.[from] = 'WARD');",
             [$request->location]
         );
         // dd($currentStocks);
 
-        $itemCount = DB::select(
-            "SELECT COUNT(*) as count FROM csrw_wards_stocks WHERE location = ?",
-            [$request->location]
-        );
+        // $itemCount = DB::select(
+        //     "SELECT COUNT(*) as count FROM csrw_wards_stocks WHERE location = ?",
+        //     [$request->location]
+        // );
 
-        if ($itemCount[0]->count != 0) {
-            $dateTime = Carbon::now();
-            if ($request->beg_bal == true) {
-                // beginning balance
-                foreach ($currentStocks as $stock) {
-                    LocationStockBalance::create([
-                        'location' => $request->location,
-                        'cl2comb' => $stock->cl2comb,
-                        'beginning_balance' => $stock->quantity,
-                        'ris_no' => $stock->ris_no,
-                        'price_id' => $stock->price_id,
-                        'entry_by' => $request->entry_by,
-                        'ward_stock_id' => $stock->id,
-                        'beg_bal_created_at' => $dateTime,
-                    ]);
-                }
-
-                LocationStockBalanceDateLogs::create([
-                    'wardcode' => $request->location,
+        // if ($itemCount[0]->count != 0) {
+        if ($request->beg_bal == true) {
+            // beginning balance
+            foreach ($currentStocks as $stock) {
+                LocationStockBalance::create([
+                    'location' => $request->location,
+                    'cl2comb' => $stock->cl2comb,
+                    'beginning_balance' => $stock->quantity,
+                    'ris_no' => $stock->ris_no,
+                    'price_id' => $stock->price_id,
+                    'entry_by' => $request->entry_by,
+                    'ward_stock_id' => $stock->id,
                     'beg_bal_created_at' => $dateTime,
                 ]);
-            } else {
-                // dd('ending');
+            }
 
-                $dateTime = Carbon::now();
-                $from = null;
-                $to = null;
+            LocationStockBalanceDateLogs::create([
+                'wardcode' => $request->location,
+                'beg_bal_created_at' => $dateTime,
+            ]);
+        } else {
+            // dd('ending');
 
-                foreach ($currentStocks as $stock) {
-                    LocationStockBalance::create([
-                        'location' => $request->location,
-                        'cl2comb' => $stock->cl2comb,
-                        'ending_balance' => $stock->quantity,
-                        'ris_no' => $stock->ris_no,
-                        'price_id' => $stock->price_id,
-                        'entry_by' => $request->entry_by,
-                        'ward_stock_id' => $stock->id,
-                        'end_bal_created_at' => $dateTime,
-                    ]);
-                }
+            // $dateTime = Carbon::now();
+            $from = null;
+            $to = null;
 
-                // Find the last row where wardcode matches and end_bal_created_at is null
-                $lastRecord = LocationStockBalanceDateLogs::where('wardcode', $request->location)
-                    ->whereNull('end_bal_created_at')
-                    ->latest('id') // or specify another column if 'id' is not the latest indicator
-                    ->first();
+            foreach ($currentStocks as $stock) {
+                LocationStockBalance::create([
+                    'location' => $request->location,
+                    'cl2comb' => $stock->cl2comb,
+                    'ending_balance' => $stock->quantity,
+                    'ris_no' => $stock->ris_no,
+                    'price_id' => $stock->price_id,
+                    'entry_by' => $request->entry_by,
+                    'ward_stock_id' => $stock->id,
+                    'end_bal_created_at' => $dateTime,
+                ]);
+            }
 
-                if ($lastRecord) {
-                    // Update the end_bal_created_at column
-                    $lastRecord->update([
-                        'end_bal_created_at' => $dateTime, // or specify a custom date if needed
-                    ]);
-                }
+            // Find the last row where wardcode matches and end_bal_created_at is null
+            $lastRecord = LocationStockBalanceDateLogs::where('wardcode', $request->location)
+                ->whereNull('end_bal_created_at')
+                ->latest('id') // or specify another column if 'id' is not the latest indicator
+                ->first();
+
+            if ($lastRecord) {
+                // Update the end_bal_created_at column
+                $lastRecord->update([
+                    'end_bal_created_at' => $dateTime, // or specify a custom date if needed
+                ]);
+            }
 
 
-                $stockBalDates = DB::select(
-                    "SELECT beg_bal_created_at AS beg_bal_date, end_bal_created_at AS end_bal_date
+            $stockBalDates = DB::select(
+                "SELECT beg_bal_created_at AS beg_bal_date, end_bal_created_at AS end_bal_date
                     FROM csrw_stock_bal_date_logs
                     WHERE wardcode = ?
                     oRDER BY created_at DESC;",
-                    [$request->location]
-                );
-                // dd($stockBalDates[0]);
-                $from = $stockBalDates[0]->beg_bal_date;
-                $to = $stockBalDates[0]->end_bal_date;
+                [$request->location]
+            );
+            // dd($stockBalDates[0]);
+            $from = $stockBalDates[0]->beg_bal_date;
+            $to = $stockBalDates[0]->end_bal_date;
 
-                $authWardcode = DB::select(
-                    "SELECT TOP 1
+            $authWardcode = DB::select(
+                "SELECT TOP 1
                     l.wardcode
                     FROM
                         user_acc u
@@ -249,12 +251,12 @@ class LocationStockBalanceController extends Controller
                     ORDER BY
                         l.created_at DESC;
                     ",
-                    [Auth::user()->employeeid]
-                );
-                $authCode = $authWardcode[0]->wardcode;
+                [Auth::user()->employeeid]
+            );
+            $authCode = $authWardcode[0]->wardcode;
 
-                $ward_report = DB::select(
-                    "SELECT
+            $ward_report = DB::select(
+                "SELECT
                         ward.ris_no,
                         hclass2.cl2comb,
                         hclass2.cl2desc AS cl2desc,
@@ -266,17 +268,17 @@ class LocationStockBalanceController extends Controller
                         SUM(CASE WHEN ward.[from] = 'CSR' THEN csrw_location_stock_balance.ending_balance + COALESCE(csrw_patient_charge_logs.charge_quantity, 0) ELSE 0 END) AS 'from_csr',
                         SUM(CASE WHEN ward.[from] = 'WARD' THEN csrw_location_stock_balance.ending_balance + COALESCE(csrw_patient_charge_logs.charge_quantity, 0) ELSE 0 END) AS 'from_ward',
                         (SELECT SUM(CASE WHEN tscode = 'SURG' THEN quantity ELSE 0 END)
-                        FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'surgery',
+                        FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb AND (cl.created_at BETWEEN '$from' AND '$to')) as 'surgery',
                         (SELECT SUM(CASE WHEN tscode = 'GYNE' THEN quantity ELSE 0 END)
-                        FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'obgyne',
+                        FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb AND (cl.created_at BETWEEN '$from' AND '$to')) as 'obgyne',
                         (SELECT SUM(CASE WHEN tscode = 'ORTHO' THEN quantity ELSE 0 END)
-                        FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'ortho',
+                        FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb AND (cl.created_at BETWEEN '$from' AND '$to')) as 'ortho',
                         (SELECT SUM(CASE WHEN tscode = 'PEDIA' THEN quantity ELSE 0 END)
-                        FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'pedia',
+                        FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb AND (cl.created_at BETWEEN '$from' AND '$to')) as 'pedia',
                         (SELECT SUM(CASE WHEN tscode = 'OPHTH' THEN quantity ELSE 0 END)
-                        FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'optha',
+                        FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb AND (cl.created_at BETWEEN '$from' AND '$to')) as 'optha',
                         (SELECT SUM(CASE WHEN tscode = 'ENT' THEN quantity ELSE 0 END)
-                        FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb) as 'ent',
+                        FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb AND (cl.created_at BETWEEN '$from' AND '$to')) as 'ent',
                         csrw_patient_charge_logs.charge_quantity as total_consumption,
                         SUM(csrw_ward_transfer_stock.transferred_qty) as transferred_qty
                     FROM
@@ -321,35 +323,35 @@ class LocationStockBalanceController extends Controller
                         csrw_patient_charge_logs.charge_quantity
                     ORDER BY
                         hclass2.cl2desc ASC;"
-                );
+            );
 
-                $result = $this->processReport($ward_report);
+            $result = $this->processReport($ward_report);
 
-                foreach ($result as $row) {
-                    $logs[] = WardStockBalanceSnapshot::create([
-                        'cl2comb' => $row->cl2comb,
-                        'item_description' => $row->item_description,
-                        'unit' => $row->unit,
-                        'unit_cost' => $row->unit_cost,
-                        'beginning_balance' => $row->beginning_balance,
-                        'from_csr' => $row->from_csr == null ? 0 : $row->from_csr,
-                        'from_ward' => $row->from_ward == null ? 0 : $row->from_ward,
-                        'total_beg_bal' => $row->total_beg_bal == null ? 0 : $row->total_beg_bal,
-                        'surgery' => $row->surgery == null ? 0 : $row->surgery,
-                        'obgyne' => $row->obgyne == null ? 0 : $row->obgyne,
-                        'ortho' => $row->ortho == null ? 0 : $row->ortho,
-                        'pedia' => $row->pedia == null ? 0 : $row->pedia,
-                        'optha' => $row->optha == null ? 0 : $row->optha,
-                        'ent' => $row->ent == null ? 0 : $row->ent,
-                        'total_consumption' => $row->total_consumption == null ? 0 : $row->total_consumption,
-                        'total_cons_estimated_cost' => $row->total_cons_estimated_cost == null ? 0 : $row->total_cons_estimated_cost,
-                        'transferred_qty' => $row->transferred_qty == null ? 0 : $row->transferred_qty,
-                        'ending_balance' => $row->ending_balance == null ? 0 : $row->ending_balance,
-                        'wardcode' => $row->wardcode,
-                    ]);
-                }
+            foreach ($result as $row) {
+                $logs[] = WardStockBalanceSnapshot::create([
+                    'cl2comb' => $row->cl2comb,
+                    'item_description' => $row->item_description,
+                    'unit' => $row->unit,
+                    'unit_cost' => $row->unit_cost,
+                    'beginning_balance' => $row->beginning_balance,
+                    'from_csr' => $row->from_csr == null ? 0 : $row->from_csr,
+                    'from_ward' => $row->from_ward == null ? 0 : $row->from_ward,
+                    'total_beg_bal' => $row->total_beg_bal == null ? 0 : $row->total_beg_bal,
+                    'surgery' => $row->surgery == null ? 0 : $row->surgery,
+                    'obgyne' => $row->obgyne == null ? 0 : $row->obgyne,
+                    'ortho' => $row->ortho == null ? 0 : $row->ortho,
+                    'pedia' => $row->pedia == null ? 0 : $row->pedia,
+                    'optha' => $row->optha == null ? 0 : $row->optha,
+                    'ent' => $row->ent == null ? 0 : $row->ent,
+                    'total_consumption' => $row->total_consumption == null ? 0 : $row->total_consumption,
+                    'total_cons_estimated_cost' => $row->total_cons_estimated_cost == null ? 0 : $row->total_cons_estimated_cost,
+                    'transferred_qty' => $row->transferred_qty == null ? 0 : $row->transferred_qty,
+                    'ending_balance' => $row->ending_balance == null ? 0 : $row->ending_balance,
+                    'wardcode' => $row->wardcode,
+                ]);
             }
         }
+        // }
 
         return redirect()->back()->with('success', 'Balance set successfully.');
     }
@@ -390,12 +392,12 @@ class LocationStockBalanceController extends Controller
                 $combinedReports[$key]->from_csr += $e->from_csr;
                 $combinedReports[$key]->from_ward += $e->from_ward;
                 $combinedReports[$key]->total_beg_bal += $e->from_csr + $e->from_ward;
-                $combinedReports[$key]->surgery += $e->surgery;
-                $combinedReports[$key]->obgyne += $e->obgyne;
-                $combinedReports[$key]->ortho += $e->ortho;
-                $combinedReports[$key]->pedia += $e->pedia;
-                $combinedReports[$key]->optha += $e->optha;
-                $combinedReports[$key]->ent += $e->ent;
+                // $combinedReports[$key]->surgery += $e->surgery;
+                // $combinedReports[$key]->obgyne += $e->obgyne;
+                // $combinedReports[$key]->ortho += $e->ortho;
+                // $combinedReports[$key]->pedia += $e->pedia;
+                // $combinedReports[$key]->optha += $e->optha;
+                // $combinedReports[$key]->ent += $e->ent;
                 $combinedReports[$key]->total_consumption += $e->total_consumption;
                 $combinedReports[$key]->total_cons_estimated_cost += $e->total_consumption * $e->unit_cost;
                 $combinedReports[$key]->transferred_qty += $e->transferred_qty;
