@@ -17,6 +17,9 @@ class CreatePatientChargeLogsJobs implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    // jobs
+    public $tries = 5;
+
     public $enccode;
     public $acctno;
     public $ward_stocks_id;
@@ -72,6 +75,37 @@ class CreatePatientChargeLogsJobs implements ShouldQueue
     }
 
     public function handle()
+    {
+        PatientChargeLogs::create([
+            'enccode' => $this->enccode,
+            'acctno' => $this->acctno,
+            'ward_stocks_id' => $this->ward_stocks_id,
+            'itemcode' =>  $this->itemcode,
+            'from' => $this->from,
+            'manufactured_date' =>  $this->manufactured_date == null ? null : Carbon::parse($this->manufactured_date)->format('Y-m-d H:i:s.v'),
+            'delivery_date' =>  $this->delivery_date == null ? null : Carbon::parse($this->delivery_date)->format('Y-m-d H:i:s.v'),
+            'expiration_date' =>  $this->expiration_date == null ? null : Carbon::parse($this->expiration_date)->format('Y-m-d H:i:s.v'),
+            // 'quantity' => $item['qtyToCharge'],
+            'quantity' => $this->quantity,
+            'price_per_piece' => $this->price_per_piece,
+            'price_total' => $this->price_total,
+            'pcchrgdte' => $this->pcchrgdte,
+            'tscode' => $this->tscode,
+            'entry_at' => $this->entry_at,
+            'entry_by' => $this->entry_by,
+            'pcchrgcod' => $this->pcchrgcod, // charge slip no.
+        ]);
+
+        event(new ChargeLogsProcessed([
+            'message' => "Patient charge logs processed."
+        ]));
+
+
+        // // testing purposes
+        // throw new \Exception('Failed!');
+    }
+
+    public function failed(\Throwable $e)
     {
         PatientChargeLogs::create([
             'enccode' => $this->enccode,
