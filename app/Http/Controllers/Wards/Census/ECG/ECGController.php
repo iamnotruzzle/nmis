@@ -57,17 +57,19 @@ class ECGController extends Controller
 
         // $ecg_census_monthly = DB::select(
         //     "SELECT
-        //     htypser.tsdesc AS DEPARTMENT,
-        //     SUM(charge.pchrgqty) AS QUANTITY,
-        //     charge.pchrgup as 'UNIT COST',
-        //     SUM(charge.pcchrgamt) AS 'TOTAL COST'
-        // FROM hpatchrg AS charge
-        // JOIN herlog AS erlog ON erlog.enccode = charge.enccode
-        // JOIN htypser ON htypser.tscode = erlog.tscode
-        // WHERE charge.pcchrgcod LIKE 'ER%'
-        // AND charge.itemcode = 'ECG' -- EROPH = Emergency room fee
-        // AND CAST(charge.pcchrgdte AS DATE) BETWEEN '2023-01-01' AND '2023-12-31'
-        // GROUP BY htypser.tsdesc, charge.pchrgup;"
+        //         DATENAME(MONTH, charge.pcchrgdte) AS MONTH, -- Get full month name
+        //         htypser.tsdesc AS DEPARTMENT,
+        //         SUM(charge.pchrgqty) AS QUANTITY,
+        //         charge.pchrgup AS [UNIT COST],
+        //         SUM(charge.pcchrgamt) AS [TOTAL COST]
+        //     FROM hpatchrg AS charge
+        //     JOIN herlog AS erlog ON erlog.enccode = charge.enccode
+        //     JOIN htypser ON htypser.tscode = erlog.tscode
+        //     WHERE charge.pcchrgcod LIKE 'ER%'
+        //     AND charge.itemcode = 'ECG'
+        //     AND CAST(charge.pcchrgdte AS DATE) BETWEEN '2023-01-01' AND '2023-12-31'
+        //     GROUP BY DATENAME(MONTH, charge.pcchrgdte), MONTH(charge.pcchrgdte), htypser.tsdesc, charge.pchrgup
+        //     ORDER BY DEPARTMENT ASC, MONTH(charge.pcchrgdte) ASC;"
         // );
 
         // $er_fee_monthly = DB::select(
