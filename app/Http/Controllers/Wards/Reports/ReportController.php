@@ -91,6 +91,7 @@ class ReportController extends Controller
                     -- Include items from 'CSR' even if charge_quantity is null
                     SUM(CASE WHEN ward.[from] = 'CSR' THEN csrw_location_stock_balance.ending_balance + COALESCE(csrw_patient_charge_logs.charge_quantity, 0) ELSE 0 END) AS 'from_csr',
                     SUM(CASE WHEN ward.[from] = 'WARD' THEN csrw_location_stock_balance.ending_balance + COALESCE(csrw_patient_charge_logs.charge_quantity, 0) ELSE 0 END) AS 'from_ward',
+                    SUM(CASE WHEN ward.[from] = 'EXISTING_STOCKS' THEN csrw_location_stock_balance.ending_balance + COALESCE(csrw_patient_charge_logs.charge_quantity, 0) ELSE 0 END) AS 'from_existing',
                     (SELECT SUM(CASE WHEN tscode = 'SURG' THEN quantity ELSE 0 END)
                     FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb AND (cl.created_at BETWEEN '$default_from' AND '$default_to')) as 'surgery',
                     (SELECT SUM(CASE WHEN tscode = 'GYNE' THEN quantity ELSE 0 END)
@@ -137,7 +138,7 @@ class ReportController extends Controller
                     AND ward.is_consumable IS NULL
 
                     AND (
-                        ward.[from] = 'CSR' OR  ward.[from] = 'WARD'
+                       ward.[from] = 'CSR' OR  ward.[from] = 'WARD' OR  ward.[from] = 'EXISTING_STOCKS'
                     )
                 GROUP BY
                     hclass2.cl2comb,
@@ -162,6 +163,7 @@ class ReportController extends Controller
                     -- Include items from 'CSR' even if charge_quantity is null
                     SUM(CASE WHEN ward.[from] = 'CSR' THEN csrw_location_stock_balance.ending_balance + COALESCE(csrw_patient_charge_logs.charge_quantity, 0) ELSE 0 END) AS 'from_csr',
                     SUM(CASE WHEN ward.[from] = 'WARD' THEN csrw_location_stock_balance.ending_balance + COALESCE(csrw_patient_charge_logs.charge_quantity, 0) ELSE 0 END) AS 'from_ward',
+                    SUM(CASE WHEN ward.[from] = 'EXISTING_STOCKS' THEN csrw_location_stock_balance.ending_balance + COALESCE(csrw_patient_charge_logs.charge_quantity, 0) ELSE 0 END) AS 'from_existing',
                     (SELECT SUM(CASE WHEN tscode = 'SURG' THEN quantity ELSE 0 END)
                     FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb AND (cl.created_at BETWEEN '$from' AND '$to')) as 'surgery',
                     (SELECT SUM(CASE WHEN tscode = 'GYNE' THEN quantity ELSE 0 END)
@@ -207,7 +209,7 @@ class ReportController extends Controller
                     )
                     AND ward.is_consumable IS NULL
                     AND (
-                        ward.[from] = 'CSR' OR  ward.[from] = 'WARD'
+                      ward.[from] = 'CSR' OR  ward.[from] = 'WARD' OR  ward.[from] = 'EXISTING_STOCKS'
                     )
                 GROUP BY
                     hclass2.cl2comb,
@@ -235,7 +237,7 @@ class ReportController extends Controller
                 $combinedReports[$key]->beginning_balance += $e->beginning_balance;
                 $combinedReports[$key]->from_csr += $e->from_csr;
                 $combinedReports[$key]->from_ward += $e->from_ward;
-                $combinedReports[$key]->total_beg_bal += $e->from_csr + $e->from_ward;
+                $combinedReports[$key]->total_beg_bal += $e->from_csr + $e->from_ward + $e->from_existing;
                 // $combinedReports[$key]->surgery += $e->surgery;
                 // $combinedReports[$key]->obgyne += $e->obgyne;
                 // $combinedReports[$key]->ortho += $e->ortho;
@@ -256,7 +258,7 @@ class ReportController extends Controller
                     'beginning_balance' => $e->beginning_balance,
                     'from_csr' => $e->from_csr,
                     'from_ward' => $e->from_ward,
-                    'total_beg_bal' => $e->from_csr + $e->from_ward,
+                    'total_beg_bal' => $e->from_csr + $e->from_ward + $e->from_existing,
                     'surgery' => $e->surgery,
                     'obgyne' => $e->obgyne,
                     'ortho' => $e->ortho,
