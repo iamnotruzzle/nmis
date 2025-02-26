@@ -47,27 +47,50 @@ class WardPatientsController extends Controller
         if ($locationType[0]->enctype == 'OPD') {
             // dd('OPD');
 
+            // $patients = DB::SELECT(
+            //     "SELECT hopdlog.enccode, hopdlog.hpercode, hopdlog.opddate, hopdlog.licno,
+            //     hpersonal.lastname, hpersonal.firstname, hpersonal.empsuffix,
+            //     hperson.patlast, hperson.patfirst, hperson.patmiddle,
+            //     htypser.tsdesc, hopdlog.opddtedis, hopdlog.opdstat
+
+            //     FROM hopdlog
+            //     WITH (NOLOCK)
+
+            //     INNER JOIN hperson ON hperson.hpercode = hopdlog.hpercode
+            //     INNER JOIN htypser ON htypser.tscode = hopdlog.tscode
+            //     LEFT JOIN hdisposition ON hdisposition.dispcode = hopdlog.opddisp
+            //     LEFT JOIN hprovider ON hprovider.licno = hopdlog.licno
+            //     LEFT JOIN hpersonal ON hpersonal.employeeid = hprovider.employeeid
+
+            //     WHERE hopdlog.tscode = ? /* tscode here */
+            //     AND hopdlog.opddate BETWEEN CAST(GETDATE() AS DATE) AND DATEADD(DAY, 1, CAST(GETDATE() AS DATE)) -- prod
+            //     -- AND hopdlog.opddate BETWEEN CAST('2022-11-30' AS DATE) AND DATEADD(DAY, 1, CAST('2022-12-01' AS DATE)) -- test
+            //     AND hopdlog.opdstat = 'A'
+            //     AND hopdlog.licno IS NOT NULL
+            //     ORDER BY hopdlog.opddate desc",
+            //     [$authWardcode[0]->wardcode]
+            // );
             $patients = DB::SELECT(
                 "SELECT hopdlog.enccode, hopdlog.hpercode, hopdlog.opddate, hopdlog.licno,
-                hpersonal.lastname, hpersonal.firstname, hpersonal.empsuffix,
-                hperson.patlast, hperson.patfirst, hperson.patmiddle,
-                htypser.tsdesc, hopdlog.opddtedis, hopdlog.opdstat
+                    hpersonal.lastname, hpersonal.firstname, hpersonal.empsuffix,
+                    hperson.patlast, hperson.patfirst, hperson.patmiddle,
+                    htypser.tsdesc, hopdlog.opddtedis, hopdlog.opdstat, hdisposition.dispdesc
 
-                FROM hopdlog
-                WITH (NOLOCK)
+                    FROM hopdlog
+                    WITH (NOLOCK)
 
-                INNER JOIN hperson ON hperson.hpercode = hopdlog.hpercode
-                INNER JOIN htypser ON htypser.tscode = hopdlog.tscode
-                LEFT JOIN hdisposition ON hdisposition.dispcode = hopdlog.opddisp
-                LEFT JOIN hprovider ON hprovider.licno = hopdlog.licno
-                LEFT JOIN hpersonal ON hpersonal.employeeid = hprovider.employeeid
+                    INNER JOIN hperson ON hperson.hpercode = hopdlog.hpercode
+                    INNER JOIN htypser ON htypser.tscode = hopdlog.tscode
+                    LEFT JOIN hdisposition ON hdisposition.dispcode = hopdlog.opddisp
+                    LEFT JOIN hprovider ON hprovider.licno = hopdlog.licno
+                    LEFT JOIN hpersonal ON hpersonal.employeeid = hprovider.employeeid
 
-                WHERE hopdlog.tscode = ? /* tscode here */
-                AND hopdlog.opddate BETWEEN CAST(GETDATE() AS DATE) AND DATEADD(DAY, 1, CAST(GETDATE() AS DATE)) -- prod
-                -- AND hopdlog.opddate BETWEEN CAST('2022-11-30' AS DATE) AND DATEADD(DAY, 1, CAST('2022-12-01' AS DATE)) -- test
-                AND hopdlog.opdstat = 'A'
-                AND hopdlog.licno IS NOT NULL
-                ORDER BY hopdlog.opddate desc",
+                    WHERE hopdlog.tscode = ? /* tscode here */
+                    AND hopdlog.opddate BETWEEN CAST(GETDATE() AS DATE) AND DATEADD(DAY, 1, CAST(GETDATE() AS DATE)) -- prod
+                    -- AND hopdlog.opddate BETWEEN CAST('2022-11-30' AS DATE) AND DATEADD(DAY, 1, CAST('2022-12-01' AS DATE)) -- test
+
+                    AND hopdlog.licno IS NOT NULL
+                    ORDER BY hopdlog.opddate desc;",
                 [$authWardcode[0]->wardcode]
             );
 
@@ -75,31 +98,6 @@ class WardPatientsController extends Controller
                 'patients' => $patients
             ]);
         } else if ($locationType[0]->enctype == 'ER') {
-            // $patients = DB::SELECT(
-            //     // this query includes all patients of ER, including patients that was transferred from ER to WARD for admission.
-            //     // 1 day filter only
-            //     "SELECT herlog.enccode, herlog.hpercode, herlog.erdate, herlog.licno,
-            //         hpersonal.lastname, hpersonal.firstname, hpersonal.empsuffix,
-            //         hperson.patlast, hperson.patfirst, hperson.patmiddle,
-            //         htypser.tsdesc, herlog.erdtedis, herlog.erstat, herlog.dispcode, henctr.toecode
-
-            //         FROM herlog
-            //         WITH (NOLOCK)
-
-            //         JOIN henctr ON henctr.enccode = herlog.enccode
-            //         INNER JOIN hperson ON hperson.hpercode = herlog.hpercode
-            //         INNER JOIN htypser ON htypser.tscode = herlog.tscode
-            //         LEFT JOIN hdisposition ON hdisposition.dispcode = herlog.dispcode
-            //         LEFT JOIN hprovider ON hprovider.licno = herlog.licno
-            //         LEFT JOIN hpersonal ON hpersonal.employeeid = hprovider.employeeid
-
-            //         WHERE
-            //             --herlog.erdate BETWEEN CAST('2022-07-01' AS DATE) AND DATEADD(DAY, 1, CAST('2022-07-01' AS DATE)) -- test 1 day
-            //             herlog.erdate BETWEEN CAST(GETDATE() AS DATE) AND DATEADD(DAY, 1, CAST(GETDATE() AS DATE))  -- prod
-
-            //         ORDER BY herlog.erdate desc;"
-            // );
-
             // 2 days filter
             $patients = DB::SELECT(
                 "SELECT
