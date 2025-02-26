@@ -105,6 +105,7 @@ class CreatePatientChargeLogsJobs implements ShouldQueue
         // throw new \Exception('Failed!');
     }
 
+    // if the job failed after trying execute this
     public function failed(\Throwable $e)
     {
         PatientChargeLogs::create([
