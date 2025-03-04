@@ -60,9 +60,9 @@ class HandleInertiaRequests extends Middleware
             // 'suppliers' => function () {
             //     return Supplier::where('suppstat', 'A')->orderBy('suppname', 'ASC')->get(['supplierID', 'suppname', 'suppstat']);
             // },
-            'auth.user.permissions' => function () use ($request) {
-                return ($request->user() ? $request->user()->getAllPermissions()->pluck('name') : null);
-            },
+            // 'auth.user.permissions' => function () use ($request) {
+            //     return ($request->user() ? $request->user()->getAllPermissions()->pluck('name') : null);
+            // },
             'auth.user.roles' => function () use ($request) {
                 return ($request->user() ? $request->user()->roles()->pluck('name') : null);
             },
