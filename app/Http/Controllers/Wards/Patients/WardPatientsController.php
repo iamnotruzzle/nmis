@@ -172,14 +172,14 @@ class WardPatientsController extends Controller
                     WHERE herlog.erdate BETWEEN DATEADD(HOUR, -12, GETDATE()) AND GETDATE();"
             );
 
-            // Extract the latest er date from query result
+            // Extract the latest datemod from query result
             $latestERDateMod = $latestERDateMod[0]->erdate ?? null;
             // dd($latestERDateMod);
 
             // Retrieve the cached latest update timestamp
             $cachedERDateMod = Cache::get($cacheKeyLatestUpdate);
 
-            // If the latest er date has changed, fetch patient data and update the cache
+            // If the latest datemod has changed, fetch patient data and update the cache
             if (!$cachedERDateMod || $latestERDateMod !== $cachedERDateMod) {
                 // 2 days filter
                 $fetchedPatients = DB::SELECT(
@@ -221,12 +221,12 @@ class WardPatientsController extends Controller
                     ORDER BY herlog.erdate DESC;"
                 );
 
-                // Update cache with new patient data and latest admission date
+                // Update cache with new patient data and latest dateMod date
                 Cache::forever($cacheKeyLatestUpdate, $latestERDateMod);
                 Cache::forever($cacheKeyPatients, $fetchedPatients);
                 $cachedPatients = $fetchedPatients;
             } else {
-                // Retrieve patient data from cache if admission date has not changed
+                // Retrieve patient data from cache if dateMod date has not changed
                 $cachedPatients = Cache::get($cacheKeyPatients);
             }
 
