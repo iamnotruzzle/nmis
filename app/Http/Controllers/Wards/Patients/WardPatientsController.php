@@ -16,62 +16,59 @@ class WardPatientsController extends Controller
 {
     public function index(Request $request)
     {
+        // Retrieve input parameters from the request
         $search = $request->search;
         $hpercode = $request->hpercode;
         $patfirst = $request->patfirst;
         $patlast = $request->patlast;
 
-        // Cache keys
+        // Define cache keys for ward code and location type based on the authenticated user's employee ID
         $cache_authWardCode = 'c_authWardCode_' . Auth::user()->employeeid;
         $cache_locationType = 'c_locationType_' . Auth::user()->employeeid;
 
-        // Retrieve cached values
+        // Attempt to retrieve cached ward code and location type
         $authWardCode_cached = Cache::get($cache_authWardCode);
         $locationType_cached = Cache::get($cache_locationType);
 
+        // If ward code is not found in cache, retrieve it from the database
         if (!$authWardCode_cached) {
-            // Fetch ward code from DB
             $authWardCode_query = DB::select(
-                "SELECT TOP 1 l.wardcode
-                FROM user_acc u
-                INNER JOIN csrw_login_history l ON u.employeeid = l.employeeid
-                WHERE l.employeeid = ?
-                ORDER BY l.created_at DESC;",
+                "SELECT TOP 1 l.wardcode FROM user_acc u
+                    INNER JOIN csrw_login_history l ON u.employeeid = l.employeeid
+                    WHERE l.employeeid = ? ORDER BY l.created_at DESC;",
                 [Auth::user()->employeeid]
             );
 
-            // If ward code exists, fetch location type
+            // If a ward code is found, retrieve its corresponding location type and cache the values
             if (!empty($authWardCode_query)) {
                 $wardCode = $authWardCode_query[0]->wardcode;
+                $locationType_query = DB::select("SELECT enctype FROM hward WHERE wardcode = ?;", [$wardCode]);
+                $enctype = !empty($locationType_query) ? $locationType_query[0]->enctype : null;
 
-                $locationType_query = DB::select(
-                    "SELECT enctype FROM hward WHERE wardcode = ?;",
-                    [$wardCode]
-                );
-
-                // Store results in cache
+                // Store values in cache for future use
                 Cache::forever($cache_authWardCode, $wardCode);
-                Cache::forever($cache_locationType, $locationType_query);
+                Cache::forever($cache_locationType, $enctype);
 
-                // Assign the cached values for later use
+                // Assign retrieved values to variables
                 $authWardCode_cached = $wardCode;
-                $locationType_cached = $locationType_query;
+                $locationType_cached = $enctype;
             }
         }
 
-        // Cache keys for storing patient data and latest update count
+        // Retrieve the location type from cache again in case it was just set
+        $locationType_cached = Cache::get($cache_locationType);
+
+        // Define cache keys for patient data and latest update timestamp
         $cacheKeyPatients = 'c_patients_' . $authWardCode_cached;
         $cacheKeyLatestUpdate = 'latest_update_' . $authWardCode_cached;
 
-        // Retrieve cached patient data
+        // Attempt to retrieve cached patient data
         $cachedPatients = Cache::get($cacheKeyPatients);
 
-        // Check if the location type is a ward (indicated by null enctype)
-        if ($locationType_cached[0]->enctype === null) {
-
-            // Retrieve the latest patient count for the ward
-            $currentPatientCount = DB::select(
-                "SELECT count(*) as count FROM hadmlog
+        // If location type is null, fetch the latest admission date for the ward
+        if ($locationType_cached === null) {
+            $latestAdmDate = DB::select(
+                "SELECT MAX(admdate) as admdate FROM hadmlog
                     RIGHT JOIN hospital.dbo.hpatroom pat_room ON hadmlog.enccode = pat_room.enccode
                     WHERE pat_room.patrmstat = 'A'
                     AND pat_room.wardcode = ?
@@ -79,59 +76,56 @@ class WardPatientsController extends Controller
                 [$authWardCode_cached]
             );
 
-            // Extract the patient count from the query result
-            $currentPatientCount = $currentPatientCount[0]->count;
+            // Extract the latest admission date from query result
+            $latestAdmDate = $latestAdmDate[0]->admdate ?? null;
 
-            // Retrieve cached patient count for comparison
-            $cachedPatientCount = Cache::get($cacheKeyLatestUpdate);
+            // Retrieve the cached latest update timestamp
+            $cachedAdmDate = Cache::get($cacheKeyLatestUpdate);
 
-            // If cache is missing or outdated, update it
-            if (!$cachedPatientCount || (int)$currentPatientCount !== (int)$cachedPatientCount) {
-
-                // Fetch fresh patient data from the database
+            // If the latest admission date has changed, fetch patient data and update the cache
+            if (!$cachedAdmDate || $latestAdmDate !== $cachedAdmDate) {
                 $fetchedPatients = DB::select(
                     "SELECT enctr.enccode, adm.admdate, enctr.hpercode, pt.patfirst, pt.patmiddle, pt.patlast, pt.patsuffix,
-                        (SELECT TOP 1 vsweight FROM hvsothr WHERE othrstat = 'A' AND enccode = adm.enccode ORDER BY othrdte DESC) AS kg,
-                        (SELECT TOP 1 vsheight FROM hvsothr WHERE othrstat = 'A' AND enccode = adm.enccode ORDER BY othrdte DESC) AS cm,
-                        room.rmname, bed.bdname, ward.wardname,
-                        adm.licno,
-                        (SELECT lastname + ', ' + firstname + ' ' + middlename FROM hpersonal WHERE physician_license_licnof.employeeid = hpersonal.employeeid) AS physician_licnof,
-                        (SELECT lastname + ', ' + firstname + ' ' + middlename FROM hpersonal WHERE physician_license_licno2.employeeid = hpersonal.employeeid) AS physician_licno2,
-                        (SELECT lastname + ', ' + firstname + ' ' + middlename FROM hpersonal WHERE physician_license_licno3.employeeid = hpersonal.employeeid) AS physician_licno3,
-                        (SELECT lastname + ', ' + firstname + ' ' + middlename FROM hpersonal WHERE physician_license_licno4.employeeid = hpersonal.employeeid) AS physician_licno4,
-                        ha.billstat AS bill_stat,
-                        (SELECT TOP 1 orcode FROM hdocord WHERE enccode = enctr.enccode ORDER BY dodate DESC) AS is_for_discharge
-                    FROM hospital.dbo.henctr enctr
-                        RIGHT JOIN hospital.dbo.hadmlog adm ON enctr.enccode = adm.enccode
-                        RIGHT JOIN hospital.dbo.hpatroom pat_room ON enctr.enccode = pat_room.enccode
-                        RIGHT JOIN hospital.dbo.hroom room ON pat_room.rmintkey = room.rmintkey
-                        RIGHT JOIN hospital.dbo.hbed bed ON bed.bdintkey = pat_room.bdintkey
-                        RIGHT JOIN hospital.dbo.hward ward ON pat_room.wardcode = ward.wardcode
-                        RIGHT JOIN hospital.dbo.hperson pt ON enctr.hpercode = pt.hpercode
-                        LEFT JOIN hospital.dbo.hprovider physician_license_licnof ON adm.licnof = physician_license_licnof.licno
-                        LEFT JOIN hospital.dbo.hprovider physician_license_licno2 ON adm.licno2 = physician_license_licno2.licno
-                        LEFT JOIN hospital.dbo.hprovider physician_license_licno3 ON adm.licno3 = physician_license_licno3.licno
-                        LEFT JOIN hospital.dbo.hprovider physician_license_licno4 ON adm.licno4 = physician_license_licno4.licno
-                        LEFT JOIN hospital.dbo.hactrack ha ON adm.enccode = ha.enccode
-                    WHERE (enctr.toecode = 'ADM' OR enctr.toecode = 'OPDAD' OR enctr.toecode = 'ERADM')
-                    AND pat_room.wardcode = ?
-                    AND pat_room.patrmstat = 'A'
-                    AND adm.admstat = 'A'
-                    ORDER BY pt.patlast ASC;",
+                            (SELECT TOP 1 vsweight FROM hvsothr WHERE othrstat = 'A' AND enccode = adm.enccode ORDER BY othrdte DESC) AS kg,
+                            (SELECT TOP 1 vsheight FROM hvsothr WHERE othrstat = 'A' AND enccode = adm.enccode ORDER BY othrdte DESC) AS cm,
+                            room.rmname, bed.bdname, ward.wardname,
+                            adm.licno,
+                            (SELECT lastname + ', ' + firstname + ' ' + middlename FROM hpersonal WHERE physician_license_licnof.employeeid = hpersonal.employeeid) AS physician_licnof,
+                            (SELECT lastname + ', ' + firstname + ' ' + middlename FROM hpersonal WHERE physician_license_licno2.employeeid = hpersonal.employeeid) AS physician_licno2,
+                            (SELECT lastname + ', ' + firstname + ' ' + middlename FROM hpersonal WHERE physician_license_licno3.employeeid = hpersonal.employeeid) AS physician_licno3,
+                            (SELECT lastname + ', ' + firstname + ' ' + middlename FROM hpersonal WHERE physician_license_licno4.employeeid = hpersonal.employeeid) AS physician_licno4,
+                            ha.billstat AS bill_stat,
+                            (SELECT TOP 1 orcode FROM hdocord WHERE enccode = enctr.enccode ORDER BY dodate DESC) AS is_for_discharge
+                        FROM hospital.dbo.henctr enctr
+                            RIGHT JOIN hospital.dbo.hadmlog adm ON enctr.enccode = adm.enccode
+                            RIGHT JOIN hospital.dbo.hpatroom pat_room ON enctr.enccode = pat_room.enccode
+                            RIGHT JOIN hospital.dbo.hroom room ON pat_room.rmintkey = room.rmintkey
+                            RIGHT JOIN hospital.dbo.hbed bed ON bed.bdintkey = pat_room.bdintkey
+                            RIGHT JOIN hospital.dbo.hward ward ON pat_room.wardcode = ward.wardcode
+                            RIGHT JOIN hospital.dbo.hperson pt ON enctr.hpercode = pt.hpercode
+                            LEFT JOIN hospital.dbo.hprovider physician_license_licnof ON adm.licnof = physician_license_licnof.licno
+                            LEFT JOIN hospital.dbo.hprovider physician_license_licno2 ON adm.licno2 = physician_license_licno2.licno
+                            LEFT JOIN hospital.dbo.hprovider physician_license_licno3 ON adm.licno3 = physician_license_licno3.licno
+                            LEFT JOIN hospital.dbo.hprovider physician_license_licno4 ON adm.licno4 = physician_license_licno4.licno
+                            LEFT JOIN hospital.dbo.hactrack ha ON adm.enccode = ha.enccode
+                        WHERE (enctr.toecode = 'ADM' OR enctr.toecode = 'OPDAD' OR enctr.toecode = 'ERADM')
+                        AND pat_room.wardcode = ?
+                        AND pat_room.patrmstat = 'A'
+                        AND adm.admstat = 'A'
+                        ORDER BY pt.patlast ASC;",
                     [$authWardCode_cached]
                 );
 
-                // Update cache with latest patient count and data
-                Cache::forever($cacheKeyLatestUpdate, $currentPatientCount);
+                // Update cache with new patient data and latest admission date
+                Cache::forever($cacheKeyLatestUpdate, $latestAdmDate);
                 Cache::forever($cacheKeyPatients, $fetchedPatients);
-
-                // Assign fresh data to cached variable
                 $cachedPatients = $fetchedPatients;
             } else {
-                // Use cached data if it's still valid
+                // Retrieve patient data from cache if admission date has not changed
                 $cachedPatients = Cache::get($cacheKeyPatients);
             }
 
+            // Return the view with the cached or fetched patient data
             return Inertia::render('Wards/Patients/Index', [
                 'patients' => $cachedPatients
             ]);

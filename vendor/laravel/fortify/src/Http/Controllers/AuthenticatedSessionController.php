@@ -93,33 +93,57 @@ class AuthenticatedSessionController extends Controller
         ]));
     }
 
-    /**
-     * Destroy an authenticated session.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Laravel\Fortify\Contracts\LogoutResponse
-     */
+    // // old and working
+    // public function destroy(Request $request): LogoutResponse
+    // {
+    //     $employeeId = Auth::user()->employeeid;
+
+    //     $this->guard->logout();
+
+    //     if ($request->hasSession()) {
+    //         $request->session()->invalidate();
+    //         $request->session()->regenerateToken();
+    //     }
+
+    //     // Cache::flush(); // Clears all cache (use with caution)
+
+    //     // Clear only user-specific cache keys
+    //     Cache::forget('c_authWardCode_' . $employeeId);
+    //     Cache::forget('c_locationType_' . $employeeId);
+    //     Cache::forget('c_patients_' . $employeeId);
+    //     Cache::forget('latest_update_' . $employeeId);
+
+    //     // Optionally clear Inertia session cached data
+    //     session()->forget(['cached_inertia_auth', 'cached_inertia_locations']);
+
+    //     return app(LogoutResponse::class);
+    // }
+
     public function destroy(Request $request): LogoutResponse
     {
-        $employeeId = Auth::user()->employeeid;
+        if (Auth::check()) {
+            $employeeId = Auth::user()->employeeid;
 
-        $this->guard->logout();
+            // Log out the user
+            $this->guard->logout();
 
-        if ($request->hasSession()) {
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
+            // Invalidate and regenerate session only if it exists
+            if ($request->hasSession()) {
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+            }
+
+            // Clear user-specific cache keys
+            Cache::deleteMultiple([
+                'c_authWardCode_' . $employeeId,
+                'c_locationType_' . $employeeId,
+                'c_patients_' . $employeeId,
+                'latest_update_' . $employeeId
+            ]);
+
+            // Optionally clear Inertia session cached data
+            session()->forget(['cached_inertia_auth', 'cached_inertia_locations']);
         }
-
-        // Cache::flush(); // Clears all cache (use with caution)
-
-        // Clear only user-specific cache keys
-        Cache::forget('c_authWardCode_' . $employeeId);
-        Cache::forget('c_locationType_' . $employeeId);
-        Cache::forget('c_patients_' . $employeeId);
-        Cache::forget('latest_update_' . $employeeId);
-
-        // Optionally clear Inertia session cached data
-        session()->forget(['cached_inertia_auth', 'cached_inertia_locations']);
 
         return app(LogoutResponse::class);
     }
