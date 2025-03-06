@@ -30,84 +30,69 @@ class HandleInertiaRequests extends Middleware
         \Barryvdh\Debugbar\Middleware\InjectDebugbar::class,
     ];
 
+    // // old
+    // public function share(Request $request)
+    // {
+    //     return array_merge(parent::share($request), [
+    //         'flash' => [
+    //             'message' => fn() => $request->session()->get('message'),
+    //             'noItemPrice' => fn() => $request->session()->get('noItemPrice'),
+    //         ],
+    //         'auth.user.userDetail' => function () use ($request) {
+    //             return ($request->user() ? $request->user()->userDetail : null);
+    //         },
+    //         'auth.user.location' => function () use ($request) {
+    //             return ($request->user() ? LoginHistory::with('locationName')->where('employeeid', Auth::user()->employeeid)->orderBy('created_at', 'DESC')->first() : null);
+    //         },
+    //         'locations' => function () {
+    //             return Location::where('wardstat', 'A')->orderBy('wardname', 'ASC')->get();
+    //         },
+
+    //         'auth.user.roles' => function () use ($request) {
+    //             return ($request->user() ? $request->user()->roles()->pluck('name') : null);
+    //         },
+    //     ]);
+    // }
+
+    // session cached handle inertia
     public function share(Request $request)
     {
+        // Retrieve cached authentication data
+        $cachedAuthUser = session('cached_inertia_auth');
+        $cachedLocations = session('cached_inertia_locations');
+
+        // If not cached, store it in the session
+        if (!$cachedAuthUser && $request->user()) {
+            $cachedAuthUser = [
+                'userDetail' => $request->user()->userDetail,
+                'location' => LoginHistory::with('locationName')
+                    ->where('employeeid', $request->user()->employeeid)
+                    ->orderBy('created_at', 'DESC')
+                    ->first(),
+                'roles' => $request->user()->roles()->pluck('name'),
+            ];
+
+            session(['cached_inertia_auth' => $cachedAuthUser]);
+        }
+
+        // If locations are not cached, fetch and store them
+        if (!$cachedLocations) {
+            $cachedLocations = Location::where('wardstat', 'A')
+                ->orderBy('wardname', 'ASC')
+                ->get();
+
+            session(['cached_inertia_locations' => $cachedLocations]);
+        }
+
         return array_merge(parent::share($request), [
             'flash' => [
                 'message' => fn() => $request->session()->get('message'),
                 'noItemPrice' => fn() => $request->session()->get('noItemPrice'),
             ],
-            // Lazily
-            // 'auth.user' => fn () => $request->user()
-            //     ? $request->user()->only('id', 'firstName', 'middleName', 'lastName', 'username', 'email', 'image')
-            //     : null,
-            'auth.user.userDetail' => function () use ($request) {
-                return ($request->user() ? $request->user()->userDetail : null);
-            },
-            'auth.user.location' => function () use ($request) {
-                return ($request->user() ? LoginHistory::with('locationName')->where('employeeid', Auth::user()->employeeid)->orderBy('created_at', 'DESC')->first() : null);
-                // return LoginHistory::with('locationName')->where('employeeid', Auth::user()->employeeid)->orderBy('created_at', 'DESC')->first();
-            },
-            // 'items' => function () {
-            //     return Item::with('unit:uomcode,uomdesc')->where('cl2stat', 'A')->orderBy('cl2desc', 'ASC')->get();
-            // },
-            // 'employees' => function () {
-            //     return UserDetail::where('empstat', 'A')->orderBy('employeeid', 'ASC')->get(['employeeid', 'empstat']);
-            // },
-            'locations' => function () {
-                return Location::where('wardstat', 'A')->orderBy('wardname', 'ASC')->get();
-            },
-            // 'suppliers' => function () {
-            //     return Supplier::where('suppstat', 'A')->orderBy('suppname', 'ASC')->get(['supplierID', 'suppname', 'suppstat']);
-            // },
-            // 'auth.user.permissions' => function () use ($request) {
-            //     return ($request->user() ? $request->user()->getAllPermissions()->pluck('name') : null);
-            // },
-            'auth.user.roles' => function () use ($request) {
-                return ($request->user() ? $request->user()->roles()->pluck('name') : null);
-            },
-            // med supplies
-            // 'medSupplies' => function () {
-            //     return Item::where('cl2stat', 'A')->orderBy('cl2desc', 'ASC')->get(['cl2comb', 'cl2desc']);
-            // },
-            //TANKS = drugs and med (oxygen), compressed air, carbon dioxide
-            // 'tanksList' => function () {
-            //     return DB::select("SELECT cast(hdmhdr.dmdcomb as varchar) + '' + cast(hdmhdr.dmdctr as varchar) as itemcode,
-            //                         hdmhdrsub.dmhdrsub, hdmhdrprice.unitcode,
-            //                         hgen.gendesc, dmdnost, hdmhdr.dmdnnostp, hstre.stredesc, hform.formdesc, hroute.rtedesc,
-            //                         (SELECT TOP 1 dmselprice FROM hdmhdrprice WHERE dmdcomb = hdmhdrsub.dmdcomb ORDER BY dmdprdte DESC) as 'price'
-            //                     FROM hdmhdr
-            //                     JOIN hdmhdrsub ON hdmhdr.dmdcomb = hdmhdrsub.dmdcomb
-            //                     JOIN hdmhdrprice ON hdmhdrsub.dmdcomb = hdmhdrprice.dmdcomb
-            //                     JOIN hdruggrp ON hdmhdr.grpcode = hdruggrp.grpcode
-            //                     JOIN hgen ON hgen.gencode = hdruggrp.gencode
-            //                     JOIN hstre ON hdmhdr.strecode = hstre.strecode
-            //                     JOIN hform ON hdmhdr.formcode = hform.formcode
-            //                     JOIN hroute ON hdmhdr.rtecode = hroute.rtecode
-            //                     WHERE ((hdmhdr.grpcode = '0000000671' )
-            //                     OR (hdmhdr.grpcode = '0000000764'
-            //                     AND hdmhdrsub.dmhdrsub = 'DRUMD' )
-            //                     OR (hdmhdr.dmdcomb = '000000002098'))
-            //                     GROUP BY hdmhdr.dmdcomb, hdmhdr.dmdctr, hdmhdrsub.dmhdrsub, hdmhdrprice.unitcode, hdmhdrsub.dmdcomb, hgen.gendesc, hdmhdr.dmdnost, hdmhdr.dmdnnostp, hstre.stredesc, hform.formdesc, hroute.rtedesc;
-            //             ");
-            // },
-            // 'typeOfCharge' => function () {
-            //     return TypeOfCharge::where('chrgstat', 'A')
-            //         ->where('chrgtable', 'NONDR')
-            //         ->get(['chrgcode', 'chrgdesc', 'bentypcod', 'chrgtable']);
-            // },
-            // 'fundSource' => function () {
-            //     return FundSource::get(['id', 'fsid', 'fsName', 'cluster_code']);
-            // },
-            // 'unitOfMeasurement' => function () {
-            //     return UnitOfMeasurement::get(['uomcode', 'uomdesc', 'uomstat']);
-            // },
-
-
-
-            // 'csrPendingCount' => function () {
-            //     return RequestStocks::where('status', 'PENDING')->count();
-            // }
+            'auth' => [
+                'user' => fn() => $cachedAuthUser,
+            ],
+            'locations' => fn() => $cachedLocations,
         ]);
     }
 }
