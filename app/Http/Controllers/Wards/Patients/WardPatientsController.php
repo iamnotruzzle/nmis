@@ -167,13 +167,13 @@ class WardPatientsController extends Controller
             ]);
         } else if ($locationType_cached == 'ER') {
             $latestERDateMod = DB::select(
-                "SELECT MAX(datemod) AS erdate
+                "SELECT MAX(datemod) AS datemod
                     FROM herlog
                     WHERE herlog.erdate BETWEEN DATEADD(HOUR, -12, GETDATE()) AND GETDATE();"
             );
 
             // Extract the latest datemod from query result
-            $latestERDateMod = $latestERDateMod[0]->erdate ?? null;
+            $latestERDateMod = $latestERDateMod[0]->datemod ?? null;
             // dd($latestERDateMod);
 
             // Retrieve the cached latest update timestamp
