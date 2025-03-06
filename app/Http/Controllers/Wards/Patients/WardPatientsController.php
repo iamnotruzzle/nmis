@@ -16,9 +16,6 @@ class WardPatientsController extends Controller
 {
     public function index(Request $request)
     {
-        // dd($request);
-
-        // Cache::flush();
         $search = $request->search;
         $hpercode = $request->hpercode;
         $patfirst = $request->patfirst;
@@ -81,15 +78,12 @@ class WardPatientsController extends Controller
                     AND hadmlog.admstat = 'A';",
                 [$authWardCode_cached]
             );
-            // dd($currentPatientCount);
 
             // Extract the patient count from the query result
             $currentPatientCount = $currentPatientCount[0]->count;
-            // dd($currentPatientCount);
 
             // Retrieve cached patient count for comparison
             $cachedPatientCount = Cache::get($cacheKeyLatestUpdate);
-            // dd($cachedPatientCount);
 
             // If cache is missing or outdated, update it
             if (!$cachedPatientCount || (int)$currentPatientCount !== (int)$cachedPatientCount) {

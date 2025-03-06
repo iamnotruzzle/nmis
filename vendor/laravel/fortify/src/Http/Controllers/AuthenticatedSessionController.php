@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Routing\Pipeline;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Laravel\Fortify\Actions\AttemptToAuthenticate;
 use Laravel\Fortify\Actions\CanonicalizeUsername;
@@ -100,6 +101,8 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): LogoutResponse
     {
+        $employeeId = Auth::user()->employeeid;
+
         $this->guard->logout();
 
         if ($request->hasSession()) {
@@ -107,7 +110,17 @@ class AuthenticatedSessionController extends Controller
             $request->session()->regenerateToken();
         }
 
-        Cache::flush(); // Clears all cache (use with caution)
+        // Cache::flush(); // Clears all cache (use with caution)
+
+        // Clear only user-specific cache keys
+        Cache::forget('c_authWardCode_' . $employeeId);
+        Cache::forget('c_locationType_' . $employeeId);
+        Cache::forget('c_patients_' . $employeeId);
+        Cache::forget('latest_update_' . $employeeId);
+
+        // Optionally clear Inertia session cached data
+        session()->forget(['cached_inertia_auth', 'cached_inertia_locations']);
+
         return app(LogoutResponse::class);
     }
 }

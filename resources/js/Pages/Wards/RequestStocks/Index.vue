@@ -1517,7 +1517,7 @@ export default {
     InputNumber,
   },
   props: {
-    authWardcode: Object,
+    // authWardcode: Object,
     items: Object,
     medicalGas: Object,
     requestedStocks: Object,
@@ -1528,6 +1528,7 @@ export default {
   },
   data() {
     return {
+      authWardcode: '',
       expandedRow: [],
       // paginator
       loading: false,
@@ -1653,12 +1654,12 @@ export default {
     this.rows = this.requestedStocks.per_page;
   },
   mounted() {
-    // console.log(this.$page.props.auth.user.location.location_name.wardcode);
-    window.Echo.channel('issued').listen('ItemIssued', (event) => {
-      //   console.log('Received event:', event);
-      console.log('Location:', event.location); // Access the location data
+    this.authWardcode = this.$page.props.auth.user.location.location_name.wardcode;
 
-      if (event.location == this.$page.props.auth.user.location.location_name.wardcode) {
+    window.Echo.channel('issued').listen('ItemIssued', (event) => {
+      //   console.log('Location:', event.location); // Access the location data
+
+      if (event.location == this.$page.props.auth.user.location.wardcode) {
         router.reload({
           onSuccess: () => {
             console.log('Data reloaded successfully');
@@ -1675,9 +1676,6 @@ export default {
     this.storeCurrentWardStocksInContainer();
 
     this.loading = false;
-
-    // console.log('currentWardStocks', this.currentWardStocks);
-    // console.log('currentWardStocks2', this.currentWardStocks2);
   },
   computed: {
     user() {
@@ -1687,7 +1685,6 @@ export default {
   methods: {
     print(data) {
       if (data) {
-        // console.log(data);
         // Set up the print form details
         this.printForm.office = data.requested_at;
         this.printForm.ris_no = `RIS-${data.id}`;
@@ -1696,7 +1693,6 @@ export default {
         this.printForm.approved_by = data.approved_by;
 
         data.request_stocks_details.forEach((e) => {
-          //   console.log(e);
           this.printForm.items.push({
             stock_no: e.issued_item.length === 0 ? '' : e.issued_item[0].id,
             description: e.item_details.cl2desc,
@@ -1747,8 +1743,6 @@ export default {
       }
     },
     openUpdateStock(data) {
-      //   console.log(data);
-
       if (data.from == 'EXISTING_STOCKS') {
         this.formExisting.id = data.ward_stock_id;
         this.formExisting.cl2comb = data.cl2comb;
@@ -1759,8 +1753,6 @@ export default {
       }
     },
     openUpdateConsignment(data) {
-      //   console.log('consignment', data);
-
       if (data.from == 'CONSIGNMENT') {
         this.formConsignment.id = data.ward_stock_id;
         this.formConsignment.cl2comb = data.cl2comb;
@@ -1771,7 +1763,6 @@ export default {
       }
     },
     openConfirmConsignmentDialog() {
-      //   console.log('openConfirmConsignmentDialog');
       this.confirmConsignmentDialog = true;
     },
     restrictNonNumericAndPeriod(event) {
@@ -1833,8 +1824,6 @@ export default {
           uomdesc: e.uomdesc,
         });
       });
-
-      //   console.log(this.itemsList);
     },
     // use storeRequestedStocksInContainer() function so that every time you make
     // server request such as POST, the data in the table
@@ -1843,7 +1832,6 @@ export default {
       this.requestStockList = []; // reset
 
       this.requestedStocks.data.forEach((e) => {
-        // console.log(e);
         this.requestStockList.push({
           id: e.id,
           status: e.status,
@@ -1915,9 +1903,6 @@ export default {
       // adding +1 to include the starting date
       let date_diff = exp_date.diff(current_date, 'days') + 1;
 
-      //   console.log(current_date.format('MM-DD-YY') == exp_date.format('MM-DD-YY'));
-
-      //    exp_date.format('MM-DD-YY') < current_date.format('MM-DD-YY')
       if (
         current_date.format('MM-DD-YY') == exp_date.format('MM-DD-YY') ||
         Date.parse(exp_date) < Date.parse(current_date)
@@ -2031,7 +2016,6 @@ export default {
           }
         }
       }
-      //   console.log(this.requestStockListDetails);
     },
     removeFromRequestContainer(item) {
       this.requestStockListDetails.splice(
@@ -2056,15 +2040,11 @@ export default {
       });
     },
     editStatus(item) {
-      //   console.log(item);
       this.editStatusDialog = true;
       this.formUpdateStatus.request_stock_id = item.id;
       this.formUpdateStatus.status = 'RECEIVED';
     },
     updateStatus() {
-      //   console.log(item);
-      //   this.formUpdateStatus.status = item;
-
       this.formUpdateStatus.put(route('requeststocks.updatedeliverystatus', this.formUpdateStatus), {
         preserveScroll: true,
         onSuccess: () => {
@@ -2083,7 +2063,7 @@ export default {
       }
 
       // setup location, requested by and requestStockListDetails before submitting
-      this.form.location = this.authWardcode.wardcode;
+      this.form.location = this.authWardcode;
       this.form.requested_by = this.user.userDetail.employeeid;
       this.form.requestStockListDetails = this.requestStockListDetails;
 
@@ -2125,7 +2105,7 @@ export default {
         return false;
       }
 
-      this.formMedicalGases.authLocation = this.$page.props.authWardcode.wardcode;
+      this.formMedicalGases.authLocation = this.authWardcode;
       if (
         this.formMedicalGases.fund_source != null ||
         this.formMedicalGases.fund_source != '' ||
@@ -2139,7 +2119,6 @@ export default {
         this.formMedicalGases.delivered_date != null ||
         this.formMedicalGases.delivered_date != ''
       ) {
-        // console.log('success');
         this.formMedicalGases.post(route('medicalGases.store'), {
           preserveScroll: true,
           onSuccess: () => {
@@ -2157,7 +2136,7 @@ export default {
         return false;
       }
 
-      this.formExisting.authLocation = this.$page.props.authWardcode.wardcode;
+      this.formExisting.authLocation = this.authWardcode;
       if (
         this.formExisting.cl2comb != null ||
         this.formExisting.cl2comb != '' ||
@@ -2169,8 +2148,6 @@ export default {
           this.formExisting.post(route('existingstock.store'), {
             preserveScroll: true,
             onSuccess: (e) => {
-              //   console.log('$page', this.$page.props.flash.noItemPrice);
-
               if (this.$page.props.flash.noItemPrice != null) {
                 // this.cancel();
                 this.noItemPriceMsg();
@@ -2197,7 +2174,7 @@ export default {
       }
     },
     submitConsignment() {
-      this.formConsignment.authLocation = this.$page.props.authWardcode.wardcode;
+      this.formConsignment.authLocation = this.authWardcode;
       if (this.isUpdateConsignment != true) {
         if (
           this.formConsignment.processing ||
@@ -2224,7 +2201,6 @@ export default {
           this.formConsignment.delivered_date != null ||
           this.formConsignment.delivered_date != ''
         ) {
-          // console.log('success');
           this.formConsignment.post(route('consignment.store'), {
             preserveScroll: true,
             onSuccess: () => {
@@ -2253,7 +2229,6 @@ export default {
       }
     },
     confirmCancelItem(item) {
-      //   console.log(item);
       this.requestStockId = item.id;
       this.cancelItemDialog = true;
     },
@@ -2351,11 +2326,8 @@ export default {
       this.formReturnToCsr.ward_stock_id = data.ward_stock_id;
       this.formReturnToCsr.item = data.item;
       this.formReturnToCsr.quantity = data.quantity;
-
-      //   console.log(this.formReturnToCsr);
     },
     submitReturnToCsr() {
-      //   console.log(this.previousQty);
       if (
         this.formReturnToCsr.processing ||
         this.formReturnToCsr.quantity == null ||
@@ -2426,7 +2398,6 @@ export default {
     },
     'formMedicalGases.cl2comb': function (val) {
       this.selectedItemsUomDesc = null;
-      //   console.log(val);
 
       this.medicalGasList.forEach((e) => {
         if (e.cl2comb == val) {
@@ -2442,12 +2413,10 @@ export default {
     },
     'formConsignment.cl2comb': function (val) {
       this.selectedItemsUomDesc = null;
-      //   console.log(val);
 
       this.itemsList.forEach((e) => {
         if (e.cl2comb == val) {
           if (e.uomdesc != null || e.uomdesc == '') {
-            // console.log(e.uomdesc);
             this.selectedItemsUomDesc = e.uomdesc;
             this.formConsignment.uomcode = e.uomcode;
           } else {
@@ -2455,8 +2424,6 @@ export default {
           }
         }
       });
-
-      //   console.log(this.selectedItemsUomDesc);
     },
     'formExisting.cl2comb': function (val) {
       this.selectedItemsUomDesc = null;
@@ -2465,7 +2432,6 @@ export default {
       this.itemsList.forEach((e) => {
         if (e.cl2comb == val) {
           if (e.uomdesc != null || e.uomdesc == '') {
-            // console.log(e.uomdesc);
             this.selectedItemsUomDesc = e.uomdesc;
             this.formExisting.uomcode = e.uomcode;
           } else {
@@ -2473,8 +2439,6 @@ export default {
           }
         }
       });
-
-      //   console.log(this.selectedItemsUomDesc);
     },
   },
 };
