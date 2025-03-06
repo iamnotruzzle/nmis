@@ -129,10 +129,10 @@ class WardPatientsController extends Controller
             return Inertia::render('Wards/Patients/Index', [
                 'patients' => $cachedPatients
             ]);
-        } else if ($locationType_cached[0]->enctype == 'OPD') {
-            if (!$cachedPatients) {
-                $patients_query = DB::SELECT(
-                    "SELECT hopdlog.enccode, hopdlog.hpercode, hopdlog.opddate, hopdlog.licno,
+        } else if ($locationType_cached == 'OPD') {
+            // if (!$cachedPatients) {
+            $patients_query = DB::SELECT(
+                "SELECT hopdlog.enccode, hopdlog.hpercode, hopdlog.opddate, hopdlog.licno,
                     hpersonal.lastname, hpersonal.firstname, hpersonal.empsuffix,
                     hperson.patlast, hperson.patfirst, hperson.patmiddle,
                     htypser.tsdesc, hopdlog.opddtedis, hopdlog.opdstat, hdisposition.dispdesc
@@ -152,23 +152,37 @@ class WardPatientsController extends Controller
 
                     AND hopdlog.licno IS NOT NULL
                     ORDER BY hopdlog.opddate desc;",
-                    [$authWardCode_cached]
-                );
+                [$authWardCode_cached]
+            );
 
-                // Store in cache permanently
-                Cache::forever($cacheKeyPatients, $patients_query);
-                // Assign the cached patients data for later use
-                $cachedPatients = $patients_query;
-            }
+            //     // Store in cache permanently
+            //     Cache::forever($cacheKeyPatients, $patients_query);
+            //     // Assign the cached patients data for later use
+            //     $cachedPatients = $patients_query;
+            // }
 
 
             return Inertia::render('Wards/Patients/OPD/Index', [
                 'patients' => $cachedPatients
             ]);
-        } else if ($locationType_cached[0]->enctype == 'ER') {
-            if (!$cachedPatients) {
+        } else if ($locationType_cached == 'ER') {
+            $latestERDateMod = DB::select(
+                "SELECT MAX(datemod) AS erdate
+                    FROM herlog
+                    WHERE herlog.erdate BETWEEN DATEADD(HOUR, -12, GETDATE()) AND GETDATE();"
+            );
+
+            // Extract the latest er date from query result
+            $latestERDateMod = $latestERDateMod[0]->erdate ?? null;
+            // dd($latestERDateMod);
+
+            // Retrieve the cached latest update timestamp
+            $cachedERDateMod = Cache::get($cacheKeyLatestUpdate);
+
+            // If the latest er date has changed, fetch patient data and update the cache
+            if (!$cachedERDateMod || $latestERDateMod !== $cachedERDateMod) {
                 // 2 days filter
-                $patients_query = DB::SELECT(
+                $fetchedPatients = DB::SELECT(
                     "SELECT
                         herlog.enccode,
                         herlog.hpercode,
@@ -185,6 +199,7 @@ class WardPatientsController extends Controller
                         herlog.erstat,
                         herlog.dispcode,
                         henctr.toecode,
+                        herlog.datemod,
                         -- Custom Bill Status Column
                         (SELECT TOP 1 'BILLED'
                         FROM csrw_patient_charge_logs
@@ -206,16 +221,19 @@ class WardPatientsController extends Controller
                     ORDER BY herlog.erdate DESC;"
                 );
 
-                // Store in cache permanently
-                Cache::forever($cacheKeyPatients, $patients_query);
-                // Assign the cached patients data for later use
-                $cachedPatients = $patients_query;
+                // Update cache with new patient data and latest admission date
+                Cache::forever($cacheKeyLatestUpdate, $latestERDateMod);
+                Cache::forever($cacheKeyPatients, $fetchedPatients);
+                $cachedPatients = $fetchedPatients;
+            } else {
+                // Retrieve patient data from cache if admission date has not changed
+                $cachedPatients = Cache::get($cacheKeyPatients);
             }
 
             return Inertia::render('Wards/Patients/ER/Index', [
                 'patients' => $cachedPatients
             ]);
-        } else if ($locationType_cached[0]->enctype == 'OR') {
+        } else if ($locationType_cached == 'OR') {
             // $hpercode != null && $hpercode != '' ||
             if ($hpercode != null && $hpercode != '') {
                 $encounters = DB::SELECT(
@@ -295,7 +313,7 @@ class WardPatientsController extends Controller
             return Inertia::render('Wards/Patients/OR/Index', [
                 'encounters' => $encounters
             ]);
-        } else if ($locationType_cached[0]->enctype == 'PD') {
+        } else if ($locationType_cached == 'PD') {
             // $hpercode != null && $hpercode != '' ||
             if ($hpercode != null && $hpercode != '') {
                 $encounters = DB::SELECT(
