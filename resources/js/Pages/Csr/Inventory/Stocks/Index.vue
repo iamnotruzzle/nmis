@@ -1714,7 +1714,7 @@ export default {
     stocks: Object,
     totalDeliveries: Object,
     // typeOfCharge: Object,
-    fundSource: Object,
+    // fundSource: Object,
     suppliers: Object,
     convertedItems: Object,
     totalConvertedItems: Object,
@@ -2164,7 +2164,7 @@ export default {
       });
     },
     storeFundSourceInContainer() {
-      this.fundSource.forEach((e) => {
+      this.$page.props.fundSource.forEach((e) => {
         this.fundSourceList.push({
           chrgcode: e.fsid,
           chrgdesc: e.fsName,

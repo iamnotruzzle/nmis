@@ -114,8 +114,8 @@ class IssueItemController extends Controller
                 item.cl2desc ASC;"
         );
 
-        $fundSource = FundSource::orderBy('fsName')
-            ->get(['id', 'fsid', 'fsName', 'cluster_code']);
+        // $fundSource = FundSource::orderBy('fsName')
+        //     ->get(['id', 'fsid', 'fsName', 'cluster_code']);
 
         $wardsMedicalGasStock = DB::select(
             "SELECT stock.id as stock_id, ward.wardname, stock.cl2comb, item.cl2desc, stock.quantity, stock.average, stock.total_usage
@@ -130,7 +130,7 @@ class IssueItemController extends Controller
             'items' => $items,
             'requestedStocks' => $requestedStocks,
             'medicalGas' => $medicalGas,
-            'fundSource' => $fundSource,
+            // 'fundSource' => $fundSource,
             'wardsMedicalGasStock' => $wardsMedicalGasStock,
             'authWardcode' => $authWardcode[0],
         ]);

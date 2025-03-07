@@ -871,7 +871,7 @@ export default {
     authWardcode: Object,
     items: Array,
     requestedStocks: Object,
-    fundSource: Object,
+    // fundSource: Object,
     medicalGas: Object,
     wardsMedicalGasStock: Object,
   },
@@ -1041,7 +1041,7 @@ export default {
       });
     },
     storeFundSourceInContainer() {
-      this.fundSource.forEach((e) => {
+      this.$page.props.fundSource.forEach((e) => {
         this.fundSourceList.push({
           chrgcode: e.fsid,
           chrgdesc: e.fsName,
