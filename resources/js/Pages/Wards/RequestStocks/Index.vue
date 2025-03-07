@@ -481,7 +481,7 @@
         </Dialog>
 
         <!-- MedicalGases -->
-        <Dialog
+        <!-- <Dialog
           v-model:visible="medicalGasesDialog"
           :modal="true"
           class="p-fluid w-4"
@@ -625,7 +625,7 @@
               @click="submitMedicalGases"
             />
           </template>
-        </Dialog>
+        </Dialog> -->
 
         <!-- Consignment -->
         <Dialog
@@ -1494,6 +1494,7 @@ import Tag from 'primevue/tag';
 import moment from 'moment';
 import Echo from 'laravel-echo';
 import { Link } from '@inertiajs/vue3';
+import { usePage } from '@inertiajs/vue3';
 
 export default {
   components: {
@@ -1519,7 +1520,7 @@ export default {
   props: {
     // authWardcode: Object,
     items: Object,
-    medicalGas: Object,
+    // medicalGas: Object,
     requestedStocks: Object,
     currentWardStocks: Object,
   },
@@ -1536,7 +1537,7 @@ export default {
       requestStockId: null,
       isUpdate: false,
       createRequestStocksDialog: false,
-      medicalGasesDialog: false,
+      //   medicalGasesDialog: false,
       consignmentDialog: false,
       confirmConsignmentDialog: false,
       isUpdateExisting: false,
@@ -1555,7 +1556,7 @@ export default {
       to: null,
       stockBalanceDeclared: false,
       itemsList: [],
-      medicalGasList: [],
+      //   medicalGasList: [],
       requestStockList: [],
       currentWardStocksList: [],
       // stock list details
@@ -1805,15 +1806,15 @@ export default {
         });
       });
 
-      this.medicalGasList = []; // reset
-      this.medicalGas.forEach((e) => {
-        this.medicalGasList.push({
-          cl2comb: e.cl2comb,
-          cl2desc: e.cl2desc,
-          uomcode: e.uomcode,
-          uomdesc: e.uomdesc,
-        });
-      });
+      //   this.medicalGasList = []; // reset
+      //   this.medicalGas.forEach((e) => {
+      //     this.medicalGasList.push({
+      //       cl2comb: e.cl2comb,
+      //       cl2desc: e.cl2desc,
+      //       uomcode: e.uomcode,
+      //       uomdesc: e.uomdesc,
+      //     });
+      //   });
     },
     // use storeRequestedStocksInContainer() function so that every time you make
     // server request such as POST, the data in the table
@@ -1841,7 +1842,7 @@ export default {
     },
     // store current stocks
     storeCurrentWardStocksInContainer() {
-      console.log(this.currentWardStocks);
+      //   console.log(this.currentWardStocks);
       this.currentWardStocksList = []; // reset
 
       moment.suppressDeprecationWarnings = true;
@@ -1937,7 +1938,7 @@ export default {
     openMedicalGasesDialog() {
       this.formMedicalGases.clearErrors();
       this.formMedicalGases.reset();
-      this.medicalGasesDialog = true;
+      //   this.medicalGasesDialog = true;
     },
     openConsignmentDialog() {
       this.formConsignment.clearErrors();
@@ -2096,31 +2097,31 @@ export default {
         return false;
       }
 
-      this.formMedicalGases.authLocation = this.authWardcode;
-      if (
-        this.formMedicalGases.fund_source != null ||
-        this.formMedicalGases.fund_source != '' ||
-        this.formMedicalGases.cl2comb != null ||
-        this.formMedicalGases.cl2comb != '' ||
-        this.formMedicalGases.quantity != null ||
-        this.formMedicalGases.quantity != '' ||
-        this.formMedicalGases.quantity != 0 ||
-        this.formMedicalGases.average != '' ||
-        this.formMedicalGases.average != 0 ||
-        this.formMedicalGases.delivered_date != null ||
-        this.formMedicalGases.delivered_date != ''
-      ) {
-        this.formMedicalGases.post(route('medicalGases.store'), {
-          preserveScroll: true,
-          onSuccess: () => {
-            this.formMedicalGases.reset();
-            this.cancel();
-            this.updateData();
-            this.createdMsg();
-            this.loading = false;
-          },
-        });
-      }
+      //   this.formMedicalGases.authLocation = this.authWardcode;
+      //   if (
+      //     this.formMedicalGases.fund_source != null ||
+      //     this.formMedicalGases.fund_source != '' ||
+      //     this.formMedicalGases.cl2comb != null ||
+      //     this.formMedicalGases.cl2comb != '' ||
+      //     this.formMedicalGases.quantity != null ||
+      //     this.formMedicalGases.quantity != '' ||
+      //     this.formMedicalGases.quantity != 0 ||
+      //     this.formMedicalGases.average != '' ||
+      //     this.formMedicalGases.average != 0 ||
+      //     this.formMedicalGases.delivered_date != null ||
+      //     this.formMedicalGases.delivered_date != ''
+      //   ) {
+      //     this.formMedicalGases.post(route('medicalGases.store'), {
+      //       preserveScroll: true,
+      //       onSuccess: () => {
+      //         this.formMedicalGases.reset();
+      //         this.cancel();
+      //         this.updateData();
+      //         this.createdMsg();
+      //         this.loading = false;
+      //       },
+      //     });
+      //   }
     },
     submitExisting() {
       if (this.formExisting.processing || this.formExisting.cl2comb == null || this.formExisting.quantity == null) {
@@ -2139,7 +2140,8 @@ export default {
           this.formExisting.post(route('existingstock.store'), {
             preserveScroll: true,
             onSuccess: (e) => {
-              if (this.$page.props.flash.noItemPrice != null) {
+              console.log(this.$page.props);
+              if (e.props.flash.noItemPrice == 0 || e.props.flash.noItemPrice != null) {
                 // this.cancel();
                 this.noItemPriceMsg();
               } else {
@@ -2247,7 +2249,7 @@ export default {
       this.createRequestStocksDialog = false;
       this.returnToCsrDialog = false;
       this.editAverageOfStocksDialog = false;
-      this.medicalGasesDialog = false;
+      //   this.medicalGasesDialog = false;
       this.consignmentDialog = false;
       this.existingDialog = false;
       this.editStatusDialog = false;
@@ -2387,21 +2389,21 @@ export default {
       }
       this.updateData();
     },
-    'formMedicalGases.cl2comb': function (val) {
-      this.selectedItemsUomDesc = null;
+    // 'formMedicalGases.cl2comb': function (val) {
+    //   this.selectedItemsUomDesc = null;
 
-      this.medicalGasList.forEach((e) => {
-        if (e.cl2comb == val) {
-          if (e.uomdesc != null || e.uomdesc == '') {
-            // console.log('if');
-            this.selectedItemsUomDesc = e.uomdesc;
-            this.formMedicalGases.uomcode = e.uomcode;
-          } else {
-            this.selectedItemsUomDesc = null;
-          }
-        }
-      });
-    },
+    //   this.medicalGasList.forEach((e) => {
+    //     if (e.cl2comb == val) {
+    //       if (e.uomdesc != null || e.uomdesc == '') {
+    //         // console.log('if');
+    //         this.selectedItemsUomDesc = e.uomdesc;
+    //         this.formMedicalGases.uomcode = e.uomcode;
+    //       } else {
+    //         this.selectedItemsUomDesc = null;
+    //       }
+    //     }
+    //   });
+    // },
     'formConsignment.cl2comb': function (val) {
       this.selectedItemsUomDesc = null;
 

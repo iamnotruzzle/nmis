@@ -35,7 +35,6 @@ class RequestStocksController extends Controller
         $authWardCode_cached = Cache::get('c_authWardCode_' . Auth::user()->employeeid);
         $wardCode = $authWardCode_cached;
 
-        // OLD
         // available items only show if quantity_after == total_issued_qty
         $items = DB::select(
             "SELECT
@@ -55,26 +54,25 @@ class RequestStocksController extends Controller
             ORDER BY
                 item.cl2desc ASC;"
         );
-        // dd($items);
 
-        $medicalGas = DB::select(
-            "SELECT
-                item.cl2comb,
-                item.cl2desc,
-                item.uomcode,
-                uom.uomdesc
-            FROM
-                hclass2 AS item
-            FULL OUTER JOIN
-                huom AS uom
-                ON uom.uomcode = item.uomcode
-            WHERE
-                item.catID = 1
-                AND item.uomcode != 'box'
-                AND item.itemcode LIKE 'MSMG-%'
-            ORDER BY
-                item.cl2desc ASC;"
-        );
+        // $medicalGas = DB::select(
+        //     "SELECT
+        //         item.cl2comb,
+        //         item.cl2desc,
+        //         item.uomcode,
+        //         uom.uomdesc
+        //     FROM
+        //         hclass2 AS item
+        //     FULL OUTER JOIN
+        //         huom AS uom
+        //         ON uom.uomcode = item.uomcode
+        //     WHERE
+        //         item.catID = 1
+        //         AND item.uomcode != 'box'
+        //         AND item.itemcode LIKE 'MSMG-%'
+        //     ORDER BY
+        //         item.cl2desc ASC;"
+        // );
         // dd($medicalGas);
 
         $requestedStocks = RequestStocks::with(['requested_at_details', 'requested_by_details', 'approved_by_details', 'request_stocks_details.item_details'])
@@ -84,9 +82,6 @@ class RequestStocksController extends Controller
                     ->orWhere('middlename', 'LIKE', '%' . $searchString . '%')
                     ->orWhere('lastname', 'LIKE', '%' . $searchString . '%');
             })
-            // ->orWhereHas('request_stocks_details.item_details', function ($q) use ($searchString) {
-            //     $q->where('cl2desc', 'LIKE', '%' . $searchString . '%');
-            // })
             ->when(
                 $request->from,
                 function ($query, $value) use ($from) {
@@ -101,26 +96,7 @@ class RequestStocksController extends Controller
             )
             ->where('location', '=', $wardCode)
             ->orderBy('created_at', 'desc')
-            ->paginate(15);
-        // dd($requestedStocks);
-
-        // // FROM CSR
-        // $currentWardStocks = WardsStocks::with(['item_details:cl2comb,cl2desc', 'request_stocks', 'unit_of_measurement:uomcode,uomdesc'])
-        //     ->where('location', $wardCode)
-        //     ->where('quantity', '!=', 0)
-        //     ->whereHas(
-        //         'request_stocks',
-        //         function ($query) {
-        //             return $query->where('status', 'RECEIVED');
-        //         }
-        //     )
-        //     ->get();
-        // // FROM other sources
-        // $currentWardStocks2 = WardsStocks::with(['item_details:cl2comb,cl2desc', 'request_stocks', 'unit_of_measurement:uomcode,uomdesc'])
-        //     ->where('request_stocks_id', null)
-        //     ->where('location', $wardCode)
-        //     ->where('quantity', '!=', 0)
-        //     ->get();
+            ->paginate(5);
 
         $currentWardStocks = DB::select(
             "SELECT ws.*,
@@ -150,7 +126,7 @@ class RequestStocksController extends Controller
 
         return Inertia::render('Wards/RequestStocks/Index', [
             'items' => $items,
-            'medicalGas' => $medicalGas,
+            // 'medicalGas' => $medicalGas,
             'requestedStocks' => $requestedStocks,
             'currentWardStocks' => $currentWardStocks,
         ]);

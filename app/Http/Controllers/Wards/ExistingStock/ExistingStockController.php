@@ -62,12 +62,14 @@ class ExistingStockController extends Controller
                 ORDER BY created_at DESC;",
             [$request->cl2comb]
         );
-        // dd($currentItemPrice[0]->price_per_unit);
+        // dd(empty($currentItemPrice));
+
+        session()->forget('noItemPrice'); // Remove previous value
 
         if (empty($currentItemPrice)) {
-            return redirect()->back()->with([
-                'noItemPrice' => 'foo',
-            ]);
+            session(['noItemPrice' => 0]);
+            session()->save();
+            return redirect()->back();
         } else {
             $itemPrices = ItemPrices::create([
                 'ris_no' => $tempRisNo,
