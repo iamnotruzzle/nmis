@@ -105,16 +105,12 @@ class CsrStocksControllers extends Controller
                 ORDER BY cl2desc ASC;"
         );
 
-        // $fundSource = FundSource::orderBy('fsName')
-        //     ->get(['id', 'fsid', 'fsName', 'cluster_code']);
-
         $suppliers = PimsSupplier::where('status', 'A')->orderBy('suppname', 'ASC')->get();
 
         return Inertia::render('Csr/Inventory/Stocks/Index', [
             'items' => $items,
             'stocks' => $stocks,
             'totalDeliveries' => $totalDeliveries,
-            // 'fundSource' => $fundSource,
             'suppliers' => $suppliers,
             'convertedItems' => $convertedItems,
             'totalConvertedItems' => $totalConvertedItems,

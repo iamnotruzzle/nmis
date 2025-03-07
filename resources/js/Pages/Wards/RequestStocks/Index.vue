@@ -1522,9 +1522,6 @@ export default {
     medicalGas: Object,
     requestedStocks: Object,
     currentWardStocks: Object,
-    // currentWardStocks2: Object,
-    // typeOfCharge: Object,
-    // fundSource: Object,
   },
   data() {
     return {

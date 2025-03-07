@@ -871,7 +871,6 @@ export default {
     authWardcode: Object,
     items: Array,
     requestedStocks: Object,
-    // fundSource: Object,
     medicalGas: Object,
     wardsMedicalGasStock: Object,
   },

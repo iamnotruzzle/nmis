@@ -1713,8 +1713,6 @@ export default {
     items: Object,
     stocks: Object,
     totalDeliveries: Object,
-    // typeOfCharge: Object,
-    // fundSource: Object,
     suppliers: Object,
     convertedItems: Object,
     totalConvertedItems: Object,

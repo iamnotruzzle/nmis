@@ -803,7 +803,6 @@ export default {
     medicines: Object,
     requestedStocks: Object,
     currentWardStocks: Object,
-    fundSource: Object,
     medsRequest: Object,
   },
   data() {

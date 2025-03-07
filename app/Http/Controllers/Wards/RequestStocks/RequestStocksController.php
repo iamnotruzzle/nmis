@@ -147,18 +147,12 @@ class RequestStocksController extends Controller
                 AND ws.quantity != 0",
             [$wardCode, $wardCode] // Duplicate the parameter
         );
-        // dd($currentWardStocks);
-
-        // $fundSource = FundSource::orderBy('fsName')
-        //     ->get(['id', 'fsid', 'fsName', 'cluster_code']);
 
         return Inertia::render('Wards/RequestStocks/Index', [
             'items' => $items,
             'medicalGas' => $medicalGas,
             'requestedStocks' => $requestedStocks,
             'currentWardStocks' => $currentWardStocks,
-            // 'currentWardStocks2' => $currentWardStocks2,
-            // 'fundSource' => $fundSource,
         ]);
     }
 
