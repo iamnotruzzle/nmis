@@ -28,7 +28,8 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request)
     {
         // Retrieve cached authentication data
-        session()->save(); // Ensure session data is persisted before reading
+        // session()->save(); // Ensure session data is persisted before reading
+        //a
 
         $cachedAuthUser = session('cached_inertia_auth');
         $cachedLocations = session('cached_inertia_locations');
