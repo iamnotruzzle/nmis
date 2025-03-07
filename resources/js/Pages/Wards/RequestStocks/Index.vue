@@ -1522,7 +1522,7 @@ export default {
     medicalGas: Object,
     requestedStocks: Object,
     currentWardStocks: Object,
-    currentWardStocks2: Object,
+    // currentWardStocks2: Object,
     // typeOfCharge: Object,
     fundSource: Object,
   },
@@ -1851,6 +1851,7 @@ export default {
     },
     // store current stocks
     storeCurrentWardStocksInContainer() {
+      console.log(this.currentWardStocks);
       this.currentWardStocksList = []; // reset
 
       moment.suppressDeprecationWarnings = true;
@@ -1861,8 +1862,8 @@ export default {
         this.currentWardStocksList.push({
           from: e.from,
           ward_stock_id: e.id,
-          cl2comb: e.item_details.cl2comb,
-          item: e.item_details.cl2desc,
+          cl2comb: e.cl2comb,
+          item: e.cl2desc,
           unit: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomdesc,
           quantity: e.quantity,
           average: e.average,
@@ -1871,21 +1872,21 @@ export default {
         });
       });
 
-      this.currentWardStocks2.forEach((e) => {
-        let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
+      //   this.currentWardStocks2.forEach((e) => {
+      //     let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
 
-        this.currentWardStocksList.push({
-          from: e.from,
-          ward_stock_id: e.id,
-          cl2comb: e.item_details.cl2comb,
-          item: e.item_details.cl2desc,
-          unit: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomdesc,
-          quantity: e.quantity,
-          average: e.average,
-          is_consumable: e.is_consumable == null ? null : e.is_consumable,
-          expiration_date: expiration_date.toString(),
-        });
-      });
+      //     this.currentWardStocksList.push({
+      //       from: e.from,
+      //       ward_stock_id: e.id,
+      //       cl2comb: e.item_details.cl2comb,
+      //       item: e.item_details.cl2desc,
+      //       unit: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomdesc,
+      //       quantity: e.quantity,
+      //       average: e.average,
+      //       is_consumable: e.is_consumable == null ? null : e.is_consumable,
+      //       expiration_date: expiration_date.toString(),
+      //     });
+      //   });
 
       //   console.log(this.currentWardStocksList);
     },

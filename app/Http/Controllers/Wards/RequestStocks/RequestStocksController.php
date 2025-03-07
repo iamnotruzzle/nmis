@@ -104,23 +104,50 @@ class RequestStocksController extends Controller
             ->paginate(15);
         // dd($requestedStocks);
 
-        // FROM CSR
-        $currentWardStocks = WardsStocks::with(['item_details:cl2comb,cl2desc', 'request_stocks', 'unit_of_measurement:uomcode,uomdesc'])
-            ->where('location', $wardCode)
-            ->where('quantity', '!=', 0)
-            ->whereHas(
-                'request_stocks',
-                function ($query) {
-                    return $query->where('status', 'RECEIVED');
-                }
-            )
-            ->get();
-        // FROM other sources
-        $currentWardStocks2 = WardsStocks::with(['item_details:cl2comb,cl2desc', 'request_stocks', 'unit_of_measurement:uomcode,uomdesc'])
-            ->where('request_stocks_id', null)
-            ->where('location', $wardCode)
-            ->where('quantity', '!=', 0)
-            ->get();
+        // // FROM CSR
+        // $currentWardStocks = WardsStocks::with(['item_details:cl2comb,cl2desc', 'request_stocks', 'unit_of_measurement:uomcode,uomdesc'])
+        //     ->where('location', $wardCode)
+        //     ->where('quantity', '!=', 0)
+        //     ->whereHas(
+        //         'request_stocks',
+        //         function ($query) {
+        //             return $query->where('status', 'RECEIVED');
+        //         }
+        //     )
+        //     ->get();
+        // // FROM other sources
+        // $currentWardStocks2 = WardsStocks::with(['item_details:cl2comb,cl2desc', 'request_stocks', 'unit_of_measurement:uomcode,uomdesc'])
+        //     ->where('request_stocks_id', null)
+        //     ->where('location', $wardCode)
+        //     ->where('quantity', '!=', 0)
+        //     ->get();
+
+        $currentWardStocks = DB::select(
+            "SELECT ws.*,
+                idt.cl2comb, idt.cl2desc,
+                uom.uomcode, uom.uomdesc
+                FROM csrw_wards_stocks ws
+                LEFT JOIN hclass2 idt ON ws.cl2comb = idt.cl2comb
+                LEFT JOIN huom uom ON ws.uomcode = uom.uomcode
+                INNER JOIN csrw_request_stocks rs ON rs.id = ws.request_stocks_id
+                WHERE ws.location = ?
+                AND ws.quantity != 0
+                AND rs.status = 'RECEIVED'
+
+                UNION ALL
+
+                SELECT ws.*,
+                    idt.cl2comb, idt.cl2desc,
+                    uom.uomcode, uom.uomdesc
+                FROM csrw_wards_stocks ws
+                LEFT JOIN hclass2 idt ON ws.cl2comb = idt.cl2comb
+                LEFT JOIN huom uom ON ws.uomcode = uom.uomcode
+                WHERE ws.request_stocks_id IS NULL
+                AND ws.location = ?
+                AND ws.quantity != 0",
+            [$wardCode, $wardCode] // Duplicate the parameter
+        );
+        // dd($currentWardStocks);
 
         $fundSource = FundSource::orderBy('fsName')
             ->get(['id', 'fsid', 'fsName', 'cluster_code']);
@@ -130,7 +157,7 @@ class RequestStocksController extends Controller
             'medicalGas' => $medicalGas,
             'requestedStocks' => $requestedStocks,
             'currentWardStocks' => $currentWardStocks,
-            'currentWardStocks2' => $currentWardStocks2,
+            // 'currentWardStocks2' => $currentWardStocks2,
             'fundSource' => $fundSource,
         ]);
     }
