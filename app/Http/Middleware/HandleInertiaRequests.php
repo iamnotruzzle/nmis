@@ -3,14 +3,8 @@
 namespace App\Http\Middleware;
 
 use App\Models\FundSource;
-use App\Models\Item;
 use App\Models\Location;
 use App\Models\LoginHistory;
-use App\Models\RequestStocks;
-use App\Models\Supplier;
-use App\Models\TypeOfCharge;
-use App\Models\UnitOfMeasurement;
-use App\Models\UserDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -55,13 +49,71 @@ class HandleInertiaRequests extends Middleware
     // }
 
     // session cached handle inertia
+    // public function share(Request $request)
+    // {
+    //     // Retrieve cached authentication data
+    //     $cachedAuthUser = session('cached_inertia_auth');
+    //     $cachedLocations = session('cached_inertia_locations');
+    //     $cachedFundSource = session('cached_inertia_fundsource');
+
+    //     // If not cached, store it in the session
+    //     if (!$cachedAuthUser && $request->user()) {
+    //         $cachedAuthUser = [
+    //             'userDetail' => $request->user()->userDetail,
+    //             'location' => LoginHistory::with('locationName')
+    //                 ->where('employeeid', $request->user()->employeeid)
+    //                 ->orderBy('created_at', 'DESC')
+    //                 ->first(),
+    //             'roles' => $request->user()->roles()->pluck('name'),
+    //         ];
+
+    //         session(['cached_inertia_auth' => $cachedAuthUser]);
+    //         session()->save();
+    //     }
+
+    //     // If locations are not cached, fetch and store them
+    //     if (!$cachedLocations) {
+    //         $cachedLocations = Location::where('wardstat', 'A')
+    //             ->orderBy('wardname', 'ASC')
+    //             ->get();
+
+    //         session(['cached_inertia_locations' => $cachedLocations]);
+    //         session()->save();
+    //     }
+
+    //     // If fund source are not cached, fetch and store them
+    //     if (!$cachedFundSource) {
+    //         $cachedFundSource = FundSource::orderBy('fsName')
+    //             ->get(['id', 'fsid', 'fsName', 'cluster_code']);
+
+    //         session(['cached_inertia_fundsource' => $cachedFundSource]);
+    //         session()->save();
+    //     }
+
+    //     return array_merge(parent::share($request), [
+    //         'flash' => [
+    //             'message' => fn() => $request->session()->get('message'),
+    //             'noItemPrice' => fn() => $request->session()->get('noItemPrice'),
+    //         ],
+    //         'auth' => [
+    //             'user' => fn() => $cachedAuthUser,
+    //         ],
+    //         'locations' => fn() => $cachedLocations,
+    //         'fundSource' => fn() => $cachedFundSource,
+    //     ]);
+    // }
+
+
     public function share(Request $request)
     {
         // Retrieve cached authentication data
+        session()->save(); // Ensure session data is persisted before reading
+
         $cachedAuthUser = session('cached_inertia_auth');
         $cachedLocations = session('cached_inertia_locations');
+        $cachedFundSource = session('cached_inertia_fundsource'); // Check correct casing
 
-        // If not cached, store it in the session
+        // Ensure caching only happens if the session is empty
         if (!$cachedAuthUser && $request->user()) {
             $cachedAuthUser = [
                 'userDetail' => $request->user()->userDetail,
@@ -73,15 +125,24 @@ class HandleInertiaRequests extends Middleware
             ];
 
             session(['cached_inertia_auth' => $cachedAuthUser]);
+            session()->save();
         }
 
-        // If locations are not cached, fetch and store them
         if (!$cachedLocations) {
             $cachedLocations = Location::where('wardstat', 'A')
                 ->orderBy('wardname', 'ASC')
                 ->get();
 
             session(['cached_inertia_locations' => $cachedLocations]);
+            session()->save();
+        }
+
+        if (!$cachedFundSource) {
+            $cachedFundSource = FundSource::orderBy('fsName')
+                ->get(['id', 'fsid', 'fsName', 'cluster_code']);
+
+            session(['cached_inertia_fundsource' => $cachedFundSource]);
+            session()->save();
         }
 
         return array_merge(parent::share($request), [
@@ -93,6 +154,7 @@ class HandleInertiaRequests extends Middleware
                 'user' => fn() => $cachedAuthUser,
             ],
             'locations' => fn() => $cachedLocations,
+            'fundSource' => fn() => $cachedFundSource,
         ]);
     }
 }

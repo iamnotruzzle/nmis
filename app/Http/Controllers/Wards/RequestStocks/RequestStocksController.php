@@ -149,8 +149,8 @@ class RequestStocksController extends Controller
         );
         // dd($currentWardStocks);
 
-        $fundSource = FundSource::orderBy('fsName')
-            ->get(['id', 'fsid', 'fsName', 'cluster_code']);
+        // $fundSource = FundSource::orderBy('fsName')
+        //     ->get(['id', 'fsid', 'fsName', 'cluster_code']);
 
         return Inertia::render('Wards/RequestStocks/Index', [
             'items' => $items,
@@ -158,7 +158,7 @@ class RequestStocksController extends Controller
             'requestedStocks' => $requestedStocks,
             'currentWardStocks' => $currentWardStocks,
             // 'currentWardStocks2' => $currentWardStocks2,
-            'fundSource' => $fundSource,
+            // 'fundSource' => $fundSource,
         ]);
     }
 

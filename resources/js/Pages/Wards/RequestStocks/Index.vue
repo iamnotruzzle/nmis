@@ -1524,7 +1524,7 @@ export default {
     currentWardStocks: Object,
     // currentWardStocks2: Object,
     // typeOfCharge: Object,
-    fundSource: Object,
+    // fundSource: Object,
   },
   data() {
     return {
@@ -1656,6 +1656,8 @@ export default {
   mounted() {
     this.authWardcode = this.$page.props.auth.user.location.location_name.wardcode;
 
+    // console.log('fs', this.$page.props.fundSource);
+
     window.Echo.channel('issued').listen('ItemIssued', (event) => {
       //   console.log('Location:', event.location); // Access the location data
 
@@ -1786,16 +1788,7 @@ export default {
       }
     },
     storeFundSourceInContainer() {
-      //   this.typeOfCharge.forEach((e) => {
-      //     this.fundSourceList.push({
-      //       chrgcode: e.chrgcode,
-      //       chrgdesc: e.chrgdesc,
-      //       bentypcod: e.bentypcod,
-      //       chrgtable: e.chrgtable,
-      //     });
-      //   });
-
-      this.fundSource.forEach((e) => {
+      this.$page.props.fundSource.forEach((e) => {
         this.fundSourceList.push({
           chrgcode: e.fsid,
           chrgdesc: e.fsName,
