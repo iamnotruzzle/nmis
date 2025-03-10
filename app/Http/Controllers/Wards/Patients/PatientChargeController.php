@@ -51,34 +51,34 @@ class PatientChargeController extends Controller
         // this query will show stocks that have the received status but also get the status FROM MEDICAL GASES and EXISTING_STOCKS
         $stocksFromCsr = DB::select(
             "SELECT
-                ws.[from],
-                ws.id,
-                ws.request_stocks_id,
-                ws.is_consumable,
-                item.cl2comb,
-                item.cl2desc,
-                item.uomcode,
-                ws.quantity,
-                ws.average,
-                ws.total_usage,
-                price.price_per_unit AS price,
-                ws.expiration_date
-            FROM csrw_wards_stocks AS ws
-            JOIN hclass2 AS item
-                ON item.cl2comb = ws.cl2comb
-            LEFT JOIN csrw_item_prices AS price
-                ON ws.cl2comb = price.cl2comb
-                AND ISNULL(ws.ris_no, '') = ISNULL(price.ris_no, '')
-            LEFT JOIN csrw_request_stocks AS request
-                ON ws.request_stocks_id = request.id
-            WHERE ws.location = '" . $wardcode . "'
-                AND ws.quantity > 0
-                AND ws.expiration_date > GETDATE()
-                AND (
-                    (request.status = 'RECEIVED')
-                    OR (ws.request_stocks_id IS NULL AND ws.[from] IN ('MEDICAL GASES', 'EXISTING_STOCKS', 'CONSIGNMENT'))
-                )
-            ORDER BY ws.expiration_date ASC;"
+                    ws.[from],
+                    ws.id,
+                    ws.request_stocks_id,
+                    ws.is_consumable,
+                    item.cl2comb,
+                    item.cl2desc,
+                    item.uomcode,
+                    ws.quantity,
+                    ws.average,
+                    ws.total_usage,
+                    price.price_per_unit AS price,
+                    ws.expiration_date
+                FROM csrw_wards_stocks AS ws
+                JOIN hclass2 AS item
+                    ON item.cl2comb = ws.cl2comb
+                LEFT JOIN csrw_item_prices AS price
+                    ON ws.cl2comb = price.cl2comb
+                    AND ISNULL(ws.ris_no, '') = ISNULL(price.ris_no, '')
+                LEFT JOIN csrw_request_stocks AS request
+                    ON ws.request_stocks_id = request.id
+                WHERE ws.location = '" . $wardcode . "'
+                    AND ws.quantity > 0
+                    AND ws.expiration_date > GETDATE()
+                    AND (
+                        (request.status = 'RECEIVED')
+                        OR (ws.request_stocks_id IS NULL AND ws.[from] IN ('MEDICAL GASES', 'EXISTING_STOCKS', 'CONSIGNMENT'))
+                    )
+                ORDER BY ws.expiration_date ASC;"
         );
         // dd($stocksFromCsr);
 

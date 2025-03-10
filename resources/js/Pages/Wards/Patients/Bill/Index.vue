@@ -310,7 +310,7 @@
             <template #body="{ data }"> ₱ {{ data.price }} </template>
           </Column>
           <Column
-            filed="total"
+            field="total"
             header="TOTAL"
             style="text-align: right; width: 10%"
             :pt="{ headerContent: 'justify-content-end' }"
@@ -666,6 +666,7 @@
         </Column>
         <Column
           header="QTY"
+          field="quantity"
           style="text-align: right"
           :pt="{ headerContent: 'justify-content-end' }"
           sortable
@@ -689,6 +690,7 @@
         </Column>
         <Column
           header="PRICE PER UNIT"
+          field="price"
           style="text-align: right"
           :pt="{ headerContent: 'justify-content-end' }"
           sortable
