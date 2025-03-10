@@ -51,32 +51,36 @@ class PatientChargeController extends Controller
         // this query will show stocks that have the received status but also get the status FROM MEDICAL GASES and EXISTING_STOCKS
         $stocksFromCsr = DB::select(
             "SELECT
-                csrw_wards_stocks.[from],
-                csrw_wards_stocks.id,
-                csrw_wards_stocks.request_stocks_id,
-                csrw_wards_stocks.is_consumable,
+                ws.[from],
+                ws.id,
+                ws.request_stocks_id,
+                ws.is_consumable,
                 item.cl2comb,
                 item.cl2desc,
                 item.uomcode,
-                csrw_wards_stocks.quantity,
-                csrw_wards_stocks.average,
-                csrw_wards_stocks.total_usage,
+                ws.quantity,
+                ws.average,
+                ws.total_usage,
                 price.price_per_unit AS price,
-                csrw_wards_stocks.expiration_date
-            FROM csrw_wards_stocks
-            JOIN hclass2 AS item ON item.cl2comb = csrw_wards_stocks.cl2comb
-            JOIN csrw_item_prices AS price ON csrw_wards_stocks.cl2comb = price.cl2comb
-            LEFT JOIN csrw_request_stocks AS request ON csrw_wards_stocks.request_stocks_id = request.id
-            WHERE csrw_wards_stocks.location = '" . $wardcode . "'
-                AND csrw_wards_stocks.ris_no = price.ris_no
-                AND csrw_wards_stocks.quantity > 0
-                AND csrw_wards_stocks.expiration_date > GETDATE()
+                ws.expiration_date
+            FROM csrw_wards_stocks AS ws
+            JOIN hclass2 AS item
+                ON item.cl2comb = ws.cl2comb
+            LEFT JOIN csrw_item_prices AS price
+                ON ws.cl2comb = price.cl2comb
+                AND ISNULL(ws.ris_no, '') = ISNULL(price.ris_no, '')
+            LEFT JOIN csrw_request_stocks AS request
+                ON ws.request_stocks_id = request.id
+            WHERE ws.location = '4FSA'
+                AND ws.quantity > 0
+                AND ws.expiration_date > GETDATE()
                 AND (
-                    (request.status = 'RECEIVED') -- Include items with a valid request_stocks_id and status RECEIVED
-                    OR (csrw_wards_stocks.request_stocks_id IS NULL AND csrw_wards_stocks.[from] IN ('MEDICAL GASES', 'EXISTING_STOCKS', 'CONSIGNMENT')) -- Include items that is not from CSR
+                    (request.status = 'RECEIVED')
+                    OR (ws.request_stocks_id IS NULL AND ws.[from] IN ('MEDICAL GASES', 'EXISTING_STOCKS', 'CONSIGNMENT'))
                 )
-            ORDER BY csrw_wards_stocks.expiration_date ASC;"
+            ORDER BY ws.expiration_date ASC;"
         );
+        // dd($stocksFromCsr);
 
         // set medicalSupplies value and remove duplicate id
         $medicalSupplies = [];

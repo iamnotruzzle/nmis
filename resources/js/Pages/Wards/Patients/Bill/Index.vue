@@ -628,7 +628,7 @@
             />
           </div>
         </template>
-        <Column
+        <!-- <Column
           field="from"
           header="FROM"
           sortable
@@ -654,7 +654,7 @@
               value="MEDICAL GASES"
             ></Tag>
           </template>
-        </Column>
+        </Column> -->
         <Column
           field="cl2desc"
           header="ITEM"
@@ -859,7 +859,7 @@ export default {
     window.removeEventListener('keydown', this.preventKeys);
   },
   mounted() {
-    // console.log(this.hpercode);
+    // console.log(this.medicalSupplies);
     window.addEventListener('beforeunload', this.preventRefresh);
     window.addEventListener('keydown', this.preventKeys);
 
@@ -978,7 +978,7 @@ export default {
         } else {
           // If not found, add a new entry
           combinedSupplies.push({
-            from: med.from,
+            // from: med.from,
             id: med.id,
             is_consumable: med.is_consumable,
             cl2comb: med.cl2comb,
