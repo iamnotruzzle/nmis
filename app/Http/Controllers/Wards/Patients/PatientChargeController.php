@@ -43,17 +43,6 @@ class PatientChargeController extends Controller
         $is_for_discharge = $request->disch;
         $room_bed = $request->room_bed;
 
-        // dd($hpercode);
-
-        // OLD
-        // $pat_tscode = '';
-        // $admlog_tscode = AdmissionLog::where('enccode', $pat_enccode)->get('tscode')->first();
-        // if ($admlog_tscode != null) {
-        //     $pat_tscode = $admlog_tscode;
-        // } else {
-        //     $pat_tscode = Opdlog::where('enccode', $pat_enccode)->get('tscode')->first();
-        // }
-
         // NEW
         $pat_tscode = '';
         $admlog_tscode = AdmissionLog::where('enccode', $pat_enccode)->get('tscode')->first();
@@ -62,15 +51,6 @@ class PatientChargeController extends Controller
         // enccode is 1 is to 1
         $pat_tscode = $admlog_tscode->tscode ?? $opdlog_tscode->tscode ?? $erlog_tscode->tscode ?? null;
         $medicalSupplies = array();
-
-        // dd($pat_tscode);
-
-        // dd($pat_enccode);
-
-        // $pat_name = DB::select("SELECT hperson.hpercode, hperson.patfirst, hperson.patmiddle, hperson.patlast FROM henctr
-        //     LEFT JOIN hperson ON henctr.hpercode = hperson.hpercode
-        //     WHERE henctr.enccode = ?
-        // ", [$pat_enccode]);
 
         // get auth wardcode
         $authWardcode = DB::select(
@@ -88,30 +68,6 @@ class PatientChargeController extends Controller
             [Auth::user()->employeeid]
         );
         $wardcode = $authWardcode[0]->wardcode;
-
-        // old query but this will show items even if they are not received status
-        // $stocksFromCsr = DB::select(
-        //     "SELECT
-        //         csrw_wards_stocks.id,
-        //         csrw_wards_stocks.is_consumable,
-
-        //         item.cl2comb,
-        //         item.cl2desc,
-        //         item.uomcode,
-        //         csrw_wards_stocks.quantity,
-        //         csrw_wards_stocks.average,
-        //         csrw_wards_stocks.total_usage,
-        //         price.price_per_unit as price,
-        //         csrw_wards_stocks.expiration_date
-        //     FROM csrw_wards_stocks
-        //     JOIN hclass2 as item ON item.cl2comb = csrw_wards_stocks.cl2comb
-        //     JOIN csrw_item_prices as price ON csrw_wards_stocks.cl2comb = price.cl2comb
-        //     WHERE csrw_wards_stocks.location = '" . $wardcode . "'
-        //         AND csrw_wards_stocks.ris_no = price.ris_no
-        //         AND csrw_wards_stocks.quantity > 0
-        //         AND csrw_wards_stocks.expiration_date > GETDATE()
-        //     ORDER BY csrw_wards_stocks.expiration_date ASC;"
-        // );
 
         // this query will show stocks that have the received status but also get the status FROM MEDICAL GASES and EXISTING_STOCKS
         $stocksFromCsr = DB::select(
@@ -165,13 +121,11 @@ class PatientChargeController extends Controller
                 $seenIds[] = $s->id;
             }
         }
-        // dd($medicalSupplies);
 
         // get miscellaneous / miscellaneous
         $misc = Miscellaneous::with('unit')
             ->where('hmstat', 'A')
             ->get(['hmcode', 'hmdesc', 'hmamt', 'uomcode']);
-        // dd($misc);
 
         $bills = DB::select(
             "SELECT pat_charge.pcchrgcod as charge_slip_no,
