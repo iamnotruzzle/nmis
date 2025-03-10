@@ -304,6 +304,8 @@ export default {
       });
     },
     goToPatientCharge(e) {
+      this.params.hpercode = e.hpercode;
+      this.params.patient_name = e.patient;
       this.params.enccode = e.enccode;
       this.params.patient = e.patient;
       this.$inertia.get('patientcharge', this.params, {

@@ -38,8 +38,12 @@ class PatientChargeController extends Controller
     public function index(Request $request)
     {
         $pat_enccode = $request->enccode;
+        $hpercode = $request->hpercode;
+        $patient_name = $request->patient;
         $is_for_discharge = $request->disch;
         $room_bed = $request->room_bed;
+
+        // dd($hpercode);
 
         // OLD
         // $pat_tscode = '';
@@ -63,10 +67,10 @@ class PatientChargeController extends Controller
 
         // dd($pat_enccode);
 
-        $pat_name = DB::select("SELECT hperson.hpercode, hperson.patfirst, hperson.patmiddle, hperson.patlast FROM henctr
-            LEFT JOIN hperson ON henctr.hpercode = hperson.hpercode
-            WHERE henctr.enccode = ?
-        ", [$pat_enccode]);
+        // $pat_name = DB::select("SELECT hperson.hpercode, hperson.patfirst, hperson.patmiddle, hperson.patlast FROM henctr
+        //     LEFT JOIN hperson ON henctr.hpercode = hperson.hpercode
+        //     WHERE henctr.enccode = ?
+        // ", [$pat_enccode]);
 
         // get auth wardcode
         $authWardcode = DB::select(
@@ -215,7 +219,9 @@ class PatientChargeController extends Controller
 
 
         return Inertia::render('Wards/Patients/Bill/Index', [
-            'pat_name' => $pat_name,
+            // 'pat_name' => $pat_name,
+            'hpercode' => $hpercode,
+            'patient_name' => $patient_name,
             'pat_tscode' => $pat_tscode,
             'pat_enccode' => $pat_enccode,
             'room_bed' => $room_bed,

@@ -471,6 +471,8 @@ export default {
     },
     goToPatientCharge(e) {
       this.params.enccode = e.enccode;
+      this.params.hpercode = e.hpercode;
+      this.params.patient_name = e.patient;
       this.params.disch = e.is_for_discharge;
       this.params.patient = e.patient;
       this.params.room_bed = e.room_bed;

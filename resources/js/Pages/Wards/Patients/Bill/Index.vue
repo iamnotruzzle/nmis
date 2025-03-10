@@ -26,10 +26,8 @@
           :globalFilterFields="['charge_slip_no', 'type_of_charge_description', 'item', 'amount']"
         >
           <template #header>
-            <span class="text-2xl text-primary font-bold">
-              {{ pat_name[0].patlast }}, {{ pat_name[0].patfirst }} {{ pat_name[0].patmiddle }}
-            </span>
-            <span class="text-2xl text-primary font-bold">( {{ pat_name[0].hpercode }} )</span>
+            <span class="text-2xl text-primary font-bold"> {{ patientName }} </span>
+            <span class="text-2xl text-primary font-bold">( {{ hpercode }} )</span>
             <div class="flex flex-wrap align-items-center justify-content-between gap-2">
               <span class="text-xl text-900 font-bold text-primary">BILLS</span>
               <div class="flex">
@@ -762,7 +760,9 @@ export default {
     SpeedDial,
   },
   props: {
-    pat_name: Array,
+    // pat_name: Array,
+    hpercode: String,
+    patient_name: String,
     pat_tscode: String,
     pat_enccode: String,
     room_bed: String,
@@ -859,6 +859,7 @@ export default {
     window.removeEventListener('keydown', this.preventKeys);
   },
   mounted() {
+    // console.log(this.hpercode);
     window.addEventListener('beforeunload', this.preventRefresh);
     window.addEventListener('keydown', this.preventKeys);
 
@@ -888,9 +889,9 @@ export default {
     // set patient enccode
     this.enccode = this.pat_enccode;
     // set patient name
-    this.patientName = this.bills.patlast + ', ' + this.bills.patfirst + ' ' + this.bills.patmiddle;
+    this.patientName = this.patient_name;
     // set hospital number
-    this.hospitalNumber = this.pat_name[0].hpercode;
+    this.hospitalNumber = this.hpercode;
   },
   methods: {
     totalPerChargeSlip(charge_slip_no) {
@@ -1191,10 +1192,9 @@ export default {
         if (data != null) {
           this.printForm.no = data.charge_slip_no;
           this.printForm.type = 'Ward';
-          this.printForm.hospital_number = this.pat_name[0].hpercode;
+          this.printForm.hospital_number = this.hpercode;
           this.printForm.date = this.chargeSlipDate(data.charge_date);
-          this.printForm.patient_name =
-            this.pat_name[0].patlast + ', ' + this.pat_name[0].patfirst + this.pat_name[0].patmiddle;
+          this.printForm.patient_name = this.patientName;
           this.printForm.location = this.$page.props.auth.user.location.location_name.wardname + ' ' + this.room_bed;
           this.printForm.chargedItems = [];
           this.printForm.entry_by = data.entry_by;
@@ -1310,7 +1310,7 @@ export default {
 
       // set form data
       this.form.enccode = this.pat_enccode;
-      this.form.hospitalNumber = this.pat_name[0].hpercode;
+      this.form.hospitalNumber = this.hpercode;
       this.form.itemsToBillList = this.itemsToBillList;
       this.form.tscode = this.pat_tscode;
 
@@ -1345,7 +1345,7 @@ export default {
       this.form.upd_id = e.charge_log_id;
       this.form.upd_ward_stocks_id = e.charge_log_ward_stocks_id;
       this.form.upd_enccode = this.pat_enccode;
-      this.form.upd_hospitalNumber = this.pat_name[0].hpercode;
+      this.form.upd_hospitalNumber = this.hpercode;
       this.form.upd_charge_slip_no = e.charge_slip_no;
       this.form.upd_itemcode = e.itemcode;
       this.form.upd_item_desc = e.item;
