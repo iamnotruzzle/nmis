@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Sessions;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use PhpParser\Node\Stmt\TryCatch;
@@ -52,22 +53,8 @@ class PatientChargeController extends Controller
         $pat_tscode = $admlog_tscode->tscode ?? $opdlog_tscode->tscode ?? $erlog_tscode->tscode ?? null;
         $medicalSupplies = array();
 
-        // get auth wardcode
-        $authWardcode = DB::select(
-            "SELECT TOP 1
-                l.wardcode
-            FROM
-                user_acc u
-            INNER JOIN
-                csrw_login_history l ON u.employeeid = l.employeeid
-            WHERE
-                l.employeeid = ?
-            ORDER BY
-                l.created_at DESC;
-            ",
-            [Auth::user()->employeeid]
-        );
-        $wardcode = $authWardcode[0]->wardcode;
+        $authWardCode_cached = Cache::get('c_authWardCode_' . Auth::user()->employeeid);
+        $wardcode = $authWardCode_cached;
 
         // this query will show stocks that have the received status but also get the status FROM MEDICAL GASES and EXISTING_STOCKS
         $stocksFromCsr = DB::select(
@@ -211,22 +198,8 @@ class PatientChargeController extends Controller
 
         $srcchrg = 'WARD';
 
-        // get auth wardcode
-        $authWardcode = DB::select(
-            "SELECT TOP 1
-                l.wardcode
-            FROM
-                user_acc u
-            INNER JOIN
-                csrw_login_history l ON u.employeeid = l.employeeid
-            WHERE
-                l.employeeid = ?
-            ORDER BY
-                l.created_at DESC;
-            ",
-            [Auth::user()->employeeid]
-        );
-        $authCode = $authWardcode[0]->wardcode;
+        $authWardCode_cached = Cache::get('c_authWardCode_' . Auth::user()->employeeid);
+        $authCode = $authWardCode_cached;
 
         $enccode = $request->enccode;
         $hospitalNumber = $request->hospitalNumber;
