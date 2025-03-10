@@ -142,7 +142,11 @@ class AuthenticatedSessionController extends Controller
             ]);
 
             // Optionally clear Inertia session cached data
-            session()->forget(['cached_inertia_auth', 'cached_inertia_locations', 'cached_inertia_fundsource']);
+            session()->forget([
+                'cached_inertia_auth',
+                'cached_inertia_locations',
+                'cached_inertia_fundsource'
+            ]);
         }
 
         return app(LogoutResponse::class);
