@@ -71,7 +71,7 @@ class PatientChargeController extends Controller
                 AND ISNULL(ws.ris_no, '') = ISNULL(price.ris_no, '')
             LEFT JOIN csrw_request_stocks AS request
                 ON ws.request_stocks_id = request.id
-            WHERE ws.location = '4FSA'
+            WHERE ws.location = '" . $wardcode . "'
                 AND ws.quantity > 0
                 AND ws.expiration_date > GETDATE()
                 AND (
