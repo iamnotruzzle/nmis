@@ -446,6 +446,7 @@ export default {
           physician: this.setPhysician(e),
           bill_stat: e.bill_stat,
           is_for_discharge: e.is_for_discharge == 'DISCH' ? true : false,
+          tscode: e.tscode,
         });
       });
       //   console.log(this.patientsList);
@@ -476,6 +477,7 @@ export default {
       this.params.disch = e.is_for_discharge;
       this.params.patient = e.patient;
       this.params.room_bed = e.room_bed;
+      this.params.tscode = e.tscode;
       //   console.log(e);
       // this.params.is_for_discharge =
       this.$inertia.get('patientcharge', this.params, {

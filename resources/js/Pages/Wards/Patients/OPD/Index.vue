@@ -168,9 +168,9 @@ export default {
   },
   // created will be initialize before mounted
   created() {
-    this.totalRecords = this.patients.total;
-    this.params.page = this.patients.current_page;
-    this.rows = this.patients.per_page;
+    // this.totalRecords = this.patients.total;
+    // this.params.page = this.patients.current_page;
+    // this.rows = this.patients.per_page;
   },
   mounted() {
     // console.log('mounted', this.patients);
@@ -213,6 +213,7 @@ export default {
     //   });
     // },
     storePatientsInContainer() {
+      console.log(this.patients);
       this.patients.forEach((e) => {
         this.patientsList.push({
           enccode: e.enccode,
@@ -227,12 +228,13 @@ export default {
             ' ' +
             (e.patsuffix == null ? '' : e.patsuffix),
           physician: e.lastname + ',' + ' ' + e.firstname + ' ' + (e.empsuffix == null ? '' : e.empsuffix),
+          tscode: e.tscode,
         });
       });
       //   console.log(this.patientsList);
     },
     onPage(event) {
-      this.params.page = event.page + 1;
+      //   this.params.page = event.page + 1;
       this.updateData();
     },
     updateData() {
@@ -243,7 +245,7 @@ export default {
         preserveState: true,
         preserveScroll: true,
         onFinish: (visit) => {
-          this.totalRecords = this.patients.total;
+          //   this.totalRecords = this.patients.total;
           this.patientsList = [];
           this.storePatientsInContainer();
           this.loading = false;
@@ -255,6 +257,8 @@ export default {
       this.params.patient_name = e.patient;
       this.params.enccode = e.enccode;
       this.params.patient = e.patient;
+      this.params.tscode = e.tscode;
+
       this.$inertia.get('patientcharge', this.params, {
         preserveState: true,
         preserveScroll: true,

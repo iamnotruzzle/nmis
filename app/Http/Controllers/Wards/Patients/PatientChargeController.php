@@ -43,15 +43,7 @@ class PatientChargeController extends Controller
         $patient_name = $request->patient;
         $is_for_discharge = $request->disch;
         $room_bed = $request->room_bed;
-
-        // NEW
-        $pat_tscode = '';
-        $admlog_tscode = AdmissionLog::where('enccode', $pat_enccode)->get('tscode')->first();
-        $opdlog_tscode = Opdlog::where('enccode', $pat_enccode)->get('tscode')->first();
-        $erlog_tscode = ERlog::where('enccode', $pat_enccode)->get('tscode')->first();
-        // enccode is 1 is to 1
-        $pat_tscode = $admlog_tscode->tscode ?? $opdlog_tscode->tscode ?? $erlog_tscode->tscode ?? null;
-        $medicalSupplies = array();
+        $pat_tscode = $request->tscode;
 
         $authWardCode_cached = Cache::get('c_authWardCode_' . Auth::user()->employeeid);
         $wardcode = $authWardCode_cached;

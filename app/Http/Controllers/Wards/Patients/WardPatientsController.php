@@ -95,7 +95,8 @@ class WardPatientsController extends Controller
                             (SELECT lastname + ', ' + firstname + ' ' + middlename FROM hpersonal WHERE physician_license_licno3.employeeid = hpersonal.employeeid) AS physician_licno3,
                             (SELECT lastname + ', ' + firstname + ' ' + middlename FROM hpersonal WHERE physician_license_licno4.employeeid = hpersonal.employeeid) AS physician_licno4,
                             ha.billstat AS bill_stat,
-                            (SELECT TOP 1 orcode FROM hdocord WHERE enccode = enctr.enccode ORDER BY dodate DESC) AS is_for_discharge
+                            (SELECT TOP 1 orcode FROM hdocord WHERE enccode = enctr.enccode ORDER BY dodate DESC) AS is_for_discharge,
+                            adm.tscode
                         FROM hospital.dbo.henctr enctr
                             RIGHT JOIN hospital.dbo.hadmlog adm ON enctr.enccode = adm.enccode
                             RIGHT JOIN hospital.dbo.hpatroom pat_room ON enctr.enccode = pat_room.enccode
@@ -138,7 +139,7 @@ class WardPatientsController extends Controller
                 "SELECT hopdlog.enccode, hopdlog.hpercode, hopdlog.opddate, hopdlog.licno,
                     hpersonal.lastname, hpersonal.firstname, hpersonal.empsuffix,
                     hperson.patlast, hperson.patfirst, hperson.patmiddle,
-                    htypser.tsdesc, hopdlog.opddtedis, hopdlog.opdstat, hdisposition.dispdesc
+                    htypser.tsdesc, hopdlog.opddtedis, hopdlog.opdstat, hdisposition.dispdesc, hopdlog.tscode
 
                     FROM hopdlog
                     WITH (NOLOCK)
@@ -166,7 +167,7 @@ class WardPatientsController extends Controller
 
 
             return Inertia::render('Wards/Patients/OPD/Index', [
-                'patients' => $cachedPatients
+                'patients' => $patients_query
             ]);
         } else if ($locationType_cached == 'ER') {
             $latestERDateMod = DB::select(
@@ -203,6 +204,7 @@ class WardPatientsController extends Controller
                         herlog.dispcode,
                         henctr.toecode,
                         herlog.datemod,
+                        herlog.tscode,
                         -- Custom Bill Status Column
                         (SELECT TOP 1 'BILLED'
                         FROM csrw_patient_charge_logs
