@@ -117,8 +117,11 @@ class WardPatientsController extends Controller
                 );
 
                 // Update cache with new patient data and latest admission date
-                Cache::forever($cacheKeyLatestUpdate, $latestAdmDate);
-                Cache::forever($cacheKeyPatients, $fetchedPatients);
+                // Cache::forever($cacheKeyLatestUpdate, $latestAdmDate);
+                // Cache::forever($cacheKeyPatients, $fetchedPatients);
+                // Store patient data and latest admission date in cache for 30 minutes
+                Cache::put($cacheKeyLatestUpdate, $latestAdmDate, now()->addMinutes(30));
+                Cache::put($cacheKeyPatients, $fetchedPatients, now()->addMinutes(30));
                 $cachedPatients = $fetchedPatients;
             } else {
                 // Retrieve patient data from cache if admission date has not changed
@@ -222,8 +225,11 @@ class WardPatientsController extends Controller
                 );
 
                 // Update cache with new patient data and latest dateMod date
-                Cache::forever($cacheKeyLatestUpdate, $latestERDateMod);
-                Cache::forever($cacheKeyPatients, $fetchedPatients);
+                // Cache::forever($cacheKeyLatestUpdate, $latestERDateMod);
+                // Cache::forever($cacheKeyPatients, $fetchedPatients);
+                // Store patient data and latest admission date in cache for 30 minutes
+                Cache::put($cacheKeyLatestUpdate, $latestERDateMod, now()->addMinutes(30));
+                Cache::put($cacheKeyPatients, $fetchedPatients, now()->addMinutes(30));
                 $cachedPatients = $fetchedPatients;
             } else {
                 // Retrieve patient data from cache if dateMod date has not changed
