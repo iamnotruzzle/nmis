@@ -791,6 +791,7 @@ export default {
       enccode: '',
       patientName: '',
       hospitalNumber: '',
+      packageList: [],
       billList: [],
       medicalSuppliesList: [],
       miscList: [],
@@ -882,6 +883,7 @@ export default {
       });
     });
 
+    this.storePackagesInController();
     this.storeBillsInContainer();
     this.getTotalAmount();
     this.storeMedicalSuppliesInContainer();
@@ -933,6 +935,19 @@ export default {
       const factor = Math.pow(10, 2);
       const truncated = Math.floor(number * factor) / factor;
       return truncated.toFixed(2);
+    },
+    storePackagesInController() {
+      this.$page.props.packages.forEach((e) => {
+        this.packageList.push({
+          id: e.id,
+          description: e.description,
+          itemcode: e.cl2comb,
+          itemDesc: e.cl2desc,
+          quantity: e.quantity,
+        });
+      });
+
+      console.log(this.packageList);
     },
     storeBillsInContainer() {
       this.billList = [];
