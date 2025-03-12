@@ -1264,7 +1264,7 @@
                   label="SUPPLEMENTAL"
                   icon="pi pi-plus"
                   iconPos="right"
-                  severity="success"
+                  severity="contrast"
                   @click="openSupplementalDialog"
                 />
                 <div class="mr-2"></div>
@@ -1311,7 +1311,7 @@
               <Tag
                 v-if="data.from == 'SUPPLEMENTAL'"
                 value="SUPPLEMENTAL"
-                severity="success"
+                severity="contrast"
               />
               <Tag
                 v-if="data.from == 'EXISTING_STOCKS'"
