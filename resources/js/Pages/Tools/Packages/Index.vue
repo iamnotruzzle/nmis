@@ -17,7 +17,6 @@
           paginator
           :rows="20"
           dataKey="id"
-          filterDisplay="row"
           sortField="description"
           :sortOrder="1"
           showGridlines
@@ -238,6 +237,7 @@
                     inputId="minmax"
                     :min="0"
                     required
+                    @keyup.enter="addItem"
                   />
                 </div>
 
@@ -528,6 +528,7 @@ export default {
             this.createPackageDialog = false;
             this.cancel();
             this.storeItemsInContainer();
+            this.storePackagesInContainer();
             this.createdMsg();
           },
         });

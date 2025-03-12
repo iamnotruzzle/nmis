@@ -255,7 +255,7 @@ export default {
   },
   methods: {
     removeRoutesIfNonAdmin() {
-      // admin
+      //#region admin
       if (this.$page.props.user.designation == 'admin') {
         this.menu.splice(1, 1);
         this.menu[0].items = [];
@@ -304,19 +304,9 @@ export default {
           }
         );
       }
-      //   if (this.$page.props.user.designation == 'admin') {
-      //     this.menu[1].items = this.menu[1].items.filter(function (obj) {
-      //       return obj.to !== 'csrmanualreports';
-      //     });
-      //   }
-      //   if (this.$page.props.user.designation == 'admin') {
-      //     this.menu[1].items = this.menu[1].items.filter(function (obj) {
-      //       return obj.to !== 'wardsmanualreports';
-      //     });
-      //   }
-      // end admin
+      //#endregion
 
-      // csr
+      //#region csr
       // if auth users designation is csr, remove requeststocks page in the array
       if (this.$page.props.user.designation == 'csr') {
         this.menu[0].items = this.menu[0].items.filter(function (obj) {
@@ -372,15 +362,9 @@ export default {
           return obj.to !== 'admindashboard';
         });
       }
+      //#endregion
 
-      //   if (this.$page.props.user.designation == 'csr') {
-      //     this.menu[2].items = this.menu[2].items.filter(function (obj) {
-      //       return obj.to !== 'wardsmanualreports';
-      //     });
-      //   }
-      // end csr
-
-      // ward
+      //#region ward
       if (this.$page.props.user.designation == 'ward') {
         this.menu[1].items = this.menu[1].items.filter(function (obj) {
           return obj.to !== 'categories' && obj.to !== 'items' && obj.to !== 'csrstocks';
@@ -401,11 +385,11 @@ export default {
           return obj.to !== 'users';
         });
       }
-      if (this.$page.props.user.designation == 'ward') {
-        this.menu[0].items = this.menu[0].items.filter(function (obj) {
-          return obj.to !== 'packages';
-        });
-      }
+      //   if (this.$page.props.user.designation == 'ward') {
+      //     this.menu[0].items = this.menu[0].items.filter(function (obj) {
+      //       return obj.to !== 'packages';
+      //     });
+      //   }
       if (this.$page.props.user.designation == 'ward') {
         this.menu[0].items = this.menu[0].items.filter(function (obj) {
           return obj.to !== 'csrreports';
@@ -431,12 +415,7 @@ export default {
           return obj.to !== 'csrdashboard';
         });
       }
-      //   if (this.$page.props.user.designation == 'ward') {
-      //     this.menu[2].items = this.menu[2].items.filter(function (obj) {
-      //       return obj.to !== 'csrmanualreports';
-      //     });
-      //   }
-      // end ward
+      //#endregion
     },
     onload() {
       document.documentElement.style.fontSize = 13 + 'px';

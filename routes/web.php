@@ -126,6 +126,6 @@ Route::middleware(['web', 'auth', 'verified'])->group(
         // end ward routes
 
         // tools
-        Route::resource('packages', PackageController::class)->middleware(['verified', 'designation_admin'])->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('packages', PackageController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
     }
 );
