@@ -32,6 +32,7 @@ class HandleInertiaRequests extends Middleware
         //a
 
         $cachedAuthUser = session('cached_inertia_auth');
+        $cachedPackages = session('cached_inertia_packages');
         $cachedLocations = session('cached_inertia_locations');
         $cachedFundSource = session('cached_inertia_fundsource'); // Check correct casing
 
@@ -47,6 +48,19 @@ class HandleInertiaRequests extends Middleware
             ];
 
             session(['cached_inertia_auth' => $cachedAuthUser]);
+            session()->save();
+        }
+
+        if (!$cachedPackages) {
+            $cachedPackages = DB::select(
+                "SELECT package.id, package.description, pack_dets.cl2comb, item.cl2desc, pack_dets.quantity, package.status
+                    FROM csrw_packages AS package
+                    JOIN csrw_package_details as pack_dets ON pack_dets.package_id = package.id
+                    JOIN hclass2 as item ON item.cl2comb = pack_dets.cl2comb
+                    ORDER BY item.cl2desc ASC;"
+            );
+
+            session(['cached_inertia_packages' => $cachedPackages]);
             session()->save();
         }
 
@@ -77,6 +91,7 @@ class HandleInertiaRequests extends Middleware
             ],
             'locations' => fn() => $cachedLocations,
             'fundSource' => fn() => $cachedFundSource,
+            'packages' => fn() => $cachedPackages,
         ]);
     }
 }
