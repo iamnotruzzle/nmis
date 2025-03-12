@@ -43,6 +43,7 @@ use App\Http\Controllers\Wards\Patients\WardPatientsController;
 use App\Http\Controllers\Wards\Reports\ReportController;
 use App\Http\Controllers\Wards\RequestStocks\RequestStocksController;
 use App\Http\Controllers\Wards\RequestStocks\RequestStocksLogs\RequestStocksLogsController;
+use App\Http\Controllers\Wards\Supplemental\SupplementalControler;
 use App\Http\Controllers\Wards\TransferStock\TransferStockController;
 use App\Models\CsrStockBalance;
 use Illuminate\Support\Facades\Route;
@@ -106,6 +107,7 @@ Route::middleware(['web', 'auth', 'verified'])->group(
 
         Route::resource('medicalGases', WardMedicalGasesController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('consignment', ConsignmentController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('supplemental', SupplementalControler::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('existingstock', ExistingStockController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('wardreports', ReportController::class)->middleware(['verified', 'designation_ward'])->only(['index']);
         Route::get('wardstocks/export/', [WardStocksReportController::class, 'export']);

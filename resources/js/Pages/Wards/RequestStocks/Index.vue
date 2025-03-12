@@ -835,6 +835,214 @@
           </template>
         </Dialog>
 
+        <!-- supplemental -->
+        <Dialog
+          v-model:visible="supplementalDialog"
+          :modal="true"
+          :closeOnEscape="false"
+          class="p-fluid w-4"
+          @hide="whenDialogIsHidden"
+        >
+          <template #header>
+            <div class="text-orange-500 text-xl font-bold">SUPPLEMENTAL</div>
+          </template>
+          <div
+            v-if="isUpdateSupplemental != true"
+            class="field"
+          >
+            <label for="fundSource">Fund source</label>
+            <Dropdown
+              id="fundSource"
+              required="true"
+              v-model="formSupplemental.fund_source"
+              :options="fundSourceList"
+              filter
+              showClear
+              dataKey="chrgcode"
+              optionLabel="chrgdesc"
+              optionValue="chrgcode"
+              class="w-full"
+              :class="{ 'p-invalid': formSupplemental.fund_source == '' }"
+            />
+            <small
+              class="text-error"
+              v-if="formSupplemental.errors.fund_source"
+            >
+              {{ formSupplemental.errors.fund_source }}
+            </small>
+          </div>
+          <div class="field">
+            <label>Items</label>
+            <Dropdown
+              required="true"
+              v-model="formSupplemental.cl2comb"
+              :options="itemsList"
+              :virtualScrollerOptions="{ itemSize: 38 }"
+              filter
+              optionValue="cl2comb"
+              optionLabel="cl2desc"
+              class="w-full mb-3"
+              :disabled="isUpdateSupplemental == true"
+            />
+          </div>
+          <div class="field">
+            <label for="unit">Unit</label>
+            <InputText
+              id="unit"
+              v-model.trim="selectedItemsUomDesc"
+              readonly
+            />
+          </div>
+          <div class="field">
+            <label>Quantity</label>
+            <InputText
+              id="quantity"
+              v-model.trim="formSupplemental.quantity"
+              required="true"
+              autofocus
+              :class="{ 'p-invalid': formSupplemental.quantity == '' || formSupplemental.quantity == null }"
+              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+              inputId="integeronly"
+            />
+            <small
+              class="text-error"
+              v-if="formSupplemental.errors.quantity"
+            >
+              {{ formSupplemental.errors.quantity }}
+            </small>
+          </div>
+          <div
+            v-if="isUpdateSupplemental != true"
+            class="field"
+          >
+            <label>Price per unit</label>
+            <InputNumber
+              id="price_per_unit"
+              inputId="minmaxfraction"
+              :minFractionDigits="2"
+              :maxFractionDigits="5"
+              v-model.trim="formSupplemental.price_per_unit"
+              required="true"
+              :class="{ 'p-invalid': formSupplemental.price_per_unit == '' || formSupplemental.price_per_unit == null }"
+            />
+            <small
+              class="text-error"
+              v-if="formSupplemental.errors.price_per_unit"
+            >
+              {{ formSupplemental.errors.price_per_unit }}
+            </small>
+          </div>
+          <div
+            v-if="isUpdateSupplemental != true"
+            class="field"
+          >
+            <label for="delivered_date">Delivered date</label>
+            <Calendar
+              v-model="formSupplemental.delivered_date"
+              dateFormat="mm-dd-yy"
+              showIcon
+              showButtonBar
+              :manualInput="false"
+              :hideOnDateTimeSelect="true"
+            />
+            <small
+              class="text-error"
+              v-if="formSupplemental.errors.delivered_date"
+            >
+              {{ formSupplemental.errors.delivered_date }}
+            </small>
+          </div>
+
+          <template #footer>
+            <Button
+              :label="!formSupplemental.processing ? 'CANCEL' : 'CANCEL'"
+              icon="pi pi-times"
+              :disabled="formSupplemental.processing"
+              severity="danger"
+              @click="cancel"
+            />
+
+            <Button
+              v-if="isUpdateSupplemental == false"
+              :disabled="
+                formSupplemental.processing ||
+                formSupplemental.fund_source == null ||
+                formSupplemental.cl2comb == null ||
+                formSupplemental.quantity == null ||
+                formSupplemental.quantity <= 0 ||
+                formSupplemental.price_per_unit == null ||
+                formSupplemental.price_per_unit <= 0 ||
+                formSupplemental.delivered_date == null
+              "
+              :label="!formSupplemental.processing ? 'SAVE' : 'SAVE'"
+              :icon="formSupplemental.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
+              severity="warning"
+              type="submit"
+              @click="openConfirmSupplementalDialog"
+            />
+
+            <Button
+              v-else
+              :label="!formSupplemental.processing ? 'SAVE' : 'SAVE'"
+              icon="pi pi-check"
+              severity="warning"
+              type="submit"
+              :disabled="formSupplemental.processing || formSupplemental.quantity == null"
+              @click="submitSupplemental"
+            />
+          </template>
+        </Dialog>
+
+        <!-- confirm supplemental -->
+        <Dialog
+          v-model:visible="confirmSupplementalDialog"
+          :modal="true"
+          :closeOnEscape="false"
+          class="p-fluid w-4"
+          persist
+        >
+          <template #header>
+            <div class="text-error uppercase text-xl font-bold">Are you sure you have entered the correct data?</div>
+          </template>
+
+          <div class="text-xl text-justify">
+            <p>
+              Please double-check the data you have entered, especially the fund source and the item details, as these
+              cannot be reversed.
+            </p>
+
+            <p>
+              Imagine saving an item with its price, only to realize later that it was incorrect after someone has
+              already charged it. Since this data cannot be undone, any mistakes will directly impact the patient’s
+              statement of account and charge logs.
+            </p>
+
+            <p>
+              If you are unsure, <b>do not proceed</b>. Every time an item is added, your user account will be recorded
+              in the logs.
+            </p>
+          </div>
+
+          <template #footer>
+            <Button
+              :label="!formSupplemental.processing ? 'CANCEL' : 'CANCEL'"
+              icon="pi pi-times"
+              :disabled="formSupplemental.processing"
+              severity="danger"
+              @click="cancel"
+            />
+
+            <Button
+              :disabled="formSupplemental.processing || countdown > 0"
+              :icon="formSupplemental.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
+              type="submit"
+              @click="submitSupplemental"
+            >
+              {{ countdown > 0 ? `YES, I'M SURE (${countdown})` : "YES, I'M SURE" }}
+            </Button>
+          </template>
+        </Dialog>
+
         <!-- Existing -->
         <Dialog
           v-model:visible="existingDialog"
@@ -1052,6 +1260,14 @@
                   @click="openConsignmentDialog"
                 />
                 <div class="mr-2"></div>
+                <Button
+                  label="SUPPLEMENTAL"
+                  icon="pi pi-plus"
+                  iconPos="right"
+                  severity="success"
+                  @click="openSupplementalDialog"
+                />
+                <div class="mr-2"></div>
                 <!-- <Button
                   label="MEDICAL GASES"
                   icon="pi pi-plus"
@@ -1091,6 +1307,11 @@
                 v-if="data.from == 'CONSIGNMENT'"
                 value="CONSIGNMENT"
                 severity="warning"
+              />
+              <Tag
+                v-if="data.from == 'SUPPLEMENTAL'"
+                value="SUPPLEMENTAL"
+                severity="success"
               />
               <Tag
                 v-if="data.from == 'EXISTING_STOCKS'"
@@ -1193,6 +1414,12 @@
                   label="UPDATE"
                   severity="info"
                   @click="openUpdateConsignment(slotProps.data)"
+                />
+                <Button
+                  v-if="slotProps.data.from == 'SUPPLEMENTAL'"
+                  label="UPDATE"
+                  severity="info"
+                  @click="openUpdateSupplemental(slotProps.data)"
                 />
               </div>
             </template>
@@ -1540,9 +1767,12 @@ export default {
       //   medicalGasesDialog: false,
       consignmentDialog: false,
       confirmConsignmentDialog: false,
+      confirmSupplementalDialog: false,
       isUpdateExisting: false,
       isUpdateConsignment: false,
+      isUpdateSupplemental: false,
       existingDialog: false,
+      supplementalDialog: false,
       returnToCsrDialog: false,
       editAverageOfStocksDialog: false,
       editStatusDialog: false,
@@ -1615,6 +1845,16 @@ export default {
         uomcode: null,
         quantity: null,
         prev_quantity: null,
+        delivered_date: null,
+      }),
+      formSupplemental: this.$inertia.form({
+        id: null,
+        authLocation: null,
+        fund_source: null,
+        cl2comb: null,
+        uomcode: null,
+        quantity: null,
+        price_per_unit: null,
         delivered_date: null,
       }),
       formReturnToCsr: this.$inertia.form({
@@ -1762,8 +2002,21 @@ export default {
         this.consignmentDialog = true;
       }
     },
+    openUpdateSupplemental(data) {
+      if (data.from == 'SUPPLEMENTAL') {
+        this.formSupplemental.id = data.ward_stock_id;
+        this.formSupplemental.cl2comb = data.cl2comb;
+        this.formSupplemental.quantity = data.quantity;
+
+        this.isUpdateSupplemental = true;
+        this.supplementalDialog = true;
+      }
+    },
     openConfirmConsignmentDialog() {
       this.confirmConsignmentDialog = true;
+    },
+    openConfirmSupplementalDialog() {
+      this.confirmSupplementalDialog = true;
     },
     restrictNonNumericAndPeriod(event) {
       if (
@@ -1950,6 +2203,11 @@ export default {
       this.formExisting.reset();
       this.existingDialog = true;
     },
+    openSupplementalDialog() {
+      this.formSupplemental.clearErrors();
+      this.formSupplemental.reset();
+      this.supplementalDialog = true;
+    },
     // when dialog is hidden, do this function
     whenDialogIsHidden() {
       this.$emit(
@@ -1957,8 +2215,10 @@ export default {
         (this.requestStockId = null),
         (this.isUpdate = false),
         (this.isUpdateExisting = false),
+        (this.isUpdateSupplemental = false),
         (this.isUpdateConsignment = false),
         (this.confirmConsignmentDialog = false),
+        (this.confirmSupplementalDialog = false),
         (this.requestStockListDetails = []),
         (this.item = null),
         (this.cl2desc = null),
@@ -1979,7 +2239,9 @@ export default {
         this.formReturnToCsr.reset(),
         this.formUpdateStatus.reset(),
         this.formExisting.clearErrors(),
-        this.formExisting.reset()
+        this.formExisting.reset(),
+        this.formSupplemental.clearErrors(),
+        this.formSupplemental.reset()
       );
     },
     fillRequestContainer() {
@@ -2221,6 +2483,61 @@ export default {
         });
       }
     },
+    submitSupplemental() {
+      this.formSupplemental.authLocation = this.authWardcode;
+      if (this.isUpdateSupplemental != true) {
+        if (
+          this.formSupplemental.processing ||
+          this.formSupplemental.fund_source == null ||
+          this.formSupplemental.cl2comb == null ||
+          this.formSupplemental.quantity == null ||
+          this.formSupplemental.price_per_unit == null ||
+          this.formSupplemental.price_per_unit <= 0 ||
+          this.formSupplemental.delivered_date == null
+        ) {
+          return false;
+        }
+
+        if (
+          this.formSupplemental.fund_source != null ||
+          this.formSupplemental.fund_source != '' ||
+          this.formSupplemental.cl2comb != null ||
+          this.formSupplemental.cl2comb != '' ||
+          this.formSupplemental.quantity != null ||
+          this.formSupplemental.quantity != '' ||
+          this.formSupplemental.quantity != 0 ||
+          this.formSupplemental.price_per_unit != '' ||
+          this.formSupplemental.price_per_unit != 0 ||
+          this.formSupplemental.delivered_date != null ||
+          this.formSupplemental.delivered_date != ''
+        ) {
+          this.formSupplemental.post(route('supplemental.store'), {
+            preserveScroll: true,
+            onSuccess: () => {
+              this.formSupplemental.reset();
+              this.cancel();
+              this.updateData();
+              this.createdMsg();
+              this.loading = false;
+            },
+          });
+        }
+      } else {
+        if (this.formSupplemental.processing || this.formSupplemental.quantity == null) {
+          return false;
+        }
+
+        this.formSupplemental.put(route('supplemental.update', this.formSupplemental.id), {
+          preserveScroll: true,
+          onSuccess: () => {
+            +this.formSupplemental.reset();
+            this.cancel();
+            this.updateData();
+            this.updateConsignmentMessage();
+          },
+        });
+      }
+    },
     confirmCancelItem(item) {
       this.requestStockId = item.id;
       this.cancelItemDialog = true;
@@ -2243,14 +2560,17 @@ export default {
     cancel() {
       this.requestStockId = null;
       this.confirmConsignmentDialog = false;
+      this.confirmSupplementalDialog = false;
       this.isUpdate = false;
       this.isUpdateExisting = false;
       this.isUpdateConsignment = false;
+      this.isUpdateSupplemental = false;
       this.createRequestStocksDialog = false;
       this.returnToCsrDialog = false;
       this.editAverageOfStocksDialog = false;
       //   this.medicalGasesDialog = false;
       this.consignmentDialog = false;
+      this.supplementalDialog = false;
       this.existingDialog = false;
       this.editStatusDialog = false;
       this.targetItemDesc = null;
@@ -2262,6 +2582,8 @@ export default {
       this.formMedicalGases.clearErrors();
       this.formConsignment.reset();
       this.formConsignment.clearErrors();
+      this.formSupplemental.reset();
+      this.formSupplemental.clearErrors();
       this.formExisting.reset();
       this.formExisting.clearErrors();
       this.formReturnToCsr.reset();
@@ -2289,6 +2611,9 @@ export default {
       this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Stock updated', life: 3000 });
     },
     updateConsignmentMessage() {
+      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Stock updated', life: 3000 });
+    },
+    updateSupplementalMessage() {
       this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Stock updated', life: 3000 });
     },
     updatedStatusMsg() {
@@ -2365,6 +2690,22 @@ export default {
         this.timer = null;
       }
     },
+    confirmSupplementalDialog(newVal) {
+      if (newVal) {
+        this.countdown = 5; // Reset countdown when dialog is opened
+        this.timer = setInterval(() => {
+          if (this.countdown > 0) {
+            this.countdown--;
+          } else {
+            clearInterval(this.timer);
+            this.timer = null;
+          }
+        }, 1000);
+      } else {
+        clearInterval(this.timer); // Stop countdown if dialog closes early
+        this.timer = null;
+      }
+    },
     search: function (val, oldVal) {
       this.params.search = val;
       this.updateData();
@@ -2412,6 +2753,20 @@ export default {
           if (e.uomdesc != null || e.uomdesc == '') {
             this.selectedItemsUomDesc = e.uomdesc;
             this.formConsignment.uomcode = e.uomcode;
+          } else {
+            this.selectedItemsUomDesc = null;
+          }
+        }
+      });
+    },
+    'formSupplemental.cl2comb': function (val) {
+      this.selectedItemsUomDesc = null;
+
+      this.itemsList.forEach((e) => {
+        if (e.cl2comb == val) {
+          if (e.uomdesc != null || e.uomdesc == '') {
+            this.selectedItemsUomDesc = e.uomdesc;
+            this.formSupplemental.uomcode = e.uomcode;
           } else {
             this.selectedItemsUomDesc = null;
           }

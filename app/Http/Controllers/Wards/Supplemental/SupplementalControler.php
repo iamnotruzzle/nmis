@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Wards\ExistingStock;
+namespace App\Http\Controllers\Wards\Supplemental;
 
 use App\Http\Controllers\Controller;
 use App\Models\Item;
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 
-class ExistingStockController extends Controller
+class SupplementalControler extends Controller
 {
     public function index()
     {
@@ -66,7 +66,7 @@ class ExistingStockController extends Controller
             'entry_by' => $entry_by,
         ]);
 
-        $consignmentItem = WardsStocks::create([
+        $supplementalItem = WardsStocks::create([
             'request_stocks_id' => null,
             'request_stocks_detail_id' => null,
             'ris_no' => $tempRisNo,
@@ -77,7 +77,7 @@ class ExistingStockController extends Controller
             'uomcode' => $request->uomcode,
             'chrgcode' => $request->fund_source,
             'quantity' => $request->quantity,
-            'from' => 'CONSIGNMENT',
+            'from' => 'SUPPLEMENTAL',
             // 'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
             'delivered_date' =>  Carbon::parse($request->delivered_date)->format('Y-m-d H:i:s.v'),
             'expiration_date' =>  Carbon::maxValue(),
@@ -88,7 +88,7 @@ class ExistingStockController extends Controller
             'request_stocks_detail_id' => null,
             'ris_no' => $tempRisNo,
             'stock_id' => null,
-            'wards_stocks_id' => $consignmentItem->id,
+            'wards_stocks_id' => $supplementalItem->id,
             'is_consumable' => null,
             'location' => $request->authLocation,
             'cl2comb' => $request->cl2comb,
