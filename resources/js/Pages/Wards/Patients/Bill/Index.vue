@@ -260,12 +260,13 @@
           v-model:filters="itemsToBillFilter"
           :globalFilterFields="['itemDesc']"
           :value="itemsToBillList"
-          tableStyle="min-width: 50rem"
+          tableStyle="min-width: 50rem; height: 500px;"
           class="p-datatable-sm w-full"
           paginator
           showGridlines
           removableSort
-          :rows="7"
+          :rows="10"
+          scrollable
         >
           <template #header>
             <div class="flex justify-content-end">
