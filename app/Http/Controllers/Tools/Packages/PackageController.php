@@ -27,6 +27,8 @@ class PackageController extends Controller
                 ORDER BY item.cl2desc ASC;"
         );
 
+        // dd($packages);
+
         return Inertia::render('Tools/Packages/Index', [
             'items' => $items,
             'packages' => $packages,
@@ -63,23 +65,60 @@ class PackageController extends Controller
 
     public function update(Package $package, Request $request)
     {
-
         $request->validate([
-            'cl1comb' => 'required|max:20',
-            'cl2desc' => 'required',
-            'unit' => 'required',
-            'cl2stat' => 'required|max:1',
+            'description' => 'required|max:150',
+            'status' => 'required',
+            'packageItems' => 'required|array|min:1',
         ]);
 
-        $updated_item =  $item->update([
-            'catID' => $request->mainCategory, // main category
-            'cl2comb' => trim($request->cl1comb) . '-' . trim($request->cl2code),
-            'cl1comb' => trim($request->cl1comb), // sub category
-            'itemcode' => $request->itemcode,
-            'cl2desc' => trim($request->cl2desc), // item desc
-            'uomcode' => $request->unit, // unit
-            'cl2stat' => $request->cl2stat,
+        // Update the package
+        $package = Package::where('id', $request->package_id)->update([
+            'description' => $request->description,
+            'status' => $request->status,
         ]);
+
+        $packageId = $request->package_id;
+        $newItems = collect($request->packageItems);
+
+        // Get current package details
+        $existingItems = DB::table('csrw_package_details')
+            ->where('package_id', $packageId)
+            ->get();
+
+        // Convert to associative array for easy comparison
+        $existingItemsMap = $existingItems->mapWithKeys(function ($item) {
+            return [$item->cl2comb => $item];
+        });
+
+        // Process new items
+        foreach ($newItems as $newItem) {
+            if (isset($existingItemsMap[$newItem['cl2comb']])) {
+                // Update quantity if changed
+                if ($existingItemsMap[$newItem['cl2comb']]->quantity != $newItem['quantity']) {
+                    DB::table('csrw_package_details')
+                        ->where('package_id', $packageId)
+                        ->where('cl2comb', $newItem['cl2comb'])
+                        ->update(['quantity' => $newItem['quantity']]);
+                }
+                // Remove from existing items map to track remaining items
+                unset($existingItemsMap[$newItem['cl2comb']]);
+            } else {
+                // Insert new item
+                DB::table('csrw_package_details')->insert([
+                    'package_id' => $packageId,
+                    'cl2comb' => $newItem['cl2comb'],
+                    'quantity' => $newItem['quantity'],
+                ]);
+            }
+        }
+
+        // Remove items that are no longer in the new list
+        if ($existingItemsMap->isNotEmpty()) {
+            DB::table('csrw_package_details')
+                ->where('package_id', $packageId)
+                ->whereIn('cl2comb', $existingItemsMap->keys())
+                ->delete();
+        }
 
         return Redirect::route('packages.index');
     }

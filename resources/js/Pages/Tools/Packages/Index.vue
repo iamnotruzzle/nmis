@@ -72,12 +72,12 @@
             </template>
           </Column>
 
-          <!-- <Column
+          <Column
             header="ACTION"
             style="width: 5%"
           >
             <template #body="slotProps">
-              <div class="flex flex-row justify-content-between align-content-around">
+              <div class="flex flex-row justify-content-center align-content-around">
                 <Button
                   v-tooltip.top="'Update'"
                   icon="pi pi-pencil"
@@ -86,27 +86,10 @@
                   severity="warning"
                   @click="editItem(slotProps.data)"
                 />
-                <Button
-                  v-if="slotProps.data.uomcode == 'box'"
-                  v-tooltip.top="'Convert'"
-                  rounded
-                  severity="success"
-                  @click="convertItem(slotProps.data)"
-                >
-                  <template #icon>
-                    <v-icon name="bi-arrow-left-right"></v-icon>
-                  </template>
-                </Button>
-                <Button
-                  v-if="slotProps.data.uomcode != 'box'"
-                  icon="pi pi-trash"
-                  rounded
-                  severity="danger"
-                  @click="confirmDeleteItem(slotProps.data)"
-                />
               </div>
             </template>
-          </Column> -->
+          </Column>
+
           <template #expansion="slotProps">
             <div class="max-w-full flex justify-content-center">
               <div class="w-11 flex flex-column align-items-center">
@@ -152,7 +135,7 @@
         </DataTable>
 
         <Dialog
-          v-model:visible="createPackageDialog"
+          v-model:visible="packageDialog"
           :modal="true"
           class="p-fluid"
           :style="{ width: '1000px' }"
@@ -365,12 +348,14 @@ export default {
       },
       expandedRow: [],
       isUpdate: false,
-      createPackageDialog: false,
+      packageDialog: false,
+      package_id: null,
       description: '',
       status: null,
       selectedItem: null,
       quantity: 0,
       packageItems: [],
+      isUpdate: false,
       statusList: [
         {
           name: 'Active',
@@ -386,6 +371,9 @@ export default {
         description: '',
         status: null,
         packageItems: null,
+
+        package_id: null,
+        itemcode: null,
       }),
     };
   },
@@ -448,12 +436,13 @@ export default {
       this.isUpdate = false;
       this.form.clearErrors();
       this.form.reset();
-      this.createPackageDialog = true;
+      this.packageDialog = true;
     },
     cancel() {
       this.isUpdate = false;
-      this.createPackageDialog = false;
+      this.packageDialog = false;
       this.description = '';
+      this.package_id = null;
       this.status = null;
       this.selectedItem = null;
       this.quantity = 0;
@@ -465,7 +454,8 @@ export default {
       this.$emit(
         'hide',
         (this.isUpdate = false),
-        (this.createPackageDialog = false),
+        (this.packageDialog = false),
+        (this.package_id = false),
         (this.description = ''),
         (this.status = null),
         (this.selectedItem = null),
@@ -504,6 +494,7 @@ export default {
     },
     submit() {
       // initialize value
+      this.form.package_id = this.package_id;
       this.form.description = this.description;
       this.form.status = this.status;
       this.form.packageItems = this.packageItems;
@@ -513,11 +504,13 @@ export default {
       }
 
       if (this.isUpdate) {
-        this.form.put(route('packages.update', this.itemId), {
+        this.form.put(route('packages.update', this.package_id), {
           preserveScroll: true,
           onSuccess: () => {
-            this.createPackageDialog = false;
+            this.packageDialog = false;
             this.cancel();
+            this.storeItemsInContainer();
+            this.storePackagesInContainer();
             this.updatedMsg();
           },
         });
@@ -525,7 +518,7 @@ export default {
         this.form.post(route('packages.store'), {
           preserveScroll: true,
           onSuccess: () => {
-            this.createPackageDialog = false;
+            this.packageDialog = false;
             this.cancel();
             this.storeItemsInContainer();
             this.storePackagesInContainer();
@@ -533,7 +526,17 @@ export default {
           },
         });
       }
-      //   console.log(this.$page.props.errors);
+    },
+    editItem(e) {
+      console.log(e);
+
+      this.package_id = e.id;
+      this.description = e.description;
+      this.status = e.status;
+      this.packageItems = e.package_details;
+
+      this.isUpdate = true;
+      this.packageDialog = true;
     },
     updateData() {
       this.$inertia.get('package', this.params, {
