@@ -1104,109 +1104,169 @@ export default {
       });
       //   console.log('item list', this.itemList);
     },
-    /***  new and optimize version */
     medicalSuppliesQtyValidation() {
-      //   console.log(this.item);
+      console.log('item', this.item);
 
-      if (this.item.is_package == false) {
-        if (!this.item) {
-          this.itemNotSelected = true;
-          this.itemNotSelectedMsg = 'Item not selected.';
-          return;
-        }
+      if (!this.item) {
+        this.itemNotSelected = true;
+        this.itemNotSelectedMsg = 'Item not selected.';
+        return;
+      }
 
-        if (!this.qtyToCharge || this.qtyToCharge <= 0) {
-          this.itemNotSelected = true;
-          this.itemNotSelectedMsg = 'Please provide quantity.';
-          return;
-        }
+      if (!this.qtyToCharge || this.qtyToCharge <= 0) {
+        this.itemNotSelected = true;
+        this.itemNotSelectedMsg = 'Please provide quantity.';
+        return;
+      }
 
-        const { typeOfCharge, itemCode, itemDesc, unit, totalQuantity, prices, price } = this.item;
-        const isDrumn = typeOfCharge === 'DRUMN';
-
-        if (isDrumn) {
-          const totalBilledQty = this.itemsToBillList
-            .filter((e) => e.itemCode === itemCode)
-            .reduce((sum, e) => sum + e.qtyToCharge, 0);
-
-          if (totalBilledQty + this.qtyToCharge > totalQuantity) {
-            this.itemNotSelected = true;
-            this.itemNotSelectedMsg = 'Total quantity exceeds available stock.';
-            return;
-          }
-
-          if (this.itemsToBillList.some((e) => e.itemCode === itemCode)) {
-            this.itemNotSelected = true;
-            this.itemNotSelectedMsg = 'Remove all related items first to update the quantity.';
-            return;
-          }
-
-          let qtyRemaining = this.qtyToCharge;
-          const newBillItems = [];
-
-          // Sort by earliest expiry date
-          prices.sort((a, b) => new Date(a.expiryDate) - new Date(b.expiryDate));
-
-          for (const priceInfo of prices) {
-            if (qtyRemaining <= 0) break;
-            const qtyToCharge = Math.min(priceInfo.quantity, qtyRemaining);
-            qtyRemaining -= qtyToCharge;
-
-            const existingItem = this.itemsToBillList.find(
-              (e) => e.itemCode === itemCode && e.price === priceInfo.price
-            );
-
-            if (existingItem) {
-              existingItem.qtyToCharge += qtyToCharge;
-              existingItem.total = (existingItem.price * existingItem.qtyToCharge).toFixed(2);
-            } else {
-              newBillItems.push({
-                id: priceInfo.id,
-                typeOfCharge,
-                itemCode,
-                itemDesc,
-                unit,
-                currentStock: isDrumn ? totalQuantity : 'Infinite',
-                qtyToCharge,
-                price: priceInfo.price,
-                total: (priceInfo.price * qtyToCharge).toFixed(2),
-                expiryDate: priceInfo.expiryDate,
-              });
-            }
-          }
-
-          if (qtyRemaining > 0) {
-            this.itemNotSelected = true;
-            this.itemNotSelectedMsg = 'Not enough quantity available.';
-            return;
-          }
-
-          this.itemsToBillList = this.itemsToBillList.filter((e) => e.itemCode !== itemCode);
-          this.itemsToBillList.push(...newBillItems);
+      if (this.item.is_package === false) {
+        // Handle DRUMN and MISC separately
+        if (this.item.typeOfCharge === 'DRUMN') {
+          this.chargeDrumnItem(this.item, this.qtyToCharge);
+        } else if (this.item.typeOfCharge === 'MISC') {
+          this.chargeMiscItem(this.item, this.qtyToCharge);
         } else {
-          if (this.itemsToBillList.some((e) => e.itemCode === itemCode)) {
-            this.itemNotSelected = true;
-            this.itemNotSelectedMsg = 'Item is already on the list.';
-            return;
-          }
+          this.itemNotSelected = true;
+          this.itemNotSelectedMsg = 'Unsupported charge type.';
+        }
+      } else {
+        console.log('Package selected, processing package items...');
 
-          this.itemsToBillList.push({
-            id: this.item.id || null,
-            typeOfCharge,
-            itemCode,
-            itemDesc,
-            unit,
-            currentStock: isDrumn ? totalQuantity : 'Infinite',
-            qtyToCharge: this.qtyToCharge,
-            price,
-            total: (price * this.qtyToCharge).toFixed(2),
-          });
+        // Find all items inside the selected package
+        const packageItems = this.packageList.filter((pkg) => pkg.id === this.item.id);
+
+        if (packageItems.length === 0) {
+          this.itemNotSelected = true;
+          this.itemNotSelectedMsg = 'No items found in the package.';
+          return;
         }
 
-        this.itemNotSelected = false;
-        this.itemNotSelectedMsg = null;
-      } else {
-        console.log(this.item);
+        // Loop through each item in the package and charge it
+        for (const pkgItem of packageItems) {
+          console.log('Processing package item:', pkgItem);
+
+          // Find the actual item details from itemList using itemCode
+          const itemDetails = this.itemList.find((e) => e.itemCode === pkgItem.itemcode);
+
+          if (!itemDetails) {
+            console.warn('Item not found in stock:', pkgItem.itemcode);
+            continue;
+          }
+
+          if (itemDetails.typeOfCharge === 'DRUMN') {
+            this.chargeDrumnItem(itemDetails, pkgItem.quantity * this.qtyToCharge);
+          } else if (itemDetails.typeOfCharge === 'MISC') {
+            this.chargeMiscItem(itemDetails, pkgItem.quantity * this.qtyToCharge);
+          } else {
+            console.warn('Unsupported charge type for package item:', itemDetails.itemCode);
+          }
+        }
+      }
+    },
+
+    /**
+     * Function to handle DRUMN charging logic.
+     */
+    chargeDrumnItem(item, quantityToCharge) {
+      const { typeOfCharge, itemCode, itemDesc, unit, totalQuantity, prices } = item;
+      const isDrumn = typeOfCharge === 'DRUMN';
+
+      if (isDrumn) {
+        const totalBilledQty = this.itemsToBillList
+          .filter((e) => e.itemCode === itemCode)
+          .reduce((sum, e) => sum + e.qtyToCharge, 0);
+
+        if (totalBilledQty + quantityToCharge > totalQuantity) {
+          this.itemNotSelected = true;
+          this.itemNotSelectedMsg = 'Total quantity exceeds available stock.';
+          return;
+        }
+
+        if (this.itemsToBillList.some((e) => e.itemCode === itemCode)) {
+          this.itemNotSelected = true;
+          this.itemNotSelectedMsg = 'Remove all related items first to update the quantity.';
+          return;
+        }
+
+        let qtyRemaining = quantityToCharge;
+        const newBillItems = [];
+
+        // Sort by earliest expiry date
+        if (Array.isArray(prices)) {
+          prices.sort((a, b) => new Date(a.expiryDate) - new Date(b.expiryDate));
+        }
+
+        for (const priceInfo of prices || []) {
+          if (qtyRemaining <= 0) break;
+          const qtyToCharge = Math.min(priceInfo.quantity, qtyRemaining);
+          qtyRemaining -= qtyToCharge;
+
+          const existingItem = this.itemsToBillList.find((e) => e.itemCode === itemCode && e.price === priceInfo.price);
+
+          if (existingItem) {
+            existingItem.qtyToCharge += qtyToCharge;
+            existingItem.total = (existingItem.price * existingItem.qtyToCharge).toFixed(2);
+          } else {
+            newBillItems.push({
+              id: priceInfo.id,
+              typeOfCharge,
+              itemCode,
+              itemDesc,
+              unit,
+              currentStock: isDrumn ? totalQuantity : 'Infinite',
+              qtyToCharge,
+              price: priceInfo.price,
+              total: (priceInfo.price * qtyToCharge).toFixed(2),
+              expiryDate: priceInfo.expiryDate,
+            });
+          }
+        }
+
+        if (qtyRemaining > 0) {
+          this.itemNotSelected = true;
+          this.itemNotSelectedMsg = 'Not enough quantity available.';
+          return;
+        }
+
+        this.itemsToBillList = this.itemsToBillList.filter((e) => e.itemCode !== itemCode);
+        this.itemsToBillList.push(...newBillItems);
+      }
+    },
+
+    /**
+     * Function to handle MISC charging logic.
+     */
+    chargeMiscItem(item, quantityToCharge) {
+      const { typeOfCharge, itemCode, itemDesc, unit, price } = item;
+      const isMisc = typeOfCharge === 'MISC';
+
+      if (isMisc) {
+        const totalBilledQty = this.itemsToBillList
+          .filter((e) => e.itemCode === itemCode)
+          .reduce((sum, e) => sum + e.qtyToCharge, 0);
+
+        if (this.itemsToBillList.some((e) => e.itemCode === itemCode)) {
+          this.itemNotSelected = true;
+          this.itemNotSelectedMsg = 'Remove all related items first to update the quantity.';
+          return;
+        }
+
+        const totalCost = (price * quantityToCharge).toFixed(2);
+
+        const newBillItem = {
+          id: null, // No need for an ID for MISC
+          typeOfCharge,
+          itemCode,
+          itemDesc,
+          unit,
+          currentStock: 'Infinite', // MISC items don't track stock
+          qtyToCharge: quantityToCharge,
+          price,
+          total: totalCost,
+          expiryDate: null, // MISC items don't have expiry dates
+        };
+
+        this.itemsToBillList.push(newBillItem);
       }
     },
     removeFromToBillContainer(item) {
