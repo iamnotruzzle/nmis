@@ -43,68 +43,82 @@ class ExistingStockController extends Controller
     public function store(Request $request)
     {
         // dd($request);
+
         $tempRisNo = $this->generateTempRisNo();
 
         $entry_by = Auth::user()->employeeid;
 
         $request->validate([
-            'fund_source' => 'required',
             'cl2comb' => 'required',
             'quantity' => 'required',
-            'delivered_date' => 'required',
-            'price_per_unit' => 'required',
+            // 'delivered_date' => 'required',
         ]);
 
-        $item = Item::where('cl2comb', $request->cl2comb)->first();
+        // $item = Item::where('cl2comb', $request->cl2comb)->first();
 
-        $itemPrices = ItemPrices::create([
-            'ris_no' => $tempRisNo,
-            'cl2comb' => $request->cl2comb,
-            'acquisition_price' => $request->price_per_unit,
-            'hospital_price' =>  $request->price_per_unit,
-            'price_per_unit' =>  $request->price_per_unit,
-            'entry_by' => $entry_by,
-        ]);
+        $currentItemPrice = DB::select(
+            "SELECT TOP 1 * FROM csrw_item_prices WHERE cl2comb = ?
+                AND item_conversion_id IS NOT NULL
+                ORDER BY created_at DESC;",
+            [$request->cl2comb]
+        );
+        // dd(empty($currentItemPrice));
 
-        $consignmentItem = WardsStocks::create([
-            'request_stocks_id' => null,
-            'request_stocks_detail_id' => null,
-            'ris_no' => $tempRisNo,
-            'stock_id' => null,
-            'is_consumable' => null,
-            'location' => $request->authLocation,
-            'cl2comb' => $request->cl2comb,
-            'uomcode' => $request->uomcode,
-            'chrgcode' => $request->fund_source,
-            'quantity' => $request->quantity,
-            'from' => 'CONSIGNMENT',
-            // 'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
-            'delivered_date' =>  Carbon::parse($request->delivered_date)->format('Y-m-d H:i:s.v'),
-            'expiration_date' =>  Carbon::maxValue(),
-        ]);
+        if (empty($currentItemPrice)) {
+            session()->forget('noItemPrice'); // Remove previous value
+            session(['noItemPrice' => 0]);
+            session()->save();
+            return redirect()->back();
+        } else {
+            $itemPrices = ItemPrices::create([
+                'ris_no' => $tempRisNo,
+                'cl2comb' => $request->cl2comb,
+                'acquisition_price' => $request->price_per_unit,
+                'hospital_price' =>  $request->price_per_unit,
+                'price_per_unit' =>  $currentItemPrice[0]->price_per_unit,
+                'entry_by' => $entry_by,
+            ]);
 
-        $wardStockLogs = WardsStocksLogs::create([
-            'request_stocks_id' => null,
-            'request_stocks_detail_id' => null,
-            'ris_no' => $tempRisNo,
-            'stock_id' => null,
-            'wards_stocks_id' => $consignmentItem->id,
-            'is_consumable' => null,
-            'location' => $request->authLocation,
-            'cl2comb' => $request->cl2comb,
-            'uomcode' => $request->uomcode,
-            'chrgcode' => $request->fund_source,
-            'prev_qty' => 0,
-            'new_qty' => $request->quantity,
-            'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
-            'delivered_date' =>  Carbon::parse($request->delivered_date)->format('Y-m-d H:i:s.v'),
-            'expiration_date' =>  Carbon::maxValue(),
-            'action' => 'CREATE',
-            'remarks' => null,
-            'entry_by' => $entry_by,
-        ]);
+            $existingStock = WardsStocks::create([
+                'request_stocks_id' => null,
+                'request_stocks_detail_id' => null,
+                'ris_no' => $tempRisNo,
+                'stock_id' => null,
+                'is_consumable' => null,
+                'location' => $request->authLocation,
+                'cl2comb' => $request->cl2comb,
+                'uomcode' => $request->uomcode,
+                'chrgcode' => '8',
+                'quantity' => $request->quantity,
+                'from' => 'EXISTING_STOCKS',
+                // 'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
+                'delivered_date' =>  Carbon::now(),
+                'expiration_date' =>  Carbon::maxValue(),
+            ]);
 
-        return Redirect::route('requeststocks.index');
+            $wardStockLogs = WardsStocksLogs::create([
+                'request_stocks_id' => null,
+                'request_stocks_detail_id' => null,
+                'ris_no' => $tempRisNo,
+                'stock_id' => null,
+                'wards_stocks_id' => $existingStock->id,
+                'is_consumable' => null,
+                'location' => $request->authLocation,
+                'cl2comb' => $request->cl2comb,
+                'uomcode' => $request->uomcode,
+                'chrgcode' => '8',
+                'prev_qty' => 0,
+                'new_qty' => $request->quantity,
+                'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
+                'delivered_date' =>  Carbon::now(),
+                'expiration_date' =>  Carbon::maxValue(),
+                'action' => 'CREATE',
+                'remarks' => null,
+                'entry_by' => $entry_by,
+            ]);
+
+            return Redirect::route('requeststocks.index');
+        }
     }
 
 
