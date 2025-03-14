@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Item;
 use App\Models\Package;
 use App\Models\PackageDetails;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -98,7 +99,10 @@ class PackageController extends Controller
                     DB::table('csrw_package_details')
                         ->where('package_id', $packageId)
                         ->where('cl2comb', $newItem['cl2comb'])
-                        ->update(['quantity' => $newItem['quantity']]);
+                        ->update([
+                            'quantity' => $newItem['quantity'],
+                            'updated_at' => Carbon::now(),
+                        ]);
                 }
                 // Remove from existing items map to track remaining items
                 unset($existingItemsMap[$newItem['cl2comb']]);
@@ -108,6 +112,8 @@ class PackageController extends Controller
                     'package_id' => $packageId,
                     'cl2comb' => $newItem['cl2comb'],
                     'quantity' => $newItem['quantity'],
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
                 ]);
             }
         }
