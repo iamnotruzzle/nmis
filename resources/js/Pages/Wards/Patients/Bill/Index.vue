@@ -858,15 +858,7 @@ export default {
       }),
     };
   },
-  //   beforeUnmount() {
-  //     window.removeEventListener('beforeunload', this.preventRefresh);
-  //     window.removeEventListener('keydown', this.preventKeys);
-  //   },
   mounted() {
-    // console.log(this.medicalSupplies);
-    // window.addEventListener('beforeunload', this.preventRefresh);
-    // window.addEventListener('keydown', this.preventKeys);
-
     window.Echo.channel('charges').listen('.ChargeLogsProcessed', (args) => {
       window.skipNProgress = true; // Prevent NProgress
 
@@ -1394,18 +1386,6 @@ export default {
     clickOutsideDialog() {
       this.$emit('hide', this.form.clearErrors(), this.form.reset());
     },
-    // preventRefresh(event) {
-    //   if (this.isSubmitting) {
-    //     event.preventDefault();
-    //     event.returnValue = 'Changes you made may not be saved.';
-    //   }
-    // },
-    // preventKeys(event) {
-    //   if (this.isSubmitting && (event.key === 'F5' || (event.ctrlKey && event.key === 'r'))) {
-    //     event.preventDefault();
-    //     alert('Submission in progress. Please wait.');
-    //   }
-    // },
     submit() {
       // console.log('else');
       if (this.form.processing || this.isSubmitting) {
