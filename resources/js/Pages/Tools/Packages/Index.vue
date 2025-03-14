@@ -401,6 +401,8 @@ export default {
         cl2comb: e.cl2comb,
         cl2desc: e.cl2desc,
       }));
+
+      console.log('itemList', this.itemsList);
     },
     storePackagesInContainer() {
       this.packagesList = []; // reset
@@ -485,7 +487,7 @@ export default {
         });
 
         // Reset fields
-        this.selectedItem = null;
+        // this.selectedItem = null;
         this.quantity = 0;
       } else {
         alert('Please select an item and enter a valid quantity.');
@@ -531,7 +533,7 @@ export default {
       }
     },
     editItem(e) {
-      console.log(e);
+      //   console.log(e);
 
       this.package_id = e.id;
       this.description = e.description;

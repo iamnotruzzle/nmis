@@ -38,13 +38,16 @@ class PackageController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->packageItems);
-
         $request->validate([
             'description' => 'required|max:150',
             'status' => 'required',
             'packageItems' => 'required|array|min:1',
         ]);
+
+        session()->forget([
+            'cached_inertia_packages',
+        ]);
+
 
         $package = Package::create([
             'description' => $request->description,
@@ -71,6 +74,10 @@ class PackageController extends Controller
             'description' => 'required|max:150',
             'status' => 'required',
             'packageItems' => 'required|array|min:1',
+        ]);
+
+        session()->forget([
+            'cached_inertia_packages',
         ]);
 
         // Update the package

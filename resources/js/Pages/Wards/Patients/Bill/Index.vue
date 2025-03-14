@@ -1149,7 +1149,8 @@ export default {
           const itemDetails = this.itemList.find((e) => e.itemCode === pkgItem.itemcode);
 
           if (!itemDetails) {
-            console.warn('Item not found in stock:', pkgItem.itemcode);
+            console.warn('Item not found in stock:', pkgItem.itemDesc);
+            this.packageFail(pkgItem.itemDesc);
             continue;
           }
 
@@ -1482,6 +1483,14 @@ export default {
     },
     updatedMsg() {
       this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Charge updated', life: 3000 });
+    },
+    packageFail(item) {
+      this.$toast.add({
+        severity: 'error',
+        summary: 'Stock Unavailable',
+        detail: `Item ${item} is either missing from your inventory or does not have enough stock.`,
+        life: 6000,
+      });
     },
   },
 };
