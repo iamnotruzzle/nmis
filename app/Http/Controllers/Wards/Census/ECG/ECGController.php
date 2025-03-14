@@ -102,6 +102,25 @@ class ECGController extends Controller
         //     ORDER BY TOTAL_COUNT DESC;"
         // );
 
+        // query to get patient that overstayed in ER
+        // more than 4 hours meaning it overstays
+        // $overstayed_patients = DB::select(
+        //     "SELECT
+        //             htypser.tsdesc AS DEPARTMENT,
+        //             COUNT(*) AS TOTAL_OVERSTAYED,
+        //             CAST(AVG(DATEDIFF(SECOND, erlog.erdate, erlog.erdtedis)) / 3600.0 AS DECIMAL(10,2)) AS AVG_OVERSTAY_HOURS
+        //         FROM herlog AS erlog
+        //         JOIN htypser ON htypser.tscode = erlog.tscode
+        //         WHERE
+        //             erlog.erdtedis IS NOT NULL
+        //             AND erlog.erdate IS NOT NULL
+        //             AND erlog.erdate < erlog.erdtedis  -- Ensure valid stay period
+        //             AND DATEDIFF(MINUTE, erlog.erdate, erlog.erdtedis) > 240  -- More than 4 hours
+        //             AND erlog.erdate BETWEEN '2025-01-01' AND '2025-01-31'
+        //         GROUP BY htypser.tsdesc
+        //         ORDER BY htypser.tsdesc;"
+        // );
+
         return Inertia::render('Wards/Census/ECG/Index', [
             'census' => $census,
         ]);
