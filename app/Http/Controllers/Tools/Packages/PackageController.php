@@ -44,9 +44,9 @@ class PackageController extends Controller
             'packageItems' => 'required|array|min:1',
         ]);
 
-        session()->forget([
-            'cached_inertia_packages',
-        ]);
+        // session()->forget([
+        //     'cached_inertia_packages',
+        // ]);
 
 
         $package = Package::create([
@@ -76,9 +76,9 @@ class PackageController extends Controller
             'packageItems' => 'required|array|min:1',
         ]);
 
-        session()->forget([
-            'cached_inertia_packages',
-        ]);
+        // session()->forget([
+        //     'cached_inertia_packages',
+        // ]);
 
         // Update the package
         $package = Package::where('id', $request->package_id)->update([
