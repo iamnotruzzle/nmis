@@ -49,6 +49,7 @@ class PackageController extends Controller
         $package = Package::create([
             'description' => $request->description,
             'status' => $request->status,
+            'created_by' => $request->user,
         ]);
         $package_id = $package->id;
 
@@ -76,6 +77,7 @@ class PackageController extends Controller
         $package = Package::where('id', $request->package_id)->update([
             'description' => $request->description,
             'status' => $request->status,
+            'updated_by' => $request->user,
         ]);
 
         $packageId = $request->package_id;

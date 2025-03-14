@@ -15,5 +15,7 @@ class Package extends Model
     protected $fillable = [
         'description',
         'status',
+        'created_by',
+        'updated_by',
     ];
 }

@@ -374,6 +374,8 @@ export default {
 
         package_id: null,
         itemcode: null,
+
+        user: null,
       }),
     };
   },
@@ -498,6 +500,7 @@ export default {
       this.form.description = this.description;
       this.form.status = this.status;
       this.form.packageItems = this.packageItems;
+      this.form.user = this.$page.props.auth.user.userDetail.employeeid;
 
       if (this.form.processing) {
         return false;
