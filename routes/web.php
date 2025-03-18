@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\Dashboard\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Csr\Dashboard\DashboardController as CsrDashboardController;
 use App\Http\Controllers\Csr\Inventory\Categories\CategoryController;
+use App\Http\Controllers\public\CsrStocksController as PubicCsrStocks;
 use App\Http\Controllers\Csr\Inventory\Categories\SubCategory\SubCategoryController;
 use App\Http\Controllers\Csr\Inventory\ItemPrice\ItemPriceController;
 use App\Http\Controllers\Csr\Inventory\Items\ItemController;
@@ -129,3 +130,5 @@ Route::middleware(['web', 'auth', 'verified'])->group(
         Route::resource('packages', PackageController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
     }
 );
+
+Route::resource('public/csrinventory', PubicCsrStocks::class)->only(['index']);
