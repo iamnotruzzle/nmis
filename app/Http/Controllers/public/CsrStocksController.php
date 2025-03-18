@@ -20,8 +20,17 @@ class CsrStocksController extends Controller
                 ORDER BY item.cl2desc ASC;"
         );
 
+        $wardsInventory = DB::select(
+            "SELECT ward.wardname as ward, item.cl2desc as item, SUM(ward_stock.quantity) as quantity
+                FROM csrw_wards_stocks as ward_stock
+                JOIN hward as ward ON ward.wardcode = ward_stock.location
+                JOIN hclass2 as item ON item.cl2comb = ward_stock.cl2comb
+                GROUP BY item.cl2desc, ward.wardname;"
+        );
+
         return Inertia::render('Csr/Public/CsrStocks/Index', [
             'csrInventory' => $csrInventory,
+            'wardsInventory' => $wardsInventory,
         ]);
     }
 

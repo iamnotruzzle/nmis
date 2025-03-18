@@ -4,12 +4,16 @@
   <Toast />
 
   <div
-    class="bg-bluegray-500 flex align-items-center justify-content-center"
-    style="width: 100%"
+    class="bg-gray-500 flex align-items-center justify-content-between px-3"
+    style="width: 100%; height: 100vh"
   >
-    <div class="flex justify-content-center h-screen w-7">
+    <!-- csr -->
+    <div
+      class="flex-1"
+      style="height: 100%"
+    >
       <DataTable
-        class="p-datatable-sm w-9 h-full"
+        class="p-datatable-sm h-full"
         v-model:filters="filters"
         :value="csrInventoryList"
         paginator
@@ -78,6 +82,104 @@
         </Column>
       </DataTable>
     </div>
+
+    <div class="mx-5"></div>
+
+    <!-- ward -->
+    <div
+      class="flex-1"
+      style="height: 100%"
+    >
+      <DataTable
+        class="p-datatable-sm h-full"
+        v-model:filters="wardFilter"
+        :value="wardsInventoryList"
+        paginator
+        :rows="30"
+        :rowsPerPageOptions="[20, 30, 40]"
+        dataKey="id"
+        filterDisplay="row"
+        sortField="item"
+        :sortOrder="1"
+        removableSort
+        :globalFilterFields="['ward', 'item']"
+        showGridlines
+        scrollable
+        scrollHeight="flex"
+      >
+        <template #header>
+          <div class="flex flex-wrap align-items-center justify-content-between">
+            <span class="text-xl text-900 font-bold text-primary">WARDS INVENTORY</span>
+            <div class="flex">
+              <div class="mr-2">
+                <div class="p-inputgroup">
+                  <span class="p-inputgroup-addon">
+                    <i class="pi pi-search"></i>
+                  </span>
+                  <InputText
+                    id="searchInput"
+                    v-model="wardFilter['global'].value"
+                    placeholder="Search"
+                    size="large"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+        <template #empty> No data found. </template>
+        <template #loading> Loading data. Please wait. </template>
+        <Column
+          field="ward"
+          header="WARD"
+          sortable
+          :showFilterMenu="false"
+          style="width: 20%"
+        >
+          <template #body="{ data }">
+            {{ data.ward }}
+          </template>
+
+          <template #filter="{ filterModel, filterCallback }">
+            <Dropdown
+              v-model="filterModel.value"
+              :options="locationFilter"
+              @change="filterCallback()"
+              size="large"
+              filter
+              optionLabel="name"
+              optionValue="name"
+              placeholder="NO FILTER"
+            />
+          </template>
+        </Column>
+        <Column
+          field="item"
+          header="ITEM"
+          sortable
+        >
+          <template #body="{ data }">
+            <p class="py-1">
+              {{ data.item }}
+            </p>
+          </template>
+        </Column>
+        <!-- breakpoint -->
+        <Column
+          field="quantity"
+          header="QTY"
+          sortable
+          style="width: 5%; text-align: right"
+          :pt="{ headerContent: 'justify-content-end' }"
+        >
+          <template #body="{ data }">
+            <p class="text-right">
+              {{ data.quantity }}
+            </p>
+          </template>
+        </Column>
+      </DataTable>
+    </div>
   </div>
 </template>
 
@@ -122,8 +224,8 @@ export default {
     // IconField,
   },
   props: {
-    csrInventory: Object,
-    currentStock: Object,
+    csrInventory: Array,
+    wardsInventory: Array,
   },
   data() {
     return {
@@ -131,8 +233,15 @@ export default {
       //     { name: 'Accountable forms', catID: 22 },
       //   ],
       csrInventoryList: [],
+      wardsInventoryList: [],
+      locationFilter: [],
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        item: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      },
+      wardFilter: {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        ward: { value: null, matchMode: FilterMatchMode.CONTAINS },
         item: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
     };
@@ -140,6 +249,8 @@ export default {
   mounted() {
     // console.log(this.currentStock);
     this.storeCsrInventoryInContainer();
+    this.storeWardsInventoryInContainer();
+    this.storeLocationsInContainer();
   },
   methods: {
     storeCsrInventoryInContainer() {
@@ -152,8 +263,31 @@ export default {
           total_quantity: e.TOTAL_QUANTITY,
         });
       });
+    },
+    storeWardsInventoryInContainer() {
+      this.wardInventoryList = []; // reset
 
-      console.log(this.csrInventory);
+      this.wardsInventory.forEach((e) => {
+        this.wardsInventoryList.push({
+          ward: e.ward,
+          item: e.item,
+          quantity: e.quantity,
+        });
+      });
+
+      console.log(this.wardsInventoryList);
+    },
+    storeLocationsInContainer() {
+      this.$page.props.locations.forEach((e) => {
+        if (e.wardcode != 'CSR' && e.wardcode != 'ADMIN') {
+          this.locationFilter.push({
+            code: e.wardcode,
+            name: e.wardname,
+          });
+        }
+      });
+
+      //   console.log(this.locationsList);
     },
   },
 };
