@@ -1780,7 +1780,7 @@ export default {
         cl2desc: { value: null, matchMode: FilterMatchMode.CONTAINS },
         suppname: { value: null, matchMode: FilterMatchMode.CONTAINS },
         chrgdesc: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        stock_lvl: { value: null, matchMode: FilterMatchMode.EQUALS },
+        // stock_lvl: { value: null, matchMode: FilterMatchMode.EQUALS },
         expiration: { from: null, to: null },
       },
       totalDeliveriesFilters: {
@@ -1927,14 +1927,13 @@ export default {
 
       // Apply global filter
       if (this.filters['global'] && this.filters['global'].value) {
-        const filterText = this.filters['global'].value.toLowerCase();
+        const filterText = this.filters['global'].value;
         filtered = filtered.filter(
           (item) =>
-            item.ris_no.toLowerCase().includes(filterText) ||
-            item.cl2desc.toLowerCase().includes(filterText) ||
-            item.suppname.toLowerCase().includes(filterText) ||
-            item.chrgdesc.toLowerCase().includes(filterText) ||
-            item.stock_lvl.toLowerCase().includes(filterText)
+            item.ris_no.includes(filterText) ||
+            item.cl2desc.includes(filterText) ||
+            item.suppname.includes(filterText) ||
+            item.chrgdesc.includes(filterText)
         );
       }
 
