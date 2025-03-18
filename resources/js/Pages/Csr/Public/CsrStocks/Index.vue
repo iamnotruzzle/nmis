@@ -4,16 +4,16 @@
   <Toast />
 
   <div
-    class="flex align-items-center justify-content-center"
+    class="bg-bluegray-500 flex align-items-center justify-content-center"
     style="width: 100%"
   >
-    <div class="card flex justify-content-center min-h-screen w-7">
+    <div class="flex justify-content-center h-screen w-7">
       <DataTable
-        class="p-datatable-sm w-9"
+        class="p-datatable-sm w-9 h-full"
         v-model:filters="filters"
         :value="csrInventoryList"
         paginator
-        :rows="20"
+        :rows="30"
         :rowsPerPageOptions="[20, 30, 40]"
         dataKey="id"
         sortField="item"
@@ -21,6 +21,8 @@
         removableSort
         :globalFilterFields="['item']"
         showGridlines
+        scrollable
+        scrollHeight="flex"
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between">
@@ -55,6 +57,11 @@
           header="ITEM"
           sortable
         >
+          <template #body="{ data }">
+            <p class="py-1">
+              {{ data.item }}
+            </p>
+          </template>
         </Column>
         <Column
           field="total_quantity"
