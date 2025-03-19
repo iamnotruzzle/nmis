@@ -83,19 +83,19 @@ class CsrStocksControllers extends Controller
         // Attempt to retrieve cached patient data
         $stocks = Cache::get($cachedKeyCsrStocks);
 
-        // If location type is null, fetch the latest admission date for the ward
+        // If location type is null, fetch the latest created_at
         if ($locationType_cached === null) {
             $latestCreatedAt = DB::select(
                 "SELECT MAX(created_at) as created_at FROM csrw_csr_stocks;"
             );
 
-            // Extract the latest admission date from query result
+            // Extract the latest created_at from query result
             $latestCreatedAt = $latestCreatedAt[0]->created_at ?? null;
 
             // Retrieve the cached latest update timestamp
             $cachedCreatedAt = Cache::get($cacheKeyLatestUpdate);
 
-            // If the latest admission date has changed, fetch patient data and update the cache
+            // If the latest created_at has changed, fetch stocks data and update the cache
             if (!$cachedCreatedAt || $latestCreatedAt !== $cachedCreatedAt) {
                 $fetchedStocks = DB::select(
                     "SELECT stock.id, stock.ris_no,
@@ -115,15 +115,11 @@ class CsrStocksControllers extends Controller
                     ORDER BY stock.created_at ASC;"
                 );
 
-                // Update cache with new patient data and latest admission date
-                // Cache::forever($cacheKeyLatestUpdate, $latestCreatedAt);
-                // Cache::forever($cachedKeyCsrStocks, $fetchedStocks);
-                // Store patient data and latest admission date in cache for 30 minutes
                 Cache::put($cacheKeyLatestUpdate, $latestCreatedAt, now()->addMinutes(30));
                 Cache::put($cachedKeyCsrStocks, $fetchedStocks, now()->addMinutes(30));
                 $stocks = $fetchedStocks;
             } else {
-                // Retrieve patient data from cache if admission date has not changed
+                // Retrieve stocks data from cache if created_at has not changed
                 $stocks = Cache::get($cachedKeyCsrStocks);
             }
         }
