@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Models\FundSource;
 use App\Models\Location;
 use App\Models\LoginHistory;
+use App\Models\PimsSupplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -35,6 +36,7 @@ class HandleInertiaRequests extends Middleware
         $cachedPackages = session('cached_inertia_packages');
         $cachedLocations = session('cached_inertia_locations');
         $cachedFundSource = session('cached_inertia_fundsource'); // Check correct casing
+        $cachedSuppliers = session('cached_inertia_suppliers');
 
         // Ensure caching only happens if the session is empty
         if (!$cachedAuthUser && $request->user()) {
@@ -82,6 +84,13 @@ class HandleInertiaRequests extends Middleware
             session()->save();
         }
 
+        if (!$cachedSuppliers) {
+            $cachedSuppliers = PimsSupplier::where('status', 'A')->orderBy('suppname', 'ASC')->get();
+
+            session(['cached_inertia_suppliers' => $cachedSuppliers]);
+            session()->save();
+        }
+
         return array_merge(parent::share($request), [
             'flash' => [
                 'message' => fn() => $request->session()->get('message'),
@@ -93,6 +102,7 @@ class HandleInertiaRequests extends Middleware
             'locations' => fn() => $cachedLocations,
             'fundSource' => fn() => $cachedFundSource,
             'packages' => fn() => $cachedPackages,
+            'suppliers' => fn() => $cachedSuppliers,
         ]);
     }
 }

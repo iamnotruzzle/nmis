@@ -1406,7 +1406,7 @@
     <div class="card">
       <TabView>
         <TabPanel header="TOTAL DELIVERIES">
-          <!-- total stocks -->
+          <!-- total deliveries -->
           <DataTable
             class="p-datatable-sm"
             dataKey="id"
@@ -1713,8 +1713,8 @@ export default {
     items: Object,
     stocks: Object,
     totalDeliveries: Object,
-    suppliers: Object,
-    convertedItems: Object,
+    // suppliers: Object,
+    // convertedItems: Object,
     totalConvertedItems: Object,
   },
   data() {
@@ -2132,7 +2132,7 @@ export default {
       });
     },
     storeSuppliersInContainer() {
-      this.suppliers.forEach((e) => {
+      this.$page.props.suppliers.forEach((e) => {
         this.suppliersList.push({
           supplierID: e.supplierID,
           suppname: e.suppname,

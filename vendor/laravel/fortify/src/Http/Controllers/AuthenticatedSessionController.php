@@ -138,6 +138,7 @@ class AuthenticatedSessionController extends Controller
                 'c_authWardCode_' . $employeeId,
                 'c_locationType_' . $employeeId,
                 'c_patients_' . $employeeId,
+                'c_csr_stocks_' . $employeeId,
                 'latest_update_' . $employeeId
             ]);
 
@@ -146,7 +147,8 @@ class AuthenticatedSessionController extends Controller
                 'cached_inertia_auth',
                 'cached_inertia_packages',
                 'cached_inertia_locations',
-                'cached_inertia_fundsource'
+                'cached_inertia_fundsource',
+                'cached_inertia_suppliers',
             ]);
         }
 

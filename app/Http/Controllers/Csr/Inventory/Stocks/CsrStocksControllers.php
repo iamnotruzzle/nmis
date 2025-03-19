@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 use App\Models\Sessions;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use mysqli;
@@ -39,24 +40,112 @@ class CsrStocksControllers extends Controller
             ",
         );
 
-        $stocks = DB::select(
-            "SELECT stock.id, stock.ris_no,
-                stock.supplierID, supplier.suppname,
-                typeOfCharge.chrgcode as codeFromHCharge, typeOfCharge.chrgdesc as descFromHCharge,
-                fundSource.fsid as codeFromFundSource, fundSource.fsName as descFromFundSource,
-                stock.cl2comb, item.cl2desc, stock.acquisition_price,
-                unit.uomcode, unit.uomdesc,
-                stock.quantity,
-                stock.manufactured_date, stock.delivered_date, expiration_date, stock.converted
-            FROM csrw_csr_stocks as stock
-            JOIN hclass2 as item ON stock.cl2comb = item.cl2comb
-            JOIN huom as unit ON stock.uomcode = unit.uomcode
-            JOIN csrw_suppliers as supplier ON stock.supplierID = supplier.supplierID
-            LEFT JOIN hcharge as typeOfCharge ON stock.chrgcode = typeOfCharge.chrgcode
-            LEFT JOIN csrw_fund_source as fundSource ON stock.chrgcode = fundSource.fsid
-            ORDER BY stock.created_at ASC;"
+        // Define cache keys for ward code and location type based on the authenticated user's employee ID
+        $cache_authWardCode = 'c_authWardCode_' . Auth::user()->employeeid;
+        $cache_locationType = 'c_locationType_' . Auth::user()->employeeid;
 
-        );
+        // Attempt to retrieve cached ward code and location type
+        $authWardCode_cached = Cache::get($cache_authWardCode);
+        $locationType_cached = Cache::get($cache_locationType);
+
+        // If ward code is not found in cache, retrieve it from the database
+        if (!$authWardCode_cached) {
+            $authWardCode_query = DB::select(
+                "SELECT TOP 1 l.wardcode FROM user_acc u
+                    INNER JOIN csrw_login_history l ON u.employeeid = l.employeeid
+                    WHERE l.employeeid = ? ORDER BY l.created_at DESC;",
+                [Auth::user()->employeeid]
+            );
+
+            // If a ward code is found, retrieve its corresponding location type and cache the values
+            if (!empty($authWardCode_query)) {
+                $wardCode = $authWardCode_query[0]->wardcode;
+                $locationType_query = DB::select("SELECT enctype FROM hward WHERE wardcode = ?;", [$wardCode]);
+                $enctype = !empty($locationType_query) ? $locationType_query[0]->enctype : null;
+
+                // Store values in cache for future use
+                Cache::forever($cache_authWardCode, $wardCode);
+                Cache::forever($cache_locationType, $enctype);
+
+                // Assign retrieved values to variables
+                $authWardCode_cached = $wardCode;
+                $locationType_cached = $enctype;
+            }
+        }
+
+        // Retrieve the location type from cache again in case it was just set
+        $locationType_cached = Cache::get($cache_locationType);
+
+        // Define cache keys for patient data and latest update timestamp
+        $cachedKeyCsrStocks = 'c_csr_stocks_' . $authWardCode_cached;
+        $cacheKeyLatestUpdate = 'latest_update_' . $authWardCode_cached;
+
+        // Attempt to retrieve cached patient data
+        $stocks = Cache::get($cachedKeyCsrStocks);
+
+        // If location type is null, fetch the latest admission date for the ward
+        if ($locationType_cached === null) {
+            $latestCreatedAt = DB::select(
+                "SELECT MAX(created_at) as created_at FROM csrw_csr_stocks;"
+            );
+
+            // Extract the latest admission date from query result
+            $latestCreatedAt = $latestCreatedAt[0]->created_at ?? null;
+
+            // Retrieve the cached latest update timestamp
+            $cachedCreatedAt = Cache::get($cacheKeyLatestUpdate);
+
+            // If the latest admission date has changed, fetch patient data and update the cache
+            if (!$cachedCreatedAt || $latestCreatedAt !== $cachedCreatedAt) {
+                $fetchedStocks = DB::select(
+                    "SELECT stock.id, stock.ris_no,
+                        stock.supplierID, supplier.suppname,
+                        typeOfCharge.chrgcode as codeFromHCharge, typeOfCharge.chrgdesc as descFromHCharge,
+                        fundSource.fsid as codeFromFundSource, fundSource.fsName as descFromFundSource,
+                        stock.cl2comb, item.cl2desc, stock.acquisition_price,
+                        unit.uomcode, unit.uomdesc,
+                        stock.quantity,
+                        stock.manufactured_date, stock.delivered_date, expiration_date, stock.converted
+                    FROM csrw_csr_stocks as stock
+                    JOIN hclass2 as item ON stock.cl2comb = item.cl2comb
+                    JOIN huom as unit ON stock.uomcode = unit.uomcode
+                    JOIN csrw_suppliers as supplier ON stock.supplierID = supplier.supplierID
+                    LEFT JOIN hcharge as typeOfCharge ON stock.chrgcode = typeOfCharge.chrgcode
+                    LEFT JOIN csrw_fund_source as fundSource ON stock.chrgcode = fundSource.fsid
+                    ORDER BY stock.created_at ASC;"
+                );
+
+                // Update cache with new patient data and latest admission date
+                // Cache::forever($cacheKeyLatestUpdate, $latestCreatedAt);
+                // Cache::forever($cachedKeyCsrStocks, $fetchedStocks);
+                // Store patient data and latest admission date in cache for 30 minutes
+                Cache::put($cacheKeyLatestUpdate, $latestCreatedAt, now()->addMinutes(30));
+                Cache::put($cachedKeyCsrStocks, $fetchedStocks, now()->addMinutes(30));
+                $stocks = $fetchedStocks;
+            } else {
+                // Retrieve patient data from cache if admission date has not changed
+                $stocks = Cache::get($cachedKeyCsrStocks);
+            }
+        }
+
+        // $stocks = DB::select(
+        // "SELECT stock.id, stock.ris_no,
+        //     stock.supplierID, supplier.suppname,
+        //     typeOfCharge.chrgcode as codeFromHCharge, typeOfCharge.chrgdesc as descFromHCharge,
+        //     fundSource.fsid as codeFromFundSource, fundSource.fsName as descFromFundSource,
+        //     stock.cl2comb, item.cl2desc, stock.acquisition_price,
+        //     unit.uomcode, unit.uomdesc,
+        //     stock.quantity,
+        //     stock.manufactured_date, stock.delivered_date, expiration_date, stock.converted
+        // FROM csrw_csr_stocks as stock
+        // JOIN hclass2 as item ON stock.cl2comb = item.cl2comb
+        // JOIN huom as unit ON stock.uomcode = unit.uomcode
+        // JOIN csrw_suppliers as supplier ON stock.supplierID = supplier.supplierID
+        // LEFT JOIN hcharge as typeOfCharge ON stock.chrgcode = typeOfCharge.chrgcode
+        // LEFT JOIN csrw_fund_source as fundSource ON stock.chrgcode = fundSource.fsid
+        // ORDER BY stock.created_at ASC;"
+
+        // );
 
         $totalDeliveries = DB::select(
             "SELECT stock.id as stock_id, stock.ris_no, item.cl2comb, item.cl2desc, stock.supplierID,
@@ -98,21 +187,21 @@ class CsrStocksControllers extends Controller
                 csrw_fund_source AS fund_source ON fund_source.fsid = converted.chrgcode;"
         );
 
-        $convertedItems = DB::select(
-            "SELECT cl1comb, cl2comb, cl2desc, uomcode
-                FROM hclass2
-                WHERE uomcode != 'box'
-                ORDER BY cl2desc ASC;"
-        );
+        // $convertedItems = DB::select(
+        //     "SELECT cl1comb, cl2comb, cl2desc, uomcode
+        //         FROM hclass2
+        //         WHERE uomcode != 'box'
+        //         ORDER BY cl2desc ASC;"
+        // );
 
-        $suppliers = PimsSupplier::where('status', 'A')->orderBy('suppname', 'ASC')->get();
+        // $suppliers = PimsSupplier::where('status', 'A')->orderBy('suppname', 'ASC')->get();
 
         return Inertia::render('Csr/Inventory/Stocks/Index', [
             'items' => $items,
             'stocks' => $stocks,
             'totalDeliveries' => $totalDeliveries,
-            'suppliers' => $suppliers,
-            'convertedItems' => $convertedItems,
+            // 'suppliers' => $suppliers,
+            // 'convertedItems' => $convertedItems,
             'totalConvertedItems' => $totalConvertedItems,
         ]);
     }
