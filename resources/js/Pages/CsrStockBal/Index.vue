@@ -74,6 +74,7 @@
           field="cl2desc"
           header="ITEM"
           style="width: 30%"
+          sortable
         >
           <template #body="{ data }">
             <span style="text-wrap: nowrap"> {{ data.cl2desc }}</span>
@@ -84,6 +85,7 @@
           header="BEGINNING BALANCE"
           style="text-align: center; width: 5%"
           :pt="{ headerContent: 'justify-content-end' }"
+          sortable
         >
           <template #body="{ data }">
             {{ data.beginning_balance }}
@@ -93,6 +95,7 @@
           field="ending_balance"
           header="ENDING BALANCE"
           style="text-align: center; width: 5%"
+          sortable
         >
           <template #body="{ data }">
             {{ data.ending_balance }}
@@ -329,7 +332,9 @@ export default {
         onFinish: (visit) => {
           //   this.totalRecords = this.users.total;
           this.balanceContainer = [];
+          this.stockBalDatesList = [];
           this.storeStockBalanceInContainer();
+          this.storeStockBalDatesInContainer();
           this.loading = false;
         },
       });
