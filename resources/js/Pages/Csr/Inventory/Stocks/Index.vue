@@ -1710,7 +1710,7 @@ export default {
   },
   props: {
     items: Object,
-    stocks: Object,
+    stocks: Array,
     totalDeliveries: Object,
     // suppliers: Object,
     // convertedItems: Object,
@@ -2115,8 +2115,8 @@ export default {
           ris_no: e.ris_no,
           supplierID: e.supplierID,
           suppname: e.suppname,
-          chrgcode: e.codeFromHCharge === null ? e.codeFromFundSource : e.codeFromHCharge,
-          chrgdesc: e.codeFromHCharge === null ? e.descFromFundSource : e.descFromHCharge,
+          chrgcode: e.codeFromFundSource,
+          chrgdesc: e.descFromFundSource,
           cl2comb: e.cl2comb,
           cl2desc: e.cl2desc,
           uomcode: e.uomcode == null ? null : e.uomcode,
@@ -2129,6 +2129,7 @@ export default {
           converted: e.converted,
         });
       });
+      //   console.log(this.stocks);
     },
     storeSuppliersInContainer() {
       this.$page.props.suppliers.forEach((e) => {

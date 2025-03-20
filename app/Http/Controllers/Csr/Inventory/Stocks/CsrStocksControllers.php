@@ -98,19 +98,34 @@ class CsrStocksControllers extends Controller
             // If the latest updated_at has changed, fetch stocks data and update the cache
             if (!$cachedUpdatedAt || $latestUpdatedAt !== $cachedUpdatedAt) {
                 $fetchedStocks = DB::select(
+                    // OLD
+                    // "SELECT stock.id, stock.ris_no,
+                    //     stock.supplierID, supplier.suppname,
+                    //     typeOfCharge.chrgcode as codeFromHCharge, typeOfCharge.chrgdesc as descFromHCharge,
+                    //     fundSource.fsid as codeFromFundSource, fundSource.fsName as descFromFundSource,
+                    //     stock.cl2comb, item.cl2desc, stock.acquisition_price,
+                    //     unit.uomcode, unit.uomdesc,
+                    //     stock.quantity,
+                    //     stock.manufactured_date, stock.delivered_date, expiration_date, stock.converted
+                    // FROM csrw_csr_stocks as stock
+                    // JOIN hclass2 as item ON stock.cl2comb = item.cl2comb
+                    // JOIN huom as unit ON stock.uomcode = unit.uomcode
+                    // JOIN csrw_suppliers as supplier ON stock.supplierID = supplier.supplierID
+                    // LEFT JOIN hcharge as typeOfCharge ON stock.chrgcode = typeOfCharge.chrgcode
+                    // LEFT JOIN csrw_fund_source as fundSource ON stock.chrgcode = fundSource.fsid
+                    // ORDER BY stock.created_at ASC;"
+
+                    // new and fixed
                     "SELECT stock.id, stock.ris_no,
                         stock.supplierID, supplier.suppname,
-                        typeOfCharge.chrgcode as codeFromHCharge, typeOfCharge.chrgdesc as descFromHCharge,
                         fundSource.fsid as codeFromFundSource, fundSource.fsName as descFromFundSource,
                         stock.cl2comb, item.cl2desc, stock.acquisition_price,
                         unit.uomcode, unit.uomdesc,
-                        stock.quantity,
-                        stock.manufactured_date, stock.delivered_date, expiration_date, stock.converted
+                        stock.quantity, stock.delivered_date, expiration_date, stock.converted
                     FROM csrw_csr_stocks as stock
                     JOIN hclass2 as item ON stock.cl2comb = item.cl2comb
                     JOIN huom as unit ON stock.uomcode = unit.uomcode
-                    JOIN csrw_suppliers as supplier ON stock.supplierID = supplier.supplierID
-                    LEFT JOIN hcharge as typeOfCharge ON stock.chrgcode = typeOfCharge.chrgcode
+                    LEFT JOIN csrw_suppliers as supplier ON stock.supplierID = supplier.supplierID
                     LEFT JOIN csrw_fund_source as fundSource ON stock.chrgcode = fundSource.fsid
                     ORDER BY stock.created_at ASC;"
                 );
@@ -123,6 +138,7 @@ class CsrStocksControllers extends Controller
                 $stocks = Cache::get($cachedKeyCsrStocks);
             }
         }
+        // dd($stocks);
 
         // $stocks = DB::select(
         // "SELECT stock.id, stock.ris_no,
