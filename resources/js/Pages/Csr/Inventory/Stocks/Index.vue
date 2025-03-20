@@ -106,7 +106,7 @@
           style="width: 5%"
         >
         </Column>
-        <Column
+        <!-- <Column
           field="manufactured_date"
           header="MFD. DATE"
           style="width: 10%"
@@ -116,7 +116,7 @@
           <template #body="{ data }">
             {{ tzone(data.manufactured_date) }}
           </template>
-        </Column>
+        </Column> -->
         <Column
           field="delivered_date"
           header="DD. DATE"
@@ -516,14 +516,14 @@
                   <span class="text-blue-500"> {{ data.price_per_unit }}</span>
                 </template>
               </Column>
-              <Column
+              <!-- <Column
                 field="manufactured_date"
                 header="MFD. DATE"
               >
                 <template #body="{ data }">
                   {{ tzone(data.manufactured_date) }}
                 </template>
-              </Column>
+              </Column> -->
               <Column
                 field="delivered_date"
                 header="DELIVERED DATE"
@@ -569,7 +569,6 @@
         :modal="true"
         class="p-fluid overflow-hidden"
         :style="{ width: '800px' }"
-        @hide="clickOutsideDialog"
         :draggable="true"
         :closeOnEscape="false"
       >
@@ -908,7 +907,7 @@
                 @keydown="restrictNonNumericAndPeriod"
               />
             </div>
-            <div class="field">
+            <!-- <div class="field">
               <div class="flex align-content-center">
                 <label>Manufactured date</label>
               </div>
@@ -920,7 +919,7 @@
                 :manualInput="false"
                 :hideOnDateTimeSelect="true"
               />
-            </div>
+            </div> -->
             <div class="field">
               <div class="flex align-content-center">
                 <label>Delivered date</label>
@@ -1756,7 +1755,7 @@ export default {
       selectedItemsUomDesc: null,
       quantity: null,
       deliveryDetails: [],
-      manufactured_date: null,
+      //   manufactured_date: null,
       delivered_date: null,
       expiration_date: null,
       acquisitionPrice: 0,
@@ -1815,7 +1814,7 @@ export default {
         uomdesc: null,
         quantity: null,
         acquisition_price: null,
-        manufactured_date: null,
+        // manufactured_date: null,
         delivered_date: null,
         expiration_date: null,
         remarks: null,
@@ -1832,7 +1831,7 @@ export default {
         cl2desc: null,
         uomcode: null,
         uomdesc: null,
-        manufactured_date: null,
+        // manufactured_date: null,
         delivered_date: null,
         expiration_date: null,
         acquisitionPrice: null,
@@ -1854,7 +1853,7 @@ export default {
         supplier: null,
         fund_source: null,
         cl2comb: null,
-        manufactured_date: null,
+        // manufactured_date: null,
         delivered_date: null,
         expiration_date: null,
         quantity: 0,
@@ -2004,7 +2003,7 @@ export default {
       this.selectedItemsUomDesc = null;
       this.quantity = null;
       this.deliveryDetails = [];
-      this.manufactured_date = null;
+      //   this.manufactured_date = null;
       this.delivered_date = null;
       this.expiration_date = null;
       this.form.clearErrors();
@@ -2124,7 +2123,7 @@ export default {
           uomdesc: e.uomcode == null ? null : e.uomdesc,
           quantity: Number(e.quantity),
           acquisition_price: e.acquisition_price,
-          manufactured_date: e.manufactured_date === null ? '' : e.manufactured_date,
+          //   manufactured_date: e.manufactured_date === null ? '' : e.manufactured_date,
           delivered_date: e.delivered_date === null ? '' : e.delivered_date,
           expiration_date: expirationDate, // Assign expirationDate to expiration_date field
           converted: e.converted,
@@ -2153,7 +2152,7 @@ export default {
           quantity_after: e.quantity_after,
           total_issued_qty: e.total_issued_qty,
           acquisition_price: e.acquisition_price,
-          manufactured_date: e.manufactured_date,
+          //   manufactured_date: e.manufactured_date,
           delivered_date: e.delivered_date,
           expiration_date: e.expiration_date,
           converted_by: e.firstname.trim() + ' ' + e.lastname.trim(),
@@ -2271,7 +2270,7 @@ export default {
         (this.disableSearchRisInput = false),
         (this.isUpdate = false),
         (this.item = null),
-        (this.addDeliveryDialog = false),
+        // (this.addDeliveryDialog = false),
         (this.editConvertedItemDialog = false),
         (this.supplier = null),
         (this.selectedFundSource = null),
@@ -2279,7 +2278,7 @@ export default {
         (this.selectedItemsUomDesc = null),
         (this.quantity = null),
         (this.deliveryDetails = []),
-        (this.manufactured_date = null),
+        // (this.manufactured_date = null),
         (this.delivered_date = null),
         (this.expiration_date = null),
         this.form.clearErrors(),
@@ -2288,8 +2287,8 @@ export default {
         this.formImport.reset(),
         this.formConvertItem.reset(),
         this.formConvertItem.clearErrors(),
-        this.formAddDelivery.clearErrors(),
-        this.formAddDelivery.reset()
+        this.formAddDelivery.clearErrors()
+        // this.formAddDelivery.reset()
       );
     },
     editItem(item) {
@@ -2307,7 +2306,7 @@ export default {
       this.form.uomdesc = item.uomdesc;
       this.form.quantity = item.quantity;
       this.form.acquisition_price = item.acquisition_price;
-      this.form.manufactured_date = item.manufactured_date;
+      //   this.form.manufactured_date = item.manufactured_date;
       this.form.delivered_date = item.delivered_date;
       this.form.expiration_date = item.expiration_date;
     },
@@ -2337,7 +2336,7 @@ export default {
                 uomdesc: e.uomdesc,
                 unitprice: e.unitprice,
                 releaseqty: Number(e.releaseqty),
-                manufactured_date: null,
+                // manufactured_date: null,
                 delivered_date: null,
                 expiration_date: null,
               });
@@ -2479,7 +2478,7 @@ export default {
       this.formImport.uomcode = e.data.uomcode;
       this.formImport.uomdesc = e.data.uomdesc;
       this.formImport.quantity = Number(e.data.releaseqty);
-      this.formImport.manufactured_date = e.data.manufactured_date;
+      //   this.formImport.manufactured_date = e.data.manufactured_date;
       this.formImport.delivered_date = e.data.delivered_date;
       this.formImport.expiration_date = e.data.expiration_date;
       this.formImport.acquisitionPrice = Number(e.data.unitprice);
@@ -2507,7 +2506,7 @@ export default {
           //   if (e.supplier == null || e.expiration_date == null) {
           e.supplier = this.formImport.supplier;
           e.supplierName = this.formImport.supplier == null ? null : this.formImport.supplier.suppname;
-          e.manufactured_date = this.formImport.manufactured_date;
+          //   e.manufactured_date = this.formImport.manufactured_date;
           e.delivered_date = this.formImport.delivered_date;
           e.expiration_date = this.formImport.expiration_date;
           e.releaseqty = this.formImport.quantity;
@@ -2583,7 +2582,7 @@ export default {
       this.formAddDelivery.post(route('csrmanualadd.store'), {
         preserveScroll: true,
         onSuccess: () => {
-          //   this.addDeliveryDialog = false;
+          this.addDeliveryDialog = true;
           this.cancel();
           this.updateData();
           this.createdMsg();
@@ -2604,8 +2603,21 @@ export default {
       this.formImport.clearErrors();
       this.formConvertItem.reset();
       this.formConvertItem.clearErrors();
-      this.formAddDelivery.reset();
+      // formAddDelivery
+      this.formAddDelivery.generateRisNo = false;
+      this.formAddDelivery.fund_source = null;
+      this.formAddDelivery.cl2comb = null;
+      //   this.formAddDelivery.manufactured_date = null;
+      this.formAddDelivery.delivered_date = null;
+      this.formAddDelivery.expiration_date = null;
+      this.formAddDelivery.quantity = 0;
+      this.formAddDelivery.acquisitionPrice = 0;
+      this.formAddDelivery.cl2comb_after = 0;
+      this.formAddDelivery.quantity_after = 0;
+      this.formAddDelivery.hospital_price = 0;
+      this.formAddDelivery.price_per_unit = 0;
       this.formAddDelivery.clearErrors();
+
       this.stocksList = [];
       this.storeStocksInContainer();
     },
