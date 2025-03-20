@@ -32,11 +32,13 @@ class CsrItemConversionController extends Controller
         $updated = CsrStocks::where('id', $request->csr_stock_id)
             ->update([
                 'converted' => 'y',
+                'updated_at' => Carbon::now(),
             ]);
 
         $updatedLog = CsrStocksLogs::where('stock_id', $request->csr_stock_id)
             ->update([
                 'converted' => 'y',
+                'updated_at' => Carbon::now(),
             ]);
 
         $convertedItem = CsrItemConversion::create([
@@ -95,6 +97,7 @@ class CsrItemConversionController extends Controller
 
         $updated_item =  $csrconvertdelivery->update([
             'quantity_after' => $request->quantity_after, // main category
+            'updated_at' => Carbon::now(),
             'update_by' => $updated_by
         ]);
 
@@ -117,6 +120,7 @@ class CsrItemConversionController extends Controller
             'action' => 'UPDATE QUANTITY',
             'remarks' => $request->remarks,
             'converted_by' => $log->converted_by,
+            'updated_at' => Carbon::now(),
             'updated_by' => $updated_by
         ]);
 
@@ -153,12 +157,16 @@ class CsrItemConversionController extends Controller
                 'action' => 'DELETED ITEM',
                 'remarks' => '',
                 'converted_by' => $log->converted_by,
-                'updated_by' => $updated_by
+                'updated_by' => $updated_by,
+                'updated_at' => Carbon::now(),
             ]);
 
             // UPDATE STOCK
             CsrStocks::where('id', $log->csr_stock_id)
-                ->update(['converted' => 'n']);
+                ->update([
+                    'converted' => 'n',
+                    'updated_at' => Carbon::now(),
+                ]);
 
             // DELETE PRICE
             ItemPrices::where('ris_no', $log->ris_no)

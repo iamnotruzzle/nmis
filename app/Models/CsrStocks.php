@@ -29,7 +29,8 @@ class CsrStocks extends Model
         'delivered_date',
         'expiration_date',
         'acquisition_price',
-        'converted'
+        'converted',
+        'updated_at'
     ];
 
     public function itemDetail()

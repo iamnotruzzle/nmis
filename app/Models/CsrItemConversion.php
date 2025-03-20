@@ -26,6 +26,7 @@ class CsrItemConversion extends Model
         'expiration_date',
         'converted_by',
         'updated_by',
+        'updated_at'
     ];
 
     public function ward_stocks()

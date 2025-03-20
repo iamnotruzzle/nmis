@@ -85,18 +85,18 @@ class CsrStocksControllers extends Controller
 
         // If location type is null, fetch the latest created_at
         if ($locationType_cached === null) {
-            $latestCreatedAt = DB::select(
-                "SELECT MAX(created_at) as created_at FROM csrw_csr_stocks;"
+            $latestUpdatedAt = DB::select(
+                "SELECT MAX(updated_at) as updated_at FROM csrw_csr_stocks;"
             );
 
-            // Extract the latest created_at from query result
-            $latestCreatedAt = $latestCreatedAt[0]->created_at ?? null;
+            // Extract the latest updated_at from query result
+            $latestUpdatedAt = $latestUpdatedAt[0]->updated_at ?? null;
 
             // Retrieve the cached latest update timestamp
-            $cachedCreatedAt = Cache::get($cacheKeyLatestUpdate);
+            $cachedUpdatedAt = Cache::get($cacheKeyLatestUpdate);
 
-            // If the latest created_at has changed, fetch stocks data and update the cache
-            if (!$cachedCreatedAt || $latestCreatedAt !== $cachedCreatedAt) {
+            // If the latest updated_at has changed, fetch stocks data and update the cache
+            if (!$cachedUpdatedAt || $latestUpdatedAt !== $cachedUpdatedAt) {
                 $fetchedStocks = DB::select(
                     "SELECT stock.id, stock.ris_no,
                         stock.supplierID, supplier.suppname,
@@ -115,7 +115,7 @@ class CsrStocksControllers extends Controller
                     ORDER BY stock.created_at ASC;"
                 );
 
-                Cache::put($cacheKeyLatestUpdate, $latestCreatedAt, now()->addMinutes(30));
+                Cache::put($cacheKeyLatestUpdate, $latestUpdatedAt, now()->addMinutes(30));
                 Cache::put($cachedKeyCsrStocks, $fetchedStocks, now()->addMinutes(30));
                 $stocks = $fetchedStocks;
             } else {

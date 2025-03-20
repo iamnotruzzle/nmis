@@ -29,5 +29,6 @@ class CsrItemConversionLogs extends Model
         'remarks',
         'converted_by',
         'updated_by',
+        'updated_at'
     ];
 }
