@@ -132,3 +132,4 @@ Route::middleware(['web', 'auth', 'verified'])->group(
 );
 
 Route::resource('public/csrinventory', PubicCsrStocks::class)->only(['index']);
+Route::get('api/inventory', [PubicCsrStocks::class, 'fetchInventory']);

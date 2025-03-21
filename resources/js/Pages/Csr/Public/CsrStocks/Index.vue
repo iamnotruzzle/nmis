@@ -188,11 +188,9 @@ import { FilterMatchMode } from 'primevue/api';
 import { router } from '@inertiajs/vue3';
 import { Head } from '@inertiajs/vue3';
 import InputText from 'primevue/inputtext';
-import Password from 'primevue/password';
 import Column from 'primevue/column';
 import DataTable from 'primevue/datatable';
 import Button from 'primevue/button';
-import Dialog from 'primevue/dialog';
 import FileUpload from 'primevue/fileupload';
 import Toast from 'primevue/toast';
 import Avatar from 'primevue/avatar';
@@ -203,16 +201,15 @@ import AutoComplete from 'primevue/autocomplete';
 import Tag from 'primevue/tag';
 import moment from 'moment';
 import { Link } from '@inertiajs/vue3';
+import axios from 'axios';
 
 export default {
   components: {
     Head,
     InputText,
     Column,
-    Password,
     DataTable,
     Button,
-    Dialog,
     FileUpload,
     Toast,
     Avatar,
@@ -247,12 +244,40 @@ export default {
     };
   },
   mounted() {
+    this.fetchInventoryData(); // Initial load
+    setInterval(this.fetchInventoryData, 40000); // Refresh every 10 seconds
+
     // console.log(this.currentStock);
     this.storeCsrInventoryInContainer();
     this.storeWardsInventoryInContainer();
     this.storeLocationsInContainer();
   },
   methods: {
+    fetchInventoryData() {
+      fetch('/api/inventory')
+        .then((response) => response.json())
+        .then((data) => {
+          this.csrInventoryList = [];
+          this.wardInventoryList = [];
+
+          // Replace arrays instead of appending
+          this.csrInventoryList = data.csrInventory.map((e) => ({
+            id: e.ID,
+            item: e.ITEM,
+            total_quantity: e.TOTAL_QUANTITY,
+          }));
+
+          this.wardsInventoryList = data.wardsInventory.map((e) => ({
+            ward: e.ward,
+            item: e.item,
+            quantity: e.quantity,
+          }));
+
+          console.log('Data updated.');
+          //   console.log('Updated inventory:', this.csrInventoryList, this.wardsInventoryList);
+        })
+        .catch((error) => console.error('Error fetching inventory:', error));
+    },
     storeCsrInventoryInContainer() {
       this.csrInventoryList = []; // reset
 
@@ -275,7 +300,7 @@ export default {
         });
       });
 
-      console.log(this.wardsInventoryList);
+      //   console.log(this.wardsInventoryList);
     },
     storeLocationsInContainer() {
       this.$page.props.locations.forEach((e) => {
