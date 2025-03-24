@@ -655,10 +655,10 @@
             />
           </div>
         </div>
-        <div class="mb-3">
+        <div class="my-3">
           <div class="flex">
             <label>Expiration date</label>
-            <span class="ml-2 text-error">*</span>
+            <span class="ml-2 text-error">* MAX BY DEFAULT.</span>
           </div>
           <div class="flex flex-row">
             <Calendar
@@ -669,16 +669,15 @@
               showButtonBar
               :manualInput="false"
               :hideOnDateTimeSelect="true"
-              :disabled="maxDate"
             />
           </div>
-          <ToggleButton
+          <!-- <ToggleButton
             v-model="maxDate"
             onLabel="Fixed date"
             offLabel="Custom date"
             onIcon="pi pi-lock"
             offIcon="pi pi-lock-open"
-          />
+          /> -->
         </div>
 
         <div class="field w-6">
@@ -2246,6 +2245,7 @@ export default {
     openAddDeliveryDialog() {
       this.formAddDelivery.clearErrors();
       this.formAddDelivery.reset();
+      this.formAddDelivery.expiration_date = new Date('9999-12-03');
       this.addDeliveryDialog = true;
     },
     // emit close dialog
@@ -2659,13 +2659,13 @@ export default {
         const similarObjects = this.findSimilarIds(cl2comb, this.convertedItemSelection);
       }
     },
-    maxDate: function (val) {
-      if (val == false) {
-        this.formAddDelivery.expiration_date = null;
-      } else {
-        this.formAddDelivery.expiration_date = new Date('9999-12-03');
-      }
-    },
+    // maxDate: function (val) {
+    //   if (val == false) {
+    //     this.formAddDelivery.expiration_date = null;
+    //   } else {
+    //     this.formAddDelivery.expiration_date = new Date('9999-12-03');
+    //   }
+    // },
     formConvertItem: {
       handler(e) {
         //    acquisition price
