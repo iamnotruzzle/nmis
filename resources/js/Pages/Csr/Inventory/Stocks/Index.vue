@@ -1842,7 +1842,7 @@ export default {
         cl2comb: null,
         // manufactured_date: null,
         delivered_date: null,
-        expiration_date: null,
+        expiration_date: new Date('9999-12-30'),
         quantity: 0,
         acquisitionPrice: 0,
         cl2comb_after: 0,
@@ -2243,9 +2243,9 @@ export default {
       this.importDeliveryDialog = true;
     },
     openAddDeliveryDialog() {
-      this.formAddDelivery.clearErrors();
-      this.formAddDelivery.reset();
-      this.formAddDelivery.expiration_date = new Date('9999-12-03');
+      //   this.formAddDelivery.clearErrors();
+      //   this.formAddDelivery.reset();
+      //   this.formAddDelivery.expiration_date = new Date('9999-12-03');
       this.addDeliveryDialog = true;
     },
     // emit close dialog
@@ -2568,7 +2568,26 @@ export default {
         preserveScroll: true,
         onSuccess: () => {
           this.addDeliveryDialog = true;
-          this.cancel();
+          //   this.cancel();
+
+          //   // formAddDelivery
+          //   //   this.formAddDelivery.generateRisNo = false;
+          //   this.formAddDelivery.fund_source = null;
+          //   this.formAddDelivery.cl2comb = null;
+          //   //   this.formAddDelivery.manufactured_date = null;
+          //   this.formAddDelivery.delivered_date = null;
+          //   //   this.formAddDelivery.expiration_date = null;
+          //   this.formAddDelivery.quantity = 0;
+          //   this.formAddDelivery.acquisitionPrice = 0;
+          //   this.formAddDelivery.cl2comb_after = 0;
+          //   this.formAddDelivery.quantity_after = 0;
+          //   this.formAddDelivery.hospital_price = 0;
+          //   this.formAddDelivery.price_per_unit = 0;
+          //   this.formAddDelivery.clearErrors();
+
+          this.stocksList = [];
+          this.storeStocksInContainer();
+
           this.updateData();
           this.createdMsg();
         },
@@ -2701,9 +2720,10 @@ export default {
         this.formAddDelivery.hospital_price = Number(hospital_price.toFixed(2));
 
         let price_per_unit = this.formAddDelivery.hospital_price / this.formAddDelivery.quantity_after;
-        this.formAddDelivery.price_per_unit =
-          this.formAddDelivery.price_per_unit == 0 ? 0 : Number(price_per_unit).toFixed(2);
-        // this.formAddDelivery.price_per_unit = Number(price_per_unit).toFixed(2);
+        // isNaN(Number(this.formAddDelivery.price_per_unit)) || this.formAddDelivery.price_per_unit == 0
+        //   ? '0.00'
+        //   : Number(this.formAddDelivery.price_per_unit).toFixed(2);
+        this.formAddDelivery.price_per_unit = Number(price_per_unit).toFixed(2);
       },
       deep: true,
     },
