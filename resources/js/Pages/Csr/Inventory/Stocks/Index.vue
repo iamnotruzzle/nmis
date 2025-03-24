@@ -2271,8 +2271,8 @@ export default {
         this.formImport.clearErrors(),
         this.formImport.reset(),
         this.formConvertItem.reset(),
-        this.formConvertItem.clearErrors(),
-        this.formAddDelivery.clearErrors()
+        this.formConvertItem.clearErrors()
+        // this.formAddDelivery.clearErrors()
         // this.formAddDelivery.reset()
       );
     },
@@ -2570,20 +2570,13 @@ export default {
           this.addDeliveryDialog = true;
           //   this.cancel();
 
-          //   // formAddDelivery
-          //   //   this.formAddDelivery.generateRisNo = false;
-          //   this.formAddDelivery.fund_source = null;
-          //   this.formAddDelivery.cl2comb = null;
-          //   //   this.formAddDelivery.manufactured_date = null;
-          //   this.formAddDelivery.delivered_date = null;
-          //   //   this.formAddDelivery.expiration_date = null;
-          //   this.formAddDelivery.quantity = 0;
-          //   this.formAddDelivery.acquisitionPrice = 0;
-          //   this.formAddDelivery.cl2comb_after = 0;
-          //   this.formAddDelivery.quantity_after = 0;
-          //   this.formAddDelivery.hospital_price = 0;
-          //   this.formAddDelivery.price_per_unit = 0;
-          //   this.formAddDelivery.clearErrors();
+          this.formAddDelivery.cl2comb = null;
+          this.formAddDelivery.quantity = 0;
+          this.formAddDelivery.acquisitionPrice = 0;
+          this.formAddDelivery.cl2comb_after = null;
+          this.formAddDelivery.quantity_after = 0;
+          this.formAddDelivery.hospital_price = 0;
+          this.formAddDelivery.price_per_unit = 0;
 
           this.stocksList = [];
           this.storeStocksInContainer();
@@ -2609,19 +2602,19 @@ export default {
       this.formConvertItem.reset();
       this.formConvertItem.clearErrors();
       // formAddDelivery
-      this.formAddDelivery.generateRisNo = false;
-      this.formAddDelivery.fund_source = null;
-      this.formAddDelivery.cl2comb = null;
-      //   this.formAddDelivery.manufactured_date = null;
-      this.formAddDelivery.delivered_date = null;
-      this.formAddDelivery.expiration_date = null;
-      this.formAddDelivery.quantity = 0;
-      this.formAddDelivery.acquisitionPrice = 0;
-      this.formAddDelivery.cl2comb_after = 0;
-      this.formAddDelivery.quantity_after = 0;
-      this.formAddDelivery.hospital_price = 0;
-      this.formAddDelivery.price_per_unit = 0;
-      this.formAddDelivery.clearErrors();
+      //   this.formAddDelivery.generateRisNo = false;
+      //   this.formAddDelivery.fund_source = null;
+      //   this.formAddDelivery.cl2comb = null;
+      //   //   this.formAddDelivery.manufactured_date = null;
+      //   this.formAddDelivery.delivered_date = null;
+      //   this.formAddDelivery.expiration_date = null;
+      //   this.formAddDelivery.quantity = 0;
+      //   this.formAddDelivery.acquisitionPrice = 0;
+      //   this.formAddDelivery.cl2comb_after = 0;
+      //   this.formAddDelivery.quantity_after = 0;
+      //   this.formAddDelivery.hospital_price = 0;
+      //   this.formAddDelivery.price_per_unit = 0;
+      //   this.formAddDelivery.clearErrors();
 
       this.stocksList = [];
       this.storeStocksInContainer();
