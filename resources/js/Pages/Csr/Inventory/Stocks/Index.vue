@@ -780,7 +780,7 @@
             icon="pi pi-times"
             severity="danger"
             text
-            @click="clickOutsideDialog"
+            @click="cancel"
           />
           <Button
             label="Save"
@@ -2575,6 +2575,7 @@ export default {
       });
     },
     cancel() {
+      this.addDeliveryDialog = false;
       this.convertDialog = false;
       this.stockId = null;
       this.isUpdate = false;
@@ -2700,7 +2701,9 @@ export default {
         this.formAddDelivery.hospital_price = Number(hospital_price.toFixed(2));
 
         let price_per_unit = this.formAddDelivery.hospital_price / this.formAddDelivery.quantity_after;
-        this.formAddDelivery.price_per_unit = Number(price_per_unit).toFixed(2);
+        this.formAddDelivery.price_per_unit =
+          this.formAddDelivery.price_per_unit == 0 ? 0 : Number(price_per_unit).toFixed(2);
+        // this.formAddDelivery.price_per_unit = Number(price_per_unit).toFixed(2);
       },
       deep: true,
     },
