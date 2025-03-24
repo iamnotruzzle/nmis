@@ -162,6 +162,21 @@
             /> -->
           </template>
         </Column>
+        <Column
+          field="created_at"
+          header="CREATED_AT"
+          sortable
+          style="width: 10%"
+          :showFilterMenu="false"
+        >
+          <template #body="{ data }">
+            <div class="flex flex-column">
+              <div>
+                {{ tzoneWithTime(data.created_at) }}
+              </div>
+            </div>
+          </template>
+        </Column>
 
         <template #groupheader="slotProps">
           <div class="bg-primary-reverse py-2 flex align-items-center">
@@ -2053,6 +2068,13 @@ export default {
         return moment.tz(date, 'Asia/Manila').format('L');
       }
     },
+    tzoneWithTime(date) {
+      if (date == null || date == '') {
+        return null;
+      } else {
+        return moment.tz(date, 'Asia/Manila').format('L LT');
+      }
+    },
     checkIfAboutToExpire(date) {
       let current_date = moment.tz(moment(), 'Asia/Manila');
       let exp_date = moment.tz(date, 'Asia/Manila');
@@ -2110,6 +2132,7 @@ export default {
           delivered_date: e.delivered_date === null ? '' : e.delivered_date,
           expiration_date: expirationDate, // Assign expirationDate to expiration_date field
           converted: e.converted,
+          created_at: e.created_at,
         });
       });
       //   console.log(this.stocks);

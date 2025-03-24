@@ -121,7 +121,7 @@ class CsrStocksControllers extends Controller
                         fundSource.fsid as codeFromFundSource, fundSource.fsName as descFromFundSource,
                         stock.cl2comb, item.cl2desc, stock.acquisition_price,
                         unit.uomcode, unit.uomdesc,
-                        stock.quantity, stock.delivered_date, expiration_date, stock.converted
+                        stock.quantity, stock.delivered_date, expiration_date, stock.converted, stock.created_at
                     FROM csrw_csr_stocks as stock
                     JOIN hclass2 as item ON stock.cl2comb = item.cl2comb
                     JOIN huom as unit ON stock.uomcode = unit.uomcode
