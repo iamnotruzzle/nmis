@@ -6,18 +6,17 @@
       <Toast />
 
       <!-- DELIVERIES -->
+      <!-- :value="filteredData" -->
       <DataTable
         class="p-datatable-sm"
         v-model:filters="filters"
-        :value="filteredData"
+        :value="stocksList"
+        :globalFilterFields="['ris_no', 'cl2desc', 'suppname', 'chrgdesc', 'expiration']"
         paginator
         :rows="10"
         :rowsPerPageOptions="[10, 20, 30, 40]"
-        filterDisplay="row"
         removableSort
-        :globalFilterFields="['ris_no', 'cl2desc', 'suppname', 'chrgdesc', 'stock_lvl']"
         showGridlines
-        selectionMode="single"
         sortMode="single"
         rowGroupMode="subheader"
         groupRowsBy="ris_no"
@@ -106,17 +105,6 @@
           style="width: 5%"
         >
         </Column>
-        <!-- <Column
-          field="manufactured_date"
-          header="MFD. DATE"
-          style="width: 10%"
-          sortable
-          :showFilterMenu="false"
-        >
-          <template #body="{ data }">
-            {{ tzone(data.manufactured_date) }}
-          </template>
-        </Column> -->
         <Column
           field="delivered_date"
           header="DD. DATE"
@@ -155,7 +143,7 @@
             </div>
           </template>
           <template #filter="slotProps">
-            <Calendar
+            <!-- <Calendar
               v-model="filters['expiration'].from"
               placeholder="FROM"
               showIcon
@@ -171,7 +159,7 @@
               showButtonBar
               :manualInput="false"
               :hideOnDateTimeSelect="true"
-            />
+            /> -->
           </template>
         </Column>
 
@@ -1921,35 +1909,31 @@ export default {
     };
   },
   computed: {
-    filteredData() {
-      let filtered = this.stocksList;
-
-      // Apply global filter
-      if (this.filters['global'] && this.filters['global'].value) {
-        const filterText = this.filters['global'].value;
-        filtered = filtered.filter(
-          (item) =>
-            item.ris_no.includes(filterText) ||
-            item.cl2desc.includes(filterText) ||
-            item.suppname.includes(filterText) ||
-            item.chrgdesc.includes(filterText)
-        );
-      }
-
-      // Apply expiration date range filter
-      if (this.filters['expiration']) {
-        const from = this.filters['expiration'].from;
-        const to = this.filters['expiration'].to;
-
-        if (from && to) {
-          filtered = filtered.filter((item) => {
-            return item.expiration_date >= from && item.expiration_date <= to;
-          });
-        }
-      }
-
-      return filtered;
-    },
+    // filteredData() {
+    //   let filtered = this.stocksList;
+    //   // Apply global filter
+    //   if (this.filters['global'] && this.filters['global'].value) {
+    //     const filterText = this.filters['global'].value;
+    //     filtered = filtered.filter(
+    //       (item) =>
+    //         item.ris_no.includes(filterText) ||
+    //         item.cl2desc.includes(filterText) ||
+    //         item.suppname.includes(filterText) ||
+    //         item.chrgdesc.includes(filterText)
+    //     );
+    //   }
+    //   // Apply expiration date range filter
+    //   if (this.filters['expiration']) {
+    //     const from = this.filters['expiration'].from;
+    //     const to = this.filters['expiration'].to;
+    //     if (from && to) {
+    //       filtered = filtered.filter((item) => {
+    //         return item.expiration_date >= from && item.expiration_date <= to;
+    //       });
+    //     }
+    //   }
+    //   return filtered;
+    // },
   },
   mounted() {
     // console.log(this.convertedItems);
@@ -1963,11 +1947,11 @@ export default {
     // this.generateTempRisNo();
 
     // Add event listener to the document
-    document.addEventListener('keydown', this.handleKeyPress);
+    // document.addEventListener('keydown', this.handleKeyPress);
   },
   beforeUnmount() {
     // Remove event listener before component is destroyed
-    document.removeEventListener('keydown', this.handleKeyPress);
+    // document.removeEventListener('keydown', this.handleKeyPress);
   },
   methods: {
     generateTempRisNo() {

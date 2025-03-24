@@ -290,6 +290,8 @@ class CsrStocksControllers extends Controller
             }
 
             return $result;
+            // return redirect()->back();
+            // return redirect()->back()->with('result', $result);
         } else {
             $deliveryDetails = $request->deliveryDetails;
             // dd($deliveryDetails);
