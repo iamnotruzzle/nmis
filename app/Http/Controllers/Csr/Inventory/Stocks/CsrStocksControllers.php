@@ -31,6 +31,27 @@ class CsrStocksControllers extends Controller
 {
     public function index(Request $request)
     {
+        //#region ris_generator
+        $currentYear = now()->format('y'); // Get last 2 digits of the year
+        $currentMonth = now()->format('m'); // Get the month (2 digits)
+
+        // Check if there are any records with the new format
+        $latestRis = DB::table('csrw_csr_stocks')
+            ->whereRaw("ris_no LIKE ?", ["$currentYear-$currentMonth-%"])
+            ->orderBy('created_at', 'desc')
+            ->value('ris_no');
+
+        // Determine the next sequence number
+        if ($latestRis) {
+            $lastNumber = (int)substr($latestRis, -6); // Extract last 6 digits
+            $nextNumber = str_pad($lastNumber + 1, 6, '0', STR_PAD_LEFT);
+        } else {
+            $nextNumber = '000001'; // Reset every new month
+        }
+        // Generate the new ris_no in the new format
+        $newRisNo = "$currentYear-$currentMonth-$nextNumber";
+        //#endregion
+
         $items = DB::select(
             "SELECT hclass2.cl1comb, hclass2.cl2comb as cl2comb, hclass2.cl2desc as cl2desc, huom.uomcode as uomcode, huom.uomdesc as uomdesc FROM hclass2
                 JOIN huom ON hclass2.uomcode = huom.uomcode
@@ -138,26 +159,6 @@ class CsrStocksControllers extends Controller
                 $stocks = Cache::get($cachedKeyCsrStocks);
             }
         }
-        // dd($stocks);
-
-        // $stocks = DB::select(
-        // "SELECT stock.id, stock.ris_no,
-        //     stock.supplierID, supplier.suppname,
-        //     typeOfCharge.chrgcode as codeFromHCharge, typeOfCharge.chrgdesc as descFromHCharge,
-        //     fundSource.fsid as codeFromFundSource, fundSource.fsName as descFromFundSource,
-        //     stock.cl2comb, item.cl2desc, stock.acquisition_price,
-        //     unit.uomcode, unit.uomdesc,
-        //     stock.quantity,
-        //     stock.manufactured_date, stock.delivered_date, expiration_date, stock.converted
-        // FROM csrw_csr_stocks as stock
-        // JOIN hclass2 as item ON stock.cl2comb = item.cl2comb
-        // JOIN huom as unit ON stock.uomcode = unit.uomcode
-        // JOIN csrw_suppliers as supplier ON stock.supplierID = supplier.supplierID
-        // LEFT JOIN hcharge as typeOfCharge ON stock.chrgcode = typeOfCharge.chrgcode
-        // LEFT JOIN csrw_fund_source as fundSource ON stock.chrgcode = fundSource.fsid
-        // ORDER BY stock.created_at ASC;"
-
-        // );
 
         $totalDeliveries = DB::select(
             "SELECT stock.id as stock_id, stock.ris_no, item.cl2comb, item.cl2desc, stock.supplierID,
@@ -199,21 +200,11 @@ class CsrStocksControllers extends Controller
                 csrw_fund_source AS fund_source ON fund_source.fsid = converted.chrgcode;"
         );
 
-        // $convertedItems = DB::select(
-        //     "SELECT cl1comb, cl2comb, cl2desc, uomcode
-        //         FROM hclass2
-        //         WHERE uomcode != 'box'
-        //         ORDER BY cl2desc ASC;"
-        // );
-
-        // $suppliers = PimsSupplier::where('status', 'A')->orderBy('suppname', 'ASC')->get();
-
         return Inertia::render('Csr/Inventory/Stocks/Index', [
             'items' => $items,
             'stocks' => $stocks,
             'totalDeliveries' => $totalDeliveries,
-            // 'suppliers' => $suppliers,
-            // 'convertedItems' => $convertedItems,
+            'newRisNo' => $newRisNo,
             'totalConvertedItems' => $totalConvertedItems,
         ]);
     }

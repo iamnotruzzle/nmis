@@ -20,6 +20,8 @@
         sortMode="single"
         rowGroupMode="subheader"
         groupRowsBy="ris_no"
+        sortField="created_at"
+        :sortOrder="-1"
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
@@ -579,34 +581,37 @@
           <div class="text-primary text-xl font-bold">ADD DELIVERY</div>
         </template>
 
-        <div class="field">
-          <div class="flex align-items-center">
-            <label class="mr-2 font-semibold text-xl"> GENERATE RIS NO.: </label>
-
-            <input
-              v-model="formAddDelivery.generateRisNo"
-              type="checkbox"
-              class="text-primary temp-ris-no"
-              :style="{ width: '25px', height: '25px', 'font-size': '20px' }"
-              cursor-pointer
-            />
-          </div>
-        </div>
-        <div class="field">
-          <div class="flex align-content-center">
-            <label>RIS no.</label>
-            <span class="ml-2 text-error">*</span>
+        <div class="field w-6">
+          <div class="flex justify-content-between align-content-center">
+            <div>
+              <label class="text-4xl">RIS NUMBER</label>
+              <span class="ml-2 text-error text-4xl">*</span>
+            </div>
+            <div class="mb-2 flex">
+              <Button
+                label="CURR."
+                size="sm"
+                severity="warning"
+                class="text-center"
+                @click="currentRisNo"
+              />
+              <Button
+                label="NEW"
+                size="sm"
+                severity="info"
+                class="ml-2"
+                @click="incrementRisNo"
+              />
+            </div>
           </div>
           <InputText
             v-model.trim="formAddDelivery.ris_no"
-            :readonly="generatedRisNo"
-            autofocus
+            class="text-4xl py-4 text-yellow-500 font-bold w-full"
           />
         </div>
         <div class="field">
           <div class="flex align-content-center">
             <label>Supplier</label>
-            <!-- <span class="ml-2 text-error">*</span> -->
           </div>
           <Dropdown
             v-model="formAddDelivery.supplier"
@@ -617,6 +622,7 @@
             optionValue="supplierID"
             optionLabel="suppname"
             class="w-full"
+            autofocus
           />
         </div>
         <div class="field">
@@ -660,13 +666,19 @@
             <span class="ml-2 text-error">*</span>
           </div>
           <div class="flex flex-row">
-            <Calendar
+            <!-- <Calendar
               v-model="formAddDelivery.delivered_date"
               dateFormat="mm-dd-yy"
               showIcon
               showButtonBar
               :manualInput="false"
               :hideOnDateTimeSelect="true"
+            /> -->
+            <input
+              type="date"
+              v-model="formAddDelivery.delivered_date"
+              class="text-4xl"
+              style="border-radius: 10px; padding: 5px"
             />
           </div>
         </div>
@@ -676,7 +688,7 @@
             <span class="ml-2 text-error">* MAX BY DEFAULT.</span>
           </div>
           <div class="flex flex-row">
-            <Calendar
+            <!-- <Calendar
               required="true"
               v-model="formAddDelivery.expiration_date"
               dateFormat="mm-dd-yy"
@@ -684,15 +696,14 @@
               showButtonBar
               :manualInput="false"
               :hideOnDateTimeSelect="true"
+            /> -->
+            <input
+              type="date"
+              v-model="formAddDelivery.expiration_date"
+              class="text-4xl"
+              style="border-radius: 10px; padding: 5px"
             />
           </div>
-          <!-- <ToggleButton
-            v-model="maxDate"
-            onLabel="Fixed date"
-            offLabel="Custom date"
-            onIcon="pi pi-lock"
-            offIcon="pi pi-lock-open"
-          /> -->
         </div>
 
         <div class="field w-6">
@@ -1714,8 +1725,7 @@ export default {
     items: Object,
     stocks: Array,
     totalDeliveries: Object,
-    // suppliers: Object,
-    // convertedItems: Object,
+    newRisNo: String,
     totalConvertedItems: Object,
   },
   data() {
@@ -1857,7 +1867,7 @@ export default {
         cl2comb: null,
         // manufactured_date: null,
         delivered_date: null,
-        expiration_date: new Date('9999-12-30'),
+        expiration_date: '9999-12-30',
         quantity: 0,
         acquisitionPrice: 0,
         cl2comb_after: 0,
@@ -1922,33 +1932,6 @@ export default {
       ],
     };
   },
-  computed: {
-    // filteredData() {
-    //   let filtered = this.stocksList;
-    //   // Apply global filter
-    //   if (this.filters['global'] && this.filters['global'].value) {
-    //     const filterText = this.filters['global'].value;
-    //     filtered = filtered.filter(
-    //       (item) =>
-    //         item.ris_no.includes(filterText) ||
-    //         item.cl2desc.includes(filterText) ||
-    //         item.suppname.includes(filterText) ||
-    //         item.chrgdesc.includes(filterText)
-    //     );
-    //   }
-    //   // Apply expiration date range filter
-    //   if (this.filters['expiration']) {
-    //     const from = this.filters['expiration'].from;
-    //     const to = this.filters['expiration'].to;
-    //     if (from && to) {
-    //       filtered = filtered.filter((item) => {
-    //         return item.expiration_date >= from && item.expiration_date <= to;
-    //       });
-    //     }
-    //   }
-    //   return filtered;
-    // },
-  },
   mounted() {
     // console.log(this.convertedItems);
     this.setMinimumDate();
@@ -1958,16 +1941,30 @@ export default {
     this.storeTotalDeliveriesInContainer();
     this.storeSuppliersInContainer();
     this.storeTotalConvertedItemsInContainer();
-    // this.generateTempRisNo();
 
-    // Add event listener to the document
-    // document.addEventListener('keydown', this.handleKeyPress);
+    this.formAddDelivery.ris_no = this.newRisNo;
   },
   beforeUnmount() {
     // Remove event listener before component is destroyed
     // document.removeEventListener('keydown', this.handleKeyPress);
   },
   methods: {
+    currentRisNo() {
+      this.formAddDelivery.ris_no = this.newRisNo;
+    },
+    // Increment the RIS number manually
+    incrementRisNo() {
+      if (!this.formAddDelivery.ris_no) return;
+
+      const parts = this.formAddDelivery.ris_no.split('-');
+      if (parts.length !== 3) return;
+
+      let lastNumber = parseInt(parts[2] || '0', 10);
+      lastNumber++; // Increment by 1
+      parts[2] = String(lastNumber).padStart(6, '0'); // Ensure 6-digit format
+
+      this.formAddDelivery.ris_no = parts.join('-');
+    },
     generateTempRisNo() {
       // Get the current year
       const currentYear = new Date().getFullYear();
@@ -2268,7 +2265,7 @@ export default {
     openAddDeliveryDialog() {
       //   this.formAddDelivery.clearErrors();
       //   this.formAddDelivery.reset();
-      //   this.formAddDelivery.expiration_date = new Date('9999-12-03');
+      //   this.formAddDelivery.expiration_date = new Date('12-30-9999');
       this.addDeliveryDialog = true;
     },
     // emit close dialog
@@ -2600,6 +2597,7 @@ export default {
           this.formAddDelivery.quantity_after = 0;
           this.formAddDelivery.hospital_price = 0;
           this.formAddDelivery.price_per_unit = 0;
+          //   this.formAddDelivery.ris_no = this.newRisNo;
 
           this.stocksList = [];
           this.storeStocksInContainer();
@@ -2699,7 +2697,7 @@ export default {
     //   if (val == false) {
     //     this.formAddDelivery.expiration_date = null;
     //   } else {
-    //     this.formAddDelivery.expiration_date = new Date('9999-12-03');
+    //     this.formAddDelivery.expiration_date = new Date('12-30-9999');
     //   }
     // },
     formConvertItem: {
