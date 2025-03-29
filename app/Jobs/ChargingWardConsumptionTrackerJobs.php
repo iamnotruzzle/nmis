@@ -28,21 +28,11 @@ class ChargingWardConsumptionTrackerJobs implements ShouldQueue
         $this->quantity = $quantity;
     }
 
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
     public function handle()
     {
-        // WardConsumptionTracker::where('wards_stocks_id', $this->ward_stocks_id)
-        //     ->update([
-        //         'charged_qty' => DB::raw("charged_qty + {$this->quantity}")
-        //     ]);
-
         WardConsumptionTracker::where('wards_stocks_id', $this->ward_stocks_id)
-            ->orderBy('created_at', 'DESC')
-            ->limit(1)
+            ->latest() // Orders by created_at DESC to get the most recent row
+            ->first()
             ->update([
                 'charged_qty' => DB::raw("charged_qty + {$this->quantity}")
             ]);
@@ -50,14 +40,9 @@ class ChargingWardConsumptionTrackerJobs implements ShouldQueue
 
     public function failed(\Throwable $e)
     {
-        // WardConsumptionTracker::where('wards_stocks_id', $this->ward_stocks_id)
-        //     ->update([
-        //         'charged_qty' => DB::raw("charged_qty + {$this->quantity}")
-        //     ]);
-
         WardConsumptionTracker::where('wards_stocks_id', $this->ward_stocks_id)
-            ->orderBy('created_at', 'DESC')
-            ->limit(1)
+            ->latest() // Orders by created_at DESC to get the most recent row
+            ->first()
             ->update([
                 'charged_qty' => DB::raw("charged_qty + {$this->quantity}")
             ]);

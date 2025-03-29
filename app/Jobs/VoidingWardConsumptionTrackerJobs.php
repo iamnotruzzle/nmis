@@ -31,6 +31,8 @@ class VoidingWardConsumptionTrackerJobs implements ShouldQueue
     public function handle()
     {
         WardConsumptionTracker::where('wards_stocks_id', $this->upd_ward_stocks_id)
+            ->latest() // Orders by created_at DESC to get the most recent row
+            ->first()
             ->update([
                 'charged_qty' => DB::raw("charged_qty - {$this->upd_QtyToReturn}")
             ]);
@@ -39,6 +41,8 @@ class VoidingWardConsumptionTrackerJobs implements ShouldQueue
     public function failed(\Throwable $e)
     {
         WardConsumptionTracker::where('wards_stocks_id', $this->upd_ward_stocks_id)
+            ->latest() // Orders by created_at DESC to get the most recent row
+            ->first()
             ->update([
                 'charged_qty' => DB::raw("charged_qty - {$this->upd_QtyToReturn}")
             ]);
