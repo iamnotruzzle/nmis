@@ -22,7 +22,6 @@ class InitializeWardConsumptionTrackerJobs implements ShouldQueue
     public $ris_no;
     public $cl2comb;
     public $uomcode;
-    public $received_qty;
     public $location;
     public $price_id;
 
@@ -32,7 +31,6 @@ class InitializeWardConsumptionTrackerJobs implements ShouldQueue
         $ris_no,
         $cl2comb,
         $uomcode,
-        $received_qty,
         $location,
         $price_id
     ) {
@@ -41,7 +39,6 @@ class InitializeWardConsumptionTrackerJobs implements ShouldQueue
         $this->ris_no = $ris_no;
         $this->cl2comb = $cl2comb;
         $this->uomcode = $uomcode;
-        $this->received_qty = $received_qty;
         $this->location = $location;
         $this->price_id = $price_id;
     }
@@ -55,10 +52,17 @@ class InitializeWardConsumptionTrackerJobs implements ShouldQueue
             'ris_no' => $this->ris_no,
             'cl2comb' => $this->cl2comb,
             'uomcode' => $this->uomcode,
-            'received_qty' => $this->received_qty,
             'charged_qty' => 0,
+            'surgery' => 0,
+            'obgyne' => 0,
+            'ortho' => 0,
+            'pedia' => 0,
+            'optha' => 0,
+            'ent' => 0,
             'return_to_csr_qty' => 0,
             'transfer_qty' => 0,
+            'beg_bal_date' => null,
+            'end_bal_date' => null,
             'item_from' => 'CSR',
             'location' => $this->location,
             'price_id' => $this->price_id,
@@ -73,7 +77,6 @@ class InitializeWardConsumptionTrackerJobs implements ShouldQueue
             'ris_no' => $this->ris_no,
             'cl2comb' => $this->cl2comb,
             'uomcode' => $this->uomcode,
-            'received_qty' => $this->received_qty,
             'charged_qty' => 0,
             'return_to_csr_qty' => 0,
             'transfer_qty' => 0,

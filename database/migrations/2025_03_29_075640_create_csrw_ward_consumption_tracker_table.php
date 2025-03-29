@@ -20,10 +20,17 @@ class CreateCsrwWardConsumptionTrackerTable extends Migration
             $table->string("ris_no");
             $table->string("cl2comb");
             $table->string("uomcode")->nullable();
-            $table->integer("received_qty");
             $table->integer("charged_qty")->nullable();
+            $table->integer("surgery")->nullable();
+            $table->integer("obgyne")->nullable();
+            $table->integer("ortho")->nullable();
+            $table->integer("pedia")->nullable();
+            $table->integer("optha")->nullable();
+            $table->integer("ent")->nullable();
             $table->integer("return_to_csr_qty")->nullable();
             $table->integer("transfer_qty")->nullable();
+            $table->dateTime("beg_bal_date")->nullable();
+            $table->dateTime("end_bal_date")->nullable();
             $table->string("item_from");
             $table->string("location");
             $table->bigInteger("price_id");
