@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Wards\RequestStocks\RequestStocksLogs;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\ReturnWardConsumptionTrackerJobs;
 use App\Models\CsrItemConversion;
 use App\Models\RequestStocksDetails;
 use App\Models\ReturnedItems;
@@ -56,28 +57,11 @@ class RequestStocksLogsController extends Controller
             'remarks' => $request->remarks,
         ]);
 
-
-        // $wardStockLogs = WardsStocksLogs::create([
-        //     'request_stocks_id' => $wardStock->request_stocks_id,
-        //     'request_stocks_detail_id' => $wardStock->request_stocks_detail_id,
-        //     'ris_no' => $wardStock->ris_no,
-        //     'stock_id' => $wardStock->id,
-        //     'is_consumable' => 'y',
-        //     'location' => $wardStock->location,
-        //     'cl2comb' => $wardStock->cl2comb,
-        //     'uomcode' => $wardStock->uomcode,
-        //     'chrgcode' => $wardStock->fund_source,
-        //     'prev_qty' => 0,
-        //     'new_qty' => $wardStock->quantity,
-        //     'average' => $wardStock->average,
-        //     'total_usage' => $wardStock->total_usage,
-        //     'manufactured_date' => Carbon::parse($wardStock->manufactured_date)->format('Y-m-d H:i:s.v'),
-        //     'delivered_date' =>  Carbon::parse($wardStock->delivered_date)->format('Y-m-d H:i:s.v'),
-        //     'expiration_date' =>  $wardStock->expiration_date,
-        //     'action' => 'CONVERT IT TO CONSUMABLE',
-        //     'remarks' => $request->remarks,
-        //     'entry_by' => $entry_by,
-        // ]);
+        $returnQty = $request->quantity;
+        ReturnWardConsumptionTrackerJobs::dispatch(
+            $ward_stock_id,
+            $returnQty,
+        );
 
         return Redirect::route('requeststocks.index');
     }
