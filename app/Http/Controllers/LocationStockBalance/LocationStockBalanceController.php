@@ -182,8 +182,7 @@ class LocationStockBalanceController extends Controller
                     ward_stock.ris_no, price.id as price_id
                     FROM csrw_wards_stocks as ward_stock
                     JOIN csrw_item_prices as price ON price.cl2comb = ward_stock.cl2comb AND price.ris_no = ward_stock.ris_no
-                    WHERE ward_stock.location = ?
-                    AND ward_stock.quantity > 0;",
+                    WHERE ward_stock.location = ?",
             [$request->location]
         );
         // dd($currentStocks);
@@ -236,7 +235,7 @@ class LocationStockBalanceController extends Controller
                 'beg_bal_created_at' => $begDateTime,
             ]);
         } else {
-            // dd('ending');
+            // dd($currentStocks);
 
             // $dateTime = Carbon::now();
             $from = null;
@@ -262,6 +261,7 @@ class LocationStockBalanceController extends Controller
                     $quantity,
                     $end_bal_date
                 );
+                // dd($stock);
             }
 
             // Find the last row where wardcode matches and end_bal_created_at is null
