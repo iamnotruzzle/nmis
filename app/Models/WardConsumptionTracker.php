@@ -12,7 +12,7 @@ class WardConsumptionTracker extends Model
     protected $table = 'csrw_ward_consumption_tracker';
 
     protected $fillable = [
-        'wardstock_id',
+        'wards_stocks_id',
         'ris_no',
         'cl2comb',
         'uomcode',

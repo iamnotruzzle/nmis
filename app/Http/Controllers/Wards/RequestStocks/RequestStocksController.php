@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use App\Models\Sessions;
+use App\Models\WardConsumptionTracker;
 use App\Models\WardsStocksLogs;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
@@ -197,26 +198,35 @@ class RequestStocksController extends Controller
                     'received_date' => Carbon::now(),
                 ]);
 
-            $stocks = WardsStocks::where('request_stocks_id', $request->request_stock_id)
-                ->get();
-            // dd($stocks);
+            // OLD
+            // $stocks = WardsStocks::where('request_stocks_id', $request->request_stock_id)
+            //     ->get();
+
+            // NEW: includes price
+            $stocks = DB::select(
+                "SELECT ward_stock.id, ward_stock.request_stocks_id, ward_stock.request_stocks_detail_id, ward_stock.stock_id, ward_stock.location, ward_stock.cl2comb,
+                    ward_stock.uomcode, ward_stock.chrgcode, ward_stock.quantity, ward_stock.[from], ward_stock.manufactured_date, ward_stock.delivered_date, ward_stock.expiration_date, ward_stock.created_at,
+                    ward_stock.ris_no, price.id as price_id
+                    FROM csrw_wards_stocks as ward_stock
+                    JOIN csrw_item_prices as price ON price.cl2comb = ward_stock.cl2comb AND price.ris_no = ward_stock.ris_no
+                    where ward_stock.request_stocks_id = ?;",
+                [$request->request_stock_id]
+            );
 
             foreach ($stocks as $stk) {
+                // dd($stk);
                 $wardStockLogs = WardsStocksLogs::create([
                     'request_stocks_id' => $stk->request_stocks_id,
                     'request_stocks_detail_id' => $stk->request_stocks_detail_id,
                     'ris_no' => $stk->ris_no,
                     'stock_id' => $stk->stock_id,
                     'wards_stocks_id' => $stk->id,
-                    'is_consumable' => $stk->is_consumable,
                     'location' => $stk->location,
                     'cl2comb' => $stk->cl2comb,
                     'uomcode' => $stk->uomcode,
                     'chrgcode' => $stk->chrgcode,
                     'prev_qty' => 0,
                     'new_qty' => $stk->quantity,
-                    'average' => $stk->average,
-                    'total_usage' => $stk->total_usage,
                     'manufactured_date' => Carbon::parse($stk->manufactured_date)->format('Y-m-d H:i:s.v'),
                     'delivered_date' =>  Carbon::parse($stk->delivered_date)->format('Y-m-d H:i:s.v'),
                     'expiration_date' => Carbon::parse($stk->expiration_date)->format('Y-m-d H:i:s.v'),
@@ -226,30 +236,23 @@ class RequestStocksController extends Controller
                 ]);
             }
 
-            // $wardStockLogs = WardsStocksLogs::create([
-            //     'request_stocks_id' => null,
-            //     'request_stocks_detail_id' => null,
-            //     'ris_no' => $tempRisNo,
-            //     'stock_id' => null,
-            //     'wards_stocks_id' => $medicalGases->id,
-            //     'is_consumable' => 'y',
-            //     'location' => $request->wardcode,
-            //     'cl2comb' => $request->cl2comb,
-            //     'uomcode' => $request->uomcode,
-            //     'chrgcode' => $request->fund_source,
-            //     'prev_qty' => 0,
-            //     'new_qty' => $request->quantity,
-            //     'average' => $request->average,
-            //     'total_usage' => (int)$request->quantity * (int)$request->average,
-            //     'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
-            //     'delivered_date' =>  Carbon::parse($request->delivered_date)->format('Y-m-d H:i:s.v'),
-            //     'expiration_date' =>  Carbon::maxValue(),
-            //     'action' => 'CREATE',
-            //     'remarks' => null,
-            //     'entry_by' => $entry_by,
-            // ]);
+            foreach ($stocks as $stk) {
+                $wardConsumptionTracker = WardConsumptionTracker::create([
+                    'wards_stocks_id' => $stk->id,
+                    'ris_no' => $stk->ris_no,
+                    'cl2comb' => $stk->cl2comb,
+                    'uomcode' => $stk->uomcode,
+                    'received_qty' => $stk->quantity,
+                    'charged_qty' => 0,
+                    'return_to_csr_qty' => 0,
+                    'transfer_qty' => 0,
+                    'item_from' => 'CSR',
+                    'location' => $stk->location,
+                    'price_id' => $stk->price_id,
+                ]);
+            }
 
-            // the parameters result will be send into the frontend
+            // // the parameters result will be send into the frontend
             event(new RequestStock('Item requested.'));
         }
 
