@@ -744,6 +744,7 @@ class ComposerStaticInita35f14ec21fb126801fb4364978bffb6
         'App\\Http\\Controllers\\Wards\\Supplemental\\SupplementalControler' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/Supplemental/SupplementalControler.php',
         'App\\Http\\Controllers\\Wards\\TransferStock\\TransferStockController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/TransferStock/TransferStockController.php',
         'App\\Http\\Controllers\\Wards\\WardsManualReport\\WardsManualReportController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/WardsManualReport/WardsManualReportController.php',
+        'App\\Http\\Controllers\\public\\CsrStocksController' => __DIR__ . '/../..' . '/app/Http/Controllers/public/CsrStocksController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\Authenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/Authenticate.php',
         'App\\Http\\Middleware\\Designation_admin' => __DIR__ . '/../..' . '/app/Http/Middleware/Designation_admin.php',

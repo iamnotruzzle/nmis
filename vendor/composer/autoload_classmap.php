@@ -65,6 +65,7 @@ return array(
     'App\\Http\\Controllers\\Wards\\Supplemental\\SupplementalControler' => $baseDir . '/app/Http/Controllers/Wards/Supplemental/SupplementalControler.php',
     'App\\Http\\Controllers\\Wards\\TransferStock\\TransferStockController' => $baseDir . '/app/Http/Controllers/Wards/TransferStock/TransferStockController.php',
     'App\\Http\\Controllers\\Wards\\WardsManualReport\\WardsManualReportController' => $baseDir . '/app/Http/Controllers/Wards/WardsManualReport/WardsManualReportController.php',
+    'App\\Http\\Controllers\\public\\CsrStocksController' => $baseDir . '/app/Http/Controllers/public/CsrStocksController.php',
     'App\\Http\\Kernel' => $baseDir . '/app/Http/Kernel.php',
     'App\\Http\\Middleware\\Authenticate' => $baseDir . '/app/Http/Middleware/Authenticate.php',
     'App\\Http\\Middleware\\Designation_admin' => $baseDir . '/app/Http/Middleware/Designation_admin.php',
