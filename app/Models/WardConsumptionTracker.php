@@ -13,6 +13,7 @@ class WardConsumptionTracker extends Model
 
     protected $fillable = [
         'wards_stocks_id',
+        'item_conversion_id',
         'ris_no',
         'cl2comb',
         'uomcode',

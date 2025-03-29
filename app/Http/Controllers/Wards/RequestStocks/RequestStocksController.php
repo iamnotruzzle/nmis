@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Wards\RequestStocks;
 
 use App\Events\RequestStock;
 use App\Http\Controllers\Controller;
+use App\Jobs\InitializeWardConsumptionTrackerJobs;
 use App\Models\FundSource;
 use App\Models\Item;
 use App\Models\RequestStocks;
@@ -204,7 +205,7 @@ class RequestStocksController extends Controller
 
             // NEW: includes price
             $stocks = DB::select(
-                "SELECT ward_stock.id, ward_stock.request_stocks_id, ward_stock.request_stocks_detail_id, ward_stock.stock_id, ward_stock.location, ward_stock.cl2comb,
+                "SELECT ward_stock.id, ward_stock.stock_id, ward_stock.request_stocks_id, ward_stock.request_stocks_detail_id, ward_stock.stock_id, ward_stock.location, ward_stock.cl2comb,
                     ward_stock.uomcode, ward_stock.chrgcode, ward_stock.quantity, ward_stock.[from], ward_stock.manufactured_date, ward_stock.delivered_date, ward_stock.expiration_date, ward_stock.created_at,
                     ward_stock.ris_no, price.id as price_id
                     FROM csrw_wards_stocks as ward_stock
@@ -237,19 +238,25 @@ class RequestStocksController extends Controller
             }
 
             foreach ($stocks as $stk) {
-                $wardConsumptionTracker = WardConsumptionTracker::create([
-                    'wards_stocks_id' => $stk->id,
-                    'ris_no' => $stk->ris_no,
-                    'cl2comb' => $stk->cl2comb,
-                    'uomcode' => $stk->uomcode,
-                    'received_qty' => $stk->quantity,
-                    'charged_qty' => 0,
-                    'return_to_csr_qty' => 0,
-                    'transfer_qty' => 0,
-                    'item_from' => 'CSR',
-                    'location' => $stk->location,
-                    'price_id' => $stk->price_id,
-                ]);
+                $id = $stk->id;
+                $item_conversion_id = $stk->stock_id;
+                $ris_no = $stk->ris_no;
+                $cl2comb = $stk->cl2comb;
+                $uomcode = $stk->uomcode;
+                $received_qty = $stk->quantity;
+                $location = $stk->location;
+                $price_id = $stk->price_id;
+
+                InitializeWardConsumptionTrackerJobs::dispatch(
+                    $id,
+                    $item_conversion_id,
+                    $ris_no,
+                    $cl2comb,
+                    $uomcode,
+                    $received_qty,
+                    $location,
+                    $price_id,
+                );
             }
 
             // // the parameters result will be send into the frontend
