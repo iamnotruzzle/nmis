@@ -243,7 +243,6 @@ class RequestStocksController extends Controller
                 $ris_no = $stk->ris_no;
                 $cl2comb = $stk->cl2comb;
                 $uomcode = $stk->uomcode;
-                $received_qty = $stk->quantity;
                 $location = $stk->location;
                 $price_id = $stk->price_id;
 
@@ -253,7 +252,6 @@ class RequestStocksController extends Controller
                     $ris_no,
                     $cl2comb,
                     $uomcode,
-                    $received_qty,
                     $location,
                     $price_id,
                 );
