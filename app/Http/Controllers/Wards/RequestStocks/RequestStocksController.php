@@ -210,7 +210,8 @@ class RequestStocksController extends Controller
                     ward_stock.ris_no, price.id as price_id
                     FROM csrw_wards_stocks as ward_stock
                     JOIN csrw_item_prices as price ON price.cl2comb = ward_stock.cl2comb AND price.ris_no = ward_stock.ris_no
-                    where ward_stock.request_stocks_id = ?;",
+                    WHERE ward_stock.request_stocks_id = ?
+                    AND ward_stock.quantity > 0;",
                 [$request->request_stock_id]
             );
 

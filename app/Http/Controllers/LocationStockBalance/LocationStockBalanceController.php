@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\LocationStockBalance;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\BegBalWardConsumptionTrackerJobs;
+use App\Jobs\EndBalWardConsumptionTrackerJobs;
 use App\Models\CsrStocks;
 use App\Models\LocationStockBalance;
 use App\Models\LocationStockBalanceDateLogs;
@@ -167,12 +169,21 @@ class LocationStockBalanceController extends Controller
         $endDateTime = $date->copy()->endOfDay()->format('Y-m-d H:i:s');   // Sets time to 23:59:59
 
         $currentStocks = DB::select(
-            "SELECT ward.id, ward.location, ward.cl2comb, ward.quantity, ward.ris_no, price.id as price_id
-                FROM csrw_wards_stocks as ward
-                JOIN csrw_item_prices as price ON price.ris_no = ward.ris_no
-                WHERE ward.location = ?
-                AND ward.quantity > 0
-                AND (ward.[from] = 'CSR' OR ward.[from] = 'WARD' OR ward.[from] = 'EXISTING_STOCKS');",
+            // "SELECT ward.id, ward.location, ward.cl2comb, ward.quantity, ward.ris_no, price.id as price_id
+            //     FROM csrw_wards_stocks as ward
+            //     JOIN csrw_item_prices as price ON price.ris_no = ward.ris_no
+            //     WHERE ward.location = ?
+            //     AND ward.quantity > 0
+            //     AND (ward.[from] = 'CSR' OR ward.[from] = 'WARD' OR ward.[from] = 'EXISTING_STOCKS');",
+            // [$request->location]
+
+            "SELECT ward_stock.id, ward_stock.stock_id, ward_stock.request_stocks_id, ward_stock.request_stocks_detail_id, ward_stock.stock_id, ward_stock.location, ward_stock.cl2comb,
+                    ward_stock.uomcode, ward_stock.chrgcode, ward_stock.quantity, ward_stock.[from], ward_stock.manufactured_date, ward_stock.delivered_date, ward_stock.expiration_date, ward_stock.created_at,
+                    ward_stock.ris_no, price.id as price_id
+                    FROM csrw_wards_stocks as ward_stock
+                    JOIN csrw_item_prices as price ON price.cl2comb = ward_stock.cl2comb AND price.ris_no = ward_stock.ris_no
+                    WHERE ward_stock.location = ?
+                    AND ward_stock.quantity > 0;",
             [$request->location]
         );
         // dd($currentStocks);
@@ -196,6 +207,15 @@ class LocationStockBalanceController extends Controller
                     'ward_stock_id' => $stock->id,
                     'beg_bal_created_at' => $begDateTime,
                 ]);
+
+                $id = $stock->id;
+                $quantity = $stock->quantity;
+                $beg_bal_date = $begDateTime;
+                BegBalWardConsumptionTrackerJobs::dispatch(
+                    $id,
+                    $quantity,
+                    $beg_bal_date
+                );
             }
 
             LocationStockBalanceDateLogs::create([
@@ -220,6 +240,15 @@ class LocationStockBalanceController extends Controller
                     'ward_stock_id' => $stock->id,
                     'end_bal_created_at' => $endDateTime,
                 ]);
+
+                $id = $stock->id;
+                $quantity = $stock->quantity;
+                $end_bal_date = $endDateTime;
+                EndBalWardConsumptionTrackerJobs::dispatch(
+                    $id,
+                    $quantity,
+                    $end_bal_date
+                );
             }
 
             // Find the last row where wardcode matches and end_bal_created_at is null

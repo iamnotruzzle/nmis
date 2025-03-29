@@ -24,6 +24,8 @@ class WardConsumptionTracker extends Model
         'pedia',
         'optha',
         'ent',
+        'beg_bal_qty',
+        'end_bal_qty',
         'return_to_csr_qty',
         'transfer_qty',
         'beg_bal_date',
