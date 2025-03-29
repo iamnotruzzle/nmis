@@ -208,11 +208,24 @@ class LocationStockBalanceController extends Controller
                     'beg_bal_created_at' => $begDateTime,
                 ]);
 
+
                 $id = $stock->id;
+                $item_conversion_id = $stock->stock_id;
+                $ris_no = $stock->ris_no;
+                $cl2comb = $stock->cl2comb;
+                $uomcode = $stock->uomcode;
                 $quantity = $stock->quantity;
+                $location = $stock->location;
+                $price_id = $stock->price_id;
                 $beg_bal_date = $begDateTime;
                 BegBalWardConsumptionTrackerJobs::dispatch(
                     $id,
+                    $item_conversion_id,
+                    $ris_no,
+                    $cl2comb,
+                    $uomcode,
+                    $location,
+                    $price_id,
                     $quantity,
                     $beg_bal_date
                 );
