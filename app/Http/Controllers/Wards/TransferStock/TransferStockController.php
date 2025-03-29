@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Wards\TransferStock;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\TransferringWardConsumptionTrackerJobs;
 use App\Models\LocationStockBalance;
 use App\Models\UserDetail;
 use App\Models\WardTransferStock;
@@ -193,27 +194,6 @@ class TransferStockController extends Controller
         $wardStock = WardsStocks::where('id', $transferredStock->ward_stock_id)->first();
         // dd($wardStock);
 
-        // create the stock
-        // WardsStocks::create([
-        //     'request_stocks_id' => $wardStock->request_stocks_id,
-        //     'request_stocks_detail_id' => $wardStock->request_stocks_detail_id,
-        //     'stock_id' => $wardStock->stock_id,
-        //     'location' => $authWardcode->wardcode,
-        //     'cl2comb' => $wardStock->cl2comb,
-        //     'chrgcode' => $wardStock->chrgcode,
-        //     'quantity' => $transferredStock->quantity,
-        //     'uomcode' => $wardStock->uomcode,
-        //     'from' => $wardStock->from,
-        //     'manufactured_date' => Carbon::parse($wardStock->manufactured_date)->format('Y-m-d H:i:s.v'),
-        //     'delivered_date' => Carbon::parse($wardStock->delivered_date)->format('Y-m-d H:i:s.v'),
-        //     'expiration_date' => Carbon::parse($wardStock->expiration_date)->format('Y-m-d H:i:s.v'),
-        //     'ris_no' => $wardStock->ris_no,
-        //     'is_consumable' => $wardStock->is_consumable,
-        //     'average' => $wardStock->average,
-        //     'total_consumed' => $wardStock->total_consumed,
-        //     'total_usage' => $wardStock->total_usage,
-        // ]);
-
         $existingWardStock = WardsStocks::where([
             'request_stocks_id' => $wardStock->request_stocks_id,
             'stock_id' => $wardStock->stock_id,
@@ -267,6 +247,14 @@ class TransferStockController extends Controller
                     ]
                 );
         }
+
+        $ward_stocks_id = $transferredStock->ward_stock_id;
+        $transferred_qty = $transferredStock->quantity;
+        TransferringWardConsumptionTrackerJobs::dispatch(
+            $ward_stocks_id,
+            $transferred_qty,
+        );
+
         return Redirect::route('transferstock.index');
     }
 
