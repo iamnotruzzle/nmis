@@ -64,4 +64,22 @@ class InitializeWardConsumptionTrackerJobs implements ShouldQueue
             'price_id' => $this->price_id,
         ]);
     }
+
+    public function failed(\Throwable $e)
+    {
+        $wardConsumptionTracker = WardConsumptionTracker::create([
+            'wards_stocks_id' => $this->id,
+            'item_conversion_id' => $this->item_conversion_id,
+            'ris_no' => $this->ris_no,
+            'cl2comb' => $this->cl2comb,
+            'uomcode' => $this->uomcode,
+            'received_qty' => $this->received_qty,
+            'charged_qty' => 0,
+            'return_to_csr_qty' => 0,
+            'transfer_qty' => 0,
+            'item_from' => 'CSR',
+            'location' => $this->location,
+            'price_id' => $this->price_id,
+        ]);
+    }
 }

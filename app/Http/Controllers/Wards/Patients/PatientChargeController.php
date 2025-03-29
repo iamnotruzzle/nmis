@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Wards\Patients;
 use App\Events\ChargeLogsProcessed;
 use App\Events\RequestStock;
 use App\Http\Controllers\Controller;
+use App\Jobs\ChargingWardConsumptionTrackerJobs;
 use App\Jobs\CreatePatientChargeLogsJobs;
 use App\Models\AdmissionLog;
 use App\Models\CsrwCode;
@@ -328,28 +329,12 @@ class PatientChargeController extends Controller
                             $pcchrgcod
                         );
 
-                        // // STEP 9: Log the charge
-                        // PatientChargeLogs::create([
-                        //     'enccode' => $enccode,
-                        //     'acctno' => $acctno,
-                        //     'ward_stocks_id' => $wardStock->id,
-                        //     'itemcode' => $wardStock->cl2comb,
-                        //     'from' => $wardStock->from,
-                        //     'manufactured_date' => $wardStock->manufactured_date == null ? null : Carbon::parse($wardStock->manufactured_date)->format('Y-m-d H:i:s.v'),
-                        //     'delivery_date' => $wardStock->delivery_date == null ? null : Carbon::parse($wardStock->delivered_date)->format('Y-m-d H:i:s.v'),
-                        //     'expiration_date' => $wardStock->expiration_date == null ? null : Carbon::parse($wardStock->expiration_date)->format('Y-m-d H:i:s.v'),
-                        //     // 'quantity' => $item['qtyToCharge'],
-                        //     'quantity' => $quantity_to_insert_in_logs,
-                        //     'price_per_piece' => (float)$item['price'] == null ? null : (float)$item['price'],
-                        //     'price_total' => (float)$quantity_to_insert_in_logs * (float)$item['price'],
-                        //     'pcchrgdte' => $patientChargeDate->pcchrgdte,
-                        //     'tscode' => $request->tscode,
-                        //     'entry_at' => $authCode,
-                        //     'entry_by' => $entryby,
-                        //     'pcchrgcod' => $patientChargeDate->pcchrgcod, // charge slip no.
-                        // ]);
+                        ChargingWardConsumptionTrackerJobs::dispatch(
+                            $ward_stocks_id,
+                            $quantity,
+                        );
                     }
-                    // IT ITEM IS MEDICAL GAS
+                    // IF ITEM IS MEDICAL GAS
                     else {
                         // save the quantity because the value of $item['qtyToCharge'] will
                         // change below
