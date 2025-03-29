@@ -333,6 +333,7 @@ class PatientChargeController extends Controller
                         ChargingWardConsumptionTrackerJobs::dispatch(
                             $ward_stocks_id,
                             $quantity,
+                            $tscode
                         );
                     }
                     // IF ITEM IS MEDICAL GAS
