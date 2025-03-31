@@ -16,8 +16,8 @@ class ReportController extends Controller
 
     public function index(Request $request)
     {
-        // $region prod
-        //   check session
+        #region prod
+        // // check session
         // $hasSession = Sessions::where('id', Session::getId())->exists();
         // $dateRange = $request->date;
         // $from = null;
@@ -284,7 +284,7 @@ class ReportController extends Controller
         //     'locationStockBalance' => $locationStockBalance,
         //     'stockBalDates' => $stockBalDates,
         // ]);
-        // #endregion prod
+        #endregion prod
 
         // maintenance page
         return Inertia::render('UnderMaintenancePage', [

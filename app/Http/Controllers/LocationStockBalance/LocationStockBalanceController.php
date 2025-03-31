@@ -31,7 +31,9 @@ class LocationStockBalanceController extends Controller
         // $from = null;
         // $to = null;
         // $locationStockBalance = null;
-        // $now = Carbon::now();
+
+        // $date = Carbon::now();
+        // $now = $date->copy()->startOfDay();
 
         // // get auth wardcode
         // $authWardcode = DB::select(
@@ -153,7 +155,7 @@ class LocationStockBalanceController extends Controller
         //     'canBeginBalance' => $canBeginBalance,
         //     'stockBalDates' => $stockBalDates,
         // ]);
-        // #endregion
+        #endregion
 
         // maintenance page
         return Inertia::render(
