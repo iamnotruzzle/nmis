@@ -330,11 +330,12 @@ class PatientChargeController extends Controller
                             $pcchrgcod
                         );
 
-                        ChargingWardConsumptionTrackerJobs::dispatch(
-                            $ward_stocks_id,
-                            $quantity,
-                            $tscode
-                        );
+                        // comment for now
+                        // ChargingWardConsumptionTrackerJobs::dispatch(
+                        //     $ward_stocks_id,
+                        //     $quantity,
+                        //     $tscode
+                        // );
                     }
                     // IF ITEM IS MEDICAL GAS
                     else {
@@ -638,10 +639,11 @@ class PatientChargeController extends Controller
 
                         $upd_QtyToReturn = (int)$upd_QtyToReturn;
                         $upd_ward_stocks_id = $request->upd_ward_stocks_id;
-                        VoidingWardConsumptionTrackerJobs::dispatch(
-                            $upd_ward_stocks_id,
-                            $upd_QtyToReturn,
-                        );
+                        // comment for now
+                        // VoidingWardConsumptionTrackerJobs::dispatch(
+                        //     $upd_ward_stocks_id,
+                        //     $upd_QtyToReturn,
+                        // );
 
                         PatientChargeReturnLogs::create([
                             'enccode' => $request->enccode,

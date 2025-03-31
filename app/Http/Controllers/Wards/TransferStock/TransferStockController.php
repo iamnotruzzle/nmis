@@ -250,10 +250,11 @@ class TransferStockController extends Controller
 
         $ward_stocks_id = $transferredStock->ward_stock_id;
         $transferred_qty = $transferredStock->quantity;
-        TransferringWardConsumptionTrackerJobs::dispatch(
-            $ward_stocks_id,
-            $transferred_qty,
-        );
+        // comment for now
+        // TransferringWardConsumptionTrackerJobs::dispatch(
+        //     $ward_stocks_id,
+        //     $transferred_qty,
+        // );
 
         return Redirect::route('transferstock.index');
     }

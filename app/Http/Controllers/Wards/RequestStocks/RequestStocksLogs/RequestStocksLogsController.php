@@ -58,10 +58,11 @@ class RequestStocksLogsController extends Controller
         ]);
 
         $returnQty = $request->quantity;
-        ReturnWardConsumptionTrackerJobs::dispatch(
-            $ward_stock_id,
-            $returnQty,
-        );
+        // comment for now
+        // ReturnWardConsumptionTrackerJobs::dispatch(
+        //     $ward_stock_id,
+        //     $returnQty,
+        // );
 
         return Redirect::route('requeststocks.index');
     }
