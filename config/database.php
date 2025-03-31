@@ -44,18 +44,18 @@ return [
         ],
 
         // // test server
-        'sqlsrv' => [
-            'driver' => 'sqlsrv',
-            'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '192.168.0.101'),
-            'port' => env('DB_PORT', '1433'),
-            'database' => env('DB_DATABASE', 'hospital'),
-            'username' => env('DB_USERNAME', 'sa'),
-            'password' => env('DB_PASSWORD', 'pacs'),
-            'charset' => 'utf8',
-            'prefix' => '',
-            'prefix_indexes' => true,
-        ],
+        // 'sqlsrv' => [
+        //     'driver' => 'sqlsrv',
+        //     'url' => env('DATABASE_URL'),
+        //     'host' => env('DB_HOST', '192.168.0.3'),
+        //     'port' => env('DB_PORT', '1433'),
+        //     'database' => env('DB_DATABASE', 'hospital'),
+        //     'username' => env('DB_USERNAME', 'sa'),
+        //     'password' => env('DB_PASSWORD', 'pacs'),
+        //     'charset' => 'utf8',
+        //     'prefix' => '',
+        //     'prefix_indexes' => true,
+        // ],
 
         // production
         // 'sqlsrv' => [
