@@ -36,8 +36,9 @@ return [
     // orig lifetime
     // 'lifetime' => env('SESSION_LIFETIME', 800),
     // 'lifetime' => 1440, // One day (in minutes)
-    'lifetime' => 120, // 2 hours
-
+    // 'lifetime' => 120, // 2 hours
+    'lifetime' => env('SESSION_LIFETIME', 120), // 2 hours (minutes)
+    'cookie_lifetime' => env('SESSION_LIFETIME', 120), // 👈 Match cookie to session
     'expire_on_close' => false,
 
     /*
