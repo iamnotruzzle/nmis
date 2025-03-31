@@ -43,19 +43,19 @@ return [
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
 
-        // test server
-        'sqlsrv' => [
-            'driver' => 'sqlsrv',
-            'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '192.168.0.3'),
-            'port' => env('DB_PORT', '1433'),
-            'database' => env('DB_DATABASE', 'hospital'),
-            'username' => env('DB_USERNAME', 'sa'),
-            'password' => env('DB_PASSWORD', 'pacs'),
-            'charset' => 'utf8',
-            'prefix' => '',
-            'prefix_indexes' => true,
-        ],
+        // // test server
+        // 'sqlsrv' => [
+        //     'driver' => 'sqlsrv',
+        //     'url' => env('DATABASE_URL'),
+        //     'host' => env('DB_HOST', '192.168.0.3'),
+        //     'port' => env('DB_PORT', '1433'),
+        //     'database' => env('DB_DATABASE', 'hospital'),
+        //     'username' => env('DB_USERNAME', 'sa'),
+        //     'password' => env('DB_PASSWORD', 'pacs'),
+        //     'charset' => 'utf8',
+        //     'prefix' => '',
+        //     'prefix_indexes' => true,
+        // ],
 
         // production
         // 'sqlsrv' => [
@@ -91,23 +91,23 @@ return [
         //     ]) : [],
         // ],
 
-        'pims' => [
-            'driver' => 'mysql',
-            'host' => env('PIMS_DB_HOST', '10.11.12.44:3306'),
-            // 'port' => env('PIMS_DB_PORT', '3306'),
-            'database' => env('PIMS_DB_DATABASE', 'pims'),
-            'username' => env('PIMS_DB_USERNAME', 'root'),
-            // 'password' => env('PIMS_DB_PASSWORD', 'pims_password'),
-            'unix_socket' => env('PIMS_DB_SOCKET', ''),
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
-            'prefix' => '',
-            'strict' => true,
-            'engine' => null,
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-            ]) : [],
-        ],
+        // 'pims' => [
+        //     'driver' => 'mysql',
+        //     'host' => env('PIMS_DB_HOST', '10.11.12.44:3306'),
+        //     // 'port' => env('PIMS_DB_PORT', '3306'),
+        //     'database' => env('PIMS_DB_DATABASE', 'pims'),
+        //     'username' => env('PIMS_DB_USERNAME', 'root'),
+        //     // 'password' => env('PIMS_DB_PASSWORD', 'pims_password'),
+        //     'unix_socket' => env('PIMS_DB_SOCKET', ''),
+        //     'charset' => 'utf8mb4',
+        //     'collation' => 'utf8mb4_unicode_ci',
+        //     'prefix' => '',
+        //     'strict' => true,
+        //     'engine' => null,
+        //     'options' => extension_loaded('pdo_mysql') ? array_filter([
+        //         PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+        //     ]) : [],
+        // ],
 
         'pgsql' => [
             'driver' => 'pgsql',
