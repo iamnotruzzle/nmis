@@ -28,10 +28,6 @@ class HandleInertiaRequests extends Middleware
 
     public function share(Request $request)
     {
-        // Retrieve cached authentication data
-        // session()->save(); // Ensure session data is persisted before reading
-        //a
-
         $cachedAuthUser = session('cached_inertia_auth');
         $cachedPackages = session('cached_inertia_packages');
         $cachedLocations = session('cached_inertia_locations');
@@ -49,8 +45,8 @@ class HandleInertiaRequests extends Middleware
                 'roles' => $request->user()->roles()->pluck('name'),
             ];
 
-            session(['cached_inertia_auth' => $cachedAuthUser]);
-            session()->save();
+            // session(['cached_inertia_auth' => $cachedAuthUser]);
+            // session()->save();
         }
 
         if (!$cachedPackages) {
@@ -63,8 +59,8 @@ class HandleInertiaRequests extends Middleware
                     ORDER BY item.cl2desc ASC;"
             );
 
-            session(['cached_inertia_packages' => $cachedPackages]);
-            session()->save();
+            // session(['cached_inertia_packages' => $cachedPackages]);
+            // session()->save();
         }
 
         if (!$cachedLocations) {
@@ -72,24 +68,33 @@ class HandleInertiaRequests extends Middleware
                 ->orderBy('wardname', 'ASC')
                 ->get();
 
-            session(['cached_inertia_locations' => $cachedLocations]);
-            session()->save();
+            // session(['cached_inertia_locations' => $cachedLocations]);
+            // session()->save();
         }
 
         if (!$cachedFundSource) {
             $cachedFundSource = FundSource::orderBy('fsName')
                 ->get(['id', 'fsid', 'fsName', 'cluster_code']);
 
-            session(['cached_inertia_fundsource' => $cachedFundSource]);
-            session()->save();
+            // session(['cached_inertia_fundsource' => $cachedFundSource]);
+            // session()->save();
         }
 
         if (!$cachedSuppliers) {
             $cachedSuppliers = PimsSupplier::where('status', 'A')->orderBy('suppname', 'ASC')->get();
 
-            session(['cached_inertia_suppliers' => $cachedSuppliers]);
-            session()->save();
+            // session(['cached_inertia_suppliers' => $cachedSuppliers]);
+            // session()->save();
         }
+
+        session([
+            'cached_inertia_auth' => $cachedAuthUser,
+            'cached_inertia_packages' => $cachedPackages,
+            'cached_inertia_locations' => $cachedLocations,
+            'cached_inertia_fundsource' => $cachedFundSource,
+            'cached_inertia_suppliers' => $cachedSuppliers,
+        ]);
+        session()->save();
 
         return array_merge(parent::share($request), [
             'flash' => [
