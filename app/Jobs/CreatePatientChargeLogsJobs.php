@@ -18,7 +18,7 @@ class CreatePatientChargeLogsJobs implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     // jobs
-    public $tries = 5;
+    // public $tries = 5;
 
     public $enccode;
     public $acctno;
