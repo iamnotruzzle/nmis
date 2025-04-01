@@ -148,7 +148,7 @@ class AuthenticatedSessionController extends Controller
                 'cached_inertia_packages',
                 'cached_inertia_locations',
                 'cached_inertia_fundsource',
-                'cached_inertia_suppliers',
+                // 'cached_inertia_suppliers',
             ]);
         }
 

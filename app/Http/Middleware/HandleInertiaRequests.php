@@ -32,7 +32,7 @@ class HandleInertiaRequests extends Middleware
         $cachedPackages = session('cached_inertia_packages');
         $cachedLocations = session('cached_inertia_locations');
         $cachedFundSource = session('cached_inertia_fundsource'); // Check correct casing
-        $cachedSuppliers = session('cached_inertia_suppliers');
+        // $cachedSuppliers = session('cached_inertia_suppliers');
 
         // Ensure caching only happens if the session is empty
         if (!$cachedAuthUser && $request->user()) {
@@ -80,19 +80,19 @@ class HandleInertiaRequests extends Middleware
             // session()->save();
         }
 
-        if (!$cachedSuppliers) {
-            $cachedSuppliers = PimsSupplier::where('status', 'A')->orderBy('suppname', 'ASC')->get();
+        // if (!$cachedSuppliers) {
+        //     $cachedSuppliers = PimsSupplier::where('status', 'A')->orderBy('suppname', 'ASC')->get();
 
-            // session(['cached_inertia_suppliers' => $cachedSuppliers]);
-            // session()->save();
-        }
+        //     // session(['cached_inertia_suppliers' => $cachedSuppliers]);
+        //     // session()->save();
+        // }
 
         session([
             'cached_inertia_auth' => $cachedAuthUser,
             'cached_inertia_packages' => $cachedPackages,
             'cached_inertia_locations' => $cachedLocations,
             'cached_inertia_fundsource' => $cachedFundSource,
-            'cached_inertia_suppliers' => $cachedSuppliers,
+            // 'cached_inertia_suppliers' => $cachedSuppliers,
         ]);
         session()->save();
 
@@ -107,7 +107,7 @@ class HandleInertiaRequests extends Middleware
             'locations' => fn() => $cachedLocations,
             'fundSource' => fn() => $cachedFundSource,
             'packages' => fn() => $cachedPackages,
-            'suppliers' => fn() => $cachedSuppliers,
+            // 'suppliers' => fn() => $cachedSuppliers,
         ]);
     }
 }
