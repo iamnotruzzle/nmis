@@ -200,12 +200,18 @@ class CsrStocksControllers extends Controller
                 csrw_fund_source AS fund_source ON fund_source.fsid = converted.chrgcode;"
         );
 
+        $cache_suppliers = 'c_suppliers_' . Auth::user()->employeeid;
+
+        $suppliers = Cache::get($cache_suppliers);
+        // dd($suppliers);
+
         return Inertia::render('Csr/Inventory/Stocks/Index', [
             'items' => $items,
             'stocks' => $stocks,
             'totalDeliveries' => $totalDeliveries,
             'newRisNo' => $newRisNo,
             'totalConvertedItems' => $totalConvertedItems,
+            'suppliers' => $suppliers,
         ]);
     }
 

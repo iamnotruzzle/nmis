@@ -1724,6 +1724,7 @@ export default {
   props: {
     items: Object,
     stocks: Array,
+    suppliers: Array,
     totalDeliveries: Object,
     newRisNo: String,
     totalConvertedItems: Object,
@@ -2135,7 +2136,7 @@ export default {
       //   console.log(this.stocks);
     },
     storeSuppliersInContainer() {
-      this.$page.props.suppliers.forEach((e) => {
+      this.suppliers.forEach((e) => {
         this.suppliersList.push({
           supplierID: e.supplierID,
           suppname: e.suppname,

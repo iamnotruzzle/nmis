@@ -7,6 +7,7 @@ use App\Models\CsrStocks;
 use App\Models\CsrStocksLogs;
 use App\Models\FundSource;
 use App\Models\Item;
+use App\Models\PimsSupplier;
 use App\Models\RequestStocks;
 use App\Models\Sessions;
 use App\Models\Supplier;
@@ -15,6 +16,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
@@ -27,6 +29,25 @@ class DashboardController extends Controller
         $pending_requests = RequestStocks::where('status', 'PENDING')->count();
         $cancelled_requests = RequestStocks::where('status', 'CANCELLED')->count();
         $completed_requests = RequestStocks::where('status', 'RECEIVED')->count();
+
+        // Define cache keys for ward code and location type based on the authenticated user's employee ID
+        $cache_suppliers = 'c_suppliers_' . Auth::user()->employeeid;
+
+        // Attempt to retrieve cached ward code and location type
+        $suppliers_cached = Cache::get($cache_suppliers);
+
+        // If ward code is not found in cache, retrieve it from the database
+        if (!$suppliers_cached) {
+
+            $suppliers = PimsSupplier::where('status', 'A')->orderBy('suppname', 'ASC')->get();
+
+            // Store values in cache for future use
+            Cache::forever($cache_suppliers, $suppliers);
+
+            // Assign retrieved values to variables
+            $suppliers_cached = $suppliers;
+        }
+
 
         $about_to_expire = DB::select(
             "SELECT TOP 10 conv.cl2comb_after as cl2comb, item.cl2desc, conv.expiration_date
