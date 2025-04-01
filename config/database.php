@@ -52,9 +52,9 @@ return [
             'database' => env('DB_DATABASE', 'hospital'),
             'username' => env('DB_USERNAME', 'sa'),
             'password' => env('DB_PASSWORD', 'pacs'),
-            'options' => [
-                PDO::ATTR_PERSISTENT => true, // Persistent connection
-            ],
+            // 'options' => [
+            //     PDO::ATTR_PERSISTENT => true, // Persistent connection
+            // ],
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
