@@ -230,8 +230,8 @@ class WardPatientsController extends Controller
                 // Cache::forever($cacheKeyLatestUpdate, $latestERDateMod);
                 // Cache::forever($cacheKeyPatients, $fetchedPatients);
                 // Store patient data and latest admission date in cache for 30 minutes
-                Cache::put($cacheKeyLatestUpdate, $latestERDateMod, now()->addMinutes(30));
-                Cache::put($cacheKeyPatients, $fetchedPatients, now()->addMinutes(30));
+                Cache::put($cacheKeyLatestUpdate, $latestERDateMod, now()->addMinutes(120));
+                Cache::put($cacheKeyPatients, $fetchedPatients, now()->addMinutes(120));
                 $cachedPatients = $fetchedPatients;
             } else {
                 // Retrieve patient data from cache if dateMod date has not changed
