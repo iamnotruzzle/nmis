@@ -57,26 +57,6 @@ class RequestStocksController extends Controller
                 item.cl2desc ASC;"
         );
 
-        // $medicalGas = DB::select(
-        //     "SELECT
-        //         item.cl2comb,
-        //         item.cl2desc,
-        //         item.uomcode,
-        //         uom.uomdesc
-        //     FROM
-        //         hclass2 AS item
-        //     FULL OUTER JOIN
-        //         huom AS uom
-        //         ON uom.uomcode = item.uomcode
-        //     WHERE
-        //         item.catID = 1
-        //         AND item.uomcode != 'box'
-        //         AND item.itemcode LIKE 'MSMG-%'
-        //     ORDER BY
-        //         item.cl2desc ASC;"
-        // );
-        // dd($medicalGas);
-
         $requestedStocks = RequestStocks::with(['requested_at_details', 'requested_by_details', 'approved_by_details', 'request_stocks_details.item_details'])
             ->where('location', '=', $wardCode)
             ->whereHas('requested_by_details', function ($q) use ($searchString) {
@@ -98,39 +78,12 @@ class RequestStocksController extends Controller
             )
             ->where('location', '=', $wardCode)
             ->orderBy('created_at', 'desc')
-            ->paginate(5);
+            ->paginate(10);
 
-        $currentWardStocks = DB::select(
-            "SELECT ws.*,
-                idt.cl2comb, idt.cl2desc,
-                uom.uomcode, uom.uomdesc
-                FROM csrw_wards_stocks ws
-                LEFT JOIN hclass2 idt ON ws.cl2comb = idt.cl2comb
-                LEFT JOIN huom uom ON ws.uomcode = uom.uomcode
-                INNER JOIN csrw_request_stocks rs ON rs.id = ws.request_stocks_id
-                WHERE ws.location = ?
-                AND ws.quantity != 0
-                AND rs.status = 'RECEIVED'
-
-                UNION ALL
-
-                SELECT ws.*,
-                    idt.cl2comb, idt.cl2desc,
-                    uom.uomcode, uom.uomdesc
-                FROM csrw_wards_stocks ws
-                LEFT JOIN hclass2 idt ON ws.cl2comb = idt.cl2comb
-                LEFT JOIN huom uom ON ws.uomcode = uom.uomcode
-                WHERE ws.request_stocks_id IS NULL
-                AND ws.location = ?
-                AND ws.quantity != 0",
-            [$wardCode, $wardCode] // Duplicate the parameter
-        );
 
         return Inertia::render('Wards/RequestStocks/Index', [
             'items' => $items,
-            // 'medicalGas' => $medicalGas,
             'requestedStocks' => $requestedStocks,
-            'currentWardStocks' => $currentWardStocks,
         ]);
     }
 
