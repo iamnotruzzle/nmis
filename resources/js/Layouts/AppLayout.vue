@@ -331,6 +331,11 @@ export default {
         });
       }
       if (this.$page.props.user.designation == 'csr') {
+        this.menu[1].items = this.menu[1].items.filter(function (obj) {
+          return obj.to !== 'faq';
+        });
+      }
+      if (this.$page.props.user.designation == 'csr') {
         this.menu[0].items = this.menu[0].items.filter(function (obj) {
           return obj.to !== 'wardspatients';
         });
