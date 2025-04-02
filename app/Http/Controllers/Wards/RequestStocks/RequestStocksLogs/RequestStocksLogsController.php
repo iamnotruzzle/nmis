@@ -64,7 +64,7 @@ class RequestStocksLogsController extends Controller
         //     $returnQty,
         // );
 
-        return Redirect::route('requeststocks.index');
+        return redirect()->back();
     }
 
 

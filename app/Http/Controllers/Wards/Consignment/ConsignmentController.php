@@ -103,7 +103,7 @@ class ConsignmentController extends Controller
             'entry_by' => $entry_by,
         ]);
 
-        return Redirect::route('requeststocks.index');
+        return Redirect::route('wardinv.index');
     }
 
 
@@ -115,7 +115,7 @@ class ConsignmentController extends Controller
             'quantity' => $request->quantity,
         ]);
 
-        return Redirect::route('requeststocks.index');
+        return Redirect::route('wardinv.index');
     }
 
     public function destroy($id)

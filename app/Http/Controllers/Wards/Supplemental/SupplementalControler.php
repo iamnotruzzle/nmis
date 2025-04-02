@@ -104,7 +104,7 @@ class SupplementalControler extends Controller
             'entry_by' => $entry_by,
         ]);
 
-        return Redirect::route('requeststocks.index');
+        return Redirect::route('wardinv.index');
     }
 
 
@@ -116,7 +116,7 @@ class SupplementalControler extends Controller
             'quantity' => $request->quantity,
         ]);
 
-        return Redirect::route('requeststocks.index');
+        return Redirect::route('wardinv.index');
     }
 
     public function destroy($id)
