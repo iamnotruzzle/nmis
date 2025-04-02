@@ -190,7 +190,7 @@ export default {
             },
             {
               label: 'Request stocks',
-              icon: 'bi-journal-check',
+              icon: 'ri-handbag-line',
               to: 'requeststocks',
               prefix: 'requeststocks',
               comp: 'Wards/RequestStocks/Index',
