@@ -1078,7 +1078,7 @@ export default {
           ward_stock_id: e.id,
           cl2comb: e.cl2comb,
           item: e.cl2desc,
-          unit: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomdesc,
+          unit: e == null ? null : e.uomdesc,
           quantity: e.quantity,
           average: e.average,
           is_consumable: e.is_consumable == null ? null : e.is_consumable,
@@ -1094,7 +1094,7 @@ export default {
       //       ward_stock_id: e.id,
       //       cl2comb: e.item_details.cl2comb,
       //       item: e.item_details.cl2desc,
-      //       unit: e.unit_of_measurement == null ? null : e.unit_of_measurement.uomdesc,
+      //       unit: e == null ? null : e.uomdesc,
       //       quantity: e.quantity,
       //       average: e.average,
       //       is_consumable: e.is_consumable == null ? null : e.is_consumable,
@@ -1369,9 +1369,6 @@ export default {
       this.formReturnToCsr.reset();
       this.formReturnToCsr.clearErrors();
     },
-    convertedMsg() {
-      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Item converted.', life: 3000 });
-    },
     noItemPriceMsg() {
       this.$toast.add({
         severity: 'error',
@@ -1381,14 +1378,17 @@ export default {
         life: 10000,
       });
     },
+    createdMsg() {
+      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Stock created', life: 5000 });
+    },
     updateExistingMessage() {
-      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Stock updated', life: 3000 });
+      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Stock updated', life: 5000 });
     },
     updateConsignmentMessage() {
-      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Stock updated', life: 3000 });
+      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Stock updated', life: 5000 });
     },
     updateSupplementalMessage() {
-      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Stock updated', life: 3000 });
+      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Stock updated', life: 5000 });
     },
     getLocalDateString(utcStr) {
       const date = new Date(utcStr);

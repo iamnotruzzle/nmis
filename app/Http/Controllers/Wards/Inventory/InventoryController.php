@@ -54,31 +54,45 @@ class InventoryController extends Controller
                 item.cl2desc ASC;"
         );
 
+        // $currentWardStocks = DB::select(
+        //     "SELECT ws.*,
+        //         idt.cl2comb, idt.cl2desc,
+        //         uom.uomcode, uom.uomdesc
+        //         FROM csrw_wards_stocks ws
+        //         LEFT JOIN hclass2 idt ON ws.cl2comb = idt.cl2comb
+        //         LEFT JOIN huom uom ON ws.uomcode = uom.uomcode
+        //         INNER JOIN csrw_request_stocks rs ON rs.id = ws.request_stocks_id
+        //         WHERE ws.location = ?
+        //         AND ws.quantity != 0
+        //         AND rs.status = 'RECEIVED'
+
+        //         UNION ALL
+
+        //         SELECT ws.*,
+        //             idt.cl2comb, idt.cl2desc,
+        //             uom.uomcode, uom.uomdesc
+        //         FROM csrw_wards_stocks ws
+        //         LEFT JOIN hclass2 idt ON ws.cl2comb = idt.cl2comb
+        //         LEFT JOIN huom uom ON ws.uomcode = uom.uomcode
+        //         WHERE ws.request_stocks_id IS NULL
+        //         AND ws.location = ?
+        //         AND ws.quantity != 0",
+        //     [$wardCode, $wardCode] // Duplicate the parameter
+        // );
+
+
         $currentWardStocks = DB::select(
-            "SELECT ws.*,
-                idt.cl2comb, idt.cl2desc,
-                uom.uomcode, uom.uomdesc
-                FROM csrw_wards_stocks ws
-                LEFT JOIN hclass2 idt ON ws.cl2comb = idt.cl2comb
-                LEFT JOIN huom uom ON ws.uomcode = uom.uomcode
-                INNER JOIN csrw_request_stocks rs ON rs.id = ws.request_stocks_id
-                WHERE ws.location = ?
-                AND ws.quantity != 0
-                AND rs.status = 'RECEIVED'
-
-                UNION ALL
-
-                SELECT ws.*,
-                    idt.cl2comb, idt.cl2desc,
-                    uom.uomcode, uom.uomdesc
-                FROM csrw_wards_stocks ws
-                LEFT JOIN hclass2 idt ON ws.cl2comb = idt.cl2comb
-                LEFT JOIN huom uom ON ws.uomcode = uom.uomcode
-                WHERE ws.request_stocks_id IS NULL
-                AND ws.location = ?
-                AND ws.quantity != 0",
-            [$wardCode, $wardCode] // Duplicate the parameter
+            "SELECT stock.*, item.cl2desc, uom.uomdesc
+                FROM csrw_wards_stocks stock
+                LEFT JOIN hclass2 item ON stock.cl2comb = item.cl2comb
+                LEFT JOIN huom uom ON stock.uomcode = uom.uomcode
+                LEFT JOIN csrw_request_stocks rs ON rs.id = stock.request_stocks_id
+                WHERE stock.location = ?
+                AND stock.quantity > 0
+                AND (rs.id IS NULL OR rs.status = 'RECEIVED');",
+            [$wardCode] // Duplicate the parameter
         );
+        // dd($currentWardStocks);
 
         return Inertia::render('Wards/Inventory/Index', [
             'items' => $items,
