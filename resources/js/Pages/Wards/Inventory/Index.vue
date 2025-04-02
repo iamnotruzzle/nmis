@@ -21,8 +21,8 @@
           v-model:filters="currentWardStocksFilter"
           :value="currentWardStocksList"
           paginator
-          :rows="10"
-          :rowsPerPageOptions="[10, 30, 50]"
+          :rows="20"
+          :rowsPerPageOptions="[20, 30, 50]"
           removableSort
           sortField="expiration_date"
           :sortOrder="1"
