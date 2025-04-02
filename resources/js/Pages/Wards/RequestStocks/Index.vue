@@ -2402,8 +2402,8 @@ export default {
           this.formExisting.post(route('existingstock.store'), {
             preserveScroll: true,
             onSuccess: (e) => {
-              console.log(this.$page.props);
-              if (e.props.flash.noItemPrice == 0 || e.props.flash.noItemPrice != null) {
+              //   console.log(this.$page.props);
+              if (e.props.flash.noItemPrice == 0) {
                 // this.cancel();
                 this.noItemPriceMsg();
               } else {

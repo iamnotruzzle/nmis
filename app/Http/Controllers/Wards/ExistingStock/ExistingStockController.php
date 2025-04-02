@@ -70,6 +70,10 @@ class ExistingStockController extends Controller
             session()->save();
             return redirect()->back();
         } else {
+            session()->forget('noItemPrice'); // Remove previous value
+            session(['noItemPrice' => 1]);
+            session()->save();
+
             $itemPrices = ItemPrices::create([
                 'ris_no' => $tempRisNo,
                 'cl2comb' => $request->cl2comb,
