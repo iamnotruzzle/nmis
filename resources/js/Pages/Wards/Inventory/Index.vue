@@ -130,14 +130,14 @@
               <span> {{ data.item }}</span>
             </template>
           </Column>
-          <Column
+          <!-- <Column
             field="unit"
             header="UNIT"
             style="text-align: right; width: 5%"
             :pt="{ headerContent: 'justify-content-end' }"
             sortable
           >
-          </Column>
+          </Column> -->
           <Column
             field="quantity"
             header="QUANTITY"
@@ -1078,7 +1078,7 @@ export default {
           ward_stock_id: e.id,
           cl2comb: e.cl2comb,
           item: e.cl2desc,
-          unit: e == null ? null : e.uomdesc,
+          //   unit: e == null ? null : e.uomdesc,
           quantity: e.quantity,
           average: e.average,
           is_consumable: e.is_consumable == null ? null : e.is_consumable,

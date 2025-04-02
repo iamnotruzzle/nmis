@@ -99,11 +99,10 @@ class InventoryController extends Controller
 
 
         $currentWardStocks = DB::select(
-            "SELECT stock.[from], stock.id, stock.cl2comb, item.cl2desc,
-                     uom.uomdesc, stock.quantity, stock.average, stock.is_consumable, stock.expiration_date
+            "SELECT stock.[from], stock.id, stock.cl2comb, item.cl2desc, stock.quantity, stock.average, stock.is_consumable, stock.expiration_date
                 FROM csrw_wards_stocks stock
                 JOIN hclass2 item ON stock.cl2comb = item.cl2comb
-                LEFT JOIN huom uom ON stock.uomcode = uom.uomcode
+                -- LEFT JOIN huom uom ON stock.uomcode = uom.uomcode
                 LEFT JOIN csrw_request_stocks rs ON rs.id = stock.request_stocks_id
                 WHERE stock.location = ?
                 AND stock.quantity > 0
