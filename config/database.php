@@ -91,23 +91,23 @@ return [
         //     ]) : [],
         // ],
 
-        'pims' => [
-            'driver' => 'mysql',
-            'host' => env('PIMS_DB_HOST', '10.11.12.44:3306'),
-            // 'port' => env('PIMS_DB_PORT', '3306'),
-            'database' => env('PIMS_DB_DATABASE', 'pims'),
-            'username' => env('PIMS_DB_USERNAME', 'root'),
-            // 'password' => env('PIMS_DB_PASSWORD', 'pims_password'),
-            'unix_socket' => env('PIMS_DB_SOCKET', ''),
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
-            'prefix' => '',
-            'strict' => true,
-            'engine' => null,
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-            ]) : [],
-        ],
+        // 'pims' => [
+        //     'driver' => 'mysql',
+        //     'host' => env('PIMS_DB_HOST', '10.11.12.44:3306'),
+        //     // 'port' => env('PIMS_DB_PORT', '3306'),
+        //     'database' => env('PIMS_DB_DATABASE', 'pims'),
+        //     'username' => env('PIMS_DB_USERNAME', 'root'),
+        //     // 'password' => env('PIMS_DB_PASSWORD', 'pims_password'),
+        //     'unix_socket' => env('PIMS_DB_SOCKET', ''),
+        //     'charset' => 'utf8mb4',
+        //     'collation' => 'utf8mb4_unicode_ci',
+        //     'prefix' => '',
+        //     'strict' => true,
+        //     'engine' => null,
+        //     'options' => extension_loaded('pdo_mysql') ? array_filter([
+        //         PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+        //     ]) : [],
+        // ],
 
         // 'pgsql' => [
         //     'driver' => 'pgsql',
