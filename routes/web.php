@@ -38,6 +38,7 @@ use App\Http\Controllers\Wards\MedicalGases\WardMedicalGasesController;
 use App\Http\Controllers\Wards\Dashboard\DashboardController as WardDashboardController;
 use App\Http\Controllers\Wards\ExistingStock\ExistingStockController;
 use App\Http\Controllers\Wards\Faq\FaqController;
+use App\Http\Controllers\Wards\Inventory\InventoryController;
 use App\Http\Controllers\Wards\ManualInventory\WardManualInventoryController;
 use App\Http\Controllers\Wards\Patients\PatientChargeController;
 use App\Http\Controllers\Wards\Patients\WardPatientsController;
@@ -103,6 +104,7 @@ Route::middleware(['web', 'auth', 'verified'])->group(
         // non-medicine supplies
         Route::resource('requeststocks', RequestStocksController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         Route::put('requeststocks', [RequestStocksController::class, 'updatedeliverystatus'])->name('requeststocks.updatedeliverystatus');
+        Route::resource('wardinv', InventoryController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         // end non-medicine supplies
         Route::resource('csrinv', CsrInventoryController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
 

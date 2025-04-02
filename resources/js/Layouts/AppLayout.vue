@@ -189,11 +189,18 @@ export default {
               comp: 'Balance/Index',
             },
             {
-              label: 'Inventory',
+              label: 'Request stocks',
               icon: 'bi-journal-check',
               to: 'requeststocks',
               prefix: 'requeststocks',
               comp: 'Wards/RequestStocks/Index',
+            },
+            {
+              label: 'Inventory',
+              icon: 'bi-journal-check',
+              to: 'wardinv',
+              prefix: 'wardinv',
+              comp: 'Wards/Inventory/Index',
             },
             {
               label: 'FAQ',
@@ -316,6 +323,11 @@ export default {
       if (this.$page.props.user.designation == 'csr') {
         this.menu[1].items = this.menu[1].items.filter(function (obj) {
           return obj.to !== 'requeststocks';
+        });
+      }
+      if (this.$page.props.user.designation == 'csr') {
+        this.menu[1].items = this.menu[1].items.filter(function (obj) {
+          return obj.to !== 'wardinv';
         });
       }
       if (this.$page.props.user.designation == 'csr') {
