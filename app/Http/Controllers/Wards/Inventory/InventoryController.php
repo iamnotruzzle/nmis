@@ -35,6 +35,24 @@ class InventoryController extends Controller
         $wardCode = $authWardCode_cached;
 
         // available items only show if quantity_after == total_issued_qty
+        // $items = DB::select(
+        //     "SELECT
+        //         item.cl2comb,
+        //         item.cl2desc,
+        //         item.uomcode,
+        //         uom.uomdesc
+        //     FROM
+        //         hclass2 AS item
+        //     FULL OUTER JOIN
+        //         huom AS uom
+        //         ON uom.uomcode = item.uomcode
+        //     WHERE
+        //         (item.catID = 1
+        //         AND item.uomcode != 'box'
+        //         AND (item.itemcode NOT LIKE 'MSMG-%' OR item.itemcode IS NULL))
+        //     ORDER BY
+        //         item.cl2desc ASC;"
+        // );
         $items = DB::select(
             "SELECT
                 item.cl2comb,
@@ -43,8 +61,7 @@ class InventoryController extends Controller
                 uom.uomdesc
             FROM
                 hclass2 AS item
-            FULL OUTER JOIN
-                huom AS uom
+           JOIN huom AS uom
                 ON uom.uomcode = item.uomcode
             WHERE
                 (item.catID = 1
@@ -82,9 +99,10 @@ class InventoryController extends Controller
 
 
         $currentWardStocks = DB::select(
-            "SELECT stock.*, item.cl2desc, uom.uomdesc
+            "SELECT stock.[from], stock.id, stock.cl2comb, item.cl2desc,
+                     uom.uomdesc, stock.quantity, stock.average, stock.is_consumable, stock.expiration_date
                 FROM csrw_wards_stocks stock
-                LEFT JOIN hclass2 item ON stock.cl2comb = item.cl2comb
+                JOIN hclass2 item ON stock.cl2comb = item.cl2comb
                 LEFT JOIN huom uom ON stock.uomcode = uom.uomcode
                 LEFT JOIN csrw_request_stocks rs ON rs.id = stock.request_stocks_id
                 WHERE stock.location = ?
