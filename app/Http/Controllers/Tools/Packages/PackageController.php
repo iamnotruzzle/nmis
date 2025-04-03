@@ -48,7 +48,6 @@ class PackageController extends Controller
         //     'cached_inertia_packages',
         // ]);
 
-
         $package = Package::create([
             'description' => $request->description,
             'status' => $request->status,

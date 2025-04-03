@@ -112,6 +112,16 @@ class PatientChargeController extends Controller
             ->where('hmstat', 'A')
             ->get(['hmcode', 'hmdesc', 'hmamt', 'uomcode']);
 
+        // get packages / packages
+        $packages = DB::select(
+            "SELECT package.id, package.description, pack_dets.cl2comb, item.cl2desc, pack_dets.quantity, package.status
+                    FROM csrw_packages AS package
+                    JOIN csrw_package_details as pack_dets ON pack_dets.package_id = package.id
+                    JOIN hclass2 as item ON item.cl2comb = pack_dets.cl2comb
+                    WHERE package.status = 'A'
+                    ORDER BY item.cl2desc ASC;"
+        );
+
         $bills = DB::select(
             "SELECT pat_charge.pcchrgcod as charge_slip_no,
                             type_of_charge.chrgcode as type_of_charge_code,
@@ -159,6 +169,7 @@ class PatientChargeController extends Controller
 
         return Inertia::render('Wards/Patients/Bill/Index', [
             // 'pat_name' => $pat_name,
+            'packages' => $packages,
             'hpercode' => $hpercode,
             'patient_name' => $patient_name,
             'pat_tscode' => $pat_tscode,

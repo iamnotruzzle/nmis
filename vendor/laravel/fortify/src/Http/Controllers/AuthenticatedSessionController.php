@@ -145,7 +145,7 @@ class AuthenticatedSessionController extends Controller
             // Optionally clear Inertia session cached data
             session()->forget([
                 'cached_inertia_auth',
-                'cached_inertia_packages',
+                // 'cached_inertia_packages',
                 'cached_inertia_locations',
                 'cached_inertia_fundsource',
                 // 'cached_inertia_suppliers',

@@ -764,6 +764,7 @@ export default {
   },
   props: {
     // pat_name: Array,
+    packages: Array,
     hpercode: String,
     patient_name: String,
     pat_tscode: String,
@@ -930,7 +931,7 @@ export default {
       return truncated.toFixed(2);
     },
     storePackagesInController() {
-      this.$page.props.packages.forEach((e) => {
+      this.packages.forEach((e) => {
         this.packageList.push({
           id: e.id,
           description: e.description,
