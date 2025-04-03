@@ -116,6 +116,7 @@ class CreatePatientChargeLogsJobs implements ShouldQueue
                     'entry_at' => $logData['entry_at'],
                     'entry_by' => $logData['entry_by'],
                     'pcchrgcod' => $logData['pcchrgcod'],
+                    'tscode' => $logData['tscode'],
                 ]
             );
         }
@@ -171,6 +172,7 @@ class CreatePatientChargeLogsJobs implements ShouldQueue
                     'entry_at' => $logData['entry_at'],
                     'entry_by' => $logData['entry_by'],
                     'pcchrgcod' => $logData['pcchrgcod'],
+                    'tscode' => $logData['tscode'],
                 ]
             );
         }
