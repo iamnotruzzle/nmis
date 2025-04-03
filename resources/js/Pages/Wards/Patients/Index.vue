@@ -256,12 +256,7 @@
           style="width: 20%"
         >
           <template #body="{ data }">
-            <div
-              v-for="physician in data.physician"
-              class="mb-2"
-            >
-              <span>{{ physician }}</span>
-            </div>
+            {{ data.physician }}
           </template>
         </Column>
       </DataTable>
@@ -398,31 +393,6 @@ export default {
       }
       return assignedPhysician;
     },
-    // use storePatientsInContainer() function so that every time you make
-    // server request such as POST, the data in the table
-    // is updated
-    // storePatientsInContainer() {
-    //   this.patients.data.forEach((e) => {
-    //     this.patientsList.push({
-    //       enccode: e.enccode,
-    //       hpercode: e.hpercode,
-    //       patient: this.setPatient(e.patient),
-    //       bill_stat: e.patient.admission_date.patient_bill_stat.billstat,
-    //       //   los: ,
-    //       admission_date: e.patient.admission_date.admdate,
-    //       kg: this.checkIfBmiExistForWeight(e.patient.admission_date),
-    //       cm: this.checkIfBmiExistForHeight(e.patient.admission_date),
-    //       bmi: this.calculateBmi(e.patient.admission_date),
-    //       room_bed: e.room.rmname + ' - ' + e.bed.bdname,
-    //       physician: this.setPhysician(
-    //         e.patient.admission_date.physician,
-    //         e.patient.admission_date.physician2,
-    //         e.patient.admission_date.physician3,
-    //         e.patient.admission_date.physician4
-    //       ),
-    //     });
-    //   });
-    // },
     storePatientsInContainer() {
       this.patients.forEach((e) => {
         this.patientsList.push({
@@ -443,13 +413,13 @@ export default {
           cm: e.cm,
           bmi: this.calculateBmi(e),
           room_bed: e.rmname + ' - ' + e.bdname,
-          physician: this.setPhysician(e),
+          physician: e.firstname + ' ' + e.lastname,
           bill_stat: e.bill_stat,
           is_for_discharge: e.is_for_discharge == 'DISCH' ? true : false,
           tscode: e.tscode,
         });
       });
-      //   console.log(this.patientsList);
+      //   console.log(this.patients);
     },
     onPage(event) {
       this.params.page = event.page + 1;

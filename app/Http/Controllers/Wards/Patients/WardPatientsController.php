@@ -86,34 +86,29 @@ class WardPatientsController extends Controller
             if (!$cachedAdmDate || $latestAdmDate !== $cachedAdmDate) {
                 $fetchedPatients = DB::select(
                     "SELECT enctr.enccode, adm.admdate, enctr.hpercode, pt.patfirst, pt.patmiddle, pt.patlast, pt.patsuffix,
-                            (SELECT TOP 1 vsweight FROM hvsothr WHERE othrstat = 'A' AND enccode = adm.enccode ORDER BY othrdte DESC) AS kg,
-                            (SELECT TOP 1 vsheight FROM hvsothr WHERE othrstat = 'A' AND enccode = adm.enccode ORDER BY othrdte DESC) AS cm,
-                            room.rmname, bed.bdname, ward.wardname,
-                            adm.licno,
-                            (SELECT lastname + ', ' + firstname + ' ' + middlename FROM hpersonal WHERE physician_license_licnof.employeeid = hpersonal.employeeid) AS physician_licnof,
-                            (SELECT lastname + ', ' + firstname + ' ' + middlename FROM hpersonal WHERE physician_license_licno2.employeeid = hpersonal.employeeid) AS physician_licno2,
-                            (SELECT lastname + ', ' + firstname + ' ' + middlename FROM hpersonal WHERE physician_license_licno3.employeeid = hpersonal.employeeid) AS physician_licno3,
-                            (SELECT lastname + ', ' + firstname + ' ' + middlename FROM hpersonal WHERE physician_license_licno4.employeeid = hpersonal.employeeid) AS physician_licno4,
-                            ha.billstat AS bill_stat,
-                            (SELECT TOP 1 orcode FROM hdocord WHERE enccode = enctr.enccode ORDER BY dodate DESC) AS is_for_discharge,
-                            adm.tscode
-                        FROM hospital.dbo.henctr enctr
-                            RIGHT JOIN hospital.dbo.hadmlog adm ON enctr.enccode = adm.enccode
-                            RIGHT JOIN hospital.dbo.hpatroom pat_room ON enctr.enccode = pat_room.enccode
-                            RIGHT JOIN hospital.dbo.hroom room ON pat_room.rmintkey = room.rmintkey
-                            RIGHT JOIN hospital.dbo.hbed bed ON bed.bdintkey = pat_room.bdintkey
-                            RIGHT JOIN hospital.dbo.hward ward ON pat_room.wardcode = ward.wardcode
-                            RIGHT JOIN hospital.dbo.hperson pt ON enctr.hpercode = pt.hpercode
-                            LEFT JOIN hospital.dbo.hprovider physician_license_licnof ON adm.licnof = physician_license_licnof.licno
-                            LEFT JOIN hospital.dbo.hprovider physician_license_licno2 ON adm.licno2 = physician_license_licno2.licno
-                            LEFT JOIN hospital.dbo.hprovider physician_license_licno3 ON adm.licno3 = physician_license_licno3.licno
-                            LEFT JOIN hospital.dbo.hprovider physician_license_licno4 ON adm.licno4 = physician_license_licno4.licno
-                            LEFT JOIN hospital.dbo.hactrack ha ON adm.enccode = ha.enccode
-                        WHERE (enctr.toecode = 'ADM' OR enctr.toecode = 'OPDAD' OR enctr.toecode = 'ERADM')
-                        AND pat_room.wardcode = ?
-                        AND pat_room.patrmstat = 'A'
-                        AND adm.admstat = 'A'
-                        ORDER BY pt.patlast ASC;",
+                        (SELECT TOP 1 vsweight FROM hvsothr WHERE othrstat = 'A' AND enccode = adm.enccode ORDER BY othrdte DESC) AS kg,
+                        (SELECT TOP 1 vsheight FROM hvsothr WHERE othrstat = 'A' AND enccode = adm.enccode ORDER BY othrdte DESC) AS cm,
+                        room.rmname, bed.bdname, ward.wardname,
+                        adm.licno,
+                        hpersonal.lastname, hpersonal.firstname, hpersonal.empsuffix,
+                        ha.billstat AS bill_stat,
+                        (SELECT TOP 1 orcode FROM hdocord WHERE enccode = enctr.enccode ORDER BY dodate DESC) AS is_for_discharge,
+                        adm.tscode
+                    FROM hospital.dbo.henctr enctr
+                        RIGHT JOIN hospital.dbo.hadmlog adm ON enctr.enccode = adm.enccode
+                        RIGHT JOIN hospital.dbo.hpatroom pat_room ON enctr.enccode = pat_room.enccode
+                        RIGHT JOIN hospital.dbo.hroom room ON pat_room.rmintkey = room.rmintkey
+                        RIGHT JOIN hospital.dbo.hbed bed ON bed.bdintkey = pat_room.bdintkey
+                        RIGHT JOIN hospital.dbo.hward ward ON pat_room.wardcode = ward.wardcode
+                        RIGHT JOIN hospital.dbo.hperson pt ON enctr.hpercode = pt.hpercode
+                        LEFT JOIN hprovider ON hprovider.licno = adm.licno
+                        LEFT JOIN hpersonal ON hpersonal.employeeid = hprovider.employeeid
+                        LEFT JOIN hospital.dbo.hactrack ha ON adm.enccode = ha.enccode
+                    WHERE (enctr.toecode = 'ADM' OR enctr.toecode = 'OPDAD' OR enctr.toecode = 'ERADM')
+                    AND pat_room.wardcode = ?
+                    AND pat_room.patrmstat = 'A'
+                    AND adm.admstat = 'A'
+                    ORDER BY pt.patlast ASC",
                     [$authWardCode_cached]
                 );
 
