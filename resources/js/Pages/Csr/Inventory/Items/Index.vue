@@ -5,7 +5,7 @@
     <div class="card">
       <Toast />
 
-      <DataTable
+      <!-- <DataTable
         class="p-datatable-sm"
         v-model:filters="filters"
         v-model:expandedRows="expandedRow"
@@ -18,6 +18,24 @@
         :sortOrder="1"
         showGridlines
         removableSort
+      > -->
+
+      <DataTable
+        class="p-datatable-sm"
+        v-model:expandedRows="expandedRow"
+        v-model:filters="filters"
+        :value="itemsList"
+        selectionMode="single"
+        lazy
+        paginator
+        removableSort
+        :rows="rows"
+        ref="dt"
+        :totalRecords="totalRecords"
+        @page="onPage($event)"
+        dataKey="cl2comb"
+        filterDisplay="row"
+        :loading="loading"
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
@@ -647,7 +665,7 @@ export default {
     cl1combs: Array,
     pimsCategory: Array,
     units: Array,
-    items: Array,
+    items: Object,
     prices: Array,
   },
   data() {
@@ -665,6 +683,7 @@ export default {
       // end data table expand
       // paginator
       loading: false,
+      totalRecords: null,
       rows: null,
       // end paginator
       authLocation: null,
@@ -771,11 +790,11 @@ export default {
     };
   },
   // created will be initialize before mounted
-  //   created() {
-  //     this.totalRecords = this.items.total;
-  //     this.params.page = this.items.current_page;
-  //     this.rows = this.items.per_page;
-  //   },
+  created() {
+    this.totalRecords = this.items.total;
+    this.params.page = this.items.current_page;
+    this.rows = this.items.per_page;
+  },
   // created will be initialize before mounted
   mounted() {
     // console.log(this.$page.props.auth.user.roles[0]);
@@ -901,7 +920,8 @@ export default {
     // is updated
     storeItemInContainer() {
       // Loop through each item in this.items
-      this.items.forEach((item) => {
+      this.items.data.forEach((item) => {
+        // console.log(item);
         // console.log('items', this.items);
         // Find corresponding item in itemsList based on cl2comb
         const matchingItem = this.itemsList.find((listItem) => listItem.cl2comb === item.cl2comb);
@@ -954,6 +974,7 @@ export default {
           });
         }
       });
+      console.log(this.itemsList);
     },
     priceChangesOptions(data) {
       // console.log('price data', data.prices);

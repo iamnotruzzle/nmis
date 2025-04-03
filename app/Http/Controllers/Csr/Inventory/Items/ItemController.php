@@ -56,30 +56,49 @@ class ItemController extends Controller
         //     ->where('item.cl2comb', 'like', '%1000-%')
         //     ->paginate(10);
 
-        $items = DB::select(
-            "SELECT
-                item.cl2comb,
-                item.cl2code,
-                main_category.categoryname AS main_category,
-                category.cl1comb AS cl1comb,
-                category.cl1desc AS sub_category,
-                item.itemcode,
-                item.catID,
-                item.cl2desc AS item,
-                unit.uomcode,
-                unit.uomdesc AS unit,
-                item.cl2stat
-            FROM
-                hclass2 AS item
-            JOIN
-                huom AS unit ON item.uomcode = unit.uomcode
-            JOIN
-                hclass1 AS category ON item.cl1comb = category.cl1comb
-            JOIN
-                csrw_pims_categories AS main_category ON item.catID = main_category.catID
-            WHERE
-                item.catID = 1"
-        );
+        // $items = DB::select(
+        //     "SELECT
+        //         item.cl2comb,
+        //         item.cl2code,
+        //         main_category.categoryname AS main_category,
+        //         category.cl1comb AS cl1comb,
+        //         category.cl1desc AS sub_category,
+        //         item.itemcode,
+        //         item.catID,
+        //         item.cl2desc AS item,
+        //         unit.uomcode,
+        //         unit.uomdesc AS unit,
+        //         item.cl2stat
+        //     FROM
+        //         hclass2 AS item
+        //     JOIN
+        //         huom AS unit ON item.uomcode = unit.uomcode
+        //     JOIN
+        //         hclass1 AS category ON item.cl1comb = category.cl1comb
+        //     JOIN
+        //         csrw_pims_categories AS main_category ON item.catID = main_category.catID
+        //     WHERE
+        //         item.catID = 1"
+        // );
+        $items = DB::table('hclass2 as item')
+            ->select([
+                'item.cl2comb',
+                'item.cl2code',
+                'main_category.categoryname as main_category',
+                'category.cl1comb as cl1comb',
+                'category.cl1desc as sub_category',
+                'item.itemcode',
+                'item.catID',
+                'item.cl2desc as item',
+                'unit.uomcode',
+                'unit.uomdesc as unit',
+                'item.cl2stat'
+            ])
+            ->join('huom as unit', 'item.uomcode', '=', 'unit.uomcode')
+            ->join('hclass1 as category', 'item.cl1comb', '=', 'category.cl1comb')
+            ->join('csrw_pims_categories as main_category', 'item.catID', '=', 'main_category.catID')
+            ->where('item.catID', 1)
+            ->paginate(10);  // 15 items per page
         // dd($items);
 
         // $prices = [];
