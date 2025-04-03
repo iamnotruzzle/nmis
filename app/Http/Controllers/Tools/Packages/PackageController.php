@@ -16,9 +16,27 @@ class PackageController extends Controller
 {
     public function index()
     {
-        $items = Item::where('cl2stat', 'A')
-            ->orderBy('cl2desc', 'ASC')
-            ->get(['cl2comb', 'cl2desc']);
+        // $items = Item::where('cl2stat', 'A')
+        //     ->orderBy('cl2desc', 'ASC')
+        //     ->get(['cl2comb', 'cl2desc']);
+
+        $items = DB::select(
+            "SELECT
+                    item.cl2comb,
+                    item.cl2desc,
+                    item.uomcode,
+                    uom.uomdesc
+                FROM
+                    hclass2 AS item
+                JOIN huom AS uom
+                    ON uom.uomcode = item.uomcode
+                WHERE
+                    (item.catID = 1
+                    AND item.uomcode != 'box'
+                    AND (item.itemcode NOT LIKE 'MSMG-%' OR item.itemcode IS NULL))
+                ORDER BY
+                    item.cl2desc ASC;"
+        );
 
         $packages = DB::select(
             "SELECT package.id, package.description, pack_dets.cl2comb, item.cl2desc, pack_dets.quantity, package.status
