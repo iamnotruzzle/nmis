@@ -72,7 +72,7 @@
           :showFilterMenu="false"
           style="width: 10%"
         >
-          <template #body="{ data }">
+          <!-- <template #body="{ data }">
             {{ data.mainCategory }}
           </template>
           <template #filter="{ filterModel, filterCallback }">
@@ -84,13 +84,12 @@
               optionValue="categoryname"
               placeholder="NO FILTER"
             />
-          </template>
+          </template> -->
         </Column>
         <Column
           field="subCategory"
           header="SUB-CATEGORY"
           :showFilterMenu="false"
-          sortable
           style="width: 15%"
         >
           <template #body="{ data }">
@@ -101,16 +100,22 @@
           field="cl2desc"
           header="DESCRIPTION"
           :showFilterMenu="false"
-          sortable
         >
           <template #body="{ data }">
             <span> {{ data.cl2desc }}</span>
           </template>
           <template #filter="{ filterModel, filterCallback }">
-            <InputText
+            <!-- <InputText
               id="searchInput"
               ref="searchInput"
               v-model="filters['global'].value"
+              placeholder="Search item (ALT + 1)"
+              size="large"
+            /> -->
+            <InputText
+              id="searchInput"
+              ref="searchInput"
+              v-model="search"
               placeholder="Search item (ALT + 1)"
               size="large"
             />
@@ -122,7 +127,7 @@
           :showFilterMenu="false"
           style="width: 5%"
         >
-          <template #body="{ data }">
+          <!-- <template #body="{ data }">
             {{ data.uomdesc }}
           </template>
           <template #filter="{ filterModel, filterCallback }">
@@ -136,7 +141,7 @@
               optionValue="uomdesc"
               placeholder="NO FILTER"
             />
-          </template>
+          </template> -->
         </Column>
         <Column
           field="cl2stat"
@@ -160,9 +165,8 @@
           </template>
           <template #filter="{ filterModel, filterCallback }">
             <Dropdown
-              v-model="filterModel.value"
+              v-model="status"
               :options="statusFilter"
-              @change="filterCallback()"
               optionLabel="name"
               optionValue="code"
               placeholder="NO FILTER"
@@ -245,7 +249,6 @@
                   field="price_per_unit"
                   header="PRICE PER UNIT"
                   style="width: 20%"
-                  sortable
                 >
                   <template #body="{ data }">
                     <span class="text-green-500"> {{ data.price_per_unit }}</span>
@@ -694,8 +697,8 @@ export default {
       dateFilter: 'this year',
       status: null,
       statusFilter: [
-        { name: 'Active', code: 'A' },
-        { name: 'Inactive', code: 'I' },
+        { name: 'ACTIVE', code: 'A' },
+        { name: 'INACTIVE', code: 'I' },
       ],
       maincat: null,
       mainCategoryFilter: [
@@ -974,7 +977,7 @@ export default {
           });
         }
       });
-      console.log(this.itemsList);
+      //   console.log(this.itemsList);
     },
     priceChangesOptions(data) {
       // console.log('price data', data.prices);
@@ -1097,7 +1100,7 @@ export default {
       return option;
     },
     updateData() {
-      this.itemsList = [];
+      //   this.itemsList = [];
       this.loading = true;
 
       this.$inertia.get('items', this.params, {
@@ -1288,14 +1291,15 @@ export default {
     },
   },
   watch: {
-    // search: function (val, oldVal) {
-    //   this.params.search = val;
-    //   this.updateData();
-    // },
-    // status: function (val, oldVal) {
-    //   this.params.status = val;
-    //   this.updateData();
-    // },
+    search: function (val, oldVal) {
+      this.params.search = val;
+      this.updateData();
+    },
+    status: function (val, oldVal) {
+      //   console.log(val);
+      this.params.status = val;
+      this.updateData();
+    },
     // maincat: function (val, oldVal) {
     //   this.params.maincat = val;
     //   this.updateData();
