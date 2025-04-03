@@ -5,21 +5,6 @@
     <div class="card">
       <Toast />
 
-      <!-- <DataTable
-        class="p-datatable-sm"
-        v-model:filters="filters"
-        v-model:expandedRows="expandedRow"
-        :value="itemsList"
-        paginator
-        :rows="20"
-        dataKey="cl2comb"
-        filterDisplay="row"
-        sortField="cl2desc"
-        :sortOrder="1"
-        showGridlines
-        removableSort
-      > -->
-
       <DataTable
         class="p-datatable-sm"
         v-model:expandedRows="expandedRow"
@@ -41,18 +26,6 @@
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
             <span class="text-xl text-900 font-bold text-primary">ITEMS</span>
             <div class="flex">
-              <div class="mr-2">
-                <!-- <div class="p-inputgroup">
-                  <span class="p-inputgroup-addon">
-                    <i class="pi pi-search"></i>
-                  </span>
-                  <InputText
-                    id="search"
-                    v-model="filters['global'].value"
-                    placeholder="Search item"
-                  />
-                </div> -->
-              </div>
               <Button
                 v-if="$page.props.auth.user.roles[0] !== 'ward'"
                 label="Add item"
@@ -72,19 +45,6 @@
           :showFilterMenu="false"
           style="width: 10%"
         >
-          <!-- <template #body="{ data }">
-            {{ data.mainCategory }}
-          </template>
-          <template #filter="{ filterModel, filterCallback }">
-            <Dropdown
-              v-model="filterModel.value"
-              :options="pimsCategoryList"
-              @change="filterCallback()"
-              optionLabel="categoryname"
-              optionValue="categoryname"
-              placeholder="NO FILTER"
-            />
-          </template> -->
         </Column>
         <Column
           field="subCategory"
@@ -105,13 +65,6 @@
             <span> {{ data.cl2desc }}</span>
           </template>
           <template #filter="{ filterModel, filterCallback }">
-            <!-- <InputText
-              id="search"
-              ref="search"
-              v-model="filters['global'].value"
-              placeholder="Search item (ALT + 1)"
-              size="large"
-            /> -->
             <InputText
               id="search"
               ref="search"
@@ -127,21 +80,6 @@
           :showFilterMenu="false"
           style="width: 5%"
         >
-          <!-- <template #body="{ data }">
-            {{ data.uomdesc }}
-          </template>
-          <template #filter="{ filterModel, filterCallback }">
-            <Dropdown
-              v-model="filterModel.value"
-              :options="unitsList"
-              @change="filterCallback()"
-              :virtualScrollerOptions="{ itemSize: 38 }"
-              filter
-              optionLabel="uomdesc"
-              optionValue="uomdesc"
-              placeholder="NO FILTER"
-            />
-          </template> -->
         </Column>
         <Column
           field="cl2stat"
@@ -235,15 +173,6 @@
                       Prices for <span class="text-primary">[ {{ slotProps.data.cl2desc }} ]</span>
                     </div>
                   </div>
-                  <!-- <div class="flex justify-content-end">
-                    <Button
-                      label="Add price"
-                      severity="success"
-                      icon="pi pi-plus"
-                      iconPos="right"
-                      @click="openPriceDialog(slotProps.data)"
-                    />
-                  </div> -->
                 </template>
                 <Column
                   field="price_per_unit"
@@ -320,10 +249,6 @@
             class="w-full mb-3"
             :class="{ 'p-invalid': form.cl1comb == '' }"
           />
-          <!-- <InputText
-            v-model="form.selectedMainCat"
-            readonly
-          /> -->
           <small
             class="text-error"
             v-if="form.errors.unit"
@@ -343,10 +268,6 @@
             class="w-full mb-3"
             :class="{ 'p-invalid': form.cl1comb == '' }"
           />
-          <!-- <InputText
-            v-model="form.selectedSubCategory"
-            readonly
-          /> -->
           <small
             class="text-error"
             v-if="form.errors.cl1comb"
@@ -742,8 +663,6 @@ export default {
       unitsList: [],
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        // cl1comb: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        // cl2desc: { value: null, matchMode: FilterMatchMode.CONTAINS },
         cl2stat: { value: null, matchMode: FilterMatchMode.EQUALS },
         mainCategory: { value: null, matchMode: FilterMatchMode.EQUALS },
         uomdesc: { value: null, matchMode: FilterMatchMode.EQUALS },
@@ -924,8 +843,6 @@ export default {
     storeItemInContainer() {
       // Loop through each item in this.items
       this.items.data.forEach((item) => {
-        // console.log(item);
-        // console.log('items', this.items);
         // Find corresponding item in itemsList based on cl2comb
         const matchingItem = this.itemsList.find((listItem) => listItem.cl2comb === item.cl2comb);
         // console.log('match', matchingItem);
@@ -980,9 +897,6 @@ export default {
       //   console.log(this.itemsList);
     },
     priceChangesOptions(data) {
-      // console.log('price data', data.prices);
-      // sort the date to ascending order
-
       let result = data.prices;
       let priceDetails = [...result].sort((a, b) =>
         moment(a.created_at, 'DD-MM-YYYY, hh:mm:ss').diff(moment(b.created_at, 'DD-MM-YYYY, hh:mm:ss'))
@@ -1220,14 +1134,6 @@ export default {
       //   console.log(this.$page.props.errors);
     },
     submitConvert() {
-      //   if (this.formConvert.processing || this.formConvert.cl2desc == null || this.formConvert.cl2desc == '') {
-      //     return false;
-      //   }
-
-      //   this.formConvert.location = this.authLocation.location.wardcode;
-
-      //   console.log('formConvert', this.formConvert);
-
       this.formConvert.post(route('csrconvertitem.store'), {
         preserveScroll: true,
         onSuccess: () => {
@@ -1239,10 +1145,6 @@ export default {
         },
         onError: (error) => {
           console.log(error);
-          //   this.convertDialog = false;
-          //   this.cancel();
-          //   this.updateData();
-          //   this.createdMsg();
         },
       });
 
@@ -1300,10 +1202,6 @@ export default {
       this.params.status = val;
       this.updateData();
     },
-    // maincat: function (val, oldVal) {
-    //   this.params.maincat = val;
-    //   this.updateData();
-    // },
   },
 };
 </script>
