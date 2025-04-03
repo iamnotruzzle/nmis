@@ -47,7 +47,7 @@
                     <i class="pi pi-search"></i>
                   </span>
                   <InputText
-                    id="searchInput"
+                    id="search"
                     v-model="filters['global'].value"
                     placeholder="Search item"
                   />
@@ -106,15 +106,15 @@
           </template>
           <template #filter="{ filterModel, filterCallback }">
             <!-- <InputText
-              id="searchInput"
-              ref="searchInput"
+              id="search"
+              ref="search"
               v-model="filters['global'].value"
               placeholder="Search item (ALT + 1)"
               size="large"
             /> -->
             <InputText
-              id="searchInput"
-              ref="searchInput"
+              id="search"
+              ref="search"
               v-model="search"
               placeholder="Search item (ALT + 1)"
               size="large"
@@ -823,7 +823,7 @@ export default {
   methods: {
     handleAlt1Shortcut(event) {
       if (event.altKey && event.key === '1') {
-        this.$refs.searchInput.$el.focus();
+        this.$refs.search.$el.focus();
       }
     },
     restrictNonNumericAndPeriod(event) {
