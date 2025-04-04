@@ -78,7 +78,7 @@ class PatientChargeController extends Controller
                     AND ws.expiration_date > GETDATE()
                     AND (
                         (request.status = 'RECEIVED')
-                        OR (ws.request_stocks_id IS NULL AND ws.[from] IN ('MEDICAL GASES', 'EXISTING_STOCKS', 'CONSIGNMENT', 'SUPPLEMENTAL'))
+                        OR (ws.request_stocks_id IS NULL AND ws.[from] IN ('MEDICAL GASES', 'EXISTING_STOCKS', 'CONSIGNMENT', 'SUPPLEMENTAL', 'WARD'))
                     )
                 ORDER BY ws.expiration_date ASC;"
         );

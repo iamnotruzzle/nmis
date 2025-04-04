@@ -8,6 +8,7 @@ use App\Models\Package;
 use App\Models\PackageDetails;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
@@ -16,9 +17,7 @@ class PackageController extends Controller
 {
     public function index()
     {
-        // $items = Item::where('cl2stat', 'A')
-        //     ->orderBy('cl2desc', 'ASC')
-        //     ->get(['cl2comb', 'cl2desc']);
+        $cache_authWardCode = 'c_authWardCode_' . Auth::user()->employeeid;
 
         $items = DB::select(
             "SELECT
@@ -43,7 +42,9 @@ class PackageController extends Controller
                 FROM csrw_packages AS package
                 JOIN csrw_package_details as pack_dets ON pack_dets.package_id = package.id
                 JOIN hclass2 as item ON item.cl2comb = pack_dets.cl2comb
-                ORDER BY item.cl2desc ASC;"
+                WHERE wardcode = ?
+                ORDER BY item.cl2desc ASC;",
+            [$cache_authWardCode]
         );
 
         // dd($packages);

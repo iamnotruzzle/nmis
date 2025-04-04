@@ -376,10 +376,12 @@ export default {
         itemcode: null,
 
         user: null,
+        wardcode: null,
       }),
     };
   },
   mounted() {
+    console.log(this.$page.props.auth.user.location.wardcode);
     this.storeItemsInContainer();
     this.storePackagesInContainer();
   },
@@ -402,7 +404,7 @@ export default {
         cl2desc: e.cl2desc,
       }));
 
-      console.log('itemList', this.itemsList);
+      //   console.log('itemList', this.itemsList);
     },
     storePackagesInContainer() {
       this.packagesList = []; // reset
@@ -503,6 +505,7 @@ export default {
       this.form.status = this.status;
       this.form.packageItems = this.packageItems;
       this.form.user = this.$page.props.auth.user.userDetail.employeeid;
+      this.form.wardcode = this.$page.props.auth.user.location.wardcode;
 
       if (this.form.processing) {
         return false;

@@ -17,5 +17,6 @@ class Package extends Model
         'status',
         'created_by',
         'updated_by',
+        'wardcode',
     ];
 }
