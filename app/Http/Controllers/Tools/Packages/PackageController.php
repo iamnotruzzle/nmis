@@ -9,6 +9,7 @@ use App\Models\PackageDetails;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
@@ -18,6 +19,7 @@ class PackageController extends Controller
     public function index()
     {
         $cache_authWardCode = 'c_authWardCode_' . Auth::user()->employeeid;
+        $authWardCode_cached = Cache::get($cache_authWardCode);
 
         $items = DB::select(
             "SELECT
@@ -44,10 +46,8 @@ class PackageController extends Controller
                 JOIN hclass2 as item ON item.cl2comb = pack_dets.cl2comb
                 WHERE wardcode = ?
                 ORDER BY item.cl2desc ASC;",
-            [$cache_authWardCode]
+            [$authWardCode_cached]
         );
-
-        // dd($packages);
 
         return Inertia::render('Tools/Packages/Index', [
             'items' => $items,
@@ -71,6 +71,7 @@ class PackageController extends Controller
             'description' => $request->description,
             'status' => $request->status,
             'created_by' => $request->user,
+            'wardcode' => $request->wardcode
         ]);
         $package_id = $package->id;
 
@@ -103,6 +104,7 @@ class PackageController extends Controller
             'description' => $request->description,
             'status' => $request->status,
             'updated_by' => $request->user,
+            'wardcode' => $request->wardcode
         ]);
 
         $packageId = $request->package_id;

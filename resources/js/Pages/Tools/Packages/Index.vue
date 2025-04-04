@@ -381,7 +381,7 @@ export default {
     };
   },
   mounted() {
-    console.log(this.$page.props.auth.user.location.wardcode);
+    // console.log(this.$page.props.auth.user.location.wardcode);
     this.storeItemsInContainer();
     this.storePackagesInContainer();
   },
