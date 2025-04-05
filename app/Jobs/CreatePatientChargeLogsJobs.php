@@ -180,5 +180,6 @@ class CreatePatientChargeLogsJobs implements ShouldQueue
         event(new ChargeLogsProcessed([
             'message' => "Patient charge logs processed."
         ]));
+        //a
     }
 }
