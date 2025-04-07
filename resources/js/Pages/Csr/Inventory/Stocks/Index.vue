@@ -573,7 +573,7 @@
         v-model:visible="addDeliveryDialog"
         :modal="true"
         class="p-fluid overflow-hidden"
-        :style="{ width: '800px' }"
+        :style="{ width: '1050px' }"
         :draggable="true"
         :closeOnEscape="false"
       >
@@ -732,46 +732,40 @@
             />
           </div>
         </div>
-        <div class="field flex align-items-center">
-          <div
-            :style="{ width: '65%' }"
-            class="mr-2 mt-auto"
-          >
-            <div class="flex align-content-center">
-              <label>Convert to</label>
-            </div>
-            <Dropdown
-              required="true"
-              v-model="formAddDelivery.cl2comb_after"
-              :options="convertedItemList"
-              :virtualScrollerOptions="{ itemSize: 38 }"
-              filter
-              showClear
-              dataKey="cl2comb"
-              optionValue="cl2comb"
-              optionLabel="cl2desc"
-              class="w-full"
-            />
+
+        <div class="mr-2 mt-auto">
+          <div class="flex align-content-center">
+            <label>Convert to</label>
           </div>
-          <div :style="{ width: '35%' }">
-            <div class="flex align-content-center">
-              <label
-                >Convert quantity <span class="text-error">(Total converted quantity of delivered item)</span></label
-              >
-            </div>
-            <InputText
-              id="quantity"
-              type="number"
-              v-model="formAddDelivery.quantity_after"
-              @keydown="restrictNonNumericAndPeriod"
-              autofocus
-              @keyup.enter="submitAddDelivery"
-              class="w-full"
-            />
+          <Dropdown
+            required="true"
+            v-model="formAddDelivery.cl2comb_after"
+            :options="convertedItemList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
+            filter
+            showClear
+            dataKey="cl2comb"
+            optionValue="cl2comb"
+            optionLabel="cl2desc"
+            class="w-full"
+          />
+        </div>
+        <div>
+          <div class="flex align-content-center">
+            <label>Convert quantity <span class="text-error">(Total converted quantity of delivered item)</span></label>
           </div>
+          <InputText
+            id="quantity"
+            type="number"
+            v-model="formAddDelivery.quantity_after"
+            @keydown="restrictNonNumericAndPeriod"
+            autofocus
+            @keyup.enter="submitAddDelivery"
+            class="w-full"
+          />
         </div>
 
-        <div class="field">
+        <div class="field mt-4">
           <div>
             <div class="flex align-content-center">
               <label class="text-green-500"
