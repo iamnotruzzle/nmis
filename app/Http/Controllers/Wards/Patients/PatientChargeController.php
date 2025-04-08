@@ -336,6 +336,12 @@ class PatientChargeController extends Controller
                             'pcchrgcod' => $processedItems[$item['itemCode']],
                             'tscode' => $tscode,
                         ];
+
+                        #region comment for now
+                        $ward_stocks_id = $wardStock->id;
+                        $quantity = $quantity_to_insert_in_logs;
+                        ChargingWardConsumptionTrackerJobs::dispatch($ward_stocks_id, $quantity, $tscode);
+                        #endregion comment for now
                     }
 
                     // MISC items
