@@ -25,143 +25,143 @@ class LocationStockBalanceController extends Controller
     public function index(Request $request)
     {
 
-        // #region prod
-        // $searchString = $request->search;
-        // $dateRange = $request->date;
-        // $from = null;
-        // $to = null;
-        // $locationStockBalance = null;
+        #region prod
+        $searchString = $request->search;
+        $dateRange = $request->date;
+        $from = null;
+        $to = null;
+        $locationStockBalance = null;
 
-        // $date = Carbon::now();
-        // $now = $date->copy()->startOfDay();
+        $date = Carbon::now();
+        $now = $date->copy()->startOfDay();
 
-        // // get auth wardcode
-        // $authWardcode = DB::select(
-        //     "SELECT TOP 1
-        //         l.wardcode
-        //     FROM
-        //         user_acc u
-        //     INNER JOIN
-        //         csrw_login_history l ON u.employeeid = l.employeeid
-        //     WHERE
-        //         l.employeeid = ?
-        //     ORDER BY
-        //         l.created_at DESC;
-        //     ",
-        //     [Auth::user()->employeeid]
-        // );
-        // // dd($authWardcode);
-        // $authCode = $authWardcode[0]->wardcode;
+        // get auth wardcode
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+            FROM
+                user_acc u
+            INNER JOIN
+                csrw_login_history l ON u.employeeid = l.employeeid
+            WHERE
+                l.employeeid = ?
+            ORDER BY
+                l.created_at DESC;
+            ",
+            [Auth::user()->employeeid]
+        );
+        // dd($authWardcode);
+        $authCode = $authWardcode[0]->wardcode;
 
-        // $stockBalDates = DB::select(
-        //     "SELECT beg_bal_created_at AS beg_bal_date, end_bal_created_at AS end_bal_date
-        //     FROM csrw_stock_bal_date_logs
-        //     WHERE wardcode = '$authCode'
-        //     oRDER BY created_at DESC;"
-        // );
+        $stockBalDates = DB::select(
+            "SELECT beg_bal_created_at AS beg_bal_date, end_bal_created_at AS end_bal_date
+            FROM csrw_stock_bal_date_logs
+            WHERE wardcode = '$authCode'
+            oRDER BY created_at DESC;"
+        );
 
-        // $default_beg_bal_date = $stockBalDates == null ? null : $stockBalDates[0]->beg_bal_date;
+        $default_beg_bal_date = $stockBalDates == null ? null : $stockBalDates[0]->beg_bal_date;
 
-        // // check if the latest has a beg bal or ending bal
-        // $balanceDecChecker = LocationStockBalance::where('location', $authCode)->OrderBy('created_at', 'DESC')->first();
+        // check if the latest has a beg bal or ending bal
+        $balanceDecChecker = LocationStockBalance::where('location', $authCode)->OrderBy('created_at', 'DESC')->first();
 
-        // $canBeginBalance = null;
+        $canBeginBalance = null;
 
-        // // if true, it can generate beginning balance else it can generate ending balance
-        // if ($balanceDecChecker == null) {
-        //     $canBeginBalance = true;
-        // } else if ($balanceDecChecker->beginning_balance == null) {
-        //     $canBeginBalance = true;
-        // } else {
-        //     $canBeginBalance = false;
-        // }
+        // if true, it can generate beginning balance else it can generate ending balance
+        if ($balanceDecChecker == null) {
+            $canBeginBalance = true;
+        } else if ($balanceDecChecker->beginning_balance == null) {
+            $canBeginBalance = true;
+        } else {
+            $canBeginBalance = false;
+        }
 
-        // preg_match('/\[\s*(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d+)\s*\] - \[\s*(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d+|ONGOING)\s*\]/', $dateRange, $matches);
-        // if ($matches) {
-        //     $from = $matches[1]; // "2025-02-24 11:42:52.846"
-        //     $to = $matches[2] === 'ONGOING' ? Carbon::now() : $matches[2]; // "2025-02-24 11:43:41.783" or null if "ONGOING"
-        // }
+        preg_match('/\[\s*(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d+)\s*\] - \[\s*(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d+|ONGOING)\s*\]/', $dateRange, $matches);
+        if ($matches) {
+            $from = $matches[1]; // "2025-02-24 11:42:52.846"
+            $to = $matches[2] === 'ONGOING' ? Carbon::now() : $matches[2]; // "2025-02-24 11:43:41.783" or null if "ONGOING"
+        }
 
-        // if ($from == null) {
-        //     $locationStockBalance = DB::select(
-        //         "SELECT
-        //         balance.cl2comb,
-        //         item.cl2desc,
-        //         SUM(balance.beginning_balance) AS beginning_balance,
-        //         SUM(balance.ending_balance) AS ending_balance,
-        //         MIN(balance.created_at) AS created_at,
-        //         MIN(balance.beg_bal_created_at) AS beg_bal_created_at,
-        //         MAX(balance.end_bal_created_at) AS end_bal_created_at,
-        //         price.price_per_unit
-        //     FROM
-        //         csrw_location_stock_balance AS balance
-        //     JOIN
-        //         hclass2 AS item ON item.cl2comb = balance.cl2comb
-        //     JOIN
-        //         csrw_item_prices AS price ON price.cl2comb = balance.cl2comb
-        //         AND price.id = balance.price_id  -- Ensure price matching by ID
-        //     WHERE
-        //         balance.location = '$authCode'
-        //          AND (
-        //             (balance.beg_bal_created_at BETWEEN '$default_beg_bal_date' AND '$now')
-        //             OR balance.beg_bal_created_at IS NULL
-        //         )
-        //         AND (
-        //             (balance.end_bal_created_at BETWEEN '$default_beg_bal_date' AND '$now')
-        //             OR balance.end_bal_created_at IS NULL
-        //         )
-        //     GROUP BY
-        //         balance.cl2comb,
-        //         item.cl2desc,
-        //         price.price_per_unit;"
-        //     );
-        // } else {
-        //     $locationStockBalance = DB::select(
-        //         "SELECT
-        //         balance.cl2comb,
-        //         item.cl2desc,
-        //         SUM(balance.beginning_balance) AS beginning_balance,
-        //         SUM(balance.ending_balance) AS ending_balance,
-        //         MIN(balance.created_at) AS created_at,
-        //         MIN(balance.beg_bal_created_at) AS beg_bal_created_at,
-        //         MAX(balance.end_bal_created_at) AS end_bal_created_at,
-        //         price.price_per_unit
-        //     FROM
-        //         csrw_location_stock_balance AS balance
-        //     JOIN
-        //         hclass2 AS item ON item.cl2comb = balance.cl2comb
-        //     JOIN
-        //         csrw_item_prices AS price ON price.cl2comb = balance.cl2comb
-        //         AND price.id = balance.price_id  -- Ensure price matching by ID
-        //     WHERE
-        //         balance.location = '$authCode'
-        //         AND (
-        //             (balance.beg_bal_created_at BETWEEN '$from' AND '$to')
-        //             OR balance.beg_bal_created_at IS NULL
-        //         )
-        //         AND (
-        //             (balance.end_bal_created_at BETWEEN '$from' AND '$to')
-        //             OR balance.end_bal_created_at IS NULL
-        //         )
-        //     GROUP BY
-        //         balance.cl2comb,
-        //         item.cl2desc,
-        //         price.price_per_unit;"
-        //     );
-        // }
-        // // prod
-        // return Inertia::render('Balance/Index', [
-        //     'locationStockBalance' => $locationStockBalance,
-        //     'canBeginBalance' => $canBeginBalance,
-        //     'stockBalDates' => $stockBalDates,
-        // ]);
+        if ($from == null) {
+            $locationStockBalance = DB::select(
+                "SELECT
+                balance.cl2comb,
+                item.cl2desc,
+                SUM(balance.beginning_balance) AS beginning_balance,
+                SUM(balance.ending_balance) AS ending_balance,
+                MIN(balance.created_at) AS created_at,
+                MIN(balance.beg_bal_created_at) AS beg_bal_created_at,
+                MAX(balance.end_bal_created_at) AS end_bal_created_at,
+                price.price_per_unit
+            FROM
+                csrw_location_stock_balance AS balance
+            JOIN
+                hclass2 AS item ON item.cl2comb = balance.cl2comb
+            JOIN
+                csrw_item_prices AS price ON price.cl2comb = balance.cl2comb
+                AND price.id = balance.price_id  -- Ensure price matching by ID
+            WHERE
+                balance.location = '$authCode'
+                 AND (
+                    (balance.beg_bal_created_at BETWEEN '$default_beg_bal_date' AND '$now')
+                    OR balance.beg_bal_created_at IS NULL
+                )
+                AND (
+                    (balance.end_bal_created_at BETWEEN '$default_beg_bal_date' AND '$now')
+                    OR balance.end_bal_created_at IS NULL
+                )
+            GROUP BY
+                balance.cl2comb,
+                item.cl2desc,
+                price.price_per_unit;"
+            );
+        } else {
+            $locationStockBalance = DB::select(
+                "SELECT
+                balance.cl2comb,
+                item.cl2desc,
+                SUM(balance.beginning_balance) AS beginning_balance,
+                SUM(balance.ending_balance) AS ending_balance,
+                MIN(balance.created_at) AS created_at,
+                MIN(balance.beg_bal_created_at) AS beg_bal_created_at,
+                MAX(balance.end_bal_created_at) AS end_bal_created_at,
+                price.price_per_unit
+            FROM
+                csrw_location_stock_balance AS balance
+            JOIN
+                hclass2 AS item ON item.cl2comb = balance.cl2comb
+            JOIN
+                csrw_item_prices AS price ON price.cl2comb = balance.cl2comb
+                AND price.id = balance.price_id  -- Ensure price matching by ID
+            WHERE
+                balance.location = '$authCode'
+                AND (
+                    (balance.beg_bal_created_at BETWEEN '$from' AND '$to')
+                    OR balance.beg_bal_created_at IS NULL
+                )
+                AND (
+                    (balance.end_bal_created_at BETWEEN '$from' AND '$to')
+                    OR balance.end_bal_created_at IS NULL
+                )
+            GROUP BY
+                balance.cl2comb,
+                item.cl2desc,
+                price.price_per_unit;"
+            );
+        }
+        // prod
+        return Inertia::render('Balance/Index', [
+            'locationStockBalance' => $locationStockBalance,
+            'canBeginBalance' => $canBeginBalance,
+            'stockBalDates' => $stockBalDates,
+        ]);
         #endregion
 
-        // maintenance page
-        return Inertia::render(
-            'UnderMaintenancePage',
-            []
-        );
+        // // maintenance page
+        // return Inertia::render(
+        //     'UnderMaintenancePage',
+        //     []
+        // );
     }
 
     public function store(Request $request)
