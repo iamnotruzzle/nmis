@@ -129,9 +129,46 @@ class WardPatientsController extends Controller
                 'patients' => $cachedPatients
             ]);
         } else if ($locationType_cached == 'OPD') {
-            // if (!$cachedPatients) {
-            $patients_query = DB::SELECT(
-                "SELECT hopdlog.enccode, hopdlog.hpercode, hopdlog.opddate, hopdlog.licno,
+
+            if ($authWardCode_cached == 'OB' || $authWardCode_cached == 'GYNE') {
+                $patients_query = DB::SELECT(
+                    "SELECT
+                        hopdlog.enccode,
+                        hopdlog.hpercode,
+                        hopdlog.opddate,
+                        hopdlog.licno,
+                        hpersonal.lastname,
+                        hpersonal.firstname,
+                        hpersonal.empsuffix,
+                        hperson.patlast,
+                        hperson.patfirst,
+                        hperson.patmiddle,
+                        htypser.tsdesc,
+                        hopdlog.opddtedis,
+                        hopdlog.opdstat,
+                        hdisposition.dispdesc,
+                        hopdlog.tscode
+
+                    FROM hopdlog WITH (NOLOCK)
+
+                    INNER JOIN hperson ON hperson.hpercode = hopdlog.hpercode
+                    INNER JOIN htypser ON htypser.tscode = hopdlog.tscode
+                    LEFT JOIN hdisposition ON hdisposition.dispcode = hopdlog.opddisp
+                    LEFT JOIN hprovider ON hprovider.licno = hopdlog.licno
+                    LEFT JOIN hpersonal ON hpersonal.employeeid = hprovider.employeeid
+
+                    WHERE hopdlog.tscode IN ('OB', 'GYNE')
+                    AND hopdlog.opddate BETWEEN CAST(GETDATE() AS DATE) AND DATEADD(DAY, 1, CAST(GETDATE() AS DATE)) -- prod
+                    -- AND hopdlog.opddate BETWEEN CAST('2022-11-30' AS DATE) AND DATEADD(DAY, 1, CAST('2022-12-01' AS DATE)) -- test
+
+                    AND hopdlog.licno IS NOT NULL
+
+                    ORDER BY hopdlog.opddate DESC;",
+                    // [$authWardCode_cached]
+                );
+            } else {
+                $patients_query = DB::SELECT(
+                    "SELECT hopdlog.enccode, hopdlog.hpercode, hopdlog.opddate, hopdlog.licno,
                     hpersonal.lastname, hpersonal.firstname, hpersonal.empsuffix,
                     hperson.patlast, hperson.patfirst, hperson.patmiddle,
                     htypser.tsdesc, hopdlog.opddtedis, hopdlog.opdstat, hdisposition.dispdesc, hopdlog.tscode
@@ -151,14 +188,9 @@ class WardPatientsController extends Controller
 
                     AND hopdlog.licno IS NOT NULL
                     ORDER BY hopdlog.opddate desc;",
-                [$authWardCode_cached]
-            );
-
-            //     // Store in cache permanently
-            //     Cache::forever($cacheKeyPatients, $patients_query);
-            //     // Assign the cached patients data for later use
-            //     $cachedPatients = $patients_query;
-            // }
+                    [$authWardCode_cached]
+                );
+            }
 
 
             return Inertia::render('Wards/Patients/OPD/Index', [
