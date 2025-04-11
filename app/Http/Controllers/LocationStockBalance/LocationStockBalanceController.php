@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\Sessions;
 use App\Models\WardConsumptionTracker;
-use App\Models\WardStockBalanceSnapshot;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
@@ -194,7 +193,7 @@ class LocationStockBalanceController extends Controller
         // if ($itemCount[0]->count != 0) {
         if ($request->beg_bal == true) {
             // beginning balance
-            foreach ($currentStocks as $stock) {=
+            foreach ($currentStocks as $stock) {
                 $id = $stock->id;
                 $item_conversion_id = $stock->stock_id;
                 $ris_no = $stock->ris_no;
@@ -365,31 +364,6 @@ class LocationStockBalanceController extends Controller
                         hclass2.cl2desc ASC;"
             );
 
-            $result = $this->processReport($ward_report);
-
-            foreach ($result as $row) {
-                $logs[] = WardStockBalanceSnapshot::create([
-                    'cl2comb' => $row->cl2comb,
-                    'item_description' => $row->item_description,
-                    'unit' => $row->unit,
-                    'unit_cost' => $row->unit_cost,
-                    'beginning_balance' => $row->beginning_balance,
-                    'from_csr' => $row->from_csr == null ? 0 : $row->from_csr,
-                    'from_ward' => $row->from_ward == null ? 0 : $row->from_ward,
-                    'total_beg_bal' => $row->total_beg_bal == null ? 0 : $row->total_beg_bal,
-                    'surgery' => $row->surgery == null ? 0 : $row->surgery,
-                    'obgyne' => $row->obgyne == null ? 0 : $row->obgyne,
-                    'ortho' => $row->ortho == null ? 0 : $row->ortho,
-                    'pedia' => $row->pedia == null ? 0 : $row->pedia,
-                    'optha' => $row->optha == null ? 0 : $row->optha,
-                    'ent' => $row->ent == null ? 0 : $row->ent,
-                    'total_consumption' => $row->total_consumption == null ? 0 : $row->total_consumption,
-                    'total_cons_estimated_cost' => $row->total_cons_estimated_cost == null ? 0 : $row->total_cons_estimated_cost,
-                    'transferred_qty' => $row->transferred_qty == null ? 0 : $row->transferred_qty,
-                    'ending_balance' => $row->ending_balance == null ? 0 : $row->ending_balance,
-                    'wardcode' => $row->wardcode,
-                ]);
-            }
             #endregion snapshot
         }
         // }
