@@ -19,78 +19,78 @@ class ChargingWardConsumptionTrackerJobs implements ShouldQueue
     // jobs
     public $tries = 5;
 
-    public $ward_stocks_id;
-    public $quantity;
+    public $ward_stock_id;
+    public $non_specific_charge;
     public $tscode;
 
-    public function __construct($ward_stocks_id, $quantity, $tscode)
+    public function __construct($ward_stock_id, $non_specific_charge, $tscode)
     {
-        $this->ward_stocks_id = $ward_stocks_id;
-        $this->quantity = $quantity;
+        $this->ward_stock_id = $ward_stock_id;
+        $this->non_specific_charge = $non_specific_charge;
         $this->tscode = $tscode;
     }
 
     public function handle()
     {
         if ($this->tscode == 'SURG') {
-            WardConsumptionTracker::where('wards_stocks_id', $this->ward_stocks_id)
+            WardConsumptionTracker::where('ward_stock_id', $this->ward_stock_id)
                 ->latest() // Orders by created_at DESC to get the most recent row
                 ->first()
                 ->update([
-                    'surgery' => DB::raw("surgery + {$this->quantity}")
+                    'surgery' => DB::raw("surgery + {$this->non_specific_charge}")
                 ]);
         } else if ($this->tscode == 'GYNE') {
-            WardConsumptionTracker::where('wards_stocks_id', $this->ward_stocks_id)
+            WardConsumptionTracker::where('ward_stock_id', $this->ward_stock_id)
                 ->latest() // Orders by created_at DESC to get the most recent row
                 ->first()
                 ->update([
-                    'obgyne' => DB::raw("obgyne + {$this->quantity}")
+                    'obgyne' => DB::raw("obgyne + {$this->non_specific_charge}")
                 ]);
         } else if ($this->tscode == 'ORTHO') {
-            WardConsumptionTracker::where('wards_stocks_id', $this->ward_stocks_id)
+            WardConsumptionTracker::where('ward_stock_id', $this->ward_stock_id)
                 ->latest() // Orders by created_at DESC to get the most recent row
                 ->first()
                 ->update([
-                    'ortho' => DB::raw("ortho + {$this->quantity}")
+                    'ortho' => DB::raw("ortho + {$this->non_specific_charge}")
                 ]);
         } else if ($this->tscode == 'PEDIA') {
-            WardConsumptionTracker::where('wards_stocks_id', $this->ward_stocks_id)
+            WardConsumptionTracker::where('ward_stock_id', $this->ward_stock_id)
                 ->latest() // Orders by created_at DESC to get the most recent row
                 ->first()
                 ->update([
-                    'pedia' => DB::raw("pedia + {$this->quantity}")
+                    'pedia' => DB::raw("pedia + {$this->non_specific_charge}")
                 ]);
         } else if ($this->tscode == 'OPHTH') {
-            WardConsumptionTracker::where('wards_stocks_id', $this->ward_stocks_id)
+            WardConsumptionTracker::where('ward_stock_id', $this->ward_stock_id)
                 ->latest() // Orders by created_at DESC to get the most recent row
                 ->first()
                 ->update([
-                    'optha' => DB::raw("optha + {$this->quantity}")
+                    'optha' => DB::raw("optha + {$this->non_specific_charge}")
                 ]);
         } else if ($this->tscode == 'ENT') {
-            WardConsumptionTracker::where('wards_stocks_id', $this->ward_stocks_id)
+            WardConsumptionTracker::where('ward_stock_id', $this->ward_stock_id)
                 ->latest() // Orders by created_at DESC to get the most recent row
                 ->first()
                 ->update([
-                    'ent' => DB::raw("ent + {$this->quantity}")
+                    'ent' => DB::raw("ent + {$this->non_specific_charge}")
                 ]);
         } else {
-            WardConsumptionTracker::where('wards_stocks_id', $this->ward_stocks_id)
+            WardConsumptionTracker::where('ward_stock_id', $this->ward_stock_id)
                 ->latest() // Orders by created_at DESC to get the most recent row
                 ->first()
                 ->update([
-                    'charged_qty' => DB::raw("charged_qty + {$this->quantity}")
+                    'non_specific_charge' => DB::raw("non_specific_charge + {$this->non_specific_charge}")
                 ]);
         }
     }
 
     public function failed(\Throwable $e)
     {
-        WardConsumptionTracker::where('wards_stocks_id', $this->ward_stocks_id)
+        WardConsumptionTracker::where('ward_stock_id', $this->ward_stock_id)
             ->latest() // Orders by created_at DESC to get the most recent row
             ->first()
             ->update([
-                'charged_qty' => DB::raw("charged_qty + {$this->quantity}")
+                'charged_qty' => DB::raw("charged_qty + {$this->non_specific_charge}")
             ]);
     }
 }

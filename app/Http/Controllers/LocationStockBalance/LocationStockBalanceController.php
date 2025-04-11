@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\Sessions;
+use App\Models\WardConsumptionTracker;
 use App\Models\WardStockBalanceSnapshot;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
@@ -216,9 +217,12 @@ class LocationStockBalanceController extends Controller
                 $cl2comb = $stock->cl2comb;
                 $uomcode = $stock->uomcode;
                 $quantity = $stock->quantity;
+                $initial_qty = $stock->quantity;
                 $location = $stock->location;
                 $price_id = $stock->price_id;
+                $from = $stock->from;
                 $beg_bal_date = $begDateTime;
+
                 BegBalWardConsumptionTrackerJobs::dispatch(
                     $id,
                     $item_conversion_id,
@@ -228,6 +232,8 @@ class LocationStockBalanceController extends Controller
                     $location,
                     $price_id,
                     $quantity,
+                    $initial_qty,
+                    $from,
                     $beg_bal_date
                 );
             }
@@ -257,10 +263,14 @@ class LocationStockBalanceController extends Controller
 
                 $id = $stock->id;
                 $quantity = $stock->quantity;
+                $price_id = $stock->price_id;
+                $cl2comb = $stock->cl2comb;
                 $end_bal_date = $endDateTime;
                 EndBalWardConsumptionTrackerJobs::dispatch(
                     $id,
+                    $cl2comb,
                     $quantity,
+                    $price_id,
                     $end_bal_date
                 );
                 // dd($stock);

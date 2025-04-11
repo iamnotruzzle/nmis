@@ -17,7 +17,7 @@ class UpdateConsumptionTrackerTable extends Migration
 
         Schema::create('csrw_ward_consumption_tracker', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger("wards_stocks_id");
+            $table->bigInteger("ward_stock_id");
             $table->bigInteger("item_conversion_id")->nullable();
             $table->string("ris_no");
             $table->string("cl2comb");

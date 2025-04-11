@@ -19,46 +19,42 @@ class EndBalWardConsumptionTrackerJobs implements ShouldQueue
     public $tries = 5;
 
     public $id;
+    public $cl2comb;
     public $quantity;
+    public $price_id;
     public $end_bal_date;
 
     public function __construct(
         $id,
+        $cl2comb,
         $quantity,
+        $price_id,
         $end_bal_date,
     ) {
         $this->id = $id;
+        $this->cl2comb = $cl2comb;
         $this->quantity = $quantity;
+        $this->price_id = $price_id;
         $this->end_bal_date = $end_bal_date;
     }
 
     public function handle()
     {
-        $latestRecord = WardConsumptionTracker::where('wards_stocks_id', $this->id)
-            ->latest() // Orders by created_at DESC to get the most recent row
+        // Find any records that are still open (not closed with end_bal_date)
+        $tracker = WardConsumptionTracker::where('ward_stock_id', $this->id)
+            ->where('cl2comb', $this->cl2comb)
+            ->where('price_id', $this->price_id)
+            ->whereNull('end_bal_date')
             ->first();
 
-        if ($latestRecord) {
-            // Update only the latest record
-            $latestRecord->update([
-                'end_bal_qty' => $this->quantity,
-                'end_bal_date' => $this->end_bal_date,
+        if ($tracker) {
+            // Update the tracker with ending balance details
+            $tracker->update([
+                'end_bal_qty' => $this->quantity, // Final quantity at end of period
+                'end_bal_date' => $this->end_bal_date, // Set the current date as the end of period
             ]);
         }
     }
 
-    public function failed(\Throwable $e)
-    {
-        $latestRecord = WardConsumptionTracker::where('wards_stocks_id', $this->id)
-            ->latest() // Orders by created_at DESC to get the most recent row
-            ->first();
-
-        if ($latestRecord) {
-            // Update only the latest record
-            $latestRecord->update([
-                'end_bal_qty' => $this->quantity,
-                'end_bal_date' => $this->end_bal_date,
-            ]);
-        }
-    }
+    public function failed(\Throwable $e) {}
 }

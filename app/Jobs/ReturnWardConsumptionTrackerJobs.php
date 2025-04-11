@@ -29,21 +29,17 @@ class ReturnWardConsumptionTrackerJobs implements ShouldQueue
 
     public function handle()
     {
-        WardConsumptionTracker::where('wards_stocks_id', $this->ward_stocks_id)
-            ->latest() // Orders by created_at DESC to get the most recent row
-            ->first()
-            ->update([
+        $tracker = WardConsumptionTracker::where('ward_stock_id', $this->ward_stocks_id)
+            ->whereNull('end_bal_date')
+            ->latest()
+            ->first();
+
+        if ($tracker) {
+            $tracker->update([
                 'return_to_csr_qty' => DB::raw("return_to_csr_qty + {$this->returnQty}")
             ]);
+        }
     }
 
-    public function failed(\Throwable $e)
-    {
-        WardConsumptionTracker::where('wards_stocks_id', $this->ward_stocks_id)
-            ->latest() // Orders by created_at DESC to get the most recent row
-            ->first()
-            ->update([
-                'return_to_csr_qty' => DB::raw("return_to_csr_qty + {$this->returnQty}")
-            ]);
-    }
+    public function failed(\Throwable $e) {}
 }

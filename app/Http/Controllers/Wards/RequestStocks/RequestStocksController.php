@@ -192,25 +192,29 @@ class RequestStocksController extends Controller
             }
 
             // comment for now
-            // foreach ($stocks as $stk) {
-            //     $id = $stk->id;
-            //     $item_conversion_id = $stk->stock_id;
-            //     $ris_no = $stk->ris_no;
-            //     $cl2comb = $stk->cl2comb;
-            //     $uomcode = $stk->uomcode;
-            //     $location = $stk->location;
-            //     $price_id = $stk->price_id;
+            foreach ($stocks as $stk) {
+                $id = $stk->id;
+                $item_conversion_id = $stk->stock_id;
+                $ris_no = $stk->ris_no;
+                $cl2comb = $stk->cl2comb;
+                $uomcode = $stk->uomcode;
+                $quantity = $stk->quantity;
+                $location = $stk->location;
+                $price_id = $stk->price_id;
+                $from = $stk->from;
 
-            //     InitializeWardConsumptionTrackerJobs::dispatch(
-            //         $id,
-            //         $item_conversion_id,
-            //         $ris_no,
-            //         $cl2comb,
-            //         $uomcode,
-            //         $location,
-            //         $price_id,
-            //     );
-            // }
+                InitializeWardConsumptionTrackerJobs::dispatch(
+                    $id,
+                    $item_conversion_id,
+                    $ris_no,
+                    $cl2comb,
+                    $uomcode,
+                    $quantity,
+                    $location,
+                    $price_id,
+                    $from,
+                );
+            }
 
             // // the parameters result will be send into the frontend
             event(new RequestStock('Item requested.'));
