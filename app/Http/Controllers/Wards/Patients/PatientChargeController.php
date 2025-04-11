@@ -156,18 +156,7 @@ class PatientChargeController extends Controller
                             ORDER BY pat_charge.pcchrgdte DESC"
         );
 
-        // check if the latest has a beg bal or ending bal
-        $balanceDecChecker = LocationStockBalance::where('location', $wardcode)->OrderBy('created_at', 'DESC')->first();
         $canCharge = null;
-
-        if ($balanceDecChecker == null) {
-            $canCharge = false;
-        } else if ($balanceDecChecker['beg_bal_created_at'] !== null) {
-            $canCharge = true;
-        } else if ($balanceDecChecker['beg_bal_created_at'] == null) {
-            $canCharge = false;
-        }
-
 
         return Inertia::render('Wards/Patients/Bill/Index', [
             // 'pat_name' => $pat_name,

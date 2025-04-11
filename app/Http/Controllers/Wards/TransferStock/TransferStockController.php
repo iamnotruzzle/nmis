@@ -75,21 +75,9 @@ class TransferStockController extends Controller
             ->orderBy('created_at', 'DESC')
             ->get();
 
-        // check if the latest has a beg bal or ending bal
-        $balanceDecChecker = LocationStockBalance::where('location', $authCode)->OrderBy('created_at', 'DESC')->first();
-        // dd($balanceDecChecker);
-        $canTransfer = null;
-
-        // if true, it can generate beginning balance else it can generate ending balance
-        if ($balanceDecChecker !== null) {
-            $canTransfer = true;
-        } else if ($balanceDecChecker == null) {
-            $canTransfer = false;
-        } else {
-            $canTransfer = false;
-        }
-
         $employees = UserDetail::where('empstat', 'A')->orderBy('employeeid', 'ASC')->get(['employeeid', 'empstat', 'firstname', 'lastname']);
+
+        $canTransfer = null;
 
         return Inertia::render('Wards/TransferStock/Index', [
             'authWardcode' => $authWardcode[0],

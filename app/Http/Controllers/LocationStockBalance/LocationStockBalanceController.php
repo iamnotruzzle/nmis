@@ -182,14 +182,6 @@ class LocationStockBalanceController extends Controller
         $endDateTime = $date->copy()->endOfDay()->format('Y-m-d H:i:s');   // Sets time to 23:59:59
 
         $currentStocks = DB::select(
-            // "SELECT ward.id, ward.location, ward.cl2comb, ward.quantity, ward.ris_no, price.id as price_id
-            //     FROM csrw_wards_stocks as ward
-            //     JOIN csrw_item_prices as price ON price.ris_no = ward.ris_no
-            //     WHERE ward.location = ?
-            //     AND ward.quantity > 0
-            //     AND (ward.[from] = 'CSR' OR ward.[from] = 'WARD' OR ward.[from] = 'EXISTING_STOCKS');",
-            // [$request->location]
-
             "SELECT ward_stock.id, ward_stock.stock_id, ward_stock.request_stocks_id, ward_stock.request_stocks_detail_id, ward_stock.stock_id, ward_stock.location, ward_stock.cl2comb,
                     ward_stock.uomcode, ward_stock.chrgcode, ward_stock.quantity, ward_stock.[from], ward_stock.manufactured_date, ward_stock.delivered_date, ward_stock.expiration_date, ward_stock.created_at,
                     ward_stock.ris_no, price.id as price_id
@@ -198,29 +190,11 @@ class LocationStockBalanceController extends Controller
                     WHERE ward_stock.location = ?",
             [$request->location]
         );
-        // dd($currentStocks);
-
-        // $itemCount = DB::select(
-        //     "SELECT COUNT(*) as count FROM csrw_wards_stocks WHERE location = ?",
-        //     [$request->location]
-        // );
 
         // if ($itemCount[0]->count != 0) {
         if ($request->beg_bal == true) {
             // beginning balance
-            foreach ($currentStocks as $stock) {
-                LocationStockBalance::create([
-                    'location' => $request->location,
-                    'cl2comb' => $stock->cl2comb,
-                    'beginning_balance' => $stock->quantity,
-                    'ris_no' => $stock->ris_no,
-                    'price_id' => $stock->price_id,
-                    'entry_by' => $request->entry_by,
-                    'ward_stock_id' => $stock->id,
-                    'beg_bal_created_at' => $begDateTime,
-                ]);
-
-
+            foreach ($currentStocks as $stock) {=
                 $id = $stock->id;
                 $item_conversion_id = $stock->stock_id;
                 $ris_no = $stock->ris_no;
@@ -253,23 +227,10 @@ class LocationStockBalanceController extends Controller
                 'beg_bal_created_at' => $begDateTime,
             ]);
         } else {
-            // dd($currentStocks);
-
-            // $dateTime = Carbon::now();
             $from = null;
             $to = null;
 
             foreach ($currentStocks as $stock) {
-                LocationStockBalance::create([
-                    'location' => $request->location,
-                    'cl2comb' => $stock->cl2comb,
-                    'ending_balance' => $stock->quantity,
-                    'ris_no' => $stock->ris_no,
-                    'price_id' => $stock->price_id,
-                    'entry_by' => $request->entry_by,
-                    'ward_stock_id' => $stock->id,
-                    'end_bal_created_at' => $endDateTime,
-                ]);
 
                 $id = $stock->id;
                 $quantity = $stock->quantity;
@@ -299,18 +260,6 @@ class LocationStockBalanceController extends Controller
                 ]);
             }
 
-
-            #region snapshot
-            // $stockBalDates = DB::select(
-            //     "SELECT beg_bal_created_at AS beg_bal_date, end_bal_created_at AS end_bal_date
-            //         FROM csrw_stock_bal_date_logs
-            //         WHERE wardcode = ?
-            //         oRDER BY created_at DESC;",
-            //     [$request->location]
-            // );
-            // // dd($stockBalDates[0]);
-            // $from = $stockBalDates[0]->beg_bal_date;
-            // $to = $stockBalDates[0]->end_bal_date;
             $stockBalDates = DB::select(
                 "SELECT beg_bal_created_at AS beg_bal_date, end_bal_created_at AS end_bal_date
                 FROM csrw_stock_bal_date_logs
@@ -526,31 +475,13 @@ class LocationStockBalanceController extends Controller
         return $reports;
     }
 
-    public function update(LocationStockBalance $stockbal, Request $request)
+    public function update()
     {
-        $request->validate([
-            'cl2comb' => 'required',
-            'ending_balance' => 'required',
-            'beginning_balance' => 'required',
-        ]);
-
-        $stockbal->update([
-            'location' => $request->location,
-            'cl2comb' => $request->cl2comb,
-            'ending_balance' => $request->ending_balance,
-            'beginning_balance' => $request->beginning_balance,
-            'updated_by' => $request->entry_by,
-        ]);
-
-        // dd($lsb);
-
         return redirect()->back();
     }
 
-    public function destroy(LocationStockBalance $stockbal)
+    public function destroy()
     {
-        // $stockbal->delete();
-
         return redirect()->back();
     }
 }

@@ -49,25 +49,6 @@ class CsrStockBalanceNotDeclaredYetRule implements Rule
         $authCode = $authWardcode[0]->wardcode;
 
         $date = Carbon::now()->subDays(30); // get last 30 days
-
-
-        $stockBalCount = LocationStockBalance::where('cl2comb', $this->cl2comb)
-            ->where('created_at', '>=', $date)
-            ->where('location', $authCode)
-            ->count();
-
-        if ($stockBalCount == 0) {
-            $stockBalDesc = Item::where('cl2comb', $this->cl2comb)
-                ->first();
-
-            $this->noBalance = trim($stockBalDesc['cl2desc']);
-        }
-
-        if ($stockBalCount == 0) {
-            return false; // false means the validation didn't pass then show validation error
-        } else {
-            return true;
-        }
     }
 
     /**
