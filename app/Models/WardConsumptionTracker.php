@@ -33,6 +33,7 @@ class WardConsumptionTracker extends Model
         'end_bal_date',
         'item_from',
         'location',
-        'price_id'
+        'price_id',
+        'status'
     ];
 }

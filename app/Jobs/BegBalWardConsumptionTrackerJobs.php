@@ -60,7 +60,7 @@ class BegBalWardConsumptionTrackerJobs implements ShouldQueue
     public function handle()
     {
         $date = Carbon::now();
-        $begDateTime = $date->copy()->startOfDay(); // Sets time to 00:00:00
+        $begDateTime = $date->copy()->startOfDay();
 
         // Step 1: Get the latest balance period for this ward
         $currentPeriod = DB::table('csrw_stock_bal_date_logs')
@@ -79,23 +79,23 @@ class BegBalWardConsumptionTrackerJobs implements ShouldQueue
             $currentPeriod = DB::table('csrw_stock_bal_date_logs')->where('id', $newId)->first();
         }
 
-        // Step 3: Check if tracker row for this stock + price + cl2comb exists (for this open period)
+        // Step 3: Get latest ACTIVE tracker row for this stock
         $tracker = WardConsumptionTracker::where('ward_stock_id', $this->id)
             ->where('cl2comb', $this->cl2comb)
             ->where('price_id', $this->price_id)
             ->where('location', $this->location)
-            ->whereNotNull('beg_bal_date')
+            ->where('status', NULL)
             ->latest('created_at')
             ->first();
 
-        if ($tracker !== null) {
-            // Update open tracker
+        if ($tracker) {
+            // 🔁 Update existing active tracker with beginning balance info
             $tracker->update([
-                'beg_bal_date' => $this->beg_bal_date ?? now(),
+                'beg_bal_date' => $this->beg_bal_date,
                 'beg_bal_qty' => $this->quantity,
             ]);
         } else {
-            // Create new tracker row
+            // 🆕 No active tracker — create a new one
             WardConsumptionTracker::create([
                 'ward_stock_id' => $this->id,
                 'item_conversion_id' => $this->item_conversion_id,
@@ -104,14 +104,14 @@ class BegBalWardConsumptionTrackerJobs implements ShouldQueue
                 'uomcode' => $this->uomcode,
                 'beg_bal_date' => $this->beg_bal_date,
                 'beg_bal_qty' => $this->quantity,
+                'initial_qty' => $this->quantity,
                 'item_from' => $this->from,
                 'location' => $this->location,
                 'price_id' => $this->price_id,
+                'status' => NULL,
             ]);
         }
     }
-
-
 
     public function failed(\Throwable $e)
     {
@@ -132,5 +132,22 @@ class BegBalWardConsumptionTrackerJobs implements ShouldQueue
         //         'price_id'         => $this->price_id,
         //     ]
         // ]);
+    }
+
+    protected function createNewTracker()
+    {
+        WardConsumptionTracker::create([
+            'ward_stock_id'        => $this->id,
+            'item_conversion_id'   => $this->item_conversion_id,
+            'ris_no'               => $this->ris_no,
+            'cl2comb'              => $this->cl2comb,
+            'uomcode'              => $this->uomcode,
+            'beg_bal_date'         => $this->beg_bal_date,
+            'beg_bal_qty'          => $this->quantity,
+            'initial_qty'          => $this->quantity,
+            'item_from'            => $this->from,
+            'location'             => $this->location,
+            'price_id'             => $this->price_id,
+        ]);
     }
 }

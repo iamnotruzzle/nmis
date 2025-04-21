@@ -40,10 +40,18 @@ class EndBalWardConsumptionTrackerJobs implements ShouldQueue
 
     public function handle()
     {
+        // $tracker = WardConsumptionTracker::where('ward_stock_id', $this->id)
+        //     ->where('cl2comb', $this->cl2comb)
+        //     ->where('price_id', $this->price_id)
+        //     ->whereNull('end_bal_date')
+        //     ->first();
+
         $tracker = WardConsumptionTracker::where('ward_stock_id', $this->id)
             ->where('cl2comb', $this->cl2comb)
             ->where('price_id', $this->price_id)
-            ->whereNull('end_bal_date')
+            // ->where('location', $this->location)
+            ->whereNull('end_bal_date')    // Only open ones
+            ->latest('created_at')
             ->first();
 
         if ($tracker) {
@@ -51,6 +59,7 @@ class EndBalWardConsumptionTrackerJobs implements ShouldQueue
             $tracker->update([
                 'end_bal_qty'  => $this->quantity,
                 'end_bal_date' => $this->end_bal_date,
+                'status' => 'closed',
             ]);
         } else {
             // Optional: log or handle if there's no tracker to update
