@@ -150,6 +150,7 @@ class LocationStockBalanceController extends Controller
         if ($request->beg_bal == true) {
             // beginning balance
             foreach ($currentStocks as $stock) {
+                // dd($stock);
                 $id = $stock->id;
                 $item_conversion_id = $stock->stock_id;
                 $ris_no = $stock->ris_no;
