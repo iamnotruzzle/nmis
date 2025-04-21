@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Wards\RequestStocks;
 
 use App\Events\RequestStock;
 use App\Http\Controllers\Controller;
-use App\Jobs\InitializeWardConsumptionTrackerJobs;
+use App\Jobs\ReceiveItemAfterBegBalJobs;
 use App\Models\FundSource;
 use App\Models\Item;
 use App\Models\RequestStocks;
@@ -203,7 +203,7 @@ class RequestStocksController extends Controller
                 $price_id = $stk->price_id;
                 $from = $stk->from;
 
-                InitializeWardConsumptionTrackerJobs::dispatch(
+                ReceiveItemAfterBegBalJobs::dispatch(
                     $id,
                     $item_conversion_id,
                     $ris_no,

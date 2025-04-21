@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Wards\Inventory;
 
 
 use App\Http\Controllers\Controller;
-use App\Jobs\InitializeWardConsumptionTrackerJobs;
 use App\Models\FundSource;
 use App\Models\Item;
 use App\Models\TypeOfCharge;

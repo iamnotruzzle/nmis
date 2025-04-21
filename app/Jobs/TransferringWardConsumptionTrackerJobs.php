@@ -18,23 +18,18 @@ class TransferringWardConsumptionTrackerJobs implements ShouldQueue
     // jobs
     public $tries = 5;
 
-    public $ward_stocks_id;
+    public $ward_stock_id;
     public $transferred_qty;
 
-    public function __construct($ward_stocks_id, $transferred_qty)
+    public function __construct($ward_stock_id, $transferred_qty)
     {
-        $this->ward_stocks_id = $ward_stocks_id;
+        $this->ward_stock_id = $ward_stock_id;
         $this->transferred_qty = $transferred_qty;
     }
 
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
     public function handle()
     {
-        $tracker = WardConsumptionTracker::where('ward_stock_id', $this->ward_stocks_id)
+        $tracker = WardConsumptionTracker::where('ward_stock_id', $this->ward_stock_id)
             ->whereNull('end_bal_date')
             ->latest()
             ->first();

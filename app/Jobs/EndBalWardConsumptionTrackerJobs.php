@@ -40,7 +40,6 @@ class EndBalWardConsumptionTrackerJobs implements ShouldQueue
 
     public function handle()
     {
-        // Find any records that are still open (not closed with end_bal_date)
         $tracker = WardConsumptionTracker::where('ward_stock_id', $this->id)
             ->where('cl2comb', $this->cl2comb)
             ->where('price_id', $this->price_id)
@@ -48,13 +47,21 @@ class EndBalWardConsumptionTrackerJobs implements ShouldQueue
             ->first();
 
         if ($tracker) {
-            // Update the tracker with ending balance details
+            // Set ending balance regardless of whether beginning balance exists
             $tracker->update([
-                'end_bal_qty' => $this->quantity, // Final quantity at end of period
-                'end_bal_date' => $this->end_bal_date, // Set the current date as the end of period
+                'end_bal_qty'  => $this->quantity,
+                'end_bal_date' => $this->end_bal_date,
+            ]);
+        } else {
+            // Optional: log or handle if there's no tracker to update
+            \Log::warning("No open tracker found for ending balance", [
+                'ward_stock_id' => $this->id,
+                'cl2comb'       => $this->cl2comb,
+                'price_id'      => $this->price_id,
             ]);
         }
     }
+
 
     public function failed(\Throwable $e) {}
 }

@@ -10,7 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class InitializeWardConsumptionTrackerJobs implements ShouldQueue
+class ReceiveItemAfterBegBalJobs implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -68,8 +68,8 @@ class InitializeWardConsumptionTrackerJobs implements ShouldQueue
                 'cl2comb'          => $this->cl2comb,
                 'uomcode'          => $this->uomcode,
                 'initial_qty'      => $this->quantity,
-                'beg_bal_date'     => now(), // Set the date when this was received
-                'beg_bal_qty'      => $this->quantity, // Track the quantity received
+                'beg_bal_date'     => null, // intentionally left null
+                'beg_bal_qty'      => 0, // intentionally left null
                 'location'         => $this->location,
                 'item_from'        => $this->from, // Whether it's from CSR or a ward
                 'price_id'         => $this->price_id,

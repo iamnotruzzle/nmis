@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\Sessions;
 use App\Models\WardConsumptionTracker;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
@@ -36,22 +37,10 @@ class LocationStockBalanceController extends Controller
         $now = $date->copy()->startOfDay();
 
         // get auth wardcode
-        $authWardcode = DB::select(
-            "SELECT TOP 1
-                l.wardcode
-            FROM
-                user_acc u
-            INNER JOIN
-                csrw_login_history l ON u.employeeid = l.employeeid
-            WHERE
-                l.employeeid = ?
-            ORDER BY
-                l.created_at DESC;
-            ",
-            [Auth::user()->employeeid]
-        );
-        // dd($authWardcode);
-        $authCode = $authWardcode[0]->wardcode;
+        // Define cache keys for ward code and location type based on the authenticated user's employee ID
+        $cache_authWardCode = 'c_authWardCode_' . Auth::user()->employeeid;
+        // Attempt to retrieve cached ward code and location type
+        $authWardCode_cached = Cache::get($cache_authWardCode);
 
         // Get the latest balance date logs for the ward
         $stockBalDates = DB::select(
@@ -60,21 +49,23 @@ class LocationStockBalanceController extends Controller
                 WHERE wardcode = ?
                 ORDER BY created_at DESC
         ",
-            [$authCode]
+            [$authWardCode_cached]
         );
 
         // Default values
         $default_beg_bal_date = $stockBalDates[0]->beg_bal_date ?? null;
         $default_end_bal_date = $stockBalDates[0]->end_bal_date ?? null;
 
-        // Check if there is an open tracker
-        $openTracker = DB::table('csrw_wards_stocks as ws')
-            ->join('csrw_ward_consumption_tracker as t', 'ws.id', '=', 't.ward_stock_id')
-            ->where('ws.location', $authCode)
-            ->whereNull('t.end_bal_date')
-            ->first();
-
-        $canBeginBalance = $openTracker === null;
+        $latestDateLog = LocationStockBalanceDateLogs::where('wardcode', $authWardCode_cached)
+            ->latest('created_at')->first();
+        // dd($latestDateLog);
+        if ($latestDateLog == null) {
+            $canBeginBalance = true;
+        } else if ($latestDateLog != null && $latestDateLog->end_bal_created_at != null) {
+            $canBeginBalance = true;
+        } else {
+            $canBeginBalance = false;
+        }
 
         // Date range parsing
         $from = $default_beg_bal_date;
@@ -88,7 +79,6 @@ class LocationStockBalanceController extends Controller
             }
         }
 
-        // if ($from == null) {
         $locationStockBalance = DB::select(
             "SELECT
                     tracker.cl2comb,
@@ -116,49 +106,14 @@ class LocationStockBalanceController extends Controller
                     price.price_per_unit
             ",
             [
-                $authCode,
+                $authWardCode_cached,
                 $from,
                 $to,
                 $from,
                 $to
             ]
         );
-        // }
-        //  else {
-        //     $locationStockBalance = DB::select(
-        //         "SELECT
-        //         balance.cl2comb,
-        //         item.cl2desc,
-        //         SUM(balance.beginning_balance) AS beginning_balance,
-        //         SUM(balance.ending_balance) AS ending_balance,
-        //         MIN(balance.created_at) AS created_at,
-        //         MIN(balance.beg_bal_created_at) AS beg_bal_created_at,
-        //         MAX(balance.end_bal_created_at) AS end_bal_created_at,
-        //         price.price_per_unit
-        //     FROM
-        //         csrw_location_stock_balance AS balance
-        //     JOIN
-        //         hclass2 AS item ON item.cl2comb = balance.cl2comb
-        //     JOIN
-        //         csrw_item_prices AS price ON price.cl2comb = balance.cl2comb
-        //         AND price.id = balance.price_id  -- Ensure price matching by ID
-        //     WHERE
-        //         balance.location = '$authCode'
-        //         AND (
-        //             (balance.beg_bal_created_at BETWEEN '$from' AND '$to')
-        //             OR balance.beg_bal_created_at IS NULL
-        //         )
-        //         AND (
-        //             (balance.end_bal_created_at BETWEEN '$from' AND '$to')
-        //             OR balance.end_bal_created_at IS NULL
-        //         )
-        //     GROUP BY
-        //         balance.cl2comb,
-        //         item.cl2desc,
-        //         price.price_per_unit;"
-        //     );
-        // }
-        // dd($locationStockBalance);
+
         // prod
         return Inertia::render('Balance/Index', [
             'locationStockBalance' => $locationStockBalance,
@@ -189,6 +144,7 @@ class LocationStockBalanceController extends Controller
                     WHERE ward_stock.location = ?",
             [$request->location]
         );
+        // dd($currentStocks);
 
         // if ($itemCount[0]->count != 0) {
         if ($request->beg_bal == true) {
@@ -226,16 +182,15 @@ class LocationStockBalanceController extends Controller
                 'beg_bal_created_at' => $begDateTime,
             ]);
         } else {
-            $from = null;
-            $to = null;
-
             foreach ($currentStocks as $stock) {
-
                 $id = $stock->id;
                 $quantity = $stock->quantity;
                 $price_id = $stock->price_id;
                 $cl2comb = $stock->cl2comb;
+                $price_id = $stock->price_id;
                 $end_bal_date = $endDateTime;
+
+                // Then proceed with dispatching end balance
                 EndBalWardConsumptionTrackerJobs::dispatch(
                     $id,
                     $cl2comb,
@@ -243,7 +198,6 @@ class LocationStockBalanceController extends Controller
                     $price_id,
                     $end_bal_date
                 );
-                // dd($stock);
             }
 
             // Find the last row where wardcode matches and end_bal_created_at is null
@@ -258,115 +212,7 @@ class LocationStockBalanceController extends Controller
                     'end_bal_created_at' => $endDateTime, // or specify a custom date if needed
                 ]);
             }
-
-            $stockBalDates = DB::select(
-                "SELECT beg_bal_created_at AS beg_bal_date, end_bal_created_at AS end_bal_date
-                FROM csrw_stock_bal_date_logs
-                WHERE wardcode = ?
-                AND beg_bal_created_at IS NOT NULL
-                AND end_bal_created_at IS NOT NULL
-                ORDER BY created_at DESC;",
-                [$request->location]
-            );
-
-            if (!empty($stockBalDates)) {
-                $from = $stockBalDates[0]->beg_bal_date;
-                $to = $stockBalDates[0]->end_bal_date;
-            } else {
-                $from = null;
-                $to = null;
-            }
-
-            $authWardcode = DB::select(
-                "SELECT TOP 1
-                    l.wardcode
-                    FROM
-                        user_acc u
-                    INNER JOIN
-                        csrw_login_history l ON u.employeeid = l.employeeid
-                    WHERE
-                        l.employeeid = ?
-                    ORDER BY
-                        l.created_at DESC;
-                    ",
-                [Auth::user()->employeeid]
-            );
-            $authCode = $authWardcode[0]->wardcode;
-
-            $ward_report = DB::select(
-                "SELECT
-                        ward.ris_no,
-                        hclass2.cl2comb,
-                        hclass2.cl2desc AS cl2desc,
-                        huom.uomdesc AS uomdesc,
-                        SUM(csrw_location_stock_balance.beginning_balance) AS beginning_balance,
-                        SUM(csrw_location_stock_balance.ending_balance) AS ending_balance,
-                        csrw_item_prices.price_per_unit AS 'unit_cost',
-                        -- Include items from 'CSR' even if charge_quantity is null
-                        SUM(CASE WHEN ward.[from] = 'CSR' THEN csrw_location_stock_balance.ending_balance + COALESCE(csrw_patient_charge_logs.charge_quantity, 0) ELSE 0 END) AS 'from_csr',
-                        SUM(CASE WHEN ward.[from] = 'WARD' THEN csrw_location_stock_balance.ending_balance + COALESCE(csrw_patient_charge_logs.charge_quantity, 0) ELSE 0 END) AS 'from_ward',
-                        SUM(CASE WHEN ward.[from] = 'EXISTING_STOCKS' THEN csrw_location_stock_balance.ending_balance + COALESCE(csrw_patient_charge_logs.charge_quantity, 0) ELSE 0 END) AS 'from_existing',
-                        (SELECT SUM(CASE WHEN tscode = 'SURG' THEN quantity ELSE 0 END)
-                        FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb AND (cl.created_at BETWEEN '$from' AND '$to')) as 'surgery',
-                        (SELECT SUM(CASE WHEN tscode = 'GYNE' THEN quantity ELSE 0 END)
-                        FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb AND (cl.created_at BETWEEN '$from' AND '$to')) as 'obgyne',
-                        (SELECT SUM(CASE WHEN tscode = 'ORTHO' THEN quantity ELSE 0 END)
-                        FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb AND (cl.created_at BETWEEN '$from' AND '$to')) as 'ortho',
-                        (SELECT SUM(CASE WHEN tscode = 'PEDIA' THEN quantity ELSE 0 END)
-                        FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb AND (cl.created_at BETWEEN '$from' AND '$to')) as 'pedia',
-                        (SELECT SUM(CASE WHEN tscode = 'OPHTH' THEN quantity ELSE 0 END)
-                        FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb AND (cl.created_at BETWEEN '$from' AND '$to')) as 'optha',
-                        (SELECT SUM(CASE WHEN tscode = 'ENT' THEN quantity ELSE 0 END)
-                        FROM csrw_patient_charge_logs as cl WHERE cl.itemcode = hclass2.cl2comb AND (cl.created_at BETWEEN '$from' AND '$to')) as 'ent',
-                        csrw_patient_charge_logs.charge_quantity as total_consumption,
-                        SUM(csrw_ward_transfer_stock.transferred_qty) as transferred_qty
-                    FROM
-                        csrw_wards_stocks AS ward
-                    JOIN hclass2 ON ward.cl2comb = hclass2.cl2comb
-                    JOIN csrw_item_prices ON csrw_item_prices.ris_no = ward.ris_no
-                    LEFT JOIN huom ON ward.uomcode = huom.uomcode
-                    LEFT JOIN (
-                        SELECT ward_stocks_id, SUM(quantity) AS charge_quantity
-                        FROM csrw_patient_charge_logs
-                        WHERE pcchrgdte BETWEEN '$from' AND '$to'
-                        GROUP BY ward_stocks_id
-                    ) csrw_patient_charge_logs ON ward.id = csrw_patient_charge_logs.ward_stocks_id
-                    LEFT JOIN csrw_location_stock_balance ON csrw_location_stock_balance.ward_stock_id = ward.id
-                    LEFT JOIN (
-                        SELECT ward_stock_id, SUM(quantity) AS transferred_qty
-                        FROM csrw_ward_transfer_stock
-                        WHERE status = 'RECEIVED'
-                        GROUP BY ward_stock_id
-                    ) csrw_ward_transfer_stock ON ward.id = csrw_ward_transfer_stock.ward_stock_id
-                    WHERE
-                        ward.location LIKE '$authCode'
-                        AND ward.is_consumable IS NULL
-                        AND (
-                            (csrw_location_stock_balance.beg_bal_created_at BETWEEN '$from' AND '$to')
-                            OR csrw_location_stock_balance.beg_bal_created_at IS NULL
-                        )
-                        AND (
-                            (csrw_location_stock_balance.end_bal_created_at BETWEEN '$from' AND '$to')
-                            OR csrw_location_stock_balance.end_bal_created_at IS NULL
-                        )
-                        AND ward.is_consumable IS NULL
-                        AND (
-                            ward.[from] = 'CSR' OR  ward.[from] = 'WARD' OR  ward.[from] = 'EXISTING_STOCKS'
-                        )
-                    GROUP BY
-                        hclass2.cl2comb,
-                        hclass2.cl2desc,
-                        huom.uomdesc,
-                        csrw_item_prices.price_per_unit,
-                        ward.ris_no,
-                        csrw_patient_charge_logs.charge_quantity
-                    ORDER BY
-                        hclass2.cl2desc ASC;"
-            );
-
-            #endregion snapshot
         }
-        // }
 
         return redirect()->back()->with('success', 'Balance set successfully.');
     }

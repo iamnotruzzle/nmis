@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Wards\TransferStock;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\ReceiveItemAfterBegBalJobs;
+use App\Jobs\ReceiveItemFromWardJobs;
 use App\Jobs\TransferringWardConsumptionTrackerJobs;
+use App\Models\ItemPrices;
 use App\Models\LocationStockBalance;
 use App\Models\UserDetail;
 use App\Models\WardTransferStock;
@@ -165,9 +168,6 @@ class TransferStockController extends Controller
         );
         $authCode = $authWardcode[0]->wardcode;
 
-        // dd($authWardcode->wardcode);
-
-        // dd($request->id);
         $wardTransferID = $request->id;
 
         // update status
@@ -177,72 +177,70 @@ class TransferStockController extends Controller
             'status' => 'RECEIVED',
         ]);
 
-        // dd($transferredStock);
-
-        $wardStock = WardsStocks::where('id', $transferredStock->ward_stock_id)->first();
-        // dd($wardStock);
-
-        $existingWardStock = WardsStocks::where([
-            'request_stocks_id' => $wardStock->request_stocks_id,
-            'stock_id' => $wardStock->stock_id,
-            'cl2comb' => $wardStock->cl2comb,
-            'ris_no' => $wardStock->ris_no,
-            'location' => $authCode,
-        ])->first();
-        // dd($existingWardStock);
-
-        if ($existingWardStock == null) {
-            WardsStocks::create([
-                'request_stocks_id' => $wardStock->request_stocks_id,
-                'request_stocks_detail_id' => $wardStock->request_stocks_detail_id,
-                'stock_id' => $wardStock->stock_id,
-                'location' => $authCode,
-                'cl2comb' => $wardStock->cl2comb,
-                'chrgcode' => $wardStock->chrgcode,
-                'quantity' => $transferredStock->quantity,
-                'uomcode' => $wardStock->uomcode,
-                'from' => 'WARD',
-                'manufactured_date' => Carbon::parse($wardStock->manufactured_date)->format('Y-m-d H:i:s.v'),
-                'delivered_date' => Carbon::parse($wardStock->delivered_date)->format('Y-m-d H:i:s.v'),
-                'expiration_date' => Carbon::parse($wardStock->expiration_date)->format('Y-m-d H:i:s.v'),
-                'ris_no' => $wardStock->ris_no,
-                'is_consumable' => $wardStock->is_consumable,
-                'average' => $wardStock->average,
-                'total_consumed' => $wardStock->total_consumed,
-                'total_usage' => $wardStock->total_usage,
-            ]);
-        } else {
-            WardsStocks::where('id', $existingWardStock->id)
-                ->update(
-                    [
-                        'request_stocks_id' => $wardStock->request_stocks_id,
-                        'request_stocks_detail_id' => $wardStock->request_stocks_detail_id,
-                        'stock_id' => $wardStock->stock_id,
-                        'location' => $authCode,
-                        'cl2comb' => $wardStock->cl2comb,
-                        'chrgcode' => $wardStock->chrgcode,
-                        'quantity' => $existingWardStock->quantity + $transferredStock->quantity,
-                        'uomcode' => $wardStock->uomcode,
-                        'from' => 'WARD',
-                        'manufactured_date' => Carbon::parse($wardStock->manufactured_date)->format('Y-m-d H:i:s.v'),
-                        'delivered_date' => Carbon::parse($wardStock->delivered_date)->format('Y-m-d H:i:s.v'),
-                        'expiration_date' => Carbon::parse($wardStock->expiration_date)->format('Y-m-d H:i:s.v'),
-                        'ris_no' => $wardStock->ris_no,
-                        'is_consumable' => $wardStock->is_consumable,
-                        'average' => $wardStock->average,
-                        'total_consumed' => $wardStock->total_consumed,
-                        'total_usage' => $wardStock->total_usage,
-                    ]
-                );
-        }
-
-        $ward_stocks_id = $transferredStock->ward_stock_id;
+        $ward_stock_id = $transferredStock->ward_stock_id;
         $transferred_qty = $transferredStock->quantity;
-        // // comment for now
+
         TransferringWardConsumptionTrackerJobs::dispatch(
-            $ward_stocks_id,
+            $ward_stock_id,
             $transferred_qty,
         );
+
+
+        #region functions for the other ward to receive the item
+        // item about to be transferred
+        $item = WardsStocks::where([
+            'id' => $transferredStock->ward_stock_id,
+        ])->first();
+        $itemPrice = ItemPrices::where([
+            'cl2comb' => $item->cl2comb,
+            'ris_no' => $item->ris_no,
+        ])->first();
+
+
+        $newStock = WardsStocks::create([
+            'request_stocks_id' => $item->request_stocks_id,
+            'request_stocks_detail_id' => $item->request_stocks_detail_id,
+            'stock_id' => $item->stock_id,
+            'location' => $authCode,
+            'cl2comb' => $item->cl2comb,
+            'chrgcode' => $item->chrgcode,
+            'quantity' => $transferredStock->quantity,
+            'uomcode' => $item->uomcode,
+            'from' => 'WARD',
+            'manufactured_date' => Carbon::parse($item->manufactured_date)->format('Y-m-d H:i:s.v'),
+            'delivered_date' => Carbon::parse($item->delivered_date)->format('Y-m-d H:i:s.v'),
+            'expiration_date' => Carbon::parse($item->expiration_date)->format('Y-m-d H:i:s.v'),
+            'ris_no' => $item->ris_no,
+            'is_consumable' => $item->is_consumable,
+            'average' => $item->average,
+            'total_consumed' => $item->total_consumed,
+            'total_usage' => $item->total_usage,
+        ]);
+
+        $id = $newStock->id;
+        $item_conversion_id = $newStock->stock_id;
+        $cl2comb = $item->cl2comb;
+        $ris_no = $item->ris_no;
+        $uomcode = $item->uomcode;
+        $initial_qty = $transferredStock->quantity;
+        $from = 'WARD';
+        $location = $authCode;
+        $price_id = $itemPrice->id;
+
+
+        ReceiveItemFromWardJobs::dispatch(
+            $id,
+            $item_conversion_id,
+            $cl2comb,
+            $ris_no,
+            $uomcode,
+            $initial_qty,
+            $from,
+            $location,
+            $price_id,
+        );
+        #endregion
+
 
         return Redirect::route('transferstock.index');
     }

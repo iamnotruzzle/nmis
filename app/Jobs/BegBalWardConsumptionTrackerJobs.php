@@ -3,12 +3,14 @@
 namespace App\Jobs;
 
 use App\Models\WardConsumptionTracker;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 
 class BegBalWardConsumptionTrackerJobs implements ShouldQueue
 {
@@ -57,32 +59,43 @@ class BegBalWardConsumptionTrackerJobs implements ShouldQueue
 
     public function handle()
     {
-        $existingTracker = WardConsumptionTracker::where('cl2comb', $this->cl2comb)
-            ->where('price_id', $this->price_id)
-            ->where('ward_stock_id', $this->id)
-            ->whereNull('end_bal_date')
+        // Step 1: Get the current active balance period for this ward/location
+        $currentPeriod = DB::table('csrw_stock_bal_date_logs')
+            ->where('wardcode', $this->location)
+            ->whereNotNull('beg_bal_created_at')
+            ->whereNull('end_bal_created_at') // only periods that haven't been closed yet
+            ->latest('beg_bal_created_at')
             ->first();
 
-        // Check if the record already exists for the period
-        $existingTracker = WardConsumptionTracker::where('ward_stock_id', $this->id)
+        if (!$currentPeriod) {
+            \Log::warning('No open beginning balance period found for location', [
+                'location' => $this->location
+            ]);
+            return;
+        }
+
+        // Step 2: Find the correct tracker row
+        $tracker = WardConsumptionTracker::where('ward_stock_id', $this->id)
             ->where('cl2comb', $this->cl2comb)
             ->where('price_id', $this->price_id)
-            ->whereNull('end_bal_date')
-            ->exists();
+            ->where('location', $this->location)
+            ->whereNull('end_bal_date') // still open
+            ->whereNull('beg_bal_date') // no beginning balance yet
+            ->whereDate('created_at', '>=', Carbon::parse($currentPeriod->beg_bal_created_at)) // optional filter by period
+            ->latest('created_at')
+            ->first();
 
-        if (!$existingTracker) {
-            WardConsumptionTracker::create([
-                'ward_stock_id'    => $this->id,
-                'item_conversion_id' => $this->item_conversion_id,
-                'ris_no'           => $this->ris_no,
-                'cl2comb'          => $this->cl2comb,
-                'uomcode'          => $this->uomcode,
-                'initial_qty'      => $this->initial_qty,
-                'beg_bal_date'     => $this->beg_bal_date,
-                'beg_bal_qty'      => $this->quantity,
-                'location'         => $this->location,
-                'item_from'        => $this->from,
-                'price_id'         => $this->price_id,
+        if ($tracker) {
+            $tracker->update([
+                'beg_bal_date' => $this->beg_bal_date, // or $currentPeriod->beg_bal_created_at
+                'beg_bal_qty'  => $this->quantity,
+            ]);
+        } else {
+            \Log::warning('No tracker row found for beginning balance', [
+                'ward_stock_id' => $this->id,
+                'cl2comb' => $this->cl2comb,
+                'price_id' => $this->price_id,
+                'location' => $this->location,
             ]);
         }
     }
