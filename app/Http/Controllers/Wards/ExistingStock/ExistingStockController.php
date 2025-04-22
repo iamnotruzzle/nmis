@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Wards\ExistingStock;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\ReceiveItemAfterBegBalJobs;
 use App\Models\Item;
 use App\Models\ItemPrices;
 use App\Models\WardsStocks;
@@ -99,6 +100,28 @@ class ExistingStockController extends Controller
                 'delivered_date' =>  Carbon::now(),
                 'expiration_date' =>  Carbon::maxValue(),
             ]);
+
+            $id = $existingStock->id;
+            $item_conversion_id = $existingStock->stock_id;
+            $ris_no = $existingStock->ris_no;
+            $cl2comb = $existingStock->cl2comb;
+            $uomcode = $existingStock->uomcode;
+            $quantity = $existingStock->quantity;
+            $location = $existingStock->location;
+            $price_id = $existingStock->price_id;
+            $from = $existingStock->from;
+
+            ReceiveItemAfterBegBalJobs::dispatch(
+                $id,
+                $item_conversion_id,
+                $ris_no,
+                $cl2comb,
+                $uomcode,
+                $quantity,
+                $location,
+                $price_id,
+                $from,
+            );
 
             $wardStockLogs = WardsStocksLogs::create([
                 'request_stocks_id' => null,
