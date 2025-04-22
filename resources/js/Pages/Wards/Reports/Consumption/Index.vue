@@ -216,7 +216,7 @@
               {{ rc.from_ward }}
             </td>
             <td style="padding: 8px; border: 1px solid black">
-              {{ rc.total_beg_bal }}
+              {{ rc.total_beg_balance }}
             </td>
             <td style="padding: 8px; border: 1px solid black">
               {{ rc.surgery }}
@@ -240,10 +240,10 @@
               {{ rc.total_consumption }}
             </td>
             <td style="padding: 8px; border: 1px solid black">
-              {{ rc.total_cons_estimated_cost }}
+              {{ rc.total_estimated_cost }}
             </td>
             <td style="padding: 8px; border: 1px solid black">
-              {{ rc.transferred_qty }}
+              {{ rc.total_transfers }}
             </td>
             <td style="padding: 8px; border: 1px solid black">
               {{ rc.ending_balance }}
@@ -294,7 +294,7 @@ export default {
     };
   },
   mounted() {
-    // console.log('reports', this.reports);
+    console.log('reports', this.reports);
 
     this.storeReportsInContainer();
     this.storeStockBalDatesInContainer();
@@ -320,7 +320,7 @@ export default {
           beginning_balance: e.beginning_balance == null ? 0 : e.beginning_balance,
           from_csr: e.from_csr == null ? 0 : e.from_csr,
           from_ward: e.from_ward == null ? 0 : e.from_ward,
-          total_beg_bal: e.total_beg_bal == null ? 0 : e.total_beg_bal,
+          total_beg_balance: e.total_beg_balance == null ? 0 : e.total_beg_balance,
           surgery: e.surgery == null ? 0 : e.surgery,
           obgyne: e.obgyne == null ? 0 : e.obgyne,
           //   urology: e.urology,
@@ -331,9 +331,8 @@ export default {
           ent: e.ent == null ? 0 : e.ent,
           //   neuro: e.neuro,
           total_consumption: e.total_consumption == null ? 0 : e.total_consumption,
-          total_cons_estimated_cost:
-            e.total_cons_estimated_cost == null ? 0 : Number(e.total_cons_estimated_cost).toFixed(2),
-          transferred_qty: e.transferred_qty == null ? 0 : e.transferred_qty,
+          total_estimated_cost: e.total_estimated_cost == null ? 0 : Number(e.total_estimated_cost).toFixed(2),
+          total_transfers: e.total_transfers == null ? 0 : e.total_transfers,
           ending_balance: e.ending_balance == null ? 0 : e.ending_balance,
           actual_inventory: e.actual_inventory == null ? 0 : e.actual_inventory,
         });
