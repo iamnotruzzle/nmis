@@ -187,7 +187,6 @@
             <template #body="slotProps">
               <div class="flex justify-content-around align-content-center">
                 <v-icon
-                  v-if="slotProps.data.status == 'ACKNOWLEDGED'"
                   name="la-receipt-solid"
                   class="text-green-500 text-8xl"
                   @click="print(slotProps.data)"
@@ -490,7 +489,7 @@
           <div>
             <h3 style="font-weight: bold; text-align: center">REQUISITION AND ISSUE SLIP</h3>
           </div>
-          <div style="display: flex; width: 100%; font-size: 1.25rem">
+          <div style="display: flex; width: 100%; font-size: 1rem">
             <div style="width: 50%"><span>Entity Name:</span></div>
             <div style="width: 50%"><span>Fund Cluster:</span></div>
           </div>
@@ -557,10 +556,6 @@
               <td style="border: 1px solid black; text-align: center">
                 <p><strong>Stock No.</strong></p>
               </td>
-              <!-- uncomment -->
-              <!-- <td style="border: 1px solid black; text-align: center">
-                <p><strong>Unit</strong></p>
-              </td> -->
               <td style="border: 1px solid black; text-align: center">
                 <p><strong>Description</strong></p>
               </td>
@@ -584,10 +579,6 @@
               <td style="border: 1px solid black; text-align: center">
                 <p>{{ item.stock_no }}</p>
               </td>
-              <!-- uncomment -->
-              <!-- <td style="border: 1px solid black; text-align: center">
-                <p>Pcs</p>
-              </td> -->
               <td style="border: 1px solid black; text-align: center">
                 <p>{{ item.description }}</p>
               </td>
@@ -595,21 +586,15 @@
                 <p>{{ item.req_qty }}</p>
               </td>
               <td style="border: 1px solid black; text-align: center">
-                <!-- <v-icon
-                  v-if="item.stock_avail == 'y'"
-                  name="bi-check2"
-                ></v-icon> -->
+                <!-- yes -->
               </td>
               <td style="border: 1px solid black; text-align: center">
-                <!-- <v-icon
-                  v-if="item.stock_avail == 'n'"
-                  name="bi-check2"
-                ></v-icon> -->
+                <!-- no -->
               </td>
               <td style="border: 1px solid black; text-align: center">
                 <p>{{ item.issue_qty }}</p>
               </td>
-              <td style="border: 1px solid black">
+              <td style="border: 1px solid black; text-align: center">
                 <p>{{ item.remarks }}</p>
               </td>
             </tr>
