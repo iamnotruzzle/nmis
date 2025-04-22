@@ -59,10 +59,10 @@ class RequestStocksLogsController extends Controller
 
         $returnQty = $request->quantity;
         // // comment for now
-        ReturnWardConsumptionTrackerJobs::dispatch(
-            $ward_stock_id,
-            $returnQty,
-        );
+        // ReturnWardConsumptionTrackerJobs::dispatch(
+        //     $ward_stock_id,
+        //     $returnQty,
+        // );
 
         return redirect()->back();
     }
