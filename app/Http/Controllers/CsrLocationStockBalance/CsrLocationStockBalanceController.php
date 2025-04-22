@@ -123,16 +123,16 @@ class CsrLocationStockBalanceController extends Controller
             );
         }
 
-        return Inertia::render('CsrStockBal/Index', [
-            'locationStockBalance' => $locationStockBalance,
-            'canBeginBalance' => $canBeginBalance,
-            'stockBalDates' => $stockBalDates,
-        ]);
+        // return Inertia::render('CsrStockBal/Index', [
+        //     'locationStockBalance' => $locationStockBalance,
+        //     'canBeginBalance' => $canBeginBalance,
+        //     'stockBalDates' => $stockBalDates,
+        // ]);
 
         // maintenance page
-        // return Inertia::render('UnderMaintenancePage', [
-        //     // 'reports' => $reports
-        // ]);
+        return Inertia::render('UnderMaintenancePage', [
+            // 'reports' => $reports
+        ]);
     }
 
     public function store(Request $request)

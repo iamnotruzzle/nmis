@@ -115,18 +115,18 @@ class LocationStockBalanceController extends Controller
         );
 
         // prod
-        return Inertia::render('Balance/Index', [
-            'locationStockBalance' => $locationStockBalance,
-            'canBeginBalance' => $canBeginBalance,
-            'stockBalDates' => $stockBalDates,
-        ]);
+        // return Inertia::render('Balance/Index', [
+        //     'locationStockBalance' => $locationStockBalance,
+        //     'canBeginBalance' => $canBeginBalance,
+        //     'stockBalDates' => $stockBalDates,
+        // ]);
         #endregion
 
         // // maintenance page
-        // return Inertia::render(
-        //     'UnderMaintenancePage',
-        //     []
-        // );
+        return Inertia::render(
+            'UnderMaintenancePage',
+            []
+        );
     }
 
     public function store(Request $request)
