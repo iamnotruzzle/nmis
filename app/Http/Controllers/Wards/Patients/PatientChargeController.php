@@ -329,7 +329,7 @@ class PatientChargeController extends Controller
                         #region comment for now
                         $ward_stock_id = $wardStock->id;
                         $non_specific_charge = $quantity_to_insert_in_logs;
-                        // ChargingWardConsumptionTrackerJobs::dispatch($ward_stock_id, $non_specific_charge, $tscode);
+                        ChargingWardConsumptionTrackerJobs::dispatch($ward_stock_id, $non_specific_charge, $tscode);
                         #endregion comment for now
                     }
 
@@ -504,11 +504,11 @@ class PatientChargeController extends Controller
 
                         $upd_QtyToReturn = (int)$upd_QtyToReturn;
                         $upd_ward_stocks_id = $request->upd_ward_stocks_id;
-                        // // comment for now
-                        // VoidingWardConsumptionTrackerJobs::dispatch(
-                        //     $upd_ward_stocks_id,
-                        //     $upd_QtyToReturn,
-                        // );
+                        // comment for now
+                        VoidingWardConsumptionTrackerJobs::dispatch(
+                            $upd_ward_stocks_id,
+                            $upd_QtyToReturn,
+                        );
 
                         PatientChargeReturnLogs::create([
                             'enccode' => $request->enccode,

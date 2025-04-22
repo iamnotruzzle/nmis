@@ -180,10 +180,10 @@ class TransferStockController extends Controller
         $ward_stock_id = $transferredStock->ward_stock_id;
         $transferred_qty = $transferredStock->quantity;
 
-        // TransferringWardConsumptionTrackerJobs::dispatch(
-        //     $ward_stock_id,
-        //     $transferred_qty,
-        // );
+        TransferringWardConsumptionTrackerJobs::dispatch(
+            $ward_stock_id,
+            $transferred_qty,
+        );
 
         #region functions for the other ward to receive the item
         // item about to be transferred
@@ -227,17 +227,17 @@ class TransferStockController extends Controller
         $price_id = $itemPrice->id;
 
 
-        // ReceiveItemFromWardJobs::dispatch(
-        //     $id,
-        //     $item_conversion_id,
-        //     $cl2comb,
-        //     $ris_no,
-        //     $uomcode,
-        //     $initial_qty,
-        //     $from,
-        //     $location,
-        //     $price_id,
-        // );
+        ReceiveItemFromWardJobs::dispatch(
+            $id,
+            $item_conversion_id,
+            $cl2comb,
+            $ris_no,
+            $uomcode,
+            $initial_qty,
+            $from,
+            $location,
+            $price_id,
+        );
         #endregion
 
 

@@ -16,5 +16,7 @@ class LocationStockBalanceDateLogs extends Model
         'wardcode',
         'beg_bal_created_at',
         'end_bal_created_at',
+        'beg_bal_declared_by',
+        'end_bal_declared_by',
     ];
 }

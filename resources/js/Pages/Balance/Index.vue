@@ -8,6 +8,17 @@
     >
       <Toast />
 
+      <div
+        class="bg-yellow-100 border border-yellow-400 text-yellow-900 px-4 py-3 rounded mb-4"
+        role="alert"
+      >
+        <strong class="font-bold text-3xl">⚠️ Warning:</strong>
+        <span class="block mt-1 text-xl">
+          Once the stock balance is declared, it cannot be changed. Proceed only if you understand and confirm the
+          inventory count is accurate. The account used to declare the balance will be recorded.
+        </span>
+      </div>
+
       <DataTable
         class="p-datatable-sm"
         v-model:filters="filters"

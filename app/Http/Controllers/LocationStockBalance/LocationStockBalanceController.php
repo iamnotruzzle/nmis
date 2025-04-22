@@ -114,23 +114,24 @@ class LocationStockBalanceController extends Controller
             ]
         );
 
-        // prod
-        // return Inertia::render('Balance/Index', [
-        //     'locationStockBalance' => $locationStockBalance,
-        //     'canBeginBalance' => $canBeginBalance,
-        //     'stockBalDates' => $stockBalDates,
-        // ]);
+        // // prod
+        return Inertia::render('Balance/Index', [
+            'locationStockBalance' => $locationStockBalance,
+            'canBeginBalance' => $canBeginBalance,
+            'stockBalDates' => $stockBalDates,
+        ]);
         #endregion
 
         // // maintenance page
-        return Inertia::render(
-            'UnderMaintenancePage',
-            []
-        );
+        // return Inertia::render(
+        //     'UnderMaintenancePage',
+        //     []
+        // );
     }
 
     public function store(Request $request)
     {
+        $entry_by = Auth::user()->employeeid;
         $date = Carbon::now();
         $begDateTime = $date->copy()->startOfDay(); // Sets time to 00:00:00
         $endDateTime = $date->copy()->endOfDay()->format('Y-m-d H:i:s');   // Sets time to 23:59:59
@@ -163,24 +164,25 @@ class LocationStockBalanceController extends Controller
                 $from = $stock->from;
                 $beg_bal_date = $begDateTime;
 
-                // BegBalWardConsumptionTrackerJobs::dispatch(
-                //     $id,
-                //     $item_conversion_id,
-                //     $ris_no,
-                //     $cl2comb,
-                //     $uomcode,
-                //     $location,
-                //     $price_id,
-                //     $quantity,
-                //     $initial_qty,
-                //     $from,
-                //     $beg_bal_date
-                // );
+                BegBalWardConsumptionTrackerJobs::dispatch(
+                    $id,
+                    $item_conversion_id,
+                    $ris_no,
+                    $cl2comb,
+                    $uomcode,
+                    $location,
+                    $price_id,
+                    $quantity,
+                    $initial_qty,
+                    $from,
+                    $beg_bal_date
+                );
             }
 
             LocationStockBalanceDateLogs::create([
                 'wardcode' => $request->location,
                 'beg_bal_created_at' => $begDateTime,
+                'beg_bal_declared_by' => $entry_by,
             ]);
         } else {
             foreach ($currentStocks as $stock) {
@@ -191,14 +193,14 @@ class LocationStockBalanceController extends Controller
                 $price_id = $stock->price_id;
                 $end_bal_date = $endDateTime;
 
-                // // Then proceed with dispatching end balance
-                // EndBalWardConsumptionTrackerJobs::dispatch(
-                //     $id,
-                //     $cl2comb,
-                //     $quantity,
-                //     $price_id,
-                //     $end_bal_date
-                // );
+                // Then proceed with dispatching end balance
+                EndBalWardConsumptionTrackerJobs::dispatch(
+                    $id,
+                    $cl2comb,
+                    $quantity,
+                    $price_id,
+                    $end_bal_date
+                );
             }
 
             // Find the last row where wardcode matches and end_bal_created_at is null
@@ -211,6 +213,7 @@ class LocationStockBalanceController extends Controller
                 // Update the end_bal_created_at column
                 $lastRecord->update([
                     'end_bal_created_at' => $endDateTime, // or specify a custom date if needed
+                    'end_bal_declared_by' => $entry_by,
                 ]);
             }
         }
