@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\LocationStockBalance;
 
 use App\Http\Controllers\Controller;
-use App\Jobs\BegBalWardConsumptionTrackerJobs;
-use App\Jobs\EndBalWardConsumptionTrackerJobs;
 use App\Models\CsrStocks;
 use App\Models\LocationStockBalance;
 use App\Models\LocationStockBalanceDateLogs;
@@ -164,19 +162,6 @@ class LocationStockBalanceController extends Controller
                 $from = $stock->from;
                 $beg_bal_date = $begDateTime;
 
-                // BegBalWardConsumptionTrackerJobs::dispatch(
-                //     $id,
-                //     $item_conversion_id,
-                //     $ris_no,
-                //     $cl2comb,
-                //     $uomcode,
-                //     $location,
-                //     $price_id,
-                //     $quantity,
-                //     $initial_qty,
-                //     $from,
-                //     $beg_bal_date
-                // );
                 $this->beginningBalanceForTrackerLog(
                     $id,
                     $item_conversion_id,
@@ -207,14 +192,6 @@ class LocationStockBalanceController extends Controller
                 $price_id = $stock->price_id;
                 $end_bal_date = $endDateTime;
 
-                // Then proceed with dispatching end balance
-                // EndBalWardConsumptionTrackerJobs::dispatch(
-                //     $id,
-                //     $cl2comb,
-                //     $quantity,
-                //     $price_id,
-                //     $end_bal_date
-                // );
                 $this->endingBalanceForTrackerLog(
                     $id,
                     $cl2comb,

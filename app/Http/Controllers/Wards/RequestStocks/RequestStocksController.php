@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Wards\RequestStocks;
 
 use App\Events\RequestStock;
 use App\Http\Controllers\Controller;
-use App\Jobs\ReceiveItemAfterBegBalJobs;
 use App\Models\FundSource;
 use App\Models\Item;
 use App\Models\RequestStocks;
@@ -203,17 +202,6 @@ class RequestStocksController extends Controller
                 $price_id = $stk->price_id;
                 $from = $stk->from;
 
-                // ReceiveItemAfterBegBalJobs::dispatch(
-                //     $id,
-                //     $item_conversion_id,
-                //     $ris_no,
-                //     $cl2comb,
-                //     $uomcode,
-                //     $quantity,
-                //     $location,
-                //     $price_id,
-                //     $from,
-                // );
                 $this->existingStockForTrackerLog(
                     $id,
                     $item_conversion_id,

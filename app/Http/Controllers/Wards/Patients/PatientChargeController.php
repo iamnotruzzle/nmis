@@ -7,7 +7,6 @@ use App\Events\RequestStock;
 use App\Http\Controllers\Controller;
 use App\Jobs\ChargingWardConsumptionTrackerJobs;
 use App\Jobs\CreatePatientChargeLogsJobs;
-use App\Jobs\VoidingWardConsumptionTrackerJobs;
 use App\Models\AdmissionLog;
 use App\Models\CsrwCode;
 use App\Models\ERlog;
@@ -505,11 +504,7 @@ class PatientChargeController extends Controller
 
                         $upd_QtyToReturn = (int)$upd_QtyToReturn;
                         $upd_ward_stocks_id = $request->upd_ward_stocks_id;
-                        // comment for now
-                        // VoidingWardConsumptionTrackerJobs::dispatch(
-                        //     $upd_ward_stocks_id,
-                        //     $upd_QtyToReturn,
-                        // );
+
                         $this->voidingConsumptionForTrackerLog(
                             $upd_ward_stocks_id,
                             $upd_QtyToReturn,

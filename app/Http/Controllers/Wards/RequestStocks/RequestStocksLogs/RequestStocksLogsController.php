@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Wards\RequestStocks\RequestStocksLogs;
 
 use App\Http\Controllers\Controller;
-use App\Jobs\ReturnWardConsumptionTrackerJobs;
 use App\Models\CsrItemConversion;
 use App\Models\RequestStocksDetails;
 use App\Models\ReturnedItems;
@@ -61,10 +60,6 @@ class RequestStocksLogsController extends Controller
 
         $returnQty = $request->quantity;
 
-        // ReturnWardConsumptionTrackerJobs::dispatch(
-        //     $ward_stock_id,
-        //     $returnQty,
-        // );
         $this->returnItemForTrackerLog(
             $ward_stock_id,
             $returnQty,

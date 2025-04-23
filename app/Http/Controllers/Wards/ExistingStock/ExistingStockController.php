@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Wards\ExistingStock;
 
 use App\Http\Controllers\Controller;
-use App\Jobs\ReceiveItemAfterBegBalJobs;
 use App\Models\Item;
 use App\Models\ItemPrices;
 use App\Models\WardConsumptionTracker;
@@ -112,17 +111,6 @@ class ExistingStockController extends Controller
             $price_id = $existingStock->price_id;
             $from = $existingStock->from;
 
-            // ReceiveItemAfterBegBalJobs::dispatch(
-            //     $id,
-            //     $item_conversion_id,
-            //     $ris_no,
-            //     $cl2comb,
-            //     $uomcode,
-            //     $quantity,
-            //     $location,
-            //     $price_id,
-            //     $from,
-            // );
             $this->existingStockForTrackerLog(
                 $id,
                 $item_conversion_id,

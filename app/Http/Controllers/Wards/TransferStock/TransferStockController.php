@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Wards\TransferStock;
 
 use App\Http\Controllers\Controller;
-use App\Jobs\ReceiveItemFromWardJobs;
-use App\Jobs\TransferringWardConsumptionTrackerJobs;
 use App\Models\ItemPrices;
 use App\Models\LocationStockBalance;
 use App\Models\UserDetail;
@@ -180,10 +178,6 @@ class TransferStockController extends Controller
         $ward_stock_id = $transferredStock->ward_stock_id;
         $transferred_qty = $transferredStock->quantity;
 
-        // TransferringWardConsumptionTrackerJobs::dispatch(
-        //     $ward_stock_id,
-        //     $transferred_qty,
-        // );
         $this->transferringItemForTrackerLog(
             $ward_stock_id,
             $transferred_qty,
@@ -230,18 +224,6 @@ class TransferStockController extends Controller
         $location = $authCode;
         $price_id = $itemPrice->id;
 
-
-        // ReceiveItemFromWardJobs::dispatch(
-        //     $id,
-        //     $item_conversion_id,
-        //     $cl2comb,
-        //     $ris_no,
-        //     $uomcode,
-        //     $initial_qty,
-        //     $from,
-        //     $location,
-        //     $price_id,
-        // );
         $this->receivedItemFromWardForTrackerLog(
             $id,
             $item_conversion_id,
