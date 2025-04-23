@@ -7,11 +7,13 @@ use App\Jobs\ReturnWardConsumptionTrackerJobs;
 use App\Models\CsrItemConversion;
 use App\Models\RequestStocksDetails;
 use App\Models\ReturnedItems;
+use App\Models\WardConsumptionTracker;
 use App\Models\WardsStocks;
 use App\Models\WardsStocksLogs;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 
 class RequestStocksLogsController extends Controller
@@ -58,13 +60,33 @@ class RequestStocksLogsController extends Controller
         ]);
 
         $returnQty = $request->quantity;
-        // comment for now
-        ReturnWardConsumptionTrackerJobs::dispatch(
+
+        // ReturnWardConsumptionTrackerJobs::dispatch(
+        //     $ward_stock_id,
+        //     $returnQty,
+        // );
+        $this->returnItemForTrackerLog(
             $ward_stock_id,
             $returnQty,
         );
 
         return redirect()->back();
+    }
+
+    public function returnItemForTrackerLog(
+        $ward_stock_id,
+        $returnQty,
+    ) {
+        $tracker = WardConsumptionTracker::where('ward_stock_id', $ward_stock_id)
+            ->whereNull('end_bal_date')
+            ->latest()
+            ->first();
+
+        if ($tracker) {
+            $tracker->update([
+                'return_to_csr_qty' => DB::raw("return_to_csr_qty + {$returnQty}")
+            ]);
+        }
     }
 
 

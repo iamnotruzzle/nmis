@@ -203,7 +203,18 @@ class RequestStocksController extends Controller
                 $price_id = $stk->price_id;
                 $from = $stk->from;
 
-                ReceiveItemAfterBegBalJobs::dispatch(
+                // ReceiveItemAfterBegBalJobs::dispatch(
+                //     $id,
+                //     $item_conversion_id,
+                //     $ris_no,
+                //     $cl2comb,
+                //     $uomcode,
+                //     $quantity,
+                //     $location,
+                //     $price_id,
+                //     $from,
+                // );
+                $this->existingStockForTrackerLog(
                     $id,
                     $item_conversion_id,
                     $ris_no,
@@ -221,6 +232,42 @@ class RequestStocksController extends Controller
         }
 
         return Redirect::route('requeststocks.index');
+    }
+
+    public function existingStockForTrackerLog(
+        $id,
+        $item_conversion_id,
+        $ris_no,
+        $cl2comb,
+        $uomcode,
+        $quantity,
+        $location,
+        $price_id,
+        $from,
+    ) {
+        // Check if this stock already exists in the tracker with no end balance (meaning it's still in progress)
+        $existingTracker = WardConsumptionTracker::where('ward_stock_id', $id)
+            ->where('cl2comb', $cl2comb)
+            ->where('price_id', $price_id)
+            ->whereNull('end_bal_date')
+            ->exists();
+
+        if (!$existingTracker) {
+            // New stock has been received after beginning balance, so create a new row
+            WardConsumptionTracker::create([
+                'ward_stock_id'    => $id,
+                'item_conversion_id' => $item_conversion_id,
+                'ris_no'           => $ris_no,
+                'cl2comb'          => $cl2comb,
+                'uomcode'          => $uomcode,
+                'initial_qty'      => $quantity,
+                'beg_bal_date'     => null, // intentionally left null
+                'beg_bal_qty'      => 0, // intentionally left null
+                'location'         => $location,
+                'item_from'        => $from, // Whether it's from CSR or a ward
+                'price_id'         => $price_id,
+            ]);
+        }
     }
 
     public function destroy(RequestStocks $requeststock, Request $request)

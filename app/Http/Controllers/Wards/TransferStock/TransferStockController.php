@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Wards\TransferStock;
 
 use App\Http\Controllers\Controller;
-use App\Jobs\ReceiveItemAfterBegBalJobs;
 use App\Jobs\ReceiveItemFromWardJobs;
 use App\Jobs\TransferringWardConsumptionTrackerJobs;
 use App\Models\ItemPrices;
@@ -17,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\Sessions;
+use App\Models\WardConsumptionTracker;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 
@@ -180,7 +180,11 @@ class TransferStockController extends Controller
         $ward_stock_id = $transferredStock->ward_stock_id;
         $transferred_qty = $transferredStock->quantity;
 
-        TransferringWardConsumptionTrackerJobs::dispatch(
+        // TransferringWardConsumptionTrackerJobs::dispatch(
+        //     $ward_stock_id,
+        //     $transferred_qty,
+        // );
+        $this->transferringItemForTrackerLog(
             $ward_stock_id,
             $transferred_qty,
         );
@@ -227,7 +231,18 @@ class TransferStockController extends Controller
         $price_id = $itemPrice->id;
 
 
-        ReceiveItemFromWardJobs::dispatch(
+        // ReceiveItemFromWardJobs::dispatch(
+        //     $id,
+        //     $item_conversion_id,
+        //     $cl2comb,
+        //     $ris_no,
+        //     $uomcode,
+        //     $initial_qty,
+        //     $from,
+        //     $location,
+        //     $price_id,
+        // );
+        $this->receivedItemFromWardForTrackerLog(
             $id,
             $item_conversion_id,
             $cl2comb,
@@ -242,6 +257,48 @@ class TransferStockController extends Controller
 
 
         return Redirect::route('transferstock.index');
+    }
+
+    public function receivedItemFromWardForTrackerLog(
+        $id,
+        $item_conversion_id,
+        $cl2comb,
+        $ris_no,
+        $uomcode,
+        $initial_qty,
+        $from,
+        $location,
+        $price_id,
+    ) {
+        WardConsumptionTracker::create([
+            'ward_stock_id'    => $id,
+            'item_conversion_id' => $item_conversion_id,
+            'ris_no'           => $ris_no,
+            'cl2comb'          => $cl2comb,
+            'uomcode'          => $uomcode,
+            'initial_qty'      => $initial_qty,
+            'beg_bal_date'     => null, // intentionally left null
+            'beg_bal_qty'      => 0, // intentionally left null
+            'location'         => $location,
+            'item_from'        => $from, // Whether it's from CSR or a ward
+            'price_id'         => $price_id,
+        ]);
+    }
+
+    public function transferringItemForTrackerLog(
+        $ward_stock_id,
+        $transferred_qty
+    ) {
+        $tracker = WardConsumptionTracker::where('ward_stock_id', $ward_stock_id)
+            ->whereNull('end_bal_date')
+            ->latest()
+            ->first();
+
+        if ($tracker) {
+            $tracker->update([
+                'transfer_qty' => DB::raw("transfer_qty + {$transferred_qty}")
+            ]);
+        }
     }
 
 

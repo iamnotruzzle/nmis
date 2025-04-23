@@ -590,7 +590,7 @@ export default {
   watch: {
     confirmBeginningDialog(newVal) {
       if (newVal) {
-        this.countdown = 15; // Reset countdown when dialog is opened
+        this.countdown = 0; // Reset countdown when dialog is opened
         this.timer = setInterval(() => {
           if (this.countdown > 0) {
             this.countdown--;
@@ -606,7 +606,7 @@ export default {
     },
     confirmEndDIalog(newVal) {
       if (newVal) {
-        this.countdown = 15; // Reset countdown when dialog is opened
+        this.countdown = 0; // Reset countdown when dialog is opened
         this.timer = setInterval(() => {
           if (this.countdown > 0) {
             this.countdown--;

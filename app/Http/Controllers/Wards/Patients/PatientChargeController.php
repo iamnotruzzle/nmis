@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Sessions;
+use App\Models\WardConsumptionTracker;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
@@ -505,7 +506,11 @@ class PatientChargeController extends Controller
                         $upd_QtyToReturn = (int)$upd_QtyToReturn;
                         $upd_ward_stocks_id = $request->upd_ward_stocks_id;
                         // comment for now
-                        VoidingWardConsumptionTrackerJobs::dispatch(
+                        // VoidingWardConsumptionTrackerJobs::dispatch(
+                        //     $upd_ward_stocks_id,
+                        //     $upd_QtyToReturn,
+                        // );
+                        $this->voidingConsumptionForTrackerLog(
                             $upd_ward_stocks_id,
                             $upd_QtyToReturn,
                         );
@@ -810,6 +815,17 @@ class PatientChargeController extends Controller
         return Redirect::back();
     }
 
+    public function voidingConsumptionForTrackerLog(
+        $upd_ward_stocks_id,
+        $upd_QtyToReturn,
+    ) {
+        WardConsumptionTracker::where('ward_stock_id', $upd_ward_stocks_id)
+            ->latest() // Orders by created_at DESC to get the most recent row
+            ->first()
+            ->update([
+                'non_specific_charge' => DB::raw("non_specific_charge - {$upd_QtyToReturn}")
+            ]);
+    }
 
     public function update(Request $request, $id)
     {

@@ -164,7 +164,20 @@ class LocationStockBalanceController extends Controller
                 $from = $stock->from;
                 $beg_bal_date = $begDateTime;
 
-                BegBalWardConsumptionTrackerJobs::dispatch(
+                // BegBalWardConsumptionTrackerJobs::dispatch(
+                //     $id,
+                //     $item_conversion_id,
+                //     $ris_no,
+                //     $cl2comb,
+                //     $uomcode,
+                //     $location,
+                //     $price_id,
+                //     $quantity,
+                //     $initial_qty,
+                //     $from,
+                //     $beg_bal_date
+                // );
+                $this->beginningBalanceForTrackerLog(
                     $id,
                     $item_conversion_id,
                     $ris_no,
@@ -179,6 +192,7 @@ class LocationStockBalanceController extends Controller
                 );
             }
 
+            //
             LocationStockBalanceDateLogs::create([
                 'wardcode' => $request->location,
                 'beg_bal_created_at' => $begDateTime,
@@ -194,7 +208,14 @@ class LocationStockBalanceController extends Controller
                 $end_bal_date = $endDateTime;
 
                 // Then proceed with dispatching end balance
-                EndBalWardConsumptionTrackerJobs::dispatch(
+                // EndBalWardConsumptionTrackerJobs::dispatch(
+                //     $id,
+                //     $cl2comb,
+                //     $quantity,
+                //     $price_id,
+                //     $end_bal_date
+                // );
+                $this->endingBalanceForTrackerLog(
                     $id,
                     $cl2comb,
                     $quantity,
@@ -219,6 +240,78 @@ class LocationStockBalanceController extends Controller
         }
 
         return redirect()->back()->with('success', 'Balance set successfully.');
+    }
+
+    public function beginningBalanceForTrackerLog($id, $item_conversion_id, $ris_no, $cl2comb, $uomcode, $location, $price_id, $quantity, $initial_qty, $from, $beg_bal_date)
+    {
+        $date = Carbon::now();
+        $begDateTime = $date->copy()->startOfDay();
+
+        // Step 1: Get the latest balance period for this ward
+        $currentPeriod = DB::table('csrw_stock_bal_date_logs')
+            ->where('wardcode', $location)
+            ->latest('beg_bal_created_at')
+            ->first();
+
+        // Step 2: Get latest ACTIVE tracker row for this stock
+        $tracker = WardConsumptionTracker::where('ward_stock_id', $id)
+            ->where('cl2comb', $cl2comb)
+            ->where('price_id', $price_id)
+            ->where('location', $location)
+            ->where('status', NULL)
+            ->latest('created_at')
+            ->first();
+
+        if ($tracker) {
+            // 🔁 Update existing active tracker with beginning balance info
+            $tracker->update([
+                'beg_bal_date' => $beg_bal_date,
+                'beg_bal_qty' => $quantity,
+            ]);
+        } else {
+            // 🆕 No active tracker — create a new one
+            WardConsumptionTracker::create([
+                'ward_stock_id' => $id,
+                'item_conversion_id' => $item_conversion_id,
+                'ris_no' => $ris_no,
+                'cl2comb' => $cl2comb,
+                'uomcode' => $uomcode,
+                'beg_bal_date' => $beg_bal_date,
+                'beg_bal_qty' => $quantity,
+                'initial_qty' => $quantity,
+                'item_from' => $from,
+                'location' => $location,
+                'price_id' => $price_id,
+                'status' => NULL,
+            ]);
+        }
+    }
+
+    public function endingBalanceForTrackerLog($id, $cl2comb, $quantity, $price_id, $end_bal_date)
+    {
+
+        $tracker = WardConsumptionTracker::where('ward_stock_id', $id)
+            ->where('cl2comb', $cl2comb)
+            ->where('price_id', $price_id)
+            ->whereNull('end_bal_date')    // Only open ones
+            ->latest('created_at')
+            ->first();
+
+        if ($tracker) {
+            // Set ending balance regardless of whether beginning balance exists
+            $tracker->update([
+                'end_bal_qty'  => $quantity,
+                'end_bal_date' => $end_bal_date,
+                'status' => 'closed',
+            ]);
+        } else {
+            // Optional: log or handle if there's no tracker to update
+            \Log::warning("No open tracker found for ending balance", [
+                'ward_stock_id' => $id,
+                'cl2comb'       => $cl2comb,
+                'price_id'      => $price_id,
+            ]);
+        }
     }
 
     public function processReport($ward_report)
