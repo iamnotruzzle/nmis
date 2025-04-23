@@ -70,48 +70,102 @@ class ReportController extends Controller
             }
         }
 
+        // $result = DB::select(
+        //     "SELECT
+        //             tracker.cl2comb,
+        //             item.cl2desc as item_description,
+        //             unit.uomdesc as unit,
+        //             price.price_per_unit as unit_cost,
+        //             SUM(tracker.beg_bal_qty) as beginning_balance,
+        //             SUM(CASE WHEN tracker.item_from IN ('CSR', 'EXISTING_STOCKS') THEN tracker.initial_qty ELSE 0 END) as from_csr,
+        //             SUM(CASE WHEN tracker.item_from = 'WARD' THEN tracker.initial_qty ELSE 0 END) as from_ward,
+        //             SUM(tracker.beg_bal_qty) as total_beg_balance,
+        //             SUM(tracker.surgery) as surgery,
+        //             SUM(tracker.obgyne) as obgyne,
+        //             SUM(tracker.ortho) as ortho,
+        //             SUM(tracker.pedia) as pedia,
+        //             SUM(tracker.ent) as ent,
+        //             SUM(tracker.non_specific_charge) as total_consumption,
+        //             SUM(price.price_per_unit * (tracker.non_specific_charge + tracker.surgery + tracker.obgyne + tracker.ortho + tracker.pedia + tracker.ent)) as total_estimated_cost,
+        //             SUM(tracker.transfer_qty) as total_transfers,
+        //             SUM(tracker.end_bal_qty) as ending_balance
+        //         FROM
+        //             csrw_ward_consumption_tracker as tracker
+        //         JOIN
+        //             hclass2 as item on item.cl2comb = tracker.cl2comb
+        //         JOIN
+        //             huom as unit ON unit.uomcode = tracker.uomcode
+        //         JOIN
+        //             csrw_item_prices as price ON price.id = tracker.price_id
+        //         WHERE
+        //             tracker.location = ?
+        //             AND (
+        //                 (tracker.beg_bal_date IS NOT NULL AND tracker.beg_bal_date BETWEEN ? AND ?)
+        //                 OR (tracker.beg_bal_date IS NULL AND tracker.end_bal_date IS NOT NULL AND tracker.end_bal_date BETWEEN ? AND ?)
+        //             )
+        //         GROUP BY
+        //             tracker.cl2comb,
+        //             item.cl2desc,
+        //             unit.uomdesc,
+        //             price.price_per_unit
+        //         ORDER BY
+        //             item.cl2desc,
+        //             price.price_per_unit;",
+        //     [$authWardCode_cached, $from, $to, $from, $to]
+        // );
+
         $result = DB::select(
             "SELECT
-                    tracker.cl2comb,
-                    item.cl2desc as item_description,
-                    unit.uomdesc as unit,
-                    price.price_per_unit as unit_cost,
-                    SUM(tracker.beg_bal_qty) as beginning_balance,
-                    SUM(CASE WHEN tracker.item_from IN ('CSR', 'EXISTING_STOCKS') THEN tracker.initial_qty ELSE 0 END) as from_csr,
-                    SUM(CASE WHEN tracker.item_from = 'WARD' THEN tracker.initial_qty ELSE 0 END) as from_ward,
-                    SUM(tracker.beg_bal_qty) as total_beg_balance,
-                    SUM(tracker.surgery) as surgery,
-                    SUM(tracker.obgyne) as obgyne,
-                    SUM(tracker.ortho) as ortho,
-                    SUM(tracker.pedia) as pedia,
-                    SUM(tracker.ent) as ent,
-                    SUM(tracker.non_specific_charge) as total_consumption,
-                    SUM(price.price_per_unit * (tracker.non_specific_charge + tracker.surgery + tracker.obgyne + tracker.ortho + tracker.pedia + tracker.ent)) as total_estimated_cost,
-                    SUM(tracker.transfer_qty) as total_transfers,
-                    SUM(tracker.end_bal_qty) as ending_balance
-                FROM
-                    csrw_ward_consumption_tracker as tracker
-                JOIN
-                    hclass2 as item on item.cl2comb = tracker.cl2comb
-                JOIN
-                    huom as unit ON unit.uomcode = tracker.uomcode
-                JOIN
-                    csrw_item_prices as price ON price.id = tracker.price_id
-                WHERE
-                    tracker.location = ?
-                    AND (
-                        (tracker.beg_bal_date IS NOT NULL AND tracker.beg_bal_date BETWEEN ? AND ?)
-                        OR (tracker.beg_bal_date IS NULL AND tracker.end_bal_date IS NOT NULL AND tracker.end_bal_date BETWEEN ? AND ?)
-                    )
-                GROUP BY
-                    tracker.cl2comb,
-                    item.cl2desc,
-                    unit.uomdesc,
-                    price.price_per_unit
-                ORDER BY
-                    item.cl2desc,
-                    price.price_per_unit;",
-            [$authWardCode_cached, $from, $to, $from, $to]
+                tracker.cl2comb,
+                item.cl2desc as item_description,
+                unit.uomdesc as unit,
+                price.price_per_unit as unit_cost,
+                SUM(tracker.beg_bal_qty) as beginning_balance,
+                SUM(CASE
+                    WHEN tracker.item_from IN ('CSR', 'EXISTING_STOCKS')
+                    AND tracker.created_at BETWEEN ? AND ?
+                    THEN tracker.initial_qty
+                    ELSE 0
+                END) as from_csr,
+                SUM(CASE
+                    WHEN tracker.item_from = 'WARD'
+                    AND tracker.created_at BETWEEN ? AND ?
+                    THEN tracker.initial_qty
+                    ELSE 0
+                END) as from_ward,
+                SUM(tracker.beg_bal_qty) as total_beg_balance,
+                SUM(tracker.surgery) as surgery,
+                SUM(tracker.obgyne) as obgyne,
+                SUM(tracker.ortho) as ortho,
+                SUM(tracker.pedia) as pedia,
+                SUM(tracker.ent) as ent,
+                SUM(tracker.non_specific_charge) as total_consumption,
+                SUM(price.price_per_unit * (tracker.non_specific_charge + tracker.surgery + tracker.obgyne + tracker.ortho + tracker.pedia + tracker.ent)) as total_estimated_cost,
+                SUM(tracker.transfer_qty) as total_transfers,
+                SUM(tracker.end_bal_qty) as ending_balance
+            FROM
+                csrw_ward_consumption_tracker as tracker
+            JOIN
+                hclass2 as item on item.cl2comb = tracker.cl2comb
+            JOIN
+                huom as unit ON unit.uomcode = tracker.uomcode
+            JOIN
+                csrw_item_prices as price ON price.id = tracker.price_id
+            WHERE
+                tracker.location = ?
+                AND (
+                    (tracker.beg_bal_date IS NOT NULL AND tracker.beg_bal_date BETWEEN ? AND ?)
+                    OR (tracker.beg_bal_date IS NULL AND tracker.end_bal_date IS NOT NULL AND tracker.end_bal_date BETWEEN ? AND ?)
+                )
+            GROUP BY
+                tracker.cl2comb,
+                item.cl2desc,
+                unit.uomdesc,
+                price.price_per_unit
+            ORDER BY
+                item.cl2desc,
+                price.price_per_unit;",
+            [$from, $to, $from, $to, $authWardCode_cached, $from, $to, $from, $to]
         );
         $reports = array_values($result);
         // dd($reports);

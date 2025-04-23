@@ -101,6 +101,16 @@ class ExistingStockController extends Controller
                 'expiration_date' =>  Carbon::maxValue(),
             ]);
 
+            $price = DB::select(
+                "SELECT price.id
+                FROM csrw_wards_stocks as ward_stock
+                JOIN csrw_item_prices as price ON price.cl2comb = ward_stock.cl2comb AND price.ris_no = ward_stock.ris_no
+                WHERE ward_stock.cl2comb = ?
+                AND ward_stock.ris_no = ?",
+                [$existingStock->cl2comb, $existingStock->ris_no]
+            );
+            // dd($price[0]->id);
+
             $id = $existingStock->id;
             $item_conversion_id = $existingStock->stock_id;
             $ris_no = $existingStock->ris_no;
@@ -108,7 +118,7 @@ class ExistingStockController extends Controller
             $uomcode = $existingStock->uomcode;
             $quantity = $existingStock->quantity;
             $location = $existingStock->location;
-            $price_id = $existingStock->price_id;
+            $price_id = $price[0]->id;
             $from = $existingStock->from;
 
             $this->existingStockForTrackerLog(

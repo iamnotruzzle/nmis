@@ -121,17 +121,44 @@ class AuthenticatedSessionController extends Controller
 
     public function destroy(Request $request): LogoutResponse
     {
+        // old
+        // if (Auth::check()) {
+        //     $employeeId = Auth::user()->employeeid;
+
+        //     // Log out the user
+        //     $this->guard->logout();
+
+        //     // Invalidate and regenerate session only if it exists
+        //     if ($request->hasSession()) {
+        //         $request->session()->invalidate();
+        //         $request->session()->regenerateToken();
+        //     }
+
+        //     // Clear user-specific cache keys
+        //     Cache::deleteMultiple([
+        //         'c_authWardCode_' . $employeeId,
+        //         'c_locationType_' . $employeeId,
+        //         'c_patients_' . $employeeId,
+        //         'c_csr_stocks_' . $employeeId,
+        //         'latest_update_' . $employeeId
+        //     ]);
+
+        //     // Optionally clear Inertia session cached data
+        //     session()->forget([
+        //         'cached_inertia_auth',
+        //         // 'cached_inertia_packages',
+        //         'cached_inertia_locations',
+        //         'cached_inertia_fundsource',
+        //         // 'cached_inertia_suppliers',
+        //     ]);
+        // }
+
+        // return app(LogoutResponse::class);
+
+
+        // new
         if (Auth::check()) {
             $employeeId = Auth::user()->employeeid;
-
-            // Log out the user
-            $this->guard->logout();
-
-            // Invalidate and regenerate session only if it exists
-            if ($request->hasSession()) {
-                $request->session()->invalidate();
-                $request->session()->regenerateToken();
-            }
 
             // Clear user-specific cache keys
             Cache::deleteMultiple([
@@ -142,14 +169,19 @@ class AuthenticatedSessionController extends Controller
                 'latest_update_' . $employeeId
             ]);
 
-            // Optionally clear Inertia session cached data
+            // Clear Inertia session cached data
             session()->forget([
                 'cached_inertia_auth',
-                // 'cached_inertia_packages',
                 'cached_inertia_locations',
                 'cached_inertia_fundsource',
-                // 'cached_inertia_suppliers',
             ]);
+
+            // Log out the user
+            $this->guard->logout();
+
+            // Invalidate and regenerate session
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
         }
 
         return app(LogoutResponse::class);
