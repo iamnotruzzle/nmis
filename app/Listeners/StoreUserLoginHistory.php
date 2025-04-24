@@ -35,8 +35,5 @@ class StoreUserLoginHistory
             'employeeid' => $user->employeeid,
             'wardcode' => $this->request->wardcode
         ]);
-        // if $user's designation is csr then create wardcode as csr
-        // if $user's designation is ward then create wardcode $this->request->wardcode
-        // if $user's designation is super-admin then create wardcode as super-admin /
     }
 }

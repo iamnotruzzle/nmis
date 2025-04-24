@@ -106,13 +106,6 @@ class JetstreamServiceProvider extends ServiceProvider
                     }
 
                     if ($allowed) {
-                        // ✅ Save login history
-                        DB::table('csrw_login_history')->insert([
-                            'employeeid' => $user->employeeid,
-                            'wardcode' => $wardcode,
-                            'created_at' => now()
-                        ]);
-
                         // ✅ Optionally clear the cache so the new ward gets picked up immediately
                         Cache::forget('c_authWardCode_' . $user->employeeid);
                         Cache::forget('c_locationType_' . $user->employeeid);
