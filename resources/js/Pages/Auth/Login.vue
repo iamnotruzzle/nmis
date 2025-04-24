@@ -169,7 +169,10 @@ export default {
     submit() {
       this.form.password = this.form.password.toUpperCase();
       this.form.post(this.route('login'), {
-        onFinish: () => this.form.reset('password'),
+        onSuccess: () => {
+          this.form.reset('password');
+          //   console.log(this.form.wardcode); // 4FSA correct
+        },
       });
     },
   },

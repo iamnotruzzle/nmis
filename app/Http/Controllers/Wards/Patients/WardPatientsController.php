@@ -30,6 +30,7 @@ class WardPatientsController extends Controller
         $authWardCode_cached = Cache::get($cache_authWardCode);
         $locationType_cached = Cache::get($cache_locationType);
 
+
         // If ward code is not found in cache, retrieve it from the database
         if (!$authWardCode_cached) {
             $authWardCode_query = DB::select(

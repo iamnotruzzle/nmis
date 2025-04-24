@@ -29,10 +29,8 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request)
     {
         $cachedAuthUser = session('cached_inertia_auth');
-        // $cachedPackages = session('cached_inertia_packages');
         $cachedLocations = session('cached_inertia_locations');
-        $cachedFundSource = session('cached_inertia_fundsource'); // Check correct casing
-        // $cachedSuppliers = session('cached_inertia_suppliers');
+        $cachedFundSource = session('cached_inertia_fundsource');
 
         // Ensure caching only happens if the session is empty
         if (!$cachedAuthUser && $request->user()) {
@@ -44,55 +42,23 @@ class HandleInertiaRequests extends Middleware
                     ->first(),
                 'roles' => $request->user()->roles()->pluck('name'),
             ];
-
-            // session(['cached_inertia_auth' => $cachedAuthUser]);
-            // session()->save();
         }
-
-        // if (!$cachedPackages) {
-        //     $cachedPackages = DB::select(
-        //         "SELECT package.id, package.description, pack_dets.cl2comb, item.cl2desc, pack_dets.quantity, package.status
-        //             FROM csrw_packages AS package
-        //             JOIN csrw_package_details as pack_dets ON pack_dets.package_id = package.id
-        //             JOIN hclass2 as item ON item.cl2comb = pack_dets.cl2comb
-        //             WHERE package.status = 'A'
-        //             ORDER BY item.cl2desc ASC;"
-        //     );
-
-        //     // session(['cached_inertia_packages' => $cachedPackages]);
-        //     // session()->save();
-        // }
 
         if (!$cachedLocations) {
             $cachedLocations = Location::where('wardstat', 'A')
                 ->orderBy('wardname', 'ASC')
                 ->get();
-
-            // session(['cached_inertia_locations' => $cachedLocations]);
-            // session()->save();
         }
 
         if (!$cachedFundSource) {
             $cachedFundSource = FundSource::orderBy('fsName')
                 ->get(['id', 'fsid', 'fsName', 'cluster_code']);
-
-            // session(['cached_inertia_fundsource' => $cachedFundSource]);
-            // session()->save();
         }
-
-        // if (!$cachedSuppliers) {
-        //     $cachedSuppliers = PimsSupplier::where('status', 'A')->orderBy('suppname', 'ASC')->get();
-
-        //     // session(['cached_inertia_suppliers' => $cachedSuppliers]);
-        //     // session()->save();
-        // }
 
         session([
             'cached_inertia_auth' => $cachedAuthUser,
-            // 'cached_inertia_packages' => $cachedPackages,
             'cached_inertia_locations' => $cachedLocations,
             'cached_inertia_fundsource' => $cachedFundSource,
-            // 'cached_inertia_suppliers' => $cachedSuppliers,
         ]);
         session()->save();
 
@@ -106,8 +72,6 @@ class HandleInertiaRequests extends Middleware
             ],
             'locations' => fn() => $cachedLocations,
             'fundSource' => fn() => $cachedFundSource,
-            // 'packages' => fn() => $cachedPackages,
-            // 'suppliers' => fn() => $cachedSuppliers,
         ]);
     }
 }
