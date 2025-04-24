@@ -131,8 +131,10 @@ class LocationStockBalanceController extends Controller
     {
         $entry_by = Auth::user()->employeeid;
         $date = Carbon::now();
-        $begDateTime = $date->copy()->startOfDay(); // Sets time to 00:00:00
-        $endDateTime = $date->copy()->endOfDay()->format('Y-m-d H:i:s');   // Sets time to 23:59:59
+        // $begDateTime = $date->copy()->startOfDay(); // Sets time to 00:00:00
+        // $endDateTime = $date->copy()->endOfDay()->format('Y-m-d H:i:s');   // Sets time to 23:59:59
+        $begDateTime = $date->copy(); // Sets time to 00:00:00
+        $endDateTime = $date->copy();   // Sets time to 23:59:59
 
         $currentStocks = DB::select(
             "SELECT ward_stock.id, ward_stock.stock_id, ward_stock.request_stocks_id, ward_stock.request_stocks_detail_id, ward_stock.stock_id, ward_stock.location, ward_stock.cl2comb,
@@ -140,7 +142,8 @@ class LocationStockBalanceController extends Controller
                     ward_stock.ris_no, price.id as price_id
                     FROM csrw_wards_stocks as ward_stock
                     JOIN csrw_item_prices as price ON price.cl2comb = ward_stock.cl2comb AND price.ris_no = ward_stock.ris_no
-                    WHERE ward_stock.location = ?",
+                    WHERE ward_stock.location = ?
+                    AND ward_stock.quantity > 0",
             [$request->location]
         );
         // dd($currentStocks);
@@ -222,7 +225,6 @@ class LocationStockBalanceController extends Controller
     public function beginningBalanceForTrackerLog($id, $item_conversion_id, $ris_no, $cl2comb, $uomcode, $location, $price_id, $quantity, $initial_qty, $from, $beg_bal_date)
     {
         $date = Carbon::now();
-        $begDateTime = $date->copy()->startOfDay();
 
         // Step 1: Get the latest balance period for this ward
         $currentPeriod = DB::table('csrw_stock_bal_date_logs')

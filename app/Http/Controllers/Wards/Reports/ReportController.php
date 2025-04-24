@@ -60,16 +60,18 @@ class ReportController extends Controller
 
         // Date range parsing
         $from = $default_beg_bal_date;
-        $to = $default_end_bal_date ?? Carbon::now(); // default to ongoing if end date is null
+        $to = $default_end_bal_date ?? Carbon::now()->endOfDay(); // default to ongoing if end date is null
 
         if (!empty($dateRange)) {
             preg_match('/\[\s*(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(?:\.\d+)?)\s*\] - \[\s*(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(?:\.\d+)?|ONGOING)\s*\]/', $dateRange, $matches);
             if ($matches) {
                 $from = $matches[1] ?? $default_beg_bal_date;
-                $to = $matches[2] === 'ONGOING' ? Carbon::now() : ($matches[2] ?? $default_end_bal_date);
+                $to = $matches[2] === 'ONGOING' ? Carbon::now()->endOfDay() : ($matches[2] ?? $default_end_bal_date);
             }
         }
+        // dd($to);
 
+        // OLD
         // $result = DB::select(
         //     "SELECT
         //             tracker.cl2comb,
@@ -116,57 +118,75 @@ class ReportController extends Controller
 
         $result = DB::select(
             "SELECT
-                tracker.cl2comb,
-                item.cl2desc as item_description,
-                unit.uomdesc as unit,
-                price.price_per_unit as unit_cost,
-                SUM(tracker.beg_bal_qty) as beginning_balance,
-                SUM(CASE
-                    WHEN tracker.item_from IN ('CSR', 'EXISTING_STOCKS')
-                    AND tracker.created_at BETWEEN ? AND ?
-                    THEN tracker.initial_qty
-                    ELSE 0
-                END) as from_csr,
-                SUM(CASE
-                    WHEN tracker.item_from = 'WARD'
-                    AND tracker.created_at BETWEEN ? AND ?
-                    THEN tracker.initial_qty
-                    ELSE 0
-                END) as from_ward,
-                SUM(tracker.beg_bal_qty) as total_beg_balance,
-                SUM(tracker.surgery) as surgery,
-                SUM(tracker.obgyne) as obgyne,
-                SUM(tracker.ortho) as ortho,
-                SUM(tracker.pedia) as pedia,
-                SUM(tracker.ent) as ent,
-                SUM(tracker.non_specific_charge) as total_consumption,
-                SUM(price.price_per_unit * (tracker.non_specific_charge + tracker.surgery + tracker.obgyne + tracker.ortho + tracker.pedia + tracker.ent)) as total_estimated_cost,
-                SUM(tracker.transfer_qty) as total_transfers,
-                SUM(tracker.end_bal_qty) as ending_balance
-            FROM
-                csrw_ward_consumption_tracker as tracker
-            JOIN
-                hclass2 as item on item.cl2comb = tracker.cl2comb
-            JOIN
-                huom as unit ON unit.uomcode = tracker.uomcode
-            JOIN
-                csrw_item_prices as price ON price.id = tracker.price_id
-            WHERE
-                tracker.location = ?
-                AND (
-                    (tracker.beg_bal_date IS NOT NULL AND tracker.beg_bal_date BETWEEN ? AND ?)
-                    OR (tracker.beg_bal_date IS NULL AND tracker.end_bal_date IS NOT NULL AND tracker.end_bal_date BETWEEN ? AND ?)
-                )
-            GROUP BY
-                tracker.cl2comb,
-                item.cl2desc,
-                unit.uomdesc,
-                price.price_per_unit
-            ORDER BY
-                item.cl2desc,
-                price.price_per_unit;",
-            [$from, $to, $from, $to, $authWardCode_cached, $from, $to, $from, $to]
+                    tracker.cl2comb,
+                    item.cl2desc as item_description,
+                    unit.uomdesc as unit,
+                    price.price_per_unit as unit_cost,
+                    /* Beginning balance - only items with beg_bal_date */
+                    SUM(CASE
+                        WHEN tracker.beg_bal_date IS NOT NULL
+                        THEN tracker.beg_bal_qty
+                        ELSE 0
+                    END) as beginning_balance,
+
+                    /* From CSR - only items without beg_bal_date created in period */
+                    SUM(CASE
+                        WHEN tracker.item_from IN ('CSR', 'EXISTING_STOCK')
+                        AND tracker.beg_bal_date IS NULL
+                        AND tracker.created_at BETWEEN ? AND ?
+                        THEN tracker.initial_qty
+                        ELSE 0
+                    END) as from_csr,
+
+                    /* From Ward - same logic */
+                    SUM(CASE
+                        WHEN tracker.item_from = 'WARD'
+                        AND tracker.beg_bal_date IS NULL
+                        AND tracker.created_at BETWEEN ? AND ?
+                        THEN tracker.initial_qty
+                        ELSE 0
+                    END) as from_ward,
+
+                    /* Other metrics */
+                    SUM(tracker.surgery) as surgery,
+                    SUM(tracker.obgyne) as obgyne,
+                    SUM(tracker.ortho) as ortho,
+                    SUM(tracker.pedia) as pedia,
+                    SUM(tracker.ent) as ent,
+                    SUM(tracker.non_specific_charge) as total_consumption,
+                    SUM(price.price_per_unit * (tracker.non_specific_charge + tracker.surgery + tracker.obgyne + tracker.ortho + tracker.pedia + tracker.ent)) as total_estimated_cost,
+                    SUM(tracker.transfer_qty) as total_transfers,
+                    /* Ending balance - all items */
+                    SUM(tracker.end_bal_qty) as ending_balance
+                FROM
+                    csrw_ward_consumption_tracker as tracker
+                JOIN
+                    hclass2 as item on item.cl2comb = tracker.cl2comb
+                JOIN
+                    huom as unit ON unit.uomcode = tracker.uomcode
+                JOIN
+                    csrw_item_prices as price ON price.id = tracker.price_id
+                WHERE
+                    tracker.location = ?
+                    AND (
+                        /* Items with declared balance in period */
+                        (tracker.beg_bal_date IS NOT NULL AND tracker.beg_bal_date = ?)
+                        OR
+                        /* Items received after declaration but in period */
+                        (tracker.beg_bal_date IS NULL AND tracker.created_at BETWEEN ? AND ?)
+                    )
+                GROUP BY
+                    tracker.cl2comb,
+                    item.cl2desc,
+                    unit.uomdesc,
+                    price.price_per_unit
+                ORDER BY
+                    item.cl2desc,
+                    price.price_per_unit",
+            [$from, $to, $from, $to, $authWardCode_cached, $from, $from, $to]
         );
+
+
         $reports = array_values($result);
         // dd($reports);
 
