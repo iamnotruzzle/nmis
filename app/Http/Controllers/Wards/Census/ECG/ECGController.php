@@ -72,6 +72,7 @@ class ECGController extends Controller
         //     ORDER BY DEPARTMENT ASC, MONTH(charge.pcchrgdte) ASC;"
         // );
 
+        // can also be Total no. Of ER patients
         // $er_fee_monthly = DB::select(
         //     "SELECT
         //     htypser.tsdesc AS DEPARTMENT,
@@ -87,19 +88,37 @@ class ECGController extends Controller
         // GROUP BY htypser.tsdesc, charge.pchrgup;"
         // );
 
+        // can also be Total no of admitted at ER
         // // change the toecode filter if needed
         // $no_of_consultation_or_admission = DB::select(
+        // "SELECT
+        //     htypser.tsdesc AS DEPARTMENT,
+        //     COUNT(*) AS TOTAL_COUNT
+        // FROM henctr
+        // INNER JOIN herlog AS erlog ON erlog.enccode = henctr.enccode
+        // JOIN htypser ON htypser.tscode = erlog.tscode
+        // WHERE henctr.toecode = 'ER' -- ER CONSULTATION
+        // --WHERE henctr.toecode = 'ERADM' -- ER ADMISSION
+        // AND henctr.encdate BETWEEN '2023-01-01' AND '2023-12-31'
+        // GROUP BY htypser.tsdesc
+        // ORDER BY TOTAL_COUNT DESC;"
+        // );
+
+        // number of discharge at ER
+        // $no_of_discharge_at_er = DB::select(
         //     "SELECT
         //         htypser.tsdesc AS DEPARTMENT,
-        //         COUNT(*) AS TOTAL_COUNT
-        //     FROM henctr
-        //     INNER JOIN herlog AS erlog ON erlog.enccode = henctr.enccode
+        //         SUM(charge.pchrgqty) AS QUANTITY,
+        //         charge.pchrgup as 'UNIT COST',
+        //         SUM(charge.pcchrgamt) AS 'TOTAL COST'
+        //     FROM hpatchrg AS charge
+        //     JOIN herlog AS erlog ON erlog.enccode = charge.enccode
         //     JOIN htypser ON htypser.tscode = erlog.tscode
-        //     WHERE henctr.toecode = 'ER' -- ER CONSULTATION
-        //     --WHERE henctr.toecode = 'ERADM' -- ER ADMISSION
-        //     AND henctr.encdate BETWEEN '2023-01-01' AND '2023-12-31'
-        //     GROUP BY htypser.tsdesc
-        //     ORDER BY TOTAL_COUNT DESC;"
+        //     WHERE charge.pcchrgcod LIKE 'ER%'
+        //     AND charge.itemcode = 'EROPH' -- EROPH = Emergency room fee
+        //     AND erlog.dispcode = 'TRASH'
+        //     AND CAST(charge.pcchrgdte AS DATE) BETWEEN '2025-03-01' AND '2025-03-31'
+        //     GROUP BY htypser.tsdesc, charge.pchrgup;"
         // );
 
         // query to get patient that overstayed in ER
