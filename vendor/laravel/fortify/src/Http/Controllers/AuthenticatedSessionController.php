@@ -2,6 +2,7 @@
 
 namespace Laravel\Fortify\Http\Controllers;
 
+use App\Models\LoginHistory;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -137,14 +138,7 @@ class AuthenticatedSessionController extends Controller
                 ]);
             }
 
-            // // Clear user-specific cache keys
-            // Cache::deleteMultiple([
-            //     'c_authWardCode_' . $employeeId,
-            //     'c_locationType_' . $employeeId,
-            //     'c_patients_' . $employeeId,
-            //     'c_csr_stocks_' . $employeeId,
-            //     'latest_update_' . $employeeId
-            // ]);
+            LoginHistory::where('employeeid', $employeeId)->delete();
 
             // Clear Inertia session cached data
             session()->forget([
