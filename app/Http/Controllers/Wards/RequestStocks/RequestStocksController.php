@@ -202,7 +202,7 @@ class RequestStocksController extends Controller
                 $price_id = $stk->price_id;
                 $from = $stk->from;
 
-                // $this->existingStockForTrackerLog(
+                // $this->requestStocksForTrackerLog(
                 //     $id,
                 //     $item_conversion_id,
                 //     $ris_no,
@@ -222,7 +222,7 @@ class RequestStocksController extends Controller
         return Redirect::route('requeststocks.index');
     }
 
-    public function existingStockForTrackerLog(
+    public function requestStocksForTrackerLog(
         $id,
         $item_conversion_id,
         $ris_no,
