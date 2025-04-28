@@ -505,10 +505,10 @@ class PatientChargeController extends Controller
                         $upd_QtyToReturn = (int)$upd_QtyToReturn;
                         $upd_ward_stocks_id = $request->upd_ward_stocks_id;
 
-                        $this->voidingConsumptionForTrackerLog(
-                            $upd_ward_stocks_id,
-                            $upd_QtyToReturn,
-                        );
+                        // $this->voidingConsumptionForTrackerLog(
+                        //     $upd_ward_stocks_id,
+                        //     $upd_QtyToReturn,
+                        // );
 
                         PatientChargeReturnLogs::create([
                             'enccode' => $request->enccode,

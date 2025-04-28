@@ -178,10 +178,10 @@ class TransferStockController extends Controller
         $ward_stock_id = $transferredStock->ward_stock_id;
         $transferred_qty = $transferredStock->quantity;
 
-        $this->transferringItemForTrackerLog(
-            $ward_stock_id,
-            $transferred_qty,
-        );
+        // $this->transferringItemForTrackerLog(
+        //     $ward_stock_id,
+        //     $transferred_qty,
+        // );
 
         #region functions for the other ward to receive the item
         // item about to be transferred
@@ -224,17 +224,17 @@ class TransferStockController extends Controller
         $location = $authCode;
         $price_id = $itemPrice->id;
 
-        $this->receivedItemFromWardForTrackerLog(
-            $id,
-            $item_conversion_id,
-            $cl2comb,
-            $ris_no,
-            $uomcode,
-            $initial_qty,
-            $from,
-            $location,
-            $price_id,
-        );
+        // $this->receivedItemFromWardForTrackerLog(
+        //     $id,
+        //     $item_conversion_id,
+        //     $cl2comb,
+        //     $ris_no,
+        //     $uomcode,
+        //     $initial_qty,
+        //     $from,
+        //     $location,
+        //     $price_id,
+        // );
         #endregion
 
 

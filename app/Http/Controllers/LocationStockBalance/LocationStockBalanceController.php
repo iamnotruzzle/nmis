@@ -24,107 +24,108 @@ class LocationStockBalanceController extends Controller
     public function index(Request $request)
     {
 
-        #region prod
-        $searchString = $request->search;
-        $dateRange = $request->date;
-        $from = null;
-        $to = null;
-        $locationStockBalance = null;
+        // #region prod
+        // $searchString = $request->search;
+        // $dateRange = $request->date;
+        // $from = null;
+        // $to = null;
+        // $locationStockBalance = null;
 
-        $date = Carbon::now();
-        $now = $date->copy()->startOfDay();
+        // $date = Carbon::now();
+        // $now = $date->copy()->startOfDay();
 
-        // get auth wardcode
-        // Define cache keys for ward code and location type based on the authenticated user's employee ID
-        $cache_authWardCode = 'c_authWardCode_' . Auth::user()->employeeid;
-        // Attempt to retrieve cached ward code and location type
-        $authWardCode_cached = Cache::get($cache_authWardCode);
+        // // get auth wardcode
+        // // Define cache keys for ward code and location type based on the authenticated user's employee ID
+        // $cache_authWardCode = 'c_authWardCode_' . Auth::user()->employeeid;
+        // // Attempt to retrieve cached ward code and location type
+        // $authWardCode_cached = Cache::get($cache_authWardCode);
 
-        // Get the latest balance date logs for the ward
-        $stockBalDates = DB::select(
-            "SELECT beg_bal_created_at AS beg_bal_date, end_bal_created_at AS end_bal_date
-                FROM csrw_stock_bal_date_logs
-                WHERE wardcode = ?
-                ORDER BY created_at DESC
-        ",
-            [$authWardCode_cached]
-        );
-
-        // Default values
-        $default_beg_bal_date = $stockBalDates[0]->beg_bal_date ?? null;
-        $default_end_bal_date = $stockBalDates[0]->end_bal_date ?? null;
-
-        $latestDateLog = LocationStockBalanceDateLogs::where('wardcode', $authWardCode_cached)
-            ->latest('created_at')->first();
-        // dd($latestDateLog);
-        if ($latestDateLog == null) {
-            $canBeginBalance = true;
-        } else if ($latestDateLog != null && $latestDateLog->end_bal_created_at != null) {
-            $canBeginBalance = true;
-        } else {
-            $canBeginBalance = false;
-        }
-
-        // Date range parsing
-        $from = $default_beg_bal_date;
-        $to = $default_end_bal_date ?? Carbon::now(); // default to ongoing if end date is null
-
-        if (!empty($dateRange)) {
-            preg_match('/\[\s*(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(?:\.\d+)?)\s*\] - \[\s*(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(?:\.\d+)?|ONGOING)\s*\]/', $dateRange, $matches);
-            if ($matches) {
-                $from = $matches[1] ?? $default_beg_bal_date;
-                $to = $matches[2] === 'ONGOING' ? Carbon::now() : ($matches[2] ?? $default_end_bal_date);
-            }
-        }
-
-        $locationStockBalance = DB::select(
-            "SELECT
-                    tracker.cl2comb,
-                    item.cl2desc,
-                    price.price_per_unit,
-                    SUM(tracker.beg_bal_qty) AS beginning_balance,
-                    SUM(tracker.end_bal_qty) AS ending_balance,
-                    MIN(tracker.beg_bal_date) AS beg_bal_created_at,
-                    MAX(tracker.end_bal_date) AS end_bal_created_at
-                FROM csrw_ward_consumption_tracker AS tracker
-                JOIN hclass2 AS item ON item.cl2comb = tracker.cl2comb
-                JOIN csrw_item_prices AS price ON price.id = tracker.price_id
-                WHERE tracker.location = ?
-                    AND (
-                        (tracker.beg_bal_date BETWEEN ? AND ?)
-                        OR tracker.beg_bal_date IS NULL
-                    )
-                    AND (
-                        (tracker.end_bal_date BETWEEN ? AND ?)
-                        OR tracker.end_bal_date IS NULL
-                    )
-                GROUP BY
-                    tracker.cl2comb,
-                    item.cl2desc,
-                    price.price_per_unit
-            ",
-            [
-                $authWardCode_cached,
-                $from,
-                $to,
-                $from,
-                $to
-            ]
-        );
-
-        // // prod
-        return Inertia::render('Balance/Index', [
-            'locationStockBalance' => $locationStockBalance,
-            'canBeginBalance' => $canBeginBalance,
-            'stockBalDates' => $stockBalDates,
-        ]);
-        #endregion
-
-        // // maintenance page
-        // return Inertia::render(
-        //     'UnderMaintenancePage',
-        //     []
+        // // Get the latest balance date logs for the ward
+        // $stockBalDates = DB::select(
+        //     "SELECT beg_bal_created_at AS beg_bal_date, end_bal_created_at AS end_bal_date
+        //         FROM csrw_stock_bal_date_logs
+        //         WHERE wardcode = ?
+        //         ORDER BY created_at DESC
+        // ",
+        //     [$authWardCode_cached]
         // );
+
+        // // Default values
+        // $default_beg_bal_date = $stockBalDates[0]->beg_bal_date ?? null;
+        // $default_end_bal_date = $stockBalDates[0]->end_bal_date ?? null;
+
+        // $latestDateLog = LocationStockBalanceDateLogs::where('wardcode', $authWardCode_cached)
+        //     ->latest('created_at')->first();
+        // // dd($latestDateLog);
+        // if ($latestDateLog == null) {
+        //     $canBeginBalance = true;
+        // } else if ($latestDateLog != null && $latestDateLog->end_bal_created_at != null) {
+        //     $canBeginBalance = true;
+        // } else {
+        //     $canBeginBalance = false;
+        // }
+
+        // // Date range parsing
+        // $from = $default_beg_bal_date;
+        // $to = $default_end_bal_date ?? Carbon::now(); // default to ongoing if end date is null
+
+        // if (!empty($dateRange)) {
+        //     preg_match('/\[\s*(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(?:\.\d+)?)\s*\] - \[\s*(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(?:\.\d+)?|ONGOING)\s*\]/', $dateRange, $matches);
+        //     if ($matches) {
+        //         $from = $matches[1] ?? $default_beg_bal_date;
+        //         $to = $matches[2] === 'ONGOING' ? Carbon::now() : ($matches[2] ?? $default_end_bal_date);
+        //     }
+        // }
+
+        // $locationStockBalance = DB::select(
+        //     "SELECT
+        //             tracker.cl2comb,
+        //             item.cl2desc,
+        //             price.price_per_unit,
+        //             SUM(tracker.beg_bal_qty) AS beginning_balance,
+        //             SUM(tracker.end_bal_qty) AS ending_balance,
+        //             MIN(tracker.beg_bal_date) AS beg_bal_created_at,
+        //             MAX(tracker.end_bal_date) AS end_bal_created_at
+        //         FROM csrw_ward_consumption_tracker AS tracker
+        //         JOIN hclass2 AS item ON item.cl2comb = tracker.cl2comb
+        //         JOIN csrw_item_prices AS price ON price.id = tracker.price_id
+        //         WHERE tracker.location = ?
+        //             AND (
+        //                 (tracker.beg_bal_date BETWEEN ? AND ?)
+        //                 OR tracker.beg_bal_date IS NULL
+        //             )
+        //             AND (
+        //                 (tracker.end_bal_date BETWEEN ? AND ?)
+        //                 OR tracker.end_bal_date IS NULL
+        //             )
+        //         GROUP BY
+        //             tracker.cl2comb,
+        //             item.cl2desc,
+        //             price.price_per_unit
+        //     ",
+        //     [
+        //         $authWardCode_cached,
+        //         $from,
+        //         $to,
+        //         $from,
+        //         $to
+        //     ]
+        // );
+
+        // // // prod
+        // return Inertia::render('Balance/Index', [
+        //     'locationStockBalance' => $locationStockBalance,
+        //     'canBeginBalance' => $canBeginBalance,
+        //     'stockBalDates' => $stockBalDates,
+        // ]);
+        // #endregion
+
+        /////////////////////////////
+        // maintenance page
+        return Inertia::render(
+            'UnderMaintenancePage',
+            []
+        );
     }
 
     public function store(Request $request)
@@ -165,19 +166,19 @@ class LocationStockBalanceController extends Controller
                 $from = $stock->from;
                 $beg_bal_date = $begDateTime;
 
-                $this->beginningBalanceForTrackerLog(
-                    $id,
-                    $item_conversion_id,
-                    $ris_no,
-                    $cl2comb,
-                    $uomcode,
-                    $location,
-                    $price_id,
-                    $quantity,
-                    $initial_qty,
-                    $from,
-                    $beg_bal_date
-                );
+                // $this->beginningBalanceForTrackerLog(
+                //     $id,
+                //     $item_conversion_id,
+                //     $ris_no,
+                //     $cl2comb,
+                //     $uomcode,
+                //     $location,
+                //     $price_id,
+                //     $quantity,
+                //     $initial_qty,
+                //     $from,
+                //     $beg_bal_date
+                // );
             }
 
             //
@@ -195,13 +196,13 @@ class LocationStockBalanceController extends Controller
                 $price_id = $stock->price_id;
                 $end_bal_date = $endDateTime;
 
-                $this->endingBalanceForTrackerLog(
-                    $id,
-                    $cl2comb,
-                    $quantity,
-                    $price_id,
-                    $end_bal_date
-                );
+                // $this->endingBalanceForTrackerLog(
+                //     $id,
+                //     $cl2comb,
+                //     $quantity,
+                //     $price_id,
+                //     $end_bal_date
+                // );
             }
 
             // Find the last row where wardcode matches and end_bal_created_at is null

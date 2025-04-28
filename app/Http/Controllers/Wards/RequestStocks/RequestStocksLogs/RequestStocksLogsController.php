@@ -60,10 +60,10 @@ class RequestStocksLogsController extends Controller
 
         $returnQty = $request->quantity;
 
-        $this->returnItemForTrackerLog(
-            $ward_stock_id,
-            $returnQty,
-        );
+        // $this->returnItemForTrackerLog(
+        //     $ward_stock_id,
+        //     $returnQty,
+        // );
 
         return redirect()->back();
     }
