@@ -124,14 +124,27 @@ class AuthenticatedSessionController extends Controller
         if (Auth::check()) {
             $employeeId = Auth::user()->employeeid;
 
-            // Clear user-specific cache keys
-            Cache::deleteMultiple([
-                'c_authWardCode_' . $employeeId,
-                'c_locationType_' . $employeeId,
-                'c_patients_' . $employeeId,
-                'c_csr_stocks_' . $employeeId,
-                'latest_update_' . $employeeId
-            ]);
+            // Retrieve cached auth ward code
+            $authWardCode = Cache::get('c_authWardCode_' . $employeeId);
+            // If auth ward code exists, delete the related keys
+            if ($authWardCode) {
+                Cache::deleteMultiple([
+                    'c_authWardCode_' . $employeeId,
+                    'c_locationType_' . $employeeId,
+                    'c_patients_' . $authWardCode,
+                    'c_csr_stocks_' . $authWardCode,
+                    'latest_update_' . $authWardCode
+                ]);
+            }
+
+            // // Clear user-specific cache keys
+            // Cache::deleteMultiple([
+            //     'c_authWardCode_' . $employeeId,
+            //     'c_locationType_' . $employeeId,
+            //     'c_patients_' . $employeeId,
+            //     'c_csr_stocks_' . $employeeId,
+            //     'latest_update_' . $employeeId
+            // ]);
 
             // Clear Inertia session cached data
             session()->forget([
