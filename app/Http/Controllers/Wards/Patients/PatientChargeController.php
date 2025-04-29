@@ -327,9 +327,9 @@ class PatientChargeController extends Controller
                         ];
 
                         #region comment for now
-                        $ward_stock_id = $wardStock->id;
-                        $non_specific_charge = $quantity_to_insert_in_logs;
-                        ChargingWardConsumptionTrackerJobs::dispatch($ward_stock_id, $non_specific_charge, $tscode);
+                        // $ward_stock_id = $wardStock->id;
+                        // $non_specific_charge = $quantity_to_insert_in_logs;
+                        // ChargingWardConsumptionTrackerJobs::dispatch($ward_stock_id, $non_specific_charge, $tscode);
                         #endregion comment for now
                     }
 
