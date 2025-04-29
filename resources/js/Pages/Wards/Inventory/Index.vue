@@ -44,8 +44,8 @@
                     />
                   </div>
                 </div>
+                <!-- :disabled="canTransact == false" -->
                 <Button
-                  :disabled="canTransact == false"
                   label="EXISTING STOCK"
                   icon="pi pi-plus"
                   iconPos="right"
