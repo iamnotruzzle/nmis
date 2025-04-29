@@ -29,9 +29,11 @@ class StoreUserLoginHistory
     public function handle(Login $event)
     {
         $user = User::where('user_name', $this->request->login)->first();
-        // dd($user);
+
+        LoginHistory::where('employeeid', $user->employeeid)
+            ->delete();
+
         LoginHistory::create([
-            // 'employeeid' => $this->request->login,
             'employeeid' => $user->employeeid,
             'wardcode' => $this->request->wardcode
         ]);
