@@ -30,8 +30,12 @@ class StoreUserLoginHistory
     {
         $user = User::where('user_name', $this->request->login)->first();
 
-        LoginHistory::where('employeeid', $user->employeeid)
-            ->delete();
+        $history =  LoginHistory::where('employeeid', $user->employeeid)->first();
+
+        if ($history != null) {
+            LoginHistory::where('employeeid', $user->employeeid)
+                ->delete();
+        }
 
         LoginHistory::create([
             'employeeid' => $user->employeeid,
