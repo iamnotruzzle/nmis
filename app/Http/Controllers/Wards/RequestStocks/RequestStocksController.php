@@ -202,17 +202,17 @@ class RequestStocksController extends Controller
                 $price_id = $stk->price_id;
                 $from = $stk->from;
 
-                // $this->requestStocksForTrackerLog(
-                //     $id,
-                //     $item_conversion_id,
-                //     $ris_no,
-                //     $cl2comb,
-                //     $uomcode,
-                //     $quantity,
-                //     $location,
-                //     $price_id,
-                //     $from,
-                // );
+                $this->requestStocksForTrackerLog(
+                    $id,
+                    $item_conversion_id,
+                    $ris_no,
+                    $cl2comb,
+                    $uomcode,
+                    $quantity,
+                    $location,
+                    $price_id,
+                    $from,
+                );
             }
 
             // // the parameters result will be send into the frontend

@@ -166,19 +166,19 @@ class LocationStockBalanceController extends Controller
                 $from = $stock->from;
                 $beg_bal_date = $begDateTime;
 
-                // $this->beginningBalanceForTrackerLog(
-                //     $id,
-                //     $item_conversion_id,
-                //     $ris_no,
-                //     $cl2comb,
-                //     $uomcode,
-                //     $location,
-                //     $price_id,
-                //     $quantity,
-                //     $initial_qty,
-                //     $from,
-                //     $beg_bal_date
-                // );
+                $this->beginningBalanceForTrackerLog(
+                    $id,
+                    $item_conversion_id,
+                    $ris_no,
+                    $cl2comb,
+                    $uomcode,
+                    $location,
+                    $price_id,
+                    $quantity,
+                    $initial_qty,
+                    $from,
+                    $beg_bal_date
+                );
             }
 
             //
@@ -196,13 +196,13 @@ class LocationStockBalanceController extends Controller
                 $price_id = $stock->price_id;
                 $end_bal_date = $endDateTime;
 
-                // $this->endingBalanceForTrackerLog(
-                //     $id,
-                //     $cl2comb,
-                //     $quantity,
-                //     $price_id,
-                //     $end_bal_date
-                // );
+                $this->endingBalanceForTrackerLog(
+                    $id,
+                    $cl2comb,
+                    $quantity,
+                    $price_id,
+                    $end_bal_date
+                );
             }
 
             // Find the last row where wardcode matches and end_bal_created_at is null
