@@ -178,10 +178,10 @@ class TransferStockController extends Controller
         $ward_stock_id = $transferredStock->ward_stock_id;
         $transferred_qty = $transferredStock->quantity;
 
-        $this->transferringItemForTrackerLog(
-            $ward_stock_id,
-            $transferred_qty,
-        );
+        // $this->transferringItemForTrackerLog(
+        //     $ward_stock_id,
+        //     $transferred_qty,
+        // );
 
         #region functions for the other ward to receive the item
         // item about to be transferred
