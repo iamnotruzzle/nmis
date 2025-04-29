@@ -140,6 +140,22 @@ class ECGController extends Controller
         //         ORDER BY htypser.tsdesc;"
         // );
 
+        // get six hour range filter
+        // $six_hour_range_filter = DB::select(
+        //     "SELECT type.tsdesc AS Department,
+        //         RIGHT('0' + CAST(DATEPART(HOUR, erlog.erdate) / 6 * 6 AS VARCHAR(2)), 2) + ':00 - ' +
+        //         RIGHT('0' + CAST((DATEPART(HOUR, erlog.erdate) / 6 * 6 + 5) AS VARCHAR(2)), 2) + ':59' AS Six_Hour_Range,
+        //         COUNT(DISTINCT erlog.enccode) AS Total_No_Patients
+        //     FROM herlog AS erlog
+        //     JOIN htypser AS type ON type.tscode = erlog.tscode
+        //     WHERE erlog.erdate >= '2025-03-01' AND erlog.erdate < '2025-03-31'
+        //     GROUP BY
+        //         type.tsdesc,
+        //         DATEPART(HOUR, erlog.erdate) / 6
+        //     ORDER BY
+        //         Six_Hour_Range, Department;"
+        // );
+
         return Inertia::render('Wards/Census/ECG/Index', [
             'census' => $census,
         ]);
