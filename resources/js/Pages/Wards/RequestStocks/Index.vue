@@ -44,6 +44,7 @@
                   </div>
                 </div>
                 <Button
+                  :disabled="canTransact == false"
                   label="Request stocks"
                   icon="pi pi-plus"
                   iconPos="right"
@@ -124,6 +125,7 @@
                 />
 
                 <Button
+                  :disabled="canTransact == false"
                   v-if="data.status == 'FILLED'"
                   label="RECEIVE"
                   icon="pi pi-check"
@@ -786,6 +788,7 @@ export default {
     // authWardcode: Object,
     items: Object,
     requestedStocks: Object,
+    canTransact: Boolean,
   },
   data() {
     return {

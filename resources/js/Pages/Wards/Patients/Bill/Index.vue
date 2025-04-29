@@ -57,6 +57,7 @@
 
                   <!-- uncomment if stock balance function is not implemented yet -->
                   <Button
+                    :disabled="canTransact == false"
                     v-if="is_for_discharge !== 'true'"
                     label="CHARGE PATIENT"
                     icon="pi pi-money-bill"
@@ -151,6 +152,7 @@
             <template #body="slotProps">
               <div v-if="slotProps.data.charge_log_id != null">
                 <Button
+                  :disabled="canTransact == false"
                   icon="pi pi-pencil"
                   class="mr-1"
                   rounded
@@ -774,7 +776,7 @@ export default {
     bills: Object,
     medicalSupplies: Object,
     misc: Object,
-    canCharge: Boolean,
+    canTransact: Boolean,
   },
   data() {
     return {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Wards\TransferStock;
 use App\Http\Controllers\Controller;
 use App\Models\ItemPrices;
 use App\Models\LocationStockBalance;
+use App\Models\LocationStockBalanceDateLogs;
 use App\Models\UserDetail;
 use App\Models\WardTransferStock;
 use Illuminate\Http\Request;
@@ -78,7 +79,16 @@ class TransferStockController extends Controller
 
         $employees = UserDetail::where('empstat', 'A')->orderBy('employeeid', 'ASC')->get(['employeeid', 'empstat', 'firstname', 'lastname']);
 
-        $canTransfer = null;
+        $latestDateLog = LocationStockBalanceDateLogs::where('wardcode', $authCode)
+            ->latest('created_at')->first();
+        $canTransact = null;
+        if ($latestDateLog == null) {
+            $canTransact = false;
+        } else if ($latestDateLog != null && $latestDateLog->end_bal_created_at != null) {
+            $canTransact = false;
+        } else {
+            $canTransact = true;
+        }
 
         return Inertia::render('Wards/TransferStock/Index', [
             'authWardcode' => $authWardcode[0],
@@ -87,7 +97,7 @@ class TransferStockController extends Controller
             // 'wardStocksMedicalGasess' => $wardStocksMedicalGasess,
             'transferredStock' => $transferredStock,
             'employees' => $employees,
-            'canTransfer' => $canTransfer,
+            'canTransact' => $canTransact
         ]);
     }
 
@@ -178,10 +188,10 @@ class TransferStockController extends Controller
         $ward_stock_id = $transferredStock->ward_stock_id;
         $transferred_qty = $transferredStock->quantity;
 
-        // $this->transferringItemForTrackerLog(
-        //     $ward_stock_id,
-        //     $transferred_qty,
-        // );
+        $this->transferringItemForTrackerLog(
+            $ward_stock_id,
+            $transferred_qty,
+        );
 
         #region functions for the other ward to receive the item
         // item about to be transferred
@@ -224,17 +234,18 @@ class TransferStockController extends Controller
         $location = $authCode;
         $price_id = $itemPrice->id;
 
-        // $this->receivedItemFromWardForTrackerLog(
-        //     $id,
-        //     $item_conversion_id,
-        //     $cl2comb,
-        //     $ris_no,
-        //     $uomcode,
-        //     $initial_qty,
-        //     $from,
-        //     $location,
-        //     $price_id,
-        // );
+        $this->receivedItemFromWardForTrackerLog(
+            $id,
+            $item_conversion_id,
+            $cl2comb,
+            $ris_no,
+            $uomcode,
+            $initial_qty,
+            $from,
+            $location,
+            $price_id,
+        );
+
         #endregion
 
 

@@ -427,6 +427,7 @@ export default {
           this.cancel();
           this.updateData();
           this.createdMsg();
+          this.confirmBeginningDialog = false;
         },
         onError: () => {
           //   console.log(this.$page.props.errors.error);
@@ -451,6 +452,7 @@ export default {
           this.cancel();
           this.updateData();
           this.createdMsg();
+          this.confirmEndDIalog = false;
         },
         onError: () => {
           //   console.log(this.$page.props.errors.error);
@@ -590,7 +592,7 @@ export default {
   watch: {
     confirmBeginningDialog(newVal) {
       if (newVal) {
-        this.countdown = 0; // Reset countdown when dialog is opened
+        this.countdown = 20; // Reset countdown when dialog is opened
         this.timer = setInterval(() => {
           if (this.countdown > 0) {
             this.countdown--;
@@ -606,7 +608,7 @@ export default {
     },
     confirmEndDIalog(newVal) {
       if (newVal) {
-        this.countdown = 0; // Reset countdown when dialog is opened
+        this.countdown = 20; // Reset countdown when dialog is opened
         this.timer = setInterval(() => {
           if (this.countdown > 0) {
             this.countdown--;

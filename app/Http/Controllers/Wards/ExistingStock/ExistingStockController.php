@@ -121,17 +121,17 @@ class ExistingStockController extends Controller
             $price_id = $price[0]->id;
             $from = $existingStock->from;
 
-            // $this->existingStockForTrackerLog(
-            //     $id,
-            //     $item_conversion_id,
-            //     $ris_no,
-            //     $cl2comb,
-            //     $uomcode,
-            //     $quantity,
-            //     $location,
-            //     $price_id,
-            //     $from,
-            // );
+            $this->existingStockForTrackerLog(
+                $id,
+                $item_conversion_id,
+                $ris_no,
+                $cl2comb,
+                $uomcode,
+                $quantity,
+                $location,
+                $price_id,
+                $from,
+            );
 
             $wardStockLogs = WardsStocksLogs::create([
                 'request_stocks_id' => null,

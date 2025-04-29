@@ -12,6 +12,7 @@ use App\Models\CsrwCode;
 use App\Models\ERlog;
 use App\Models\Item;
 use App\Models\LocationStockBalance;
+use App\Models\LocationStockBalanceDateLogs;
 use App\Models\Miscellaneous;
 use App\Models\Opdlog;
 use App\Models\Patient;
@@ -156,7 +157,16 @@ class PatientChargeController extends Controller
                             ORDER BY pat_charge.pcchrgdte DESC"
         );
 
-        $canCharge = null;
+        $latestDateLog = LocationStockBalanceDateLogs::where('wardcode', $wardcode)
+            ->latest('created_at')->first();
+        $canTransact = null;
+        if ($latestDateLog == null) {
+            $canTransact = false;
+        } else if ($latestDateLog != null && $latestDateLog->end_bal_created_at != null) {
+            $canTransact = false;
+        } else {
+            $canTransact = true;
+        }
 
         return Inertia::render('Wards/Patients/Bill/Index', [
             // 'pat_name' => $pat_name,
@@ -171,7 +181,7 @@ class PatientChargeController extends Controller
             'medicalSupplies' => $medicalSupplies,
             'misc' => $misc,
             'is_for_discharge' => $is_for_discharge,
-            'canCharge' => $canCharge,
+            'canTransact' => $canTransact,
         ]);
     }
 
@@ -327,9 +337,9 @@ class PatientChargeController extends Controller
                         ];
 
                         #region comment for now
-                        // $ward_stock_id = $wardStock->id;
-                        // $non_specific_charge = $quantity_to_insert_in_logs;
-                        // ChargingWardConsumptionTrackerJobs::dispatch($ward_stock_id, $non_specific_charge, $tscode);
+                        $ward_stock_id = $wardStock->id;
+                        $non_specific_charge = $quantity_to_insert_in_logs;
+                        ChargingWardConsumptionTrackerJobs::dispatch($ward_stock_id, $non_specific_charge, $tscode);
                         #endregion comment for now
                     }
 
@@ -505,10 +515,10 @@ class PatientChargeController extends Controller
                         $upd_QtyToReturn = (int)$upd_QtyToReturn;
                         $upd_ward_stocks_id = $request->upd_ward_stocks_id;
 
-                        // $this->voidingConsumptionForTrackerLog(
-                        //     $upd_ward_stocks_id,
-                        //     $upd_QtyToReturn,
-                        // );
+                        $this->voidingConsumptionForTrackerLog(
+                            $upd_ward_stocks_id,
+                            $upd_QtyToReturn,
+                        );
 
                         PatientChargeReturnLogs::create([
                             'enccode' => $request->enccode,

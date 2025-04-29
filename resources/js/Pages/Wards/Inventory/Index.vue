@@ -45,6 +45,7 @@
                   </div>
                 </div>
                 <Button
+                  :disabled="canTransact == false"
                   label="EXISTING STOCK"
                   icon="pi pi-plus"
                   iconPos="right"
@@ -198,12 +199,14 @@
             <template #body="slotProps">
               <div class="flex justify-content-center">
                 <Button
+                  :disabled="canTransact == false"
                   v-if="slotProps.data.from == 'CSR'"
                   label="RETURN"
                   severity="primary"
                   @click="returnToCsr(slotProps.data)"
                 />
                 <Button
+                  :disabled="canTransact == false"
                   v-if="slotProps.data.from == 'EXISTING_STOCKS'"
                   label="UPDATE"
                   severity="info"
@@ -863,6 +866,7 @@ export default {
   props: {
     items: Object,
     currentWardStocks: Object,
+    canTransact: Boolean,
   },
   data() {
     return {

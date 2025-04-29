@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Wards\Inventory;
 use App\Http\Controllers\Controller;
 use App\Models\FundSource;
 use App\Models\Item;
+use App\Models\LocationStockBalanceDateLogs;
 use App\Models\TypeOfCharge;
 use App\Models\WardsStocks;
 use Carbon\Carbon;
@@ -110,9 +111,22 @@ class InventoryController extends Controller
         );
         // dd($currentWardStocks);
 
+        $latestDateLog = LocationStockBalanceDateLogs::where('wardcode', $authWardCode_cached)
+            ->latest('created_at')->first();
+        $canTransact = null;
+        if ($latestDateLog == null) {
+            $canTransact = false;
+        } else if ($latestDateLog != null && $latestDateLog->end_bal_created_at != null) {
+            $canTransact = false;
+        } else {
+            $canTransact = true;
+        }
+        // dd($canTransact);
+
         return Inertia::render('Wards/Inventory/Index', [
             'items' => $items,
             'currentWardStocks' => $currentWardStocks,
+            'canTransact' => $canTransact,
         ]);
     }
 }

@@ -6,6 +6,7 @@ use App\Events\RequestStock;
 use App\Http\Controllers\Controller;
 use App\Models\FundSource;
 use App\Models\Item;
+use App\Models\LocationStockBalanceDateLogs;
 use App\Models\RequestStocks;
 use App\Models\RequestStocksDetails;
 use App\Models\TypeOfCharge;
@@ -79,10 +80,22 @@ class RequestStocksController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
+        $latestDateLog = LocationStockBalanceDateLogs::where('wardcode', $wardCode)
+            ->latest('created_at')->first();
+        $canTransact = null;
+        if ($latestDateLog == null) {
+            $canTransact = false;
+        } else if ($latestDateLog != null && $latestDateLog->end_bal_created_at != null) {
+            $canTransact = false;
+        } else {
+            $canTransact = true;
+        }
+
 
         return Inertia::render('Wards/RequestStocks/Index', [
             'items' => $items,
             'requestedStocks' => $requestedStocks,
+            'canTransact' => $canTransact
         ]);
     }
 
@@ -202,17 +215,17 @@ class RequestStocksController extends Controller
                 $price_id = $stk->price_id;
                 $from = $stk->from;
 
-                // $this->requestStocksForTrackerLog(
-                //     $id,
-                //     $item_conversion_id,
-                //     $ris_no,
-                //     $cl2comb,
-                //     $uomcode,
-                //     $quantity,
-                //     $location,
-                //     $price_id,
-                //     $from,
-                // );
+                $this->requestStocksForTrackerLog(
+                    $id,
+                    $item_conversion_id,
+                    $ris_no,
+                    $cl2comb,
+                    $uomcode,
+                    $quantity,
+                    $location,
+                    $price_id,
+                    $from,
+                );
             }
 
             // // the parameters result will be send into the frontend

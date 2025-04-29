@@ -80,6 +80,7 @@
         >
           <template #body="slotProps">
             <Button
+              :disabled="canTransact == false"
               icon="pi pi-pencil"
               class="mr-1"
               rounded
@@ -421,6 +422,7 @@
               <template #body="slotProps">
                 <div>
                   <Button
+                    :disabled="canTransact == false"
                     v-if="slotProps.data.status != 'RECEIVED'"
                     label="RECEIVE"
                     :icon="form.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
@@ -488,7 +490,7 @@ export default {
     // wardStocksMedicalGasess: Object,
     transferredStock: Object,
     employees: Object,
-    canTransfer: Boolean,
+    canTransact: Boolean,
   },
   data() {
     return {
