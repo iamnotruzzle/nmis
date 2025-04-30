@@ -46,8 +46,10 @@ class CsrInventoryController extends Controller
             "SELECT item.cl2desc as item_desc, SUM(ward_stock.quantity) as quantity
                 FROM csrw_wards_stocks as ward_stock
                 JOIN hclass2 as item ON item.cl2comb = ward_stock.cl2comb
+                LEFT JOIN csrw_request_stocks rs ON rs.id = ward_stock.request_stocks_id
                 WHERE ward_stock.quantity > 0
-                AND location = '$wardCode'
+                AND ward_stock.location = '$wardCode'
+                AND (rs.id IS NULL OR rs.status = 'RECEIVED')
                 GROUP BY item.cl2desc
                 ORDER BY item.cl2desc ASC;"
         );
