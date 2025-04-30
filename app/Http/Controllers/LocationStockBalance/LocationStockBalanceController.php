@@ -137,15 +137,30 @@ class LocationStockBalanceController extends Controller
         $begDateTime = $date->copy(); // Sets time to 00:00:00
         $endDateTime = $date->copy();   // Sets time to 23:59:59
 
+        // old
+        // $currentStocks = DB::select(
+        //     "SELECT ward_stock.id, ward_stock.stock_id, ward_stock.request_stocks_id, ward_stock.request_stocks_detail_id, ward_stock.stock_id, ward_stock.location, ward_stock.cl2comb,
+        //             ward_stock.uomcode, ward_stock.chrgcode, ward_stock.quantity, ward_stock.[from], ward_stock.manufactured_date, ward_stock.delivered_date, ward_stock.expiration_date, ward_stock.created_at,
+        //             ward_stock.ris_no, price.id as price_id
+        //             FROM csrw_wards_stocks as ward_stock
+        //             JOIN csrw_item_prices as price ON price.cl2comb = ward_stock.cl2comb AND price.ris_no = ward_stock.ris_no
+        //             WHERE ward_stock.location = ?
+        //             AND ward_stock.quantity > 0",
+        //     [$request->location]
+        // );
+
+        // new ONLY read stocks that have request stock status as received or NULL(meaning its added using existing stock function)
         $currentStocks = DB::select(
             "SELECT ward_stock.id, ward_stock.stock_id, ward_stock.request_stocks_id, ward_stock.request_stocks_detail_id, ward_stock.stock_id, ward_stock.location, ward_stock.cl2comb,
-                    ward_stock.uomcode, ward_stock.chrgcode, ward_stock.quantity, ward_stock.[from], ward_stock.manufactured_date, ward_stock.delivered_date, ward_stock.expiration_date, ward_stock.created_at,
-                    ward_stock.ris_no, price.id as price_id
-                    FROM csrw_wards_stocks as ward_stock
-                    JOIN csrw_item_prices as price ON price.cl2comb = ward_stock.cl2comb AND price.ris_no = ward_stock.ris_no
-                    WHERE ward_stock.location = ?
-                    AND ward_stock.quantity > 0",
-            [$request->location]
+                ward_stock.uomcode, ward_stock.chrgcode, ward_stock.quantity, ward_stock.[from], ward_stock.manufactured_date, ward_stock.delivered_date, ward_stock.expiration_date, ward_stock.created_at,
+                ward_stock.ris_no, price.id as price_id
+                FROM csrw_wards_stocks as ward_stock
+            JOIN csrw_item_prices as price ON price.cl2comb = ward_stock.cl2comb AND price.ris_no = ward_stock.ris_no
+            LEFT JOIN csrw_request_stocks rs ON rs.id = ward_stock.request_stocks_id
+            WHERE ward_stock.location = ?
+            AND ward_stock.quantity > 0
+            AND (rs.id IS NULL OR rs.status = 'RECEIVED');",
+            [$request->location] // Duplicate the parameter
         );
         // dd($currentStocks);
 

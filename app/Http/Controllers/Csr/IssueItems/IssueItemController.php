@@ -65,14 +65,6 @@ class IssueItemController extends Controller
             ->whereHas('requested_at_details', function ($q) use ($searchString) {
                 $q->where('wardname', 'LIKE', '%' . $searchString . '%');
             })
-            // ->orWhereHas('requested_by_details', function ($q) use ($searchString) {
-            //     $q->where('firstname', 'LIKE', '%' . $searchString . '%')
-            //         ->orWhere('middlename', 'LIKE', '%' . $searchString . '%')
-            //         ->orWhere('lastname', 'LIKE', '%' . $searchString . '%');
-            // })
-            // ->orWhereHas('request_stocks_details.item_details', function ($q) use ($searchString) {
-            //     $q->where('cl2desc', 'LIKE', '%' . $searchString . '%');
-            // })
             ->when(
                 $request->from,
                 function ($query, $value) use ($from) {
@@ -92,7 +84,7 @@ class IssueItemController extends Controller
                 }
             )
             ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->paginate(5);
         // dd($requestedStocks);
 
         $medicalGas = DB::select(
