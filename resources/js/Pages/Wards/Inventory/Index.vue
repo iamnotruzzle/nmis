@@ -198,15 +198,15 @@
           >
             <template #body="slotProps">
               <div class="flex justify-content-center">
+                <!-- :disabled="canTransact == false" -->
                 <Button
-                  :disabled="canTransact == false"
                   v-if="slotProps.data.from == 'CSR'"
                   label="RETURN"
                   severity="primary"
                   @click="returnToCsr(slotProps.data)"
                 />
+                <!-- :disabled="canTransact == false" -->
                 <Button
-                  :disabled="canTransact == false"
                   v-if="slotProps.data.from == 'EXISTING_STOCKS'"
                   label="UPDATE"
                   severity="info"
