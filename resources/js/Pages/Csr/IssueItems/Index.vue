@@ -213,29 +213,18 @@
           </Column>
           <template #expansion="slotProps">
             <div class="p-3">
+              <!-- {{ slotProps.data.request_stocks_details }} -->
               <DataTable
                 paginator
                 removableSort
-                :rows="7"
+                :rows="10"
                 :value="slotProps.data.request_stocks_details"
                 showGridlines
               >
                 <template #header>
                   <div class="flex flex-wrap align-items-center justify-content-between gap-2">
                     <span class="text-primary">PENDING ITEMS</span>
-                    <div class="flex flex-row align-items-center">
-                      <!-- <a
-                        v-if="slotProps.data.status != 'PENDING'"
-                        :href="`issueitems/issued?from=${params.from}&to=${params.to}
-                      &id=${(params.id = slotProps.data.id)}`"
-                        target="_blank"
-                        class="mr-3"
-                      >
-                        <i
-                          class="pi pi-download"
-                          :style="{ color: 'green', 'font-size': '1.2rem' }"
-                        ></i>
-                      </a> -->
+                    <!-- <div class="flex flex-row align-items-center">
                       <Button
                         v-if="slotProps.data.status != 'PENDING'"
                         icon="pi pi-book"
@@ -246,14 +235,14 @@
                         @click="viewIssuedItem(slotProps.data)"
                         size="large"
                       />
-                    </div>
+                    </div> -->
                   </div>
                 </template>
                 <Column
                   header="ITEM"
                   style="width: 50%"
                 >
-                  <template #body="{ data }"> {{ data.item_details.cl2desc }} </template>
+                  <template #body="{ data }"> {{ data.cl2desc }} </template>
                 </Column>
                 <Column
                   field="requested_qty"
@@ -1256,6 +1245,7 @@ export default {
     this.rows = this.requestedStocks.per_page;
   },
   mounted() {
+    console.log('requestedStocks', this.requestedStocks);
     // store ward list
     this.$page.props.locations.forEach((e) => {
       if (e.wardcode != 'CSR' && e.wardcode != 'ADMIN') {
@@ -1269,7 +1259,6 @@ export default {
     window.Echo.channel('request').listen('RequestStock', (args) => {
       router.reload({
         onSuccess: (e) => {
-          console.log(e);
           this.requestStockList = [];
           this.storeRequestedStocksInContainer();
         },
@@ -1293,8 +1282,9 @@ export default {
   },
   methods: {
     print(data) {
-      console.log(data);
+      //   console.log(data);
       if (data) {
+        // console.log('data', data);
         // Set up the print form details
         this.printForm.office = data.requested_at;
         this.printForm.ris_no = `RIS-${data.id}`;
@@ -1304,8 +1294,9 @@ export default {
 
         data.request_stocks_details.forEach((e) => {
           this.printForm.items.push({
-            stock_no: e.issued_item.length === 0 ? '' : e.issued_item[0].id,
-            description: e.item_details.cl2desc,
+            // stock_no: e.issued_item.length === 0 ? '' : e.issued_item[0].id,
+            stock_no: e.converted_item[0].id,
+            description: e.cl2desc,
             req_qty: e.requested_qty,
             stock_avail: e.approved_qty != 0 ? 'y' : 'n',
             issue_qty: e.approved_qty,
@@ -1407,62 +1398,33 @@ export default {
     // server request such as POST, the data in the table
     // is updated
     storeRequestedStocksInContainer() {
-      //   console.log(this.requestedStocks.data);
       this.requestedStocks.data.forEach((e) => {
         this.requestStockList.push({
           id: e.id,
           status: e.status,
-          requested_by: e.requested_by_details.firstname + ' ' + e.requested_by_details.lastname,
-          approved_by:
-            e.approved_by_details != null
-              ? e.approved_by_details.firstname + ' ' + e.approved_by_details.lastname
-              : null,
+          requested_by: e.requested_by,
+          approved_by: e.approved_by,
           remarks: e.remarks,
-          requested_at: e.requested_at_details.wardname,
+          requested_at: e.requested_at,
           created_at: e.created_at,
           request_stocks_details: e.request_stocks_details,
         });
       });
-      //   console.log(this.requestStockList);
     },
-    viewIssuedItem(data) {
-      //   console.log('data', data.id);
-      data.request_stocks_details.forEach((item) => {
-        // console.log('item', item);
-
-        item.issued_item.forEach((e) => {
-          //   console.log(e);
-          if (data.id == e.request_stocks_id) {
-            this.issuedItemList.push({
-              ris_no: e.ris_no,
-              cl2desc: e.item_details.cl2desc,
-              quantity: e.quantity,
-              expiration_date: e.expiration_date,
-            });
-          }
-        });
-      });
-
-      //   console.log(this.issuedItemList);
-      this.issuedItemsDialog = true;
-    },
-    // getSeverity(status) {
-    //   switch (status) {
-    //     case 'PENDING':
-    //       return 'primary';
-
-    //     case 'ACKNOWLEDGED':
-    //       return 'yellow';
-
-    //     case 'FILLED':
-    //       return 'info';
-
-    //     case 'RECEIVED':
-    //       return 'success';
-
-    //     default:
-    //       return null;
-    //   }
+    // viewIssuedItem(data) {
+    //   data.request_stocks_details.forEach((item) => {
+    //     item.issued_item.forEach((e) => {
+    //       if (data.id == e.request_stocks_id) {
+    //         this.issuedItemList.push({
+    //           ris_no: e.ris_no,
+    //           cl2desc: e.cl2desc,
+    //           quantity: e.quantity,
+    //           expiration_date: e.expiration_date,
+    //         });
+    //       }
+    //     });
+    //   });
+    //   this.issuedItemsDialog = true;
     // },
     onPage(event) {
       this.params.page = event.page + 1;
@@ -1488,7 +1450,6 @@ export default {
       });
     },
     openCreateRequestStocksDialog(item) {
-      //   console.log(item.request_stocks_details);
       this.form.clearErrors();
       this.form.reset();
       this.form.request_stocks_id = item.id;
@@ -1498,11 +1459,10 @@ export default {
       this.requestStockId = item.id;
 
       item.request_stocks_details.forEach((e) => {
-        // console.log(e);
         this.requestStockListDetails.push({
-          request_stocks_details_id: e.id,
+          request_stocks_details_id: e.detail_id,
           cl2comb: e.cl2comb,
-          cl2desc: e.item_details.cl2desc,
+          cl2desc: e.cl2desc,
           requested_qty: e.requested_qty,
           approved_qty: e.approved_qty,
           remarks: e.remarks,
@@ -1562,7 +1522,6 @@ export default {
           }
         }
       }
-      //   console.log(this.requestStockListDetails);
     },
     removeFromRequestContainer(item) {
       this.requestStockListDetails.splice(
@@ -1578,10 +1537,11 @@ export default {
       this.requestStockId = item.id;
 
       item.request_stocks_details.forEach((e) => {
+        // console.log(e);
         this.requestStockListDetails.push({
-          request_stocks_details_id: e.id,
+          request_stocks_details_id: e.detail_id,
           cl2comb: e.cl2comb,
-          cl2desc: e.item_details.cl2desc,
+          cl2desc: e.cl2desc,
           requested_qty: e.requested_qty,
           approved_qty: e.approved_qty,
           staticApproved_qty: e.approved_qty,
@@ -1591,13 +1551,13 @@ export default {
                 return Number(accumulator) + Number(object.quantity_after);
               }, 0)
           ),
+          //   stock_w_approved: 0,
           stock_qty: e.converted_item.reduce((accumulator, object) => {
             return Number(accumulator) + Number(object.quantity_after);
           }, 0),
           remarks: e.remarks,
         });
       });
-      //   console.log(this.requestStockListDetails);
     },
     submit() {
       if (this.form.processing) {
@@ -1612,8 +1572,6 @@ export default {
       // approved qty <= total stock
       if (this.disabled != true) {
         if (this.isUpdate) {
-          //   console.log(this.requestStockListDetails);
-
           this.requestStockListDetails.forEach((e) => {
             e.approved_qty = e.approved_qty == '' || e.approved_qty == null ? 0 : e.approved_qty;
             e.remarks = e.remarks == '' || e.remarks == null ? null : e.remarks;
@@ -1692,7 +1650,6 @@ export default {
         this.formMedicalGas.delivered_date != null ||
         this.formMedicalGas.delivered_date != ''
       ) {
-        // console.log('success');
         this.formMedicalGas.post(route('medicalgastoward.store'), {
           preserveScroll: true,
           onFinish: () => {
@@ -1706,9 +1663,6 @@ export default {
       }
     },
     updateMedicalGas() {
-      //   console.log(item);
-      //   this.formUpdateStatus.status = item;
-
       if (
         this.formUpdateMedicalGas.processing ||
         this.formUpdateMedicalGas.quantity == '' ||
@@ -1729,8 +1683,6 @@ export default {
       });
     },
     editMedicalGas(data) {
-      //   console.log(data);
-
       this.updateMedicalGasDialog = true;
 
       this.formUpdateMedicalGas.stock_id = data.stock_id;
@@ -1756,15 +1708,11 @@ export default {
       this.formUpdateMedicalGas.clearErrors();
     },
     editStatus(item) {
-      //   console.log(item);
       this.editStatusDialog = true;
       this.formUpdateStatus.request_stock_id = item.id;
       this.formUpdateStatus.status = 'RECEIVED';
     },
     updateStatus() {
-      //   console.log(item);
-      //   this.formUpdateStatus.status = item;
-
       this.formUpdateStatus.put(route('issueitems.acknowledgedrequest', this.formUpdateStatus), {
         preserveScroll: true,
         onSuccess: () => {
@@ -1802,13 +1750,10 @@ export default {
   watch: {
     'formMedicalGas.cl2comb': function (val) {
       this.selectedItemsUomDesc = null;
-      //   console.log(val);
 
       this.medicalGasList.forEach((e) => {
-        // console.log(e);
         if (e.cl2comb == val) {
           if (e.uomdesc != null || e.uomdesc == '') {
-            // console.log('if');
             this.selectedItemsUomDesc = e.uomdesc;
             this.formMedicalGas.uomcode = e.uomcode;
           } else {
@@ -1817,9 +1762,7 @@ export default {
         }
       });
     },
-    formUpdateMedicalGas: function (val) {
-      console.log(val);
-    },
+    formUpdateMedicalGas: function (val) {},
     search: function (val, oldVal) {
       this.params.search = val;
       this.updateData();
@@ -1845,7 +1788,6 @@ export default {
       this.updateData();
     },
     selectedStatus: function (val) {
-      //   console.log(val['code']);
       this.params.status = this.selectedStatus;
 
       this.updateData();

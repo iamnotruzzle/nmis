@@ -54,36 +54,101 @@ class IssueItemController extends Controller
                 WHERE converted.quantity_after != converted.total_issued_qty;"
         );
 
-        $requestedStocks = RequestStocks::with([
-            'requested_at_details:wardcode,wardname',
-            'requested_by_details:employeeid,firstname,middlename,lastname',
-            'approved_by_details',
-            'request_stocks_details.item_details:cl2comb,cl2desc',
-            'request_stocks_details'
-        ])
-            ->whereHas('requested_at_details', function ($q) use ($searchString) {
-                $q->where('wardname', 'LIKE', '%' . $searchString . '%');
-            })
-            ->when(
-                $request->from,
-                function ($query, $value) use ($from) {
-                    $query->whereDate('created_at', '>=', $from);
-                }
+        // $requestedStocks = RequestStocks::with([
+        //     'requested_at_details:wardcode,wardname',
+        //     'requested_by_details:employeeid,firstname,middlename,lastname',
+        //     'approved_by_details',
+        //     'request_stocks_details.item_details:cl2comb,cl2desc',
+        //     'request_stocks_details'
+        // ])
+        //     ->whereHas('requested_at_details', function ($q) use ($searchString) {
+        //         $q->where('wardname', 'LIKE', '%' . $searchString . '%');
+        //     })
+        //     ->when(
+        //         $request->from,
+        //         function ($query, $value) use ($from) {
+        //             $query->whereDate('created_at', '>=', $from);
+        //         }
+        //     )
+        //     ->when(
+        //         $request->to,
+        //         function ($query, $value) use ($to) {
+        //             $query->whereDate('created_at', '<=', $to);
+        //         }
+        //     )
+        //     ->when(
+        //         $request->status,
+        //         function ($query, $value) {
+        //             $query->where('status', $value);
+        //         }
+        //     )
+        //     ->orderBy('created_at', 'desc')
+        //     ->paginate(5);
+
+        $requests = DB::table('csrw_request_stocks as rs')
+            ->join('hward as ward', 'ward.wardcode', '=', 'rs.location')
+            ->join('hpersonal as requested_by', 'requested_by.employeeid', '=', 'rs.requested_by')
+            ->leftJoin('hpersonal as approved_by', 'approved_by.employeeid', '=', 'rs.approved_by')
+            ->select(
+                'rs.id',
+                'ward.wardname',
+                'rs.status',
+                'rs.created_at',
+                DB::raw("requested_by.firstname + ' ' + requested_by.lastname as requested_by_name"),
+                DB::raw("approved_by.firstname + ' ' + approved_by.lastname as approved_by_name")
             )
-            ->when(
-                $request->to,
-                function ($query, $value) use ($to) {
-                    $query->whereDate('created_at', '<=', $to);
-                }
-            )
-            ->when(
-                $request->status,
-                function ($query, $value) {
-                    $query->where('status', $value);
-                }
-            )
-            ->orderBy('created_at', 'desc')
+            ->groupBy('rs.id', 'ward.wardname', 'rs.status', 'rs.created_at', 'requested_by.firstname', 'requested_by.lastname', 'approved_by.firstname', 'approved_by.lastname')
+            ->orderByDesc('rs.id')
             ->paginate(5);
+
+        $requestIds = collect($requests->items())->pluck('id');
+
+        $details = DB::table('csrw_request_stocks_details as rsd')
+            ->join('hclass2 as item', 'item.cl2comb', '=', 'rsd.cl2comb')
+            ->whereIn('rsd.request_stocks_id', $requestIds)
+            ->select(
+                'rsd.id as detail_id',
+                'rsd.request_stocks_id',
+                'rsd.cl2comb',
+                'item.cl2desc',
+                'rsd.requested_qty',
+                'rsd.approved_qty',
+                'rsd.remarks'
+            )
+            ->get();
+
+        // Step 3: Fetch converted items
+        $cl2combs = $details->pluck('cl2comb')->unique();
+        $converted = DB::table('csrw_csr_item_conversion')
+            ->whereIn('cl2comb_after', $cl2combs)
+            ->whereDate('expiration_date', '>', now())
+            ->select('id', 'cl2comb_after', 'quantity_after', 'expiration_date')
+            ->get()
+            ->groupBy('cl2comb_after');
+        $groupedDetails = $details->groupBy('request_stocks_id');
+
+        $data = collect($requests->items())->map(function ($req) use ($groupedDetails, $converted) {
+            return [
+                'id' => $req->id,
+                'created_at' => $req->created_at,
+                'status' => $req->status,
+                'requested_by' => $req->requested_by_name,
+                'approved_by' => $req->approved_by_name,
+                'requested_at' => $req->wardname,
+                'request_stocks_details' => $groupedDetails[$req->id]->map(function ($d) use ($converted) {
+                    return [
+                        'detail_id' => $d->detail_id,
+                        'cl2comb' => $d->cl2comb,
+                        'cl2desc' => $d->cl2desc,
+                        'requested_qty' => $d->requested_qty,
+                        'approved_qty' => $d->approved_qty,
+                        'remarks' => $d->remarks,
+                        'converted_item' => isset($converted[$d->cl2comb]) ? $converted[$d->cl2comb]->values() : collect(),
+                    ];
+                })->values()
+            ];
+        });
+        // dd($data);
 
 
         $medicalGas = DB::select(
@@ -116,7 +181,14 @@ class IssueItemController extends Controller
 
         return Inertia::render('Csr/IssueItems/Index', [
             'items' => $items,
-            'requestedStocks' => $requestedStocks,
+            // 'requestedStocks' => $requestedStocks,
+            'requestedStocks' => [
+                'data' => $data,
+                'current_page' => $requests->currentPage(),
+                'per_page' => $requests->perPage(),
+                'total' => $requests->total(),
+                'last_page' => $requests->lastPage(),
+            ],
             'medicalGas' => $medicalGas,
             'wardsMedicalGasStock' => $wardsMedicalGasStock,
             'authWardcode' => $authWardcode[0],
