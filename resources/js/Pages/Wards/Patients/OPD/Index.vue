@@ -59,10 +59,27 @@
           sortable
         >
           <template #body="{ data }">
-            <div class="flex flex-row align-items-center">
-              <div class="">
-                <span>{{ data.tsdesc }}</span>
-              </div>
+            <div class="flex flex-row align-items-center justify-content-center">
+              <Tag
+                v-if="data.tsdesc == 'Animal Bite'"
+                value="ANIMAL BITE"
+                severity="success"
+              />
+              <Tag
+                v-else-if="data.tsdesc == 'Family Medicine'"
+                value="FAMILY MEDICINE"
+                severity="warning"
+              />
+              <Tag
+                v-else-if="data.tsdesc == 'E-Konsulta'"
+                value="E-KONSULTA"
+                severity="info"
+              />
+              <Tag
+                v-else
+                value="EMS"
+                severity="info"
+              />
             </div>
           </template>
         </Column>
