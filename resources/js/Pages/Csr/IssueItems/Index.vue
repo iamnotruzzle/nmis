@@ -1295,7 +1295,7 @@ export default {
         data.request_stocks_details.forEach((e) => {
           this.printForm.items.push({
             // stock_no: e.issued_item.length === 0 ? '' : e.issued_item[0].id,
-            stock_no: e.converted_item[0].id,
+            stock_no: e.converted_item?.length > 0 ? e.converted_item[0].id : '',
             description: e.cl2desc,
             req_qty: e.requested_qty,
             stock_avail: e.approved_qty != 0 ? 'y' : 'n',
