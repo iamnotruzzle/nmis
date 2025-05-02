@@ -89,6 +89,12 @@ class IssueItemController extends Controller
             ->join('hward as ward', 'ward.wardcode', '=', 'rs.location')
             ->join('hpersonal as requested_by', 'requested_by.employeeid', '=', 'rs.requested_by')
             ->leftJoin('hpersonal as approved_by', 'approved_by.employeeid', '=', 'rs.approved_by')
+            ->when(
+                $request->status, // assumes $request is available and has a `status`
+                function ($query, $value) {
+                    return $query->where('rs.status', $value);
+                }
+            )
             ->select(
                 'rs.id',
                 'ward.wardname',
