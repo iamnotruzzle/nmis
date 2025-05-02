@@ -167,6 +167,41 @@ class WardPatientsController extends Controller
                     ORDER BY hopdlog.opddate DESC;",
                     // [$authWardCode_cached]
                 );
+            } else if ($authWardCode_cached == 'FAMED') {
+                $patients_query = DB::SELECT(
+                    "SELECT
+                        hopdlog.enccode,
+                        hopdlog.hpercode,
+                        hopdlog.opddate,
+                        hopdlog.licno,
+                        hpersonal.lastname,
+                        hpersonal.firstname,
+                        hpersonal.empsuffix,
+                        hperson.patlast,
+                        hperson.patfirst,
+                        hperson.patmiddle,
+                        htypser.tsdesc,
+                        hopdlog.opddtedis,
+                        hopdlog.opdstat,
+                        hdisposition.dispdesc,
+                        hopdlog.tscode
+
+                    FROM hopdlog WITH (NOLOCK)
+
+                    INNER JOIN hperson ON hperson.hpercode = hopdlog.hpercode
+                    INNER JOIN htypser ON htypser.tscode = hopdlog.tscode
+                    LEFT JOIN hdisposition ON hdisposition.dispcode = hopdlog.opddisp
+                    LEFT JOIN hprovider ON hprovider.licno = hopdlog.licno
+                    LEFT JOIN hpersonal ON hpersonal.employeeid = hprovider.employeeid
+
+                    WHERE hopdlog.tscode LIKE 'FAM%'
+                    AND hopdlog.opddate BETWEEN CAST(GETDATE() AS DATE) AND DATEADD(DAY, 1, CAST(GETDATE() AS DATE)) -- prod
+                    -- AND hopdlog.opddate BETWEEN CAST('2022-11-30' AS DATE) AND DATEADD(DAY, 1, CAST('2022-12-01' AS DATE)) -- test
+
+                    AND hopdlog.licno IS NOT NULL
+
+                    ORDER BY hopdlog.opddate DESC;"
+                );
             } else {
                 $patients_query = DB::SELECT(
                     "SELECT hopdlog.enccode, hopdlog.hpercode, hopdlog.opddate, hopdlog.licno,
@@ -195,7 +230,8 @@ class WardPatientsController extends Controller
 
 
             return Inertia::render('Wards/Patients/OPD/Index', [
-                'patients' => $patients_query
+                'patients' => $patients_query,
+                'currWard' => $authWardCode_cached,
             ]);
         } else if ($locationType_cached == 'ER') {
             $latestERDateMod = DB::select(

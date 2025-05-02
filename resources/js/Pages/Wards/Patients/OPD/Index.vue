@@ -17,19 +17,11 @@
         sortField="patient"
         :sortOrder="1"
         removableSort
-        :globalFilterFields="['hpercode', 'patient', 'status', 'physician']"
+        :globalFilterFields="['hpercode', 'patient', 'status', 'physician', 'tsdesc']"
         showGridlines
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-end">
-            <!-- <div>
-              <v-icon
-                name="ri-user-shared-fill"
-                class="pi pi-send text-green-500 text-xl mr-2"
-              ></v-icon>
-              <span>:&nbsp;&nbsp;FOR DISCHARGE</span>
-            </div> -->
-
             <div>
               <div class="p-inputgroup">
                 <span class="p-inputgroup-addon">
@@ -55,6 +47,21 @@
             <div class="flex flex-row align-items-center">
               <div class="">
                 <span class="text-green-500">{{ data.hpercode }}</span>
+              </div>
+            </div>
+          </template>
+        </Column>
+        <Column
+          v-if="currWard == 'FAMED'"
+          field="tsdesc"
+          header="DEPARTMENT"
+          style="width: 5%"
+          sortable
+        >
+          <template #body="{ data }">
+            <div class="flex flex-row align-items-center">
+              <div class="">
+                <span>{{ data.tsdesc }}</span>
               </div>
             </div>
           </template>
@@ -148,6 +155,7 @@ export default {
   },
   props: {
     patients: Object,
+    currWard: String,
   },
   data() {
     return {
@@ -163,6 +171,7 @@ export default {
         hpercode: { value: null, matchMode: FilterMatchMode.CONTAINS },
         patient: { value: null, matchMode: FilterMatchMode.CONTAINS },
         physician: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        tsdesc: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
     };
   },
@@ -229,6 +238,7 @@ export default {
             (e.patsuffix == null ? '' : e.patsuffix),
           physician: e.lastname + ',' + ' ' + e.firstname + ' ' + (e.empsuffix == null ? '' : e.empsuffix),
           tscode: e.tscode,
+          tsdesc: e.tsdesc,
         });
       });
       //   console.log(this.patientsList);
