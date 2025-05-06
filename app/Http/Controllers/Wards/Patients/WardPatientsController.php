@@ -200,8 +200,9 @@ class WardPatientsController extends Controller
 
                     AND hopdlog.licno IS NOT NULL
 
-                    ORDER BY hopdlog.opddate DESC;"
+                    ORDER BY hopdlog.opddate ASC;"
                 );
+                // dd($patients_query);
             } else {
                 $patients_query = DB::SELECT(
                     "SELECT hopdlog.enccode, hopdlog.hpercode, hopdlog.opddate, hopdlog.licno,

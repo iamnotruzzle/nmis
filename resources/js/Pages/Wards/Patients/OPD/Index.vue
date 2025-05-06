@@ -14,7 +14,7 @@
         :rowsPerPageOptions="[20, 30, 40]"
         dataKey="hpercode"
         filterDisplay="row"
-        sortField="patient"
+        sortField="opddate"
         :sortOrder="1"
         removableSort
         :globalFilterFields="['hpercode', 'patient', 'status', 'physician', 'tsdesc']"
@@ -97,6 +97,16 @@
                 <span>{{ data.patient }}</span>
               </div>
             </div>
+          </template>
+        </Column>
+        <Column
+          field="admission_date"
+          header="ADMISSION DATE"
+          sortable
+          style="width: 10%"
+        >
+          <template #body="{ data }">
+            <span class="font-semibold">{{ tzone(data.opddate) }}</span>
           </template>
         </Column>
         <Column
@@ -206,6 +216,7 @@ export default {
   },
   methods: {
     tzone(date) {
+      console.log(date);
       return moment.tz(date, 'Asia/Manila').format('LLL');
     },
     setPatient(patient) {
@@ -256,9 +267,10 @@ export default {
           physician: e.lastname + ',' + ' ' + e.firstname + ' ' + (e.empsuffix == null ? '' : e.empsuffix),
           tscode: e.tscode,
           tsdesc: e.tsdesc,
+          opddate: e.opddate,
         });
       });
-      //   console.log(this.patientsList);
+      console.log(this.patientsList);
     },
     onPage(event) {
       //   this.params.page = event.page + 1;
