@@ -46,11 +46,11 @@ class HandleInertiaRequests extends Middleware
             ];
         }
 
-        if (Auth::user()->designation == 'csr') {
-            $pendingAndAckCount = DB::select(
-                "SELECT count(*) as count FROM csrw_request_stocks WHERE status = 'ACKNOWLEDGED' OR status = 'PENDING';"
-            );
-        }
+        // if (Auth::user()->designation == 'csr') {
+        //     $pendingAndAckCount = DB::select(
+        //         "SELECT count(*) as count FROM csrw_request_stocks WHERE status = 'ACKNOWLEDGED' OR status = 'PENDING';"
+        //     );
+        // }
         // dd($pendingAndAckCount[0]->count);
         // dd(Auth::user()->designation);
 
@@ -82,7 +82,8 @@ class HandleInertiaRequests extends Middleware
             ],
             'locations' => fn() => $cachedLocations,
             'fundSource' => fn() => $cachedFundSource,
-            'pendingAndAckCount' => fn() => $pendingAndAckCount[0]->count,
+            // 'pendingAndAckCount' => fn() => $pendingAndAckCount[0]->count,
+            'pendingAndAckCount' => fn() => 0,
         ]);
     }
 }
