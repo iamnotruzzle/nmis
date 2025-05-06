@@ -49,11 +49,11 @@ class HandleInertiaRequests extends Middleware
             ];
         }
 
-        if ($cachedAuthUser['location']->wardcode == 'CSR') {
-            $pendingAndAckCount = DB::select(
-                "SELECT count(*) as count FROM csrw_request_stocks WHERE status = 'ACKNOWLEDGED' OR status = 'PENDING';"
-            );
-        }
+        // if ($cachedAuthUser['location']->wardcode == 'CSR') {
+        //     $pendingAndAckCount = DB::select(
+        //         "SELECT count(*) as count FROM csrw_request_stocks WHERE status = 'ACKNOWLEDGED' OR status = 'PENDING';"
+        //     );
+        // }
         // dd($pendingAndAckCount[0]->count);
 
         if (!$cachedLocations) {
@@ -84,7 +84,7 @@ class HandleInertiaRequests extends Middleware
             ],
             'locations' => fn() => $cachedLocations,
             'fundSource' => fn() => $cachedFundSource,
-            'pendingAndAckCount' => fn() => 0,
+            // 'pendingAndAckCount' => fn() => 0,
         ]);
     }
 }

@@ -255,11 +255,11 @@ export default {
     // });
 
     // set count for pending and acknowledged RIS
-    this.count = this.$page.props.pendingAndAckCount;
-    const targetItem = this.menu[0].items.find((item) => item.prefix === 'issueitems');
-    if (targetItem) {
-      targetItem.badge = this.count; // or any dynamic value
-    }
+    // this.count = this.$page.props.pendingAndAckCount;
+    // const targetItem = this.menu[0].items.find((item) => item.prefix === 'issueitems');
+    // if (targetItem) {
+    //   targetItem.badge = this.count; // or any dynamic value
+    // }
 
     this.removeRoutesIfNonAdmin();
 
