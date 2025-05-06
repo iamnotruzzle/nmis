@@ -101,7 +101,8 @@ class JetstreamServiceProvider extends ServiceProvider
                         $allowed = true;
                     } elseif ($wardcode == 'ADMIN' && $designation == 'admin') {
                         $allowed = true;
-                    } elseif ($wardcode != 'CSR' && $wardcode != 'ADMIN' && $designation == 'ward') {
+                        // } elseif ($wardcode != 'CSR' && $wardcode != 'ADMIN' && $designation == 'ward') {
+                    } elseif ($designation == 'ward' || $designation == 'csr') {
                         $allowed = true;
                     }
 
