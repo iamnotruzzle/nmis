@@ -34,9 +34,6 @@ class HandleInertiaRequests extends Middleware
         // current PENDING and ACKNOWLEDGED RIS
         $pendingAndAckCount = 0;
 
-        // // get auth location
-        // dd($cachedAuthUser['location']->wardcode);
-
         // Ensure caching only happens if the session is empty
         if (!$cachedAuthUser && $request->user()) {
             $cachedAuthUser = [
@@ -49,12 +46,13 @@ class HandleInertiaRequests extends Middleware
             ];
         }
 
-        // if ($cachedAuthUser['location']->wardcode == 'CSR') {
-        //     $pendingAndAckCount = DB::select(
-        //         "SELECT count(*) as count FROM csrw_request_stocks WHERE status = 'ACKNOWLEDGED' OR status = 'PENDING';"
-        //     );
-        // }
+        if (Auth::user()->designation == 'csr') {
+            $pendingAndAckCount = DB::select(
+                "SELECT count(*) as count FROM csrw_request_stocks WHERE status = 'ACKNOWLEDGED' OR status = 'PENDING';"
+            );
+        }
         // dd($pendingAndAckCount[0]->count);
+        // dd(Auth::user()->designation);
 
         if (!$cachedLocations) {
             $cachedLocations = Location::where('wardstat', 'A')
@@ -84,7 +82,7 @@ class HandleInertiaRequests extends Middleware
             ],
             'locations' => fn() => $cachedLocations,
             'fundSource' => fn() => $cachedFundSource,
-            // 'pendingAndAckCount' => fn() => 0,
+            'pendingAndAckCount' => fn() => $pendingAndAckCount[0]->count,
         ]);
     }
 }
