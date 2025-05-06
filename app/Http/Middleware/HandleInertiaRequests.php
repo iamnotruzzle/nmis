@@ -84,7 +84,7 @@ class HandleInertiaRequests extends Middleware
             ],
             'locations' => fn() => $cachedLocations,
             'fundSource' => fn() => $cachedFundSource,
-            'pendingAndAckCount' => fn() => $pendingAndAckCount[0]->count,
+            'pendingAndAckCount' => fn() => 0,
         ]);
     }
 }
