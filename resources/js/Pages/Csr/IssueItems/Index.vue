@@ -1245,7 +1245,7 @@ export default {
     this.rows = this.requestedStocks.per_page;
   },
   mounted() {
-    console.log('requestedStocks', this.requestedStocks);
+    // console.log('requestedStocks', this.requestedStocks);
     // store ward list
     this.$page.props.locations.forEach((e) => {
       if (e.wardcode != 'CSR' && e.wardcode != 'ADMIN') {

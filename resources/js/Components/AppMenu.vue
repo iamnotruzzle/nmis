@@ -52,7 +52,6 @@ export default {
     };
   },
   created() {
-    // console.log(this.$page.props.auth.user);
     // this.image = this.$page.props.user.image;
     this.employeeId = this.$page.props.auth.user.userDetail.employeeid;
     this.name = this.$page.props.auth.user.userDetail.firstname + ' ' + this.$page.props.auth.user.userDetail.lastname;
