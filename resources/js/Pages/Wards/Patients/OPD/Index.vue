@@ -13,10 +13,8 @@
         :rows="20"
         :rowsPerPageOptions="[20, 30, 40]"
         dataKey="hpercode"
-        filterDisplay="row"
         sortField="opddate"
         :sortOrder="1"
-        removableSort
         :globalFilterFields="['hpercode', 'patient', 'status', 'physician', 'tsdesc']"
         showGridlines
       >
@@ -100,8 +98,8 @@
           </template>
         </Column>
         <Column
-          field="admission_date"
-          header="ADMISSION DATE"
+          field="opddate"
+          header="DATE OF REGISTRATION"
           sortable
           style="width: 10%"
         >
@@ -216,7 +214,7 @@ export default {
   },
   methods: {
     tzone(date) {
-      console.log(date);
+      //   console.log(date);
       return moment.tz(date, 'Asia/Manila').format('LLL');
     },
     setPatient(patient) {
