@@ -42,6 +42,7 @@ use App\Http\Controllers\Wards\Inventory\InventoryController;
 use App\Http\Controllers\Wards\ManualInventory\WardManualInventoryController;
 use App\Http\Controllers\Wards\Patients\PatientChargeController;
 use App\Http\Controllers\Wards\Patients\WardPatientsController;
+use App\Http\Controllers\Wards\ReOrderLevel\ReOrderLevelController;
 use App\Http\Controllers\Wards\Reports\ReportController;
 use App\Http\Controllers\Wards\RequestStocks\RequestStocksController;
 use App\Http\Controllers\Wards\RequestStocks\RequestStocksLogs\RequestStocksLogsController;
@@ -126,6 +127,8 @@ Route::middleware(['web', 'auth', 'verified'])->group(
         Route::put('transferstock', [TransferStockController::class, 'updatetransferstatus', 'designation_ward'])->name('transferstock.updatetransferstatus');
 
         Route::resource('faq', FaqController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
+
+        Route::resource('reorder', ReOrderLevelController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         // end ward routes
 
         // tools

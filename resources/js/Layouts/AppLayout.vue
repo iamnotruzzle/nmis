@@ -196,6 +196,13 @@ export default {
               comp: 'Wards/RequestStocks/Index',
             },
             {
+              label: 'Stock Level',
+              icon: 'ri-handbag-line',
+              to: 'reorder',
+              prefix: 'reorder',
+              comp: 'Wards/ReOrderLevel/Index',
+            },
+            {
               label: 'Inventory',
               icon: 'bi-journal-check',
               to: 'wardinv',
@@ -330,6 +337,11 @@ export default {
       if (this.$page.props.user.designation == 'csr') {
         this.menu[1].items = this.menu[1].items.filter(function (obj) {
           return obj.to !== 'requeststocks';
+        });
+      }
+      if (this.$page.props.user.designation == 'csr') {
+        this.menu[1].items = this.menu[1].items.filter(function (obj) {
+          return obj.to !== 'reorder';
         });
       }
       if (this.$page.props.user.designation == 'csr') {

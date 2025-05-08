@@ -14,6 +14,8 @@ class WardsReOrderLevel extends Model
     protected $fillable = [
         'cl2comb',
         'reorder_level_qty',
+        'status',
+        'wardcode',
         'created_by',
         'updated_by',
     ];

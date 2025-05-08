@@ -17,7 +17,10 @@ class CreateCsrwWardsStockLevelTable extends Migration
             $table->id();
             $table->string('cl2comb');
             $table->integer('reorder_level_qty');
+            $table->string('status');
+            $table->string('wardcode');
             $table->string('created_by');
+            $table->string('updated_by')->nullable();
             $table->timestamps();
         });
     }
