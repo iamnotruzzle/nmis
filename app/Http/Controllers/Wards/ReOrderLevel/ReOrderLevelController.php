@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Wards\ReOrderLevel;
 
 use App\Http\Controllers\Controller;
+use App\Models\WardsReOrderLevel;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class ReOrderLevelController extends Controller
@@ -56,7 +58,18 @@ class ReOrderLevelController extends Controller
 
     public function store(Request $request)
     {
-        //
+        $cache_authWardCode = 'c_authWardCode_' . Auth::user()->employeeid;
+        $authWardCode_cached = Cache::get($cache_authWardCode);
+
+        $reOrderLevel = WardsReOrderLevel::create([
+            'cl2comb' => $request->cl2comb,
+            'reorder_level_qty' => $request->reorder_level_qty,
+            'status' => $request->status,
+            'wardcode' => $authWardCode_cached,
+            'created_by' => Auth::user()->employeeid,
+        ]);
+
+        return Redirect::route('reorder.index');
     }
 
     public function update(Request $request, $id)

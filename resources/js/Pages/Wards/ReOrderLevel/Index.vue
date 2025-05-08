@@ -1,12 +1,12 @@
 <template>
   <app-layout>
-    <Head title="NMIS - STOCK LEVEL" />
+    <Head title="NMIS - REORDER LEVEL" />
 
     <div>
       <div class="card">
         <Toast />
         <!-- current ward stocks -->
-        <span class="text-xl text-900 font-bold text-primary">STOCK LEVEL</span>
+        <span class="text-xl text-900 font-bold text-primary">REORDER LEVEL</span>
 
         <DataTable
           class="p-datatable-sm"
@@ -38,7 +38,7 @@
                   </div>
                 </div>
                 <Button
-                  label="STOCK LEVEL"
+                  label="ADD REORDER LEVEL"
                   icon="pi pi-plus"
                   iconPos="right"
                   @click="openstockLevelDialog"
@@ -130,7 +130,6 @@
             <template #body="slotProps">
               <div class="flex justify-content-center">
                 <Button
-                  v-if="slotProps.data.from == 'EXISTING_STOCKS'"
                   label="UPDATE"
                   severity="info"
                   @click="openUpdateStocklevel(slotProps.data)"
