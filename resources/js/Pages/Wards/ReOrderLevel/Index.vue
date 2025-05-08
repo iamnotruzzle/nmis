@@ -1,30 +1,23 @@
 <template>
   <app-layout>
-    <Head title="NMIS - Stocks" />
+    <Head title="NMIS - STOCK LEVEL" />
 
     <div>
-      <!-- <div
-        class="card"
-        style="border-top-left-radius: 0; border-top-right-radius: 0"
-      >
-        <Toast />
-      </div> -->
-
       <div class="card">
         <Toast />
         <!-- current ward stocks -->
-        <span class="text-xl text-900 font-bold text-primary">CURRENT STOCKS</span>
+        <span class="text-xl text-900 font-bold text-primary">STOCK LEVEL</span>
 
         <DataTable
           class="p-datatable-sm"
           dataKey="id"
-          v-model:filters="currentWardStocksFilter"
-          :value="currentWardStocksList"
+          v-model:filters="itemsWithReOrderLevelFilter"
+          :value="itemsWithReOrderLevelList"
           paginator
           :rows="20"
           :rowsPerPageOptions="[20, 30, 50]"
           removableSort
-          sortField="expiration_date"
+          sortField="created_at"
           :sortOrder="1"
           showGridlines
           :loading="loading"
@@ -39,18 +32,16 @@
                     </span>
                     <InputText
                       id="searchInput"
-                      v-model="currentWardStocksFilter['global'].value"
+                      v-model="itemsWithReOrderLevelFilter['global'].value"
                       placeholder="Search item"
                     />
                   </div>
                 </div>
-                <!-- :disabled="canTransact == false" -->
                 <Button
-                  label="EXISTING STOCK"
+                  label="STOCK LEVEL"
                   icon="pi pi-plus"
                   iconPos="right"
-                  severity="info"
-                  @click="openExistingDialog"
+                  @click="openstockLevelDialog"
                 />
               </div>
             </div>
@@ -58,72 +49,76 @@
           <template #empty> No item found. </template>
           <template #loading> Loading item data. Please wait. </template>
           <Column
-            field="item"
+            field="cl2desc"
             header="ITEM"
             style="width: 30%"
             sortable
           >
             <template #body="{ data }">
-              <span> {{ data.item }}</span>
+              <span> {{ data.cl2desc }}</span>
             </template>
           </Column>
-          <!-- <Column
-            field="unit"
+          <Column
+            field="uomdesc"
             header="UNIT"
-            style="text-align: right; width: 5%"
-            :pt="{ headerContent: 'justify-content-end' }"
-            sortable
-          >
-          </Column> -->
-          <Column
-            field="quantity"
-            header="QUANTITY"
-            style="text-align: right; width: 5%"
+            style="width: 30%"
             sortable
           >
             <template #body="{ data }">
-              {{ data.quantity }}
+              <span> {{ data.uomdesc }}</span>
             </template>
           </Column>
           <Column
-            field="average"
-            header="AVERAGE"
-            style="text-align: right; width: 5%"
+            field="reorder_level_qty"
+            header="REORDER LEVEL"
+            style="width: 30%"
             sortable
           >
             <template #body="{ data }">
-              <p v-if="data.is_consumable == 'y'">
-                <span class="test-success"> {{ data.average }}/unit</span>
-              </p>
+              <span> {{ data.reorder_level_qty }}</span>
             </template>
           </Column>
           <Column
-            field="expiration_date"
-            header="EXPIRATION DATE"
+            field="status"
+            header="STATUS"
+            style="width: 30%"
+            sortable
+          >
+            <template #body="{ data }">
+              <span v-if="data.status == A"> ACTIVE </span>
+              <span> INACTIVE</span>
+            </template>
+          </Column>
+          <Column
+            field="created_by_name"
+            header="CREATED BY"
+            style="width: 30%"
+            sortable
+          >
+            <template #body="{ data }">
+              <span> {{ data.created_by_name }}</span>
+            </template>
+          </Column>
+          <Column
+            field="updated_by_name"
+            header="UPDATED BY"
+            style="width: 30%"
+            sortable
+          >
+            <template #body="{ data }">
+              <span> {{ data.updated_by_name }}</span>
+            </template>
+          </Column>
+          <Column
+            field="created_at"
+            header="CREATED AT"
             style="text-align: right; width: 15%"
             :pt="{ headerContent: 'justify-content-end' }"
             sortable
           >
             <template #body="{ data }">
-              <div
-                v-if="data.is_consumable != 'y'"
-                class="flex flex-column"
-              >
-                <div>
-                  {{ tzone(data.expiration_date) }}
-                </div>
-
-                <div class="mays-2">
-                  <span
-                    :class="
-                      checkIfAboutToExpire(data.expiration_date) != 'Item has expired.'
-                        ? 'text-lg text-green-500'
-                        : 'text-lg text-error'
-                    "
-                  >
-                    {{ checkIfAboutToExpire(data.expiration_date) }}
-                  </span>
-                </div>
+              <div>
+                {{ tzone(data.created_at) }}
               </div>
             </template>
           </Column>
@@ -138,7 +133,7 @@
                   v-if="slotProps.data.from == 'EXISTING_STOCKS'"
                   label="UPDATE"
                   severity="info"
-                  @click="openUpdateStock(slotProps.data)"
+                  @click="openUpdateStocklevel(slotProps.data)"
                 />
               </div>
             </template>
@@ -149,7 +144,7 @@
 
       <!-- Existing -->
       <Dialog
-        v-model:visible="existingDialog"
+        v-model:visible="stockLevelDialog"
         :modal="true"
         class="p-fluid w-4"
         @hide="whenDialogIsHidden"
@@ -161,7 +156,7 @@
           <label>Items</label>
           <Dropdown
             required="true"
-            v-model="formExisting.cl2comb"
+            v-model="formStockLevel.cl2comb"
             :options="itemsList"
             :virtualScrollerOptions="{ itemSize: 38 }"
             filter
@@ -184,35 +179,35 @@
           <label>Quantity</label>
           <InputText
             id="quantity"
-            v-model.trim="formExisting.quantity"
+            v-model.trim="formStockLevel.quantity"
             required="true"
             autofocus
-            :class="{ 'p-invalid': formExisting.quantity == '' || formExisting.quantity == null }"
+            :class="{ 'p-invalid': formStockLevel.quantity == '' || formStockLevel.quantity == null }"
             onkeypress="return event.charCode >= 48 && event.charCode <= 57"
             inputId="integeronly"
           />
           <small
             class="text-error"
-            v-if="formExisting.errors.quantity"
+            v-if="formStockLevel.errors.quantity"
           >
-            {{ formExisting.errors.quantity }}
+            {{ formStockLevel.errors.quantity }}
           </small>
         </div>
 
         <template #footer>
           <Button
-            :label="!formExisting.processing ? 'CANCEL' : 'CANCEL'"
+            :label="!formStockLevel.processing ? 'CANCEL' : 'CANCEL'"
             icon="pi pi-times"
-            :disabled="formExisting.processing || formExisting.cl2comb == null || formExisting.quantity == null"
+            :disabled="formStockLevel.processing || formStockLevel.cl2comb == null || formStockLevel.quantity == null"
             severity="danger"
             @click="cancel"
           />
 
           <Button
             v-if="isUpdateExisting == false"
-            :disabled="formExisting.processing || formExisting.cl2comb == null || formExisting.quantity == null"
-            :label="!formExisting.processing ? 'SAVE' : 'SAVE'"
-            :icon="formExisting.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
+            :disabled="formStockLevel.processing || formStockLevel.cl2comb == null || formStockLevel.quantity == null"
+            :label="!formStockLevel.processing ? 'SAVE' : 'SAVE'"
+            :icon="formStockLevel.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
             severity="info"
             type="submit"
             @click="submitExisting"
@@ -220,9 +215,9 @@
 
           <Button
             v-else
-            :disabled="formExisting.processing || formExisting.cl2comb == null || formExisting.quantity == null"
-            :label="!formExisting.processing ? 'UPDATE' : 'UPDATE'"
-            :icon="formExisting.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
+            :disabled="formStockLevel.processing || formStockLevel.cl2comb == null || formStockLevel.quantity == null"
+            :label="!formStockLevel.processing ? 'UPDATE' : 'UPDATE'"
+            :icon="formStockLevel.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
             severity="info"
             type="submit"
             @click="submitExisting"
@@ -281,24 +276,19 @@ export default {
   },
   props: {
     items: Object,
-    currentWardStocks: Object,
-    canTransact: Boolean,
+    itemsWithReOrderLevel: Array,
   },
   data() {
     return {
       authWardcode: '',
-      expandedRow: [],
       // paginator
       loading: false,
       totalRecords: null,
       rows: null,
       // end paginator,
-      countdown: 0,
       isUpdate: false,
       isUpdateExisting: false,
-      existingDialog: false,
-      editAverageOfStocksDialog: false,
-      editStatusDialog: false,
+      stockLevelDialog: false,
       cancelItemDialog: false,
       search: '',
       selectedItemsUomDesc: null,
@@ -309,30 +299,11 @@ export default {
       to: null,
       stockBalanceDeclared: false,
       itemsList: [],
-      currentWardStocksList: [],
-      currentWardStocksFilter: {
+      itemsWithReOrderLevelList: [],
+      itemsWithReOrderLevelFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
-      fundSourceList: [],
-      item: null,
-      cl2desc: null,
-      approved_qty: null,
-      itemNotSelected: false,
-      itemNotSelectedMsg: null,
-      // end stock list details
-      filters: {
-        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      },
-      formMedicalGases: this.$inertia.form({
-        authLocation: null,
-        fund_source: null,
-        cl2comb: null,
-        uomcode: null,
-        quantity: null,
-        average: null,
-        delivered_date: null,
-      }),
-      formExisting: this.$inertia.form({
+      formStockLevel: this.$inertia.form({
         id: null,
         authLocation: null,
         fund_source: null,
@@ -342,16 +313,13 @@ export default {
         prev_quantity: null,
         delivered_date: null,
       }),
-      previousQty: 0,
-      targetItemDesc: null,
     };
   },
   mounted() {
     this.authWardcode = this.$page.props.auth.user.location.location_name.wardcode;
 
-    this.storeFundSourceInContainer();
     this.storeItemsInController();
-    this.storeCurrentWardStocksInContainer();
+    this.storeItemsWithReOrderLevelInContainer();
 
     this.loading = false;
   },
@@ -361,15 +329,13 @@ export default {
     },
   },
   methods: {
-    openUpdateStock(data) {
-      if (data.from == 'EXISTING_STOCKS') {
-        this.formExisting.id = data.ward_stock_id;
-        this.formExisting.cl2comb = data.cl2comb;
-        this.formExisting.quantity = data.quantity;
+    openUpdateStocklevel(data) {
+      this.formStockLevel.id = data.ward_stock_id;
+      this.formStockLevel.cl2comb = data.cl2comb;
+      this.formStockLevel.quantity = data.quantity;
 
-        this.isUpdateExisting = true;
-        this.existingDialog = true;
-      }
+      this.isUpdateExisting = true;
+      this.stockLevelDialog = true;
     },
     restrictNonNumericAndPeriod(event) {
       if (
@@ -391,16 +357,6 @@ export default {
         event.preventDefault();
       }
     },
-    storeFundSourceInContainer() {
-      this.$page.props.fundSource.forEach((e) => {
-        this.fundSourceList.push({
-          chrgcode: e.fsid,
-          chrgdesc: e.fsName,
-          bentypcod: null,
-          chrgtable: null,
-        });
-      });
-    },
     storeItemsInController() {
       this.itemsList = []; // reset
       this.items.forEach((e) => {
@@ -412,25 +368,27 @@ export default {
         });
       });
     },
-    // store current stocks
-    storeCurrentWardStocksInContainer() {
-      this.currentWardStocksList = []; // reset
+    storeItemsWithReOrderLevelInContainer() {
+      this.itemsWithReOrderLevelList = []; // reset
 
       moment.suppressDeprecationWarnings = true;
 
-      this.currentWardStocks.forEach((e) => {
+      this.itemsWithReOrderLevel.forEach((e) => {
         let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
 
-        this.currentWardStocksList.push({
-          from: e.from,
-          ward_stock_id: e.id,
+        this.itemsWithReOrderLevelList.push({
+          id: e.id,
           cl2comb: e.cl2comb,
-          item: e.cl2desc,
-          //   unit: e == null ? null : e.uomdesc,
-          quantity: e.quantity,
-          average: e.average,
-          is_consumable: e.is_consumable == null ? null : e.is_consumable,
-          expiration_date: expiration_date.toString(),
+          cl2desc: e.cl2desc,
+          uomcode: e.uomcode,
+          uomdesc: e.uomdesc,
+          reorder_level_qty: e.reorder_level_qty,
+          status: e.status,
+          wardcode: e.wardcode,
+          wardname: e.wardname,
+          created_by_name: e.created_by_name,
+          updated_by_name: e.updated_by_name,
+          created_at: e.created_at,
         });
       });
     },
@@ -470,14 +428,14 @@ export default {
         onSuccess: (visit) => {
           this.cancel();
           this.storeItemsInController();
-          this.storeCurrentWardStocksInContainer();
+          this.storeItemsWithReOrderLevelInContainer();
         },
       });
     },
-    openExistingDialog() {
-      this.formExisting.clearErrors();
-      this.formExisting.reset();
-      this.existingDialog = true;
+    openstockLevelDialog() {
+      this.formStockLevel.clearErrors();
+      this.formStockLevel.reset();
+      this.stockLevelDialog = true;
     },
     // when dialog is hidden, do this function
     whenDialogIsHidden() {
@@ -490,30 +448,31 @@ export default {
         (this.approved_qty = null),
         (this.itemNotSelected = null),
         (this.itemNotSelectedMsg = null),
-        (this.targetItemDesc = null),
         (this.selectedItemsUomDesc = ''),
         (this.oldQuantity = 0),
-        this.formMedicalGases.clearErrors(),
-        this.formMedicalGases.reset(),
-        this.formExisting.clearErrors(),
-        this.formExisting.reset()
+        this.formStockLevel.clearErrors(),
+        this.formStockLevel.reset()
       );
     },
     submitExisting() {
-      if (this.formExisting.processing || this.formExisting.cl2comb == null || this.formExisting.quantity == null) {
+      if (
+        this.formStockLevel.processing ||
+        this.formStockLevel.cl2comb == null ||
+        this.formStockLevel.quantity == null
+      ) {
         return false;
       }
 
-      this.formExisting.authLocation = this.authWardcode;
+      this.formStockLevel.authLocation = this.authWardcode;
       if (
-        this.formExisting.cl2comb != null ||
-        this.formExisting.cl2comb != '' ||
-        this.formExisting.quantity != null ||
-        this.formExisting.quantity != ''
+        this.formStockLevel.cl2comb != null ||
+        this.formStockLevel.cl2comb != '' ||
+        this.formStockLevel.quantity != null ||
+        this.formStockLevel.quantity != ''
       ) {
         // check if in update mode
         if (this.isUpdateExisting == false) {
-          this.formExisting.post(route('existingstock.store'), {
+          this.formStockLevel.post(route('existingstock.store'), {
             preserveScroll: true,
             onSuccess: (e) => {
               //   console.log(this.$page.props);
@@ -521,7 +480,7 @@ export default {
                 // this.cancel();
                 this.noItemPriceMsg();
               } else {
-                this.formExisting.reset();
+                this.formStockLevel.reset();
                 this.cancel();
                 this.updateData();
                 this.createdMsg();
@@ -530,10 +489,10 @@ export default {
             },
           });
         } else {
-          this.formExisting.put(route('existingstock.update', this.formExisting.id), {
+          this.formStockLevel.put(route('existingstock.update', this.formStockLevel.id), {
             preserveScroll: true,
             onSuccess: () => {
-              this.formExisting.reset();
+              this.formStockLevel.reset();
               this.cancel();
               this.updateData();
               this.updateExistingMessage();
@@ -545,16 +504,11 @@ export default {
     cancel() {
       this.isUpdate = false;
       this.isUpdateExisting = false;
-      this.editAverageOfStocksDialog = false;
-      this.existingDialog = false;
-      this.editStatusDialog = false;
-      this.targetItemDesc = null;
+      this.stockLevelDialog = false;
       this.oldQuantity = 0;
       this.selectedItemsUomDesc = '';
-      this.formMedicalGases.reset();
-      this.formMedicalGases.clearErrors();
-      this.formExisting.reset();
-      this.formExisting.clearErrors();
+      this.formStockLevel.reset();
+      this.formStockLevel.clearErrors();
     },
     createdMsg() {
       this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Stock created', life: 5000 });
@@ -605,14 +559,14 @@ export default {
       }
       this.updateData();
     },
-    'formExisting.cl2comb': function (val) {
+    'formStockLevel.cl2comb': function (val) {
       this.selectedItemsUomDesc = null;
 
       this.itemsList.forEach((e) => {
         if (e.cl2comb == val) {
           if (e.uomdesc != null || e.uomdesc == '') {
             this.selectedItemsUomDesc = e.uomdesc;
-            this.formExisting.uomcode = e.uomcode;
+            this.formStockLevel.uomcode = e.uomcode;
           } else {
             this.selectedItemsUomDesc = null;
           }

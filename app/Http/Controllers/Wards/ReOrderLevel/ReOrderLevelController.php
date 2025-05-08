@@ -35,7 +35,7 @@ class ReOrderLevelController extends Controller
         );
 
         $itemsWithReOrderLevel = DB::select(
-            "SELECT lvl.id, lvl.cl2comb, item.cl2comb, uom.uomdesc, lvl.reorder_level_qty, lvl. status, lvl.wardcode, ward.wardname, lvl.created_by,
+            "SELECT lvl.id, lvl.cl2comb, item.cl2desc, uom.uomcode, uom.uomdesc, lvl.reorder_level_qty, lvl.status, lvl.wardcode, ward.wardname,
                 employee.firstname + ' ' + employee.lastname AS created_by_name, employee.firstname + ' ' + employee.lastname AS updated_by_name,
                 lvl.created_at
                 FROM csrw_wards_stock_level as lvl
