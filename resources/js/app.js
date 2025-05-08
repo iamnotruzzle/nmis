@@ -53,6 +53,7 @@ import {
   OiPackage,
   BiCheck2,
   RiHandbagLine,
+  BiBoundingBoxCircles,
 } from 'oh-vue-icons/icons';
 addIcons(
   CoChartLine,
@@ -86,7 +87,8 @@ addIcons(
   MdReceiptlongOutlined,
   OiPackage,
   BiCheck2,
-  RiHandbagLine
+  RiHandbagLine,
+  BiBoundingBoxCircles
 );
 
 moment.tz.setDefault('Asia/Manila');

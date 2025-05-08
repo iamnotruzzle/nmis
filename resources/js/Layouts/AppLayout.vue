@@ -197,7 +197,7 @@ export default {
             },
             {
               label: 'Stock Level',
-              icon: 'ri-handbag-line',
+              icon: 'bi-bounding-box-circles',
               to: 'reorder',
               prefix: 'reorder',
               comp: 'Wards/ReOrderLevel/Index',
