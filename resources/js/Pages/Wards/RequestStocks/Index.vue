@@ -47,8 +47,15 @@
                   :disabled="canTransact == false"
                   label="Request stocks"
                   icon="pi pi-plus"
-                  iconPos="right"
+                  class="mr-2"
                   @click="openCreateRequestStocksDialog"
+                />
+                <Button
+                  label="REORDER"
+                  :icon="form.processing ? 'pi pi-spin pi-spinner' : 'pi pi-plus'"
+                  type="submit"
+                  severity="info"
+                  @click="reorder"
                 />
               </div>
             </div>
@@ -762,6 +769,7 @@ import moment from 'moment';
 import Echo from 'laravel-echo';
 import { Link } from '@inertiajs/vue3';
 import { usePage } from '@inertiajs/vue3';
+import axios from 'axios';
 
 export default {
   components: {
@@ -860,6 +868,9 @@ export default {
 
         items: [],
       }),
+      formReorder: this.$inertia.form({
+        wardcode: 'asdasd', // charge_slip_no
+      }),
     };
   },
   // created will be initialize before mounted
@@ -870,6 +881,7 @@ export default {
   },
   mounted() {
     this.authWardcode = this.$page.props.auth.user.location.location_name.wardcode;
+    this.formReorder.wardcode = this.$page.props.auth.user.location.location_name.wardcode;
 
     // console.log('fs', this.$page.props.fundSource);
 
@@ -1198,6 +1210,29 @@ export default {
           },
         });
       }
+    },
+    reorder() {
+      this.requestStockListDetails = [];
+      axios
+        .get('requeststocks/view-reorder')
+        .then((response) => {
+          console.log(response.data);
+          this.reorders = response.data; // Store it in your component
+
+          this.reorders.forEach((e) => {
+            this.requestStockListDetails.push({
+              cl2comb: e.cl2comb,
+              cl2desc: e.cl2desc,
+              requested_qty: e.reorder_quantity,
+            });
+          });
+        })
+        .then(() => {
+          this.createRequestStocksDialog = true;
+        })
+        .catch((error) => {
+          console.error('Fetch error:', error);
+        });
     },
     confirmCancelItem(item) {
       this.requestStockId = item.id;
