@@ -81,12 +81,22 @@
           <Column
             field="status"
             header="STATUS"
-            style="width: 30%"
-            sortable
+            :showFilterMenu="false"
+            sortable=""
           >
             <template #body="{ data }">
-              <span v-if="data.status == A"> ACTIVE </span>
-              <span> INACTIVE</span>
+              <div class="text-center">
+                <Tag
+                  v-if="data.status == 'A'"
+                  value="ACTIVE"
+                  severity="success"
+                />
+                <Tag
+                  v-else
+                  value="INACTIVE"
+                  severity="danger"
+                />
+              </div>
             </template>
           </Column>
           <Column
@@ -130,8 +140,11 @@
             <template #body="slotProps">
               <div class="flex justify-content-center">
                 <Button
-                  label="UPDATE"
-                  severity="info"
+                  icon="pi pi-pencil"
+                  class="mr-1"
+                  rounded
+                  text
+                  severity="warning"
                   @click="openUpdateStocklevel(slotProps.data)"
                 />
               </div>
@@ -141,7 +154,7 @@
         <!-- test -->
       </div>
 
-      <!-- Existing -->
+      <!-- REORDER -->
       <Dialog
         v-model:visible="stockLevelDialog"
         :modal="true"
@@ -149,7 +162,7 @@
         @hide="whenDialogIsHidden"
       >
         <template #header>
-          <div class="text-blue-500 text-xl font-bold">EXISTING STOCK</div>
+          <div class="text-blue-500 text-xl font-bold">REORDER LEVEL</div>
         </template>
         <div class="field">
           <label>Items</label>
@@ -162,7 +175,7 @@
             optionValue="cl2comb"
             optionLabel="cl2desc"
             class="w-full mb-3"
-            :disabled="isUpdateExisting == true"
+            :disabled="isUpdatingReorderLevel == true"
           />
         </div>
         <div class="field">
@@ -171,25 +184,51 @@
             id="unit"
             v-model.trim="selectedItemsUomDesc"
             readonly
-            :disabled="isUpdateExisting == true"
+            :disabled="isUpdatingReorderLevel == true"
           />
         </div>
         <div class="field">
-          <label>Quantity</label>
+          <label>Reorder level quantity</label>
           <InputText
-            id="quantity"
-            v-model.trim="formStockLevel.quantity"
+            id="reorder_level_qty"
+            v-model.trim="formStockLevel.reorder_level_qty"
             required="true"
             autofocus
-            :class="{ 'p-invalid': formStockLevel.quantity == '' || formStockLevel.quantity == null }"
+            :class="{ 'p-invalid': formStockLevel.reorder_level_qty == '' || formStockLevel.reorder_level_qty == null }"
             onkeypress="return event.charCode >= 48 && event.charCode <= 57"
             inputId="integeronly"
           />
           <small
             class="text-error"
-            v-if="formStockLevel.errors.quantity"
+            v-if="formStockLevel.errors.reorder_level_qty"
           >
-            {{ formStockLevel.errors.quantity }}
+            {{ formStockLevel.errors.reorder_level_qty }}
+          </small>
+        </div>
+
+        <!-- Status -->
+        <div class="field">
+          <label>Status</label>
+          <Dropdown
+            required="true"
+            v-model="formStockLevel.status"
+            :options="statusList"
+            optionLabel="name"
+            optionValue="code"
+            class="w-full"
+          >
+            <template #option="slotProps">
+              <Tag
+                :value="slotProps.option.name"
+                :severity="statusSeverity(slotProps.option)"
+              />
+            </template>
+          </Dropdown>
+          <small
+            class="text-error"
+            v-if="formStockLevel.errors.status"
+          >
+            {{ formStockLevel.errors.status }}
           </small>
         </div>
 
@@ -197,29 +236,33 @@
           <Button
             :label="!formStockLevel.processing ? 'CANCEL' : 'CANCEL'"
             icon="pi pi-times"
-            :disabled="formStockLevel.processing || formStockLevel.cl2comb == null || formStockLevel.quantity == null"
+            :disabled="formStockLevel.processing"
             severity="danger"
             @click="cancel"
           />
 
           <Button
-            v-if="isUpdateExisting == false"
-            :disabled="formStockLevel.processing || formStockLevel.cl2comb == null || formStockLevel.quantity == null"
+            v-if="isUpdatingReorderLevel == false"
+            :disabled="
+              formStockLevel.processing || formStockLevel.cl2comb == null || formStockLevel.reorder_level_qty == null
+            "
             :label="!formStockLevel.processing ? 'SAVE' : 'SAVE'"
             :icon="formStockLevel.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
             severity="info"
             type="submit"
-            @click="submitExisting"
+            @click="submitAddReOrderLvl"
           />
 
           <Button
             v-else
-            :disabled="formStockLevel.processing || formStockLevel.cl2comb == null || formStockLevel.quantity == null"
+            :disabled="
+              formStockLevel.processing || formStockLevel.cl2comb == null || formStockLevel.reorder_level_qty == null
+            "
             :label="!formStockLevel.processing ? 'UPDATE' : 'UPDATE'"
             :icon="formStockLevel.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
             severity="info"
             type="submit"
-            @click="submitExisting"
+            @click="submitAddReOrderLvl"
           />
         </template>
       </Dialog>
@@ -286,14 +329,23 @@ export default {
       rows: null,
       // end paginator,
       isUpdate: false,
-      isUpdateExisting: false,
+      isUpdatingReorderLevel: false,
       stockLevelDialog: false,
       cancelItemDialog: false,
       search: '',
       selectedItemsUomDesc: null,
-      oldQuantity: 0,
       options: {},
       params: {},
+      statusList: [
+        {
+          name: 'Active',
+          code: 'A',
+        },
+        {
+          name: 'Inactive',
+          code: 'I',
+        },
+      ],
       from: null,
       to: null,
       stockBalanceDeclared: false,
@@ -304,13 +356,9 @@ export default {
       },
       formStockLevel: this.$inertia.form({
         id: null,
-        authLocation: null,
-        fund_source: null,
         cl2comb: null,
-        uomcode: null,
-        quantity: null,
-        prev_quantity: null,
-        delivered_date: null,
+        reorder_level_qty: null,
+        status: null,
       }),
     };
   },
@@ -328,12 +376,23 @@ export default {
     },
   },
   methods: {
-    openUpdateStocklevel(data) {
-      this.formStockLevel.id = data.ward_stock_id;
-      this.formStockLevel.cl2comb = data.cl2comb;
-      this.formStockLevel.quantity = data.quantity;
+    statusSeverity(status) {
+      //   console.log(status);
+      switch (status.code) {
+        case 'I':
+          return 'danger';
 
-      this.isUpdateExisting = true;
+        case 'A':
+          return 'success';
+      }
+    },
+    openUpdateStocklevel(data) {
+      this.formStockLevel.id = data.id;
+      this.formStockLevel.cl2comb = data.cl2comb;
+      this.formStockLevel.reorder_level_qty = data.reorder_level_qty;
+      this.formStockLevel.status = data.status;
+
+      this.isUpdatingReorderLevel = true;
       this.stockLevelDialog = true;
     },
     restrictNonNumericAndPeriod(event) {
@@ -421,7 +480,7 @@ export default {
       this.updateData();
     },
     updateData() {
-      this.$inertia.get('wardinv', this.params, {
+      this.$inertia.get('reorder', this.params, {
         preserveState: true,
         preserveScroll: true,
         onSuccess: (visit) => {
@@ -441,54 +500,45 @@ export default {
       this.$emit(
         'hide',
         (this.isUpdate = false),
-        (this.isUpdateExisting = false),
+        (this.isUpdatingReorderLevel = false),
         (this.item = null),
         (this.cl2desc = null),
-        (this.approved_qty = null),
         (this.itemNotSelected = null),
         (this.itemNotSelectedMsg = null),
         (this.selectedItemsUomDesc = ''),
-        (this.oldQuantity = 0),
         this.formStockLevel.clearErrors(),
         this.formStockLevel.reset()
       );
     },
-    submitExisting() {
+    submitAddReOrderLvl() {
       if (
         this.formStockLevel.processing ||
         this.formStockLevel.cl2comb == null ||
-        this.formStockLevel.quantity == null
+        this.formStockLevel.reorder_level_qty == null
       ) {
         return false;
       }
 
-      this.formStockLevel.authLocation = this.authWardcode;
       if (
         this.formStockLevel.cl2comb != null ||
         this.formStockLevel.cl2comb != '' ||
-        this.formStockLevel.quantity != null ||
-        this.formStockLevel.quantity != ''
+        this.formStockLevel.reorder_level_qty != null ||
+        this.formStockLevel.reorder_level_qty != ''
       ) {
         // check if in update mode
-        if (this.isUpdateExisting == false) {
-          this.formStockLevel.post(route('existingstock.store'), {
+        if (this.isUpdatingReorderLevel == false) {
+          this.formStockLevel.post(route('reorder.store'), {
             preserveScroll: true,
             onSuccess: (e) => {
-              //   console.log(this.$page.props);
-              if (e.props.flash.noItemPrice == 0) {
-                // this.cancel();
-                this.noItemPriceMsg();
-              } else {
-                this.formStockLevel.reset();
-                this.cancel();
-                this.updateData();
-                this.createdMsg();
-                this.loading = false;
-              }
+              this.formStockLevel.reset();
+              this.cancel();
+              this.updateData();
+              this.createdMsg();
+              this.loading = false;
             },
           });
         } else {
-          this.formStockLevel.put(route('existingstock.update', this.formStockLevel.id), {
+          this.formStockLevel.put(route('reorder.update', this.formStockLevel.id), {
             preserveScroll: true,
             onSuccess: () => {
               this.formStockLevel.reset();
@@ -502,18 +552,17 @@ export default {
     },
     cancel() {
       this.isUpdate = false;
-      this.isUpdateExisting = false;
+      this.isUpdatingReorderLevel = false;
       this.stockLevelDialog = false;
-      this.oldQuantity = 0;
       this.selectedItemsUomDesc = '';
       this.formStockLevel.reset();
       this.formStockLevel.clearErrors();
     },
     createdMsg() {
-      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Stock created', life: 5000 });
+      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Reorder level created', life: 5000 });
     },
     updateExistingMessage() {
-      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Stock updated', life: 5000 });
+      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Reorder level updated', life: 5000 });
     },
     getLocalDateString(utcStr) {
       const date = new Date(utcStr);
@@ -530,7 +579,7 @@ export default {
       );
     },
     updatedStockMsg() {
-      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Stock updated', life: 3000 });
+      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Reorder level updated', life: 3000 });
     },
   },
   watch: {

@@ -47,7 +47,7 @@ class ReOrderLevelController extends Controller
                 JOIN hpersonal as employee ON employee.employeeid = lvl.created_by
                 LEFT JOIN hpersonal AS updated_by_employee ON updated_by_employee.employeeid = lvl.updated_by
                 WHERE lvl.wardcode = ?;",
-            ['wardCode']
+            [$wardCode]
         );
 
         return Inertia::render('Wards/ReOrderLevel/Index', [
@@ -58,6 +58,8 @@ class ReOrderLevelController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request);
+
         $cache_authWardCode = 'c_authWardCode_' . Auth::user()->employeeid;
         $authWardCode_cached = Cache::get($cache_authWardCode);
 
@@ -72,9 +74,15 @@ class ReOrderLevelController extends Controller
         return Redirect::route('reorder.index');
     }
 
-    public function update(Request $request, $id)
+    public function update(WardsReOrderLevel $reorder, Request $request)
     {
-        //
+        $reorder->update([
+            'reorder_level_qty' => $request->reorder_level_qty,
+            'status' => $request->status,
+            'updated_by' => Auth::user()->employeeid,
+        ]);
+
+        return Redirect::route('reorder.index');
     }
 
     public function destroy($id)
