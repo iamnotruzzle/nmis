@@ -51,8 +51,9 @@
                   @click="openCreateRequestStocksDialog"
                 />
                 <Button
+                  :disabled="canTransact == false"
                   label="REORDER"
-                  :icon="form.processing ? 'pi pi-spin pi-spinner' : 'pi pi-plus'"
+                  :icon="formReorder.processing ? 'pi pi-spin pi-spinner' : 'pi pi-plus'"
                   type="submit"
                   severity="info"
                   @click="reorder"
@@ -285,6 +286,12 @@
           <template #header>
             <div class="text-primary text-xl font-bold">REQUEST STOCK</div>
           </template>
+          <div
+            v-if="noStockLevel == true"
+            class="mb-4"
+          >
+            <p class="font-bold text-xl text-error">The stock level has not been set yet.</p>
+          </div>
           <div class="field">
             <label>Available items</label>
             <Dropdown
@@ -821,6 +828,7 @@ export default {
       from: null,
       to: null,
       stockBalanceDeclared: false,
+      noStockLevel: false,
       itemsList: [],
       requestStockList: [],
       // stock list details
@@ -1091,6 +1099,7 @@ export default {
     whenDialogIsHidden() {
       this.$emit(
         'hide',
+        (this.noStockLevel = false),
         (this.requestStockId = null),
         (this.isUpdate = false),
         (this.requestStockListDetails = []),
@@ -1216,8 +1225,11 @@ export default {
       axios
         .get('requeststocks/view-reorder')
         .then((response) => {
-          console.log(response.data);
+          //   console.log(response.data);
           this.reorders = response.data; // Store it in your component
+          if (response.data == [] || response.data == null) {
+            this.noStockLevel = true;
+          }
 
           this.reorders.forEach((e) => {
             this.requestStockListDetails.push({
@@ -1258,6 +1270,7 @@ export default {
       this.isUpdate = false;
       this.createRequestStocksDialog = false;
       this.editStatusDialog = false;
+      this.noStockLevel = false;
       this.targetItemDesc = null;
       this.oldQuantity = 0;
       this.selectedItemsUomDesc = '';

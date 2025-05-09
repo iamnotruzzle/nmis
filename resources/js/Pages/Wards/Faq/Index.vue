@@ -144,6 +144,45 @@
           />
         </div>
       </Fieldset>
+
+      <Fieldset
+        legend="REORDER STOCK"
+        :toggleable="true"
+        collapsed
+      >
+        <div class="text-xl">
+          <p class="m-0">
+            1. Go to the sidebar and click on <span class="font-bold text-yellow-500">Stock Level</span> tab.
+          </p>
+          <img
+            src="images/reorder_1.png"
+            class="w-2 h-2 my-2"
+          />
+          <p class="m-0">
+            2. <span class="font-bold text-yellow-500">Click ADD STOCK LEVEL button</span>, and a modal will appear.
+          </p>
+          <img
+            src="images/reorder_2.png"
+            class="w-10 h-10 my-2"
+          />
+          <p class="m-0 mt-2">3. Fill out the form to set an item's reorder point and reorder quantity.</p>
+          <img
+            src="images/reorder_3.png"
+            class="w-5 h-5 my-2"
+          />
+          <p class="m-0 mt-2">
+            4. On the Request Stocks page, click the "Reorder" button to automatically fetch your reorder list.
+          </p>
+          <img
+            src="images/reorder_4.png"
+            class="w-10 h-10 my-2"
+          />
+          <img
+            src="images/reorder_5.png"
+            class="w-5 h-5 my-2"
+          />
+        </div>
+      </Fieldset>
     </div>
   </app-layout>
 </template>

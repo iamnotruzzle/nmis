@@ -452,14 +452,20 @@ export default {
       }
     },
     storeItemsInController() {
-      this.itemsList = []; // reset
+      this.itemsList = []; // Reset
+
+      // Create a Set of cl2comb values that already have reorder levels
+      const reorderCl2Set = new Set(this.itemsWithReOrderLevel.map((item) => item.cl2comb));
+
       this.items.forEach((e) => {
-        this.itemsList.push({
-          cl2comb: e.cl2comb,
-          cl2desc: e.cl2desc,
-          uomcode: e.uomcode,
-          uomdesc: e.uomdesc,
-        });
+        if (!reorderCl2Set.has(e.cl2comb)) {
+          this.itemsList.push({
+            cl2comb: e.cl2comb,
+            cl2desc: e.cl2desc,
+            uomcode: e.uomcode,
+            uomdesc: e.uomdesc,
+          });
+        }
       });
     },
     storeItemsWithReOrderLevelInContainer() {
