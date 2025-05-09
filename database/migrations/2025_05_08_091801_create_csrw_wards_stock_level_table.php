@@ -16,7 +16,8 @@ class CreateCsrwWardsStockLevelTable extends Migration
         Schema::create('csrw_wards_stock_level', function (Blueprint $table) {
             $table->id();
             $table->string('cl2comb');
-            $table->integer('reorder_level_qty');
+            $table->integer('reorder_point');
+            $table->integer('reorder_quantity');
             $table->string('status');
             $table->string('wardcode');
             $table->string('created_by');

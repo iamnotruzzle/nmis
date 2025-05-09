@@ -37,7 +37,7 @@ class ReOrderLevelController extends Controller
         );
 
         $itemsWithReOrderLevel = DB::select(
-            "SELECT lvl.id, lvl.cl2comb, item.cl2desc, uom.uomcode, uom.uomdesc, lvl.reorder_level_qty, lvl.status, lvl.wardcode, ward.wardname,
+            "SELECT lvl.id, lvl.cl2comb, item.cl2desc, uom.uomcode, uom.uomdesc, lvl.reorder_point, lvl.reorder_quantity, lvl.status, lvl.wardcode, ward.wardname,
                 employee.firstname + ' ' + employee.lastname AS created_by_name, employee.firstname + ' ' + employee.lastname AS updated_by_name,
                 lvl.created_at
                 FROM csrw_wards_stock_level as lvl
@@ -65,7 +65,8 @@ class ReOrderLevelController extends Controller
 
         $reOrderLevel = WardsReOrderLevel::create([
             'cl2comb' => $request->cl2comb,
-            'reorder_level_qty' => $request->reorder_level_qty,
+            'reorder_point' => $request->reorder_point,
+            'reorder_quantity' => $request->reorder_quantity,
             'status' => $request->status,
             'wardcode' => $authWardCode_cached,
             'created_by' => Auth::user()->employeeid,
@@ -77,7 +78,8 @@ class ReOrderLevelController extends Controller
     public function update(WardsReOrderLevel $reorder, Request $request)
     {
         $reorder->update([
-            'reorder_level_qty' => $request->reorder_level_qty,
+            'reorder_point' => $request->reorder_point,
+            'reorder_quantity' => $request->reorder_quantity,
             'status' => $request->status,
             'updated_by' => Auth::user()->employeeid,
         ]);
