@@ -57,28 +57,56 @@ class RequestStocksController extends Controller
                 item.cl2desc ASC;"
         );
 
-        $requestedStocks = RequestStocks::with(['requested_at_details', 'requested_by_details', 'approved_by_details', 'request_stocks_details.item_details'])
-            ->where('location', '=', $wardCode)
-            ->whereHas('requested_by_details', function ($q) use ($searchString) {
-                $q->where('firstname', 'LIKE', '%' . $searchString . '%')
-                    ->orWhere('middlename', 'LIKE', '%' . $searchString . '%')
-                    ->orWhere('lastname', 'LIKE', '%' . $searchString . '%');
-            })
-            ->when(
-                $request->from,
-                function ($query, $value) use ($from) {
-                    $query->whereDate('created_at', '>=', $from);
-                }
-            )
-            ->when(
-                $request->to,
-                function ($query, $value) use ($to) {
-                    $query->whereDate('created_at', '<=', $to);
-                }
-            )
-            ->where('location', '=', $wardCode)
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+        // OPTIMIZE TTHIS
+        if ($wardCode == 'ER') {
+            $requestedStocks = RequestStocks::with(['requested_at_details', 'requested_by_details', 'approved_by_details', 'request_stocks_details.item_details'])
+                ->where('location', '=', $wardCode)
+                ->whereHas('requested_by_details', function ($q) use ($searchString) {
+                    $q->where('firstname', 'LIKE', '%' . $searchString . '%')
+                        ->orWhere('middlename', 'LIKE', '%' . $searchString . '%')
+                        ->orWhere('lastname', 'LIKE', '%' . $searchString . '%');
+                })
+                ->when(
+                    $request->from,
+                    function ($query, $value) use ($from) {
+                        $query->whereDate('created_at', '>=', $from);
+                    }
+                )
+                ->when(
+                    $request->to,
+                    function ($query, $value) use ($to) {
+                        $query->whereDate('created_at', '<=', $to);
+                    }
+                )
+                ->where('location', '=', $wardCode)
+                ->orderBy('created_at', 'desc')
+                ->paginate(2);
+        } else {
+            $requestedStocks = RequestStocks::with(['requested_at_details', 'requested_by_details', 'approved_by_details', 'request_stocks_details.item_details'])
+                ->where('location', '=', $wardCode)
+                ->whereHas('requested_by_details', function ($q) use ($searchString) {
+                    $q->where('firstname', 'LIKE', '%' . $searchString . '%')
+                        ->orWhere('middlename', 'LIKE', '%' . $searchString . '%')
+                        ->orWhere('lastname', 'LIKE', '%' . $searchString . '%');
+                })
+                ->when(
+                    $request->from,
+                    function ($query, $value) use ($from) {
+                        $query->whereDate('created_at', '>=', $from);
+                    }
+                )
+                ->when(
+                    $request->to,
+                    function ($query, $value) use ($to) {
+                        $query->whereDate('created_at', '<=', $to);
+                    }
+                )
+                ->where('location', '=', $wardCode)
+                ->orderBy('created_at', 'desc')
+                ->paginate(5);
+        }
+
+        // dd($requestedStocks);
 
         $latestDateLog = LocationStockBalanceDateLogs::where('wardcode', $wardCode)
             ->latest('created_at')->first();
