@@ -75,7 +75,7 @@
             sortable
           >
             <template #body="{ data }">
-              <span> {{ data.reorder_point }}</span>
+              <span class="text-error font-bold"> {{ data.reorder_point }}</span>
             </template>
           </Column>
           <Column
@@ -85,7 +85,7 @@
             sortable
           >
             <template #body="{ data }">
-              <span> {{ data.reorder_quantity }}</span>
+              <span class="text-green-500 font-bold"> {{ data.reorder_quantity }}</span>
             </template>
           </Column>
           <Column
