@@ -290,13 +290,13 @@ class WardPatientsController extends Controller
                     --                     AND DATEADD(DAY, 1, CAST(GETDATE() AS DATE))
 
                     -- 1 1/2 day filter
-                    WHERE
-                            herlog.erdate BETWEEN DATEADD(DAY, -1.5, CAST(GETDATE() AS DATETIME))
-                                            AND DATEADD(DAY, 1.5, CAST(GETDATE() AS DATETIME))
+                    -- WHERE
+                    --         herlog.erdate BETWEEN DATEADD(DAY, -1.5, CAST(GETDATE() AS DATETIME))
+                    --                         AND DATEADD(DAY, 1.5, CAST(GETDATE() AS DATETIME))
 
                     -- 2 days filter
-                    -- WHERE herlog.erdate BETWEEN DATEADD(DAY, -2, CAST(GETDATE() AS DATE))
-                    --                     AND DATEADD(DAY, 2, CAST(GETDATE() AS DATE))
+                    WHERE herlog.erdate BETWEEN DATEADD(DAY, -2, CAST(GETDATE() AS DATE))
+                                        AND DATEADD(DAY, 2, CAST(GETDATE() AS DATE))
 
                     ORDER BY herlog.erdate DESC;"
                 );
