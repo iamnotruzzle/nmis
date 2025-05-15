@@ -104,3 +104,24 @@ Homestead.json
 
 # Forge
 /.forge/
+
+
+# Ignore all contents inside storage
+/storage/*
+
+# Allow specific folders
+!/storage/app
+!/storage/app/public
+!/storage/framework
+!/storage/framework/cache
+!/storage/framework/sessions
+!/storage/framework/views
+!/storage/logs
+
+# Ignore contents of specific framework subfolders
+/storage/framework/cache/*
+/storage/framework/sessions/*
+
+# But keep their .gitignore files
+!/storage/framework/cache/.gitignore
+!/storage/framework/sessions/.gitignore
