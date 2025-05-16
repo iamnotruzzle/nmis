@@ -28,7 +28,7 @@ class RedirectIfAuthenticated
                 } else if (Auth::user()->designation == 'csr') {
                     return redirect()->route('admindashboard.index');
                 } else {
-                    return redirect()->route('wardspatients.index');
+                    return redirect()->route('warddashboard.index');
                 }
             }
         }

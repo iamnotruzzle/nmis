@@ -20,7 +20,7 @@ class Designation_csr
         if (Auth::user()->designation == 'csr') {
             return $next($request);
         } else if (Auth::user()->designation == 'ward') {
-            return redirect(route('wardspatients.index'));
+            return redirect(route('warddashboard.index'));
         } else {
             return redirect(route('admindashboard.index'));
         }
