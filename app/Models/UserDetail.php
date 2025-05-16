@@ -43,4 +43,14 @@ class UserDetail extends Model
     {
         return $this->hasOne(User::class, 'employeeid', 'employeeid');
     }
+
+    public function endorsementsGiven()
+    {
+        return $this->hasMany(WaEndorsement::class, 'from_user', 'employeeid');
+    }
+
+    public function endorsementsReceived()
+    {
+        return $this->hasMany(WaEndorsement::class, 'to_user', 'employeeid');
+    }
 }
