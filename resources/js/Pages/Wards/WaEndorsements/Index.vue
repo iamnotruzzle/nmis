@@ -315,7 +315,34 @@
               >
                 <template #header>
                   <div class="flex align-items-center justify-content-between w-full">
-                    <div class="text-white uppercase">Item {{ index + 1 }} - {{ endorse.tag || 'No Tag' }}</div>
+                    <div class="text-white uppercase">
+                      Item {{ index + 1 }} -
+                      <span
+                        v-if="endorse.status == 'CANCELLED'"
+                        class="text-error"
+                      >
+                        {{ endorse.tag }}
+                      </span>
+                      <span
+                        v-else-if="endorse.status == 'PENDING'"
+                        class="text-color-secondary"
+                      >
+                        {{ endorse.tag }}
+                      </span>
+                      <span
+                        v-else-if="endorse.status == 'ONGOING'"
+                        class="text-yellow-500"
+                      >
+                        {{ endorse.tag }}
+                      </span>
+                      <span
+                        v-else-if="endorse.status == 'COMPLETED'"
+                        class="text-green-500"
+                      >
+                        {{ endorse.tag }}
+                      </span>
+                      <span v-else> NO TAG </span>
+                    </div>
                     <Tag
                       :value="endorse.status || 'No Status'"
                       :severity="statusSeverity({ code: endorse.status })"
