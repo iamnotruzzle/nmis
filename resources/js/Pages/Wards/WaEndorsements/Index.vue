@@ -298,62 +298,69 @@
               {{ form.errors.to }}
             </small>
           </div>
-          <div
-            v-for="(endorsement, index) in form.endorsementDetails"
-            :key="index"
-            class="mb-4 border rounded-lg shadow-sm"
+
+          <Accordion
+            multiple
+            :activeIndex="[0]"
+            expandIcon="pi pi-plus"
+            collapseIcon="pi pi-minus"
+            class="pa-0 ma-0"
           >
-            <div class="flex justify-content-between align-items-center mb-2">
-              <label class="font-medium">Description {{ index + 1 }}</label>
-              <Button
-                icon="pi pi-times"
-                class="p-button-danger"
-                @click="removeEndorse(index)"
-                v-if="form.endorsementDetails.length > 1"
+            <AccordionTab
+              v-for="(endorse, index) in form.endorsementDetails"
+              :key="index"
+              :header="`Item ${index + 1}`"
+            >
+              <TextArea
+                v-model="endorse.description"
+                rows="6"
+                class="w-full mb-2"
+                placeholder="Enter description"
               />
-            </div>
 
-            <TextArea
-              v-model="endorsement.description"
-              rows="6"
-              class="w-full mb-2"
-              placeholder="Enter description"
-            />
+              <div class="field flex gap-2">
+                <Dropdown
+                  v-model="endorse.tag"
+                  :options="tagFilter"
+                  optionLabel="name"
+                  optionValue="code"
+                  placeholder="TAG"
+                  class="mr-2"
+                >
+                  <template #option="slotProps">
+                    <Tag :value="slotProps.option.name" />
+                  </template>
+                </Dropdown>
+                <Dropdown
+                  v-model="endorse.status"
+                  :options="statusFilter"
+                  optionLabel="name"
+                  optionValue="code"
+                  placeholder="STATUS"
+                >
+                  <template #option="slotProps">
+                    <Tag
+                      :value="slotProps.option.name"
+                      :severity="statusSeverity(slotProps.option)"
+                    />
+                  </template>
+                </Dropdown>
+              </div>
 
-            <div class="field flex gap-2">
-              <Dropdown
-                v-model="endorsement.tag"
-                :options="tagFilter"
-                optionLabel="name"
-                optionValue="code"
-                placeholder="TAG"
-                class="mr-2"
-              >
-                <template #option="slotProps">
-                  <Tag :value="slotProps.option.name" />
-                </template>
-              </Dropdown>
-              <Dropdown
-                v-model="endorsement.status"
-                :options="statusFilter"
-                optionLabel="name"
-                optionValue="code"
-                placeholder="STATUS"
-              >
-                <template #option="slotProps">
-                  <Tag
-                    :value="slotProps.option.name"
-                    :severity="statusSeverity(slotProps.option)"
-                  />
-                </template>
-              </Dropdown>
-            </div>
-          </div>
+              <Button
+                icon="pi pi-trash"
+                label="Remove"
+                severity="danger"
+                :disabled="form.endorsementDetails.length == 1"
+                @click="removeEndorse(index)"
+              />
+            </AccordionTab>
+          </Accordion>
 
           <Button
             label="Add Endorsement Item"
             icon="pi pi-plus"
-            class="mt-2"
+            class="mt-3"
             @click="addMore"
           />
 
@@ -735,6 +742,8 @@ import { router } from '@inertiajs/vue3';
 import { Head } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import InputText from 'primevue/inputtext';
+import Accordion from 'primevue/accordion';
+import AccordionTab from 'primevue/accordiontab';
 import Password from 'primevue/password';
 import Column from 'primevue/column';
 import DataTable from 'primevue/datatable';
@@ -760,6 +769,8 @@ export default {
     AppLayout,
     Head,
     InputText,
+    Accordion,
+    AccordionTab,
     Column,
     Password,
     DataTable,
