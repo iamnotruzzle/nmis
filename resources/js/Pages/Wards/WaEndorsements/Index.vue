@@ -299,70 +299,84 @@
             </small>
           </div>
 
-          <Accordion
-            multiple
-            :activeIndex="[0]"
-            expandIcon="pi pi-plus"
-            collapseIcon="pi pi-minus"
-            class="pa-0 ma-0"
-          >
-            <AccordionTab
-              v-for="(endorse, index) in form.endorsementDetails"
-              :key="index"
-              :header="`Item ${index + 1} - ${endorse.tag || 'No Tag'} (${endorse.status || 'No Status'})`"
+          <div class="border-1 p-2 border-dotted">
+            <!-- <h1>LIST OF ENDORSEMENTS</h1> -->
+
+            <Accordion
+              :activeIndex="activeAccordionIndex"
+              @tab-change="activeAccordionIndex = $event.index"
+              expandIcon="pi pi-plus"
+              collapseIcon="pi pi-minus"
+              class="pa-0 ma-0"
             >
-              <TextArea
-                v-model="endorse.description"
-                rows="6"
-                class="w-full mb-2"
-                placeholder="Enter description"
-              />
-
-              <div class="field flex gap-2">
-                <Dropdown
-                  v-model="endorse.tag"
-                  :options="tagFilter"
-                  optionLabel="name"
-                  optionValue="code"
-                  placeholder="TAG"
-                  class="mr-2"
-                >
-                  <template #option="slotProps">
-                    <Tag :value="slotProps.option.name" />
-                  </template>
-                </Dropdown>
-                <Dropdown
-                  v-model="endorse.status"
-                  :options="statusFilter"
-                  optionLabel="name"
-                  optionValue="code"
-                  placeholder="STATUS"
-                >
-                  <template #option="slotProps">
+              <AccordionTab
+                v-for="(endorse, index) in form.endorsementDetails"
+                :key="index"
+              >
+                <template #header>
+                  <div class="flex align-items-center justify-content-between w-full">
+                    <div class="text-white uppercase">Item {{ index + 1 }} - {{ endorse.tag || 'No Tag' }}</div>
                     <Tag
-                      :value="slotProps.option.name"
-                      :severity="statusSeverity(slotProps.option)"
+                      :value="endorse.status || 'No Status'"
+                      :severity="statusSeverity({ code: endorse.status })"
+                      rounded
+                      class="mr-2"
                     />
-                  </template>
-                </Dropdown>
-              </div>
+                  </div>
+                </template>
+                <TextArea
+                  v-model="endorse.description"
+                  rows="6"
+                  class="w-full mb-2"
+                  placeholder="Enter description"
+                />
 
-              <Button
-                icon="pi pi-trash"
-                label="Remove"
-                severity="danger"
-                v-if="form.endorsementDetails.length > 1"
-                @click="removeEndorse(index)"
-              />
-            </AccordionTab>
-          </Accordion>
+                <div class="field flex gap-2">
+                  <Dropdown
+                    v-model="endorse.tag"
+                    :options="tagFilter"
+                    optionLabel="name"
+                    optionValue="code"
+                    placeholder="TAG"
+                    class="mr-2"
+                  >
+                    <template #option="slotProps">
+                      <Tag :value="slotProps.option.name" />
+                    </template>
+                  </Dropdown>
+                  <Dropdown
+                    v-model="endorse.status"
+                    :options="statusFilter"
+                    optionLabel="name"
+                    optionValue="code"
+                    placeholder="STATUS"
+                  >
+                    <template #option="slotProps">
+                      <Tag
+                        :value="slotProps.option.name"
+                        :severity="statusSeverity(slotProps.option)"
+                      />
+                    </template>
+                  </Dropdown>
+                </div>
 
-          <Button
-            label="Add Endorsement Item"
-            icon="pi pi-plus"
-            class="mt-3"
-            @click="addMore"
-          />
+                <Button
+                  icon="pi pi-trash"
+                  label="Remove"
+                  severity="danger"
+                  v-if="form.endorsementDetails.length > 1"
+                  @click="removeEndorse(index)"
+                />
+              </AccordionTab>
+            </Accordion>
+
+            <Button
+              label="Add Endorsement Item"
+              icon="pi pi-plus"
+              class="mt-3"
+              @click="addMore"
+            />
+          </div>
 
           <template #footer>
             <Button
@@ -855,6 +869,7 @@ export default {
         // description, tag (Equipment, Medical Supply, JORS, Medical tank, Others), status ('CANCELLED', PENDING, ONGOING COMPLETED),
         endorsementDetails: [],
       }),
+      activeAccordionIndex: 0,
       formUpdateStatus: this.$inertia.form({
         request_stock_id: null,
         status: null,
@@ -896,6 +911,8 @@ export default {
         tag: null,
         status: null,
       });
+      // Automatically open the last added item and close others
+      this.activeAccordionIndex = this.form.endorsementDetails.length - 1;
     },
     removeEndorse(index) {
       this.form.endorsementDetails.splice(index, 1);
