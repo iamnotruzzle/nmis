@@ -309,7 +309,7 @@
             <AccordionTab
               v-for="(endorse, index) in form.endorsementDetails"
               :key="index"
-              :header="`Item ${index + 1}`"
+              :header="`Item ${index + 1} - ${endorse.tag || 'No Tag'} (${endorse.status || 'No Status'})`"
             >
               <TextArea
                 v-model="endorse.description"
@@ -351,7 +351,7 @@
                 icon="pi pi-trash"
                 label="Remove"
                 severity="danger"
-                :disabled="form.endorsementDetails.length == 1"
+                v-if="form.endorsementDetails.length > 1"
                 @click="removeEndorse(index)"
               />
             </AccordionTab>
