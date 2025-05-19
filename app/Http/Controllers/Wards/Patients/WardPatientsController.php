@@ -479,72 +479,76 @@ class WardPatientsController extends Controller
         } else if ($locationType_cached == 'PD') {
             // $hpercode != null && $hpercode != '' ||
             if ($hpercode != null && $hpercode != '') {
+                // $encounters = DB::SELECT(
+                //     "WITH RankedRecords AS (
+                //         SELECT
+                //             henctr.enccode,
+                //             henctr.toecode,
+                //             hperson.hpercode,
+                //             hperson.patfirst,
+                //             hperson.patmiddle,
+                //             hperson.patlast,
+                //             hperson.patsuffix,
+                //             henctr.encdate,
+                //             ROW_NUMBER() OVER (PARTITION BY henctr.toecode ORDER BY henctr.encdate DESC) AS RowNum
+                //         FROM hperson
+                //         JOIN henctr ON henctr.hpercode = hperson.hpercode
+                //         WHERE hperson.hpercode LIKE ?
+                //         AND henctr.toecode IN ('ADM', 'OPD', 'ER')
+                //     )
+                //     SELECT TOP 1
+                //         enccode,
+                //         toecode,
+                //         hpercode,
+                //         patfirst,
+                //         patmiddle,
+                //         patlast,
+                //         patsuffix,
+                //         encdate
+                //     FROM RankedRecords
+                //     WHERE RowNum = 1
+                //     ORDER BY encdate DESC;",
+                //     [
+                //         $hpercode . '%'
+                //     ]
+                // );
                 $encounters = DB::SELECT(
-                    "WITH RankedRecords AS (
-                        SELECT
-                            henctr.enccode,
-                            henctr.toecode,
-                            hperson.hpercode,
-                            hperson.patfirst,
-                            hperson.patmiddle,
-                            hperson.patlast,
-                            hperson.patsuffix,
-                            henctr.encdate,
-                            ROW_NUMBER() OVER (PARTITION BY henctr.toecode ORDER BY henctr.encdate DESC) AS RowNum
-                        FROM hperson
-                        JOIN henctr ON henctr.hpercode = hperson.hpercode
-                        WHERE hperson.hpercode LIKE ?
-                        AND henctr.toecode IN ('ADM', 'OPD', 'ER')
-                    )
-                    SELECT TOP 1
-                        enccode,
-                        toecode,
-                        hpercode,
-                        patfirst,
-                        patmiddle,
-                        patlast,
-                        patsuffix,
-                        encdate
-                    FROM RankedRecords
-                    WHERE RowNum = 1
-                    ORDER BY encdate DESC;",
-                    [
-                        $hpercode . '%'
-                    ]
+                    "SELECT TOP 5
+                            h.enccode,
+                            h.toecode,
+                            p.hpercode,
+                            p.patfirst,
+                            p.patmiddle,
+                            p.patlast,
+                            p.patsuffix,
+                            h.encdate
+                        FROM hperson p
+                        JOIN henctr h ON h.hpercode = p.hpercode
+                        WHERE p.hpercode LIKE ?
+                        AND h.toecode NOT IN ('WALKN')
+                        ORDER BY h.encdate DESC",
+                    [$hpercode]
                 );
             } else if (($patfirst != null && $patlast != null)) {
                 $encounters = DB::SELECT(
-                    "WITH RankedRecords AS (
-                        SELECT
-                            henctr.enccode,
-                            henctr.toecode,
-                            hperson.hpercode,
-                            hperson.patfirst,
-                            hperson.patmiddle,
-                            hperson.patlast,
-                            hperson.patsuffix,
-                            henctr.encdate,
-                            ROW_NUMBER() OVER (PARTITION BY henctr.toecode ORDER BY henctr.encdate DESC) AS RowNum
-                        FROM hperson
-                        JOIN henctr ON henctr.hpercode = hperson.hpercode
-                        WHERE (hperson.patfirst LIKE ? AND hperson.patlast LIKE ?)
-                        AND henctr.toecode IN ('ADM', 'OPD', 'ER')
-                    )
-                    SELECT TOP 1
-                        enccode,
-                        toecode,
-                        hpercode,
-                        patfirst,
-                        patmiddle,
-                        patlast,
-                        patsuffix,
-                        encdate
-                    FROM RankedRecords
-                    WHERE RowNum = 1
-                    ORDER BY encdate DESC;",
+                    "SELECT TOP 5
+                            h.enccode,
+                            h.toecode,
+                            p.hpercode,
+                            p.patfirst,
+                            p.patmiddle,
+                            p.patlast,
+                            p.patsuffix,
+                            h.encdate
+                        FROM hperson p
+                        JOIN henctr h ON h.hpercode = p.hpercode
+                        WHERE p.patfirst LIKE ?
+                        AND p.patlast LIKE ?
+                        AND h.toecode NOT IN ('WALKN')
+                        ORDER BY h.encdate DESC",
                     [
-                        '%' . $patlast . '%',
-                        '%' . $patfirst . '%'
+                        '%' . $patfirst . '%',
+                        '%' . $patlast . '%'
                     ]
                 );
             } else {
