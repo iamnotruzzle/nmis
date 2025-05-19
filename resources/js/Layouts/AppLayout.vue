@@ -127,6 +127,13 @@ export default {
               comp: 'Wards/TransferStock/Index',
             },
             {
+              label: 'WA-Endorsements',
+              icon: 'bi-at',
+              to: 'wa-endorse',
+              prefix: 'wa-endorse',
+              comp: 'Wards/WaEndorsements/Index',
+            },
+            {
               label: 'CSR Inventory',
               icon: 'bi-boxes',
               to: 'csrinv',
@@ -349,6 +356,11 @@ export default {
       if (this.$page.props.user.designation == 'csr') {
         this.menu[1].items = this.menu[1].items.filter(function (obj) {
           return obj.to !== 'requeststocks';
+        });
+      }
+      if (this.$page.props.user.designation == 'csr') {
+        this.menu[1].items = this.menu[1].items.filter(function (obj) {
+          return obj.to !== 'wa-endorse';
         });
       }
       if (this.$page.props.user.designation == 'csr') {

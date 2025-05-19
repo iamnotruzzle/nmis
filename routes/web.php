@@ -48,7 +48,9 @@ use App\Http\Controllers\Wards\RequestStocks\RequestStocksController;
 use App\Http\Controllers\Wards\RequestStocks\RequestStocksLogs\RequestStocksLogsController;
 use App\Http\Controllers\Wards\Supplemental\SupplementalControler;
 use App\Http\Controllers\Wards\TransferStock\TransferStockController;
+use App\Http\Controllers\Wards\WaEndorsement\WaEndorsementController;
 use App\Models\CsrStockBalance;
+use App\Models\WaEndorsement;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -119,6 +121,8 @@ Route::middleware(['web', 'auth', 'verified'])->group(
         Route::resource('wardspatients', WardPatientsController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('patientcharge', PatientChargeController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('wardsstockslogs', RequestStocksLogsController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
+
+        Route::resource('wa-endorse', WaEndorsementController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
 
         Route::resource('transferstock', TransferStockController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         Route::put('transferstock', [TransferStockController::class, 'updatetransferstatus', 'designation_ward'])->name('transferstock.updatetransferstatus');
