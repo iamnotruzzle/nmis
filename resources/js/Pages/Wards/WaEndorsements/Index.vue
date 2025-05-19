@@ -15,7 +15,7 @@
           class="p-datatable-sm"
           v-model:expandedRows="expandedRow"
           v-model:filters="filters"
-          :value="requestStockList"
+          :value="endorsementList"
           selectionMode="single"
           lazy
           paginator
@@ -56,8 +56,8 @@
             expander
             style="width: 5%"
           />
-          <template #empty> No requested stock found. </template>
-          <template #loading> Loading requested stock data. Please wait. </template>
+          <template #empty> No endorsement found. </template>
+          <template #loading> Loading endorsement data. Please wait. </template>
           <Column
             header="CREATED AT"
             filterField="created_at"
@@ -274,89 +274,88 @@
           @hide="whenDialogIsHidden"
         >
           <template #header>
-            <div class="text-primary text-xl font-bold">REQUEST STOCK</div>
+            <div class="text-primary text-xl font-bold">ENDORSEMENT</div>
           </template>
-          <div
-            v-if="noStockLevel == true"
-            class="mb-4"
-          >
-            <p class="font-bold text-xl text-error">The stock level has not been set yet.</p>
-          </div>
           <div class="field">
-            <label for="Item">Quantity</label>
-            <InputText
-              id="quantity"
-              type="number"
-              v-model="requested_qty"
-              :class="{ 'p-invalid': requested_qty == '' || item == null }"
-              @keydown="restrictNonNumericAndPeriod"
-              @keyup.enter="fillEndorsementContainer"
+            <label for="to">To</label>
+            <Dropdown
+              id="to"
+              v-model.trim="form.to"
+              required="true"
+              :options="employeesList"
+              :virtualScrollerOptions="{ itemSize: 38 }"
+              filter
+              optionLabel="name"
+              optionValue="employeeid"
+              class="w-full mb-3"
+              :class="{ 'p-invalid': form.to == '' }"
+              showClear
             />
             <small
               class="text-error"
-              v-if="itemNotSelected == true"
+              v-if="form.errors.to"
             >
-              {{ itemNotSelectedMsg }}
+              {{ form.errors.to }}
             </small>
           </div>
-          <div class="field mt-4">
-            <label class="mr-2">Endorsemented stock list</label>
-            <i
-              class="pi pi-shopping-cart text-blue-500"
-              style="font-size: 1.5rem"
+          <div
+            v-for="(endorsement, index) in form.endorsementDetails"
+            :key="index"
+            class="mb-4 border rounded-lg shadow-sm"
+          >
+            <div class="flex justify-content-between align-items-center mb-2">
+              <label class="font-medium">Description {{ index + 1 }}</label>
+              <Button
+                icon="pi pi-times"
+                class="p-button-danger"
+                @click="removeEndorse(index)"
+                v-if="form.endorsementDetails.length > 1"
+              />
+            </div>
+
+            <TextArea
+              v-model="endorsement.description"
+              rows="6"
+              class="w-full mb-2"
+              placeholder="Enter description"
             />
-            <DataTable
-              v-model:filters="requestStockListDetailsFilter"
-              :globalFilterFields="['cl2desc']"
-              :value="requestStockListDetails"
-              tableStyle="min-width: 50rem"
-              class="p-datatable-sm w-full"
-              paginator
-              removableSort
-              showGridlines
-              :rows="5"
-            >
-              <template #header>
-                <div class="flex justify-content-end">
-                  <div class="p-inputgroup">
-                    <span class="p-inputgroup-addon">
-                      <i class="pi pi-search"></i>
-                    </span>
-                    <InputText
-                      id="searchInput"
-                      v-model="requestStockListDetailsFilter['global'].value"
-                      placeholder="Search item"
-                    />
-                  </div>
-                </div>
-              </template>
-              <Column
-                field="cl2desc"
-                header="PENDING ITEM"
-                style="width: 70%"
-                sortable
-              ></Column>
-              <Column
-                field="requested_qty"
-                header="PENDING QTY"
-                style="width: 20%"
-                sortable
-              ></Column>
-              <Column
-                header=""
-                style="width: 10%"
+
+            <div class="field flex gap-2">
+              <Dropdown
+                v-model="endorsement.tag"
+                :options="tagFilter"
+                optionLabel="name"
+                optionValue="code"
+                placeholder="TAG"
+                class="mr-2"
               >
-                <template #body="slotProps">
-                  <Button
-                    icon="pi pi-times"
-                    label="REMOVE"
-                    severity="danger"
-                    @click="removeFromEndorsementContainer(slotProps.data)"
+                <template #option="slotProps">
+                  <Tag :value="slotProps.option.name" />
+                </template>
+              </Dropdown>
+              <Dropdown
+                v-model="endorsement.status"
+                :options="statusFilter"
+                optionLabel="name"
+                optionValue="code"
+                placeholder="STATUS"
+              >
+                <template #option="slotProps">
+                  <Tag
+                    :value="slotProps.option.name"
+                    :severity="statusSeverity(slotProps.option)"
                   />
                 </template>
-              </Column>
-            </DataTable>
+              </Dropdown>
+            </div>
           </div>
+
+          <Button
+            label="Add Endorsement Item"
+            icon="pi pi-plus"
+            class="mt-2"
+            @click="addMore"
+          />
 
           <template #footer>
             <Button
@@ -369,7 +368,7 @@
 
             <Button
               v-if="isUpdate == true"
-              :disabled="form.processing || requestStockListDetails == '' || requestStockListDetails == null"
+              :disabled="form.processing || endorsementDetails == '' || endorsementDetails == null"
               :label="!form.processing ? 'UPDATE' : 'UPDATE'"
               :icon="form.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
               severity="warning"
@@ -378,9 +377,9 @@
             />
             <Button
               v-else
-              :label="!form.processing ? 'REQUEST' : 'REQUEST'"
+              :label="!form.processing ? 'ENDORSE' : 'ENDORSE'"
               :icon="form.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
-              :disabled="form.processing || requestStockListDetails == '' || requestStockListDetails == null"
+              :disabled="form.processing || endorsementDetails == '' || endorsementDetails == null"
               type="submit"
               @click="submit"
             />
@@ -780,6 +779,7 @@ export default {
   props: {
     endorsements: Object,
     endorsements: Object,
+    employees: Object,
   },
   data() {
     return {
@@ -805,12 +805,13 @@ export default {
       to: null,
       stockBalanceDeclared: false,
       noStockLevel: false,
-      requestStockList: [],
+      employeesList: [],
       // stock list details
-      requestStockListDetailsFilter: {
+      endorsementDetailsFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
-      requestStockListDetails: [],
+      endorsementList: [],
+      endorsementDetails: [],
       item: null,
       cl2desc: null,
       requested_qty: null,
@@ -821,11 +822,27 @@ export default {
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
+      status: null,
+      statusFilter: [
+        { name: 'CANCELLED', code: 'CANCELLED' },
+        { name: 'PENDING', code: 'PENDING' },
+        { name: 'ONGOING', code: 'ONGOING' },
+        { name: 'COMPLETED', code: 'COMPLETED' },
+      ],
+      tag: null,
+      tagFilter: [
+        { name: 'EQUIPMENT', code: 'EQUIPMENT' },
+        { name: 'MEDICAL SUPPLY', code: 'MEDICAL SUPPLY' },
+        { name: 'MEDICAL MEDICAL TANK', code: 'MEDICAL MEDICAL TANK' },
+        { name: 'JORS', code: 'JORS' },
+        { name: 'OTHERS', code: 'OTHERS' },
+      ],
       form: this.$inertia.form({
-        endorsement_id: null,
-        location: null,
-        requested_by: null,
-        requestStockListDetails: [],
+        id: null,
+        to: null,
+        wardcode: null,
+        // description, tag (Equipment, Medical Supply, JORS, Medical tank, Others), status ('CANCELLED', PENDING, ONGOING COMPLETED),
+        endorsementDetails: [],
       }),
       formUpdateStatus: this.$inertia.form({
         request_stock_id: null,
@@ -851,21 +868,8 @@ export default {
   mounted() {
     this.authWardcode = this.$page.props.auth.user.location.location_name.wardcode;
 
-    window.Echo.channel('issued').listen('ItemIssued', (event) => {
-      //   console.log('Location:', event.location); // Access the location data
-
-      if (event.location == this.$page.props.auth.user.location.wardcode) {
-        router.reload({
-          onSuccess: () => {
-            console.log('Data reloaded successfully');
-            this.requestStockList = []; // Reset
-            this.storeEndorsementsInContainer();
-          },
-        });
-      }
-    });
-
     this.storeEndorsementsInContainer();
+    this.storeEmployeesInContainer();
 
     this.loading = false;
   },
@@ -875,6 +879,41 @@ export default {
     },
   },
   methods: {
+    addMore() {
+      this.form.endorsementDetails.push({
+        description: '',
+        tag: null,
+        status: null,
+      });
+    },
+    removeEndorse(index) {
+      this.form.endorsementDetails.splice(index, 1);
+    },
+    statusSeverity(status) {
+      //   console.log(status);
+      switch (status.code) {
+        case 'CANCELLED':
+          return 'danger';
+
+        case 'PENDING':
+          return 'secondary';
+
+        case 'ONGOING':
+          return 'warning';
+
+        case 'COMPLETED':
+          return 'success';
+      }
+    },
+    storeEmployeesInContainer() {
+      this.employees.forEach((e) => {
+        // console.log(e);
+        this.employeesList.push({
+          employeeid: e.employeeid,
+          name: '(' + e.employeeid + ') - ' + e.firstname + ' ' + e.lastname,
+        });
+      });
+    },
     print(data) {
       if (data) {
         // Set up the print form details
@@ -956,10 +995,10 @@ export default {
     // server request such as POST, the data in the table
     // is updated
     storeEndorsementsInContainer() {
-      this.requestStockList = []; // reset
+      this.endorsementList = []; // reset
 
       this.endorsements.data.forEach((e) => {
-        this.requestStockList.push({
+        this.endorsementList.push({
           id: e.id,
           from_user: e.from_user,
           to_user: e.to_user,
@@ -1011,7 +1050,7 @@ export default {
         preserveScroll: true,
         onSuccess: (visit) => {
           this.totalRecords = this.endorsements.total;
-          this.requestStockList = [];
+          this.endorsementList = [];
           this.expandedRow = [];
           this.storeEndorsementsInContainer();
           this.loading = false;
@@ -1033,7 +1072,7 @@ export default {
         (this.noStockLevel = false),
         (this.endorsement_id = null),
         (this.isUpdate = false),
-        (this.requestStockListDetails = []),
+        (this.endorsementDetails = []),
         (this.item = null),
         (this.cl2desc = null),
         (this.requested_qty = null),
@@ -1060,13 +1099,13 @@ export default {
           this.itemNotSelectedMsg = 'Please provide quantity.';
         } else {
           // check if item selected is already on the list
-          if (this.requestStockListDetails.some((e) => e.cl2comb === this.item['cl2comb'])) {
+          if (this.endorsementDetails.some((e) => e.cl2comb === this.item['cl2comb'])) {
             this.itemNotSelected = true;
             this.itemNotSelectedMsg = 'Item is already on the list.';
           } else {
             this.itemNotSelected = false;
             this.itemNotSelectedMsg = null;
-            this.requestStockListDetails.push({
+            this.endorsementDetails.push({
               cl2comb: this.item['cl2comb'],
               cl2desc: this.item['cl2desc'],
               requested_qty: this.requested_qty,
@@ -1076,20 +1115,20 @@ export default {
       }
     },
     removeFromEndorsementContainer(item) {
-      this.requestStockListDetails.splice(
-        this.requestStockListDetails.findIndex((e) => e.cl2comb === item.cl2comb),
+      this.endorsementDetails.splice(
+        this.endorsementDetails.findIndex((e) => e.cl2comb === item.cl2comb),
         1
       );
     },
     editEndorsementedStock(item) {
-      this.form.endorsement_id = item.id;
+      this.form.id = item.id;
 
       this.isUpdate = true;
       this.createEndorsementDialog = true;
       this.endorsement_id = item.id;
 
       item.request_stocks_details.forEach((e) => {
-        this.requestStockListDetails.push({
+        this.endorsementDetails.push({
           request_stocks_details_id: e.id,
           cl2comb: e.cl2comb,
           cl2desc: e.item_details.cl2desc,
@@ -1120,10 +1159,10 @@ export default {
         return false;
       }
 
-      // setup location, requested by and requestStockListDetails before submitting
-      this.form.location = this.authWardcode;
+      // setup location, requested by and endorsementDetails before submitting
+      this.form.wardcode = this.authWardcode;
       this.form.requested_by = this.user.userDetail.employeeid;
-      this.form.requestStockListDetails = this.requestStockListDetails;
+      this.form.endorsementDetails = this.endorsementDetails;
 
       if (this.isUpdate) {
         this.form.put(route('wa-endorse.update', this.endorsement_id), {
@@ -1160,7 +1199,7 @@ export default {
         preserveScroll: true,
         onSuccess: () => {
           this.loading = false;
-          this.requestStockList = [];
+          this.endorsementList = [];
           this.cancelItemDialog = false;
           this.endorsement_id = null;
           this.form.clearErrors();
@@ -1214,6 +1253,13 @@ export default {
     // end ward stocks logs
   },
   watch: {
+    createEndorsementDialog(val) {
+      if (val) {
+        if (this.form.endorsementDetails.length === 0) {
+          this.addMore();
+        }
+      }
+    },
     search: function (val, oldVal) {
       this.params.search = val;
       this.updateData();
