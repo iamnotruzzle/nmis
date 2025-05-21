@@ -1072,18 +1072,21 @@ export default {
       );
     },
     editEndorsement(item) {
+      console.log(item);
       this.form.id = item.id;
+      this.form.from_user = item.from_user;
+      this.form.to_user = item.to_user;
 
       this.isUpdate = true;
       this.createEndorsementDialog = true;
-      this.endorsement_id = item.id;
 
-      item.request_stocks_details.forEach((e) => {
+      item.endorsementDetails.forEach((e) => {
         this.form.endorsementDetails.push({
-          request_stocks_details_id: e.id,
-          cl2comb: e.cl2comb,
-          cl2desc: e.item_details.cl2desc,
-          requested_qty: e.requested_qty,
+          id: e.id,
+          endorsement_id: e.endorsement_id,
+          tag: e.tag,
+          description: e.description,
+          status: e.status,
         });
       });
     },
@@ -1115,10 +1118,9 @@ export default {
       this.form.from_user = this.user.userDetail.employeeid;
 
       if (this.isUpdate) {
-        this.form.put(route('wa-endorse.update', this.endorsement_id), {
+        this.form.put(route('wa-endorse.update', this.form.id), {
           preserveScroll: true,
           onSuccess: () => {
-            this.endorsement_id = null;
             this.createEndorsementDialog = false;
             this.cancel();
             this.updateData();
@@ -1177,7 +1179,7 @@ export default {
       this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Endorsement created', life: 3000 });
     },
     updatedMsg() {
-      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Stock request updated', life: 3000 });
+      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Endorsement updated', life: 3000 });
     },
     updatedStatusMsg() {
       this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Changed requested stocks status', life: 3000 });

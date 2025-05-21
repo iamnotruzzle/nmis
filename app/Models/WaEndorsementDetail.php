@@ -17,6 +17,7 @@ class WaEndorsementDetail extends Model
         'description',
         'tag',
         'status',
+        'soft_delete',
     ];
 
     public function endorsement()
