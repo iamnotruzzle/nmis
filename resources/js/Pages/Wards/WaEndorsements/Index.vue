@@ -31,7 +31,7 @@
           <template #header>
             <div class="flex flex-wrap align-items-center justify-content-end gap-2">
               <div class="flex">
-                <div class="mr-2">
+                <!-- <div class="mr-2">
                   <div class="p-inputgroup">
                     <span class="p-inputgroup-addon">
                       <i class="pi pi-search"></i>
@@ -42,7 +42,7 @@
                       placeholder="Search"
                     />
                   </div>
-                </div>
+                </div> -->
                 <Button
                   label="Endorsement"
                   icon="pi pi-plus"
