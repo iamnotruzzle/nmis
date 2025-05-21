@@ -145,7 +145,7 @@
               >
                 <Column header="TAG">
                   <template #body="{ data }">
-                    <span> {{ data.tag }}</span>
+                    <span class="font-bold"> {{ data.tag }}</span>
                   </template>
                 </Column>
                 <Column
