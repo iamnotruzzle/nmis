@@ -18,17 +18,22 @@ class WaEndorsement extends Model
         'wardcode',
     ];
 
+    public function ward()
+    {
+        return $this->hasOne(Location::class, 'wardcode', 'wardcode');
+    }
+
     public function details()
     {
         return $this->hasMany(WaEndorsementDetail::class, 'endorsement_id');
     }
 
-    public function fromUser()
+    public function from_user()
     {
         return $this->belongsTo(UserDetail::class, 'from_user', 'employeeid');
     }
 
-    public function toUser()
+    public function to_user()
     {
         return $this->belongsTo(UserDetail::class, 'to_user', 'employeeid');
     }

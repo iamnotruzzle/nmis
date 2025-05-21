@@ -90,95 +90,27 @@
             </template>
           </Column>
           <Column
-            field="status"
-            header="STATUS"
-            style="text-align: center; width: 10%"
-            :pt="{ headerContent: 'justify-content-center' }"
-          >
-            <template #body="{ data }">
-              <div class="flex justify-content-center align-content-center">
-                <Tag
-                  v-if="data.status == 'PENDING'"
-                  :value="data.status"
-                  severity="contrast"
-                />
-                <Tag
-                  v-if="data.status == 'ACKNOWLEDGED'"
-                  :value="data.status"
-                  severity="primary"
-                />
-                <Tag
-                  v-if="data.status == 'FILLED'"
-                  :value="data.status"
-                  severity="info"
-                />
-                <Tag
-                  v-if="data.status == 'RECEIVED'"
-                  :value="data.status"
-                  severity="success"
-                />
-                <Tag
-                  v-if="data.status == 'CANCELLED'"
-                  :value="data.status"
-                  severity="danger"
-                />
-
-                <Button
-                  v-if="data.status == 'FILLED'"
-                  label="RECEIVE"
-                  icon="pi pi-check"
-                  class="ml-2"
-                  severity="success"
-                  @click="editStatus(data)"
-                />
-              </div>
-            </template>
-          </Column>
-          <Column
-            field="requested_by"
-            header="REQUESTED BY"
+            field="from_user_name"
+            header="FROM"
             style="width: 30%"
           >
             <template #body="{ data }">
               <div class="flex flex-row align-items-center">
-                <!-- <img
-                  v-if="data.requested_by_image != null"
-                  :src="`storage/${data.requested_by_image}`"
-                  class="w-3rem h-3rem rounded-card"
-                />
-                <img
-                  v-else
-                  src="images/no_profile.png"
-                  class="w-3rem h-3rem rounded-card"
-                /> -->
-
                 <span class="font-semibold text-xl pl-3">
-                  {{ data.requested_by }}
+                  {{ data.from_user_name }}
                 </span>
               </div>
             </template>
           </Column>
           <Column
-            field="approved_by"
-            header="APPROVED BY"
+            field="to_use_name"
+            header="TO"
             style="width: 30%"
           >
             <template #body="{ data }">
               <div class="flex flex-row align-items-center">
-                <!-- <img
-                  v-if="data.approved_by_image != null"
-                  :src="`storage/${data.approved_by_image}`"
-                  class="w-3rem h-3rem rounded-card"
-                />
-
-                <img
-                  v-if="data.approved_by != null && data.approved_by_image == null"
-                  src="images/no_profile.png"
-                  class="w-3rem h-3rem rounded-card"
-                /> -->
-
                 <span class="font-semibold text-xl pl-3">
-                  {{ data.approved_by }}
+                  {{ data.to_user_name }}
                 </span>
               </div>
             </template>
@@ -201,17 +133,9 @@
             <template #body="slotProps">
               <div class="flex justify-content-around align-content-center">
                 <v-icon
-                  v-if="slotProps.data.status == 'PENDING'"
                   name="pr-pencil"
                   class="text-yellow-500 text-xl"
-                  @click="editEndorsementedStock(slotProps.data)"
-                ></v-icon>
-
-                <v-icon
-                  v-if="slotProps.data.status == 'PENDING' || slotProps.data.status == 'ACKNOWLEDGED'"
-                  name="fc-cancel"
-                  class="text-red-500 text-xl"
-                  @click="confirmCancelItem(slotProps.data)"
+                  @click="editEndorsement(slotProps.data)"
                 ></v-icon>
               </div>
             </template>
@@ -223,42 +147,45 @@
                 removableSort
                 showGridlines
                 :rows="5"
-                :value="slotProps.data.request_stocks_details"
+                :value="slotProps.data.endorsementDetails"
               >
-                <Column
-                  field="item"
-                  header="ITEM"
-                  style="width: 60%"
-                >
+                <Column header="TAG">
                   <template #body="{ data }">
-                    <span> {{ data.item_details.cl2desc }}</span>
+                    <span> {{ data.tag }}</span>
                   </template>
                 </Column>
                 <Column
-                  header="PENDING QTY"
-                  style="text-align: right; width: 10%"
-                  :pt="{ headerContent: 'justify-content-end' }"
+                  header="DESCRIPTION"
+                  width="70%"
                 >
                   <template #body="{ data }">
-                    <span class="text-blue-500">{{ data.requested_qty }} </span>
+                    <span> {{ data.description }}</span>
                   </template>
                 </Column>
-                <Column
-                  field="approved_qty"
-                  header="APPROVED QTY"
-                  style="text-align: right; width: 10%"
-                  :pt="{ headerContent: 'justify-content-end' }"
-                >
+                <Column header="STATUS">
                   <template #body="{ data }">
-                    <span class="text-green-500">{{ data.approved_qty }} </span>
+                    <Tag
+                      v-if="data.status == 'CANCELLED'"
+                      :value="data.status"
+                      severity="danger"
+                    />
+                    <Tag
+                      v-if="data.status == 'PENDING'"
+                      :value="data.status"
+                      severity="secondary"
+                    />
+                    <Tag
+                      v-if="data.status == 'ONGOING'"
+                      :value="data.status"
+                      severity="warning"
+                    />
+                    <Tag
+                      v-if="data.status == 'COMPLETED'"
+                      :value="data.status"
+                      severity="success"
+                    />
                   </template>
                 </Column>
-                <Column
-                  field="remarks"
-                  header="REMARKS"
-                  style="width: 20%; text-align: center"
-                  :pt="{ headerContent: 'justify-content-center' }"
-                ></Column>
               </DataTable>
             </div>
           </template>
@@ -277,10 +204,10 @@
             <div class="text-primary text-xl font-bold">ENDORSEMENT</div>
           </template>
           <div class="field">
-            <label for="to">To</label>
+            <label for="to_user">To</label>
             <Dropdown
-              id="to"
-              v-model.trim="form.to"
+              id="to_user"
+              v-model.trim="form.to_user"
               required="true"
               :options="employeesList"
               :virtualScrollerOptions="{ itemSize: 38 }"
@@ -288,14 +215,14 @@
               optionLabel="name"
               optionValue="employeeid"
               class="w-full mb-3"
-              :class="{ 'p-invalid': form.to == '' }"
+              :class="{ 'p-invalid': form.to_user == '' }"
               showClear
             />
             <small
               class="text-error"
-              v-if="form.errors.to"
+              v-if="form.errors.to_user"
             >
-              {{ form.errors.to }}
+              {{ form.errors.to_user }}
             </small>
           </div>
 
@@ -416,7 +343,7 @@
 
             <Button
               v-if="isUpdate == true"
-              :disabled="form.processing || endorsementDetails == '' || endorsementDetails == null"
+              :disabled="form.processing || form.endorsementDetails.length < 1"
               :label="!form.processing ? 'UPDATE' : 'UPDATE'"
               :icon="form.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
               severity="warning"
@@ -427,7 +354,12 @@
               v-else
               :label="!form.processing ? 'ENDORSE' : 'ENDORSE'"
               :icon="form.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
-              :disabled="form.processing || endorsementDetails == '' || endorsementDetails == null"
+              :disabled="
+                form.processing ||
+                form.to_user == null ||
+                form.endorsementDetails.length < 1 ||
+                form.endorsementDetails.some((e) => !e.description || !e.tag || !e.status)
+              "
               type="submit"
               @click="submit"
             />
@@ -830,7 +762,6 @@ export default {
   },
   props: {
     endorsements: Object,
-    endorsements: Object,
     employees: Object,
   },
   data() {
@@ -863,7 +794,6 @@ export default {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       endorsementList: [],
-      endorsementDetails: [],
       item: null,
       cl2desc: null,
       requested_qty: null,
@@ -891,7 +821,8 @@ export default {
       ],
       form: this.$inertia.form({
         id: null,
-        to: null,
+        from_user: null,
+        to_user: null,
         wardcode: null,
         // description, tag (Equipment, Medical Supply, JORS, Medical tank, Others), status ('CANCELLED', PENDING, ONGOING COMPLETED),
         endorsementDetails: [],
@@ -1050,21 +981,20 @@ export default {
     // server request such as POST, the data in the table
     // is updated
     storeEndorsementsInContainer() {
+      console.log(this.endorsements.data);
       this.endorsementList = []; // reset
 
       this.endorsements.data.forEach((e) => {
         this.endorsementList.push({
           id: e.id,
-          from_user: e.from_user,
-          to_user: e.to_user,
-          //   requested_by: e.requested_by_details.firstname + ' ' + e.requested_by_details.lastname,
-          //   approved_by:
-          //     e.approved_by_details != null
-          //       ? e.approved_by_details.firstname + ' ' + e.approved_by_details.lastname
-          //       : null,
-          wardcode: e.wardcode,
+          from_user: e.from_user.employeeid,
+          from_user_name: e.from_user.firstname + ' ' + e.from_user.middlename + ' ' + e.from_user.lastname,
+          to_user: e.to_user.employeeid,
+          to_user_name: e.to_user.firstname + ' ' + e.to_user.middlename + ' ' + e.to_user.lastname,
+          wardcode: e.ward.wardcode,
+          wardname: e.ward.wardname,
           created_at: e.created_at,
-          request_stocks_details: e.request_stocks_details,
+          endorsementDetails: e.details,
         });
       });
     },
@@ -1127,7 +1057,6 @@ export default {
         (this.noStockLevel = false),
         (this.endorsement_id = null),
         (this.isUpdate = false),
-        (this.endorsementDetails = []),
         (this.item = null),
         (this.cl2desc = null),
         (this.requested_qty = null),
@@ -1142,40 +1071,7 @@ export default {
         this.formUpdateStatus.reset()
       );
     },
-    fillEndorsementContainer() {
-      // check if no selected item
-      if (this.item == null || this.item == '') {
-        this.itemNotSelected = true;
-        this.itemNotSelectedMsg = 'Item not selected.';
-      } else {
-        // check if request qty is not provided
-        if (this.requested_qty == 0 || this.requested_qty == null || this.requested_qty == '') {
-          this.itemNotSelected = true;
-          this.itemNotSelectedMsg = 'Please provide quantity.';
-        } else {
-          // check if item selected is already on the list
-          if (this.endorsementDetails.some((e) => e.cl2comb === this.item['cl2comb'])) {
-            this.itemNotSelected = true;
-            this.itemNotSelectedMsg = 'Item is already on the list.';
-          } else {
-            this.itemNotSelected = false;
-            this.itemNotSelectedMsg = null;
-            this.endorsementDetails.push({
-              cl2comb: this.item['cl2comb'],
-              cl2desc: this.item['cl2desc'],
-              requested_qty: this.requested_qty,
-            });
-          }
-        }
-      }
-    },
-    removeFromEndorsementContainer(item) {
-      this.endorsementDetails.splice(
-        this.endorsementDetails.findIndex((e) => e.cl2comb === item.cl2comb),
-        1
-      );
-    },
-    editEndorsementedStock(item) {
+    editEndorsement(item) {
       this.form.id = item.id;
 
       this.isUpdate = true;
@@ -1183,7 +1079,7 @@ export default {
       this.endorsement_id = item.id;
 
       item.request_stocks_details.forEach((e) => {
-        this.endorsementDetails.push({
+        this.form.endorsementDetails.push({
           request_stocks_details_id: e.id,
           cl2comb: e.cl2comb,
           cl2desc: e.item_details.cl2desc,
@@ -1216,8 +1112,7 @@ export default {
 
       // setup location, requested by and endorsementDetails before submitting
       this.form.wardcode = this.authWardcode;
-      this.form.requested_by = this.user.userDetail.employeeid;
-      this.form.endorsementDetails = this.endorsementDetails;
+      this.form.from_user = this.user.userDetail.employeeid;
 
       if (this.isUpdate) {
         this.form.put(route('wa-endorse.update', this.endorsement_id), {
@@ -1235,7 +1130,6 @@ export default {
         this.form.post(route('wa-endorse.store'), {
           preserveScroll: true,
           onSuccess: () => {
-            this.endorsement_id = null;
             this.createEndorsementDialog = false;
             this.cancel();
             this.updateData();
@@ -1280,7 +1174,7 @@ export default {
       this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Item converted.', life: 3000 });
     },
     createdMsg() {
-      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Stock request created', life: 3000 });
+      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Endorsement created', life: 3000 });
     },
     updatedMsg() {
       this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Stock request updated', life: 3000 });
