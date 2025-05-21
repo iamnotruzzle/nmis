@@ -90,7 +90,6 @@
             </template>
           </Column>
           <Column
-            field="from_user_name"
             header="FROM"
             style="width: 30%"
           >
@@ -103,7 +102,6 @@
             </template>
           </Column>
           <Column
-            field="to_use_name"
             header="TO"
             style="width: 30%"
           >
@@ -136,6 +134,13 @@
                   name="pr-pencil"
                   class="text-yellow-500 text-xl"
                   @click="editEndorsement(slotProps.data)"
+                ></v-icon>
+
+                <v-icon
+                  v-if="slotProps.data.from_user == $page.props.auth.user.userDetail.employeeid"
+                  name="fc-cancel"
+                  class="text-red-500 text-xl"
+                  @click="confirmCancelItem(slotProps.data)"
                 ></v-icon>
               </div>
             </template>
@@ -422,7 +427,7 @@
               class="pi pi-exclamation-triangle mr-3"
               style="font-size: 2rem"
             />
-            <span v-if="form">Are you sure you want to cancel this request?</span>
+            <span v-if="form">Are you sure you want to cancel this endorsement?</span>
           </div>
           <template #footer>
             <Button
@@ -815,7 +820,7 @@ export default {
       tagFilter: [
         { name: 'EQUIPMENT', code: 'EQUIPMENT' },
         { name: 'MEDICAL SUPPLY', code: 'MEDICAL SUPPLY' },
-        { name: 'MEDICAL MEDICAL TANK', code: 'MEDICAL MEDICAL TANK' },
+        { name: 'MEDICAL TANK', code: 'MEDICAL TANK' },
         { name: 'JORS', code: 'JORS' },
         { name: 'OTHERS', code: 'OTHERS' },
       ],
@@ -1142,17 +1147,15 @@ export default {
       }
     },
     confirmCancelItem(item) {
-      this.endorsement_id = item.id;
+      this.form.id = item.id;
       this.cancelItemDialog = true;
     },
     cancelItem() {
-      this.form.delete(route('wa-endorse.destroy', this.endorsement_id), {
+      this.form.delete(route('wa-endorse.destroy', this.form.id), {
         preserveScroll: true,
         onSuccess: () => {
           this.loading = false;
-          this.endorsementList = [];
           this.cancelItemDialog = false;
-          this.endorsement_id = null;
           this.form.clearErrors();
           this.form.reset();
           this.updateData();
@@ -1185,7 +1188,7 @@ export default {
       this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Changed requested stocks status', life: 3000 });
     },
     cancelledMsg() {
-      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Stock request canceld', life: 3000 });
+      this.$toast.add({ severity: 'error', summary: 'Success', detail: 'Endorsement cancelled.', life: 3000 });
     },
     getLocalDateString(utcStr) {
       const date = new Date(utcStr);

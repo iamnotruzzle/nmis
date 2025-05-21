@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\UserDetail;
 use App\Models\WaEndorsement;
 use App\Models\WaEndorsementDetail;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -14,16 +15,32 @@ use Throwable;
 
 class WaEndorsementController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $from = Carbon::parse($request->from)->startOfDay();
+        $to = Carbon::parse($request->to)->endOfDay();
+
         $endorsements = WaEndorsement::with([
             'ward:wardcode,wardname',
             'details',
             'from_user:employeeid,firstname,middlename,lastname',
             'to_user:employeeid,firstname,middlename,lastname'
         ])
+            ->when(
+                $request->from,
+                function ($query, $value) use ($from) {
+                    $query->whereDate('created_at', '>=', $from);
+                }
+            )
+            ->when(
+                $request->to,
+                function ($query, $value) use ($to) {
+                    $query->whereDate('created_at', '<=', $to);
+                }
+            )
+            ->where('soft_delete', null)
+            ->orderBy('created_at', 'desc')
             ->paginate(5);
-        // dd($endorsements);
 
         $employees = UserDetail::where('empstat', 'A')->orderBy('employeeid', 'ASC')->get(['employeeid', 'empstat', 'firstname', 'lastname']);
 
@@ -97,8 +114,23 @@ class WaEndorsementController extends Controller
         return redirect()->back()->with('success', 'Endorsement updated successfully.');
     }
 
-    public function destroy($id)
+    public function destroy(WaEndorsement $waendorsement, Request $request)
     {
-        //
+
+        // dd($requeststock->id);
+        $id = $request->id;
+
+        // delete request stock
+        // $requeststock->delete();
+
+        // // delete request stock details
+        // RequestStocksDetails::where('request_stocks_id', $requestStocksID)->delete();
+
+        WaEndorsement::where('id', $id)
+            ->update([
+                'soft_delete' => 'yes',
+            ]);
+
+        return redirect()->back()->with('success', 'Endorsement cancelled.');
     }
 }
