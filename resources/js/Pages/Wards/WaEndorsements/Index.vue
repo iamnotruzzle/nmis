@@ -44,7 +44,7 @@
                   </div>
                 </div> -->
                 <Button
-                  label="Endorsement"
+                  label="ENDORSE"
                   icon="pi pi-plus"
                   class="mr-2"
                   @click="openCreateEndorsementDialog"
@@ -676,13 +676,40 @@ export default {
         },
       });
     },
+    // when dialog is opened, automatically add the endorsements
+    // that is not completed or cancelled
     openCreateEndorsementDialog() {
       this.isUpdate = false;
       this.form.clearErrors();
       this.form.reset();
       this.endorsement_id = null;
       this.createEndorsementDialog = true;
+
+      // Use local endorsementList to find the latest valid entry
+      if (this.endorsementList.length > 0) {
+        const latest = this.endorsementList[0]; // assuming it's sorted newest first
+
+        // Filter details
+        const validDetails = latest.endorsementDetails.filter((detail) => {
+          return detail.status !== 'CANCELLED' && detail.status !== 'COMPLETED';
+        });
+
+        // Populate form with valid endorsementDetails
+        if (validDetails.length > 0) {
+          this.form.endorsementDetails = validDetails.map((detail) => ({
+            description: detail.description,
+            tag: detail.tag,
+            status: detail.status,
+          }));
+        } else {
+          this.form.endorsementDetails = [{ description: '', tag: '', status: '' }];
+        }
+      } else {
+        // fallback if list is empty
+        this.form.endorsementDetails = [{ description: '', tag: '', status: '' }];
+      }
     },
+
     // when dialog is hidden, do this function
     whenDialogIsHidden() {
       this.$emit(

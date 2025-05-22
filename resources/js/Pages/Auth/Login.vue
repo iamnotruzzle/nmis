@@ -76,7 +76,7 @@
                 v-model="form.login"
                 name="login"
                 type="text"
-                class="w-full uppercase"
+                class="w-full"
                 style="padding: 1rem"
               />
             </div>
@@ -92,7 +92,7 @@
                 id="password"
                 v-model="form.password"
                 :toggleMask="true"
-                class="w-full uppercase"
+                class="w-full"
                 inputClass="w-full"
                 :feedback="false"
                 @keyup.enter="submit"
