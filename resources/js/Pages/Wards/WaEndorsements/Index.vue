@@ -153,7 +153,7 @@
                   width="70%"
                 >
                   <template #body="{ data }">
-                    <span> {{ data.description }}</span>
+                    <p class="p-2 text-justify">{{ data.description }}</p>
                   </template>
                 </Column>
                 <Column header="STATUS">
