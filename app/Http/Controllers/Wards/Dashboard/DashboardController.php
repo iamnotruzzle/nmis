@@ -16,15 +16,30 @@ class DashboardController extends Controller
 
     public function index()
     {
-        $cache_authWardCode = 'c_authWardCode_' . Auth::user()->employeeid;
-        $authWardCode_cached = Cache::get($cache_authWardCode);
+        //region get auth ward code
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+                FROM
+                    user_acc u
+                INNER JOIN
+                    csrw_login_history l ON u.employeeid = l.employeeid
+                WHERE
+                    l.employeeid = ?
+                ORDER BY
+                    l.created_at DESC;
+                ",
+            [Auth::user()->employeeid]
+        );
+        // dd($authWardcode);
+        $authCode = $authWardcode[0]->wardcode;
 
         $result_patient_charges_total = DB::select(
             "SELECT SUM(price_total) AS total_charges
                 FROM csrw_patient_charge_logs
                 WHERE entry_at = ?
                 AND CAST(created_at AS DATE) = CAST(GETDATE() AS DATE);",
-            [$authWardCode_cached]
+            [$authCode]
         );
         $patient_charges_total = round($result_patient_charges_total[0]->total_charges, 2);
 
@@ -38,7 +53,7 @@ class DashboardController extends Controller
                     GROUP BY cl2comb
                 ) AS w ON r.cl2comb = w.cl2comb
                 WHERE w.total_quantity <= r.reorder_point",
-            [$authWardCode_cached]
+            [$authCode]
         );
         $low_stock_items = (int)$result_low_stock_items[0]->low_stock_items;
 
@@ -47,7 +62,7 @@ class DashboardController extends Controller
                 FROM csrw_request_stocks
                 WHERE status = 'FILLED'
                 AND location = ?",
-            [$authWardCode_cached]
+            [$authCode]
         );
         $ready_to_received = (int)$result_to_received[0]->total;
 
@@ -58,7 +73,7 @@ class DashboardController extends Controller
                 AND expiration_date IS NOT NULL
                 AND expiration_date BETWEEN CAST(GETDATE() AS DATE) AND DATEADD(DAY, 30, GETDATE())
                 AND quantity > 0;",
-            [$authWardCode_cached]
+            [$authCode]
         );
         $expiring_soon = (int)$result_expiring_soon[0]->expiring_soon_count;
 

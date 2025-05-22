@@ -8,6 +8,8 @@ use App\Models\WaEndorsement;
 use App\Models\WaEndorsementDetail;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -19,6 +21,24 @@ class WaEndorsementController extends Controller
     {
         $from = Carbon::parse($request->from)->startOfDay();
         $to = Carbon::parse($request->to)->endOfDay();
+
+        //region get auth ward code
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+                FROM
+                    user_acc u
+                INNER JOIN
+                    csrw_login_history l ON u.employeeid = l.employeeid
+                WHERE
+                    l.employeeid = ?
+                ORDER BY
+                    l.created_at DESC;
+                ",
+            [Auth::user()->employeeid]
+        );
+        // dd($authWardcode);
+        $authCode = $authWardcode[0]->wardcode;
 
         $endorsements = WaEndorsement::with([
             'ward:wardcode,wardname',
@@ -38,6 +58,7 @@ class WaEndorsementController extends Controller
                     $query->whereDate('created_at', '<=', $to);
                 }
             )
+            ->where('wardcode', $authCode)
             ->where('soft_delete', null)
             ->orderBy('created_at', 'desc')
             ->paginate(5);
