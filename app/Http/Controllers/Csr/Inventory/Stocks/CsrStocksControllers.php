@@ -61,51 +61,38 @@ class CsrStocksControllers extends Controller
             ",
         );
 
-        // Define cache keys for ward code and location type based on the authenticated user's employee ID
-        $cache_authWardCode = 'c_authWardCode_' . Auth::user()->employeeid;
-        $cache_locationType = 'c_locationType_' . Auth::user()->employeeid;
+        #region auth ward code and ward location type
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+                FROM
+                    user_acc u
+                INNER JOIN
+                    csrw_login_history l ON u.employeeid = l.employeeid
+                WHERE
+                    l.employeeid = ?
+                ORDER BY
+                    l.created_at DESC;
+                ",
+            [Auth::user()->employeeid]
+        );
+        $authCode = $authWardcode[0]->wardcode;
 
-        // Attempt to retrieve cached ward code and location type
-        $authWardCode_cached = Cache::get($cache_authWardCode);
-        $locationType_cached = Cache::get($cache_locationType);
-
-        // If ward code is not found in cache, retrieve it from the database
-        if (!$authWardCode_cached) {
-            $authWardCode_query = DB::select(
-                "SELECT TOP 1 l.wardcode FROM user_acc u
-                    INNER JOIN csrw_login_history l ON u.employeeid = l.employeeid
-                    WHERE l.employeeid = ? ORDER BY l.created_at DESC;",
-                [Auth::user()->employeeid]
-            );
-
-            // If a ward code is found, retrieve its corresponding location type and cache the values
-            if (!empty($authWardCode_query)) {
-                $wardCode = $authWardCode_query[0]->wardcode;
-                $locationType_query = DB::select("SELECT enctype FROM hward WHERE wardcode = ?;", [$wardCode]);
-                $enctype = !empty($locationType_query) ? $locationType_query[0]->enctype : null;
-
-                // Store values in cache for future use
-                Cache::forever($cache_authWardCode, $wardCode);
-                Cache::forever($cache_locationType, $enctype);
-
-                // Assign retrieved values to variables
-                $authWardCode_cached = $wardCode;
-                $locationType_cached = $enctype;
-            }
-        }
-
+        $locationType_query = DB::select("SELECT enctype FROM hward WHERE wardcode = ?;", [$authCode]);
+        // $locationType_cached = Cache::get($enctype);
+        $enctype = !empty($locationType_query) ? $locationType_query[0]->enctype : null;
         // Retrieve the location type from cache again in case it was just set
-        $locationType_cached = Cache::get($cache_locationType);
+        #endregion
 
         // Define cache keys for patient data and latest update timestamp
-        $cachedKeyCsrStocks = 'c_csr_stocks_' . $authWardCode_cached;
-        $cacheKeyLatestUpdate = 'latest_update_' . $authWardCode_cached;
+        $cachedKeyCsrStocks = 'c_csr_stocks_' . $authCode;
+        $cacheKeyLatestUpdate = 'latest_update_' . $authCode;
 
         // Attempt to retrieve cached patient data
         $stocks = Cache::get($cachedKeyCsrStocks);
 
         // If location type is null, fetch the latest created_at
-        if ($locationType_cached === null) {
+        if ($enctype === null) {
             $latestUpdatedAt = DB::select(
                 "SELECT MAX(updated_at) as updated_at FROM csrw_csr_stocks;"
             );
@@ -119,23 +106,6 @@ class CsrStocksControllers extends Controller
             // If the latest updated_at has changed, fetch stocks data and update the cache
             if (!$cachedUpdatedAt || $latestUpdatedAt !== $cachedUpdatedAt) {
                 $fetchedStocks = DB::select(
-                    // OLD
-                    // "SELECT stock.id, stock.ris_no,
-                    //     stock.supplierID, supplier.suppname,
-                    //     typeOfCharge.chrgcode as codeFromHCharge, typeOfCharge.chrgdesc as descFromHCharge,
-                    //     fundSource.fsid as codeFromFundSource, fundSource.fsName as descFromFundSource,
-                    //     stock.cl2comb, item.cl2desc, stock.acquisition_price,
-                    //     unit.uomcode, unit.uomdesc,
-                    //     stock.quantity,
-                    //     stock.manufactured_date, stock.delivered_date, expiration_date, stock.converted
-                    // FROM csrw_csr_stocks as stock
-                    // JOIN hclass2 as item ON stock.cl2comb = item.cl2comb
-                    // JOIN huom as unit ON stock.uomcode = unit.uomcode
-                    // JOIN csrw_suppliers as supplier ON stock.supplierID = supplier.supplierID
-                    // LEFT JOIN hcharge as typeOfCharge ON stock.chrgcode = typeOfCharge.chrgcode
-                    // LEFT JOIN csrw_fund_source as fundSource ON stock.chrgcode = fundSource.fsid
-                    // ORDER BY stock.created_at ASC;"
-
                     // new and fixed
                     "SELECT stock.id, stock.ris_no,
                         stock.supplierID, supplier.suppname,

@@ -27,11 +27,21 @@ class ReportController extends Controller
         $date = Carbon::now();
         $now = $date->copy()->startOfDay();
 
-        // get auth wardcode
-        // Define cache keys for ward code and location type based on the authenticated user's employee ID
-        $cache_authWardCode = 'c_authWardCode_' . Auth::user()->employeeid;
-        // Attempt to retrieve cached ward code and location type
-        $authWardCode_cached = Cache::get($cache_authWardCode);
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+                FROM
+                    user_acc u
+                INNER JOIN
+                    csrw_login_history l ON u.employeeid = l.employeeid
+                WHERE
+                    l.employeeid = ?
+                ORDER BY
+                    l.created_at DESC;
+                ",
+            [Auth::user()->employeeid]
+        );
+        $authCode = $authWardcode[0]->wardcode;
 
         // Get the latest balance date logs for the ward
         $stockBalDates = DB::select(
@@ -40,14 +50,14 @@ class ReportController extends Controller
                 WHERE wardcode = ?
                 ORDER BY created_at DESC
         ",
-            [$authWardCode_cached]
+            [$authCode]
         );
 
         // Default values
         $default_beg_bal_date = $stockBalDates[0]->beg_bal_date ?? null;
         $default_end_bal_date = $stockBalDates[0]->end_bal_date ?? null;
 
-        $latestDateLog = LocationStockBalanceDateLogs::where('wardcode', $authWardCode_cached)
+        $latestDateLog = LocationStockBalanceDateLogs::where('wardcode', $authCode)
             ->latest('created_at')->first();
         // dd($latestDateLog);
         if ($latestDateLog == null) {
@@ -138,7 +148,7 @@ class ReportController extends Controller
                 ORDER BY
                     item.cl2desc,
                     price.price_per_unit",
-            [$from, $to, $from, $to, $authWardCode_cached, $from, $from, $to]
+            [$from, $to, $from, $to, $authCode, $from, $from, $to]
         );
 
 

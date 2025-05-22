@@ -40,9 +40,9 @@ class WardPatientsController extends Controller
         $authCode = $authWardcode[0]->wardcode;
 
         $locationType_query = DB::select("SELECT enctype FROM hward WHERE wardcode = ?;", [$authCode]);
+        // $locationType_cached = Cache::get($enctype);
         $enctype = !empty($locationType_query) ? $locationType_query[0]->enctype : null;
         // Retrieve the location type from cache again in case it was just set
-        // $locationType_cached = Cache::get($enctype);
         #endregion
 
         // Define cache keys for patient data and latest update timestamp

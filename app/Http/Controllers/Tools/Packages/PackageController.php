@@ -18,8 +18,21 @@ class PackageController extends Controller
 {
     public function index()
     {
-        $cache_authWardCode = 'c_authWardCode_' . Auth::user()->employeeid;
-        $authWardCode_cached = Cache::get($cache_authWardCode);
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+                FROM
+                    user_acc u
+                INNER JOIN
+                    csrw_login_history l ON u.employeeid = l.employeeid
+                WHERE
+                    l.employeeid = ?
+                ORDER BY
+                    l.created_at DESC;
+                ",
+            [Auth::user()->employeeid]
+        );
+        $authCode = $authWardcode[0]->wardcode;
 
         $items = DB::select(
             "SELECT
@@ -46,7 +59,7 @@ class PackageController extends Controller
                 JOIN hclass2 as item ON item.cl2comb = pack_dets.cl2comb
                 WHERE wardcode = ?
                 ORDER BY item.cl2desc ASC;",
-            [$authWardCode_cached]
+            [$authCode]
         );
 
         return Inertia::render('Tools/Packages/Index', [

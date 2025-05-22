@@ -15,8 +15,21 @@ class ReOrderLevelController extends Controller
 {
     public function index()
     {
-        $authWardCode_cached = Cache::get('c_authWardCode_' . Auth::user()->employeeid);
-        $wardCode = $authWardCode_cached;
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+                FROM
+                    user_acc u
+                INNER JOIN
+                    csrw_login_history l ON u.employeeid = l.employeeid
+                WHERE
+                    l.employeeid = ?
+                ORDER BY
+                    l.created_at DESC;
+                ",
+            [Auth::user()->employeeid]
+        );
+        $authCode = $authWardcode[0]->wardcode;
 
         $items = DB::select(
             "SELECT
@@ -47,7 +60,7 @@ class ReOrderLevelController extends Controller
                 JOIN hpersonal as employee ON employee.employeeid = lvl.created_by
                 LEFT JOIN hpersonal AS updated_by_employee ON updated_by_employee.employeeid = lvl.updated_by
                 WHERE lvl.wardcode = ?;",
-            [$wardCode]
+            [$authCode]
         );
 
         return Inertia::render('Wards/ReOrderLevel/Index', [
@@ -60,15 +73,28 @@ class ReOrderLevelController extends Controller
     {
         // dd($request);
 
-        $cache_authWardCode = 'c_authWardCode_' . Auth::user()->employeeid;
-        $authWardCode_cached = Cache::get($cache_authWardCode);
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+                FROM
+                    user_acc u
+                INNER JOIN
+                    csrw_login_history l ON u.employeeid = l.employeeid
+                WHERE
+                    l.employeeid = ?
+                ORDER BY
+                    l.created_at DESC;
+                ",
+            [Auth::user()->employeeid]
+        );
+        $authCode = $authWardcode[0]->wardcode;
 
         $reOrderLevel = WardsReOrderLevel::create([
             'cl2comb' => $request->cl2comb,
             'reorder_point' => $request->reorder_point,
             'reorder_quantity' => $request->reorder_quantity,
             'status' => $request->status,
-            'wardcode' => $authWardCode_cached,
+            'wardcode' => $authCode,
             'created_by' => Auth::user()->employeeid,
         ]);
 
