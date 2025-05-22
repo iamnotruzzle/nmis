@@ -13,25 +13,21 @@ class CsrInventoryController extends Controller
 {
     public function index()
     {
-        // $authWardcode = DB::select(
-        //     "SELECT TOP 1
-        //         l.wardcode
-        //     FROM
-        //         user_acc u
-        //     INNER JOIN
-        //         csrw_login_history l ON u.employeeid = l.employeeid
-        //     WHERE
-        //         l.employeeid = ?
-        //     ORDER BY
-        //         l.created_at DESC;
-        //     ",
-        //     [Auth::user()->employeeid]
-        // );
-        // $authCode = $authWardcode[0]->wardcode;
-
-        // Retrieve cached values
-        $authWardCode_cached = Cache::get('c_authWardCode_' . Auth::user()->employeeid);
-        $wardCode = $authWardCode_cached;
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+                FROM
+                    user_acc u
+                INNER JOIN
+                    csrw_login_history l ON u.employeeid = l.employeeid
+                WHERE
+                    l.employeeid = ?
+                ORDER BY
+                    l.created_at DESC;
+                ",
+            [Auth::user()->employeeid]
+        );
+        $authCode = $authWardcode[0]->wardcode;
 
         $csrInventory = DB::select(
             "SELECT item_conver.cl2comb_after, item.cl2desc as item_desc, SUM(quantity_after) as quantity
@@ -48,7 +44,7 @@ class CsrInventoryController extends Controller
                 JOIN hclass2 as item ON item.cl2comb = ward_stock.cl2comb
                 LEFT JOIN csrw_request_stocks rs ON rs.id = ward_stock.request_stocks_id
                 WHERE ward_stock.quantity > 0
-                AND ward_stock.location = '$wardCode'
+                AND ward_stock.location = '$authCode'
                 AND (rs.id IS NULL OR rs.status = 'RECEIVED')
                 GROUP BY item.cl2desc
                 ORDER BY item.cl2desc ASC;"

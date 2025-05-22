@@ -31,7 +31,6 @@ class DashboardController extends Controller
                 ",
             [Auth::user()->employeeid]
         );
-        // dd($authWardcode);
         $authCode = $authWardcode[0]->wardcode;
 
         $result_patient_charges_total = DB::select(

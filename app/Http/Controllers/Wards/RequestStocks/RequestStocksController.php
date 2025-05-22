@@ -271,15 +271,28 @@ class RequestStocksController extends Controller
 
     public function viewItemReOrderQuantity(Request $request)
     {
-        $authWardCode_cached = Cache::get('c_authWardCode_' . Auth::user()->employeeid);
-        $wardCode = $authWardCode_cached;
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+                FROM
+                    user_acc u
+                INNER JOIN
+                    csrw_login_history l ON u.employeeid = l.employeeid
+                WHERE
+                    l.employeeid = ?
+                ORDER BY
+                    l.created_at DESC;
+                ",
+            [Auth::user()->employeeid]
+        );
+        $authCode = $authWardcode[0]->wardcode;
 
         $result = DB::select(
             "SELECT lvl.cl2comb, item.cl2desc, lvl.reorder_quantity
                 FROM csrw_wards_stock_level as lvl
                 JOIN hclass2 as ITEM ON item.cl2comb = lvl.cl2comb
                 WHERE lvl.wardcode = ?;",
-            [$wardCode]
+            [$authCode]
         );
 
         return $result;

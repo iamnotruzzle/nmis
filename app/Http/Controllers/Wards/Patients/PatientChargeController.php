@@ -48,8 +48,21 @@ class PatientChargeController extends Controller
         $room_bed = $request->room_bed;
         $pat_tscode = $request->tscode;
 
-        $authWardCode_cached = Cache::get('c_authWardCode_' . Auth::user()->employeeid);
-        $wardcode = $authWardCode_cached;
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+                FROM
+                    user_acc u
+                INNER JOIN
+                    csrw_login_history l ON u.employeeid = l.employeeid
+                WHERE
+                    l.employeeid = ?
+                ORDER BY
+                    l.created_at DESC;
+                ",
+            [Auth::user()->employeeid]
+        );
+        $authCode = $authWardcode[0]->wardcode;
 
         // this query will show stocks that have the received status but also get the status FROM MEDICAL GASES and EXISTING_STOCKS
         $stocksFromCsr = DB::select(
@@ -74,7 +87,7 @@ class PatientChargeController extends Controller
                     AND ISNULL(ws.ris_no, '') = ISNULL(price.ris_no, '')
                 LEFT JOIN csrw_request_stocks AS request
                     ON ws.request_stocks_id = request.id
-                WHERE ws.location = '" . $wardcode . "'
+                WHERE ws.location = '" . $authCode . "'
                     AND ws.quantity > 0
                     AND ws.expiration_date > GETDATE()
                     AND (
@@ -122,7 +135,7 @@ class PatientChargeController extends Controller
                     WHERE package.status = 'A'
                     AND package.wardcode = ?
                     ORDER BY item.cl2desc ASC;",
-            [$wardcode]
+            [$authCode]
         );
 
         $bills = DB::select(
@@ -157,7 +170,7 @@ class PatientChargeController extends Controller
                             ORDER BY pat_charge.pcchrgdte DESC"
         );
 
-        $latestDateLog = LocationStockBalanceDateLogs::where('wardcode', $wardcode)
+        $latestDateLog = LocationStockBalanceDateLogs::where('wardcode', $authCode)
             ->latest('created_at')->first();
         $canTransact = null;
         if ($latestDateLog == null) {
@@ -208,8 +221,21 @@ class PatientChargeController extends Controller
 
         $srcchrg = 'WARD';
 
-        $authWardCode_cached = Cache::get('c_authWardCode_' . Auth::user()->employeeid);
-        $authCode = $authWardCode_cached;
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+                FROM
+                    user_acc u
+                INNER JOIN
+                    csrw_login_history l ON u.employeeid = l.employeeid
+                WHERE
+                    l.employeeid = ?
+                ORDER BY
+                    l.created_at DESC;
+                ",
+            [Auth::user()->employeeid]
+        );
+        $authCode = $authWardcode[0]->wardcode;
 
         $enccode = $request->enccode;
         $hospitalNumber = $request->hospitalNumber;

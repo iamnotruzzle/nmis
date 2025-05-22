@@ -30,29 +30,22 @@ class InventoryController extends Controller
         $from = Carbon::parse($request->from)->startOfDay();
         $to = Carbon::parse($request->to)->endOfDay();
 
-        // Retrieve cached values
-        $authWardCode_cached = Cache::get('c_authWardCode_' . Auth::user()->employeeid);
-        $wardCode = $authWardCode_cached;
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+                FROM
+                    user_acc u
+                INNER JOIN
+                    csrw_login_history l ON u.employeeid = l.employeeid
+                WHERE
+                    l.employeeid = ?
+                ORDER BY
+                    l.created_at DESC;
+                ",
+            [Auth::user()->employeeid]
+        );
+        $authCode = $authWardcode[0]->wardcode;
 
-        // available items only show if quantity_after == total_issued_qty
-        // $items = DB::select(
-        //     "SELECT
-        //         item.cl2comb,
-        //         item.cl2desc,
-        //         item.uomcode,
-        //         uom.uomdesc
-        //     FROM
-        //         hclass2 AS item
-        //     FULL OUTER JOIN
-        //         huom AS uom
-        //         ON uom.uomcode = item.uomcode
-        //     WHERE
-        //         (item.catID = 1
-        //         AND item.uomcode != 'box'
-        //         AND (item.itemcode NOT LIKE 'MSMG-%' OR item.itemcode IS NULL))
-        //     ORDER BY
-        //         item.cl2desc ASC;"
-        // );
         $items = DB::select(
             "SELECT
                 item.cl2comb,
@@ -71,32 +64,6 @@ class InventoryController extends Controller
                 item.cl2desc ASC;"
         );
 
-        // $currentWardStocks = DB::select(
-        //     "SELECT ws.*,
-        //         idt.cl2comb, idt.cl2desc,
-        //         uom.uomcode, uom.uomdesc
-        //         FROM csrw_wards_stocks ws
-        //         LEFT JOIN hclass2 idt ON ws.cl2comb = idt.cl2comb
-        //         LEFT JOIN huom uom ON ws.uomcode = uom.uomcode
-        //         INNER JOIN csrw_request_stocks rs ON rs.id = ws.request_stocks_id
-        //         WHERE ws.location = ?
-        //         AND ws.quantity != 0
-        //         AND rs.status = 'RECEIVED'
-
-        //         UNION ALL
-
-        //         SELECT ws.*,
-        //             idt.cl2comb, idt.cl2desc,
-        //             uom.uomcode, uom.uomdesc
-        //         FROM csrw_wards_stocks ws
-        //         LEFT JOIN hclass2 idt ON ws.cl2comb = idt.cl2comb
-        //         LEFT JOIN huom uom ON ws.uomcode = uom.uomcode
-        //         WHERE ws.request_stocks_id IS NULL
-        //         AND ws.location = ?
-        //         AND ws.quantity != 0",
-        //     [$wardCode, $wardCode] // Duplicate the parameter
-        // );
-
 
         $currentWardStocks = DB::select(
             "SELECT stock.[from], stock.id, stock.cl2comb, item.cl2desc, stock.quantity, stock.average, stock.is_consumable, stock.expiration_date
@@ -107,11 +74,11 @@ class InventoryController extends Controller
                 WHERE stock.location = ?
                 AND stock.quantity > 0
                 AND (rs.id IS NULL OR rs.status = 'RECEIVED');",
-            [$wardCode] // Duplicate the parameter
+            [$authCode] // Duplicate the parameter
         );
         // dd($currentWardStocks);
 
-        $latestDateLog = LocationStockBalanceDateLogs::where('wardcode', $authWardCode_cached)
+        $latestDateLog = LocationStockBalanceDateLogs::where('wardcode', $authCode)
             ->latest('created_at')->first();
         $canTransact = null;
         if ($latestDateLog == null) {
