@@ -66,6 +66,9 @@ class RequestStocksController extends Controller
                         ->orWhere('middlename', 'LIKE', '%' . $searchString . '%')
                         ->orWhere('lastname', 'LIKE', '%' . $searchString . '%');
                 })
+                ->when($request->status, function ($query, $value) {
+                    $query->where('status', $value);
+                })
                 ->when(
                     $request->from,
                     function ($query, $value) use ($from) {
@@ -88,6 +91,9 @@ class RequestStocksController extends Controller
                     $q->where('firstname', 'LIKE', '%' . $searchString . '%')
                         ->orWhere('middlename', 'LIKE', '%' . $searchString . '%')
                         ->orWhere('lastname', 'LIKE', '%' . $searchString . '%');
+                })
+                ->when($request->status, function ($query, $value) {
+                    $query->where('status', $value);
                 })
                 ->when(
                     $request->from,

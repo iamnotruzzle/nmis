@@ -48,7 +48,7 @@
 
         <div class="col-12 md:col-6 lg:col-3">
           <Link
-            href="requeststocks?page=1"
+            href="requeststocks?page=1&status=FILLED"
             class="no-underline text-inherit block h-full"
           >
             <div

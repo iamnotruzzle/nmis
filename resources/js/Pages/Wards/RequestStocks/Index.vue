@@ -101,11 +101,12 @@
           <Column
             field="status"
             header="STATUS"
-            style="text-align: center; width: 10%"
+            style="text-align: right; width: 10%"
             :pt="{ headerContent: 'justify-content-center' }"
+            :showFilterMenu="false"
           >
             <template #body="{ data }">
-              <div class="flex justify-content-center align-content-center">
+              <div class="flex flex-column justify-content-center align-content-center">
                 <Tag
                   v-if="data.status == 'PENDING'"
                   :value="data.status"
@@ -137,11 +138,22 @@
                   v-if="data.status == 'FILLED'"
                   label="RECEIVE"
                   icon="pi pi-check"
-                  class="ml-2"
+                  class="mt-2"
                   severity="success"
                   @click="editStatus(data)"
                 />
               </div>
+            </template>
+            <template #filter="{}">
+              <Dropdown
+                v-model="status"
+                :options="statusList"
+                optionLabel="status"
+                optionValue="code"
+                :highlightOnSelect="true"
+                class="w-full"
+              >
+              </Dropdown>
             </template>
           </Column>
           <Column
@@ -821,6 +833,14 @@ export default {
       editStatusDialog: false,
       cancelItemDialog: false,
       search: '',
+      status: null,
+      statusList: [
+        { status: 'NO FILTER', code: '' },
+        { status: 'PENDING', code: 'PENDING' },
+        { status: 'ACKNOWLEDGED', code: 'ACKNOWLEDGED' },
+        { status: 'FILLED', code: 'FILLED' },
+        { status: 'RECEIVED', code: 'RECEIVED' },
+      ],
       selectedItemsUomDesc: null,
       oldQuantity: 0,
       options: {},
@@ -1314,6 +1334,10 @@ export default {
   watch: {
     search: function (val, oldVal) {
       this.params.search = val;
+      this.updateData();
+    },
+    status: function (val, oldVal) {
+      this.params.status = val;
       this.updateData();
     },
     from: function (val) {
