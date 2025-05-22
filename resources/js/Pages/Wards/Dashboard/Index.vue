@@ -7,7 +7,9 @@
             <div class="flex justify-content-between mb-3">
               <div>
                 <span class="block text-500 font-medium mb-3">Patient charges today</span>
-                <div class="text-900 font-medium text-xl">₱ {{ patient_charges_total }}</div>
+                <div class="text-900 font-medium text-xl">
+                  {{ patient_charges_total.toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) }}
+                </div>
               </div>
               <div
                 class="flex align-items-center justify-content-center bg-blue-100 border-round"
