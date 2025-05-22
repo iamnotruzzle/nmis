@@ -22,6 +22,7 @@ window.Echo = new Echo({
 import { OhVueIcon, addIcons } from 'oh-vue-icons';
 import {
   CoChartLine,
+  BiHourglass,
   CoBorderAll,
   LaCapsulesSolid,
   LaBoxesSolid,
@@ -58,6 +59,7 @@ import {
 } from 'oh-vue-icons/icons';
 addIcons(
   CoChartLine,
+  BiHourglass,
   CoBorderAll,
   LaCapsulesSolid,
   LaBoxesSolid,
