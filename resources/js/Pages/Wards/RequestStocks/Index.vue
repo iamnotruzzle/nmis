@@ -101,8 +101,6 @@
           <Column
             field="status"
             header="STATUS"
-            style="text-align: right; width: 10%"
-            :pt="{ headerContent: 'justify-content-center' }"
             :showFilterMenu="false"
           >
             <template #body="{ data }">
@@ -149,9 +147,10 @@
                 v-model="status"
                 :options="statusList"
                 optionLabel="status"
+                placeholder="FILTER"
                 optionValue="code"
                 :highlightOnSelect="true"
-                class="w-full"
+                class="w-full md:w-14rem"
               >
               </Dropdown>
             </template>
