@@ -22,59 +22,62 @@ class WardPatientsController extends Controller
         $patfirst = $request->patfirst;
         $patlast = $request->patlast;
 
-        // Define cache keys for ward code and location type based on the authenticated user's employee ID
-        $cache_authWardCode = 'c_authWardCode_' . Auth::user()->employeeid;
-        $cache_locationType = 'c_locationType_' . Auth::user()->employeeid;
+        #region auth ward code and ward location type
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+                FROM
+                    user_acc u
+                INNER JOIN
+                    csrw_login_history l ON u.employeeid = l.employeeid
+                WHERE
+                    l.employeeid = ?
+                ORDER BY
+                    l.created_at DESC;
+                ",
+            [Auth::user()->employeeid]
+        );
+        // dd($authWardcode);
+        $authCode = $authWardcode[0]->wardcode;
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+                FROM
+                    user_acc u
+                INNER JOIN
+                    csrw_login_history l ON u.employeeid = l.employeeid
+                WHERE
+                    l.employeeid = ?
+                ORDER BY
+                    l.created_at DESC;
+                ",
+            [Auth::user()->employeeid]
+        );
+        $authCode = $authWardcode[0]->wardcode;
 
-        // Attempt to retrieve cached ward code and location type
-        $authWardCode_cached = Cache::get($cache_authWardCode);
-        $locationType_cached = Cache::get($cache_locationType);
-
-
-        // If ward code is not found in cache, retrieve it from the database
-        if (!$authWardCode_cached) {
-            $authWardCode_query = DB::select(
-                "SELECT TOP 1 l.wardcode FROM user_acc u
-                    INNER JOIN csrw_login_history l ON u.employeeid = l.employeeid
-                    WHERE l.employeeid = ? ORDER BY l.created_at DESC;",
-                [Auth::user()->employeeid]
-            );
-
-            // If a ward code is found, retrieve its corresponding location type and cache the values
-            if (!empty($authWardCode_query)) {
-                $wardCode = $authWardCode_query[0]->wardcode;
-                $locationType_query = DB::select("SELECT enctype FROM hward WHERE wardcode = ?;", [$wardCode]);
-                $enctype = !empty($locationType_query) ? $locationType_query[0]->enctype : null;
-
-                // Store values in cache for future use
-                Cache::forever($cache_authWardCode, $wardCode);
-                Cache::forever($cache_locationType, $enctype);
-
-                // Assign retrieved values to variables
-                $authWardCode_cached = $wardCode;
-                $locationType_cached = $enctype;
-            }
-        }
-
+        $locationType_query = DB::select("SELECT enctype FROM hward WHERE wardcode = ?;", [$authCode]);
+        $enctype = !empty($locationType_query) ? $locationType_query[0]->enctype : null;
         // Retrieve the location type from cache again in case it was just set
-        $locationType_cached = Cache::get($cache_locationType);
+        // $locationType_cached = Cache::get($enctype);
+        #endregion
 
         // Define cache keys for patient data and latest update timestamp
-        $cacheKeyPatients = 'c_patients_' . $authWardCode_cached;
-        $cacheKeyLatestUpdate = 'latest_update_' . $authWardCode_cached;
+        $cacheKeyPatients = 'c_patients_' . $authCode;
+        $cacheKeyLatestUpdate = 'latest_update_' . $authCode;
 
         // Attempt to retrieve cached patient data
         $cachedPatients = Cache::get($cacheKeyPatients);
 
         // If location type is null, fetch the latest admission date for the ward
-        if ($locationType_cached === null) {
+        // locationType_cached
+        if ($enctype === null) {
             $latestAdmDate = DB::select(
                 "SELECT MAX(admdate) as admdate FROM hadmlog
                     RIGHT JOIN hospital.dbo.hpatroom pat_room ON hadmlog.enccode = pat_room.enccode
                     WHERE pat_room.patrmstat = 'A'
                     AND pat_room.wardcode = ?
                     AND hadmlog.admstat = 'A';",
-                [$authWardCode_cached]
+                [$authCode]
             );
 
             // Extract the latest admission date from query result
@@ -110,7 +113,7 @@ class WardPatientsController extends Controller
                     AND pat_room.patrmstat = 'A'
                     AND adm.admstat = 'A'
                     ORDER BY pt.patlast ASC",
-                    [$authWardCode_cached]
+                    [$authCode]
                 );
 
                 // Update cache with new patient data and latest admission date
@@ -129,9 +132,9 @@ class WardPatientsController extends Controller
             return Inertia::render('Wards/Patients/Index', [
                 'patients' => $cachedPatients
             ]);
-        } else if ($locationType_cached == 'OPD') {
+        } else if ($enctype == 'OPD') {
 
-            if ($authWardCode_cached == 'OB' || $authWardCode_cached == 'GYNE') {
+            if ($authCode == 'OB' || $authCode == 'GYNE') {
                 $patients_query = DB::SELECT(
                     "SELECT
                         hopdlog.enccode,
@@ -167,7 +170,7 @@ class WardPatientsController extends Controller
                     ORDER BY hopdlog.opddate DESC;",
                     // [$authWardCode_cached]
                 );
-            } else if ($authWardCode_cached == 'FAMED') {
+            } else if ($authCode == 'FAMED') {
                 $patients_query = DB::SELECT(
                     "SELECT
                         hopdlog.enccode,
@@ -225,16 +228,16 @@ class WardPatientsController extends Controller
 
                     AND hopdlog.licno IS NOT NULL
                     ORDER BY hopdlog.opddate desc;",
-                    [$authWardCode_cached]
+                    [$authCode]
                 );
             }
 
 
             return Inertia::render('Wards/Patients/OPD/Index', [
                 'patients' => $patients_query,
-                'currWard' => $authWardCode_cached,
+                'currWard' => $authCode,
             ]);
-        } else if ($locationType_cached == 'ER') {
+        } else if ($enctype == 'ER') {
             $latestERDateMod = DB::select(
                 "SELECT MAX(datemod) AS datemod
                     FROM herlog
@@ -243,7 +246,6 @@ class WardPatientsController extends Controller
 
             // Extract the latest datemod from query result
             $latestERDateMod = $latestERDateMod[0]->datemod ?? null;
-            // dd($latestERDateMod);
 
             // Retrieve the cached latest update timestamp
             $cachedERDateMod = Cache::get($cacheKeyLatestUpdate);
@@ -316,7 +318,7 @@ class WardPatientsController extends Controller
             return Inertia::render('Wards/Patients/ER/Index', [
                 'patients' => $cachedPatients
             ]);
-        } else if ($locationType_cached == 'OR') {
+        } else if ($enctype == 'OR') {
             // $hpercode != null && $hpercode != '' ||
             if ($hpercode != null && $hpercode != '') {
                 $encounters = DB::SELECT(
@@ -396,7 +398,7 @@ class WardPatientsController extends Controller
             return Inertia::render('Wards/Patients/OR/Index', [
                 'encounters' => $encounters
             ]);
-        } else if ($locationType_cached == 'PACU') {
+        } else if ($enctype == 'PACU') {
             // $hpercode != null && $hpercode != '' ||
             if ($hpercode != null && $hpercode != '') {
                 $encounters = DB::SELECT(
@@ -476,42 +478,9 @@ class WardPatientsController extends Controller
             return Inertia::render('Wards/Patients/OR/Index', [
                 'encounters' => $encounters
             ]);
-        } else if ($locationType_cached == 'PD') {
+        } else if ($enctype == 'PD') {
             // $hpercode != null && $hpercode != '' ||
             if ($hpercode != null && $hpercode != '') {
-                // $encounters = DB::SELECT(
-                //     "WITH RankedRecords AS (
-                //         SELECT
-                //             henctr.enccode,
-                //             henctr.toecode,
-                //             hperson.hpercode,
-                //             hperson.patfirst,
-                //             hperson.patmiddle,
-                //             hperson.patlast,
-                //             hperson.patsuffix,
-                //             henctr.encdate,
-                //             ROW_NUMBER() OVER (PARTITION BY henctr.toecode ORDER BY henctr.encdate DESC) AS RowNum
-                //         FROM hperson
-                //         JOIN henctr ON henctr.hpercode = hperson.hpercode
-                //         WHERE hperson.hpercode LIKE ?
-                //         AND henctr.toecode IN ('ADM', 'OPD', 'ER')
-                //     )
-                //     SELECT TOP 1
-                //         enccode,
-                //         toecode,
-                //         hpercode,
-                //         patfirst,
-                //         patmiddle,
-                //         patlast,
-                //         patsuffix,
-                //         encdate
-                //     FROM RankedRecords
-                //     WHERE RowNum = 1
-                //     ORDER BY encdate DESC;",
-                //     [
-                //         $hpercode . '%'
-                //     ]
-                // );
                 $encounters = DB::SELECT(
                     "SELECT TOP 5
                             h.enccode,
@@ -560,7 +529,7 @@ class WardPatientsController extends Controller
             return Inertia::render('Wards/Patients/Peritoneal/Index', [
                 'encounters' => $encounters
             ]);
-        } else if ($locationType_cached == 'OBC') {
+        } else if ($enctype == 'OBC') {
             // $hpercode != null && $hpercode != '' ||
             if ($hpercode != null && $hpercode != '') {
                 $encounters = DB::SELECT(
