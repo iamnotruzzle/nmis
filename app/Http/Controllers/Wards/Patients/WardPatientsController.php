@@ -37,22 +37,6 @@ class WardPatientsController extends Controller
                 ",
             [Auth::user()->employeeid]
         );
-        // dd($authWardcode);
-        $authCode = $authWardcode[0]->wardcode;
-        $authWardcode = DB::select(
-            "SELECT TOP 1
-                l.wardcode
-                FROM
-                    user_acc u
-                INNER JOIN
-                    csrw_login_history l ON u.employeeid = l.employeeid
-                WHERE
-                    l.employeeid = ?
-                ORDER BY
-                    l.created_at DESC;
-                ",
-            [Auth::user()->employeeid]
-        );
         $authCode = $authWardcode[0]->wardcode;
 
         $locationType_query = DB::select("SELECT enctype FROM hward WHERE wardcode = ?;", [$authCode]);
