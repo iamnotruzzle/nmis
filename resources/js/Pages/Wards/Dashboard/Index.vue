@@ -169,11 +169,32 @@
             <span class="text-base font-normal mb-2 text-orange-500 font-italic">Refresh every 5mins</span>
             <Chart
               type="line"
-              :data="chartData"
-              :options="chartOptions"
+              :data="dailyChargeChartData"
+              :options="dailyChargeChartOptions"
             />
           </template>
         </Card>
+      </div>
+    </div>
+
+    <!-- top items and  -->
+    <div class="grid">
+      <!-- top items -->
+      <div class="col-12 md:col-6">
+        <Card class="w-full shadow-md">
+          <template #title>📦 Top Items Charged</template>
+          <template #content>
+            <Chart
+              type="bar"
+              :data="topItemsChartData"
+              :options="topItemsChartOptions"
+            />
+          </template>
+        </Card>
+      </div>
+
+      <div class="col-12 md:col-6">
+        <div></div>
       </div>
     </div>
   </app-layout>
@@ -205,6 +226,10 @@ export default {
     ready_to_receive: Number,
     expiring_soon: Number,
     latest_endorsement: Object,
+    topItems: Array,
+    topItems_labels: Array,
+    topItems_dataQty: Array,
+    topItems_dataAmount: Array,
     chargeChartData: {
       type: Object,
       required: true,
@@ -212,8 +237,8 @@ export default {
   },
   data() {
     return {
-      chartData: this.chargeChartData,
-      chartOptions: {
+      dailyChargeChartData: this.chargeChartData,
+      dailyChargeChartOptions: {
         devicePixelRatio: 4,
         responsive: true,
         // maintainAspectRatio: false,
@@ -243,9 +268,58 @@ export default {
           },
         },
       },
+      topItemsChartData: {
+        labels: [], // from backend
+        datasets: [
+          {
+            label: 'Total Quantity',
+            backgroundColor: '#42A5F5',
+            data: [], // from backend
+          },
+          // Optional second dataset:
+          // {
+          //   label: 'Total Amount (₱)',
+          //   backgroundColor: '#66BB6A',
+          //   data: [], // total_amount
+          // },
+        ],
+      },
+      topItemsChartOptions: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'top' },
+          title: {
+            display: true,
+            text: 'Top Charged Items - Last 7 Days',
+          },
+          tooltip: {
+            callbacks: {
+              title(tooltipItems) {
+                // Show full label in tooltip
+                return tooltipItems[0].labelFull || tooltipItems[0].label;
+              },
+            },
+          },
+        },
+        scales: {
+          x: {
+            ticks: {
+              callback: function (val, index) {
+                const label = this.getLabelForValue(index);
+                const maxLength = 15;
+                return label.length > maxLength ? label.substring(0, maxLength) + '...' : label;
+              },
+            },
+          },
+        },
+      },
     };
   },
-  mounted() {},
+  mounted() {
+    console.log(this.topItems);
+    this.topItemsChartData.labels = this.topItems_labels;
+    this.topItemsChartData.datasets[0].data = this.topItems_dataQty;
+  },
   methods: {
     tzone(date) {
       if (date == null || date == '') {

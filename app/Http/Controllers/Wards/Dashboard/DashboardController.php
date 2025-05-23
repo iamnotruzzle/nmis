@@ -126,6 +126,28 @@ class DashboardController extends Controller
         $result_patient_charges_total = $charges->firstWhere('charge_date', $today)?->total_charge_amount ?? 0;
         $patient_charges_total = round($result_patient_charges_total, 2);
 
+        #region top items
+        $topItems = DB::table('csrw_patient_charge_logs as logs')
+            ->join('hclass2 as item', 'item.cl2comb', '=', 'logs.itemcode')
+            ->select(
+                'logs.itemcode',
+                'item.cl2desc as description',
+                DB::raw('SUM(logs.quantity) as total_qty'),
+                DB::raw('SUM(logs.price_total) as total_amount')
+            )
+            ->where('logs.pcchrgdte', '>=', now()->subDays(7))
+            ->where('logs.entry_at', 'ER')
+            ->groupBy('logs.itemcode', 'item.cl2desc')
+            ->orderByDesc('total_qty')
+            ->limit(10)
+            ->get();
+        // Prepare for Chart
+        $topItems_labels = $topItems->pluck('description');
+        $topItems_dataQty = $topItems->pluck('total_qty');
+        $topItems_dataAmount = $topItems->pluck('total_amount');
+        #endregion
+
+
         return Inertia::render('Wards/Dashboard/Index', [
             'patient_charges_total' => $patient_charges_total,
             'low_stock_items' => $low_stock_items,
@@ -133,6 +155,10 @@ class DashboardController extends Controller
             'expiring_soon' => $expiring_soon,
             'latest_endorsement' => $latest_endorsement,
             'chargeChartData' => $chargeChartData,
+            'topItems' => $topItems,
+            'topItems_labels' => $topItems_labels,
+            'topItems_dataQty' => $topItems_dataQty,
+            'topItems_dataAmount' => $topItems_dataAmount,
         ]);
     }
 
