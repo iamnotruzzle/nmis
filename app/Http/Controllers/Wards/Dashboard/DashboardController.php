@@ -76,11 +76,26 @@ class DashboardController extends Controller
         );
         $expiring_soon = (int)$result_expiring_soon[0]->expiring_soon_count;
 
+        $latest_endorsement = DB::select(
+            "SELECT person.firstname, person.lastname, d.description, d.tag, d.status, e.created_at
+                FROM (
+                    SELECT TOP 1 *
+                    FROM csrw_wa_endorsements
+                    WHERE wardcode = ? AND soft_delete IS NULL
+                    ORDER BY created_at DESC
+                ) AS e
+                JOIN csrw_wa_endorsements_details AS d ON d.endorsement_id = e.id
+                JOIN hpersonal as person ON person.employeeid = e.from_user;",
+            [$authCode]
+        );
+        // dd($latest_endorsement);
+
         return Inertia::render('Wards/Dashboard/Index', [
             'patient_charges_total' => $patient_charges_total,
             'low_stock_items' => $low_stock_items,
             'ready_to_received' => $ready_to_received,
-            'expiring_soon' => $expiring_soon
+            'expiring_soon' => $expiring_soon,
+            'latest_endorsement' => $latest_endorsement,
         ]);
     }
 

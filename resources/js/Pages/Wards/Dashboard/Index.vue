@@ -101,23 +101,79 @@
         </div>
       </div>
     </div>
+
+    <Card
+      v-if="latest_endorsement.length"
+      class="w-full shadow-md"
+    >
+      <template #title> 🆕 Latest Endorsement </template>
+
+      <template #content>
+        <div class="text-xl mb-4">
+          <p><strong>From:</strong> {{ latest_endorsement[0].firstname }} {{ latest_endorsement[0].lastname }}</p>
+          <p><strong>Date:</strong> {{ tzone(latest_endorsement[0].created_at) }}</p>
+        </div>
+
+        <DataTable
+          :value="latest_endorsement"
+          class="p-datatable-sm"
+          removableSort
+        >
+          <Column
+            field="description"
+            header="DESCRIPTION"
+          >
+            <template #body="{ data }">
+              <p class="text-justify">{{ data.description }}</p>
+            </template>
+          </Column>
+          <Column
+            field="tag"
+            header="TAG"
+            sortable
+          />
+          <Column
+            field="status"
+            header="STATUS"
+            sortable
+          >
+            <template #body="{ data }">
+              <Tag
+                :value="data.status"
+                :severity="statusSeverity(data.status)"
+              />
+            </template>
+          </Column>
+        </DataTable>
+      </template>
+    </Card>
   </app-layout>
 </template>
 
 <script>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { Link } from '@inertiajs/vue3';
+import Card from 'primevue/card';
+import Tag from 'primevue/tag';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import moment from 'moment';
 
 export default {
   components: {
     AppLayout,
     Link,
+    Card,
+    Tag,
+    DataTable,
+    Column,
   },
   props: {
     patient_charges_total: Number,
     low_stock_items: Number,
     ready_to_received: Number,
     expiring_soon: Number,
+    latest_endorsement: Object,
   },
   data() {
     return {
@@ -125,5 +181,30 @@ export default {
     };
   },
   mounted() {},
+  methods: {
+    tzone(date) {
+      if (date == null || date == '') {
+        return null;
+      } else {
+        return moment.tz(date, 'Asia/Manila').format('L');
+      }
+    },
+    statusSeverity(status) {
+      //   console.log(status);
+      switch (status) {
+        case 'CANCELLED':
+          return 'danger';
+
+        case 'PENDING':
+          return 'secondary';
+
+        case 'ONGOING':
+          return 'warning';
+
+        case 'COMPLETED':
+          return 'success';
+      }
+    },
+  },
 };
 </script>
