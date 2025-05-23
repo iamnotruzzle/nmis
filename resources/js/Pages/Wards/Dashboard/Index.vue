@@ -273,7 +273,7 @@ export default {
         datasets: [
           {
             label: 'Total Quantity',
-            backgroundColor: '#42A5F5',
+            backgroundColor: '#21ff76',
             data: [], // from backend
           },
           // Optional second dataset:
