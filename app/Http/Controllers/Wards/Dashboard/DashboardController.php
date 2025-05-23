@@ -134,21 +134,33 @@ class DashboardController extends Controller
         #endregion
 
         #region current and last month total charge
-        $previousMonth = DB::select(
-            "SELECT price_total
+        $previousMonth = Cache::remember(
+            "previousMonth_{$authCode}",
+            300,
+            function () use ($authCode) {
+                return DB::select(
+                    "SELECT price_total
                 FROM csrw_patient_charge_logs
                 WHERE MONTH(pcchrgdte) = MONTH(DATEADD(MONTH, -1, GETDATE()))
                 AND YEAR(pcchrgdte) = YEAR(DATEADD(MONTH, -1, GETDATE()))
                 AND entry_at = ?;",
-            [$authCode]
+                    [$authCode]
+                );
+            }
         );
-        $currentMonth = DB::select(
-            "SELECT price_total
+        $currentMonth = Cache::remember(
+            "currentMonth_{$authCode}",
+            300,
+            function () use ($authCode) {
+                return DB::select(
+                    "SELECT price_total
                 FROM csrw_patient_charge_logs
                 WHERE MONTH(pcchrgdte) = MONTH(GETDATE())
                 AND YEAR(pcchrgdte) = YEAR(GETDATE())
                 AND entry_at = ?",
-            [$authCode]
+                    [$authCode]
+                );
+            }
         );
         $lastMonthTotal = array_sum(array_map(fn($row) => (float) $row->price_total, $previousMonth));
         $currentMonthTotal = array_sum(array_map(fn($row) => (float) $row->price_total, $currentMonth));
