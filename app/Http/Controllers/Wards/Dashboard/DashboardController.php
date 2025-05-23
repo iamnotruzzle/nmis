@@ -36,15 +36,6 @@ class DashboardController extends Controller
         );
         $authCode = $authWardcode[0]->wardcode;
 
-        // $result_patient_charges_total = DB::select(
-        //     "SELECT SUM(price_total) AS total_charges
-        //         FROM csrw_patient_charge_logs
-        //         WHERE entry_at = ?
-        //         AND CAST(created_at AS DATE) = CAST(GETDATE() AS DATE);",
-        //     [$authCode]
-        // );
-        // $patient_charges_total = round($result_patient_charges_total[0]->total_charges, 2);
-
         $result_low_stock_items = DB::select(
             "SELECT COUNT(*) AS low_stock_items
                 FROM csrw_wards_stock_level AS r
@@ -93,22 +84,15 @@ class DashboardController extends Controller
         );
 
         // // cache version (refresh every 5 mins)
-        // $charges = Cache::remember("charges_{$authCode}", 300, function () use ($authCode) {
-        //     return DB::table('csrw_patient_charge_logs')
-        //         ->selectRaw("CONVERT(date, pcchrgdte) AS charge_date, SUM(price_total) AS total_charge_amount")
-        //         ->where('pcchrgdte', '>=', now()->subDays(7))
-        //         ->where('entry_at', $authCode)
-        //         ->groupByRaw("CONVERT(date, pcchrgdte)")
-        //         ->orderBy('charge_date')
-        //         ->get();
-        // });
-        $charges = DB::table('csrw_patient_charge_logs')
-            ->selectRaw("CONVERT(date, pcchrgdte) AS charge_date, SUM(price_total) AS total_charge_amount")
-            ->where('pcchrgdte', '>=', now()->subDays(7))
-            ->where('entry_at', $authCode)
-            ->groupByRaw("CONVERT(date, pcchrgdte)")
-            ->orderBy('charge_date')
-            ->get();
+        $charges = Cache::remember("charges_{$authCode}", 300, function () use ($authCode) {
+            return DB::table('csrw_patient_charge_logs')
+                ->selectRaw("CONVERT(date, pcchrgdte) AS charge_date, SUM(price_total) AS total_charge_amount")
+                ->where('pcchrgdte', '>=', now()->subDays(7))
+                ->where('entry_at', $authCode)
+                ->groupByRaw("CONVERT(date, pcchrgdte)")
+                ->orderBy('charge_date')
+                ->get();
+        });
         // Format for Chart.js
         $chargeChartData = [
             'labels' => $charges->pluck('charge_date')->map(fn($d) => Carbon::parse($d)->format('M d')),
@@ -127,24 +111,47 @@ class DashboardController extends Controller
         $patient_charges_total = round($result_patient_charges_total, 2);
 
         #region top items
-        $topItems = DB::table('csrw_patient_charge_logs as logs')
-            ->join('hclass2 as item', 'item.cl2comb', '=', 'logs.itemcode')
-            ->select(
-                'logs.itemcode',
-                'item.cl2desc as description',
-                DB::raw('SUM(logs.quantity) as total_qty'),
-                DB::raw('SUM(logs.price_total) as total_amount')
-            )
-            ->where('logs.pcchrgdte', '>=', now()->subDays(7))
-            ->where('logs.entry_at', $authCode)
-            ->groupBy('logs.itemcode', 'item.cl2desc')
-            ->orderByDesc('total_qty')
-            ->limit(10)
-            ->get();
+        $topItems = Cache::remember("topItems_{$authCode}", 300, function () use ($authCode) {
+            return DB::table('csrw_patient_charge_logs as logs')
+                ->join('hclass2 as item', 'item.cl2comb', '=', 'logs.itemcode')
+                ->select(
+                    'logs.itemcode',
+                    'item.cl2desc as description',
+                    DB::raw('SUM(logs.quantity) as total_qty'),
+                    DB::raw('SUM(logs.price_total) as total_amount')
+                )
+                ->where('logs.pcchrgdte', '>=', now()->subDays(7))
+                ->where('logs.entry_at', $authCode)
+                ->groupBy('logs.itemcode', 'item.cl2desc')
+                ->orderByDesc('total_qty')
+                ->limit(5)
+                ->get();
+        });
         // Prepare for Chart
         $topItems_labels = $topItems->pluck('description');
         $topItems_dataQty = $topItems->pluck('total_qty');
         $topItems_dataAmount = $topItems->pluck('total_amount');
+        #endregion
+
+        #region current and last month total charge
+        $previousMonth = DB::select(
+            "SELECT price_total
+                FROM csrw_patient_charge_logs
+                WHERE MONTH(pcchrgdte) = MONTH(DATEADD(MONTH, -1, GETDATE()))
+                AND YEAR(pcchrgdte) = YEAR(DATEADD(MONTH, -1, GETDATE()))
+                AND entry_at = ?;",
+            [$authCode]
+        );
+        $currentMonth = DB::select(
+            "SELECT price_total
+                FROM csrw_patient_charge_logs
+                WHERE MONTH(pcchrgdte) = MONTH(GETDATE())
+                AND YEAR(pcchrgdte) = YEAR(GETDATE())
+                AND entry_at = ?",
+            [$authCode]
+        );
+        $lastMonthTotal = array_sum(array_map(fn($row) => (float) $row->price_total, $previousMonth));
+        $currentMonthTotal = array_sum(array_map(fn($row) => (float) $row->price_total, $currentMonth));
         #endregion
 
 
@@ -159,70 +166,67 @@ class DashboardController extends Controller
             'topItems_labels' => $topItems_labels,
             'topItems_dataQty' => $topItems_dataQty,
             'topItems_dataAmount' => $topItems_dataAmount,
+            'lastMonthTotal' => $lastMonthTotal,
+            'currentMonthTotal' => $currentMonthTotal,
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function addDashboardData()
     {
-        //
+        #region top items
+        $topItems = DB::table('csrw_patient_charge_logs as logs')
+            ->join('hclass2 as item', 'item.cl2comb', '=', 'logs.itemcode')
+            ->select(
+                'logs.itemcode',
+                'item.cl2desc as description',
+                DB::raw('SUM(logs.quantity) as total_qty'),
+                DB::raw('SUM(logs.price_total) as total_amount')
+            )
+            ->where('logs.pcchrgdte', '>=', now()->subDays(3))
+            ->where('logs.entry_at', $authCode)
+            ->groupBy('logs.itemcode', 'item.cl2desc')
+            ->orderByDesc('total_qty')
+            ->limit(10)
+            ->get();
+        // Prepare for Chart
+        $topItems_labels = $topItems->pluck('description');
+        $topItems_dataQty = $topItems->pluck('total_qty');
+        $topItems_dataAmount = $topItems->pluck('total_amount');
+        #endregion
+
+        #region current and last month total charge
+        $previousMonth = DB::select(
+            "SELECT SUM(price_total) AS last_month_total
+                FROM csrw_patient_charge_logs
+                WHERE MONTH(pcchrgdte) = MONTH(DATEADD(MONTH, -1, GETDATE()))
+                AND YEAR(pcchrgdte) = YEAR(DATEADD(MONTH, -1, GETDATE()))
+                AND entry_at = ?;",
+            [$authCode]
+        );
+        $currentMonth = DB::select(
+            "SELECT SUM(price_total) AS current_month_total
+                FROM csrw_patient_charge_logs
+                WHERE MONTH(pcchrgdte) = MONTH(GETDATE())
+                AND YEAR(pcchrgdte) = YEAR(GETDATE())
+                AND entry_at = ?",
+            [$authCode]
+        );
+        $lastMonthTotal = $previousMonth[0]->last_month_total ?? 0;
+        $currentMonthTotal = $currentMonth[0]->current_month_total ?? 0;
+        // dd($lastMonthTotal);
+        #endregion
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         //

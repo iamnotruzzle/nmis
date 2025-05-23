@@ -165,7 +165,7 @@
       <div class="col-12 md:col-6">
         <Card class="w-full">
           <template #content>
-            <h3 class="text-xl font-bold mb-1">Daily Charges (₱)</h3>
+            <h3 class="text-xl font-bold mb-1">💵 Daily Charges (₱)</h3>
             <span class="text-base font-normal mb-2 text-orange-500 font-italic">Refresh every 5mins</span>
             <Chart
               type="line"
@@ -182,7 +182,10 @@
       <!-- top items -->
       <div class="col-12 md:col-6">
         <Card class="w-full shadow-md">
-          <template #title>📦 Top Items Charged</template>
+          <template #title>
+            <h3 class="text-xl font-bold mb-1">📦 Top Items Charged</h3>
+            <span class="text-base font-normal mb-2 text-orange-500 font-italic">Refresh every 5mins</span>
+          </template>
           <template #content>
             <Chart
               type="bar"
@@ -194,7 +197,19 @@
       </div>
 
       <div class="col-12 md:col-6">
-        <div></div>
+        <Card class="w-full shadow-md">
+          <template #title>
+            <h3 class="text-xl font-bold mb-1">📊 Monthly Charge Comparison</h3>
+            <span class="text-base font-normal mb-2 text-orange-500 font-italic">Refresh every 5mins</span>
+          </template>
+          <template #content>
+            <Chart
+              type="bar"
+              :data="monthlyChartData"
+              :options="monthlyChartOptions"
+            />
+          </template>
+        </Card>
       </div>
     </div>
   </app-layout>
@@ -234,6 +249,8 @@ export default {
       type: Object,
       required: true,
     },
+    lastMonthTotal: String,
+    currentMonthTotal: String,
   },
   data() {
     return {
@@ -268,6 +285,7 @@ export default {
           },
         },
       },
+
       topItemsChartData: {
         labels: [], // from backend
         datasets: [
@@ -313,12 +331,55 @@ export default {
           },
         },
       },
+
+      monthlyChartData: {
+        labels: ['Last Month', 'This Month'],
+        datasets: [
+          {
+            label: 'Total Charges (₱)',
+            backgroundColor: ['#f59e0b', '#3b82f6'],
+            barPercentage: 0.5,
+            barThickness: 80,
+            maxBarThickness: 80,
+            minBarLength: 2,
+            data: [0, 0], // Placeholder
+          },
+        ],
+      },
+      monthlyChartOptions: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'bottom',
+          },
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                return `₱${context.raw.toLocaleString()}`;
+              },
+            },
+          },
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function (value) {
+                return '₱' + value.toLocaleString();
+              },
+            },
+          },
+        },
+      },
     };
   },
   mounted() {
     console.log(this.topItems);
     this.topItemsChartData.labels = this.topItems_labels;
     this.topItemsChartData.datasets[0].data = this.topItems_dataQty;
+
+    this.monthlyChartData.datasets[0].data = [Number(this.lastMonthTotal), Number(this.currentMonthTotal)];
   },
   methods: {
     tzone(date) {
