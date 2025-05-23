@@ -102,49 +102,54 @@
       </div>
     </div>
 
-    <Card
-      v-if="latest_endorsement.length"
-      class="w-full shadow-md"
-    >
+    <Card class="w-full shadow-md">
       <template #title> 🆕 Latest Endorsement </template>
 
       <template #content>
-        <div class="text-xl mb-4">
-          <p><strong>From:</strong> {{ latest_endorsement[0].firstname }} {{ latest_endorsement[0].lastname }}</p>
-          <p><strong>Date:</strong> {{ tzone(latest_endorsement[0].created_at) }}</p>
-        </div>
+        <div v-if="latest_endorsement.length">
+          <div class="text-xl mb-4">
+            <p><strong>From:</strong> {{ latest_endorsement[0].firstname }} {{ latest_endorsement[0].lastname }}</p>
+            <p><strong>Date:</strong> {{ tzone(latest_endorsement[0].created_at) }}</p>
+          </div>
 
-        <DataTable
-          :value="latest_endorsement"
-          class="p-datatable-sm"
-          removableSort
+          <DataTable
+            :value="latest_endorsement"
+            class="p-datatable-sm"
+            removableSort
+          >
+            <Column
+              field="description"
+              header="DESCRIPTION"
+            >
+              <template #body="{ data }">
+                <p class="text-justify">{{ data.description }}</p>
+              </template>
+            </Column>
+            <Column
+              field="tag"
+              header="TAG"
+              sortable
+            />
+            <Column
+              field="status"
+              header="STATUS"
+              sortable
+            >
+              <template #body="{ data }">
+                <Tag
+                  :value="data.status"
+                  :severity="statusSeverity(data.status)"
+                />
+              </template>
+            </Column>
+          </DataTable>
+        </div>
+        <div
+          v-else
+          class="text-sm text-gray-500 italic text-center py-8"
         >
-          <Column
-            field="description"
-            header="DESCRIPTION"
-          >
-            <template #body="{ data }">
-              <p class="text-justify">{{ data.description }}</p>
-            </template>
-          </Column>
-          <Column
-            field="tag"
-            header="TAG"
-            sortable
-          />
-          <Column
-            field="status"
-            header="STATUS"
-            sortable
-          >
-            <template #body="{ data }">
-              <Tag
-                :value="data.status"
-                :severity="statusSeverity(data.status)"
-              />
-            </template>
-          </Column>
-        </DataTable>
+          No endorsements found for this ward.
+        </div>
       </template>
     </Card>
   </app-layout>
