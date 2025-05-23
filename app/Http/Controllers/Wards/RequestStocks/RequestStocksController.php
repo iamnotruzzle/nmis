@@ -33,9 +33,21 @@ class RequestStocksController extends Controller
         $from = Carbon::parse($request->from)->startOfDay();
         $to = Carbon::parse($request->to)->endOfDay();
 
-        // Retrieve cached values
-        $authWardCode_cached = Cache::get('c_authWardCode_' . Auth::user()->employeeid);
-        $wardCode = $authWardCode_cached;
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+                FROM
+                    user_acc u
+                INNER JOIN
+                    csrw_login_history l ON u.employeeid = l.employeeid
+                WHERE
+                    l.employeeid = ?
+                ORDER BY
+                    l.created_at DESC;
+                ",
+            [Auth::user()->employeeid]
+        );
+        $authCode = $authWardcode[0]->wardcode;
 
         // available items only show if quantity_after == total_issued_qty
         $items = DB::select(
@@ -58,9 +70,9 @@ class RequestStocksController extends Controller
         );
 
         // OPTIMIZE TTHIS
-        if ($wardCode == 'ER') {
+        if ($authCode == 'ER') {
             $requestedStocks = RequestStocks::with(['requested_at_details', 'requested_by_details', 'approved_by_details', 'request_stocks_details.item_details'])
-                ->where('location', '=', $wardCode)
+                ->where('location', '=', $authCode)
                 ->whereHas('requested_by_details', function ($q) use ($searchString) {
                     $q->where('firstname', 'LIKE', '%' . $searchString . '%')
                         ->orWhere('middlename', 'LIKE', '%' . $searchString . '%')
@@ -81,12 +93,12 @@ class RequestStocksController extends Controller
                         $query->whereDate('created_at', '<=', $to);
                     }
                 )
-                ->where('location', '=', $wardCode)
+                ->where('location', '=', $authCode)
                 ->orderBy('created_at', 'desc')
                 ->paginate(2);
         } else {
             $requestedStocks = RequestStocks::with(['requested_at_details', 'requested_by_details', 'approved_by_details', 'request_stocks_details.item_details'])
-                ->where('location', '=', $wardCode)
+                ->where('location', '=', $authCode)
                 ->whereHas('requested_by_details', function ($q) use ($searchString) {
                     $q->where('firstname', 'LIKE', '%' . $searchString . '%')
                         ->orWhere('middlename', 'LIKE', '%' . $searchString . '%')
@@ -107,14 +119,14 @@ class RequestStocksController extends Controller
                         $query->whereDate('created_at', '<=', $to);
                     }
                 )
-                ->where('location', '=', $wardCode)
+                ->where('location', '=', $authCode)
                 ->orderBy('created_at', 'desc')
                 ->paginate(5);
         }
 
         // dd($requestedStocks);
 
-        $latestDateLog = LocationStockBalanceDateLogs::where('wardcode', $wardCode)
+        $latestDateLog = LocationStockBalanceDateLogs::where('wardcode', $authCode)
             ->latest('created_at')->first();
         $canTransact = null;
         if ($latestDateLog == null) {

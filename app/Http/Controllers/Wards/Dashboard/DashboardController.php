@@ -17,6 +17,8 @@ class DashboardController extends Controller
 
     public function index()
     {
+        $today = Carbon::today()->toDateString();
+
         //region get auth ward code
         $authWardcode = DB::select(
             "SELECT TOP 1
@@ -34,14 +36,14 @@ class DashboardController extends Controller
         );
         $authCode = $authWardcode[0]->wardcode;
 
-        $result_patient_charges_total = DB::select(
-            "SELECT SUM(price_total) AS total_charges
-                FROM csrw_patient_charge_logs
-                WHERE entry_at = ?
-                AND CAST(created_at AS DATE) = CAST(GETDATE() AS DATE);",
-            [$authCode]
-        );
-        $patient_charges_total = round($result_patient_charges_total[0]->total_charges, 2);
+        // $result_patient_charges_total = DB::select(
+        //     "SELECT SUM(price_total) AS total_charges
+        //         FROM csrw_patient_charge_logs
+        //         WHERE entry_at = ?
+        //         AND CAST(created_at AS DATE) = CAST(GETDATE() AS DATE);",
+        //     [$authCode]
+        // );
+        // $patient_charges_total = round($result_patient_charges_total[0]->total_charges, 2);
 
         $result_low_stock_items = DB::select(
             "SELECT COUNT(*) AS low_stock_items
@@ -57,14 +59,14 @@ class DashboardController extends Controller
         );
         $low_stock_items = (int)$result_low_stock_items[0]->low_stock_items;
 
-        $result_to_received = DB::select(
+        $result_to_receive = DB::select(
             "SELECT COUNT(*) as total
                 FROM csrw_request_stocks
                 WHERE status = 'FILLED'
                 AND location = ?",
             [$authCode]
         );
-        $ready_to_received = (int)$result_to_received[0]->total;
+        $ready_to_receive = (int)$result_to_receive[0]->total;
 
         $result_expiring_soon = DB::select(
             "SELECT COUNT(*) AS expiring_soon_count
@@ -90,11 +92,21 @@ class DashboardController extends Controller
             [$authCode]
         );
 
+        // cache version (refresh every 5 mins)
+        // $charges = Cache::remember("charges_{$authCode}", 300, function () use ($authCode) {
+        //     return DB::table('csrw_patient_charge_logs')
+        //         ->selectRaw("CONVERT(date, pcchrgdte) AS charge_date, SUM(price_total) AS total_charge_amount")
+        //         ->where('pcchrgdte', '>=', now()->subDays(7))
+        //         ->where('entry_at', $authCode)
+        //         ->groupByRaw("CONVERT(date, pcchrgdte)")
+        //         ->orderBy('charge_date')
+        //         ->get();
+        // });
         $charges = DB::table('csrw_patient_charge_logs')
-            ->selectRaw('CAST(pcchrgdte AS DATE) AS charge_date, SUM(price_total) AS total_charge_amount')
+            ->selectRaw("CONVERT(date, pcchrgdte) AS charge_date, SUM(price_total) AS total_charge_amount")
             ->where('pcchrgdte', '>=', now()->subDays(7))
             ->where('entry_at', $authCode)
-            ->groupByRaw('CAST(pcchrgdte AS DATE)')
+            ->groupByRaw("CONVERT(date, pcchrgdte)")
             ->orderBy('charge_date')
             ->get();
         // Format for Chart.js
@@ -110,10 +122,14 @@ class DashboardController extends Controller
             ]]
         ];
 
+        // 👇 Extract today's charge total from the cached $charges
+        $result_patient_charges_total = $charges->firstWhere('charge_date', $today)?->total_charge_amount ?? 0;
+        $patient_charges_total = round($result_patient_charges_total, 2);
+
         return Inertia::render('Wards/Dashboard/Index', [
             'patient_charges_total' => $patient_charges_total,
             'low_stock_items' => $low_stock_items,
-            'ready_to_received' => $ready_to_received,
+            'ready_to_receive' => $ready_to_receive,
             'expiring_soon' => $expiring_soon,
             'latest_endorsement' => $latest_endorsement,
             'chargeChartData' => $chargeChartData,

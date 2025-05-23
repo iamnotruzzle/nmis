@@ -60,8 +60,8 @@
             >
               <div class="flex justify-content-between mb-3">
                 <div>
-                  <span class="block text-500 font-medium mb-3">Ready to Received</span>
-                  <div class="text-900 font-medium text-xl">{{ ready_to_received }}</div>
+                  <span class="block text-500 font-medium mb-3">Ready to Receive</span>
+                  <div class="text-900 font-medium text-xl">{{ ready_to_receive }}</div>
                 </div>
                 <div
                   class="flex align-items-center justify-content-center bg-green-100 border-round"
@@ -106,7 +106,7 @@
     <!-- endorsement and daily charges -->
     <div class="grid">
       <!-- endorsements -->
-      <div class="col-6">
+      <div class="col-12 md:col-6">
         <Card class="w-full shadow-md">
           <template #title> 🆕 Latest Endorsement </template>
 
@@ -162,10 +162,11 @@
       </div>
 
       <!-- daily charges chart -->
-      <div class="col-6">
+      <div class="col-12 md:col-6">
         <Card class="w-full">
           <template #content>
-            <h3 class="text-xl font-bold mb-2">Daily Charges (₱)</h3>
+            <h3 class="text-xl font-bold mb-1">Daily Charges (₱)</h3>
+            <span class="text-base font-normal mb-2 text-orange-500 font-italic">Refresh every 5mins</span>
             <Chart
               type="line"
               :data="chartData"
@@ -201,7 +202,7 @@ export default {
   props: {
     patient_charges_total: Number,
     low_stock_items: Number,
-    ready_to_received: Number,
+    ready_to_receive: Number,
     expiring_soon: Number,
     latest_endorsement: Object,
     chargeChartData: {
@@ -214,6 +215,8 @@ export default {
       chartData: this.chargeChartData,
       chartOptions: {
         devicePixelRatio: 4,
+        responsive: true,
+        // maintainAspectRatio: false,
         responsive: true,
         plugins: {
           legend: {
