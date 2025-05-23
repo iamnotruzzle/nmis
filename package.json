@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@inertiajs/vue3": "^1.0.2",
+    "chart.js": "^4.4.9",
     "echarts": "^5.4.2",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.42",

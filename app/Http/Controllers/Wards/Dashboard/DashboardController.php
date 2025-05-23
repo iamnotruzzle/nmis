@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Wards\Dashboard;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Sessions;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -88,7 +89,26 @@ class DashboardController extends Controller
                 JOIN hpersonal as person ON person.employeeid = e.from_user;",
             [$authCode]
         );
-        // dd($latest_endorsement);
+
+        $charges = DB::table('csrw_patient_charge_logs')
+            ->selectRaw('CAST(pcchrgdte AS DATE) AS charge_date, SUM(price_total) AS total_charge_amount')
+            ->where('pcchrgdte', '>=', now()->subDays(7))
+            ->where('entry_at', $authCode)
+            ->groupByRaw('CAST(pcchrgdte AS DATE)')
+            ->orderBy('charge_date')
+            ->get();
+        // Format for Chart.js
+        $chargeChartData = [
+            'labels' => $charges->pluck('charge_date')->map(fn($d) => Carbon::parse($d)->format('M d')),
+            'datasets' => [[
+                'label' => 'Daily Charges (₱)',
+                'data' => $charges->pluck('total_charge_amount'),
+                'borderColor' => 'rgb(75, 192, 192)',
+                'backgroundColor' => 'rgba(75, 192, 192, 0.2)',
+                'fill' => true,
+                'tension' => 0.3
+            ]]
+        ];
 
         return Inertia::render('Wards/Dashboard/Index', [
             'patient_charges_total' => $patient_charges_total,
@@ -96,6 +116,7 @@ class DashboardController extends Controller
             'ready_to_received' => $ready_to_received,
             'expiring_soon' => $expiring_soon,
             'latest_endorsement' => $latest_endorsement,
+            'chargeChartData' => $chargeChartData,
         ]);
     }
 

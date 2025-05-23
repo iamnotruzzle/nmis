@@ -1,6 +1,7 @@
 <template>
   <app-layout>
     <div class="surface-ground">
+      <!-- top cards -->
       <div class="grid">
         <div class="col-12 md:col-6 lg:col-3">
           <div class="surface-card shadow-2 p-3 border-round h-full flex flex-column justify-between">
@@ -102,56 +103,78 @@
       </div>
     </div>
 
-    <Card class="w-full shadow-md">
-      <template #title> 🆕 Latest Endorsement </template>
+    <!-- endorsement and daily charges -->
+    <div class="grid">
+      <!-- endorsements -->
+      <div class="col-6">
+        <Card class="w-full shadow-md">
+          <template #title> 🆕 Latest Endorsement </template>
 
-      <template #content>
-        <div v-if="latest_endorsement.length">
-          <div class="text-xl mb-4">
-            <p><strong>From:</strong> {{ latest_endorsement[0].firstname }} {{ latest_endorsement[0].lastname }}</p>
-            <p><strong>Date:</strong> {{ tzone(latest_endorsement[0].created_at) }}</p>
-          </div>
+          <template #content>
+            <div v-if="latest_endorsement.length">
+              <div class="text-xl mb-4">
+                <p><strong>From:</strong> {{ latest_endorsement[0].firstname }} {{ latest_endorsement[0].lastname }}</p>
+                <p><strong>Date:</strong> {{ tzone(latest_endorsement[0].created_at) }}</p>
+              </div>
 
-          <DataTable
-            :value="latest_endorsement"
-            class="p-datatable-sm"
-            removableSort
-          >
-            <Column
-              field="description"
-              header="DESCRIPTION"
-            >
-              <template #body="{ data }">
-                <p class="text-justify">{{ data.description }}</p>
-              </template>
-            </Column>
-            <Column
-              field="tag"
-              header="TAG"
-              sortable
-            />
-            <Column
-              field="status"
-              header="STATUS"
-              sortable
-            >
-              <template #body="{ data }">
-                <Tag
-                  :value="data.status"
-                  :severity="statusSeverity(data.status)"
+              <DataTable
+                :value="latest_endorsement"
+                class="p-datatable-sm"
+                paginator
+                :rows="5"
+                removableSort
+              >
+                <Column
+                  field="description"
+                  header="DESCRIPTION"
+                >
+                  <template #body="{ data }">
+                    <p class="text-justify">{{ data.description }}</p>
+                  </template>
+                </Column>
+                <Column
+                  field="tag"
+                  header="TAG"
+                  sortable
                 />
-              </template>
-            </Column>
-          </DataTable>
-        </div>
-        <div
-          v-else
-          class="text-sm text-gray-500 italic text-center py-8"
-        >
-          No endorsements found for this ward.
-        </div>
-      </template>
-    </Card>
+                <Column
+                  field="status"
+                  header="STATUS"
+                  sortable
+                >
+                  <template #body="{ data }">
+                    <Tag
+                      :value="data.status"
+                      :severity="statusSeverity(data.status)"
+                    />
+                  </template>
+                </Column>
+              </DataTable>
+            </div>
+            <div
+              v-else
+              class="text-lg text-gray-500 italic text-center py-8"
+            >
+              No endorsements found for this ward.
+            </div>
+          </template>
+        </Card>
+      </div>
+
+      <!-- daily charges chart -->
+      <div class="col-6">
+        <Card class="w-full shadow-md">
+          <template #content>
+            <h3 class="text-xl font-bold mb-2">Daily Charges (₱)</h3>
+            <Chart
+              type="line"
+              :data="chartData"
+              :options="chartOptions"
+            />
+          </template>
+        </Card>
+      </div>
+    </div>
   </app-layout>
 </template>
 
@@ -162,6 +185,7 @@ import Card from 'primevue/card';
 import Tag from 'primevue/tag';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+import Chart from 'primevue/chart';
 import moment from 'moment';
 
 export default {
@@ -172,6 +196,7 @@ export default {
     Tag,
     DataTable,
     Column,
+    Chart,
   },
   props: {
     patient_charges_total: Number,
@@ -179,10 +204,41 @@ export default {
     ready_to_received: Number,
     expiring_soon: Number,
     latest_endorsement: Object,
+    chargeChartData: {
+      type: Object,
+      required: true,
+    },
   },
   data() {
     return {
-      //   patient_charges_total: null,
+      chartData: this.chargeChartData,
+      chartOptions: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: false,
+            text: 'Daily Charges',
+          },
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: '₱',
+            },
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Date',
+            },
+          },
+        },
+      },
     };
   },
   mounted() {},
