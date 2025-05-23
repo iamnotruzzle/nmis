@@ -92,7 +92,7 @@ class DashboardController extends Controller
             [$authCode]
         );
 
-        // cache version (refresh every 5 mins)
+        // // cache version (refresh every 5 mins)
         // $charges = Cache::remember("charges_{$authCode}", 300, function () use ($authCode) {
         //     return DB::table('csrw_patient_charge_logs')
         //         ->selectRaw("CONVERT(date, pcchrgdte) AS charge_date, SUM(price_total) AS total_charge_amount")
