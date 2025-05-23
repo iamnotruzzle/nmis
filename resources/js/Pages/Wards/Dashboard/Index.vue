@@ -163,7 +163,7 @@
 
       <!-- daily charges chart -->
       <div class="col-6">
-        <Card class="w-full shadow-md">
+        <Card class="w-full">
           <template #content>
             <h3 class="text-xl font-bold mb-2">Daily Charges (₱)</h3>
             <Chart
@@ -213,6 +213,7 @@ export default {
     return {
       chartData: this.chargeChartData,
       chartOptions: {
+        devicePixelRatio: 4,
         responsive: true,
         plugins: {
           legend: {
