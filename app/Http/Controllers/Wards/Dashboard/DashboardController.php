@@ -83,16 +83,14 @@ class DashboardController extends Controller
             [$authCode]
         );
 
-        // // cache version (refresh every 5 mins)
-        $charges = Cache::remember("charges_{$authCode}", 300, function () use ($authCode) {
-            return DB::table('csrw_patient_charge_logs')
-                ->selectRaw("CONVERT(date, pcchrgdte) AS charge_date, SUM(price_total) AS total_charge_amount")
-                ->where('pcchrgdte', '>=', now()->subDays(7))
-                ->where('entry_at', $authCode)
-                ->groupByRaw("CONVERT(date, pcchrgdte)")
-                ->orderBy('charge_date')
-                ->get();
-        });
+        #region charges
+        $charges = DB::table('csrw_patient_charge_logs')
+            ->selectRaw("CONVERT(date, pcchrgdte) AS charge_date, SUM(price_total) AS total_charge_amount")
+            ->where('pcchrgdte', '>=', now()->subDays(7))
+            ->where('entry_at', $authCode)
+            ->groupByRaw("CONVERT(date, pcchrgdte)")
+            ->orderBy('charge_date')
+            ->get();
         // Format for Chart.js
         $chargeChartData = [
             'labels' => $charges->pluck('charge_date')->map(fn($d) => Carbon::parse($d)->format('M d')),
@@ -109,9 +107,11 @@ class DashboardController extends Controller
         // 👇 Extract today's charge total from the cached $charges
         $result_patient_charges_total = $charges->firstWhere('charge_date', $today)?->total_charge_amount ?? 0;
         $patient_charges_total = round($result_patient_charges_total, 2);
+        #endregion
 
         #region top items
-        $topItems = Cache::remember("topItems_{$authCode}", 300, function () use ($authCode) {
+        // // cache version (refresh every 5 mins)
+        $topItems = Cache::remember("charges_{$authCode}", 300, function () use ($authCode) {
             return DB::table('csrw_patient_charge_logs as logs')
                 ->join('hclass2 as item', 'item.cl2comb', '=', 'logs.itemcode')
                 ->select(
@@ -124,7 +124,7 @@ class DashboardController extends Controller
                 ->where('logs.entry_at', $authCode)
                 ->groupBy('logs.itemcode', 'item.cl2desc')
                 ->orderByDesc('total_qty')
-                ->limit(5)
+                ->limit(10)
                 ->get();
         });
         // Prepare for Chart
@@ -134,33 +134,21 @@ class DashboardController extends Controller
         #endregion
 
         #region current and last month total charge
-        $previousMonth = Cache::remember(
-            "previousMonth_{$authCode}",
-            300,
-            function () use ($authCode) {
-                return DB::select(
-                    "SELECT price_total
+        $previousMonth = DB::select(
+            "SELECT price_total
                 FROM csrw_patient_charge_logs
                 WHERE MONTH(pcchrgdte) = MONTH(DATEADD(MONTH, -1, GETDATE()))
                 AND YEAR(pcchrgdte) = YEAR(DATEADD(MONTH, -1, GETDATE()))
                 AND entry_at = ?;",
-                    [$authCode]
-                );
-            }
+            [$authCode]
         );
-        $currentMonth = Cache::remember(
-            "currentMonth_{$authCode}",
-            300,
-            function () use ($authCode) {
-                return DB::select(
-                    "SELECT price_total
+        $currentMonth = DB::select(
+            "SELECT price_total
                 FROM csrw_patient_charge_logs
                 WHERE MONTH(pcchrgdte) = MONTH(GETDATE())
                 AND YEAR(pcchrgdte) = YEAR(GETDATE())
                 AND entry_at = ?",
-                    [$authCode]
-                );
-            }
+            [$authCode]
         );
         $lastMonthTotal = array_sum(array_map(fn($row) => (float) $row->price_total, $previousMonth));
         $currentMonthTotal = array_sum(array_map(fn($row) => (float) $row->price_total, $currentMonth));

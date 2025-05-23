@@ -166,7 +166,6 @@
         <Card class="w-full">
           <template #content>
             <h3 class="text-xl font-bold mb-1">💵 Daily Charges (₱)</h3>
-            <span class="text-base font-normal mb-2 text-orange-500 font-italic">Refresh every 5mins</span>
             <Chart
               type="line"
               :data="dailyChargeChartData"
@@ -200,7 +199,7 @@
         <Card class="w-full shadow-md">
           <template #title>
             <h3 class="text-xl font-bold mb-1">📊 Monthly Charge Comparison</h3>
-            <span class="text-base font-normal mb-2 text-orange-500 font-italic">Refresh every 5mins</span>
+            <span class="text-base font-normal mb-2 text-orange-500 font-italic">.</span>
           </template>
           <template #content>
             <Chart
