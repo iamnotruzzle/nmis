@@ -136,7 +136,7 @@ class DashboardController extends Controller
                 DB::raw('SUM(logs.price_total) as total_amount')
             )
             ->where('logs.pcchrgdte', '>=', now()->subDays(7))
-            ->where('logs.entry_at', 'ER')
+            ->where('logs.entry_at', $authCode)
             ->groupBy('logs.itemcode', 'item.cl2desc')
             ->orderByDesc('total_qty')
             ->limit(10)
