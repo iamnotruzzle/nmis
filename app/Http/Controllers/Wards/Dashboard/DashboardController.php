@@ -45,8 +45,9 @@ class DashboardController extends Controller
                     WHERE location = ?
                     GROUP BY cl2comb
                 ) AS w ON r.cl2comb = w.cl2comb
-                WHERE w.total_quantity <= r.reorder_point",
-            [$authCode]
+                WHERE w.total_quantity <= r.reorder_point
+                AND wardcode = ?",
+            [$authCode, $authCode]
         );
         $low_stock_items = (int)$result_low_stock_items[0]->low_stock_items;
 
