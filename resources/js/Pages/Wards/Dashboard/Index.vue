@@ -405,8 +405,20 @@ export default {
         // },
         tooltip: {
           formatter: function (info) {
-            // Find the root node (top-level diagnosis)
-            let diagnosis = info.treePathInfo && info.treePathInfo.length > 1 ? info.treePathInfo[1].name : info.name;
+            // Check if info is valid and has treePathInfo with length > 1
+            if (
+              !info ||
+              !info.name ||
+              typeof info.value === 'undefined' ||
+              !info.treePathInfo ||
+              info.treePathInfo.length < 2
+            ) {
+              // Return empty string to disable tooltip on empty space or root level
+              return '';
+            }
+
+            // Get diagnosis from the second level (top-level diagnosis)
+            const diagnosis = info.treePathInfo[1].name;
 
             return `
                     <div class="tooltip-title">${diagnosis}</div>
