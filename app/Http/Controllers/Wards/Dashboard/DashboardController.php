@@ -155,6 +155,72 @@ class DashboardController extends Controller
         $currentMonthTotal = array_sum(array_map(fn($row) => (float) $row->price_total, $currentMonth));
         #endregion
 
+        #region diagnosis
+        $diagnosis = DB::select(
+            "SELECT
+                TOP 5
+                hsubcateg.subcatdesc,
+                total = COUNT(hsubcateg.subcatdesc),
+                hsubcateg.diagsubcat,
+
+                -- 1 below
+                Male_1   = SUM(CASE WHEN herlog.patage < 1 AND hperson.patsex = 'M' THEN 1 ELSE 0 END),
+                FeMale_1 = SUM(CASE WHEN herlog.patage < 1 AND hperson.patsex = 'F' THEN 1 ELSE 0 END),
+
+                -- 1 to 4
+                Male_2   = SUM(CASE WHEN herlog.patage BETWEEN 1 AND 4 AND hperson.patsex = 'M' THEN 1 ELSE 0 END),
+                FeMale_2 = SUM(CASE WHEN herlog.patage BETWEEN 1 AND 4 AND hperson.patsex = 'F' THEN 1 ELSE 0 END),
+
+                -- 5 to 9
+                Male_3   = SUM(CASE WHEN herlog.patage BETWEEN 5 AND 9 AND hperson.patsex = 'M' THEN 1 ELSE 0 END),
+                FeMale_3 = SUM(CASE WHEN herlog.patage BETWEEN 5 AND 9 AND hperson.patsex = 'F' THEN 1 ELSE 0 END),
+
+                -- 10 to 14
+                Male_4   = SUM(CASE WHEN herlog.patage BETWEEN 10 AND 14 AND hperson.patsex = 'M' THEN 1 ELSE 0 END),
+                FeMale_4 = SUM(CASE WHEN herlog.patage BETWEEN 10 AND 14 AND hperson.patsex = 'F' THEN 1 ELSE 0 END),
+
+                -- 15 to 19
+                Male_5   = SUM(CASE WHEN herlog.patage BETWEEN 15 AND 19 AND hperson.patsex = 'M' THEN 1 ELSE 0 END),
+                FeMale_5 = SUM(CASE WHEN herlog.patage BETWEEN 15 AND 19 AND hperson.patsex = 'F' THEN 1 ELSE 0 END),
+
+                -- 20 to 44
+                Male_6   = SUM(CASE WHEN herlog.patage BETWEEN 20 AND 44 AND hperson.patsex = 'M' THEN 1 ELSE 0 END),
+                FeMale_6 = SUM(CASE WHEN herlog.patage BETWEEN 20 AND 44 AND hperson.patsex = 'F' THEN 1 ELSE 0 END),
+
+                -- 45 to 64
+                Male_7   = SUM(CASE WHEN herlog.patage BETWEEN 45 AND 64 AND hperson.patsex = 'M' THEN 1 ELSE 0 END),
+                FeMale_7 = SUM(CASE WHEN herlog.patage BETWEEN 45 AND 64 AND hperson.patsex = 'F' THEN 1 ELSE 0 END),
+
+                -- >= 65
+                Male_8   = SUM(CASE WHEN herlog.patage >= 65 AND hperson.patsex = 'M' THEN 1 ELSE 0 END),
+                FeMale_8 = SUM(CASE WHEN herlog.patage >= 65 AND hperson.patsex = 'F' THEN 1 ELSE 0 END)
+
+                --total_cost = SUM(hpatacct.patotamt),
+
+                --cnt_all = (
+                --    SELECT COUNT(*)
+                --    FROM herlog a
+                --    WHERE a.erdate BETWEEN '2025-05-01' AND DATEADD(DAY, 1, '2025-05-26')
+                --      AND a.ercase = 'Y'
+                --)
+
+            FROM herlog
+            JOIN hencdiag ON herlog.enccode = hencdiag.enccode
+            --LEFT JOIN hpatacct ON herlog.enccode = hpatacct.enccode
+            JOIN hperson ON herlog.hpercode = hperson.hpercode
+            JOIN hdiag ON hencdiag.diagcode = hdiag.diagcode
+            JOIN hsubcateg ON hdiag.diagsubcat = hsubcateg.diagsubcat
+
+            WHERE
+                hencdiag.primediag = 'Y'
+                AND hencdiag.tdcode = 'FINDX'
+                AND herlog.erdate BETWEEN '2025-05-01' AND DATEADD(DAY, 1, '2025-05-26')
+                AND herlog.ercase = 'Y'
+
+            GROUP BY hsubcateg.subcatdesc, hsubcateg.diagsubcat
+            ORDER BY total DESC"
+        );
+        #endregion
 
         return Inertia::render('Wards/Dashboard/Index', [
             'patient_charges_total' => $patient_charges_total,
@@ -169,6 +235,7 @@ class DashboardController extends Controller
             'topItems_dataAmount' => $topItems_dataAmount,
             'lastMonthTotal' => $lastMonthTotal,
             'currentMonthTotal' => $currentMonthTotal,
+            'diagnosis' => $diagnosis,
         ]);
     }
 
