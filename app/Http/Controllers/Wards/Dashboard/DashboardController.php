@@ -158,7 +158,6 @@ class DashboardController extends Controller
         #region diagnosis
         $diagnosis = DB::select(
             "SELECT
-                TOP 5
                 hsubcateg.subcatdesc,
                 total = COUNT(hsubcateg.subcatdesc),
                 hsubcateg.diagsubcat,
@@ -214,12 +213,42 @@ class DashboardController extends Controller
             WHERE
                 hencdiag.primediag = 'Y'
                 AND hencdiag.tdcode = 'FINDX'
-                AND herlog.erdate BETWEEN '2025-05-01' AND DATEADD(DAY, 1, '2025-05-26')
+                AND herlog.erdate BETWEEN '2025-04-01' AND DATEADD(DAY, 1, '2025-05-26')
                 AND herlog.ercase = 'Y'
 
             GROUP BY hsubcateg.subcatdesc, hsubcateg.diagsubcat
             ORDER BY total DESC"
         );
+        $diagnosisData = collect($diagnosis)->map(function ($item) {
+            return [
+                'name' => $item->subcatdesc,
+                'value' => $item->total,
+                // Optional: add tooltip details if needed
+                'tooltip' => [
+                    'formatter' => "{$item->subcatdesc}<br />Total: {$item->total}"
+                ],
+                // Optional: add children for age group breakdown
+                'children' => [
+                    ['name' => 'M <1', 'value' => $item->Male_1],
+                    ['name' => 'F <1', 'value' => $item->FeMale_1],
+                    ['name' => 'M 1-4', 'value' => $item->Male_2],
+                    ['name' => 'F 1-4', 'value' => $item->FeMale_2],
+                    ['name' => 'M 5-9', 'value' => $item->Male_3],
+                    ['name' => 'F 5-9', 'value' => $item->FeMale_3],
+                    ['name' => 'M 10-14', 'value' => $item->Male_4],
+                    ['name' => 'F 10-14', 'value' => $item->FeMale_4],
+                    ['name' => 'M 15-19', 'value' => $item->Male_5],
+                    ['name' => 'F 15-19', 'value' => $item->FeMale_5],
+                    ['name' => 'M 20-44', 'value' => $item->Male_6],
+                    ['name' => 'F 20-44', 'value' => $item->FeMale_6],
+                    ['name' => 'M 45-64', 'value' => $item->Male_7],
+                    ['name' => 'F 45-64', 'value' => $item->FeMale_7],
+                    ['name' => 'M 65+', 'value' => $item->Male_8],
+                    ['name' => 'F 65+', 'value' => $item->FeMale_8],
+                ]
+            ];
+        });
+
         #endregion
 
         return Inertia::render('Wards/Dashboard/Index', [
@@ -235,7 +264,8 @@ class DashboardController extends Controller
             'topItems_dataAmount' => $topItems_dataAmount,
             'lastMonthTotal' => $lastMonthTotal,
             'currentMonthTotal' => $currentMonthTotal,
-            'diagnosis' => $diagnosis,
+            // 'diagnosis' => $diagnosis,
+            'diagnosisData' => $diagnosisData,
         ]);
     }
 

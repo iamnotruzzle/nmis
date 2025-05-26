@@ -107,14 +107,20 @@
       <div class="col-12">
         <Card class="w-full shadow-md">
           <template #title>
-            <h3 class="text-xl font-bold mb-1">📊 TOP 5 Diagnosis by Age & Gender</h3>
+            <h3 class="text-xl font-bold mb-1">📊 Diagnosis by Age & Gender</h3>
             <span class="text-base font-normal mb-2 text-blue-500 font-italic">Refresh every 5 minutes</span>
           </template>
           <template #content>
-            <Chart
+            <!-- <Chart
               type="bar"
               :data="diagnosisChartData"
               :options="diagnosisChartOptions"
+            /> -->
+            <v-chart
+              class="vchart"
+              :option="diagnosisChartOptions"
+              autoresize
+              style="height: 600px"
             />
           </template>
         </Card>
@@ -268,7 +274,8 @@ export default {
     },
     lastMonthTotal: Number,
     currentMonthTotal: Number,
-    diagnosis: Array,
+    // diagnosis: Array,
+    diagnosisData: Array,
   },
   data() {
     return {
@@ -391,116 +398,60 @@ export default {
         },
       },
 
-      diagnosisChartData: {
-        labels: [], // will be populated with subcatdesc (diagnosis)
-        datasets: [
-          {
-            label: 'Male (<1)',
-            backgroundColor: '#42a5f5',
-            data: [],
+      diagnosisChartOptions: {
+        // title: {
+        //   text: 'Top 5 Diagnoses - Age/Gender Treemap',
+        //   left: 'center',
+        // },
+        tooltip: {
+          formatter: function (info) {
+            // Find the root node (top-level diagnosis)
+            let diagnosis = info.treePathInfo && info.treePathInfo.length > 1 ? info.treePathInfo[1].name : info.name;
+
+            return `
+                    <div class="tooltip-title">${diagnosis}</div>
+                    ${info.name !== diagnosis ? `${info.name}<br />` : ''}
+                    Total Cases: ${info.value}
+                `;
           },
+        },
+        series: [
           {
-            label: 'Female (<1)',
-            backgroundColor: '#ef5350',
-            data: [],
-          },
-          {
-            label: 'Male (1–4)',
-            backgroundColor: '#2196f3',
-            data: [],
-          },
-          {
-            label: 'Female (1–4)',
-            backgroundColor: '#f48fb1',
-            data: [],
-          },
-          {
-            label: 'Male (5–9)',
-            backgroundColor: '#1976d2',
-            data: [],
-          },
-          {
-            label: 'Female (5–9)',
-            backgroundColor: '#e91e63',
-            data: [],
-          },
-          {
-            label: 'Male (10–14)',
-            backgroundColor: '#1565c0',
-            data: [],
-          },
-          {
-            label: 'Female (10–14)',
-            backgroundColor: '#d81b60',
-            data: [],
-          },
-          {
-            label: 'Male (15–19)',
-            backgroundColor: '#0d47a1',
-            data: [],
-          },
-          {
-            label: 'Female (15–19)',
-            backgroundColor: '#c2185b',
-            data: [],
-          },
-          {
-            label: 'Male (20–44)',
-            backgroundColor: '#1e88e5',
-            data: [],
-          },
-          {
-            label: 'Female (20–44)',
-            backgroundColor: '#f06292',
-            data: [],
-          },
-          {
-            label: 'Male (45–64)',
-            backgroundColor: '#1976d2',
-            data: [],
-          },
-          {
-            label: 'Female (45–64)',
-            backgroundColor: '#d81b60',
-            data: [],
-          },
-          {
-            label: 'Male (65+)',
-            backgroundColor: '#0d47a1',
-            data: [],
-          },
-          {
-            label: 'Female (65+)',
-            backgroundColor: '#c2185b',
-            data: [],
+            name: 'Diagnosis',
+            type: 'treemap',
+            visibleMin: 300,
+            label: {
+              show: true,
+              formatter: '{b}',
+            },
+            itemStyle: {
+              borderColor: '#fff',
+            },
+            levels: [
+              {
+                itemStyle: {
+                  borderWidth: 0,
+                  gapWidth: 5,
+                },
+              },
+              {
+                itemStyle: {
+                  gapWidth: 1,
+                },
+              },
+              {
+                colorSaturation: [0.35, 0.5],
+                itemStyle: {
+                  gapWidth: 1,
+                  borderColorSaturation: 0.6,
+                },
+              },
+            ],
+            nodeClick: false, // 🔒 disables zooming/zoom-on-click
+            roam: false, // 🛑 disables pan/zoom interactions
+            data: [], // <-- your data goes here
           },
         ],
-      },
-      diagnosisChartOptions: {
-        responsive: true,
-        plugins: {
-          legend: { position: 'top' },
-          title: {
-            display: true,
-            text: 'Diagnosis by Age and Gender',
-          },
-        },
-        scales: {
-          x: {
-            stacked: true,
-            ticks: {
-              callback: function (val, index) {
-                const label = this.getLabelForValue(index);
-                const maxLength = 15;
-                return label.length > maxLength ? label.substring(0, maxLength) + '...' : label;
-              },
-            },
-          },
-          y: {
-            stacked: true,
-            beginAtZero: true,
-          },
-        },
       },
     };
   },
@@ -511,32 +462,20 @@ export default {
 
     this.monthlyChartData.datasets[0].data = [Number(this.lastMonthTotal), Number(this.currentMonthTotal)];
 
-    const keyMap = [
-      'Male_1',
-      'FeMale_1',
-      'Male_2',
-      'FeMale_2',
-      'Male_3',
-      'FeMale_3',
-      'Male_4',
-      'FeMale_4',
-      'Male_5',
-      'FeMale_5',
-      'Male_6',
-      'FeMale_6',
-      'Male_7',
-      'FeMale_7',
-      'Male_8',
-      'FeMale_8',
-    ];
-    this.diagnosisChartData.labels = this.diagnosis.map((item) => item.subcatdesc);
-    this.diagnosisChartData.datasets.forEach((dataset, index) => {
-      const key = keyMap[index]; // Get the correct key for this dataset
-      dataset.data = this.diagnosis.map((item) => item[key] ?? 0); // Use 0 if key is missing
-    });
-    console.log(this.diagnosisChartData.datasets);
+    const diagnosisCount = this.diagnosisData.length;
+    this.diagnosisChartOptions.color = this.generateColors(diagnosisCount);
+    this.diagnosisChartOptions.series[0].data = this.diagnosisData;
   },
   methods: {
+    generateColors(num) {
+      const colors = [];
+      for (let i = 0; i < num; i++) {
+        // Generate HSL colors evenly spaced in the hue range 0-360
+        const hue = Math.round((360 / num) * i);
+        colors.push(`hsl(${hue}, 70%, 60%)`);
+      }
+      return colors;
+    },
     tzone(date) {
       if (date == null || date == '') {
         return null;
@@ -563,3 +502,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.chart {
+  width: 100%;
+}
+</style>

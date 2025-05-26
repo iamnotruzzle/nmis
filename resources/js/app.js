@@ -7,8 +7,14 @@ import Tooltip from 'primevue/tooltip';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css'; // Import default styles
 import { router } from '@inertiajs/vue3';
-
 import Echo from 'laravel-echo';
+import * as echarts from 'echarts/core';
+import { TreemapChart } from 'echarts/charts';
+import { TitleComponent, TooltipComponent } from 'echarts/components';
+import { CanvasRenderer } from 'echarts/renderers';
+import VueECharts from 'vue-echarts';
+
+echarts.use([TreemapChart, TitleComponent, TooltipComponent, CanvasRenderer]);
 
 window.Pusher = require('pusher-js');
 
@@ -110,6 +116,7 @@ createInertiaApp({
       .use(ToastService)
       .directive('tooltip', Tooltip)
       .component('v-icon', OhVueIcon)
+      .component('v-chart', VueECharts)
       .mixin({ methods: { route } })
       .mount(el);
   },
