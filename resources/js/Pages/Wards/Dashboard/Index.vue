@@ -155,7 +155,7 @@
               v-else
               class="text-lg text-gray-500 italic text-center py-8"
             >
-              No endorsements found for this ward.
+              No endorsements found for this location.
             </div>
           </template>
         </Card>
