@@ -439,6 +439,9 @@ export default {
             itemStyle: {
               borderColor: '#fff',
             },
+            breadcrumb: {
+              show: false,
+            },
             levels: [
               {
                 itemStyle: {
