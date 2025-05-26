@@ -105,10 +105,17 @@ Homestead.json
 # Forge
 /.forge/
 
-
+#region dont push or pull cache and session folder
 /storage/*
 !/storage/.gitignore
-!/storage/logs
+!/storage/app
+!/storage/app/public
 !/storage/framework
+!/storage/framework/.gitignore
+!/storage/logs
+!/storage/logs/.gitignore
+
 /storage/framework/sessions/*
 /storage/framework/cache/*
+/storage/app/*
+#endregion
