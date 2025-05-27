@@ -226,7 +226,25 @@ class DashboardController extends Controller
                 [$from, $to]
             );
         } else {
-            $topDiagnosis = [];
+            $topDiagnosis = DB::select(
+                "SELECT
+                    TOP 10
+                    hsubcateg.subcatdesc as final_diagnosis,
+                    COUNT(DISTINCT hadmlog.enccode) AS patient_count
+                FROM hadmlog
+                JOIN hencdiag ON hadmlog.enccode = hencdiag.enccode
+                JOIN hperson ON hadmlog.hpercode = hperson.hpercode
+                JOIN hdiag ON hencdiag.diagcode = hdiag.diagcode
+                JOIN hsubcateg ON hdiag.diagsubcat = hsubcateg.diagsubcat
+                WHERE
+                    hencdiag.primediag = 'Y'
+                    AND hencdiag.tdcode = 'FINDX'
+                    -- AND hadmlog.erdate BETWEEN '2025-02-01' AND DATEADD(DAY, 1, '2025-05-26')
+                    AND hadmlog.admdate BETWEEN ? AND DATEADD(DAY, 1, ?)
+                GROUP BY hsubcateg.subcatdesc
+                ORDER BY patient_count DESC;",
+                [$from, $to]
+            );
         }
 
         return response()->json($topDiagnosis);
