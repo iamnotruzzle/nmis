@@ -209,7 +209,7 @@ class DashboardController extends Controller
             WHERE
                 hencdiag.primediag = 'Y'
                 AND hencdiag.tdcode = 'FINDX'
-                AND herlog.erdate BETWEEN '2025-04-01' AND DATEADD(DAY, 1, '2025-05-26')
+                AND herlog.erdate BETWEEN '2025-02-01' AND DATEADD(DAY, 1, '2025-05-26')
                 AND herlog.ercase = 'Y'
             GROUP BY hsubcateg.subcatdesc
             ORDER BY patient_count DESC;"

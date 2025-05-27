@@ -483,7 +483,7 @@ export default {
             ticks: {
               callback: function (val, index) {
                 const label = this.getLabelForValue(index);
-                const maxLength = 20;
+                const maxLength = 16;
                 return label.length > maxLength ? label.substring(0, maxLength) + '...' : label;
               },
             },
