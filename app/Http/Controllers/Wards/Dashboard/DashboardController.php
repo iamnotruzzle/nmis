@@ -225,6 +225,27 @@ class DashboardController extends Controller
                 ORDER BY patient_count DESC;",
                 [$from, $to]
             );
+        } else if ($enctype == 'OPD') {
+            $topDiagnosis = DB::select(
+                "SELECT
+                    TOP 10
+                    hsubcateg.subcatdesc as final_diagnosis,
+                    COUNT(DISTINCT hopdlog.enccode) AS patient_count
+                FROM hopdlog
+                JOIN hencdiag ON hopdlog.enccode = hencdiag.enccode
+                JOIN hperson ON hopdlog.hpercode = hperson.hpercode
+                JOIN hdiag ON hencdiag.diagcode = hdiag.diagcode
+                JOIN hsubcateg ON hdiag.diagsubcat = hsubcateg.diagsubcat
+                WHERE
+                    hencdiag.primediag = 'Y'
+                    AND hencdiag.tdcode = 'FINDX'
+                    -- AND hopdlog.erdate BETWEEN '2025-02-01' AND DATEADD(DAY, 1, '2025-05-26')
+                    AND hopdlog.erdate BETWEEN ? AND DATEADD(DAY, 1, ?)
+                    AND hopdlog.ercase = 'Y'
+                GROUP BY hsubcateg.subcatdesc
+                ORDER BY patient_count DESC;",
+                [$from, $to]
+            );
         } else {
             $topDiagnosis = DB::select(
                 "SELECT
