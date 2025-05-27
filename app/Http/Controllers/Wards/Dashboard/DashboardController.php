@@ -206,7 +206,7 @@ class DashboardController extends Controller
                 WHERE
                     hencdiag.primediag = 'Y'
                     AND hencdiag.tdcode = 'FINDX'
-                    AND hadmlog.admdate BETWEEN '2025-04-01' AND DATEADD(DAY, 1, '2025-05-26')
+                    AND hadmlog.admdate BETWEEN '2025-05-01' AND DATEADD(DAY, 1, '2025-05-01')
 
                 GROUP BY hsubcateg.subcatdesc, hsubcateg.diagsubcat
                 ORDER BY total DESC;"
@@ -289,7 +289,7 @@ class DashboardController extends Controller
                 WHERE
                     hencdiag.primediag = 'Y'
                     AND hencdiag.tdcode = 'FINDX'
-                    AND herlog.erdate BETWEEN '2025-04-01' AND DATEADD(DAY, 1, '2025-05-26')
+                    AND herlog.erdate BETWEEN '2025-05-01' AND DATEADD(DAY, 1, '2025-05-01')
                     AND herlog.ercase = 'Y'
 
                 GROUP BY hsubcateg.subcatdesc, hsubcateg.diagsubcat

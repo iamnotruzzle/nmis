@@ -108,6 +108,9 @@
         <Card class="w-full shadow-md">
           <template #title>
             <h3 class="text-xl font-bold mb-1">📊 Diagnosis by Age & Gender</h3>
+            <h3 class="text-xl font-bold mb-1">
+              The data presented is fictitious and used solely for testing purposes.
+            </h3>
             <span class="text-base font-normal mb-2 text-blue-500 font-italic">Refresh every 5 minutes</span>
           </template>
           <template #content>
