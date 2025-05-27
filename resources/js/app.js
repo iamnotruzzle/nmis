@@ -10,11 +10,20 @@ import { router } from '@inertiajs/vue3';
 import Echo from 'laravel-echo';
 import * as echarts from 'echarts/core';
 import { TreemapChart } from 'echarts/charts';
-import { TitleComponent, TooltipComponent } from 'echarts/components';
+import { TitleComponent, TooltipComponent, GridComponent, LegendComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
+import { BarChart } from 'echarts/charts';
 import VueECharts from 'vue-echarts';
 
-echarts.use([TreemapChart, TitleComponent, TooltipComponent, CanvasRenderer]);
+echarts.use([
+  CanvasRenderer,
+  TitleComponent,
+  TooltipComponent,
+  GridComponent,
+  LegendComponent, // optional but good for bar charts
+  BarChart,
+  TreemapChart, // optional
+]);
 
 window.Pusher = require('pusher-js');
 

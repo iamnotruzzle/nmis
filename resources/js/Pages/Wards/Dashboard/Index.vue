@@ -103,33 +103,6 @@
       </div>
     </div>
 
-    <div class="grid">
-      <div class="col-12">
-        <Card class="w-full shadow-md">
-          <template #title>
-            <h3 class="text-xl font-bold mb-1">📊 Diagnosis by Age & Gender</h3>
-            <h3 class="text-xl font-bold mb-1">
-              The data presented is fictitious and used solely for testing purposes.
-            </h3>
-            <span class="text-base font-normal mb-2 text-blue-500 font-italic">Refresh every 5 minutes</span>
-          </template>
-          <template #content>
-            <!-- <Chart
-              type="bar"
-              :data="diagnosisChartData"
-              :options="diagnosisChartOptions"
-            /> -->
-            <v-chart
-              class="vchart"
-              :option="diagnosisChartOptions"
-              autoresize
-              style="height: 600px"
-            />
-          </template>
-        </Card>
-      </div>
-    </div>
-
     <!-- endorsement and daily charges -->
     <div class="grid">
       <!-- endorsements -->
@@ -197,6 +170,28 @@
               type="line"
               :data="dailyChargeChartData"
               :options="dailyChargeChartOptions"
+            />
+          </template>
+        </Card>
+      </div>
+    </div>
+
+    <!-- top diagnoses -->
+    <div class="grid">
+      <div class="col-12">
+        <Card class="w-full shadow-md">
+          <template #title>
+            <h3 class="text-xl font-bold mb-1">🏥 Top Diagnoses</h3>
+            <h3 class="text-xl font-bold mb-1">
+              The data presented is fictitious and used solely for testing purposes.
+            </h3>
+            <span class="text-base font-normal mb-2 text-blue-500 font-italic">Refresh every 5 minutes</span>
+          </template>
+          <template #content>
+            <Chart
+              type="bar"
+              :data="topDiagnosisChartData"
+              :options="topDiagnosisChartOptions"
             />
           </template>
         </Card>
@@ -277,8 +272,7 @@ export default {
     },
     lastMonthTotal: Number,
     currentMonthTotal: Number,
-    // diagnosis: Array,
-    diagnosisData: Array,
+    topDiagnosis: Array,
   },
   data() {
     return {
@@ -401,88 +395,62 @@ export default {
         },
       },
 
-      diagnosisChartOptions: {
-        // title: {
-        //   text: 'Top 5 Diagnoses - Age/Gender Treemap',
-        //   left: 'center',
-        // },
-        tooltip: {
-          formatter: function (info) {
-            // Check if info is valid and has treePathInfo with length > 1
-            if (
-              !info ||
-              !info.name ||
-              typeof info.value === 'undefined' ||
-              !info.treePathInfo ||
-              info.treePathInfo.length < 2
-            ) {
-              // Return empty string to disable tooltip on empty space or root level
-              return '';
-            }
-
-            // Get diagnosis from the second level (top-level diagnosis)
-            const diagnosis = info.treePathInfo[1].name;
-
-            return `
-                    <div class="tooltip-title">${diagnosis}</div>
-                    ${info.name !== diagnosis ? `${info.name}<br />` : ''}
-                    Total Cases: ${info.value}
-                `;
-          },
-        },
-        series: [
+      topDiagnosisChartData: {
+        labels: [], // Filled in mounted
+        datasets: [
           {
-            name: 'Diagnosis',
-            type: 'treemap',
-            visibleMin: 300,
-            label: {
-              show: true,
-              formatter: '{b}',
-            },
-            itemStyle: {
-              borderColor: '#fff',
-            },
-            breadcrumb: {
-              show: false,
-            },
-            levels: [
-              {
-                itemStyle: {
-                  borderWidth: 0,
-                  gapWidth: 5,
-                },
-              },
-              {
-                itemStyle: {
-                  gapWidth: 1,
-                },
-              },
-              {
-                colorSaturation: [0.35, 0.5],
-                itemStyle: {
-                  gapWidth: 1,
-                  borderColorSaturation: 0.6,
-                },
-              },
-            ],
-            nodeClick: false, // 🔒 disables zooming/zoom-on-click
-            roam: false, // 🛑 disables pan/zoom interactions
-            data: [], // <-- your data goes here
+            label: 'Patients',
+            backgroundColor: '#3398DB',
+            data: [], // Filled in mounted
           },
         ],
+      },
+      topDiagnosisChartOptions: {
+        indexAxis: 'y', // ✅ Horizontal bar chart
+        responsive: true,
+        plugins: {
+          legend: { position: 'top' },
+          title: {
+            display: true,
+            text: 'Top 20 Diagnoses - Current Month',
+          },
+          tooltip: {
+            callbacks: {
+              title(tooltipItems) {
+                return tooltipItems[0].labelFull || tooltipItems[0].label;
+              },
+            },
+          },
+        },
+        scales: {
+          x: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Patients',
+            },
+          },
+          y: {
+            ticks: {
+              callback: function (val, index) {
+                const label = this.getLabelForValue(index);
+                const maxLength = 20;
+                return label.length > maxLength ? label.substring(0, maxLength) + '...' : label;
+              },
+            },
+          },
+        },
       },
     };
   },
   mounted() {
-    // console.log(this.topItems);
     this.topItemsChartData.labels = this.topItems_labels;
     this.topItemsChartData.datasets[0].data = this.topItems_dataQty;
 
     this.monthlyChartData.datasets[0].data = [Number(this.lastMonthTotal), Number(this.currentMonthTotal)];
 
-    const diagnosisCount = this.diagnosisData.length;
-    this.diagnosisChartOptions.color = this.generateColors(diagnosisCount);
-    this.diagnosisChartOptions.series[0].data = this.diagnosisData;
+    this.topDiagnosisChartData.labels = this.topDiagnosis.map((item) => item.final_diagnosis);
+    this.topDiagnosisChartData.datasets[0].data = this.topDiagnosis.map((item) => item.patient_count);
   },
   methods: {
     generateColors(num) {

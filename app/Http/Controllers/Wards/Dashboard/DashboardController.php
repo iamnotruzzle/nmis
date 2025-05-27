@@ -157,174 +157,27 @@ class DashboardController extends Controller
         $currentMonthTotal = array_sum(array_map(fn($row) => (float) $row->price_total, $currentMonth));
         #endregion
 
-        #region diagnosis
-        if ($enctype !== 'ER' || $enctype ==  null) {
-            $diagnosis = DB::select(
-                "SELECT
-                    hsubcateg.subcatdesc,
-                    total = COUNT(hsubcateg.subcatdesc),
-                    hsubcateg.diagsubcat,
 
-                    -- 1 below
-                    Male_1   = SUM(CASE WHEN hadmlog.patage < 1 AND hperson.patsex = 'M' THEN 1 ELSE 0 END),
-                    FeMale_1 = SUM(CASE WHEN hadmlog.patage < 1 AND hperson.patsex = 'F' THEN 1 ELSE 0 END),
-
-                    -- 1 to 4
-                    Male_2   = SUM(CASE WHEN hadmlog.patage BETWEEN 1 AND 4 AND hperson.patsex = 'M' THEN 1 ELSE 0 END),
-                    FeMale_2 = SUM(CASE WHEN hadmlog.patage BETWEEN 1 AND 4 AND hperson.patsex = 'F' THEN 1 ELSE 0 END),
-
-                    -- 5 to 9
-                    Male_3   = SUM(CASE WHEN hadmlog.patage BETWEEN 5 AND 9 AND hperson.patsex = 'M' THEN 1 ELSE 0 END),
-                    FeMale_3 = SUM(CASE WHEN hadmlog.patage BETWEEN 5 AND 9 AND hperson.patsex = 'F' THEN 1 ELSE 0 END),
-
-                    -- 10 to 14
-                    Male_4   = SUM(CASE WHEN hadmlog.patage BETWEEN 10 AND 14 AND hperson.patsex = 'M' THEN 1 ELSE 0 END),
-                    FeMale_4 = SUM(CASE WHEN hadmlog.patage BETWEEN 10 AND 14 AND hperson.patsex = 'F' THEN 1 ELSE 0 END),
-
-                    -- 15 to 19
-                    Male_5   = SUM(CASE WHEN hadmlog.patage BETWEEN 15 AND 19 AND hperson.patsex = 'M' THEN 1 ELSE 0 END),
-                    FeMale_5 = SUM(CASE WHEN hadmlog.patage BETWEEN 15 AND 19 AND hperson.patsex = 'F' THEN 1 ELSE 0 END),
-
-                    -- 20 to 44
-                    Male_6   = SUM(CASE WHEN hadmlog.patage BETWEEN 20 AND 44 AND hperson.patsex = 'M' THEN 1 ELSE 0 END),
-                    FeMale_6 = SUM(CASE WHEN hadmlog.patage BETWEEN 20 AND 44 AND hperson.patsex = 'F' THEN 1 ELSE 0 END),
-
-                    -- 45 to 64
-                    Male_7   = SUM(CASE WHEN hadmlog.patage BETWEEN 45 AND 64 AND hperson.patsex = 'M' THEN 1 ELSE 0 END),
-                    FeMale_7 = SUM(CASE WHEN hadmlog.patage BETWEEN 45 AND 64 AND hperson.patsex = 'F' THEN 1 ELSE 0 END),
-
-                    -- >= 65
-                    Male_8   = SUM(CASE WHEN hadmlog.patage >= 65 AND hperson.patsex = 'M' THEN 1 ELSE 0 END),
-                    FeMale_8 = SUM(CASE WHEN hadmlog.patage >= 65 AND hperson.patsex = 'F' THEN 1 ELSE 0 END)
-
-                FROM hadmlog
-                JOIN hencdiag ON hadmlog.enccode = hencdiag.enccode
-                JOIN hperson ON hadmlog.hpercode = hperson.hpercode
-                JOIN hdiag ON hencdiag.diagcode = hdiag.diagcode
-                JOIN hsubcateg ON hdiag.diagsubcat = hsubcateg.diagsubcat
-
-                WHERE
-                    hencdiag.primediag = 'Y'
-                    AND hencdiag.tdcode = 'FINDX'
-                    AND hadmlog.admdate BETWEEN '2025-05-01' AND DATEADD(DAY, 1, '2025-05-01')
-
-                GROUP BY hsubcateg.subcatdesc, hsubcateg.diagsubcat
-                ORDER BY total DESC;"
-            );
-            $diagnosisData = collect($diagnosis)->map(function ($item) {
-                return [
-                    'name' => $item->subcatdesc,
-                    'value' => $item->total,
-                    // Optional: add tooltip details if needed
-                    'tooltip' => [
-                        'formatter' => "{$item->subcatdesc}<br />Total: {$item->total}"
-                    ],
-                    // Optional: add children for age group breakdown
-                    'children' => [
-                        ['name' => 'M <1', 'value' => $item->Male_1],
-                        ['name' => 'F <1', 'value' => $item->FeMale_1],
-                        ['name' => 'M 1-4', 'value' => $item->Male_2],
-                        ['name' => 'F 1-4', 'value' => $item->FeMale_2],
-                        ['name' => 'M 5-9', 'value' => $item->Male_3],
-                        ['name' => 'F 5-9', 'value' => $item->FeMale_3],
-                        ['name' => 'M 10-14', 'value' => $item->Male_4],
-                        ['name' => 'F 10-14', 'value' => $item->FeMale_4],
-                        ['name' => 'M 15-19', 'value' => $item->Male_5],
-                        ['name' => 'F 15-19', 'value' => $item->FeMale_5],
-                        ['name' => 'M 20-44', 'value' => $item->Male_6],
-                        ['name' => 'F 20-44', 'value' => $item->FeMale_6],
-                        ['name' => 'M 45-64', 'value' => $item->Male_7],
-                        ['name' => 'F 45-64', 'value' => $item->FeMale_7],
-                        ['name' => 'M 65+', 'value' => $item->Male_8],
-                        ['name' => 'F 65+', 'value' => $item->FeMale_8],
-                    ]
-                ];
-            });
-        } else if ($enctype == 'ER') {
-            $diagnosis = DB::select(
-                "SELECT
-                hsubcateg.subcatdesc,
-                total = COUNT(hsubcateg.subcatdesc),
-                hsubcateg.diagsubcat,
-
-                -- 1 below
-                Male_1   = SUM(CASE WHEN herlog.patage < 1 AND hperson.patsex = 'M' THEN 1 ELSE 0 END),
-                FeMale_1 = SUM(CASE WHEN herlog.patage < 1 AND hperson.patsex = 'F' THEN 1 ELSE 0 END),
-
-                -- 1 to 4
-                Male_2   = SUM(CASE WHEN herlog.patage BETWEEN 1 AND 4 AND hperson.patsex = 'M' THEN 1 ELSE 0 END),
-                FeMale_2 = SUM(CASE WHEN herlog.patage BETWEEN 1 AND 4 AND hperson.patsex = 'F' THEN 1 ELSE 0 END),
-
-                -- 5 to 9
-                Male_3   = SUM(CASE WHEN herlog.patage BETWEEN 5 AND 9 AND hperson.patsex = 'M' THEN 1 ELSE 0 END),
-                FeMale_3 = SUM(CASE WHEN herlog.patage BETWEEN 5 AND 9 AND hperson.patsex = 'F' THEN 1 ELSE 0 END),
-
-                -- 10 to 14
-                Male_4   = SUM(CASE WHEN herlog.patage BETWEEN 10 AND 14 AND hperson.patsex = 'M' THEN 1 ELSE 0 END),
-                FeMale_4 = SUM(CASE WHEN herlog.patage BETWEEN 10 AND 14 AND hperson.patsex = 'F' THEN 1 ELSE 0 END),
-
-                -- 15 to 19
-                Male_5   = SUM(CASE WHEN herlog.patage BETWEEN 15 AND 19 AND hperson.patsex = 'M' THEN 1 ELSE 0 END),
-                FeMale_5 = SUM(CASE WHEN herlog.patage BETWEEN 15 AND 19 AND hperson.patsex = 'F' THEN 1 ELSE 0 END),
-
-                -- 20 to 44
-                Male_6   = SUM(CASE WHEN herlog.patage BETWEEN 20 AND 44 AND hperson.patsex = 'M' THEN 1 ELSE 0 END),
-                FeMale_6 = SUM(CASE WHEN herlog.patage BETWEEN 20 AND 44 AND hperson.patsex = 'F' THEN 1 ELSE 0 END),
-
-                -- 45 to 64
-                Male_7   = SUM(CASE WHEN herlog.patage BETWEEN 45 AND 64 AND hperson.patsex = 'M' THEN 1 ELSE 0 END),
-                FeMale_7 = SUM(CASE WHEN herlog.patage BETWEEN 45 AND 64 AND hperson.patsex = 'F' THEN 1 ELSE 0 END),
-
-                -- >= 65
-                Male_8   = SUM(CASE WHEN herlog.patage >= 65 AND hperson.patsex = 'M' THEN 1 ELSE 0 END),
-                FeMale_8 = SUM(CASE WHEN herlog.patage >= 65 AND hperson.patsex = 'F' THEN 1 ELSE 0 END)
-
+        #region top 20 diagnosis this month
+        $topDiagnosis = DB::select(
+            "SELECT
+                    TOP 10
+                    --hdiag.diagdesc as sub_diagnosis,
+                    hsubcateg.subcatdesc as final_diagnosis,
+                    COUNT(DISTINCT herlog.enccode) AS patient_count
                 FROM herlog
                 JOIN hencdiag ON herlog.enccode = hencdiag.enccode
-                --LEFT JOIN hpatacct ON herlog.enccode = hpatacct.enccode
                 JOIN hperson ON herlog.hpercode = hperson.hpercode
                 JOIN hdiag ON hencdiag.diagcode = hdiag.diagcode
                 JOIN hsubcateg ON hdiag.diagsubcat = hsubcateg.diagsubcat
-
                 WHERE
                     hencdiag.primediag = 'Y'
                     AND hencdiag.tdcode = 'FINDX'
-                    AND herlog.erdate BETWEEN '2025-05-01' AND DATEADD(DAY, 1, '2025-05-01')
+                    AND herlog.erdate BETWEEN '2025-04-01' AND DATEADD(DAY, 1, '2025-05-26')
                     AND herlog.ercase = 'Y'
-
-                GROUP BY hsubcateg.subcatdesc, hsubcateg.diagsubcat
-                ORDER BY total DESC"
-            );
-            $diagnosisData = collect($diagnosis)->map(function ($item) {
-                return [
-                    'name' => $item->subcatdesc,
-                    'value' => $item->total,
-                    // Optional: add tooltip details if needed
-                    'tooltip' => [
-                        'formatter' => "{$item->subcatdesc}<br />Total: {$item->total}"
-                    ],
-                    // Optional: add children for age group breakdown
-                    'children' => [
-                        ['name' => 'M <1', 'value' => $item->Male_1],
-                        ['name' => 'F <1', 'value' => $item->FeMale_1],
-                        ['name' => 'M 1-4', 'value' => $item->Male_2],
-                        ['name' => 'F 1-4', 'value' => $item->FeMale_2],
-                        ['name' => 'M 5-9', 'value' => $item->Male_3],
-                        ['name' => 'F 5-9', 'value' => $item->FeMale_3],
-                        ['name' => 'M 10-14', 'value' => $item->Male_4],
-                        ['name' => 'F 10-14', 'value' => $item->FeMale_4],
-                        ['name' => 'M 15-19', 'value' => $item->Male_5],
-                        ['name' => 'F 15-19', 'value' => $item->FeMale_5],
-                        ['name' => 'M 20-44', 'value' => $item->Male_6],
-                        ['name' => 'F 20-44', 'value' => $item->FeMale_6],
-                        ['name' => 'M 45-64', 'value' => $item->Male_7],
-                        ['name' => 'F 45-64', 'value' => $item->FeMale_7],
-                        ['name' => 'M 65+', 'value' => $item->Male_8],
-                        ['name' => 'F 65+', 'value' => $item->FeMale_8],
-                    ]
-                ];
-            });
-        }
+                GROUP BY hsubcateg.subcatdesc
+                ORDER BY patient_count DESC;"
+        );
         #endregion
 
         return Inertia::render('Wards/Dashboard/Index', [
@@ -340,8 +193,7 @@ class DashboardController extends Controller
             'topItems_dataAmount' => $topItems_dataAmount,
             'lastMonthTotal' => $lastMonthTotal,
             'currentMonthTotal' => $currentMonthTotal,
-            // 'diagnosis' => $diagnosis,
-            'diagnosisData' => $diagnosisData,
+            'topDiagnosis' => $topDiagnosis,
         ]);
     }
 
