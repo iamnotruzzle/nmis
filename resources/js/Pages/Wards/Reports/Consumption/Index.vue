@@ -344,7 +344,8 @@ export default {
     fnExcelReport() {
       const table = document.getElementById('theTable');
       let tableHTML = table.outerHTML;
-      const fileName = `${this.selectedDate}.xls`;
+      //   const fileName = `${this.selectedDate}.xls`;
+      const fileName = 'report';
 
       const msie = window.navigator.userAgent.indexOf('MSIE ');
 
