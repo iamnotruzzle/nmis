@@ -202,31 +202,25 @@
                   id="to"
                 />
                 <Button
-                  icon="pi pi-check"
                   aria-label="Filter"
                   class="ml-2"
+                  severity="warning"
+                  :icon="loadingTopDiagnosis == true ? 'pi pi-spin pi-spinner' : 'pi pi-filter'"
                   @click="fetchTopDiagnoses"
                 />
               </div>
             </div>
           </template>
           <template #content>
-            <!-- <div
+            <div
               v-if="loadingTopDiagnosis"
               class="flex justify-content-center align-items-center"
               style="height: 400px; width: 100%"
             >
               <i class="pi pi-spin pi-spinner text-4xl text-blue-500"></i>
             </div>
-            <div v-else>
-              <Chart
-                type="bar"
-                :data="topDiagnosisChartData"
-                :options="topDiagnosisChartOptions"
-                style="height: 400px; width: 100%"
-              />
-            </div> -->
             <Chart
+              v-else
               type="bar"
               :data="topDiagnosisChartData"
               :options="topDiagnosisChartOptions"
@@ -242,22 +236,23 @@
           style="max-width: 100%; margin: auto"
         >
           <template #title>
-            <h3 class="text-xl font-bold mb-1">🏥 Top Diagnoses</h3>
-            <span class="text-base font-normal mb-2 text-blue-500 font-italic">Updated weekly</span>
+            <h3 class="text-xl font-bold mb-1">UPCOMING UPDATES</h3>
+            <span class="text-base font-normal mb-2 text-blue-500 font-italic">.</span>
           </template>
           <template #content>
-            <Chart
+            <!-- <Chart
               type="bar"
               :data="topDiagnosisChartData"
               :options="topDiagnosisChartOptions"
               style="height: 400px; width: 100%"
-            />
+            /> -->
+            <div style="height: 400px; width: 100%"></div>
           </template>
         </Card>
       </div>
     </div>
 
-    <!-- top items and  -->
+    <!-- top items and monthly charge -->
     <div class="grid">
       <!-- top items -->
       <div class="col-12 md:col-6">
@@ -276,6 +271,7 @@
         </Card>
       </div>
 
+      <!-- monthly charge -->
       <div class="col-12 md:col-6">
         <Card class="w-full shadow-md">
           <template #title>
@@ -457,6 +453,8 @@ export default {
       },
 
       loadingTopDiagnosis: false,
+      topDiagFrom: null,
+      topDiagTo: null,
       topDiagnosisChartData: {
         labels: [], // Filled in mounted
         datasets: [
@@ -474,7 +472,7 @@ export default {
           legend: { position: 'top' },
           title: {
             display: true,
-            text: 'Top 10 Diagnoses - Current Month',
+            text: 'Top 10 Diagnoses',
           },
           tooltip: {
             callbacks: {
@@ -503,9 +501,6 @@ export default {
           },
         },
       },
-
-      topDiagFrom: null,
-      topDiagTo: null,
     };
   },
   mounted() {
@@ -517,12 +512,8 @@ export default {
     this.monthlyChargeData.datasets[0].data = [Number(this.lastMonthTotal), Number(this.currentMonthTotal)];
 
     // top diagnoses
-    const today = new Date();
-    // First day of current month
-    const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-    this.topDiagFrom = firstDay.toISOString().split('T')[0];
-    // Today
-    this.topDiagTo = today.toISOString().split('T')[0];
+    this.topDiagFrom = moment().tz('Asia/Manila').startOf('month').format('YYYY-MM-DD');
+    this.topDiagTo = moment().tz('Asia/Manila').format('YYYY-MM-DD');
     this.fetchTopDiagnoses();
   },
   methods: {
