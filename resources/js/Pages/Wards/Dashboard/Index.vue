@@ -184,16 +184,43 @@
           style="max-width: 100%; margin: auto"
         >
           <template #title>
-            <h3 class="text-xl font-bold mb-1">🏥 Top Diagnoses</h3>
-            <span class="text-base font-normal mb-2 text-blue-500 font-italic">.</span>
+            <div class="flex justify-content-between">
+              <div>
+                <h3 class="text-xl font-bold mb-1">🏥 Top Diagnoses</h3>
+                <span class="text-base font-normal mb-2 text-blue-500 font-italic">.</span>
+              </div>
+              <div class="flex justify-content-between align-items-center">
+                <input
+                  v-model="topDiagFrom"
+                  type="date"
+                  id="from"
+                />
+                <div class="mx-2">-</div>
+                <input
+                  v-model="topDiagTo"
+                  type="date"
+                  id="to"
+                />
+              </div>
+            </div>
           </template>
           <template #content>
-            <Chart
-              type="bar"
-              :data="topDiagnosisChartData"
-              :options="topDiagnosisChartOptions"
+            <div
+              v-if="loadingTopDiagnosis"
+              class="flex justify-content-center align-items-center"
               style="height: 400px; width: 100%"
-            />
+            >
+              <i class="pi pi-spin pi-spinner text-4xl text-blue-500"></i>
+              <!-- PrimeVue spinner icon -->
+            </div>
+            <div v-else>
+              <Chart
+                type="bar"
+                :data="topDiagnosisChartData"
+                :options="topDiagnosisChartOptions"
+                style="height: 400px; width: 100%"
+              />
+            </div>
           </template>
         </Card>
       </div>
@@ -266,6 +293,7 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Chart from 'primevue/chart';
 import moment from 'moment';
+import axios from 'axios';
 
 export default {
   components: {
@@ -293,7 +321,6 @@ export default {
     },
     lastMonthTotal: Number,
     currentMonthTotal: Number,
-    topDiagnosis: Array,
   },
   data() {
     return {
@@ -416,6 +443,7 @@ export default {
         },
       },
 
+      loadingTopDiagnosis: false,
       topDiagnosisChartData: {
         labels: [], // Filled in mounted
         datasets: [
@@ -455,13 +483,16 @@ export default {
             ticks: {
               callback: function (val, index) {
                 const label = this.getLabelForValue(index);
-                const maxLength = 17;
+                const maxLength = 20;
                 return label.length > maxLength ? label.substring(0, maxLength) + '...' : label;
               },
             },
           },
         },
       },
+
+      topDiagFrom: null,
+      topDiagTo: null,
     };
   },
   mounted() {
@@ -470,10 +501,27 @@ export default {
 
     this.monthlyChartData.datasets[0].data = [Number(this.lastMonthTotal), Number(this.currentMonthTotal)];
 
-    this.topDiagnosisChartData.labels = this.topDiagnosis.map((item) => item.final_diagnosis);
-    this.topDiagnosisChartData.datasets[0].data = this.topDiagnosis.map((item) => item.patient_count);
+    this.fetchTopDiagnosis();
   },
   methods: {
+    async fetchTopDiagnosis() {
+      try {
+        this.loadingTopDiagnosis = true;
+        const response = await axios.get(route('warddashboard.topDiagnoses'));
+        this.topDiagnosis = response.data;
+
+        // update chart data here if needed
+        this.topDiagnosisLabels = this.topDiagnosis.map((item) => item.final_diagnosis);
+        this.topDiagnosisQty = this.topDiagnosis.map((item) => item.patient_count);
+
+        this.topDiagnosisChartData.labels = this.topDiagnosisLabels;
+        this.topDiagnosisChartData.datasets[0].data = this.topDiagnosisQty;
+      } catch (error) {
+        console.error('Failed to fetch top diagnosis data:', error);
+      } finally {
+        this.loadingTopDiagnosis = false;
+      }
+    },
     generateColors(num) {
       const colors = [];
       for (let i = 0; i < num; i++) {

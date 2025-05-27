@@ -158,31 +158,6 @@ class DashboardController extends Controller
         #endregion
 
 
-        #region top 20 diagnosis this month
-        if ($enctype == 'ER') {
-            $topDiagnosis = DB::select(
-                "SELECT
-                    TOP 10
-                    --hdiag.diagdesc as sub_diagnosis,
-                    hsubcateg.subcatdesc as final_diagnosis,
-                    COUNT(DISTINCT herlog.enccode) AS patient_count
-                FROM herlog
-                JOIN hencdiag ON herlog.enccode = hencdiag.enccode
-                JOIN hperson ON herlog.hpercode = hperson.hpercode
-                JOIN hdiag ON hencdiag.diagcode = hdiag.diagcode
-                JOIN hsubcateg ON hdiag.diagsubcat = hsubcateg.diagsubcat
-                WHERE
-                    hencdiag.primediag = 'Y'
-                    AND hencdiag.tdcode = 'FINDX'
-                    AND herlog.erdate BETWEEN DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) -- from start of the month
-                                        AND DATEADD(DAY, 1, CAST(GETDATE() AS DATE)) -- to current month
-                    AND herlog.ercase = 'Y'
-                GROUP BY hsubcateg.subcatdesc
-                ORDER BY patient_count DESC;"
-            );
-        }
-        #endregion
-
         return Inertia::render('Wards/Dashboard/Index', [
             'patient_charges_total' => $patient_charges_total,
             'low_stock_items' => $low_stock_items,
@@ -196,54 +171,54 @@ class DashboardController extends Controller
             'topItems_dataAmount' => $topItems_dataAmount,
             'lastMonthTotal' => $lastMonthTotal,
             'currentMonthTotal' => $currentMonthTotal,
-            'topDiagnosis' => $topDiagnosis,
         ]);
     }
 
-    public function addDashboardData()
+    public function topDiagnosesData(Request $request)
     {
-        #region top items
-        $topItems = DB::table('csrw_patient_charge_logs as logs')
-            ->join('hclass2 as item', 'item.cl2comb', '=', 'logs.itemcode')
-            ->select(
-                'logs.itemcode',
-                'item.cl2desc as description',
-                DB::raw('SUM(logs.quantity) as total_qty'),
-                DB::raw('SUM(logs.price_total) as total_amount')
-            )
-            ->where('logs.pcchrgdte', '>=', now()->subDays(3))
-            ->where('logs.entry_at', $authCode)
-            ->groupBy('logs.itemcode', 'item.cl2desc')
-            ->orderByDesc('total_qty')
-            ->limit(10)
-            ->get();
-        // Prepare for Chart
-        $topItems_labels = $topItems->pluck('description');
-        $topItems_dataQty = $topItems->pluck('total_qty');
-        $topItems_dataAmount = $topItems->pluck('total_amount');
-        #endregion
+        //region get auth ward code
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+                FROM
+                    user_acc u
+                INNER JOIN
+                    csrw_login_history l ON u.employeeid = l.employeeid
+                WHERE
+                    l.employeeid = ?
+                ORDER BY
+                    l.created_at DESC;
+                ",
+            [Auth::user()->employeeid]
+        );
+        $authCode = $authWardcode[0]->wardcode;
+        $locationType_query = DB::select("SELECT enctype FROM hward WHERE wardcode = ?;", [$authCode]);
+        $enctype = !empty($locationType_query) ? $locationType_query[0]->enctype : null;
 
-        #region current and last month total charge
-        $previousMonth = DB::select(
-            "SELECT SUM(price_total) AS last_month_total
-                FROM csrw_patient_charge_logs
-                WHERE MONTH(pcchrgdte) = MONTH(DATEADD(MONTH, -1, GETDATE()))
-                AND YEAR(pcchrgdte) = YEAR(DATEADD(MONTH, -1, GETDATE()))
-                AND entry_at = ?;",
-            [$authCode]
-        );
-        $currentMonth = DB::select(
-            "SELECT SUM(price_total) AS current_month_total
-                FROM csrw_patient_charge_logs
-                WHERE MONTH(pcchrgdte) = MONTH(GETDATE())
-                AND YEAR(pcchrgdte) = YEAR(GETDATE())
-                AND entry_at = ?",
-            [$authCode]
-        );
-        $lastMonthTotal = $previousMonth[0]->last_month_total ?? 0;
-        $currentMonthTotal = $currentMonth[0]->current_month_total ?? 0;
-        // dd($lastMonthTotal);
-        #endregion
+        if ($enctype == 'ER') {
+            $topDiagnosis = DB::select(
+                "SELECT
+                TOP 10
+                hsubcateg.subcatdesc as final_diagnosis,
+                COUNT(DISTINCT herlog.enccode) AS patient_count
+            FROM herlog
+            JOIN hencdiag ON herlog.enccode = hencdiag.enccode
+            JOIN hperson ON herlog.hpercode = hperson.hpercode
+            JOIN hdiag ON hencdiag.diagcode = hdiag.diagcode
+            JOIN hsubcateg ON hdiag.diagsubcat = hsubcateg.diagsubcat
+            WHERE
+                hencdiag.primediag = 'Y'
+                AND hencdiag.tdcode = 'FINDX'
+                AND herlog.erdate BETWEEN '2025-04-01' AND DATEADD(DAY, 1, '2025-05-26')
+                AND herlog.ercase = 'Y'
+            GROUP BY hsubcateg.subcatdesc
+            ORDER BY patient_count DESC;"
+            );
+        } else {
+            $topDiagnosis = [];
+        }
+
+        return response()->json($topDiagnosis);
     }
 
     public function store(Request $request)
