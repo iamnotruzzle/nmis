@@ -159,8 +159,9 @@ class DashboardController extends Controller
 
 
         #region top 20 diagnosis this month
-        $topDiagnosis = DB::select(
-            "SELECT
+        if ($enctype == 'ER') {
+            $topDiagnosis = DB::select(
+                "SELECT
                     TOP 10
                     --hdiag.diagdesc as sub_diagnosis,
                     hsubcateg.subcatdesc as final_diagnosis,
@@ -173,11 +174,13 @@ class DashboardController extends Controller
                 WHERE
                     hencdiag.primediag = 'Y'
                     AND hencdiag.tdcode = 'FINDX'
-                    AND herlog.erdate BETWEEN '2025-04-01' AND DATEADD(DAY, 1, '2025-05-26')
+                    AND herlog.erdate BETWEEN DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) -- from start of the month
+                                        AND DATEADD(DAY, 1, CAST(GETDATE() AS DATE)) -- to current month
                     AND herlog.ercase = 'Y'
                 GROUP BY hsubcateg.subcatdesc
                 ORDER BY patient_count DESC;"
-        );
+            );
+        }
         #endregion
 
         return Inertia::render('Wards/Dashboard/Index', [

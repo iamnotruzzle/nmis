@@ -178,20 +178,41 @@
 
     <!-- top diagnoses -->
     <div class="grid">
-      <div class="col-12">
-        <Card class="w-full shadow-md">
+      <div class="col-12 md:col-6">
+        <Card
+          class="w-full shadow-md"
+          style="max-width: 100%; margin: auto"
+        >
           <template #title>
             <h3 class="text-xl font-bold mb-1">🏥 Top Diagnoses</h3>
-            <h3 class="text-xl font-bold mb-1">
-              The data presented is fictitious and used solely for testing purposes.
-            </h3>
-            <span class="text-base font-normal mb-2 text-blue-500 font-italic">Refresh every 5 minutes</span>
+            <span class="text-base font-normal mb-2 text-blue-500 font-italic">.</span>
           </template>
           <template #content>
             <Chart
               type="bar"
               :data="topDiagnosisChartData"
               :options="topDiagnosisChartOptions"
+              style="height: 400px; width: 100%"
+            />
+          </template>
+        </Card>
+      </div>
+
+      <div class="col-12 md:col-6">
+        <Card
+          class="w-full shadow-md"
+          style="max-width: 100%; margin: auto"
+        >
+          <template #title>
+            <h3 class="text-xl font-bold mb-1">🏥 Top Diagnoses</h3>
+            <span class="text-base font-normal mb-2 text-blue-500 font-italic">Updated weekly</span>
+          </template>
+          <template #content>
+            <Chart
+              type="bar"
+              :data="topDiagnosisChartData"
+              :options="topDiagnosisChartOptions"
+              style="height: 400px; width: 100%"
             />
           </template>
         </Card>
@@ -412,7 +433,7 @@ export default {
           legend: { position: 'top' },
           title: {
             display: true,
-            text: 'Top 20 Diagnoses - Current Month',
+            text: 'Top 10 Diagnoses - Current Month',
           },
           tooltip: {
             callbacks: {
@@ -434,7 +455,7 @@ export default {
             ticks: {
               callback: function (val, index) {
                 const label = this.getLabelForValue(index);
-                const maxLength = 20;
+                const maxLength = 17;
                 return label.length > maxLength ? label.substring(0, maxLength) + '...' : label;
               },
             },
