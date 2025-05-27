@@ -176,6 +176,15 @@ class DashboardController extends Controller
 
     public function topDiagnosesData(Request $request)
     {
+        $from = $request->from;
+        $to = $request->to;
+
+        // Default to current month if not provided
+        if (!$from || !$to) {
+            $from = now()->startOfMonth()->toDateString();
+            $to = now()->toDateString();
+        }
+
         //region get auth ward code
         $authWardcode = DB::select(
             "SELECT TOP 1
@@ -198,21 +207,23 @@ class DashboardController extends Controller
         if ($enctype == 'ER') {
             $topDiagnosis = DB::select(
                 "SELECT
-                TOP 10
-                hsubcateg.subcatdesc as final_diagnosis,
-                COUNT(DISTINCT herlog.enccode) AS patient_count
-            FROM herlog
-            JOIN hencdiag ON herlog.enccode = hencdiag.enccode
-            JOIN hperson ON herlog.hpercode = hperson.hpercode
-            JOIN hdiag ON hencdiag.diagcode = hdiag.diagcode
-            JOIN hsubcateg ON hdiag.diagsubcat = hsubcateg.diagsubcat
-            WHERE
-                hencdiag.primediag = 'Y'
-                AND hencdiag.tdcode = 'FINDX'
-                AND herlog.erdate BETWEEN '2025-02-01' AND DATEADD(DAY, 1, '2025-05-26')
-                AND herlog.ercase = 'Y'
-            GROUP BY hsubcateg.subcatdesc
-            ORDER BY patient_count DESC;"
+                    TOP 10
+                    hsubcateg.subcatdesc as final_diagnosis,
+                    COUNT(DISTINCT herlog.enccode) AS patient_count
+                FROM herlog
+                JOIN hencdiag ON herlog.enccode = hencdiag.enccode
+                JOIN hperson ON herlog.hpercode = hperson.hpercode
+                JOIN hdiag ON hencdiag.diagcode = hdiag.diagcode
+                JOIN hsubcateg ON hdiag.diagsubcat = hsubcateg.diagsubcat
+                WHERE
+                    hencdiag.primediag = 'Y'
+                    AND hencdiag.tdcode = 'FINDX'
+                    -- AND herlog.erdate BETWEEN '2025-02-01' AND DATEADD(DAY, 1, '2025-05-26')
+                    AND herlog.erdate BETWEEN ? AND DATEADD(DAY, 1, ?)
+                    AND herlog.ercase = 'Y'
+                GROUP BY hsubcateg.subcatdesc
+                ORDER BY patient_count DESC;",
+                [$from, $to]
             );
         } else {
             $topDiagnosis = [];

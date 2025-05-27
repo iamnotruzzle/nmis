@@ -201,17 +201,22 @@
                   type="date"
                   id="to"
                 />
+                <Button
+                  icon="pi pi-check"
+                  aria-label="Filter"
+                  class="ml-2"
+                  @click="fetchTopDiagnoses"
+                />
               </div>
             </div>
           </template>
           <template #content>
-            <div
+            <!-- <div
               v-if="loadingTopDiagnosis"
               class="flex justify-content-center align-items-center"
               style="height: 400px; width: 100%"
             >
               <i class="pi pi-spin pi-spinner text-4xl text-blue-500"></i>
-              <!-- PrimeVue spinner icon -->
             </div>
             <div v-else>
               <Chart
@@ -220,7 +225,13 @@
                 :options="topDiagnosisChartOptions"
                 style="height: 400px; width: 100%"
               />
-            </div>
+            </div> -->
+            <Chart
+              type="bar"
+              :data="topDiagnosisChartData"
+              :options="topDiagnosisChartOptions"
+              style="height: 400px; width: 100%"
+            />
           </template>
         </Card>
       </div>
@@ -274,8 +285,8 @@
           <template #content>
             <Chart
               type="bar"
-              :data="monthlyChartData"
-              :options="monthlyChartOptions"
+              :data="monthlyChargeData"
+              :options="monthlyChargeOptions"
             />
           </template>
         </Card>
@@ -291,6 +302,7 @@ import Card from 'primevue/card';
 import Tag from 'primevue/tag';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+import Button from 'primevue/button';
 import Chart from 'primevue/chart';
 import moment from 'moment';
 import axios from 'axios';
@@ -304,6 +316,7 @@ export default {
     DataTable,
     Column,
     Chart,
+    Button,
   },
   props: {
     patient_charges_total: Number,
@@ -402,7 +415,7 @@ export default {
         },
       },
 
-      monthlyChartData: {
+      monthlyChargeData: {
         labels: ['Last Month', 'This Month'],
         datasets: [
           {
@@ -416,7 +429,7 @@ export default {
           },
         ],
       },
-      monthlyChartOptions: {
+      monthlyChargeOptions: {
         responsive: true,
         plugins: {
           legend: {
@@ -496,21 +509,36 @@ export default {
     };
   },
   mounted() {
+    // top items
     this.topItemsChartData.labels = this.topItems_labels;
     this.topItemsChartData.datasets[0].data = this.topItems_dataQty;
 
-    this.monthlyChartData.datasets[0].data = [Number(this.lastMonthTotal), Number(this.currentMonthTotal)];
+    // monthly charge
+    this.monthlyChargeData.datasets[0].data = [Number(this.lastMonthTotal), Number(this.currentMonthTotal)];
 
-    this.fetchTopDiagnosis();
+    // top diagnoses
+    const today = new Date();
+    // First day of current month
+    const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+    this.topDiagFrom = firstDay.toISOString().split('T')[0];
+    // Today
+    this.topDiagTo = today.toISOString().split('T')[0];
+    this.fetchTopDiagnoses();
   },
   methods: {
-    async fetchTopDiagnosis() {
+    async fetchTopDiagnoses() {
       try {
         this.loadingTopDiagnosis = true;
-        const response = await axios.get(route('warddashboard.topDiagnoses'));
+        const response = await axios.get('warddashboard/top-diagnoses', {
+          params: {
+            from: this.topDiagFrom,
+            to: this.topDiagTo,
+          },
+        });
+
         this.topDiagnosis = response.data;
 
-        // update chart data here if needed
+        // update chart data
         this.topDiagnosisLabels = this.topDiagnosis.map((item) => item.final_diagnosis);
         this.topDiagnosisQty = this.topDiagnosis.map((item) => item.patient_count);
 
