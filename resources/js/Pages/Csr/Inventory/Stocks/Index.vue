@@ -1959,6 +1959,24 @@ export default {
     // document.removeEventListener('keydown', this.handleKeyPress);
   },
   methods: {
+    recalculatePrices() {
+      let acquisition_price = Number(this.formConvertItem.acquisition_price);
+      let quantity_before = Number(this.formConvertItem.quantity_before);
+      let quantity_after = Number(this.formConvertItem.quantity_after);
+
+      // Avoid division by 0
+      if (!quantity_before || !quantity_after) {
+        this.formConvertItem.hospital_price = 0;
+        this.formConvertItem.price_per_unit = 0;
+        return;
+      }
+
+      let hospital_price = (acquisition_price * quantity_before) / 0.7;
+      this.formConvertItem.hospital_price = Number(hospital_price.toFixed(2));
+
+      let price_per_unit = this.formConvertItem.hospital_price / quantity_after;
+      this.formConvertItem.price_per_unit = Number(price_per_unit.toFixed(2));
+    },
     currentRisNo() {
       this.formAddDelivery.ris_no = this.newRisNo;
     },
@@ -2706,26 +2724,24 @@ export default {
         const similarObjects = this.findSimilarIds(cl2comb, this.convertedItemSelection);
       }
     },
-    // maxDate: function (val) {
-    //   if (val == false) {
-    //     this.formAddDelivery.expiration_date = null;
-    //   } else {
-    //     this.formAddDelivery.expiration_date = new Date('12-30-9999');
-    //   }
-    // },
-    formConvertItem: {
-      handler(e) {
-        this.formConvertItem.hospital_price = 0;
-        //    acquisition price
-        let acquisition_price = Number(e.acquisition_price);
-        let hospital_price = (acquisition_price * this.formConvertItem.quantity_before) / 0.7;
-        this.formConvertItem.hospital_price = Number(hospital_price.toFixed(2));
 
-        let price_per_unit = this.formConvertItem.hospital_price / this.formConvertItem.quantity_after;
-        this.formConvertItem.price_per_unit = Number(price_per_unit).toFixed(2);
-      },
-      deep: true,
-    },
+    'formConvertItem.acquisition_price': 'recalculatePrices',
+    'formConvertItem.quantity_before': 'recalculatePrices',
+    'formConvertItem.quantity_after': 'recalculatePrices',
+    // formConvertItem: {
+    //   handler(e) {
+    //     this.formConvertItem.hospital_price = 0;
+    //     //    acquisition price
+    //     let acquisition_price = Number(e.acquisition_price);
+    //     let hospital_price = (acquisition_price * this.formConvertItem.quantity_before) / 0.7;
+    //     this.formConvertItem.hospital_price = Number(hospital_price.toFixed(2));
+
+    //     let price_per_unit = this.formConvertItem.hospital_price / this.formConvertItem.quantity_after;
+    //     this.formConvertItem.price_per_unit = Number(price_per_unit).toFixed(2);
+    //   },
+    //   deep: true,
+    // },
+
     formImport: {
       handler(e) {
         // console.log(this.formAddDelivery.price_per_unit);
