@@ -153,7 +153,7 @@ class CsrStocksControllers extends Controller
                 item_before.cl2desc AS cl2desc_before,
                 converted.quantity_after,
                 converted.total_issued_qty,
-                price.hospital_price,
+                price.price_per_unit,
                 converted.expiration_date,
                 employee.firstname,
                 employee.lastname

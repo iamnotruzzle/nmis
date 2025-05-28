@@ -126,7 +126,7 @@ class CsrItemConversionController extends Controller
 
         ItemPrices::where('item_conversion_id', $request->id)
             ->update([
-                'hospital_price' => $request->update_hospital_price
+                'price_per_unit' => $request->update_price_per_unit
             ]);
 
         // $convertedItem = CsrItemConversionLogs::where('item_conversion_id', $request->id)->first();
