@@ -153,6 +153,7 @@ class CsrStocksControllers extends Controller
                 item_before.cl2desc AS cl2desc_before,
                 converted.quantity_after,
                 converted.total_issued_qty,
+                price.hospital_price,
                 converted.expiration_date,
                 employee.firstname,
                 employee.lastname
@@ -167,7 +168,9 @@ class CsrStocksControllers extends Controller
             JOIN
                 hpersonal AS employee ON employee.employeeid = converted.converted_by
             JOIN
-                csrw_fund_source AS fund_source ON fund_source.fsid = converted.chrgcode;"
+                csrw_fund_source AS fund_source ON fund_source.fsid = converted.chrgcode
+            JOIN
+                csrw_item_prices as price ON item_conversion_id = converted.id;"
         );
 
         $cache_suppliers = 'c_suppliers_' . Auth::user()->employeeid;
