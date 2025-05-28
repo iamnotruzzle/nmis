@@ -1303,6 +1303,20 @@
           />
         </div>
         <div class="field">
+          <div>
+            <div class="flex align-content-center">
+              <label class="text-green-500">Hospital price</label>
+            </div>
+            <InputNumber
+              class="w-full"
+              v-model.trim="formConvertItem.update_hospital_price"
+              inputId="minmaxfraction"
+              :minFractionDigits="2"
+              :maxFractionDigits="5"
+            />
+          </div>
+        </div>
+        <div class="field">
           <div class="flex align-content-center">
             <label>Remarks</label>
             <span class="ml-2 text-error">*</span>
@@ -1884,6 +1898,7 @@ export default {
         cl2comb_after: 0,
         quantity_after: 0,
         hospital_price: 0,
+        update_hospital_price: 0,
         price_per_unit: 0,
         remarks: null,
       }),
@@ -2151,12 +2166,14 @@ export default {
           quantity_after: e.quantity_after,
           total_issued_qty: e.total_issued_qty,
           acquisition_price: e.acquisition_price,
+          hospital_price: e.hospital_price,
           //   manufactured_date: e.manufactured_date,
           delivered_date: e.delivered_date,
           expiration_date: e.expiration_date,
           converted_by: e.firstname.trim() + ' ' + e.lastname.trim(),
         });
       });
+      //   console.log(this.totalConvertedItemsList);
     },
     storeFundSourceInContainer() {
       this.$page.props.fundSource.forEach((e) => {
@@ -2408,6 +2425,7 @@ export default {
       });
     },
     editConvertedItem(item) {
+      this.formConvertItem.update_hospital_price = item.hospital_price;
       this.formConvertItem.id = item.id;
       this.formConvertItem.quantity_after = item.quantity_after;
 
@@ -2697,6 +2715,7 @@ export default {
     // },
     formConvertItem: {
       handler(e) {
+        this.formConvertItem.hospital_price = 0;
         //    acquisition price
         let acquisition_price = Number(e.acquisition_price);
         let hospital_price = (acquisition_price * this.formConvertItem.quantity_before) / 0.7;
