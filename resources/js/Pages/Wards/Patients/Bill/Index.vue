@@ -943,7 +943,7 @@ export default {
         });
       });
 
-      console.log(this.packageList);
+      //   console.log(this.packageList);
     },
     storeBillsInContainer() {
       this.billList = [];
@@ -1035,7 +1035,7 @@ export default {
               id: med.id,
               price: med.price,
               quantity: medQuantity,
-              expiryDate: med.expiryDate,
+              expiration_date: med.expiration_date,
             });
           } else {
             combinedItems[med.cl2desc] = {
@@ -1046,7 +1046,7 @@ export default {
               itemDesc: '(MEDICAL SUPPLY)' + ' - ' + med.cl2desc,
               unit: med.uomcode == null ? null : med.uomcode,
               totalQuantity: medQuantity,
-              prices: [{ id: med.id, price: med.price, quantity: medQuantity, expiryDate: med.expiryDate }],
+              prices: [{ id: med.id, price: med.price, quantity: medQuantity, expiration_date: med.expiration_date }],
               is_package: false,
             };
           }
@@ -1100,7 +1100,7 @@ export default {
       //   console.log('item list', this.itemList);
     },
     medicalSuppliesQtyValidation() {
-      console.log('item', this.item);
+      console.log('item 1', this.item);
 
       if (!this.item) {
         this.itemNotSelected = true;
@@ -1164,6 +1164,7 @@ export default {
      * Function to handle DRUMN charging logic.
      */
     chargeDrumnItem(item, quantityToCharge) {
+      console.log('item', item);
       const { typeOfCharge, itemCode, itemDesc, unit, totalQuantity, prices } = item;
       const isDrumn = typeOfCharge === 'DRUMN';
 
@@ -1189,7 +1190,7 @@ export default {
 
         // Sort by earliest expiry date
         if (Array.isArray(prices)) {
-          prices.sort((a, b) => new Date(a.expiryDate) - new Date(b.expiryDate));
+          prices.sort((a, b) => new Date(a.expiration_date) - new Date(b.expiration_date));
         }
 
         for (const priceInfo of prices || []) {
@@ -1213,7 +1214,7 @@ export default {
               qtyToCharge,
               price: priceInfo.price,
               total: (priceInfo.price * qtyToCharge).toFixed(2),
-              expiryDate: priceInfo.expiryDate,
+              expiration_date: priceInfo.expiration_date,
             });
           }
         }
@@ -1259,7 +1260,7 @@ export default {
           qtyToCharge: quantityToCharge,
           price,
           total: totalCost,
-          expiryDate: null, // MISC items don't have expiry dates
+          expiration_date: null, // MISC items don't have expiry dates
         };
 
         this.itemsToBillList.push(newBillItem);
