@@ -65,38 +65,38 @@ class PatientChargeController extends Controller
         $authCode = $authWardcode[0]->wardcode;
 
         // this query will show stocks that have the received status but also get the status FROM MEDICAL GASES and EXISTING_STOCKS
-        $stocksFromCsr = DB::select(
-            "SELECT
-                    ws.[from],
-                    ws.id,
-                    ws.request_stocks_id,
-                    ws.is_consumable,
-                    item.cl2comb,
-                    item.cl2desc,
-                    item.uomcode,
-                    ws.quantity,
-                    ws.average,
-                    ws.total_usage,
-                    price.price_per_unit AS price,
-                    ws.expiration_date,
-                    ws.created_at
-                FROM csrw_wards_stocks AS ws
-                JOIN hclass2 AS item
-                    ON item.cl2comb = ws.cl2comb
-                LEFT JOIN csrw_item_prices AS price
-                    ON ws.cl2comb = price.cl2comb
-                    AND ISNULL(ws.ris_no, '') = ISNULL(price.ris_no, '')
-                LEFT JOIN csrw_request_stocks AS request
-                    ON ws.request_stocks_id = request.id
-                WHERE ws.location = '" . $authCode . "'
-                    AND ws.quantity > 0
-                    AND ws.expiration_date > GETDATE()
-                    AND (
-                        (request.status = 'RECEIVED')
-                        OR (ws.request_stocks_id IS NULL AND ws.[from] IN ('MEDICAL GASES', 'EXISTING_STOCKS', 'CONSIGNMENT', 'SUPPLEMENTAL', 'WARD'))
-                    )
-                ORDER BY ws.expiration_date ASC;"
-        );
+        // $stocksFromCsr = DB::select(
+        //     "SELECT
+        //             ws.[from],
+        //             ws.id,
+        //             ws.request_stocks_id,
+        //             ws.is_consumable,
+        //             item.cl2comb,
+        //             item.cl2desc,
+        //             item.uomcode,
+        //             ws.quantity,
+        //             ws.average,
+        //             ws.total_usage,
+        //             price.price_per_unit AS price,
+        //             ws.expiration_date,
+        //             ws.created_at
+        //         FROM csrw_wards_stocks AS ws
+        //         JOIN hclass2 AS item
+        //             ON item.cl2comb = ws.cl2comb
+        //         LEFT JOIN csrw_item_prices AS price
+        //             ON ws.cl2comb = price.cl2comb
+        //             AND ISNULL(ws.ris_no, '') = ISNULL(price.ris_no, '')
+        //         LEFT JOIN csrw_request_stocks AS request
+        //             ON ws.request_stocks_id = request.id
+        //         WHERE ws.location = '" . $authCode . "'
+        //             AND ws.quantity > 0
+        //             AND ws.expiration_date > GETDATE()
+        //             AND (
+        //                 (request.status = 'RECEIVED')
+        //                 OR (ws.request_stocks_id IS NULL AND ws.[from] IN ('MEDICAL GASES', 'EXISTING_STOCKS', 'CONSIGNMENT', 'SUPPLEMENTAL', 'WARD'))
+        //             )
+        //         ORDER BY ws.expiration_date ASC;"
+        // );
         // dd($stocksFromCsr);
 
         $fromCSR = DB::select(
@@ -116,7 +116,6 @@ class PatientChargeController extends Controller
                 AND (rs.id IS NULL OR rs.status = 'RECEIVED')
                 AND stock.[from] = 'CSR';"
         );
-
         $fromExisting = DB::select(
             "SELECT stock.[from], stock.id, stock.request_stocks_id, stock.is_consumable,
                 item.cl2comb, item.cl2desc, item.uomcode,
@@ -132,7 +131,6 @@ class PatientChargeController extends Controller
                 AND stock.quantity > 0
                 AND stock.[from] = 'EXISTING_STOCKS';"
         );
-
         $fromMedical = DB::select(
             "SELECT stock.[from], stock.id, stock.request_stocks_id, stock.is_consumable,
                 item.cl2comb, item.cl2desc, item.uomcode,
@@ -148,7 +146,6 @@ class PatientChargeController extends Controller
                 AND stock.quantity > 0
                 AND stock.[from] = 'MEDICAL GASES';"
         );
-
         // set medicalSupplies value
         $medicalSupplies = [];
         foreach ($fromCSR as $s) {
