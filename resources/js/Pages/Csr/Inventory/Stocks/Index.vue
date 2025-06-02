@@ -557,6 +557,7 @@
             text
             @click="cancel"
           />
+
           <Button
             label="Save"
             icon="pi pi-check"
@@ -806,6 +807,24 @@
             label="Save"
             icon="pi pi-check"
             text
+            :disabled="
+              formAddDelivery.processing ||
+              formAddDelivery.ris_no == null ||
+              formAddDelivery.fund_source == null ||
+              formAddDelivery.cl2comb == null ||
+              formAddDelivery.delivered_date == null ||
+              formAddDelivery.expiration_date == null ||
+              formAddDelivery.quantity == null ||
+              formAddDelivery.quantity == 0 ||
+              formAddDelivery.acquisitionPrice == null ||
+              formAddDelivery.acquisitionPrice == 0
+            "
+            @click="openSummaryAddDeliveryDialog"
+          />
+          <!-- <Button
+            label="Save"
+            icon="pi pi-check"
+            text
             type="submit"
             :disabled="
               formAddDelivery.processing ||
@@ -820,7 +839,7 @@
               formAddDelivery.acquisitionPrice == 0
             "
             @click="submitAddDelivery"
-          />
+          /> -->
         </template>
       </Dialog>
 
@@ -1266,7 +1285,7 @@
               formConvertItem.remarks == '' ||
               formConvertItem.remarks == null
             "
-            @click="submitConvertItem"
+            @click="openSummaryConvertDialog"
           />
         </template>
       </Dialog>
@@ -1384,6 +1403,114 @@
             :disabled="formConvertItem.processing"
             @click="deleteConvertItem"
           />
+        </template>
+      </Dialog>
+
+      <!-- Open summary dialog add delivery -->
+      <Dialog
+        v-model:visible="summaryAddDeliveryDialog"
+        :style="{ width: '500px' }"
+        header="Confirm"
+        :closeOnEscape="false"
+      >
+        <template #header>
+          <div class="flex flex-column">
+            <div class="text-primary text-xl font-bold">DELIVERY SUMMARY</div>
+          </div>
+        </template>
+
+        <div class="p-4 bg-gray-50 rounded-md shadow-sm space-y-5 mt-3">
+          <div class="text-base text-gray-700">
+            <span class="font-bold text-2xl">CONVERTED ITEM:</span>
+            <span class="text-green-700 font-semibold text-2xl ml-2">
+              <span v-if="itemName == null">Item not converted yet.</span>
+              <span v-else>{{ itemName }}</span>
+            </span>
+          </div>
+          <div class="my-4"></div>
+          <div class="text-base text-gray-700">
+            <span class="font-bold text-2xl">PRICE PER UNIT:</span>
+            <span class="text-green-700 font-semibold text-2xl ml-2">
+              <span v-if="formAddDelivery.price_per_unit == Infinity">₱ 0</span>
+              <span v-else>₱ {{ formAddDelivery.price_per_unit }}</span>
+            </span>
+          </div>
+        </div>
+
+        <template #footer>
+          <Button
+            label="Cancel"
+            icon="pi pi-times"
+            severity="danger"
+            class="p-button-text"
+            @click="summaryAddDeliveryDialog = false"
+          />
+          <Button
+            :disabled="formAddDelivery.processing || countdown > 0"
+            type="submit"
+            severity="success"
+            @click="submitAddDelivery"
+          >
+            <i
+              :class="formAddDelivery.processing ? 'pi pi-spin pi-spinner' : 'mx-1 pi pi-check'"
+              style="font-size: 1rem"
+            ></i>
+            {{ countdown > 0 ? `Save (${countdown})` : 'Save' }}
+          </Button>
+        </template>
+      </Dialog>
+
+      <!-- Open summary dialog convertItem -->
+      <Dialog
+        v-model:visible="summaryConvertDialog"
+        :style="{ width: '500px' }"
+        header="Confirm"
+        :closeOnEscape="false"
+      >
+        <template #header>
+          <div class="flex flex-column">
+            <div class="text-primary text-xl font-bold">CONVERTED ITEM SUMMARY</div>
+          </div>
+        </template>
+
+        <div class="p-4 bg-gray-50 rounded-md shadow-sm space-y-5 mt-3">
+          <div class="text-base text-gray-700">
+            <span class="font-bold text-2xl">CONVERTED ITEM:</span>
+            <span class="text-green-700 font-semibold text-2xl ml-2">
+              <span v-if="itemName == null">Item not converted yet.</span>
+              <span v-else>{{ itemName }}</span>
+            </span>
+          </div>
+          <div class="my-4"></div>
+          <div class="text-base text-gray-700">
+            <span class="font-bold text-2xl">PRICE PER UNIT:</span>
+            <span class="text-green-700 font-semibold text-2xl ml-2">
+              <span v-if="formConvertItem.price_per_unit == Infinity">₱ 0</span>
+              <span v-else>₱ {{ formConvertItem.price_per_unit }}</span>
+            </span>
+          </div>
+        </div>
+
+        <template #footer>
+          <Button
+            label="Cancel"
+            icon="pi pi-times"
+            severity="danger"
+            class="p-button-text"
+            @click="summaryConvertDialog = false"
+          />
+          <Button
+            :disabled="formConvertItem.processing || countdown > 0"
+            type="submit"
+            severity="success"
+            @click="submitConvertItem"
+          >
+            <i
+              :class="formConvertItem.processing ? 'pi pi-spin pi-spinner' : 'mx-1 pi pi-check'"
+              style="font-size: 1rem"
+            ></i>
+            {{ countdown > 0 ? `Save (${countdown})` : 'Save' }}
+          </Button>
         </template>
       </Dialog>
 
@@ -1739,6 +1866,8 @@ export default {
   },
   data() {
     return {
+      itemName: null,
+      countdown: 0,
       maxDate: false,
       minimumDate: null,
       stockId: null,
@@ -1746,6 +1875,8 @@ export default {
       importDeliveryDialog: false,
       addDeliveryDialog: false,
       updateStockDialog: false,
+      summaryAddDeliveryDialog: false,
+      summaryConvertDialog: false,
       deliveryExist: false,
       editDeliveryQtyDialog: false,
       convertDialog: false,
@@ -2191,7 +2322,7 @@ export default {
           converted_by: e.firstname.trim() + ' ' + e.lastname.trim(),
         });
       });
-      console.log(this.totalConvertedItemsList);
+      //   console.log(this.totalConvertedItemsList);
     },
     storeFundSourceInContainer() {
       this.$page.props.fundSource.forEach((e) => {
@@ -2284,6 +2415,28 @@ export default {
           this.storeTotalConvertedItemsInContainer();
         },
       });
+    },
+    openSummaryAddDeliveryDialog() {
+      console.log(this.formAddDelivery.price_per_unit);
+      //   console.log('summary item', this.formAddDelivery.cl2comb);
+      this.convertedItemList.forEach((e) => {
+        // console.log(e);
+        if (this.formAddDelivery.cl2comb_after == e.cl2comb) {
+          this.itemName = e.cl2desc;
+        }
+      });
+      this.summaryAddDeliveryDialog = true;
+    },
+    openSummaryConvertDialog() {
+      console.log(this.formConvertItem.price_per_unit);
+      //   console.log('summary item', this.formConvertItem.cl2comb);
+      this.convertedItemList.forEach((e) => {
+        // console.log(e);
+        if (this.formConvertItem.cl2comb_after == e.cl2comb) {
+          this.itemName = e.cl2desc;
+        }
+      });
+      this.summaryConvertDialog = true;
     },
     openImportDeliveryDialog() {
       this.isUpdate = false;
@@ -2635,6 +2788,7 @@ export default {
 
           this.updateData();
           this.createdMsg();
+          this.summaryAddDeliveryDialog = false;
         },
       });
     },
@@ -2647,6 +2801,8 @@ export default {
       this.disableSearchRisInput = false;
       this.updateStockDialog = false;
       this.editConvertedItemDialog = false;
+      this.summaryAddDeliveryDialog = false;
+      this.summaryConvertDialog = false;
       this.form.reset();
       this.form.clearErrors();
       this.formImport.reset();
@@ -2694,6 +2850,38 @@ export default {
     },
   },
   watch: {
+    summaryAddDeliveryDialog(newVal) {
+      if (newVal) {
+        this.countdown = 4; // Reset countdown when dialog is opened
+        this.timer = setInterval(() => {
+          if (this.countdown > 0) {
+            this.countdown--;
+          } else {
+            clearInterval(this.timer);
+            this.timer = null;
+          }
+        }, 1000);
+      } else {
+        clearInterval(this.timer); // Stop countdown if dialog closes early
+        this.timer = null;
+      }
+    },
+    summaryConvertDialog(newVal) {
+      if (newVal) {
+        this.countdown = 4; // Reset countdown when dialog is opened
+        this.timer = setInterval(() => {
+          if (this.countdown > 0) {
+            this.countdown--;
+          } else {
+            clearInterval(this.timer);
+            this.timer = null;
+          }
+        }, 1000);
+      } else {
+        clearInterval(this.timer); // Stop countdown if dialog closes early
+        this.timer = null;
+      }
+    },
     item: function (val) {
       this.selectedItemsUomDesc = null;
 
