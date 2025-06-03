@@ -242,7 +242,10 @@
         </small>
       </div>
       <div class="field mt-4">
-        <label class="mr-2 font-bold">ITEMS / SERVICES TO CHARGE</label>
+        <div class="flex justify-content-between">
+          <label class="mr-2 font-bold">ITEMS / SERVICES TO CHARGE</label>
+          <span class="text-xl font-bold text-green-500">TOTAL: ₱ {{ totalCharge }}</span>
+        </div>
 
         <!-- <p
                 class="text-error text-xl font-semibold"
@@ -262,7 +265,7 @@
           v-model:filters="itemsToBillFilter"
           :globalFilterFields="['itemDesc']"
           :value="itemsToBillList"
-          tableStyle="min-width: 50rem; height: 500px;"
+          tableStyle="min-width: 50rem; "
           class="p-datatable-sm w-full"
           paginator
           showGridlines
