@@ -19,7 +19,7 @@
           </p>
           <img
             src="images/req_stock_1.png"
-            class="w-10 h-10 my-2 border-3 border-blue-500"
+            class="w-10 h-10 my-2 border-3 border-yellow-500"
           />
           <p class="m-0">
             3. Click the <span class="font-bold text-yellow-500">Available Items</span> dropdown to view the items
@@ -35,7 +35,7 @@
           </p>
           <img
             src="images/req_stock_modal.png"
-            class="w-8 h-8 my-2 border-3 border-blue-500"
+            class="w-8 h-8 my-2 border-3 border-yellow-500"
           />
           <p class="m-0">
             6. After requesting an item, the order will have a
@@ -58,7 +58,7 @@
           </p>
           <img
             src="images/req_stock_pending.png"
-            class="w-8 h-8 my-2 border-3 border-blue-500"
+            class="w-8 h-8 my-2 border-3 border-yellow-500"
           />
           <p class="m-0">
             7. When status is
@@ -84,7 +84,7 @@
           </p>
           <img
             src="images/req_stock_filled.png"
-            class="w-8 h-8 my-2 border-3 border-blue-500"
+            class="w-8 h-8 my-2 border-3 border-yellow-500"
           />
           <p class="m-0">
             <span class="font-bold text-error mr-1 mt-3">NOTE:</span> Remember that clicking the button means you have
@@ -107,7 +107,7 @@
           </p>
           <img
             src="images/patient_list.png"
-            class="w-10 h-10 my-2 border-3 border-blue-500"
+            class="w-10 h-10 my-2 border-3 border-yellow-500"
           />
         </div>
       </Fieldset>
@@ -124,7 +124,7 @@
           </p>
           <img
             src="images/patient_charge_1.png"
-            class="w-10 h-10 my-2 border-3 border-blue-500"
+            class="w-10 h-10 my-2 border-3 border-yellow-500"
           />
           <p class="m-0 mt-2">
             3. Click the <span class="font-bold text-yellow-500">Available Items</span> dropdown to view the items
@@ -140,7 +140,7 @@
           </p>
           <img
             src="images/patient_charge_2.png"
-            class="w-10 h-10 my-2 border-3 border-blue-500"
+            class="w-10 h-10 my-2 border-3 border-yellow-500"
           />
         </div>
       </Fieldset>
@@ -180,6 +180,66 @@
           <img
             src="images/reorder_5.png"
             class="w-5 h-5 my-2"
+          />
+        </div>
+      </Fieldset>
+
+      <Fieldset
+        legend="ENDORSEMENTS"
+        :toggleable="true"
+        collapsed
+      >
+        <div class="text-xl">
+          <p class="m-0 text-yellow-500">
+            Endorsement feature is the handover of ward-related responsibilities from one ward assistant to another
+            during shift changes.
+          </p>
+          <img
+            src="images/endorsement-1.png"
+            class="w-2 h-2 my-2"
+          />
+          <p class="m-0 text-yellow-500">
+            You can create an <span class="font-italic">endorsement</span> by clicking the Endorsement button.
+          </p>
+          <img
+            src="images/endorsement-2.png"
+            class="w-6 h-6 my-2"
+          />
+          <p class="m-0 text-yellow-500">
+            Add the endorsement description. Don’t forget to include the type and current status. You can add or remove
+            endorsement items by clicking the designated buttons.
+          </p>
+          <img
+            src="images/endorsement-3.png"
+            class="w-6 h-6 my-2"
+          />
+          <p class="m-0 text-yellow-500">
+            After saving the endorsement, it will appear in the list. Expand the endorsement to view the included items.
+          </p>
+          <img
+            src="images/endorsement-4.png"
+            class="w-6 h-6 my-2"
+          />
+          <p class="m-0 text-yellow-500">
+            To update an endorsement, click the
+            <i class="pi pi-pencil text-yellow-500"></i> icon — for example, to change the status.
+          </p>
+          <img
+            src="images/endorsement-5.png"
+            class="w-6 h-6 my-2"
+          />
+          <p class="m-0 text-yellow-500">
+            When creating a new endorsement, any previous endorsement with a status other than Completed or Cancelled
+            will be automatically added to the list.
+          </p>
+          <img
+            src="images/endorsement-6.png"
+            class="w-6 h-6 my-2"
+          />
+          <p class="m-0 text-yellow-500">The latest endorsement will be shown on the dashboard page.</p>
+          <img
+            src="images/endorsement-7.png"
+            class="w-6 h-6 my-2"
           />
         </div>
       </Fieldset>

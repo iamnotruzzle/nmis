@@ -223,6 +223,8 @@
           <div class="border-1 p-2 border-dotted">
             <!-- <h1>LIST OF ENDORSEMENTS</h1> -->
 
+            <h3 class="text-yellow-500 text-center">EXPAND ITEM TO SHOW ENDORSEMENT DETAILS</h3>
+
             <Accordion
               :activeIndex="activeAccordionIndex"
               @tab-change="activeAccordionIndex = $event.index"
