@@ -344,12 +344,63 @@
         />
 
         <Button
-          :disabled="itemsToBillList.length == 0 || form.processing"
+          :disabled="itemsToBillList.length == 0 || form.processing || chargeSummaryDialog == true"
           :label="!form.processing ? 'CHARGE' : 'CHARGE'"
           :icon="form.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
-          type="submit"
-          @click="submit"
+          @click="openChargeSummaryDialog"
         />
+      </template>
+    </Dialog>
+
+    <!-- Open summary dialog add delivery -->
+    <Dialog
+      v-model:visible="chargeSummaryDialog"
+      :style="{ width: '500px' }"
+      header="Confirm"
+      :closeOnEscape="false"
+    >
+      <template #header>
+        <div class="flex flex-column">
+          <div class="text-primary text-xl font-bold">CHARGE SUMMARY</div>
+        </div>
+      </template>
+
+      <div class="p-4 bg-gray-50 rounded-md shadow-sm space-y-5 mt-3">
+        <!-- Warning at the top -->
+        <div class="text-2xl p-4 bg-yellow-100 text-yellow-900 border border-yellow-400 rounded-md">
+          ⚠️ If the total charge seems high, review the list for items with unusual prices, remove them from the list,
+          and contact <strong>Central Supply</strong> for confirmation.
+        </div>
+        <!-- Total Charge -->
+        <!-- Total Charge -->
+        <div class="text-center border-t pt-4">
+          <div class="text-2xl font-bold text-gray-900">
+            Total Charge:
+            <span class="text-green-700">₱ {{ totalCharge }}</span>
+          </div>
+        </div>
+      </div>
+
+      <template #footer>
+        <Button
+          :label="!form.processing ? 'CANCEL' : 'CANCEL'"
+          icon="pi pi-times"
+          :disabled="form.processing"
+          severity="danger"
+          @click="chargeSummaryDialog = false"
+        />
+        <Button
+          :disabled="form.processing || countdown > 0"
+          type="submit"
+          severity="success"
+          @click="submit"
+        >
+          <i
+            :class="form.processing ? 'pi pi-spin pi-spinner' : 'mx-1 pi pi-check'"
+            style="font-size: 1rem"
+          ></i>
+          {{ countdown > 0 ? `Save (${countdown})` : 'CHARGE' }}
+        </Button>
       </template>
     </Dialog>
 
@@ -809,6 +860,8 @@ export default {
       updateQtyNotEnough: false,
       receiptDialog: false,
       isPrinting: false,
+      chargeSummaryDialog: false,
+      countdown: 0,
       totalAmount: 0,
       medicalSuppliesListFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -861,13 +914,23 @@ export default {
       }),
     };
   },
+  computed: {
+    totalCharge() {
+      return this.itemsToBillList
+        .reduce((sum, item) => {
+          const total = parseFloat(item.total || 0);
+          return sum + (isNaN(total) ? 0 : total);
+        }, 0)
+        .toFixed(2);
+    },
+  },
   mounted() {
     window.Echo.channel('charges').listen('.ChargeLogsProcessed', (args) => {
       window.skipNProgress = true; // Prevent NProgress
 
       router.reload({
         onSuccess: () => {
-          console.log('Data reloaded successfully');
+          //   console.log('Data reloaded successfully');
           this.storeMedicalSuppliesInContainer();
           this.storeBillsInContainer();
           window.skipNProgress = false; // Reset flag after reload
@@ -894,6 +957,10 @@ export default {
     this.hospitalNumber = this.hpercode;
   },
   methods: {
+    openChargeSummaryDialog() {
+      console.log('charge list', this.itemsToBillList);
+      this.chargeSummaryDialog = true;
+    },
     totalPerChargeSlip(charge_slip_no) {
       let total = 0;
 
@@ -1100,7 +1167,7 @@ export default {
       //   console.log('item list', this.itemList);
     },
     medicalSuppliesQtyValidation() {
-      console.log('item 1', this.item);
+      //   console.log('item 1', this.item);
 
       if (!this.item) {
         this.itemNotSelected = true;
@@ -1164,7 +1231,7 @@ export default {
      * Function to handle DRUMN charging logic.
      */
     chargeDrumnItem(item, quantityToCharge) {
-      console.log('item', item);
+      //   console.log('item', item);
       const { typeOfCharge, itemCode, itemDesc, unit, totalQuantity, prices } = item;
       const isDrumn = typeOfCharge === 'DRUMN';
 
@@ -1457,6 +1524,7 @@ export default {
       this.itemNotSelectedMsg = null;
       this.createBillDialog = false;
       this.updateBillDialog = false;
+      this.chargeSummaryDialog = false;
       this.form.isUpdate = false;
       this.printForm.reset();
       this.form.reset();
@@ -1475,6 +1543,24 @@ export default {
         detail: `Item ${item} is either missing from your inventory or does not have enough stock.`,
         life: 6000,
       });
+    },
+  },
+  watch: {
+    chargeSummaryDialog(newVal) {
+      if (newVal) {
+        this.countdown = 4; // Reset countdown when dialog is opened
+        this.timer = setInterval(() => {
+          if (this.countdown > 0) {
+            this.countdown--;
+          } else {
+            clearInterval(this.timer);
+            this.timer = null;
+          }
+        }, 1000);
+      } else {
+        clearInterval(this.timer); // Stop countdown if dialog closes early
+        this.timer = null;
+      }
     },
   },
 };
