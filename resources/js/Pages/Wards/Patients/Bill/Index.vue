@@ -399,7 +399,7 @@
             :class="form.processing ? 'pi pi-spin pi-spinner' : 'mx-1 pi pi-check'"
             style="font-size: 1rem"
           ></i>
-          {{ countdown > 0 ? `Save (${countdown})` : 'CHARGE' }}
+          {{ countdown > 0 ? `CHARGE (${countdown})` : 'CHARGE' }}
         </Button>
       </template>
     </Dialog>
