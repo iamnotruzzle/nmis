@@ -263,130 +263,252 @@ class CsrStocksControllers extends Controller
             // return redirect()->back();
             // return redirect()->back()->with('result', $result);
         } else {
+            // dd($request);
             $deliveryDetails = $request->deliveryDetails;
             // dd($deliveryDetails);
 
             $entry_by = Auth::user()->employeeid;
 
-            foreach ($deliveryDetails as $r) {
-                if (isset($r['cl2comb_after']) && isset($r['quantity_after'])) {
-                    // dd($r);
-                    $stock = CsrStocks::create([
-                        'ris_no' => $r['risno'],
-                        'cl2comb' => $r['cl2comb'],
-                        'uomcode' => $r['uomcode'],
-                        'supplierID' => $r['supplier'] != null ? $r['supplier']['supplierID'] : null,
-                        'chrgcode' => $r['fsid'],
-                        'quantity' => $r['releaseqty'],
-                        // 'manufactured_date' => Carbon::parse($r['manufactured_date'])->format('Y-m-d H:i:s.v'),
-                        'delivered_date' => Carbon::parse($r['delivered_date'])->format('Y-m-d H:i:s.v'),
-                        'expiration_date' => Carbon::parse($r['expiration_date'])->format('Y-m-d H:i:s.v'),
-                        'acquisition_price' => $r['unitprice'],
-                        'converted' => 'y',
-                    ]);
+            DB::beginTransaction();
 
-                    $stockLog = CsrStocksLogs::create([
-                        'stock_id' => $stock->id,
-                        'ris_no' => $r['risno'],
-                        'cl2comb' => $r['cl2comb'],
-                        'uomcode' => $r['uomcode'],
-                        'supplierID' => $r['supplier'] != null ? $r['supplier']['supplierID'] : null,
-                        'chrgcode' => $r['fsid'],
-                        'prev_qty' => 0,
-                        'new_qty' => $r['releaseqty'],
-                        'quantity' => $r['releaseqty'],
-                        // 'manufactured_date' => Carbon::parse($r['manufactured_date'])->format('Y-m-d H:i:s.v'),
-                        'delivered_date' => Carbon::parse($r['delivered_date'])->format('Y-m-d H:i:s.v'),
-                        'expiration_date' => Carbon::parse($r['expiration_date'])->format('Y-m-d H:i:s.v'),
-                        'action' => 'ADDED DELIVERY',
-                        'remarks' => '',
-                        'acquisition_price' => $r['unitprice'],
-                        'entry_by' => $entry_by,
-                        'converted' => 'y',
-                    ]);
-
-                    $convertedItem = CsrItemConversion::create([
-                        'csr_stock_id' => $stock->id,
-                        'ris_no' => $stock->ris_no,
-                        'chrgcode' => $stock->chrgcode,
-                        'cl2comb_before' => $stock->cl2comb,
-                        'quantity_before' => $stock->quantity,
-                        'cl2comb_after' => $r['cl2comb_after'],
-                        'quantity_after' => $r['quantity_after'],
-                        'supplierID' => $stock->supplierID,
-                        // 'manufactured_date' => Carbon::parse($stock->manufactured_date)->format('Y-m-d H:i:s.v'),
-                        'delivered_date' =>  Carbon::parse($stock->delivered_date)->format('Y-m-d H:i:s.v'),
-                        'expiration_date' =>  Carbon::parse($stock->expiration_date)->format('Y-m-d H:i:s.v'),
-                        'converted_by' => $entry_by,
-                    ]);
-                    //
-
-                    if ($r['price_per_unit'] != null) {
-                        $itemPrices = ItemPrices::create([
-                            'cl2comb' => $r['cl2comb_after'],
-                            'price_per_unit' => $r['price_per_unit'],
-                            'entry_by' => $entry_by,
+            try {
+                foreach ($deliveryDetails as $r) {
+                    if (isset($r['cl2comb_after']) && isset($r['quantity_after'])) {
+                        $stock = CsrStocks::create([
                             'ris_no' => $r['risno'],
+                            'cl2comb' => $r['cl2comb'],
+                            'uomcode' => $r['uomcode'],
+                            'supplierID' => $r['supplier'] != null ? $r['supplier']['supplierID'] : null,
+                            'chrgcode' => $r['fsid'],
+                            'quantity' => $r['releaseqty'],
+                            'delivered_date' => Carbon::parse($r['delivered_date'])->format('Y-m-d H:i:s.v'),
+                            'expiration_date' => Carbon::parse($r['expiration_date'])->format('Y-m-d H:i:s.v'),
                             'acquisition_price' => $r['unitprice'],
-                            'hospital_price' => $r['hospital_price'],
+                            'converted' => 'y',
+                        ]);
+
+                        $stockLog = CsrStocksLogs::create([
+                            'stock_id' => $stock->id,
+                            'ris_no' => $r['risno'],
+                            'cl2comb' => $r['cl2comb'],
+                            'uomcode' => $r['uomcode'],
+                            'supplierID' => $r['supplier'] != null ? $r['supplier']['supplierID'] : null,
+                            'chrgcode' => $r['fsid'],
+                            'prev_qty' => 0,
+                            'new_qty' => $r['releaseqty'],
+                            'quantity' => $r['releaseqty'],
+                            'delivered_date' => Carbon::parse($r['delivered_date'])->format('Y-m-d H:i:s.v'),
+                            'expiration_date' => Carbon::parse($r['expiration_date'])->format('Y-m-d H:i:s.v'),
+                            'action' => 'ADDED DELIVERY',
+                            'remarks' => '',
+                            'acquisition_price' => $r['unitprice'],
+                            'entry_by' => $entry_by,
+                            'converted' => 'y',
+                        ]);
+
+                        $convertedItem = CsrItemConversion::create([
+                            'csr_stock_id' => $stock->id,
+                            'ris_no' => $stock->ris_no,
+                            'chrgcode' => $stock->chrgcode,
+                            'cl2comb_before' => $stock->cl2comb,
+                            'quantity_before' => $stock->quantity,
+                            'cl2comb_after' => $r['cl2comb_after'],
+                            'quantity_after' => $r['quantity_after'],
+                            'supplierID' => $stock->supplierID,
+                            'delivered_date' =>  Carbon::parse($stock->delivered_date)->format('Y-m-d H:i:s.v'),
+                            'expiration_date' =>  Carbon::parse($stock->expiration_date)->format('Y-m-d H:i:s.v'),
+                            'converted_by' => $entry_by,
+                        ]);
+
+                        if ($r['price_per_unit'] != null) {
+                            $itemPrices = ItemPrices::create([
+                                'cl2comb' => $r['cl2comb_after'],
+                                'price_per_unit' => $r['price_per_unit'],
+                                'entry_by' => $entry_by,
+                                'ris_no' => $r['risno'],
+                                'acquisition_price' => $r['unitprice'],
+                                'hospital_price' => $r['hospital_price'],
+                                'item_conversion_id' => $convertedItem->id,
+                            ]);
+                        }
+
+                        $convertedItemLog = CsrItemConversionLogs::create([
                             'item_conversion_id' => $convertedItem->id,
+                            'csr_stock_id' => $stock->id,
+                            'ris_no' => $stock->ris_no,
+                            'chrgcode' => $stock->chrgcode,
+                            'cl2comb_before' => $stock->cl2comb,
+                            'quantity_before' => $stock->quantity,
+                            'cl2comb_after' => $r['cl2comb_after'],
+                            'prev_qty' => 0,
+                            'new_qty' => $r['quantity_after'],
+                            'supplierID' => $stock->supplierID,
+                            'delivered_date' =>  Carbon::parse($stock->delivered_date)->format('Y-m-d H:i:s.v'),
+                            'expiration_date' =>  Carbon::parse($stock->expiration_date)->format('Y-m-d H:i:s.v'),
+                            'action' => 'CONVERTED ITEM',
+                            'remarks' => '',
+                            'converted_by' => $entry_by,
+                        ]);
+                    } else {
+                        $stock = CsrStocks::create([
+                            'ris_no' => $r['risno'],
+                            'cl2comb' => $r['cl2comb'],
+                            'uomcode' => $r['uomcode'],
+                            'supplierID' => $r['supplier'] != null ? $r['supplier']['supplierID'] : null,
+                            'chrgcode' => $r['fsid'],
+                            'quantity' => $r['releaseqty'],
+                            'delivered_date' => Carbon::parse($r['delivered_date'])->format('Y-m-d H:i:s.v'),
+                            'expiration_date' => Carbon::parse($r['expiration_date'])->format('Y-m-d H:i:s.v'),
+                            'acquisition_price' => $r['unitprice'],
+                            'converted' => 'n',
+                        ]);
+
+                        $stockLog = CsrStocksLogs::create([
+                            'stock_id' => $stock->id,
+                            'ris_no' => $r['risno'],
+                            'cl2comb' => $r['cl2comb'],
+                            'uomcode' => $r['uomcode'],
+                            'supplierID' => $r['supplier'] != null ? $r['supplier']['supplierID'] : null,
+                            'chrgcode' => $r['fsid'],
+                            'prev_qty' => 0,
+                            'new_qty' => $r['releaseqty'],
+                            'quantity' => $r['releaseqty'],
+                            'delivered_date' => Carbon::parse($r['delivered_date'])->format('Y-m-d H:i:s.v'),
+                            'expiration_date' => Carbon::parse($r['expiration_date'])->format('Y-m-d H:i:s.v'),
+                            'action' => 'ADDED DELIVERY',
+                            'remarks' => '',
+                            'acquisition_price' => $r['unitprice'],
+                            'entry_by' => $entry_by,
+                            'converted' => 'n',
                         ]);
                     }
-
-                    $convertedItemLog = CsrItemConversionLogs::create([
-                        'item_conversion_id' => $convertedItem->id,
-                        'csr_stock_id' => $stock->id,
-                        'ris_no' => $stock->ris_no,
-                        'chrgcode' => $stock->chrgcode,
-                        'cl2comb_before' => $stock->cl2comb,
-                        'quantity_before' => $stock->quantity,
-                        'cl2comb_after' => $r['cl2comb_after'],
-                        'prev_qty' => 0,
-                        'new_qty' => $r['quantity_after'],
-                        'supplierID' => $stock->supplierID,
-                        // 'manufactured_date' => Carbon::parse($stock->manufactured_date)->format('Y-m-d H:i:s.v'),
-                        'delivered_date' =>  Carbon::parse($stock->delivered_date)->format('Y-m-d H:i:s.v'),
-                        'expiration_date' =>  Carbon::parse($stock->expiration_date)->format('Y-m-d H:i:s.v'),
-                        'action' => 'CONVERTED ITEM',
-                        'remarks' => '',
-                        'converted_by' => $entry_by,
-                    ]);
-                } else {
-                    $stock = CsrStocks::create([
-                        'ris_no' => $r['risno'],
-                        'cl2comb' => $r['cl2comb'],
-                        'uomcode' => $r['uomcode'],
-                        'supplierID' => $r['supplier'] != null ? $r['supplier']['supplierID'] : null,
-                        'chrgcode' => $r['fsid'],
-                        'quantity' => $r['releaseqty'],
-                        // 'manufactured_date' => Carbon::parse($r['manufactured_date'])->format('Y-m-d H:i:s.v'),
-                        'delivered_date' => Carbon::parse($r['delivered_date'])->format('Y-m-d H:i:s.v'),
-                        'expiration_date' => Carbon::parse($r['expiration_date'])->format('Y-m-d H:i:s.v'),
-                        'acquisition_price' => $r['unitprice'],
-                        'converted' => 'n',
-                    ]);
-
-                    $stockLog = CsrStocksLogs::create([
-                        'stock_id' => $stock->id,
-                        'ris_no' => $r['risno'],
-                        'cl2comb' => $r['cl2comb'],
-                        'uomcode' => $r['uomcode'],
-                        'supplierID' => $r['supplier'] != null ? $r['supplier']['supplierID'] : null,
-                        'chrgcode' => $r['fsid'],
-                        'prev_qty' => 0,
-                        'new_qty' => $r['releaseqty'],
-                        'quantity' => $r['releaseqty'],
-                        // 'manufactured_date' => Carbon::parse($r['manufactured_date'])->format('Y-m-d H:i:s.v'),
-                        'delivered_date' => Carbon::parse($r['delivered_date'])->format('Y-m-d H:i:s.v'),
-                        'expiration_date' => Carbon::parse($r['expiration_date'])->format('Y-m-d H:i:s.v'),
-                        'action' => 'ADDED DELIVERY',
-                        'remarks' => '',
-                        'acquisition_price' => $r['unitprice'],
-                        'entry_by' => $entry_by,
-                        'converted' => 'n',
-                    ]);
                 }
+
+                DB::commit(); // ✅ commit only if all pass
+            } catch (\Exception $e) {
+                DB::rollBack(); // ❌ rollback everything if any error occurs
+                throw $e; // Optional: rethrow or handle the error as needed
             }
+
+            // foreach ($deliveryDetails as $r) {
+            //     if (isset($r['cl2comb_after']) && isset($r['quantity_after'])) {
+            //         // dd($r);
+            //         $stock = CsrStocks::create([
+            //             'ris_no' => $r['risno'],
+            //             'cl2comb' => $r['cl2comb'],
+            //             'uomcode' => $r['uomcode'],
+            //             'supplierID' => $r['supplier'] != null ? $r['supplier']['supplierID'] : null,
+            //             'chrgcode' => $r['fsid'],
+            //             'quantity' => $r['releaseqty'],
+            //             // 'manufactured_date' => Carbon::parse($r['manufactured_date'])->format('Y-m-d H:i:s.v'),
+            //             'delivered_date' => Carbon::parse($r['delivered_date'])->format('Y-m-d H:i:s.v'),
+            //             'expiration_date' => Carbon::parse($r['expiration_date'])->format('Y-m-d H:i:s.v'),
+            //             'acquisition_price' => $r['unitprice'],
+            //             'converted' => 'y',
+            //         ]);
+
+            //         $stockLog = CsrStocksLogs::create([
+            //             'stock_id' => $stock->id,
+            //             'ris_no' => $r['risno'],
+            //             'cl2comb' => $r['cl2comb'],
+            //             'uomcode' => $r['uomcode'],
+            //             'supplierID' => $r['supplier'] != null ? $r['supplier']['supplierID'] : null,
+            //             'chrgcode' => $r['fsid'],
+            //             'prev_qty' => 0,
+            //             'new_qty' => $r['releaseqty'],
+            //             'quantity' => $r['releaseqty'],
+            //             // 'manufactured_date' => Carbon::parse($r['manufactured_date'])->format('Y-m-d H:i:s.v'),
+            //             'delivered_date' => Carbon::parse($r['delivered_date'])->format('Y-m-d H:i:s.v'),
+            //             'expiration_date' => Carbon::parse($r['expiration_date'])->format('Y-m-d H:i:s.v'),
+            //             'action' => 'ADDED DELIVERY',
+            //             'remarks' => '',
+            //             'acquisition_price' => $r['unitprice'],
+            //             'entry_by' => $entry_by,
+            //             'converted' => 'y',
+            //         ]);
+
+            //         $convertedItem = CsrItemConversion::create([
+            //             'csr_stock_id' => $stock->id,
+            //             'ris_no' => $stock->ris_no,
+            //             'chrgcode' => $stock->chrgcode,
+            //             'cl2comb_before' => $stock->cl2comb,
+            //             'quantity_before' => $stock->quantity,
+            //             'cl2comb_after' => $r['cl2comb_after'],
+            //             'quantity_after' => $r['quantity_after'],
+            //             'supplierID' => $stock->supplierID,
+            //             // 'manufactured_date' => Carbon::parse($stock->manufactured_date)->format('Y-m-d H:i:s.v'),
+            //             'delivered_date' =>  Carbon::parse($stock->delivered_date)->format('Y-m-d H:i:s.v'),
+            //             'expiration_date' =>  Carbon::parse($stock->expiration_date)->format('Y-m-d H:i:s.v'),
+            //             'converted_by' => $entry_by,
+            //         ]);
+            //         //
+
+            //         if ($r['price_per_unit'] != null) {
+            //             $itemPrices = ItemPrices::create([
+            //                 'cl2comb' => $r['cl2comb_after'],
+            //                 'price_per_unit' => $r['price_per_unit'],
+            //                 'entry_by' => $entry_by,
+            //                 'ris_no' => $r['risno'],
+            //                 'acquisition_price' => $r['unitprice'],
+            //                 'hospital_price' => $r['hospital_price'],
+            //                 'item_conversion_id' => $convertedItem->id,
+            //             ]);
+            //         }
+
+            //         $convertedItemLog = CsrItemConversionLogs::create([
+            //             'item_conversion_id' => $convertedItem->id,
+            //             'csr_stock_id' => $stock->id,
+            //             'ris_no' => $stock->ris_no,
+            //             'chrgcode' => $stock->chrgcode,
+            //             'cl2comb_before' => $stock->cl2comb,
+            //             'quantity_before' => $stock->quantity,
+            //             'cl2comb_after' => $r['cl2comb_after'],
+            //             'prev_qty' => 0,
+            //             'new_qty' => $r['quantity_after'],
+            //             'supplierID' => $stock->supplierID,
+            //             // 'manufactured_date' => Carbon::parse($stock->manufactured_date)->format('Y-m-d H:i:s.v'),
+            //             'delivered_date' =>  Carbon::parse($stock->delivered_date)->format('Y-m-d H:i:s.v'),
+            //             'expiration_date' =>  Carbon::parse($stock->expiration_date)->format('Y-m-d H:i:s.v'),
+            //             'action' => 'CONVERTED ITEM',
+            //             'remarks' => '',
+            //             'converted_by' => $entry_by,
+            //         ]);
+            //     } else {
+            //         $stock = CsrStocks::create([
+            //             'ris_no' => $r['risno'],
+            //             'cl2comb' => $r['cl2comb'],
+            //             'uomcode' => $r['uomcode'],
+            //             'supplierID' => $r['supplier'] != null ? $r['supplier']['supplierID'] : null,
+            //             'chrgcode' => $r['fsid'],
+            //             'quantity' => $r['releaseqty'],
+            //             // 'manufactured_date' => Carbon::parse($r['manufactured_date'])->format('Y-m-d H:i:s.v'),
+            //             'delivered_date' => Carbon::parse($r['delivered_date'])->format('Y-m-d H:i:s.v'),
+            //             'expiration_date' => Carbon::parse($r['expiration_date'])->format('Y-m-d H:i:s.v'),
+            //             'acquisition_price' => $r['unitprice'],
+            //             'converted' => 'n',
+            //         ]);
+
+            //         $stockLog = CsrStocksLogs::create([
+            //             'stock_id' => $stock->id,
+            //             'ris_no' => $r['risno'],
+            //             'cl2comb' => $r['cl2comb'],
+            //             'uomcode' => $r['uomcode'],
+            //             'supplierID' => $r['supplier'] != null ? $r['supplier']['supplierID'] : null,
+            //             'chrgcode' => $r['fsid'],
+            //             'prev_qty' => 0,
+            //             'new_qty' => $r['releaseqty'],
+            //             'quantity' => $r['releaseqty'],
+            //             // 'manufactured_date' => Carbon::parse($r['manufactured_date'])->format('Y-m-d H:i:s.v'),
+            //             'delivered_date' => Carbon::parse($r['delivered_date'])->format('Y-m-d H:i:s.v'),
+            //             'expiration_date' => Carbon::parse($r['expiration_date'])->format('Y-m-d H:i:s.v'),
+            //             'action' => 'ADDED DELIVERY',
+            //             'remarks' => '',
+            //             'acquisition_price' => $r['unitprice'],
+            //             'entry_by' => $entry_by,
+            //             'converted' => 'n',
+            //         ]);
+            //     }
+            // }
 
             return redirect()->back();
         }
