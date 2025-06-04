@@ -116,6 +116,23 @@ class PatientChargeController extends Controller
                 AND (rs.id IS NULL OR rs.status = 'RECEIVED')
                 AND stock.[from] = 'CSR';"
         );
+        $fromWard = DB::select(
+            "SELECT stock.[from], stock.id, stock.request_stocks_id, stock.is_consumable,
+                item.cl2comb, item.cl2desc, item.uomcode,
+                stock.quantity, stock.average, stock.total_usage,
+                price.price_per_unit as price,
+                stock.expiration_date, stock.created_at
+                FROM csrw_wards_stocks stock
+                JOIN hclass2 item ON stock.cl2comb = item.cl2comb
+                LEFT JOIN csrw_request_stocks rs ON rs.id = stock.request_stocks_id
+                LEFT JOIN csrw_item_prices AS price
+                    ON stock.cl2comb = price.cl2comb
+                    AND price.item_conversion_id = stock.stock_id
+                WHERE stock.location = '" . $authCode . "'
+                AND stock.quantity > 0
+                AND (rs.id IS NULL OR rs.status = 'RECEIVED')
+                AND stock.[from] = 'WARD';"
+        );
         $fromExisting = DB::select(
             "SELECT stock.[from], stock.id, stock.request_stocks_id, stock.is_consumable,
                 item.cl2comb, item.cl2desc, item.uomcode,
@@ -181,6 +198,22 @@ class PatientChargeController extends Controller
             ];
         }
         foreach ($fromMedical as $s) {
+            $medicalSupplies[] = (object) [
+                'from' => $s->from,
+                'id' => $s->id,
+                'is_consumable' => $s->is_consumable,
+                'cl2comb' => $s->cl2comb,
+                'cl2desc' => $s->cl2desc,
+                'uomcode' => $s->uomcode,
+                'quantity' => $s->quantity,
+                'average' => $s->average,
+                'total_usage' => $s->total_usage,
+                'price' => $s->price,
+                'expiration_date' => $s->expiration_date,
+                'created_at' => $s->created_at,
+            ];
+        }
+        foreach ($fromWard as $s) {
             $medicalSupplies[] = (object) [
                 'from' => $s->from,
                 'id' => $s->id,
