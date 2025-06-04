@@ -124,10 +124,10 @@ class CsrItemConversionController extends Controller
             'updated_by' => $updated_by
         ]);
 
-        ItemPrices::where('item_conversion_id', $request->id)
-            ->update([
-                'price_per_unit' => $request->update_price_per_unit
-            ]);
+        // ItemPrices::where('item_conversion_id', $request->id)
+        //     ->update([
+        //         'price_per_unit' => $request->update_price_per_unit
+        //     ]);
 
         // $convertedItem = CsrItemConversionLogs::where('item_conversion_id', $request->id)->first();
 

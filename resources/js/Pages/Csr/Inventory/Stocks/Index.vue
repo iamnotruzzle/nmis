@@ -1321,7 +1321,7 @@
             autofocus
           />
         </div>
-        <div class="field">
+        <!-- <div class="field">
           <div>
             <div class="flex align-content-center">
               <label class="text-green-500">Price per unit</label>
@@ -1334,7 +1334,7 @@
               :maxFractionDigits="5"
             />
           </div>
-        </div>
+        </div> -->
         <div class="field">
           <div class="flex align-content-center">
             <label>Remarks</label>
