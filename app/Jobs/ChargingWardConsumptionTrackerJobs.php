@@ -11,6 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ChargingWardConsumptionTrackerJobs implements ShouldQueue
 {
@@ -86,11 +87,10 @@ class ChargingWardConsumptionTrackerJobs implements ShouldQueue
 
     public function failed(\Throwable $e)
     {
-        WardConsumptionTracker::where('ward_stock_id', $this->ward_stock_id)
-            ->latest() // Orders by created_at DESC to get the most recent row
-            ->first()
-            ->update([
-                'charged_qty' => DB::raw("charged_qty + {$this->non_specific_charge}")
-            ]);
+        // Log the ward_stock_id and the exception message
+        Log::error('WardConsumptionTracker update failed.', [
+            'ward_stock_id' => $this->ward_stock_id,
+            'error' => $e->getMessage()
+        ]);
     }
 }
