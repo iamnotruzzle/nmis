@@ -25,7 +25,7 @@ class InventoryController extends Controller
 {
     public function index(Request $request)
     {
-        dd(5);
+        // dd(5);
         $searchString = $request->search;
 
         $from = Carbon::parse($request->from)->startOfDay();

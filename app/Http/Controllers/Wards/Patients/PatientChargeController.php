@@ -99,6 +99,21 @@ class PatientChargeController extends Controller
         // );
         // dd($stocksFromCsr);
 
+        $fromExisting = DB::select(
+            "SELECT stock.[from], stock.id, stock.request_stocks_id, stock.is_consumable,
+                item.cl2comb, item.cl2desc, item.uomcode,
+                stock.quantity, stock.average, stock.total_usage,
+                price.price_per_unit as price,
+                stock.expiration_date, stock.created_at
+                FROM csrw_wards_stocks stock
+                JOIN hclass2 item ON stock.cl2comb = item.cl2comb
+                LEFT JOIN csrw_item_prices AS price
+                    ON stock.cl2comb = price.cl2comb
+                    AND price.ris_no = stock.ris_no -- use ris_no if item is from ward/existing
+                WHERE stock.location = '" . $authCode . "'
+                AND stock.quantity > 0
+                AND stock.[from] = 'EXISTING_STOCKS';"
+        );
         $fromCSR = DB::select(
             "SELECT stock.[from], stock.id, stock.request_stocks_id, stock.is_consumable,
                 item.cl2comb, item.cl2desc, item.uomcode,
@@ -133,21 +148,6 @@ class PatientChargeController extends Controller
                 AND stock.quantity > 0
                 AND (rs.id IS NULL OR rs.status = 'RECEIVED')
                 AND stock.[from] = 'WARD';"
-        );
-        $fromExisting = DB::select(
-            "SELECT stock.[from], stock.id, stock.request_stocks_id, stock.is_consumable,
-                item.cl2comb, item.cl2desc, item.uomcode,
-                stock.quantity, stock.average, stock.total_usage,
-                price.price_per_unit as price,
-                stock.expiration_date, stock.created_at
-                FROM csrw_wards_stocks stock
-                JOIN hclass2 item ON stock.cl2comb = item.cl2comb
-                LEFT JOIN csrw_item_prices AS price
-                    ON stock.cl2comb = price.cl2comb
-                    AND price.ris_no = stock.ris_no -- use ris_no if item is from ward/existing
-                WHERE stock.location = '" . $authCode . "'
-                AND stock.quantity > 0
-                AND stock.[from] = 'EXISTING_STOCKS';"
         );
         $fromMedical = DB::select(
             "SELECT stock.[from], stock.id, stock.request_stocks_id, stock.is_consumable,
