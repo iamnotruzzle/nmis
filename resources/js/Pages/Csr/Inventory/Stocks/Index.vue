@@ -2596,6 +2596,7 @@ export default {
       });
     },
     editConvertedItem(item) {
+      console.log(item);
       this.formConvertItem.update_price_per_unit = item.price_per_unit;
       this.formConvertItem.id = item.id;
       this.formConvertItem.quantity_after = item.quantity_after;
