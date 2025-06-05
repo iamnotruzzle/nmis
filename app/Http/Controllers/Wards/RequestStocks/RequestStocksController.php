@@ -21,6 +21,7 @@ use App\Models\Sessions;
 use App\Models\WardConsumptionTracker;
 use App\Models\WardsStocksLogs;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -203,80 +204,117 @@ class RequestStocksController extends Controller
         $entry_by = Auth::user()->employeeid;
 
         if ($requestStock->status == 'FILLED') {
-            // update status
-            RequestStocks::where('id', $request->request_stock_id)
-                ->update([
-                    'status' => $request->status,
-                    'received_date' => Carbon::now(),
-                ]);
+            DB::beginTransaction();
 
-            // OLD
-            // $stocks = WardsStocks::where('request_stocks_id', $request->request_stock_id)
-            //     ->get();
+            try {
 
-            // NEW: includes price
-            $stocks = DB::select(
-                "SELECT ward_stock.id, ward_stock.stock_id, ward_stock.request_stocks_id, ward_stock.request_stocks_detail_id, ward_stock.stock_id, ward_stock.location, ward_stock.cl2comb,
+                // update status
+                RequestStocks::where('id', $request->request_stock_id)
+                    ->update([
+                        'status' => $request->status,
+                        'received_date' => Carbon::now(),
+                    ]);
+
+                // NEW: includes price
+                $stocks = DB::select(
+                    "SELECT ward_stock.id, ward_stock.stock_id, ward_stock.request_stocks_id, ward_stock.request_stocks_detail_id, ward_stock.stock_id, ward_stock.location, ward_stock.cl2comb,
                     ward_stock.uomcode, ward_stock.chrgcode, ward_stock.quantity, ward_stock.[from], ward_stock.manufactured_date, ward_stock.delivered_date, ward_stock.expiration_date, ward_stock.created_at,
                     ward_stock.ris_no, price.id as price_id
                     FROM csrw_wards_stocks as ward_stock
                     JOIN csrw_item_prices as price ON price.cl2comb = ward_stock.cl2comb AND price.ris_no = ward_stock.ris_no
                     WHERE ward_stock.request_stocks_id = ?
                     AND ward_stock.quantity > 0;",
-                [$request->request_stock_id]
-            );
-
-            foreach ($stocks as $stk) {
-                // dd($stk);
-                $wardStockLogs = WardsStocksLogs::create([
-                    'request_stocks_id' => $stk->request_stocks_id,
-                    'request_stocks_detail_id' => $stk->request_stocks_detail_id,
-                    'ris_no' => $stk->ris_no,
-                    'stock_id' => $stk->stock_id,
-                    'wards_stocks_id' => $stk->id,
-                    'location' => $stk->location,
-                    'cl2comb' => $stk->cl2comb,
-                    'uomcode' => $stk->uomcode,
-                    'chrgcode' => $stk->chrgcode,
-                    'prev_qty' => 0,
-                    'new_qty' => $stk->quantity,
-                    'manufactured_date' => Carbon::parse($stk->manufactured_date)->format('Y-m-d H:i:s.v'),
-                    'delivered_date' =>  Carbon::parse($stk->delivered_date)->format('Y-m-d H:i:s.v'),
-                    'expiration_date' => Carbon::parse($stk->expiration_date)->format('Y-m-d H:i:s.v'),
-                    'action' => 'CREATE',
-                    'remarks' => null,
-                    'entry_by' => $entry_by,
-                ]);
-            }
-
-            // comment for now
-            foreach ($stocks as $stk) {
-                $id = $stk->id;
-                $item_conversion_id = $stk->stock_id;
-                $ris_no = $stk->ris_no;
-                $cl2comb = $stk->cl2comb;
-                $uomcode = $stk->uomcode;
-                $quantity = $stk->quantity;
-                $location = $stk->location;
-                $price_id = $stk->price_id;
-                $from = $stk->from;
-
-                $this->requestStocksForTrackerLog(
-                    $id,
-                    $item_conversion_id,
-                    $ris_no,
-                    $cl2comb,
-                    $uomcode,
-                    $quantity,
-                    $location,
-                    $price_id,
-                    $from,
+                    [$request->request_stock_id]
                 );
-            }
 
-            // // the parameters result will be send into the frontend
-            event(new RequestStock('Item requested.'));
+                foreach ($stocks as $stk) {
+                    // dd($stk);
+                    $wardStockLogs = WardsStocksLogs::create([
+                        'request_stocks_id' => $stk->request_stocks_id,
+                        'request_stocks_detail_id' => $stk->request_stocks_detail_id,
+                        'ris_no' => $stk->ris_no,
+                        'stock_id' => $stk->stock_id,
+                        'wards_stocks_id' => $stk->id,
+                        'location' => $stk->location,
+                        'cl2comb' => $stk->cl2comb,
+                        'uomcode' => $stk->uomcode,
+                        'chrgcode' => $stk->chrgcode,
+                        'prev_qty' => 0,
+                        'new_qty' => $stk->quantity,
+                        'manufactured_date' => Carbon::parse($stk->manufactured_date)->format('Y-m-d H:i:s.v'),
+                        'delivered_date' =>  Carbon::parse($stk->delivered_date)->format('Y-m-d H:i:s.v'),
+                        'expiration_date' => Carbon::parse($stk->expiration_date)->format('Y-m-d H:i:s.v'),
+                        'action' => 'CREATE',
+                        'remarks' => null,
+                        'entry_by' => $entry_by,
+                    ]);
+                }
+
+                foreach ($stocks as $stk) {
+                    $id = $stk->id;
+                    $item_conversion_id = $stk->stock_id;
+                    $ris_no = $stk->ris_no;
+                    $cl2comb = $stk->cl2comb;
+                    $uomcode = $stk->uomcode;
+                    $quantity = $stk->quantity;
+                    $location = $stk->location;
+                    $price_id = $stk->price_id;
+                    $from = $stk->from;
+
+                    // $this->requestStocksForTrackerLog(
+                    //     $id,
+                    //     $item_conversion_id,
+                    //     $ris_no,
+                    //     $cl2comb,
+                    //     $uomcode,
+                    //     $quantity,
+                    //     $location,
+                    //     $price_id,
+                    //     $from,
+                    // );
+
+                    // Check if this stock already exists in the tracker with no end balance (meaning it's still in progress)
+                    $existingTracker = WardConsumptionTracker::where('ward_stock_id', $id)
+                        ->where('cl2comb', $cl2comb)
+                        ->where('price_id', $price_id)
+                        ->whereNull('end_bal_date')
+                        ->exists();
+
+                    if (!$existingTracker) {
+                        // New stock has been received after beginning balance, so create a new row
+                        WardConsumptionTracker::create([
+                            'ward_stock_id'    => $id,
+                            'item_conversion_id' => $item_conversion_id,
+                            'ris_no'           => $ris_no,
+                            'cl2comb'          => $cl2comb,
+                            'uomcode'          => $uomcode,
+                            'initial_qty'      => $quantity,
+                            'beg_bal_date'     => null, // intentionally left null
+                            'beg_bal_qty'      => 0, // intentionally left null
+                            'location'         => $location,
+                            'item_from'        => $from, // Whether it's from CSR or a ward
+                            'price_id'         => $price_id,
+                        ]);
+                    }
+                }
+
+                // // the parameters result will be send into the frontend
+                event(new RequestStock('Item requested.'));
+
+                DB::commit();
+            } catch (\Throwable $e) {
+                DB::rollBack();
+
+                Log::error('Stock processing failed', [
+                    'request_stock_id' => $request->request_stock_id,
+                    'message' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString(),
+                ]);
+
+                throw $e; // optional: you can handle/log this as needed
+            }
         }
+
 
         return Redirect::route('requeststocks.index');
     }
