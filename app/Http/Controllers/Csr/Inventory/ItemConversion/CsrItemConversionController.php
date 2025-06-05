@@ -174,7 +174,7 @@ class CsrItemConversionController extends Controller
                 ]);
 
             // DELETE PRICE
-            ItemPrices::where('ris_no', $log->ris_no)
+            ItemPrices::where('item_conversion_id', $log->item_conversion_id)
                 ->where('cl2comb', $log->cl2comb_after)
                 ->delete();
         }

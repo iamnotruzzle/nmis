@@ -172,6 +172,7 @@ class CsrStocksControllers extends Controller
             JOIN
                 csrw_item_prices as price ON item_conversion_id = converted.id;"
         );
+        // dd($totalConvertedItems);
 
         $cache_suppliers = 'c_suppliers_' . Auth::user()->employeeid;
 

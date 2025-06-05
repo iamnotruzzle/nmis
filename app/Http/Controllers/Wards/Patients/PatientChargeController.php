@@ -110,12 +110,13 @@ class PatientChargeController extends Controller
                 LEFT JOIN csrw_request_stocks rs ON rs.id = stock.request_stocks_id
                 LEFT JOIN csrw_item_prices AS price
                     ON stock.cl2comb = price.cl2comb
-                    AND price.ris_no = stock.ris_no
+                    AND price.item_conversion_id = stock.stock_id
                 WHERE stock.location = '" . $authCode . "'
                 AND stock.quantity > 0
                 AND (rs.id IS NULL OR rs.status = 'RECEIVED')
                 AND stock.[from] = 'CSR';"
         );
+        // dd($fromCSR);
         $fromWard = DB::select(
             "SELECT stock.[from], stock.id, stock.request_stocks_id, stock.is_consumable,
                 item.cl2comb, item.cl2desc, item.uomcode,
