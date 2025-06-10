@@ -29,7 +29,6 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request)
     {
         $cachedAuthUser = session('cached_inertia_auth');
-        // $cachedLocations = session('cached_inertia_locations');
         $cachedFundSource = session('cached_inertia_fundsource');
         // current PENDING and ACKNOWLEDGED RIS
         $pendingAndAckCount = 0;
