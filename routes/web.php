@@ -67,7 +67,7 @@ use Illuminate\Support\Facades\Route;
 
 // Route::redirect('/', 'login');
 // Route::redirect('/', '/login');
-Route::get('/login', [AuthenticationController::class, 'index'])->name('login');
+Route::get('/', [AuthenticationController::class, 'index']);
 // Route::resource('/', AuthenticationController::class)->only(['index', 'store', 'update', 'destroy']);
 
 // Route::middleware(['auth:sanctum'])->group(
