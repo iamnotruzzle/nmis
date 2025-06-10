@@ -115,6 +115,9 @@ Route::middleware(['web', 'auth', 'verified'])->group(
                 ->name('warddashboard.topDiagnoses');
             Route::get('warddashboard/top-ten-items', [WardDashboardController::class, 'topTenItemsData'])
                 ->name('warddashboard.topTenItems');
+
+            Route::get('warddashboard/monthly-charge', [WardDashboardController::class, 'monthlyCharge'])
+                ->name('warddashboard.monthlyCharge');
         });
         // non-medicine supplies
         Route::resource('requeststocks', RequestStocksController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);

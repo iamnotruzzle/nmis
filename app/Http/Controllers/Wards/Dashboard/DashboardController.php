@@ -135,26 +135,26 @@ class DashboardController extends Controller
         // $topItems_dataAmount = $topItems->pluck('total_amount');
         // #endregion
 
-        #region current and last month total charge
-        $previousMonth = DB::select(
-            "SELECT price_total
-                FROM csrw_patient_charge_logs
-                WHERE MONTH(pcchrgdte) = MONTH(DATEADD(MONTH, -1, GETDATE()))
-                AND YEAR(pcchrgdte) = YEAR(DATEADD(MONTH, -1, GETDATE()))
-                AND entry_at = ?;",
-            [$authCode]
-        );
-        $currentMonth = DB::select(
-            "SELECT price_total
-                FROM csrw_patient_charge_logs
-                WHERE MONTH(pcchrgdte) = MONTH(GETDATE())
-                AND YEAR(pcchrgdte) = YEAR(GETDATE())
-                AND entry_at = ?",
-            [$authCode]
-        );
-        $lastMonthTotal = array_sum(array_map(fn($row) => (float) $row->price_total, $previousMonth));
-        $currentMonthTotal = array_sum(array_map(fn($row) => (float) $row->price_total, $currentMonth));
-        #endregion
+        // #region current and last month total charge
+        // $previousMonth = DB::select(
+        //     "SELECT price_total
+        //         FROM csrw_patient_charge_logs
+        //         WHERE MONTH(pcchrgdte) = MONTH(DATEADD(MONTH, -1, GETDATE()))
+        //         AND YEAR(pcchrgdte) = YEAR(DATEADD(MONTH, -1, GETDATE()))
+        //         AND entry_at = ?;",
+        //     [$authCode]
+        // );
+        // $currentMonth = DB::select(
+        //     "SELECT price_total
+        //         FROM csrw_patient_charge_logs
+        //         WHERE MONTH(pcchrgdte) = MONTH(GETDATE())
+        //         AND YEAR(pcchrgdte) = YEAR(GETDATE())
+        //         AND entry_at = ?",
+        //     [$authCode]
+        // );
+        // $lastMonthTotal = array_sum(array_map(fn($row) => (float) $row->price_total, $previousMonth));
+        // $currentMonthTotal = array_sum(array_map(fn($row) => (float) $row->price_total, $currentMonth));
+        // #endregion
 
 
         return Inertia::render('Wards/Dashboard/Index', [
@@ -168,8 +168,8 @@ class DashboardController extends Controller
             // 'topItems_labels' => $topItems_labels,
             // 'topItems_dataQty' => $topItems_dataQty,
             // 'topItems_dataAmount' => $topItems_dataAmount,
-            'lastMonthTotal' => $lastMonthTotal,
-            'currentMonthTotal' => $currentMonthTotal,
+            // 'lastMonthTotal' => $lastMonthTotal,
+            // 'currentMonthTotal' => $currentMonthTotal,
         ]);
     }
 
@@ -333,6 +333,51 @@ class DashboardController extends Controller
             'topItems_labels' => $topItems_labels,
             'topItems_dataQty' => $topItems_dataQty,
             'topItems_dataAmount' => $topItems_dataAmount,
+        ]);
+    }
+
+    public function monthlyCharge(Request $request)
+    {
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+                FROM
+                    user_acc u
+                INNER JOIN
+                    csrw_login_history l ON u.employeeid = l.employeeid
+                WHERE
+                    l.employeeid = ?
+                ORDER BY
+                    l.created_at DESC;
+                ",
+            [Auth::user()->employeeid]
+        );
+        $authCode = $authWardcode[0]->wardcode;
+
+        #region current and last month total charge
+        $previousMonth = DB::select(
+            "SELECT price_total
+                FROM csrw_patient_charge_logs
+                WHERE MONTH(pcchrgdte) = MONTH(DATEADD(MONTH, -1, GETDATE()))
+                AND YEAR(pcchrgdte) = YEAR(DATEADD(MONTH, -1, GETDATE()))
+                AND entry_at = ?;",
+            [$authCode]
+        );
+        $currentMonth = DB::select(
+            "SELECT price_total
+                FROM csrw_patient_charge_logs
+                WHERE MONTH(pcchrgdte) = MONTH(GETDATE())
+                AND YEAR(pcchrgdte) = YEAR(GETDATE())
+                AND entry_at = ?",
+            [$authCode]
+        );
+        $lastMonthTotal = array_sum(array_map(fn($row) => (float) $row->price_total, $previousMonth));
+        $currentMonthTotal = array_sum(array_map(fn($row) => (float) $row->price_total, $currentMonth));
+        #endregion
+
+        return response()->json([
+            'lastMonthTotal' => $lastMonthTotal,
+            'currentMonthTotal' => $currentMonthTotal,
         ]);
     }
 

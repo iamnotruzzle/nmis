@@ -287,7 +287,15 @@
             <span class="text-base font-normal mb-2 text-orange-500 font-italic">.</span>
           </template>
           <template #content>
+            <div
+              v-if="loadingMonthlyCharge"
+              class="flex justify-content-center align-items-center"
+              style="height: 400px; width: 100%"
+            >
+              <i class="pi pi-spin pi-spinner text-4xl text-blue-500"></i>
+            </div>
             <Chart
+              v-else
               type="bar"
               :data="monthlyChargeData"
               :options="monthlyChargeOptions"
@@ -420,6 +428,7 @@ export default {
         },
       },
 
+      loadingMonthlyCharge: false,
       monthlyChargeData: {
         labels: ['Last Month', 'This Month'],
         datasets: [
@@ -517,14 +526,15 @@ export default {
     // this.topItemsChartData.labels = this.topItems_labels;
     // this.topItemsChartData.datasets[0].data = this.topItems_dataQty;
 
-    // monthly charge
-    this.monthlyChargeData.datasets[0].data = [Number(this.lastMonthTotal), Number(this.currentMonthTotal)];
+    // // monthly charge
+    // this.monthlyChargeData.datasets[0].data = [Number(this.lastMonthTotal), Number(this.currentMonthTotal)];
 
     // top diagnoses
     this.topDiagFrom = moment().tz('Asia/Manila').startOf('month').format('YYYY-MM-DD');
     this.topDiagTo = moment().tz('Asia/Manila').format('YYYY-MM-DD');
     this.fetchTopDiagnoses();
     this.fetchTopTenItems();
+    this.fetchMonthlyCharge();
   },
   methods: {
     async fetchTopDiagnoses() {
@@ -555,16 +565,30 @@ export default {
       try {
         this.loadingTopItems = true;
         const response = await axios.get('warddashboard/top-ten-items');
-        console.log('top 10', response);
-
-        this.topDiagnosis = response.data;
 
         this.topItemsChartData.labels = response.data.topItems_labels;
         this.topItemsChartData.datasets[0].data = response.data.topItems_dataQty;
       } catch (error) {
-        console.error('Failed to fetch top diagnosis data:', error);
+        console.error('Failed to fetch data:', error);
       } finally {
         this.loadingTopItems = false;
+      }
+    },
+    async fetchMonthlyCharge() {
+      try {
+        this.loadingMonthlyCharge = true;
+        const response = await axios.get('warddashboard/monthly-charge');
+        console.log('monthly', response);
+
+        // monthly charge
+        this.monthlyChargeData.datasets[0].data = [
+          Number(response.data.lastMonthTotal),
+          Number(response.data.currentMonthTotal),
+        ];
+      } catch (error) {
+        console.error('Failed to fetch data:', error);
+      } finally {
+        this.loadingMonthlyCharge = false;
       }
     },
     generateColors(num) {
