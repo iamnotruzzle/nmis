@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\Dashboard\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Authentication\AuthenticationController;
 use App\Http\Controllers\Csr\Dashboard\DashboardController as CsrDashboardController;
 use App\Http\Controllers\Csr\Inventory\Categories\CategoryController;
 use App\Http\Controllers\public\CsrStocksController as PubicCsrStocks;
@@ -64,7 +65,9 @@ use Illuminate\Support\Facades\Route;
 |/
 */
 
-Route::redirect('/', 'login');
+// Route::redirect('/', 'login');
+Route::get('/', [AuthenticationController::class, 'index']);
+// Route::resource('/', AuthenticationController::class)->only(['index', 'store', 'update', 'destroy']);
 
 // Route::middleware(['auth:sanctum'])->group(
 Route::middleware(['web', 'auth', 'verified'])->group(

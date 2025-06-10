@@ -223,6 +223,7 @@ export default {
   props: {
     csrInventory: Array,
     wardsInventory: Array,
+    locations: Object,
   },
   data() {
     return {
@@ -303,7 +304,7 @@ export default {
       //   console.log(this.wardsInventoryList);
     },
     storeLocationsInContainer() {
-      this.$page.props.locations.forEach((e) => {
+      this.locations.forEach((e) => {
         if (e.wardcode != 'CSR' && e.wardcode != 'ADMIN') {
           this.locationFilter.push({
             code: e.wardcode,

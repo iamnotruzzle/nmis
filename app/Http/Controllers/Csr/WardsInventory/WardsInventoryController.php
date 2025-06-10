@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Csr\WardsInventory;
 
 use App\Http\Controllers\Controller;
+use App\Models\Location;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Sessions;
@@ -24,8 +25,13 @@ class WardsInventoryController extends Controller
                 GROUP BY item.cl2desc, ward.wardname;"
         );
 
+        $locations = Location::where('wardstat', 'A')
+            ->orderBy('wardname', 'ASC')
+            ->get();
+
         return Inertia::render('Csr/WardsInventory/Index', [
             'wardsInventory' => $wardsInventory,
+            'locations' => $locations,
         ]);
     }
 

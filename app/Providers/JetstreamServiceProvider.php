@@ -99,14 +99,18 @@ class JetstreamServiceProvider extends ServiceProvider
                     $allowed = false;
                     if ($wardcode == 'CSR' && $designation == 'csr') {
                         $allowed = true;
+                        Cache::forget('c_authWardCode_' . $user->employeeid);
+                        Cache::forget('c_locationType_' . $user->employeeid);
+
+                        return $user;
                     } elseif ($wardcode == 'ADMIN' && $designation == 'admin') {
                         $allowed = true;
+                        Cache::forget('c_authWardCode_' . $user->employeeid);
+                        Cache::forget('c_locationType_' . $user->employeeid);
+
+                        return $user;
                     } elseif ($wardcode != 'CSR' && $wardcode != 'ADMIN' && $designation == 'ward') {
                         $allowed = true;
-                    }
-
-                    if ($allowed) {
-                        // ✅ Optionally clear the cache so the new ward gets picked up immediately
                         Cache::forget('c_authWardCode_' . $user->employeeid);
                         Cache::forget('c_locationType_' . $user->employeeid);
 
@@ -114,6 +118,16 @@ class JetstreamServiceProvider extends ServiceProvider
                     } else {
                         throw ValidationException::withMessages(["You don't have permission to access this location."]);
                     }
+
+                    // if ($allowed) {
+                    //     // ✅ Optionally clear the cache so the new ward gets picked up immediately
+                    //     Cache::forget('c_authWardCode_' . $user->employeeid);
+                    //     Cache::forget('c_locationType_' . $user->employeeid);
+
+                    //     return $user;
+                    // } else {
+                    //     throw ValidationException::withMessages(["You don't have permission to access this location."]);
+                    // }
                 }
             } else {
                 throw ValidationException::withMessages(["The location field is required."]);

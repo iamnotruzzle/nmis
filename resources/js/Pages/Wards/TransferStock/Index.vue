@@ -491,6 +491,7 @@ export default {
     transferredStock: Object,
     employees: Object,
     canTransact: Boolean,
+    locations: Object,
   },
   data() {
     return {
@@ -572,7 +573,7 @@ export default {
       return moment.tz(date, 'Asia/Manila').format('L');
     },
     storeLocationsInContainer() {
-      this.$page.props.locations.forEach((e) => {
+      this.locations.forEach((e) => {
         if (e.wardcode == 'CSR' || e.wardcode == 'ADMIN') {
           return null;
         } else {

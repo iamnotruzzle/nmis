@@ -8,6 +8,7 @@ use App\Models\CsrItemConversion;
 use App\Models\CsrStocks;
 use App\Models\FundSource;
 use App\Models\Item;
+use App\Models\Location;
 use App\Models\RequestStocks;
 use App\Models\RequestStocksDetails;
 use App\Models\WardsStocks;
@@ -185,6 +186,10 @@ class IssueItemController extends Controller
                 AND stock.quantity > 0"
         );
 
+        $locations = Location::where('wardstat', 'A')
+            ->orderBy('wardname', 'ASC')
+            ->get();
+
         return Inertia::render('Csr/IssueItems/Index', [
             'items' => $items,
             // 'requestedStocks' => $requestedStocks,
@@ -198,6 +203,7 @@ class IssueItemController extends Controller
             'medicalGas' => $medicalGas,
             'wardsMedicalGasStock' => $wardsMedicalGasStock,
             'authWardcode' => $authWardcode[0],
+            'locations' => $locations,
         ]);
     }
 

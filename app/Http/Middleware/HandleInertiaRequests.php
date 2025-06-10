@@ -29,7 +29,7 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request)
     {
         $cachedAuthUser = session('cached_inertia_auth');
-        $cachedLocations = session('cached_inertia_locations');
+        // $cachedLocations = session('cached_inertia_locations');
         $cachedFundSource = session('cached_inertia_fundsource');
         // current PENDING and ACKNOWLEDGED RIS
         $pendingAndAckCount = 0;
@@ -49,14 +49,12 @@ class HandleInertiaRequests extends Middleware
         $pendingAndAckCount = DB::select(
             "SELECT count(*) as count FROM csrw_request_stocks WHERE status = 'ACKNOWLEDGED' OR status = 'PENDING';"
         );
-        // dd($pendingAndAckCount[0]->count);
-        // dd(Auth::user()->designation);
 
-        if (!$cachedLocations) {
-            $cachedLocations = Location::where('wardstat', 'A')
-                ->orderBy('wardname', 'ASC')
-                ->get();
-        }
+        // if (!$cachedLocations) {
+        //     $cachedLocations = Location::where('wardstat', 'A')
+        //         ->orderBy('wardname', 'ASC')
+        //         ->get();
+        // }
 
         if (!$cachedFundSource) {
             $cachedFundSource = FundSource::orderBy('fsName')
@@ -65,7 +63,7 @@ class HandleInertiaRequests extends Middleware
 
         session([
             'cached_inertia_auth' => $cachedAuthUser,
-            'cached_inertia_locations' => $cachedLocations,
+            // 'cached_inertia_locations' => $cachedLocations,
             'cached_inertia_fundsource' => $cachedFundSource,
         ]);
         session()->save();
@@ -79,7 +77,7 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => fn() => $cachedAuthUser,
             ],
-            'locations' => fn() => $cachedLocations,
+            // 'locations' => fn() => $cachedLocations,
             'fundSource' => fn() => $cachedFundSource,
             'pendingAndAckCount' => fn() => $pendingAndAckCount[0]->count,
             // 'pendingAndAckCount' => fn() => 0,

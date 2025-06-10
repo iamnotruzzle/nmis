@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\public;
 
 use App\Http\Controllers\Controller;
+use App\Models\Location;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -33,9 +34,14 @@ class CsrStocksController extends Controller
             );
         });
 
+        $locations = Location::where('wardstat', 'A')
+            ->orderBy('wardname', 'ASC')
+            ->get();
+
         return Inertia::render('Csr/Public/CsrStocks/Index', [
             'csrInventory' => $csrInventory,
             'wardsInventory' => $wardsInventory,
+            'locations' => $locations,
         ]);
     }
 

@@ -285,6 +285,7 @@ export default {
   },
   props: {
     returnedItems: Object,
+    locations: Object,
   },
   data() {
     return {
@@ -352,7 +353,7 @@ export default {
       });
     },
     storeLocationsInContainer() {
-      this.$page.props.locations.forEach((e) => {
+      this.locations.forEach((e) => {
         if (e.wardcode != 'CSR' && e.wardcode != 'ADMIN') {
           this.locationFilter.push({
             code: e.wardcode,

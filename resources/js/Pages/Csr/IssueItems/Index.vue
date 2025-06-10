@@ -1126,6 +1126,7 @@ export default {
     requestedStocks: Object,
     medicalGas: Object,
     wardsMedicalGasStock: Object,
+    locations: Object,
   },
   data() {
     return {
@@ -1247,7 +1248,7 @@ export default {
   mounted() {
     // console.log('requestedStocks', this.requestedStocks);
     // store ward list
-    this.$page.props.locations.forEach((e) => {
+    this.locations.forEach((e) => {
       if (e.wardcode != 'CSR' && e.wardcode != 'ADMIN') {
         this.wardList.push({
           wardcode: e.wardcode,

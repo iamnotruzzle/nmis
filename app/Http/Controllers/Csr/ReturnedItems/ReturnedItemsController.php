@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Csr\ReturnedItems;
 
 use App\Http\Controllers\Controller;
 use App\Models\CsrItemConversion;
+use App\Models\Location;
 use App\Models\ReturnedItems;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -45,8 +46,13 @@ class ReturnedItemsController extends Controller
             ];
         }
 
+        $locations = Location::where('wardstat', 'A')
+            ->orderBy('wardname', 'ASC')
+            ->get();
+
         return Inertia::render('Csr/ReturnedItems/Index', [
             'returnedItems' => $returnedItems,
+            'locations' => $locations,
         ]);
     }
 

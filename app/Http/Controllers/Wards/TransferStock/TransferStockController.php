@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Wards\TransferStock;
 
 use App\Http\Controllers\Controller;
 use App\Models\ItemPrices;
+use App\Models\Location;
 use App\Models\LocationStockBalance;
 use App\Models\LocationStockBalanceDateLogs;
 use App\Models\UserDetail;
@@ -90,6 +91,10 @@ class TransferStockController extends Controller
             $canTransact = true;
         }
 
+        $locations = Location::where('wardstat', 'A')
+            ->orderBy('wardname', 'ASC')
+            ->get();
+
         return Inertia::render('Wards/TransferStock/Index', [
             'authWardcode' => $authWardcode[0],
             'wardStocks' => $wardStocks,
@@ -97,7 +102,8 @@ class TransferStockController extends Controller
             // 'wardStocksMedicalGasess' => $wardStocksMedicalGasess,
             'transferredStock' => $transferredStock,
             'employees' => $employees,
-            'canTransact' => $canTransact
+            'canTransact' => $canTransact,
+            'locations' => $locations,
         ]);
     }
 
