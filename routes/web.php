@@ -113,6 +113,8 @@ Route::middleware(['web', 'auth', 'verified'])->group(
             // New route for AJAX call to get top diagnoses
             Route::get('warddashboard/top-diagnoses', [WardDashboardController::class, 'topDiagnosesData'])
                 ->name('warddashboard.topDiagnoses');
+            Route::get('warddashboard/top-ten-items', [WardDashboardController::class, 'topTenItemsData'])
+                ->name('warddashboard.topTenItems');
         });
         // non-medicine supplies
         Route::resource('requeststocks', RequestStocksController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);

@@ -262,7 +262,15 @@
             <span class="text-base font-normal mb-2 text-orange-500 font-italic">Refresh every 5mins</span>
           </template>
           <template #content>
+            <div
+              v-if="loadingTopItems"
+              class="flex justify-content-center align-items-center"
+              style="height: 400px; width: 100%"
+            >
+              <i class="pi pi-spin pi-spinner text-4xl text-blue-500"></i>
+            </div>
             <Chart
+              v-else
               type="bar"
               :data="topItemsChartData"
               :options="topItemsChartOptions"
@@ -320,10 +328,10 @@ export default {
     ready_to_receive: Number,
     expiring_soon: Number,
     latest_endorsement: Object,
-    topItems: Array,
-    topItems_labels: Array,
-    topItems_dataQty: Array,
-    topItems_dataAmount: Array,
+    // topItems: Array,
+    // topItems_labels: Array,
+    // topItems_dataQty: Array,
+    // topItems_dataAmount: Array,
     chargeChartData: {
       type: Object,
       required: true,
@@ -365,6 +373,7 @@ export default {
         },
       },
 
+      loadingTopItems: false,
       topItemsChartData: {
         labels: [], // from backend
         datasets: [
@@ -505,8 +514,8 @@ export default {
   },
   mounted() {
     // top items
-    this.topItemsChartData.labels = this.topItems_labels;
-    this.topItemsChartData.datasets[0].data = this.topItems_dataQty;
+    // this.topItemsChartData.labels = this.topItems_labels;
+    // this.topItemsChartData.datasets[0].data = this.topItems_dataQty;
 
     // monthly charge
     this.monthlyChargeData.datasets[0].data = [Number(this.lastMonthTotal), Number(this.currentMonthTotal)];
@@ -515,6 +524,7 @@ export default {
     this.topDiagFrom = moment().tz('Asia/Manila').startOf('month').format('YYYY-MM-DD');
     this.topDiagTo = moment().tz('Asia/Manila').format('YYYY-MM-DD');
     this.fetchTopDiagnoses();
+    this.fetchTopTenItems();
   },
   methods: {
     async fetchTopDiagnoses() {
@@ -539,6 +549,22 @@ export default {
         console.error('Failed to fetch top diagnosis data:', error);
       } finally {
         this.loadingTopDiagnosis = false;
+      }
+    },
+    async fetchTopTenItems() {
+      try {
+        this.loadingTopItems = true;
+        const response = await axios.get('warddashboard/top-ten-items');
+        console.log('top 10', response);
+
+        this.topDiagnosis = response.data;
+
+        this.topItemsChartData.labels = response.data.topItems_labels;
+        this.topItemsChartData.datasets[0].data = response.data.topItems_dataQty;
+      } catch (error) {
+        console.error('Failed to fetch top diagnosis data:', error);
+      } finally {
+        this.loadingTopItems = false;
       }
     },
     generateColors(num) {

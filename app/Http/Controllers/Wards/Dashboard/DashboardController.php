@@ -112,29 +112,28 @@ class DashboardController extends Controller
         $patient_charges_total = round($result_patient_charges_total, 2);
         #endregion
 
-        #region top items
-        // // cache version (refresh every 5 mins)
-        $topItems = Cache::remember("charges_{$authCode}", 300, function () use ($authCode) {
-            return DB::table('csrw_patient_charge_logs as logs')
-                ->join('hclass2 as item', 'item.cl2comb', '=', 'logs.itemcode')
-                ->select(
-                    'logs.itemcode',
-                    'item.cl2desc as description',
-                    DB::raw('SUM(logs.quantity) as total_qty'),
-                    DB::raw('SUM(logs.price_total) as total_amount')
-                )
-                ->where('logs.pcchrgdte', '>=', now()->subDays(7))
-                ->where('logs.entry_at', $authCode)
-                ->groupBy('logs.itemcode', 'item.cl2desc')
-                ->orderByDesc('total_qty')
-                ->limit(10)
-                ->get();
-        });
-        // Prepare for Chart
-        $topItems_labels = $topItems->pluck('description');
-        $topItems_dataQty = $topItems->pluck('total_qty');
-        $topItems_dataAmount = $topItems->pluck('total_amount');
-        #endregion
+        // #region top items
+        // $topItems = Cache::remember("charges_{$authCode}", 300, function () use ($authCode) {
+        //     return DB::table('csrw_patient_charge_logs as logs')
+        //         ->join('hclass2 as item', 'item.cl2comb', '=', 'logs.itemcode')
+        //         ->select(
+        //             'logs.itemcode',
+        //             'item.cl2desc as description',
+        //             DB::raw('SUM(logs.quantity) as total_qty'),
+        //             DB::raw('SUM(logs.price_total) as total_amount')
+        //         )
+        //         ->where('logs.pcchrgdte', '>=', now()->subDays(7))
+        //         ->where('logs.entry_at', $authCode)
+        //         ->groupBy('logs.itemcode', 'item.cl2desc')
+        //         ->orderByDesc('total_qty')
+        //         ->limit(10)
+        //         ->get();
+        // });
+        // // Prepare for Chart
+        // $topItems_labels = $topItems->pluck('description');
+        // $topItems_dataQty = $topItems->pluck('total_qty');
+        // $topItems_dataAmount = $topItems->pluck('total_amount');
+        // #endregion
 
         #region current and last month total charge
         $previousMonth = DB::select(
@@ -165,10 +164,10 @@ class DashboardController extends Controller
             'expiring_soon' => $expiring_soon,
             'latest_endorsement' => $latest_endorsement,
             'chargeChartData' => $chargeChartData,
-            'topItems' => $topItems,
-            'topItems_labels' => $topItems_labels,
-            'topItems_dataQty' => $topItems_dataQty,
-            'topItems_dataAmount' => $topItems_dataAmount,
+            // 'topItems' => $topItems,
+            // 'topItems_labels' => $topItems_labels,
+            // 'topItems_dataQty' => $topItems_dataQty,
+            // 'topItems_dataAmount' => $topItems_dataAmount,
             'lastMonthTotal' => $lastMonthTotal,
             'currentMonthTotal' => $currentMonthTotal,
         ]);
@@ -269,6 +268,72 @@ class DashboardController extends Controller
         }
 
         return response()->json($topDiagnosis);
+    }
+
+    public function topTenItemsData(Request $request)
+    {
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+                FROM
+                    user_acc u
+                INNER JOIN
+                    csrw_login_history l ON u.employeeid = l.employeeid
+                WHERE
+                    l.employeeid = ?
+                ORDER BY
+                    l.created_at DESC;
+                ",
+            [Auth::user()->employeeid]
+        );
+        $authCode = $authWardcode[0]->wardcode;
+
+        #region top items
+        // value of topItems is cached for 5mins
+        // $topItems = Cache::remember("charges_{$authCode}", 300, function () use ($authCode) {
+        //     return DB::table('csrw_patient_charge_logs as logs')
+        //         ->join('hclass2 as item', 'item.cl2comb', '=', 'logs.itemcode')
+        //         ->select(
+        //             'logs.itemcode',
+        //             'item.cl2desc as description',
+        //             DB::raw('SUM(logs.quantity) as total_qty'),
+        //             DB::raw('SUM(logs.price_total) as total_amount')
+        //         )
+        //         ->where('logs.pcchrgdte', '>=', now()->subDays(7))
+        //         ->where('logs.entry_at', $authCode)
+        //         ->groupBy('logs.itemcode', 'item.cl2desc')
+        //         ->orderByDesc('total_qty')
+        //         ->limit(10)
+        //         ->get();
+        // });
+        // regular query, no caching
+        $topItems = DB::table('csrw_patient_charge_logs as logs')
+            ->join('hclass2 as item', 'item.cl2comb', '=', 'logs.itemcode')
+            ->select(
+                'logs.itemcode',
+                'item.cl2desc as description',
+                DB::raw('SUM(logs.quantity) as total_qty'),
+                DB::raw('SUM(logs.price_total) as total_amount')
+            )
+            ->where('logs.pcchrgdte', '>=', now()->subDays(7))
+            ->where('logs.entry_at', $authCode)
+            ->groupBy('logs.itemcode', 'item.cl2desc')
+            ->orderByDesc('total_qty')
+            ->limit(10)
+            ->get();
+
+        // Prepare for Chart
+        $topItems_labels = $topItems->pluck('description');
+        $topItems_dataQty = $topItems->pluck('total_qty');
+        $topItems_dataAmount = $topItems->pluck('total_amount');
+        #endregion
+
+        return response()->json([
+            'topItems' => $topItems,
+            'topItems_labels' => $topItems_labels,
+            'topItems_dataQty' => $topItems_dataQty,
+            'topItems_dataAmount' => $topItems_dataAmount,
+        ]);
     }
 
     public function store(Request $request)
