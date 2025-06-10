@@ -11,11 +11,22 @@ class AuthenticationController extends Controller
 {
     public function index()
     {
+        // $locations = Location::where('wardstat', 'A')
+        //     ->orderBy('wardname', 'ASC')
+        //     ->get();
+
+        return Inertia::render('Auth/Login', [
+            // 'locations' => $locations,
+        ]);
+    }
+
+    public function wardslocation()
+    {
         $locations = Location::where('wardstat', 'A')
             ->orderBy('wardname', 'ASC')
             ->get();
 
-        return Inertia::render('Auth/Login', [
+        return response()->json([
             'locations' => $locations,
         ]);
     }

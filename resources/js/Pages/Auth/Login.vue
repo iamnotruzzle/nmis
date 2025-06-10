@@ -122,6 +122,7 @@ import Password from 'primevue/password';
 import Message from 'primevue/message';
 import Dropdown from 'primevue/dropdown';
 import { usePage } from '@inertiajs/vue3';
+import axios from 'axios';
 
 export default {
   components: {
@@ -139,10 +140,11 @@ export default {
     },
   },
   props: {
-    locations: Array,
+    // locations: Array,
   },
   data() {
     return {
+      loadingLocations: false,
       locationsList: [],
       form: this.$inertia.form({
         wardcode: null,
@@ -158,14 +160,31 @@ export default {
     // console.log(this.locationsList);
   },
   methods: {
-    initializeLocation() {
-      this.locations.forEach((e) => {
-        this.locationsList.push({
-          wardcode: e.wardcode,
-          wardname: e.wardname,
+    async initializeLocation() {
+      try {
+        this.loadingLocations = true;
+        const response = await axios.get('wardslocation');
+        // console.log(response.data.locations);
+        response.data.locations.forEach((e) => {
+          this.locationsList.push({
+            wardcode: e.wardcode,
+            wardname: e.wardname,
+          });
         });
-      });
+      } catch (error) {
+        console.error('Failed to fetch data:', error);
+      } finally {
+        this.loadingLocations = false;
+      }
     },
+    // initializeLocation() {
+    //   this.locations.forEach((e) => {
+    //     this.locationsList.push({
+    //       wardcode: e.wardcode,
+    //       wardname: e.wardname,
+    //     });
+    //   });
+    // },
     submit() {
       this.form.password = this.form.password.toUpperCase();
       this.form.post(this.route('login'), {

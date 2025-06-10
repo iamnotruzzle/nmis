@@ -65,10 +65,11 @@ use Illuminate\Support\Facades\Route;
 |/
 */
 
-// Route::redirect('/', 'login');
+Route::redirect('/', 'login');
 // Route::redirect('/', '/login');
-Route::get('/', [AuthenticationController::class, 'index']);
-// Route::resource('/', AuthenticationController::class)->only(['index', 'store', 'update', 'destroy']);
+// Route::resource('authen', [AuthenticationController::class, 'index'])->name('login.index');
+Route::get('wardslocation', [AuthenticationController::class, 'wardslocation'])
+    ->name('wardslocation');
 
 // Route::middleware(['auth:sanctum'])->group(
 Route::middleware(['web', 'auth', 'verified'])->group(
