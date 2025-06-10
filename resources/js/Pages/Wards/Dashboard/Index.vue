@@ -166,11 +166,24 @@
         <Card class="w-full">
           <template #content>
             <h3 class="text-xl font-bold mb-1">💵 Daily Charges (₱)</h3>
+            <div
+              v-if="loadingCharges"
+              class="flex justify-content-center align-items-center"
+              style="height: 400px; width: 100%"
+            >
+              <i class="pi pi-spin pi-spinner text-4xl text-blue-500"></i>
+            </div>
             <Chart
+              v-else
               type="line"
               :data="dailyChargeChartData"
               :options="dailyChargeChartOptions"
             />
+            <!-- <Chart
+              type="line"
+              :data="dailyChargeChartData"
+              :options="dailyChargeChartOptions"
+            /> -->
           </template>
         </Card>
       </div>
@@ -331,7 +344,7 @@ export default {
     Button,
   },
   props: {
-    patient_charges_total: Number,
+    // patient_charges_total: Number,
     low_stock_items: Number,
     ready_to_receive: Number,
     expiring_soon: Number,
@@ -340,16 +353,18 @@ export default {
     // topItems_labels: Array,
     // topItems_dataQty: Array,
     // topItems_dataAmount: Array,
-    chargeChartData: {
-      type: Object,
-      required: true,
-    },
+    // chargeChartData: {
+    //   type: Object,
+    //   required: true,
+    // },
     lastMonthTotal: Number,
     currentMonthTotal: Number,
   },
   data() {
     return {
-      dailyChargeChartData: this.chargeChartData,
+      loadingCharges: false,
+      patient_charges_total: 0,
+      dailyChargeChartData: null,
       dailyChargeChartOptions: {
         devicePixelRatio: 4,
         responsive: true,
@@ -535,6 +550,7 @@ export default {
     this.fetchTopDiagnoses();
     this.fetchTopTenItems();
     this.fetchMonthlyCharge();
+    this.charges();
   },
   methods: {
     async fetchTopDiagnoses() {
@@ -578,7 +594,7 @@ export default {
       try {
         this.loadingMonthlyCharge = true;
         const response = await axios.get('warddashboard/monthly-charge');
-        console.log('monthly', response);
+        // console.log('monthly', response);
 
         // monthly charge
         this.monthlyChargeData.datasets[0].data = [
@@ -589,6 +605,21 @@ export default {
         console.error('Failed to fetch data:', error);
       } finally {
         this.loadingMonthlyCharge = false;
+      }
+    },
+    async charges() {
+      try {
+        this.loadingCharges = true;
+        const response = await axios.get('warddashboard/charges');
+        console.log('charges', response.data);
+
+        // monthly charge
+        this.dailyChargeChartData = response.data.chargeChartData;
+        this.patient_charges_total = response.data.patient_charges_total;
+      } catch (error) {
+        console.error('Failed to fetch data:', error);
+      } finally {
+        this.loadingCharges = false;
       }
     },
     generateColors(num) {

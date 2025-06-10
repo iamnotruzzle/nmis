@@ -17,8 +17,6 @@ class DashboardController extends Controller
 
     public function index()
     {
-        $today = Carbon::today()->toDateString();
-
         //region get auth ward code
         $authWardcode = DB::select(
             "SELECT TOP 1
@@ -86,31 +84,31 @@ class DashboardController extends Controller
             [$authCode]
         );
 
-        #region charges
-        $charges = DB::table('csrw_patient_charge_logs')
-            ->selectRaw("CONVERT(date, pcchrgdte) AS charge_date, SUM(price_total) AS total_charge_amount")
-            ->where('pcchrgdte', '>=', now()->subDays(7))
-            ->where('entry_at', $authCode)
-            ->groupByRaw("CONVERT(date, pcchrgdte)")
-            ->orderBy('charge_date')
-            ->get();
-        // Format for Chart.js
-        $chargeChartData = [
-            'labels' => $charges->pluck('charge_date')->map(fn($d) => Carbon::parse($d)->format('M d')),
-            'datasets' => [[
-                'label' => 'Daily Charges (₱)',
-                'data' => $charges->pluck('total_charge_amount'),
-                'borderColor' => 'rgb(75, 192, 192)',
-                'backgroundColor' => 'rgba(75, 192, 192, 0.2)',
-                'fill' => true,
-                'tension' => 0.3
-            ]]
-        ];
+        // #region charges
+        // $charges = DB::table('csrw_patient_charge_logs')
+        //     ->selectRaw("CONVERT(date, pcchrgdte) AS charge_date, SUM(price_total) AS total_charge_amount")
+        //     ->where('pcchrgdte', '>=', now()->subDays(7))
+        //     ->where('entry_at', $authCode)
+        //     ->groupByRaw("CONVERT(date, pcchrgdte)")
+        //     ->orderBy('charge_date')
+        //     ->get();
+        // // Format for Chart.js
+        // $chargeChartData = [
+        //     'labels' => $charges->pluck('charge_date')->map(fn($d) => Carbon::parse($d)->format('M d')),
+        //     'datasets' => [[
+        //         'label' => 'Daily Charges (₱)',
+        //         'data' => $charges->pluck('total_charge_amount'),
+        //         'borderColor' => 'rgb(75, 192, 192)',
+        //         'backgroundColor' => 'rgba(75, 192, 192, 0.2)',
+        //         'fill' => true,
+        //         'tension' => 0.3
+        //     ]]
+        // ];
 
-        // 👇 Extract today's charge total from the cached $charges
-        $result_patient_charges_total = $charges->firstWhere('charge_date', $today)?->total_charge_amount ?? 0;
-        $patient_charges_total = round($result_patient_charges_total, 2);
-        #endregion
+        // // 👇 Extract today's charge total from the cached $charges
+        // $result_patient_charges_total = $charges->firstWhere('charge_date', $today)?->total_charge_amount ?? 0;
+        // $patient_charges_total = round($result_patient_charges_total, 2);
+        // #endregion
 
         // #region top items
         // $topItems = Cache::remember("charges_{$authCode}", 300, function () use ($authCode) {
@@ -158,12 +156,14 @@ class DashboardController extends Controller
 
 
         return Inertia::render('Wards/Dashboard/Index', [
-            'patient_charges_total' => $patient_charges_total,
             'low_stock_items' => $low_stock_items,
             'ready_to_receive' => $ready_to_receive,
             'expiring_soon' => $expiring_soon,
             'latest_endorsement' => $latest_endorsement,
-            'chargeChartData' => $chargeChartData,
+
+            // 'chargeChartData' => $chargeChartData,
+            // 'patient_charges_total' => $patient_charges_total,
+
             // 'topItems' => $topItems,
             // 'topItems_labels' => $topItems_labels,
             // 'topItems_dataQty' => $topItems_dataQty,
@@ -378,6 +378,58 @@ class DashboardController extends Controller
         return response()->json([
             'lastMonthTotal' => $lastMonthTotal,
             'currentMonthTotal' => $currentMonthTotal,
+        ]);
+    }
+
+    public function charges(Request $request)
+    {
+        $today = Carbon::today()->toDateString();
+
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+                FROM
+                    user_acc u
+                INNER JOIN
+                    csrw_login_history l ON u.employeeid = l.employeeid
+                WHERE
+                    l.employeeid = ?
+                ORDER BY
+                    l.created_at DESC;
+                ",
+            [Auth::user()->employeeid]
+        );
+        $authCode = $authWardcode[0]->wardcode;
+
+        #region charges
+        $charges = DB::table('csrw_patient_charge_logs')
+            ->selectRaw("CONVERT(date, pcchrgdte) AS charge_date, SUM(price_total) AS total_charge_amount")
+            ->where('pcchrgdte', '>=', now()->subDays(7))
+            ->where('entry_at', $authCode)
+            ->groupByRaw("CONVERT(date, pcchrgdte)")
+            ->orderBy('charge_date')
+            ->get();
+        // Format for Chart.js
+        $chargeChartData = [
+            'labels' => $charges->pluck('charge_date')->map(fn($d) => Carbon::parse($d)->format('M d')),
+            'datasets' => [[
+                'label' => 'Daily Charges (₱)',
+                'data' => $charges->pluck('total_charge_amount'),
+                'borderColor' => 'rgb(75, 192, 192)',
+                'backgroundColor' => 'rgba(75, 192, 192, 0.2)',
+                'fill' => true,
+                'tension' => 0.3
+            ]]
+        ];
+
+        // 👇 Extract today's charge total from the cached $charges
+        $result_patient_charges_total = $charges->firstWhere('charge_date', $today)?->total_charge_amount ?? 0;
+        $patient_charges_total = round($result_patient_charges_total, 2);
+        #endregion
+
+        return response()->json([
+            'chargeChartData' => $chargeChartData,
+            'patient_charges_total' => $patient_charges_total,
         ]);
     }
 
