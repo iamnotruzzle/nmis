@@ -611,7 +611,7 @@ export default {
       try {
         this.loadingCharges = true;
         const response = await axios.get('warddashboard/charges');
-        console.log('charges', response.data);
+        // console.log('charges', response.data);
 
         // monthly charge
         this.dailyChargeChartData = response.data.chargeChartData;
