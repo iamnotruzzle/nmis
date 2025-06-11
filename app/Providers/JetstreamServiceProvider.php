@@ -91,43 +91,7 @@ class JetstreamServiceProvider extends ServiceProvider
                 $decrypted_pass_from_db = DB::select("SELECT dbo.ufn_crypto(user_pass, 0) AS decrypted_pass_from_db FROM user_acc WHERE user_name = ?", [$request->login]);
 
                 if ($user && $dec[0]->decrypted_pass == $decrypted_pass_from_db[0]->decrypted_pass_from_db) {
-
-                    $designation = $user->designation;
-                    $wardcode = $request->wardcode;
-
-                    // Only log the login if designation matches the selected ward type
-                    $allowed = false;
-                    if ($wardcode == 'CSR' && $designation == 'csr') {
-                        $allowed = true;
-                        Cache::forget('c_authWardCode_' . $user->employeeid);
-                        Cache::forget('c_locationType_' . $user->employeeid);
-
-                        return $user;
-                    } elseif ($wardcode == 'ADMIN' && $designation == 'admin') {
-                        $allowed = true;
-                        Cache::forget('c_authWardCode_' . $user->employeeid);
-                        Cache::forget('c_locationType_' . $user->employeeid);
-
-                        return $user;
-                    } elseif ($wardcode != 'CSR' && $wardcode != 'ADMIN' && $designation == 'ward') {
-                        $allowed = true;
-                        Cache::forget('c_authWardCode_' . $user->employeeid);
-                        Cache::forget('c_locationType_' . $user->employeeid);
-
-                        return $user;
-                    } else {
-                        throw ValidationException::withMessages(["You don't have permission to access this location."]);
-                    }
-
-                    // if ($allowed) {
-                    //     // ✅ Optionally clear the cache so the new ward gets picked up immediately
-                    //     Cache::forget('c_authWardCode_' . $user->employeeid);
-                    //     Cache::forget('c_locationType_' . $user->employeeid);
-
-                    //     return $user;
-                    // } else {
-                    //     throw ValidationException::withMessages(["You don't have permission to access this location."]);
-                    // }
+                    return $user;
                 }
             } else {
                 throw ValidationException::withMessages(["The location field is required."]);

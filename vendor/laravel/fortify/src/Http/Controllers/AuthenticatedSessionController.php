@@ -9,6 +9,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Routing\Pipeline;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Laravel\Fortify\Actions\AttemptToAuthenticate;
 use Laravel\Fortify\Actions\CanonicalizeUsername;
 use Laravel\Fortify\Actions\EnsureLoginIsNotThrottled;
@@ -96,38 +97,55 @@ class AuthenticatedSessionController extends Controller
 
     public function destroy(Request $request): LogoutResponse
     {
-        if (Auth::check()) {
-            $employeeId = Auth::user()->employeeid;
+        // if (Auth::check()) {
+        $employeeId = Auth::user()->employeeid;
 
-            // Retrieve cached auth ward code
-            $authWardCode = Cache::get('c_authWardCode_' . $employeeId);
-            // If auth ward code exists, delete the related keys
-            if ($authWardCode) {
-                Cache::deleteMultiple([
-                    'c_authWardCode_' . $employeeId,
-                    'c_locationType_' . $employeeId,
-                    'c_patients_' . $authWardCode,
-                    'c_csr_stocks_' . $authWardCode,
-                    'latest_update_' . $authWardCode
-                ]);
-            }
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+                FROM
+                    user_acc u
+                INNER JOIN
+                    csrw_login_history l ON u.employeeid = l.employeeid
+                WHERE
+                    l.employeeid = ?
+                ORDER BY
+                    l.created_at DESC;
+                ",
+            [$employeeId]
+        );
+        $authCode = $authWardcode[0]->wardcode;
 
-            LoginHistory::where('employeeid', $employeeId)->delete();
-
-            // Clear Inertia session cached data
-            session()->forget([
-                'cached_inertia_auth',
-                // 'cached_inertia_locations',
-                'cached_inertia_fundsource',
+        // Retrieve cached auth ward code
+        // $authWardCode_employeeId = Cache::get($authCode . $employeeId);
+        // $authWardCode_employeeId = Cache::get($authCode);
+        // If auth ward code exists, delete the related keys
+        if ($authCode) {
+            Cache::deleteMultiple([
+                // 'c_authWardCode_' . $employeeId,
+                // 'c_locationType_' . $employeeId,
+                'c_patients_' . $authCode,
+                'c_csr_stocks_' . $authCode,
+                'latest_update_' . $authCode
             ]);
-
-            // Log out the user
-            $this->guard->logout();
-
-            // Invalidate and regenerate session
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
         }
+
+        LoginHistory::where('employeeid', $employeeId)->delete();
+
+        // Clear Inertia session cached data
+        session()->forget([
+            'cached_inertia_auth',
+            // 'cached_inertia_locations',
+            'cached_inertia_fundsource',
+        ]);
+
+        // Log out the user
+        $this->guard->logout();
+
+        // Invalidate and regenerate session
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        // }
 
         return app(LogoutResponse::class);
     }
