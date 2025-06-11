@@ -66,8 +66,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::redirect('/', 'login');
-// Route::redirect('/', '/login');
-// Route::resource('authen', [AuthenticationController::class, 'index'])->name('login.index');
+
 Route::get('wardslocation', [AuthenticationController::class, 'wardslocation'])
     ->name('wardslocation');
 

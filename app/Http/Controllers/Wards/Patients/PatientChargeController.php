@@ -129,7 +129,8 @@ class PatientChargeController extends Controller
                 WHERE stock.location = '" . $authCode . "'
                 AND stock.quantity > 0
                 AND (rs.id IS NULL OR rs.status = 'RECEIVED')
-                AND stock.[from] = 'CSR';"
+                AND stock.[from] = 'CSR'
+                AND stock.expiration_date > CAST(GETDATE() AS DATE);"
         );
         // dd($fromCSR);
         $fromWard = DB::select(
@@ -147,7 +148,8 @@ class PatientChargeController extends Controller
                 WHERE stock.location = '" . $authCode . "'
                 AND stock.quantity > 0
                 AND (rs.id IS NULL OR rs.status = 'RECEIVED')
-                AND stock.[from] = 'WARD';"
+                AND stock.[from] = 'WARD'
+                AND stock.expiration_date > CAST(GETDATE() AS DATE);"
         );
         $fromMedical = DB::select(
             "SELECT stock.[from], stock.id, stock.request_stocks_id, stock.is_consumable,
