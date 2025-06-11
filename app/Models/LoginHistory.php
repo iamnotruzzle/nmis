@@ -14,7 +14,8 @@ class LoginHistory extends Model
     protected $fillable = [
         'id',
         'employeeid',
-        'wardcode'
+        'wardcode',
+        'login_token'
     ];
 
     public function userDetail()

@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Actions\Jetstream\DeleteUser;
 use App\Models\Location;
+use App\Models\LoginHistory;
 use App\Models\Sessions;
 use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -16,6 +17,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Fortify;
 use Laravel\Jetstream\Jetstream;
+use Illuminate\Support\Str;
 
 class JetstreamServiceProvider extends ServiceProvider
 {
@@ -82,20 +84,57 @@ class JetstreamServiceProvider extends ServiceProvider
         // });
 
 
+        // Fortify::authenticateUsing(function (Request $request) {
+        //     $user = User::where('user_name', $request->login)->first();
+
+        //     if ($request->wardcode != null || $request->wardcode != '') {
+        //         $enc = DB::select("select dbo.ufn_crypto('" . $request->password . "', 1) as decrypted_pass");
+        //         $dec = DB::select("select dbo.ufn_crypto('" . $enc[0]->decrypted_pass . "', 0) as decrypted_pass");
+        //         $decrypted_pass_from_db = DB::select("SELECT dbo.ufn_crypto(user_pass, 0) AS decrypted_pass_from_db FROM user_acc WHERE user_name = ?", [$request->login]);
+
+        //         if ($user && $dec[0]->decrypted_pass == $decrypted_pass_from_db[0]->decrypted_pass_from_db) {
+        //             //create login history
+        //             LoginHistory::create([
+        //                 'employeeid' => $user->employeeid,
+        //                 'wardcode' => $request->wardcode
+        //             ]);
+
+        //             return $user;
+        //         }
+        //     } else {
+        //         throw ValidationException::withMessages(["The location field is required."]);
+        //     }
+        // });
+
+
+
         Fortify::authenticateUsing(function (Request $request) {
             $user = User::where('user_name', $request->login)->first();
 
-            if ($request->wardcode != null || $request->wardcode != '') {
-                $enc = DB::select("select dbo.ufn_crypto('" . $request->password . "', 1) as decrypted_pass");
-                $dec = DB::select("select dbo.ufn_crypto('" . $enc[0]->decrypted_pass . "', 0) as decrypted_pass");
+            if (!$request->wardcode || trim($request->wardcode) === '') {
+                throw ValidationException::withMessages(["wardcode" => "The location field is required."]);
+            }
+
+            if ($user) {
+                $enc = DB::select("select dbo.ufn_crypto(?, 1) as decrypted_pass", [$request->password]);
+                $dec = DB::select("select dbo.ufn_crypto(?, 0) as decrypted_pass", [$enc[0]->decrypted_pass]);
                 $decrypted_pass_from_db = DB::select("SELECT dbo.ufn_crypto(user_pass, 0) AS decrypted_pass_from_db FROM user_acc WHERE user_name = ?", [$request->login]);
 
-                if ($user && $dec[0]->decrypted_pass == $decrypted_pass_from_db[0]->decrypted_pass_from_db) {
+                if ($dec[0]->decrypted_pass === $decrypted_pass_from_db[0]->decrypted_pass_from_db) {
+
+                    // ✅ Save pending login token and wardcode for next request
+                    session([
+                        'pending_login_token' => (string) Str::uuid(),
+                        'pending_wardcode' => $request->wardcode,
+                    ]);
+
                     return $user;
                 }
-            } else {
-                throw ValidationException::withMessages(["The location field is required."]);
             }
+
+            throw ValidationException::withMessages([
+                Fortify::username() => __('auth.failed'),
+            ]);
         });
     }
 
