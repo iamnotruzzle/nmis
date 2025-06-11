@@ -42,6 +42,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\HandleInertiaRequests::class,
+            \App\Http\Middleware\CheckActiveLogin::class,
         ],
 
         'api' => [
@@ -74,6 +75,7 @@ class Kernel extends HttpKernel
         'designation_admin' => Designation_admin::class,
         'designation_csr_or_admin' => Designation_csr_or_admin::class,
         'designation_csr' => Designation_csr::class,
-        'designation_ward' => Designation_ward::class
+        'designation_ward' => Designation_ward::class,
+        'check.active.login' => \App\Http\Middleware\CheckActiveLogin::class,
     ];
 }

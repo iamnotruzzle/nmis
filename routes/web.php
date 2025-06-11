@@ -71,7 +71,7 @@ Route::get('wardslocation', [AuthenticationController::class, 'wardslocation'])
     ->name('wardslocation');
 
 // Route::middleware(['auth:sanctum'])->group(
-Route::middleware(['web', 'auth', 'verified'])->group(
+Route::middleware(['web', 'auth', 'verified', 'check.active.login'])->group(
     function () {
         // admin routes
         Route::resource('admindashboard', AdminDashboardController::class)->middleware(['verified', 'designation_admin'])->only(['index', 'store', 'update', 'destroy']);
