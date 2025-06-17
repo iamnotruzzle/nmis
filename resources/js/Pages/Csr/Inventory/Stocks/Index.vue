@@ -71,21 +71,18 @@
         <Column
           field="suppname"
           header="SUPPLIER"
-          sortable
           style="width: 10%"
         >
         </Column>
         <Column
           field="chrgdesc"
           header="FUND SOURCE"
-          sortable
           style="width: 10%"
         >
         </Column>
         <Column
           field="cl2desc"
           header="ITEM"
-          sortable
           style="width: 15%"
         >
         </Column>
@@ -98,7 +95,6 @@
         <Column
           field="quantity"
           header="QTY"
-          sortable
           style="width: 5%"
         >
         </Column>
@@ -112,7 +108,6 @@
           field="delivered_date"
           header="DD. DATE"
           style="width: 10%"
-          sortable
           :showFilterMenu="false"
         >
           <template #body="{ data }">
@@ -123,7 +118,6 @@
           field="expiration_date"
           header="EXP. DATE"
           style="width: 10%"
-          sortable
           :showFilterMenu="false"
         >
           <template #body="{ data }">
@@ -168,7 +162,6 @@
         <Column
           field="created_at"
           header="CREATED_AT"
-          sortable
           style="width: 10%"
           :showFilterMenu="false"
         >
