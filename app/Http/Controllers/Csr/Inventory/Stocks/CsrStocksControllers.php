@@ -107,7 +107,7 @@ class CsrStocksControllers extends Controller
             if (!$cachedUpdatedAt || $latestUpdatedAt !== $cachedUpdatedAt) {
                 $fetchedStocks = DB::select(
                     // new and fixed
-                    "SELECT TOP 50 stock.id, stock.ris_no,
+                    "SELECT TOP 40 stock.id, stock.ris_no,
                         stock.supplierID, supplier.suppname,
                         fundSource.fsid as codeFromFundSource, fundSource.fsName as descFromFundSource,
                         stock.cl2comb, item.cl2desc, stock.acquisition_price,
