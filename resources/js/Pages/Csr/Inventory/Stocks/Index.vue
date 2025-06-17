@@ -761,7 +761,6 @@
             v-model="formAddDelivery.quantity_after"
             @keydown="restrictNonNumericAndPeriod"
             autofocus
-            @keyup.enter="submitAddDelivery"
             class="w-full"
           />
         </div>
@@ -1209,7 +1208,6 @@
               v-model="formConvertItem.quantity_after"
               @keydown="restrictNonNumericAndPeriod"
               autofocus
-              @keyup.enter="submitAddDelivery"
               class="w-full"
             />
           </div>
