@@ -12,16 +12,17 @@
         v-model:filters="filters"
         :value="stocksList"
         :globalFilterFields="['ris_no', 'cl2desc', 'suppname', 'chrgdesc', 'expiration']"
+        lazy
         paginator
-        :rows="10"
-        :rowsPerPageOptions="[10, 20, 30, 40]"
+        :rows="rows"
         removableSort
         showGridlines
         sortMode="single"
         rowGroupMode="subheader"
         groupRowsBy="ris_no"
-        sortField="created_at"
-        :sortOrder="-1"
+        :totalRecords="totalRecords"
+        @page="onPage($event)"
+        :loading="loading"
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
@@ -35,7 +36,7 @@
                   </span>
                   <InputText
                     id="searchInput"
-                    v-model="filters['global'].value"
+                    v-model="search"
                     placeholder="Search item"
                   />
                 </div>
@@ -1856,7 +1857,7 @@ export default {
   },
   props: {
     items: Object,
-    stocks: Array,
+    stocks: Object,
     suppliers: Array,
     totalDeliveries: Object,
     newRisNo: String,
@@ -1882,6 +1883,11 @@ export default {
       deleteConvertedItemDialog: false,
       deleteStockDialog: false,
       params: {},
+      // paginator
+      loading: false,
+      totalRecords: null,
+      rows: null,
+      // end paginator,
       search: '',
       // manufactured date
       from_md: null,
@@ -1920,17 +1926,20 @@ export default {
       suppliersList: [],
       convertedItemsList: [],
       convertedItemSelection: [],
+      //   filters: {
+      //     global: {
+      //       value: null,
+      //       matchMode: FilterMatchMode.CONTAINS,
+      //     },
+      //     ris_no: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      //     cl2desc: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      //     suppname: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      //     chrgdesc: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      //     // stock_lvl: { value: null, matchMode: FilterMatchMode.EQUALS },
+      //     expiration: { from: null, to: null },
+      //   },
       filters: {
-        global: {
-          value: null,
-          matchMode: FilterMatchMode.CONTAINS,
-        },
-        ris_no: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        cl2desc: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        suppname: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        chrgdesc: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        // stock_lvl: { value: null, matchMode: FilterMatchMode.EQUALS },
-        expiration: { from: null, to: null },
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       totalDeliveriesFilters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -2070,6 +2079,12 @@ export default {
         },
       ],
     };
+  },
+  // created will be initialize before mounted
+  created() {
+    this.totalRecords = this.stocks.total;
+    this.params.page = this.stocks.current_page;
+    this.rows = this.stocks.per_page;
   },
   mounted() {
     // console.log(this.convertedItems);
@@ -2267,7 +2282,7 @@ export default {
     // server request such as POST, the data in the table
     // is updated
     storeStocksInContainer() {
-      this.stocks.forEach((e) => {
+      this.stocks.data.forEach((e) => {
         const expirationDate = e.expiration_date === null ? null : new Date(e.expiration_date); // Convert expiration_date to Date object
         this.stocksList.push({
           id: e.id,
@@ -2391,6 +2406,10 @@ export default {
           converted: e.converted,
         });
       });
+    },
+    onPage(event) {
+      this.params.page = event.page + 1;
+      this.updateData();
     },
     updateData() {
       this.$inertia.get('csrstocks', this.params, {
@@ -2849,6 +2868,10 @@ export default {
     },
   },
   watch: {
+    search: function (val, oldVal) {
+      this.params.search = val;
+      this.updateData();
+    },
     summaryAddDeliveryDialog(newVal) {
       if (newVal) {
         this.countdown = 4; // Reset countdown when dialog is opened

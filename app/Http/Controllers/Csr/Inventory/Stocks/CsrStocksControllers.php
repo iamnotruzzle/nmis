@@ -31,6 +31,8 @@ class CsrStocksControllers extends Controller
 {
     public function index(Request $request)
     {
+        $search = $request->search;
+
         //#region ris_generator
         $currentYear = now()->format('y'); // Get last 2 digits of the year
         $currentMonth = now()->format('m'); // Get the month (2 digits)
@@ -84,50 +86,81 @@ class CsrStocksControllers extends Controller
         // Retrieve the location type from cache again in case it was just set
         #endregion
 
+        // without pagination
         // Define cache keys for patient data and latest update timestamp
-        $cachedKeyCsrStocks = 'c_csr_stocks_' . $authCode;
-        $cacheKeyLatestUpdate = 'latest_update_' . $authCode;
+        // $cachedKeyCsrStocks = 'c_csr_stocks_' . $authCode;
+        // $cacheKeyLatestUpdate = 'latest_update_' . $authCode;
+        // // Attempt to retrieve cached patient data
+        // $stocks = Cache::get($cachedKeyCsrStocks);
+        // // If location type is null, fetch the latest created_at
+        // if ($enctype === null) {
+        //     $latestUpdatedAt = DB::select(
+        //         "SELECT MAX(updated_at) as updated_at FROM csrw_csr_stocks;"
+        //     );
 
-        // Attempt to retrieve cached patient data
-        $stocks = Cache::get($cachedKeyCsrStocks);
+        //     // Extract the latest updated_at from query result
+        //     $latestUpdatedAt = $latestUpdatedAt[0]->updated_at ?? null;
 
-        // If location type is null, fetch the latest created_at
+        //     // Retrieve the cached latest update timestamp
+        //     $cachedUpdatedAt = Cache::get($cacheKeyLatestUpdate);
+
+        //     // If the latest updated_at has changed, fetch stocks data and update the cache
+        //     if (!$cachedUpdatedAt || $latestUpdatedAt !== $cachedUpdatedAt) {
+        //         $fetchedStocks = DB::select(
+        //             // new and fixed
+        //             "SELECT stock.id, stock.ris_no,
+        //                 stock.supplierID, supplier.suppname,
+        //                 fundSource.fsid as codeFromFundSource, fundSource.fsName as descFromFundSource,
+        //                 stock.cl2comb, item.cl2desc, stock.acquisition_price,
+        //                 unit.uomcode, unit.uomdesc,
+        //                 stock.quantity, stock.delivered_date, expiration_date, stock.converted, stock.created_at
+        //             FROM csrw_csr_stocks as stock
+        //             JOIN hclass2 as item ON stock.cl2comb = item.cl2comb
+        //             JOIN huom as unit ON stock.uomcode = unit.uomcode
+        //             LEFT JOIN csrw_suppliers as supplier ON stock.supplierID = supplier.supplierID
+        //             LEFT JOIN csrw_fund_source as fundSource ON stock.chrgcode = fundSource.fsid
+        //             ORDER BY stock.created_at ASC;"
+        //         );
+
+        //         Cache::put($cacheKeyLatestUpdate, $latestUpdatedAt, now()->addMinutes(30));
+        //         Cache::put($cachedKeyCsrStocks, $fetchedStocks, now()->addMinutes(30));
+        //         $stocks = $fetchedStocks;
+        //     } else {
+        //         // Retrieve stocks data from cache if created_at has not changed
+        //         $stocks = Cache::get($cachedKeyCsrStocks);
+        //     }
+        // }
+
+        // with pagination
         if ($enctype === null) {
-            $latestUpdatedAt = DB::select(
-                "SELECT MAX(updated_at) as updated_at FROM csrw_csr_stocks;"
-            );
-
-            // Extract the latest updated_at from query result
-            $latestUpdatedAt = $latestUpdatedAt[0]->updated_at ?? null;
-
-            // Retrieve the cached latest update timestamp
-            $cachedUpdatedAt = Cache::get($cacheKeyLatestUpdate);
-
-            // If the latest updated_at has changed, fetch stocks data and update the cache
-            if (!$cachedUpdatedAt || $latestUpdatedAt !== $cachedUpdatedAt) {
-                $fetchedStocks = DB::select(
-                    // new and fixed
-                    "SELECT stock.id, stock.ris_no,
-                        stock.supplierID, supplier.suppname,
-                        fundSource.fsid as codeFromFundSource, fundSource.fsName as descFromFundSource,
-                        stock.cl2comb, item.cl2desc, stock.acquisition_price,
-                        unit.uomcode, unit.uomdesc,
-                        stock.quantity, stock.delivered_date, expiration_date, stock.converted, stock.created_at
-                    FROM csrw_csr_stocks as stock
-                    JOIN hclass2 as item ON stock.cl2comb = item.cl2comb
-                    JOIN huom as unit ON stock.uomcode = unit.uomcode
-                    LEFT JOIN csrw_suppliers as supplier ON stock.supplierID = supplier.supplierID
-                    LEFT JOIN csrw_fund_source as fundSource ON stock.chrgcode = fundSource.fsid
-                    ORDER BY stock.created_at ASC;"
-                );
-
-                Cache::put($cacheKeyLatestUpdate, $latestUpdatedAt, now()->addMinutes(30));
-                Cache::put($cachedKeyCsrStocks, $fetchedStocks, now()->addMinutes(30));
-                $stocks = $fetchedStocks;
-            } else {
-                // Retrieve stocks data from cache if created_at has not changed
-                $stocks = Cache::get($cachedKeyCsrStocks);
-            }
+            $stocks = DB::table('csrw_csr_stocks as stock')
+                ->select(
+                    'stock.id',
+                    'stock.ris_no',
+                    'stock.supplierID',
+                    'supplier.suppname',
+                    'fundSource.fsid as codeFromFundSource',
+                    'fundSource.fsName as descFromFundSource',
+                    'stock.cl2comb',
+                    'item.cl2desc',
+                    'stock.acquisition_price',
+                    'unit.uomcode',
+                    'unit.uomdesc',
+                    'stock.quantity',
+                    'stock.delivered_date',
+                    'expiration_date',
+                    'stock.converted',
+                    'stock.created_at'
+                )
+                ->join('hclass2 as item', 'stock.cl2comb', '=', 'item.cl2comb')
+                ->join('huom as unit', 'stock.uomcode', '=', 'unit.uomcode')
+                ->leftJoin('csrw_suppliers as supplier', 'stock.supplierID', '=', 'supplier.supplierID')
+                ->leftJoin('csrw_fund_source as fundSource', 'stock.chrgcode', '=', 'fundSource.fsid')
+                ->when($search, function ($query, $search) {
+                    $query->where('item.cl2desc', 'like', "%{$search}%");
+                })
+                ->orderBy('stock.created_at', 'DESC')
+                ->paginate(10); // You can change 10 to however many items you want per page
         }
 
         $totalDeliveries = DB::select(
