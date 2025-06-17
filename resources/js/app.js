@@ -114,10 +114,30 @@ moment.tz.setDefault('Asia/Manila');
 
 NProgress.configure({ showSpinner: false, speed: 400 });
 
+// OLD AND NOT USING CODE SPLITTING
+// createInertiaApp({
+//   progress: false,
+
+//   //   resolve: (name) => require(`./Pages/${name}.vue`),
+//   setup({ el, App, props, plugin }) {
+//     return createApp({ render: () => h(App, props) })
+//       .use(plugin)
+//       .use(PrimeVue, { ripple: true })
+//       .use(ToastService)
+//       .directive('tooltip', Tooltip)
+//       .component('v-icon', OhVueIcon)
+//       .component('v-chart', VueECharts)
+//       .mixin({ methods: { route } })
+//       .mount(el);
+//   },
+// });
+
+// USES CODE SPLITTING
 createInertiaApp({
   progress: false,
 
-  resolve: (name) => require(`./Pages/${name}.vue`),
+  resolve: (name) => import(`./Pages/${name}.vue`), // ✅ dynamic import
+
   setup({ el, App, props, plugin }) {
     return createApp({ render: () => h(App, props) })
       .use(plugin)
