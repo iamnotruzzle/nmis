@@ -252,7 +252,7 @@
                   style="width: 60%"
                 >
                   <template #body="{ data }">
-                    <span> {{ data.item_details.cl2desc }}</span>
+                    <span> {{ data.cl2desc }}</span>
                   </template>
                 </Column>
                 <Column
@@ -950,7 +950,7 @@ export default {
         data.request_stocks_details.forEach((e) => {
           this.printForm.items.push({
             stock_no: e.issued_item.length === 0 ? '' : e.issued_item[0].id,
-            description: e.item_details.cl2desc,
+            description: e.cl2desc,
             req_qty: e.requested_qty,
             stock_avail: e.approved_qty != 0 ? 'y' : 'n',
             issue_qty: e.approved_qty,
@@ -1044,23 +1044,19 @@ export default {
     storeRequestedStocksInContainer() {
       this.requestStockList = []; // reset
 
+      //   console.log('before', this.requestedStocks.data);
       this.requestedStocks.data.forEach((e) => {
         this.requestStockList.push({
           id: e.id,
           status: e.status,
-          requested_by: e.requested_by_details.firstname + ' ' + e.requested_by_details.lastname,
-          //   requested_by_image: e.requested_by_details.user_account.image,
-          requested_at: e.requested_at_details.wardname,
-          approved_by:
-            e.approved_by_details != null
-              ? e.approved_by_details.firstname + ' ' + e.approved_by_details.lastname
-              : null,
-          //   approved_by_image: e.approved_by_details != null ? e.approved_by_details.user_account.image : null,
-          //   approved_by_image: null,
+          requested_by: `${e.requested_by_firstname} ${e.requested_by_lastname}`,
+          requested_at: e.requested_from,
+          approved_by: e.approved_by_firstname ? `${e.approved_by_firstname} ${e.approved_by_lastname}` : null,
           created_at: e.created_at,
-          request_stocks_details: e.request_stocks_details,
+          request_stocks_details: e.request_stocks_details, // or fetch separately if needed
         });
       });
+      //   console.log('after', this.requestStockList);
     },
     tzone(date) {
       if (date == null || date == '') {
@@ -1180,7 +1176,7 @@ export default {
         this.requestStockListDetails.push({
           request_stocks_details_id: e.id,
           cl2comb: e.cl2comb,
-          cl2desc: e.item_details.cl2desc,
+          cl2desc: e.cl2desc,
           requested_qty: e.requested_qty,
         });
       });
