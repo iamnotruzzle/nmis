@@ -71,92 +71,90 @@ class RequestStocksController extends Controller
         );
 
         // OPTIMIZE TTHIS
-        if ($authCode == 'ER') {
-            $requestedStocks = RequestStocks::with(['requested_at_details', 'requested_by_details', 'approved_by_details', 'request_stocks_details.item_details'])
-                ->where('location', '=', $authCode)
-                ->whereHas('requested_by_details', function ($q) use ($searchString) {
-                    $q->where('firstname', 'LIKE', '%' . $searchString . '%')
-                        ->orWhere('middlename', 'LIKE', '%' . $searchString . '%')
-                        ->orWhere('lastname', 'LIKE', '%' . $searchString . '%');
-                })
-                ->when($request->status, function ($query, $value) {
-                    $query->where('status', $value);
-                })
-                ->when(
-                    $request->from,
-                    function ($query, $value) use ($from) {
-                        $query->whereDate('created_at', '>=', $from);
-                    }
-                )
-                ->when(
-                    $request->to,
-                    function ($query, $value) use ($to) {
-                        $query->whereDate('created_at', '<=', $to);
-                    }
-                )
-                ->where('location', '=', $authCode)
-                ->orderBy('created_at', 'desc')
-                ->paginate(2);
-        } else {
-            $requestedStocks = DB::table('csrw_request_stocks as rs')
-                ->select([
-                    'rs.id',
-                    'rs.location',
-                    'rs.status',
-                    'rs.received_date',
-                    'rs.created_at',
+        // if ($authCode == 'ER') {
+        //     $requestedStocks = RequestStocks::with(['requested_at_details', 'requested_by_details', 'approved_by_details', 'request_stocks_details.item_details'])
+        //         ->where('location', '=', $authCode)
+        //         ->whereHas('requested_by_details', function ($q) use ($searchString) {
+        //             $q->where('firstname', 'LIKE', '%' . $searchString . '%')
+        //                 ->orWhere('middlename', 'LIKE', '%' . $searchString . '%')
+        //                 ->orWhere('lastname', 'LIKE', '%' . $searchString . '%');
+        //         })
+        //         ->when($request->status, function ($query, $value) {
+        //             $query->where('status', $value);
+        //         })
+        //         ->when(
+        //             $request->from,
+        //             function ($query, $value) use ($from) {
+        //                 $query->whereDate('created_at', '>=', $from);
+        //             }
+        //         )
+        //         ->when(
+        //             $request->to,
+        //             function ($query, $value) use ($to) {
+        //                 $query->whereDate('created_at', '<=', $to);
+        //             }
+        //         )
+        //         ->where('location', '=', $authCode)
+        //         ->orderBy('created_at', 'desc')
+        //         ->paginate(2);
+        // } else {
+        $requestedStocks = DB::table('csrw_request_stocks as rs')
+            ->select([
+                'rs.id',
+                'rs.location',
+                'rs.status',
+                'rs.received_date',
+                'rs.created_at',
 
-                    // Requested from (ward/location)
-                    'loc.wardname as requested_from',
+                // Requested from (ward/location)
+                'loc.wardname as requested_from',
 
-                    // Requested by
-                    'rb.firstname as requested_by_firstname',
-                    'rb.lastname as requested_by_lastname',
+                // Requested by
+                'rb.firstname as requested_by_firstname',
+                'rb.lastname as requested_by_lastname',
 
-                    // Approved by
-                    'ab.firstname as approved_by_firstname',
-                    'ab.lastname as approved_by_lastname',
-                ])
-                ->leftJoin('hward as loc', 'rs.location', '=', 'loc.wardcode')
-                ->leftJoin('hpersonal as rb', 'rs.requested_by', '=', 'rb.employeeid')
-                ->leftJoin('hpersonal as ab', 'rs.approved_by', '=', 'ab.employeeid')
-                ->where('rs.location', $authCode)
-                ->when($searchString, function ($query, $searchString) {
-                    $query->where(function ($q) use ($searchString) {
-                        $q->where('rb.firstname', 'LIKE', "%$searchString%")
-                            ->orWhere('rb.lastname', 'LIKE', "%$searchString%");
-                    });
-                })
-                ->when($request->status, fn($q, $status) => $q->where('rs.status', $status))
-                ->when($request->from, fn($q, $from) => $q->whereDate('rs.created_at', '>=', $from))
-                ->when($request->to, fn($q, $to) => $q->whereDate('rs.created_at', '<=', $to))
-                ->orderBy('rs.created_at', 'desc')
-                ->paginate(3);
+                // Approved by
+                'ab.firstname as approved_by_firstname',
+                'ab.lastname as approved_by_lastname',
+            ])
+            ->leftJoin('hward as loc', 'rs.location', '=', 'loc.wardcode')
+            ->leftJoin('hpersonal as rb', 'rs.requested_by', '=', 'rb.employeeid')
+            ->leftJoin('hpersonal as ab', 'rs.approved_by', '=', 'ab.employeeid')
+            ->where('rs.location', $authCode)
+            ->when($searchString, function ($query, $searchString) {
+                $query->where(function ($q) use ($searchString) {
+                    $q->where('rb.firstname', 'LIKE', "%$searchString%")
+                        ->orWhere('rb.lastname', 'LIKE', "%$searchString%");
+                });
+            })
+            ->when($request->status, fn($q, $status) => $q->where('rs.status', $status))
+            ->when($request->from, fn($q, $from) => $q->whereDate('rs.created_at', '>=', $from))
+            ->when($request->to, fn($q, $to) => $q->whereDate('rs.created_at', '<=', $to))
+            ->orderBy('rs.created_at', 'desc')
+            ->paginate(3);
 
-            $ids = collect($requestedStocks->items())->pluck('id')->toArray();
-            $requestStocksDetails = DB::table('csrw_request_stocks_details as rsd')
-                ->select([
-                    'rsd.request_stocks_id',
-                    'rsd.id',
-                    'rsd.cl2comb',
-                    'rsd.requested_qty',
-                    'rsd.approved_qty',
-                    'item.cl2desc',
-                    'item.uomcode',
-                    'unit.uomdesc'
-                ])
-                ->leftJoin('hclass2 as item', 'rsd.cl2comb', '=', 'item.cl2comb')
-                ->leftJoin('huom as unit', 'item.uomcode', '=', 'unit.uomcode')
-                ->whereIn('rsd.request_stocks_id', $ids)
-                ->get()
-                ->groupBy('request_stocks_id');
+        $ids = collect($requestedStocks->items())->pluck('id')->toArray();
+        $requestStocksDetails = DB::table('csrw_request_stocks_details as rsd')
+            ->select([
+                'rsd.request_stocks_id',
+                'rsd.id',
+                'rsd.cl2comb',
+                'rsd.requested_qty',
+                'rsd.approved_qty',
+                'item.cl2desc',
+                'item.uomcode',
+                'unit.uomdesc'
+            ])
+            ->leftJoin('hclass2 as item', 'rsd.cl2comb', '=', 'item.cl2comb')
+            ->leftJoin('huom as unit', 'item.uomcode', '=', 'unit.uomcode')
+            ->whereIn('rsd.request_stocks_id', $ids)
+            ->get()
+            ->groupBy('request_stocks_id');
 
-            foreach ($requestedStocks as $stock) {
-                $stock->request_stocks_details = $requestStocksDetails[$stock->id] ?? [];
-            }
-
-            // dd($stock);
+        foreach ($requestedStocks as $stock) {
+            $stock->request_stocks_details = $requestStocksDetails[$stock->id] ?? [];
         }
+        // }
 
         // dd($requestedStocks);
 
