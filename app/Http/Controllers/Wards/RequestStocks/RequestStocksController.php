@@ -122,7 +122,7 @@ class RequestStocksController extends Controller
                 )
                 ->where('location', '=', $authCode)
                 ->orderBy('created_at', 'desc')
-                ->paginate(5);
+                ->paginate(2);
         }
 
         // dd($requestedStocks);
