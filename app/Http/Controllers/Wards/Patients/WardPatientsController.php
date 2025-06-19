@@ -236,7 +236,58 @@ class WardPatientsController extends Controller
 
             // If the latest datemod has changed, fetch patient data and update the cache
             if (!$cachedERDateMod || $latestERDateMod !== $cachedERDateMod) {
-                // 2 days filter
+                ////old
+                // $fetchedPatients = DB::SELECT(
+                //     "SELECT
+                //         herlog.enccode,
+                //         herlog.hpercode,
+                //         herlog.erdate,
+                //         herlog.licno,
+                //         hpersonal.lastname,
+                //         hpersonal.firstname,
+                //         hpersonal.empsuffix,
+                //         hperson.patlast,
+                //         hperson.patfirst,
+                //         hperson.patmiddle,
+                //         htypser.tsdesc,
+                //         herlog.erdate,
+                //         herlog.erstat,
+                //         herlog.dispcode,
+                //         henctr.toecode,
+                //         herlog.datemod,
+                //         herlog.tscode,
+                //         -- Custom Bill Status Column
+                //         (SELECT TOP 1 'BILLED'
+                //         FROM csrw_patient_charge_logs
+                //         WHERE csrw_patient_charge_logs.enccode = herlog.enccode
+                //         AND csrw_patient_charge_logs.entry_at = 'ER') AS bill_status
+
+                //     FROM herlog WITH (NOLOCK)
+                //     JOIN henctr ON henctr.enccode = herlog.enccode
+                //     INNER JOIN hperson ON hperson.hpercode = herlog.hpercode
+                //     INNER JOIN htypser ON htypser.tscode = herlog.tscode
+                //     LEFT JOIN hdisposition ON hdisposition.dispcode = herlog.dispcode
+                //     LEFT JOIN hprovider ON hprovider.licno = herlog.licno
+                //     LEFT JOIN hpersonal ON hpersonal.employeeid = hprovider.employeeid
+
+                //     --1 day filter
+                //     -- WHERE
+                //     --     herlog.erdate BETWEEN DATEADD(DAY, -1, CAST(GETDATE() AS DATE))
+                //     --                     AND DATEADD(DAY, 1, CAST(GETDATE() AS DATE))
+
+                //     -- 1 1/2 day filter
+                //     -- WHERE
+                //     --         herlog.erdate BETWEEN DATEADD(DAY, -1.5, CAST(GETDATE() AS DATETIME))
+                //     --                         AND DATEADD(DAY, 1.5, CAST(GETDATE() AS DATETIME))
+
+                //     -- 2 days filter
+                //     WHERE  herlog.erdate BETWEEN DATEADD(DAY, -2, GETDATE())
+                //             AND GETDATE()
+
+                //     ORDER BY herlog.erdate DESC;"
+                // );
+
+                //// new and optimized
                 $fetchedPatients = DB::SELECT(
                     "SELECT
                         herlog.enccode,
@@ -256,11 +307,12 @@ class WardPatientsController extends Controller
                         henctr.toecode,
                         herlog.datemod,
                         herlog.tscode,
+                        billing.bill_status
                         -- Custom Bill Status Column
-                        (SELECT TOP 1 'BILLED'
-                        FROM csrw_patient_charge_logs
-                        WHERE csrw_patient_charge_logs.enccode = herlog.enccode
-                        AND csrw_patient_charge_logs.entry_at = 'ER') AS bill_status
+                        -- (SELECT TOP 1 'BILLED'
+                        -- FROM csrw_patient_charge_logs
+                        -- WHERE csrw_patient_charge_logs.enccode = herlog.enccode
+                        -- AND csrw_patient_charge_logs.entry_at = 'ER') AS bill_status
 
                     FROM herlog WITH (NOLOCK)
                     JOIN henctr ON henctr.enccode = herlog.enccode
@@ -269,6 +321,11 @@ class WardPatientsController extends Controller
                     LEFT JOIN hdisposition ON hdisposition.dispcode = herlog.dispcode
                     LEFT JOIN hprovider ON hprovider.licno = herlog.licno
                     LEFT JOIN hpersonal ON hpersonal.employeeid = hprovider.employeeid
+                    LEFT JOIN (
+                        SELECT DISTINCT enccode, 'BILLED' AS bill_status
+                        FROM csrw_patient_charge_logs
+                        WHERE entry_at = 'ER'
+                    ) AS billing ON billing.enccode = herlog.enccode
 
                     --1 day filter
                     -- WHERE
