@@ -21,7 +21,7 @@ class Designation_admin
         if (Auth::user()->designation == 'admin') {
             return $next($request);
         } else if (Auth::user()->designation == 'ward') {
-            return redirect(route('warddashboard.index'));
+            return redirect(route('wardspatients.index'));
         } else {
             return redirect(route('csrdashboard.index'));
         }

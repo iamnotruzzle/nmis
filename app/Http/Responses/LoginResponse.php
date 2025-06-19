@@ -48,7 +48,7 @@ class LoginResponse implements LoginResponseContract
         $home = match ($user->designation) {
             'admin' => 'admindashboard',
             'csr' => 'csrdashboard',
-            default => 'warddashboard',
+            default => 'wardspatients',
         };
 
         return redirect()->to($home);
