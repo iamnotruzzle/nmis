@@ -815,6 +815,7 @@ export default {
     items: Object,
     requestedStocks: Object,
     canTransact: Boolean,
+    canAddExpiryDate: Boolean,
   },
   data() {
     return {

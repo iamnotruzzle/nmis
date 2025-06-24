@@ -169,11 +169,10 @@ class RequestStocksController extends Controller
             $canTransact = true;
         }
 
-
         return Inertia::render('Wards/RequestStocks/Index', [
             'items' => $items,
             'requestedStocks' => $requestedStocks,
-            'canTransact' => $canTransact
+            'canTransact' => $canTransact,
         ]);
     }
 

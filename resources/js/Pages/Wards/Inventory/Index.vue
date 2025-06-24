@@ -243,6 +243,12 @@
           <div class="text-orange-500 text-xl font-bold">CONSIGNMENT</div>
         </template>
         <div
+          v-if="canAddExpiryDate"
+          class="bg-orange-700 text-white p-4 rounded font-semibold my-2 text-3xl"
+        >
+          Please double-check the expiration date. It cannot be updated once saved.
+        </div>
+        <div
           v-if="isUpdateConsignment != true"
           class="field"
         >
@@ -348,6 +354,21 @@
             {{ formConsignment.errors.delivered_date }}
           </small>
         </div>
+        <div
+          v-if="canAddExpiryDate"
+          class="field flex flex-column"
+        >
+          <div>
+            <label>Expiration date</label>
+            <span class="ml-2 text-error">* MAX BY DEFAULT.</span>
+          </div>
+          <input
+            type="date"
+            v-model="formConsignment.expiration_date"
+            class="text-4xl"
+            style="border-radius: 10px; padding: 5px"
+          />
+        </div>
 
         <template #footer>
           <Button
@@ -448,8 +469,14 @@
         @hide="whenDialogIsHidden"
       >
         <template #header>
-          <div class="text-orange-500 text-xl font-bold">SUPPLEMENTAL</div>
+          <div class="text-whitetext-xl font-bold">SUPPLEMENTAL</div>
         </template>
+        <div
+          v-if="canAddExpiryDate"
+          class="bg-orange-700 text-white p-4 rounded font-semibold my-2 text-3xl"
+        >
+          Please double-check the expiration date. It cannot be updated once saved.
+        </div>
         <div
           v-if="isUpdateSupplemental != true"
           class="field"
@@ -556,6 +583,21 @@
             {{ formSupplemental.errors.delivered_date }}
           </small>
         </div>
+        <div
+          v-if="canAddExpiryDate"
+          class="field flex flex-column"
+        >
+          <div>
+            <label>Expiration date</label>
+            <span class="ml-2 text-error">* MAX BY DEFAULT.</span>
+          </div>
+          <input
+            type="date"
+            v-model="formSupplemental.expiration_date"
+            class="text-4xl"
+            style="border-radius: 10px; padding: 5px"
+          />
+        </div>
 
         <template #footer>
           <Button
@@ -657,6 +699,12 @@
         <template #header>
           <div class="text-blue-500 text-xl font-bold">EXISTING STOCK</div>
         </template>
+        <div
+          v-if="canAddExpiryDate"
+          class="bg-orange-700 text-white p-4 rounded font-semibold my-2 text-3xl"
+        >
+          Please double-check the expiration date. It cannot be updated once saved.
+        </div>
         <div class="field">
           <label>Items</label>
           <Dropdown
@@ -697,6 +745,21 @@
           >
             {{ formExisting.errors.quantity }}
           </small>
+        </div>
+        <div
+          v-if="canAddExpiryDate"
+          class="field flex flex-column"
+        >
+          <div>
+            <label>Expiration date</label>
+            <span class="ml-2 text-error">* MAX BY DEFAULT.</span>
+          </div>
+          <input
+            type="date"
+            v-model="formExisting.expiration_date"
+            class="text-4xl"
+            style="border-radius: 10px; padding: 5px"
+          />
         </div>
 
         <template #footer>
@@ -867,6 +930,7 @@ export default {
     items: Object,
     currentWardStocks: Object,
     canTransact: Boolean,
+    canAddExpiryDate: Boolean,
   },
   data() {
     return {
@@ -933,6 +997,7 @@ export default {
         quantity: null,
         price_per_unit: null,
         delivered_date: null,
+        expiration_date: null,
       }),
       formExisting: this.$inertia.form({
         id: null,
@@ -943,6 +1008,7 @@ export default {
         quantity: null,
         prev_quantity: null,
         delivered_date: null,
+        expiration_date: '9999-12-30',
       }),
       formSupplemental: this.$inertia.form({
         id: null,
@@ -953,6 +1019,7 @@ export default {
         quantity: null,
         price_per_unit: null,
         delivered_date: null,
+        expiration_date: null,
       }),
       formReturnToCsr: this.$inertia.form({
         ward_stock_id: null,

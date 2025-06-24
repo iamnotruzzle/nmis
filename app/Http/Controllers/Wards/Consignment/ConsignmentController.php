@@ -79,7 +79,7 @@ class ConsignmentController extends Controller
             'from' => 'CONSIGNMENT',
             // 'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
             'delivered_date' =>  Carbon::parse($request->delivered_date)->format('Y-m-d H:i:s.v'),
-            'expiration_date' =>  Carbon::maxValue(),
+            'expiration_date' =>  $request->expiration_date ? Carbon::parse($request->expiration_date)->format('Y-m-d H:i:s.v') : Carbon::maxValue(),
         ]);
 
         $wardStockLogs = WardsStocksLogs::create([
@@ -97,7 +97,7 @@ class ConsignmentController extends Controller
             'new_qty' => $request->quantity,
             'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
             'delivered_date' =>  Carbon::parse($request->delivered_date)->format('Y-m-d H:i:s.v'),
-            'expiration_date' =>  Carbon::maxValue(),
+            'expiration_date' =>  $request->expiration_date ? Carbon::parse($request->expiration_date)->format('Y-m-d H:i:s.v') : Carbon::maxValue(),
             'action' => 'CREATE',
             'remarks' => null,
             'entry_by' => $entry_by,

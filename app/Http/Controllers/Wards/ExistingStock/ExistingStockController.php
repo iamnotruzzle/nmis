@@ -98,7 +98,7 @@ class ExistingStockController extends Controller
                 'from' => 'EXISTING_STOCKS',
                 // 'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
                 'delivered_date' =>  Carbon::now(),
-                'expiration_date' =>  Carbon::maxValue(),
+                'expiration_date' =>  $request->expiration_date ? Carbon::parse($request->expiration_date)->format('Y-m-d H:i:s.v') : Carbon::maxValue(),
             ]);
 
             $price = DB::select(
@@ -148,7 +148,7 @@ class ExistingStockController extends Controller
                 'new_qty' => $request->quantity,
                 'manufactured_date' => Carbon::parse($request->manufactured_date)->format('Y-m-d H:i:s.v'),
                 'delivered_date' =>  Carbon::now(),
-                'expiration_date' =>  Carbon::maxValue(),
+                'expiration_date' =>  $request->expiration_date ? Carbon::parse($request->expiration_date)->format('Y-m-d H:i:s.v') : Carbon::maxValue(),
                 'action' => 'CREATE',
                 'remarks' => null,
                 'entry_by' => $entry_by,
