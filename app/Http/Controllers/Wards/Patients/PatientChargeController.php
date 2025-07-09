@@ -99,6 +99,21 @@ class PatientChargeController extends Controller
         // );
         // dd($stocksFromCsr);
 
+        // $fromExisting = DB::select(
+        //     "SELECT stock.[from], stock.id, stock.request_stocks_id, stock.is_consumable,
+        //         item.cl2comb, item.cl2desc, item.uomcode,
+        //         stock.quantity, stock.average, stock.total_usage,
+        //         price.price_per_unit as price,
+        //         stock.expiration_date, stock.created_at
+        //         FROM csrw_wards_stocks stock
+        //         JOIN hclass2 item ON stock.cl2comb = item.cl2comb
+        //         LEFT JOIN csrw_item_prices AS price
+        //             ON stock.cl2comb = price.cl2comb
+        //             AND price.ris_no = stock.ris_no -- use ris_no if item is from ward/existing
+        //         WHERE stock.location = '" . $authCode . "'
+        //         AND stock.quantity > 0
+        //         AND stock.[from] = 'EXISTING_STOCKS'"
+        // );
         $fromExisting = DB::select(
             "SELECT stock.[from], stock.id, stock.request_stocks_id, stock.is_consumable,
                 item.cl2comb, item.cl2desc, item.uomcode,
@@ -112,7 +127,9 @@ class PatientChargeController extends Controller
                     AND price.ris_no = stock.ris_no -- use ris_no if item is from ward/existing
                 WHERE stock.location = '" . $authCode . "'
                 AND stock.quantity > 0
-                AND stock.[from] = 'EXISTING_STOCKS';"
+                AND stock.[from] != 'CSR'
+                AND stock.[from] != 'WARD'
+                AND stock.[from] != 'MEDICAL GASES'"
         );
         $fromCSR = DB::select(
             "SELECT stock.[from], stock.id, stock.request_stocks_id, stock.is_consumable,
@@ -268,7 +285,8 @@ class PatientChargeController extends Controller
                             charge_log.ward_stocks_id as charge_log_ward_stocks_id,
                             charge_log.quantity as charge_log_quantity,
                             charge_log.expiration_date as charge_log_expiration_date,
-                            charge_by.firstname + ' ' + charge_by.lastname as entry_by
+                            charge_by.firstname + ' ' + charge_by.lastname as entry_by,
+                            charge_log.entry_at as entry_at
                             FROM hospital.dbo.hpatchrg pat_charge
                             LEFT JOIN hospital.dbo.hclass2 as item ON pat_charge.itemcode = item.cl2comb
                             LEFT JOIN hospital.dbo.hclass1 as category ON item.cl1comb = category.cl1comb

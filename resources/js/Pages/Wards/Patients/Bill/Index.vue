@@ -150,7 +150,7 @@
             style="width: 5%"
           >
             <template #body="slotProps">
-              <div v-if="slotProps.data.charge_log_id != null">
+              <div v-if="slotProps.data.charge_log_id != null && authWardcode == slotProps.data.entry_at">
                 <Button
                   :disabled="canTransact == false"
                   icon="pi pi-pencil"
@@ -834,6 +834,7 @@ export default {
   },
   data() {
     return {
+      authWardcode: '',
       isSubmitting: false, // Flag to track form submission
       domUpdater: null,
       stockBalanceDeclared: false,
@@ -928,6 +929,7 @@ export default {
     },
   },
   mounted() {
+    this.authWardcode = this.$page.props.auth.user.location.location_name.wardcode;
     window.Echo.channel('charges').listen('.ChargeLogsProcessed', (args) => {
       window.skipNProgress = true; // Prevent NProgress
 
@@ -1037,6 +1039,7 @@ export default {
           charge_date_viewer: moment(e.charge_date).format('MM-DD-YYYY: hh:mm:ss'),
           charge_date: e.charge_date,
           entry_by: e.entry_by,
+          entry_at: e.entry_at,
         });
       });
 

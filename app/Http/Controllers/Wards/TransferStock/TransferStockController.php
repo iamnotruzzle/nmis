@@ -58,6 +58,7 @@ class TransferStockController extends Controller
             ->where('location', '=', $authCode)
             ->where(function ($query) {
                 $query->where('from', 'WARD')
+                    ->orWhere('from', 'DELIVERY')
                     ->orWhere('from', 'CONSIGNMENT')
                     ->orWhere('from', 'EXISTING_STOCKS');
             })

@@ -46,11 +46,21 @@
                 </div>
                 <!-- :disabled="canTransact == false" -->
                 <Button
+                  v-if="!['CATHL', 'CENDU', 'HEMO'].includes(authWardcode)"
                   label="EXISTING STOCK"
                   icon="pi pi-plus"
                   iconPos="right"
                   severity="info"
                   @click="openExistingDialog"
+                />
+                <div class="mr-2"></div>
+                <Button
+                  v-if="['CATHL', 'CENDU', 'HEMO'].includes(authWardcode)"
+                  label="DELIVERY"
+                  icon="pi pi-plus"
+                  iconPos="right"
+                  severity="info"
+                  @click="openDeliveryDialog"
                 />
                 <div class="mr-2"></div>
                 <Button
@@ -92,6 +102,11 @@
               <Tag
                 v-if="data.from == 'CSR'"
                 value="CSR"
+                severity="primary"
+              />
+              <Tag
+                v-if="data.from == 'DELIVERY'"
+                value="DELIVERY"
                 severity="primary"
               />
               <Tag
@@ -230,6 +245,235 @@
         </DataTable>
         <!-- test -->
       </div>
+
+      <!-- Delivery -->
+      <Dialog
+        v-model:visible="deliveryDialog"
+        :modal="true"
+        :closeOnEscape="false"
+        class="p-fluid w-4"
+        @hide="whenDialogIsHidden"
+      >
+        <template #header>
+          <div class="text-blue-500 text-xl font-bold">DELIVERY</div>
+        </template>
+        <div
+          v-if="canAddExpiryDate"
+          class="bg-orange-700 text-white p-4 rounded font-semibold my-2 text-3xl"
+        >
+          Please double-check the expiration date. It cannot be updated once saved.
+        </div>
+        <div
+          v-if="isUpdateDelivery != true"
+          class="field"
+        >
+          <label for="fundSource">Fund source</label>
+          <Dropdown
+            id="fundSource"
+            required="true"
+            v-model="formDelivery.fund_source"
+            :options="fundSourceList"
+            filter
+            showClear
+            dataKey="chrgcode"
+            optionLabel="chrgdesc"
+            optionValue="chrgcode"
+            class="w-full"
+            :class="{ 'p-invalid': formDelivery.fund_source == '' }"
+          />
+          <small
+            class="text-error"
+            v-if="formDelivery.errors.fund_source"
+          >
+            {{ formDelivery.errors.fund_source }}
+          </small>
+        </div>
+        <div class="field">
+          <label>Items</label>
+          <Dropdown
+            required="true"
+            v-model="formDelivery.cl2comb"
+            :options="itemsList"
+            :virtualScrollerOptions="{ itemSize: 38 }"
+            filter
+            optionValue="cl2comb"
+            optionLabel="cl2desc"
+            class="w-full mb-3"
+            :disabled="isUpdateDelivery == true"
+          />
+        </div>
+        <div class="field">
+          <label for="unit">Unit</label>
+          <InputText
+            id="unit"
+            v-model.trim="selectedItemsUomDesc"
+            readonly
+          />
+        </div>
+        <div class="field">
+          <label>Quantity</label>
+          <InputText
+            id="quantity"
+            v-model.trim="formDelivery.quantity"
+            required="true"
+            autofocus
+            :class="{ 'p-invalid': formDelivery.quantity == '' || formDelivery.quantity == null }"
+            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+            inputId="integeronly"
+          />
+          <small
+            class="text-error"
+            v-if="formDelivery.errors.quantity"
+          >
+            {{ formDelivery.errors.quantity }}
+          </small>
+        </div>
+        <div
+          v-if="isUpdateDelivery != true"
+          class="field"
+        >
+          <label>Price per unit</label>
+          <InputNumber
+            id="price_per_unit"
+            inputId="minmaxfraction"
+            :minFractionDigits="2"
+            :maxFractionDigits="5"
+            v-model.trim="formDelivery.price_per_unit"
+            required="true"
+            :class="{ 'p-invalid': formDelivery.price_per_unit == '' || formDelivery.price_per_unit == null }"
+          />
+          <small
+            class="text-error"
+            v-if="formDelivery.errors.price_per_unit"
+          >
+            {{ formDelivery.errors.price_per_unit }}
+          </small>
+        </div>
+        <div
+          v-if="isUpdateDelivery != true"
+          class="field"
+        >
+          <label for="delivered_date">Delivered date</label>
+          <Calendar
+            v-model="formDelivery.delivered_date"
+            dateFormat="mm-dd-yy"
+            showIcon
+            showButtonBar
+            :manualInput="false"
+            :hideOnDateTimeSelect="true"
+          />
+          <small
+            class="text-error"
+            v-if="formDelivery.errors.delivered_date"
+          >
+            {{ formDelivery.errors.delivered_date }}
+          </small>
+        </div>
+        <div
+          v-if="canAddExpiryDate"
+          class="field flex flex-column"
+        >
+          <div>
+            <label>Expiration date</label>
+            <span class="ml-2 text-error">* MAX BY DEFAULT.</span>
+          </div>
+          <input
+            type="date"
+            v-model="formDelivery.expiration_date"
+            class="text-4xl"
+            style="border-radius: 10px; padding: 5px"
+          />
+        </div>
+
+        <template #footer>
+          <Button
+            :label="!formDelivery.processing ? 'CANCEL' : 'CANCEL'"
+            icon="pi pi-times"
+            :disabled="formDelivery.processing"
+            severity="danger"
+            @click="cancel"
+          />
+
+          <Button
+            v-if="isUpdateDelivery == false"
+            :disabled="
+              formDelivery.processing ||
+              formDelivery.fund_source == null ||
+              formDelivery.cl2comb == null ||
+              formDelivery.quantity == null ||
+              formDelivery.quantity <= 0 ||
+              formDelivery.price_per_unit == null ||
+              formDelivery.price_per_unit <= 0 ||
+              formDelivery.delivered_date == null
+            "
+            :label="!formDelivery.processing ? 'SAVE' : 'SAVE'"
+            :icon="formDelivery.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
+            severity="warning"
+            type="submit"
+            @click="openConfirmDeliveryDialog"
+          />
+
+          <Button
+            v-else
+            :label="!formDelivery.processing ? 'SAVE' : 'SAVE'"
+            icon="pi pi-check"
+            severity="warning"
+            type="submit"
+            :disabled="formDelivery.processing || formDelivery.quantity == null"
+            @click="submitDelivery"
+          />
+        </template>
+      </Dialog>
+
+      <!-- confirm delivery -->
+      <Dialog
+        v-model:visible="confirmDeliveryDialog"
+        :modal="true"
+        :closeOnEscape="false"
+        class="p-fluid w-4"
+        persist
+      >
+        <template #header>
+          <div class="text-error uppercase text-xl font-bold">Are you sure you have entered the correct data?</div>
+        </template>
+
+        <div class="text-xl text-justify">
+          <p>
+            Please double-check the data you have entered, especially the fund source and the item details, as these
+            cannot be reversed.
+          </p>
+
+          <p>
+            Imagine saving an item with its price, only to realize later that it was incorrect after someone has already
+            charged it. Since this data cannot be undone, any mistakes will directly impact the patient’s statement of
+            account and charge logs.
+          </p>
+
+          <p>
+            If you are unsure, <b>do not proceed</b>. Every time an item is added, your user account will be recorded in
+            the logs.
+          </p>
+        </div>
+
+        <template #footer>
+          <Button
+            :label="!formDelivery.processing ? 'CANCEL' : 'CANCEL'"
+            icon="pi pi-times"
+            :disabled="formDelivery.processing"
+            severity="danger"
+            @click="cancel"
+          />
+
+          <Button
+            :disabled="formDelivery.processing || countdown > 0"
+            :icon="formDelivery.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
+            type="submit"
+            @click="submitDelivery"
+          >
+            {{ countdown > 0 ? `YES, I'M SURE (${countdown})` : "YES, I'M SURE" }}
+          </Button>
+        </template>
+      </Dialog>
 
       <!-- Consignment -->
       <Dialog
@@ -945,10 +1189,12 @@ export default {
       isUpdate: false,
       //   medicalGasesDialog: false,
       consignmentDialog: false,
+      deliveryDialog: false,
       confirmConsignmentDialog: false,
+      confirmDeliveryDialog: false,
       confirmSupplementalDialog: false,
       isUpdateExisting: false,
-      isUpdateConsignment: false,
+      isUpdateDelivery: false,
       isUpdateSupplemental: false,
       existingDialog: false,
       supplementalDialog: false,
@@ -989,6 +1235,17 @@ export default {
         delivered_date: null,
       }),
       formConsignment: this.$inertia.form({
+        id: null,
+        authLocation: null,
+        fund_source: null,
+        cl2comb: null,
+        uomcode: null,
+        quantity: null,
+        price_per_unit: null,
+        delivered_date: null,
+        expiration_date: null,
+      }),
+      formDelivery: this.$inertia.form({
         id: null,
         authLocation: null,
         fund_source: null,
@@ -1067,6 +1324,16 @@ export default {
         this.consignmentDialog = true;
       }
     },
+    openUpdateDelivery(data) {
+      if (data.from == 'DELIVERY') {
+        this.formDelivery.id = data.ward_stock_id;
+        this.formDelivery.cl2comb = data.cl2comb;
+        this.formDelivery.quantity = data.quantity;
+
+        this.isUpdateDelivery = true;
+        this.DeliveryDialog = true;
+      }
+    },
     openUpdateSupplemental(data) {
       if (data.from == 'SUPPLEMENTAL') {
         this.formSupplemental.id = data.ward_stock_id;
@@ -1079,6 +1346,9 @@ export default {
     },
     openConfirmConsignmentDialog() {
       this.confirmConsignmentDialog = true;
+    },
+    openConfirmDeliveryDialog() {
+      this.confirmDeliveryDialog = true;
     },
     openConfirmSupplementalDialog() {
       this.confirmSupplementalDialog = true;
@@ -1220,6 +1490,11 @@ export default {
       this.formConsignment.reset();
       this.consignmentDialog = true;
     },
+    openDeliveryDialog() {
+      this.formDelivery.clearErrors();
+      this.formDelivery.reset();
+      this.deliveryDialog = true;
+    },
     openExistingDialog() {
       this.formExisting.clearErrors();
       this.formExisting.reset();
@@ -1239,6 +1514,8 @@ export default {
         (this.isUpdateSupplemental = false),
         (this.isUpdateConsignment = false),
         (this.confirmConsignmentDialog = false),
+        (this.isUpdateDelivery = false),
+        (this.confirmDeliveryDialog = false),
         (this.confirmSupplementalDialog = false),
         (this.item = null),
         (this.cl2desc = null),
@@ -1252,6 +1529,8 @@ export default {
         this.formMedicalGases.reset(),
         this.formConsignment.reset(),
         this.formConsignment.clearErrors(),
+        this.formDelivery.reset(),
+        this.formDelivery.clearErrors(),
         this.formReturnToCsr.clearErrors(),
         this.formReturnToCsr.reset(),
         this.formExisting.clearErrors(),
@@ -1358,6 +1637,61 @@ export default {
         });
       }
     },
+    submitDelivery() {
+      this.formDelivery.authLocation = this.authWardcode;
+      if (this.isUpdateDelivery != true) {
+        if (
+          this.formDelivery.processing ||
+          this.formDelivery.fund_source == null ||
+          this.formDelivery.cl2comb == null ||
+          this.formDelivery.quantity == null ||
+          this.formDelivery.price_per_unit == null ||
+          this.formDelivery.price_per_unit <= 0 ||
+          this.formDelivery.delivered_date == null
+        ) {
+          return false;
+        }
+
+        if (
+          this.formDelivery.fund_source != null ||
+          this.formDelivery.fund_source != '' ||
+          this.formDelivery.cl2comb != null ||
+          this.formDelivery.cl2comb != '' ||
+          this.formDelivery.quantity != null ||
+          this.formDelivery.quantity != '' ||
+          this.formDelivery.quantity != 0 ||
+          this.formDelivery.price_per_unit != '' ||
+          this.formDelivery.price_per_unit != 0 ||
+          this.formDelivery.delivered_date != null ||
+          this.formDelivery.delivered_date != ''
+        ) {
+          this.formDelivery.post(route('delivery.store'), {
+            preserveScroll: true,
+            onSuccess: () => {
+              this.formDelivery.reset();
+              this.cancel();
+              this.updateData();
+              this.createdMsg();
+              this.loading = false;
+            },
+          });
+        }
+      } else {
+        if (this.formDelivery.processing || this.formDelivery.quantity == null) {
+          return false;
+        }
+
+        this.formDelivery.put(route('delivery.update', this.formDelivery.id), {
+          preserveScroll: true,
+          onSuccess: () => {
+            +this.formDelivery.reset();
+            this.cancel();
+            this.updateData();
+            this.updateDeliveryMessage();
+          },
+        });
+      }
+    },
     submitSupplemental() {
       this.formSupplemental.authLocation = this.authWardcode;
       if (this.isUpdateSupplemental != true) {
@@ -1408,21 +1742,24 @@ export default {
             +this.formSupplemental.reset();
             this.cancel();
             this.updateData();
-            this.updateConsignmentMessage();
+            this.updateSupplementalMessage();
           },
         });
       }
     },
     cancel() {
       this.confirmConsignmentDialog = false;
+      this.confirmDeliveryDialog = false;
       this.confirmSupplementalDialog = false;
       this.isUpdate = false;
       this.isUpdateExisting = false;
       this.isUpdateConsignment = false;
+      this.isUpdateDelivery = false;
       this.isUpdateSupplemental = false;
       this.returnToCsrDialog = false;
       this.editAverageOfStocksDialog = false;
       this.consignmentDialog = false;
+      this.deliveryDialog = false;
       this.supplementalDialog = false;
       this.existingDialog = false;
       this.editStatusDialog = false;
@@ -1433,6 +1770,8 @@ export default {
       this.formMedicalGases.clearErrors();
       this.formConsignment.reset();
       this.formConsignment.clearErrors();
+      this.formDelivery.reset();
+      this.formDelivery.clearErrors();
       this.formSupplemental.reset();
       this.formSupplemental.clearErrors();
       this.formExisting.reset();
@@ -1456,6 +1795,9 @@ export default {
       this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Stock updated', life: 5000 });
     },
     updateConsignmentMessage() {
+      this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Stock updated', life: 5000 });
+    },
+    updateDeliveryMessage() {
       this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Stock updated', life: 5000 });
     },
     updateSupplementalMessage() {
@@ -1516,6 +1858,22 @@ export default {
     confirmConsignmentDialog(newVal) {
       if (newVal) {
         this.countdown = 5; // Reset countdown when dialog is opened
+        this.timer = setInterval(() => {
+          if (this.countdown > 0) {
+            this.countdown--;
+          } else {
+            clearInterval(this.timer);
+            this.timer = null;
+          }
+        }, 1000);
+      } else {
+        clearInterval(this.timer); // Stop countdown if dialog closes early
+        this.timer = null;
+      }
+    },
+    confirmDeliveryDialog(newVal) {
+      if (newVal) {
+        this.countdown = 1; // Reset countdown when dialog is opened
         this.timer = setInterval(() => {
           if (this.countdown > 0) {
             this.countdown--;
@@ -1592,6 +1950,20 @@ export default {
           if (e.uomdesc != null || e.uomdesc == '') {
             this.selectedItemsUomDesc = e.uomdesc;
             this.formConsignment.uomcode = e.uomcode;
+          } else {
+            this.selectedItemsUomDesc = null;
+          }
+        }
+      });
+    },
+    'formDelivery.cl2comb': function (val) {
+      this.selectedItemsUomDesc = null;
+
+      this.itemsList.forEach((e) => {
+        if (e.cl2comb == val) {
+          if (e.uomdesc != null || e.uomdesc == '') {
+            this.selectedItemsUomDesc = e.uomdesc;
+            this.formDelivery.uomcode = e.uomcode;
           } else {
             this.selectedItemsUomDesc = null;
           }
