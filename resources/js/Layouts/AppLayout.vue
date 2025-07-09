@@ -254,20 +254,6 @@ export default {
     },
   },
   mounted() {
-    // window.Echo.channel('request').listen('RequestStock', (args) => {
-    //   //   console.log(args);
-
-    //   //   use foreach instead of filter
-    //   if (this.$page.props.user.designation == 'csr') {
-    //     this.menu[0].items = this.menu[0].items.filter(function (obj) {
-    //       //   console.log(obj);
-    //       if (obj.to == 'issueitems') {
-    //         obj.badge = args;
-    //       }
-    //     });
-    //   }
-    // });
-
     // // set count for pending and acknowledged RIS
     this.count = this.$page.props.pendingAndAckCount;
     const targetItem = this.menu[0].items.find((item) => item.prefix === 'issueitems');
@@ -445,11 +431,6 @@ export default {
           return obj.to !== 'users';
         });
       }
-      //   if (this.$page.props.user.designation == 'ward') {
-      //     this.menu[0].items = this.menu[0].items.filter(function (obj) {
-      //       return obj.to !== 'packages';
-      //     });
-      //   }
       if (this.$page.props.user.designation == 'ward') {
         this.menu[0].items = this.menu[0].items.filter(function (obj) {
           return obj.to !== 'csrreports';
@@ -458,6 +439,16 @@ export default {
       if (this.$page.props.user.designation == 'ward') {
         this.menu[0].items = this.menu[0].items.filter(function (obj) {
           return obj.to !== 'wardsinv';
+        });
+      }
+      if (
+        this.$page.props.user.designation == 'ward' &&
+        (this.$page.props.auth.user.location.wardcode == 'CATHL' ||
+          this.$page.props.auth.user.location.wardcode == 'CENDU' ||
+          this.$page.props.auth.user.location.wardcode == 'HEMO')
+      ) {
+        this.menu[1].items = this.menu[1].items.filter(function (obj) {
+          return obj.to !== 'requeststocks';
         });
       }
       if (this.$page.props.user.designation == 'ward') {
