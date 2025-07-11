@@ -1011,7 +1011,7 @@
               <p>{{ printForm.requested_by }}</p>
             </td>
             <td style="border: 1px solid black; text-align: center">
-              <span>Efleda Sarah V. Marders, RN, MAN</span>
+              <!-- <span>Efleda Sarah V. Marders, RN, MAN</span> -->
             </td>
             <td style="border: 1px solid black; text-align: center">
               <p>David Bagaoisan</p>
@@ -1034,7 +1034,7 @@
               <p>&nbsp;</p>
             </td>
             <td style="border: 1px solid black; text-align: center">
-              <span>CHIEF NURSE VII</span>
+              <!-- <span>CHIEF NURSE VII</span> -->
             </td>
             <td style="border: 1px solid black">
               <p>&nbsp;</p>
