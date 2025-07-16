@@ -990,10 +990,7 @@
             {{ formExisting.errors.quantity }}
           </small>
         </div>
-        <div
-          v-if="canAddExpiryDate"
-          class="field flex flex-column"
-        >
+        <div class="field flex flex-column">
           <div>
             <label>Expiration date</label>
             <span class="ml-2 text-error">* MAX BY DEFAULT.</span>
