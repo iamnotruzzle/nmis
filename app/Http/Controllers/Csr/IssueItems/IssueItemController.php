@@ -106,10 +106,12 @@ class IssueItemController extends Controller
             )
             ->groupBy('rs.id', 'ward.wardname', 'rs.status', 'rs.created_at', 'requested_by.firstname', 'requested_by.lastname', 'approved_by.firstname', 'approved_by.lastname')
             ->orderByDesc('rs.id')
-            ->paginate(5);
+            ->paginate(3);
 
+        // Get the IDs from the current page
         $requestIds = collect($requests->items())->pluck('id');
 
+        // Fetch details only for the current page IDs
         $details = DB::table('csrw_request_stocks_details as rsd')
             ->join('hclass2 as item', 'item.cl2comb', '=', 'rsd.cl2comb')
             ->whereIn('rsd.request_stocks_id', $requestIds)
@@ -124,7 +126,7 @@ class IssueItemController extends Controller
             )
             ->get();
 
-        // Step 3: Fetch converted items
+        // Fetch converted items only for the current page
         $cl2combs = $details->pluck('cl2comb')->unique();
         $converted = DB::table('csrw_csr_item_conversion')
             ->whereIn('cl2comb_after', $cl2combs)
@@ -132,8 +134,11 @@ class IssueItemController extends Controller
             ->select('id', 'cl2comb_after', 'quantity_after', 'expiration_date')
             ->get()
             ->groupBy('cl2comb_after');
+
+        // Group details by request_stocks_id
         $groupedDetails = $details->groupBy('request_stocks_id');
 
+        // Map the data with safety check
         $data = collect($requests->items())->map(function ($req) use ($groupedDetails, $converted) {
             return [
                 'id' => $req->id,
@@ -142,17 +147,19 @@ class IssueItemController extends Controller
                 'requested_by' => $req->requested_by_name,
                 'approved_by' => $req->approved_by_name,
                 'requested_at' => $req->wardname,
-                'request_stocks_details' => $groupedDetails[$req->id]->map(function ($d) use ($converted) {
-                    return [
-                        'detail_id' => $d->detail_id,
-                        'cl2comb' => $d->cl2comb,
-                        'cl2desc' => $d->cl2desc,
-                        'requested_qty' => $d->requested_qty,
-                        'approved_qty' => $d->approved_qty,
-                        'remarks' => $d->remarks,
-                        'converted_item' => isset($converted[$d->cl2comb]) ? $converted[$d->cl2comb]->values() : collect(),
-                    ];
-                })->values()
+                'request_stocks_details' => isset($groupedDetails[$req->id])
+                    ? $groupedDetails[$req->id]->map(function ($d) use ($converted) {
+                        return [
+                            'detail_id' => $d->detail_id,
+                            'cl2comb' => $d->cl2comb,
+                            'cl2desc' => $d->cl2desc,
+                            'requested_qty' => $d->requested_qty,
+                            'approved_qty' => $d->approved_qty,
+                            'remarks' => $d->remarks,
+                            'converted_item' => isset($converted[$d->cl2comb]) ? $converted[$d->cl2comb]->values() : collect(),
+                        ];
+                    })->values()
+                    : collect(), // Return empty collection if no details found for this request
             ];
         });
         // dd($data);
