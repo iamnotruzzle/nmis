@@ -217,7 +217,7 @@ class PatientChargeController extends Controller
                     -- AND package.wardcode = ?
                     ORDER BY item.cl2desc ASC;",
         );
-
+        // get variant
         $genericVariants = DB::select("SELECT generic_cl2comb, variant_cl2comb FROM csrw_generic_variants");
 
 
