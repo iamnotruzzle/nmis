@@ -29,6 +29,7 @@ use App\Http\Controllers\Reports\Csr\CsrStocksReportController;
 use App\Http\Controllers\Reports\Csr\IssuedItems\IssuedItemsReportController;
 use App\Http\Controllers\Reports\Ward\WardsManualReportExportController;
 use App\Http\Controllers\Reports\Ward\WardStocksReportController;
+use App\Http\Controllers\Tools\GenericVariant\GenericVariantController;
 use App\Http\Controllers\Tools\Packages\PackageController;
 use App\Http\Controllers\Users\User\ProfileController;
 use App\Http\Controllers\Users\UserController;
@@ -156,6 +157,7 @@ Route::middleware(['web', 'auth', 'verified', 'check.active.login'])->group(
 
         // tools
         Route::resource('packages', PackageController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('generic-variants', GenericVariantController::class)->middleware(['verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
     }
 );
 

@@ -162,6 +162,13 @@ export default {
               prefix: 'packages',
               comp: 'Tools/Packages/Index',
             },
+            {
+              label: 'Generic variants',
+              icon: 'oi-package',
+              to: 'generic-variants',
+              prefix: 'generic-variants',
+              comp: 'Tools/GenericVariants/Index',
+            },
             // {
             //   label: 'ECG',
             //   icon: 'si-microsoftexcel',
@@ -439,6 +446,11 @@ export default {
       if (this.$page.props.user.designation == 'ward') {
         this.menu[0].items = this.menu[0].items.filter(function (obj) {
           return obj.to !== 'wardsinv';
+        });
+      }
+      if (this.$page.props.user.designation == 'ward') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'generic-variants';
         });
       }
       if (
