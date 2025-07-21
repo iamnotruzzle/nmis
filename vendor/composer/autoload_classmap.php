@@ -55,6 +55,7 @@ return array(
     'App\\Http\\Controllers\\Wards\\Consignment\\ConsignmentController' => $baseDir . '/app/Http/Controllers/Wards/Consignment/ConsignmentController.php',
     'App\\Http\\Controllers\\Wards\\CsrInventory\\CsrInventoryController' => $baseDir . '/app/Http/Controllers/Wards/CsrInventory/CsrInventoryController.php',
     'App\\Http\\Controllers\\Wards\\Dashboard\\DashboardController' => $baseDir . '/app/Http/Controllers/Wards/Dashboard/DashboardController.php',
+    'App\\Http\\Controllers\\Wards\\Delivery\\DeliveryController' => $baseDir . '/app/Http/Controllers/Wards/Delivery/DeliveryController.php',
     'App\\Http\\Controllers\\Wards\\ExistingStock\\ExistingStockController' => $baseDir . '/app/Http/Controllers/Wards/ExistingStock/ExistingStockController.php',
     'App\\Http\\Controllers\\Wards\\Faq\\FaqController' => $baseDir . '/app/Http/Controllers/Wards/Faq/FaqController.php',
     'App\\Http\\Controllers\\Wards\\Inventory\\InventoryController' => $baseDir . '/app/Http/Controllers/Wards/Inventory/InventoryController.php',

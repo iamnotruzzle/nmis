@@ -734,6 +734,7 @@ class ComposerStaticInita35f14ec21fb126801fb4364978bffb6
         'App\\Http\\Controllers\\Wards\\Consignment\\ConsignmentController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/Consignment/ConsignmentController.php',
         'App\\Http\\Controllers\\Wards\\CsrInventory\\CsrInventoryController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/CsrInventory/CsrInventoryController.php',
         'App\\Http\\Controllers\\Wards\\Dashboard\\DashboardController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/Dashboard/DashboardController.php',
+        'App\\Http\\Controllers\\Wards\\Delivery\\DeliveryController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/Delivery/DeliveryController.php',
         'App\\Http\\Controllers\\Wards\\ExistingStock\\ExistingStockController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/ExistingStock/ExistingStockController.php',
         'App\\Http\\Controllers\\Wards\\Faq\\FaqController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/Faq/FaqController.php',
         'App\\Http\\Controllers\\Wards\\Inventory\\InventoryController' => __DIR__ . '/../..' . '/app/Http/Controllers/Wards/Inventory/InventoryController.php',
