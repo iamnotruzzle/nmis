@@ -348,6 +348,34 @@
       </template>
     </Dialog>
 
+    <Dialog
+      v-model:visible="variantDialogVisible"
+      modal
+      header="Select Variant"
+    >
+      <p>
+        Select a variant for: <strong>{{ variantItemName }}</strong>
+      </p>
+      <Dropdown
+        v-model="selectedVariant"
+        :options="currentVariantOptions"
+        placeholder="Choose variant"
+        class="w-full"
+      />
+      <template #footer>
+        <Button
+          label="Cancel"
+          severity="secondary"
+          @click="variantDialogVisible = false"
+        />
+        <Button
+          label="Confirm"
+          severity="primary"
+          @click="onVariantSelected(selectedVariant)"
+        />
+      </template>
+    </Dialog>
+
     <!-- Open summary dialog add delivery -->
     <Dialog
       v-model:visible="chargeSummaryDialog"
@@ -851,6 +879,11 @@ export default {
       miscList: [],
       itemList: [],
       itemsToBillList: [],
+      variantDialogVisible: false,
+      variantItemName: '',
+      currentVariantOptions: [],
+      selectedVariant: null,
+      onVariantSelected: null,
       item: null, // selected item
       itemDesc: null,
       qtyToCharge: null,
@@ -948,6 +981,7 @@ export default {
     this.storeMedicalSuppliesInContainer();
     this.storeMiscInContainer();
     this.storeItemsInContainer();
+    this.mapvariant();
 
     // set patient enccode
     this.enccode = this.pat_enccode;
@@ -964,6 +998,21 @@ export default {
         }
         this.variantMap[generic_cl2comb].push(variant_cl2comb);
       });
+      console.log(this.genericVariants);
+      //   [
+      //     {
+      //         "generic_cl2comb": "1000-11761-KMXXJ",
+      //         "variant_cl2comb": "1000-11761-jrctj"
+      //     },
+      //     {
+      //         "generic_cl2comb": "1000-11761-KMXXJ",
+      //         "variant_cl2comb": "1000-11761-ctfvV"
+      //     },
+      //     {
+      //         "generic_cl2comb": "1000-11761-KMXXJ",
+      //         "variant_cl2comb": "1000-11761-oJnyy"
+      //     }
+      //     ]
     },
     openChargeSummaryDialog() {
       console.log('charge list', this.itemsToBillList);
@@ -1175,7 +1224,18 @@ export default {
       });
       //   console.log('item list', this.itemList);
     },
-    medicalSuppliesQtyValidation() {
+    async selectVariantDialog(itemDesc, variants) {
+      return new Promise((resolve) => {
+        this.variantDialogVisible = true;
+        this.currentVariantOptions = variants;
+        this.variantItemName = itemDesc;
+        this.onVariantSelected = (selectedVariant) => {
+          this.variantDialogVisible = false;
+          resolve(selectedVariant);
+        };
+      });
+    },
+    async medicalSuppliesQtyValidation() {
       //   console.log('item 1', this.item);
 
       if (!this.item) {
@@ -1212,12 +1272,26 @@ export default {
           return;
         }
 
-        // Loop through each item in the package and charge it
         for (const pkgItem of packageItems) {
-          console.log('Processing package item:', pkgItem);
+          let itemCodeToCharge = pkgItem.itemcode;
 
-          // Find the actual item details from itemList using itemCode
-          const itemDetails = this.itemList.find((e) => e.itemCode === pkgItem.itemcode);
+          // Check if the itemCode is a generic with variants
+          const isGeneric = this.variantMap[itemCodeToCharge] !== undefined;
+
+          if (isGeneric) {
+            const selectedVariant = await this.selectVariantDialog(pkgItem.itemDesc, this.variantMap[itemCodeToCharge]);
+
+            if (!selectedVariant) {
+              this.packageFail(pkgItem.itemDesc);
+              continue;
+            }
+
+            // 🔁 Replace the generic with the selected variant
+            itemCodeToCharge = selectedVariant;
+          }
+
+          // Find the actual item details from itemList using final itemCodeToCharge
+          const itemDetails = this.itemList.find((e) => e.itemCode === itemCodeToCharge);
 
           if (!itemDetails) {
             console.warn('Item not found in stock:', pkgItem.itemDesc);
