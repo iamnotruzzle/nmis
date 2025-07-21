@@ -1240,7 +1240,7 @@ export default {
         quantity: null,
         price_per_unit: null,
         delivered_date: null,
-        expiration_date: null,
+        expiration_date: '9999-12-30',
       }),
       formDelivery: this.$inertia.form({
         id: null,
@@ -1273,7 +1273,7 @@ export default {
         quantity: null,
         price_per_unit: null,
         delivered_date: null,
-        expiration_date: null,
+        expiration_date: '9999-12-30',
       }),
       formReturnToCsr: this.$inertia.form({
         ward_stock_id: null,
