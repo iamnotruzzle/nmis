@@ -16,6 +16,8 @@
         :sortOrder="1"
         showGridlines
         removableSort
+        rowGroupMode="rowspan"
+        groupRowsBy="generic_desc"
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
@@ -28,6 +30,15 @@
             />
           </div>
         </template>
+
+        <Column
+          header="#"
+          headerStyle="width:3rem"
+        >
+          <template #body="slotProps">
+            {{ slotProps.index + 1 }}
+          </template>
+        </Column>
 
         <Column
           field="generic_desc"
