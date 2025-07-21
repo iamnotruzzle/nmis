@@ -28,6 +28,7 @@
               <div class="flex">
                 <div class="mr-2">
                   <Button
+                    v-if="$page.props.auth.user.location.wardcode == 'CSR'"
                     label="Create package"
                     icon="pi pi-plus"
                     iconPos="right"
@@ -335,6 +336,7 @@ export default {
     InputNumber,
   },
   props: {
+    // authCode: String,
     items: Object,
     packages: Array,
   },

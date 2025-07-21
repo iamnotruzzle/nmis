@@ -64,6 +64,7 @@ class PackageController extends Controller
         return Inertia::render('Tools/Packages/Index', [
             'items' => $items,
             'packages' => $packages,
+            'authCode' => $authCode,
         ]);
     }
 
