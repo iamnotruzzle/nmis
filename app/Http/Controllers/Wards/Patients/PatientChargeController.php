@@ -64,56 +64,6 @@ class PatientChargeController extends Controller
         );
         $authCode = $authWardcode[0]->wardcode;
 
-        // this query will show stocks that have the received status but also get the status FROM MEDICAL GASES and EXISTING_STOCKS
-        // $stocksFromCsr = DB::select(
-        //     "SELECT
-        //             ws.[from],
-        //             ws.id,
-        //             ws.request_stocks_id,
-        //             ws.is_consumable,
-        //             item.cl2comb,
-        //             item.cl2desc,
-        //             item.uomcode,
-        //             ws.quantity,
-        //             ws.average,
-        //             ws.total_usage,
-        //             price.price_per_unit AS price,
-        //             ws.expiration_date,
-        //             ws.created_at
-        //         FROM csrw_wards_stocks AS ws
-        //         JOIN hclass2 AS item
-        //             ON item.cl2comb = ws.cl2comb
-        //         LEFT JOIN csrw_item_prices AS price
-        //             ON ws.cl2comb = price.cl2comb
-        //             AND ISNULL(ws.ris_no, '') = ISNULL(price.ris_no, '')
-        //         LEFT JOIN csrw_request_stocks AS request
-        //             ON ws.request_stocks_id = request.id
-        //         WHERE ws.location = '" . $authCode . "'
-        //             AND ws.quantity > 0
-        //             AND ws.expiration_date > GETDATE()
-        //             AND (
-        //                 (request.status = 'RECEIVED')
-        //                 OR (ws.request_stocks_id IS NULL AND ws.[from] IN ('MEDICAL GASES', 'EXISTING_STOCKS', 'CONSIGNMENT', 'SUPPLEMENTAL', 'WARD'))
-        //             )
-        //         ORDER BY ws.expiration_date ASC;"
-        // );
-        // dd($stocksFromCsr);
-
-        // $fromExisting = DB::select(
-        //     "SELECT stock.[from], stock.id, stock.request_stocks_id, stock.is_consumable,
-        //         item.cl2comb, item.cl2desc, item.uomcode,
-        //         stock.quantity, stock.average, stock.total_usage,
-        //         price.price_per_unit as price,
-        //         stock.expiration_date, stock.created_at
-        //         FROM csrw_wards_stocks stock
-        //         JOIN hclass2 item ON stock.cl2comb = item.cl2comb
-        //         LEFT JOIN csrw_item_prices AS price
-        //             ON stock.cl2comb = price.cl2comb
-        //             AND price.ris_no = stock.ris_no -- use ris_no if item is from ward/existing
-        //         WHERE stock.location = '" . $authCode . "'
-        //         AND stock.quantity > 0
-        //         AND stock.[from] = 'EXISTING_STOCKS'"
-        // );
         $fromExisting = DB::select(
             "SELECT stock.[from], stock.id, stock.request_stocks_id, stock.is_consumable,
                 item.cl2comb, item.cl2desc, item.uomcode,
@@ -256,16 +206,45 @@ class PatientChargeController extends Controller
             ->where('hmstat', 'A')
             ->get(['hmcode', 'hmdesc', 'hmamt', 'uomcode']);
 
+
         // get packages / packages
+        // $packages = DB::select(
+        //     "SELECT package.id, package.description, pack_dets.cl2comb, item.cl2desc, pack_dets.quantity, package.status
+        //             FROM csrw_packages AS package
+        //             JOIN csrw_package_details as pack_dets ON pack_dets.package_id = package.id
+        //             JOIN hclass2 as item ON item.cl2comb = pack_dets.cl2comb
+        //             WHERE package.status = 'A'
+        //             -- AND package.wardcode = ?
+        //             ORDER BY item.cl2desc ASC;",
+        // );
         $packages = DB::select(
-            "SELECT package.id, package.description, pack_dets.cl2comb, item.cl2desc, pack_dets.quantity, package.status
-                    FROM csrw_packages AS package
-                    JOIN csrw_package_details as pack_dets ON pack_dets.package_id = package.id
-                    JOIN hclass2 as item ON item.cl2comb = pack_dets.cl2comb
-                    WHERE package.status = 'A'
-                    -- AND package.wardcode = ?
-                    ORDER BY item.cl2desc ASC;",
+            "SELECT
+                package.id,
+                package.description,
+                pack_dets.cl2comb,
+                item.cl2desc,
+                pack_dets.quantity,
+                package.status,
+                CASE
+                    WHEN gv.generic_cl2comb IS NOT NULL THEN 1
+                    ELSE 0
+                END AS is_generic
+            FROM
+                csrw_packages AS package
+            JOIN
+                csrw_package_details AS pack_dets ON pack_dets.package_id = package.id
+            JOIN
+                hclass2 AS item ON item.cl2comb = pack_dets.cl2comb
+            LEFT JOIN
+                csrw_generic_variants AS gv ON gv.generic_cl2comb = pack_dets.cl2comb
+            WHERE
+                package.status = 'A'
+            ORDER BY
+                item.cl2desc ASC;",
         );
+
+        $genericVariants = DB::select("SELECT generic_cl2comb, variant_cl2comb FROM csrw_generic_variants");
+
 
         $bills = DB::select(
             "SELECT pat_charge.pcchrgcod as charge_slip_no,
@@ -314,6 +293,7 @@ class PatientChargeController extends Controller
         return Inertia::render('Wards/Patients/Bill/Index', [
             // 'pat_name' => $pat_name,
             'packages' => $packages,
+            'genericVariants' => $genericVariants,
             'hpercode' => $hpercode,
             'patient_name' => $patient_name,
             'pat_tscode' => $pat_tscode,
