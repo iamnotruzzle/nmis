@@ -36,7 +36,7 @@
                 </div>
               </div>
               <Button
-                label="ADD STOCK LEVEL"
+                label="ADD VARIANT"
                 icon="pi pi-plus"
                 iconPos="right"
                 @click="openCreateDialog"
