@@ -46,7 +46,7 @@ class PackageController extends Controller
                     ON uom.uomcode = item.uomcode
                 WHERE
                     (item.catID = 1
-                    AND item.uomcode != 'box'
+                    -- AND item.uomcode != 'box'
                     AND (item.itemcode NOT LIKE 'MSMG-%' OR item.itemcode IS NULL))
                 ORDER BY
                     item.cl2desc ASC;"
