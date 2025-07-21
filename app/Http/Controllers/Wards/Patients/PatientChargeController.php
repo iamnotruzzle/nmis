@@ -218,7 +218,20 @@ class PatientChargeController extends Controller
                     ORDER BY item.cl2desc ASC;",
         );
         // get variant
-        $genericVariants = DB::select("SELECT generic_cl2comb, variant_cl2comb FROM csrw_generic_variants");
+        // $genericVariants = DB::select("SELECT generic_cl2comb, variant_cl2comb FROM csrw_generic_variants");
+        $genericVariants = DB::select(
+            "SELECT
+                gv.generic_cl2comb,
+                gv.variant_cl2comb,
+                generic_item.cl2desc AS generic_desc,
+                variant_item.cl2desc AS variant_desc
+            FROM
+                csrw_generic_variants AS gv
+            JOIN
+                hclass2 AS generic_item ON generic_item.cl2comb = gv.generic_cl2comb
+            JOIN
+                hclass2 AS variant_item ON variant_item.cl2comb = gv.variant_cl2comb;"
+        );
 
 
         $bills = DB::select(

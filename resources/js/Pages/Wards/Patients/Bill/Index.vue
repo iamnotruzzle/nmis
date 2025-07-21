@@ -351,6 +351,7 @@
     <Dialog
       v-model:visible="variantDialogVisible"
       modal
+      class="p-fluid w-4"
       header="Select Variant"
     >
       <p>
@@ -359,7 +360,10 @@
       <Dropdown
         v-model="selectedVariant"
         :options="currentVariantOptions"
+        optionLabel="label"
+        optionValue="value"
         placeholder="Choose variant"
+        :virtualScrollerOptions="{ itemSize: 28 }"
         class="w-full"
       />
       <template #footer>
@@ -991,28 +995,39 @@ export default {
     this.hospitalNumber = this.hpercode;
   },
   methods: {
+    // mapvariant() {
+    //   this.genericVariants.forEach(({ generic_cl2comb, variant_cl2comb }) => {
+    //     if (!this.variantMap[generic_cl2comb]) {
+    //       this.variantMap[generic_cl2comb] = [];
+    //     }
+    //     this.variantMap[generic_cl2comb].push(variant_cl2comb);
+    //   });
+    //   console.log(this.genericVariants);
+    //   //   [
+    //   //     {
+    //   //         "generic_cl2comb": "1000-11761-KMXXJ",
+    //   //         "variant_cl2comb": "1000-11761-jrctj"
+    //   //     },
+    //   //     {
+    //   //         "generic_cl2comb": "1000-11761-KMXXJ",
+    //   //         "variant_cl2comb": "1000-11761-ctfvV"
+    //   //     },
+    //   //     {
+    //   //         "generic_cl2comb": "1000-11761-KMXXJ",
+    //   //         "variant_cl2comb": "1000-11761-oJnyy"
+    //   //     }
+    //   //     ]
+    // },
     mapvariant() {
-      this.genericVariants.forEach(({ generic_cl2comb, variant_cl2comb }) => {
+      this.$page.props.genericVariants.forEach(({ generic_cl2comb, variant_cl2comb, variant_desc }) => {
         if (!this.variantMap[generic_cl2comb]) {
           this.variantMap[generic_cl2comb] = [];
         }
-        this.variantMap[generic_cl2comb].push(variant_cl2comb);
+        this.variantMap[generic_cl2comb].push({
+          label: variant_desc, // shown in dropdown
+          value: variant_cl2comb, // used internally
+        });
       });
-      console.log(this.genericVariants);
-      //   [
-      //     {
-      //         "generic_cl2comb": "1000-11761-KMXXJ",
-      //         "variant_cl2comb": "1000-11761-jrctj"
-      //     },
-      //     {
-      //         "generic_cl2comb": "1000-11761-KMXXJ",
-      //         "variant_cl2comb": "1000-11761-ctfvV"
-      //     },
-      //     {
-      //         "generic_cl2comb": "1000-11761-KMXXJ",
-      //         "variant_cl2comb": "1000-11761-oJnyy"
-      //     }
-      //     ]
     },
     openChargeSummaryDialog() {
       console.log('charge list', this.itemsToBillList);
