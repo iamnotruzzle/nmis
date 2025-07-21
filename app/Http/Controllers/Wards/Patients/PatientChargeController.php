@@ -208,39 +208,14 @@ class PatientChargeController extends Controller
 
 
         // get packages / packages
-        // $packages = DB::select(
-        //     "SELECT package.id, package.description, pack_dets.cl2comb, item.cl2desc, pack_dets.quantity, package.status
-        //             FROM csrw_packages AS package
-        //             JOIN csrw_package_details as pack_dets ON pack_dets.package_id = package.id
-        //             JOIN hclass2 as item ON item.cl2comb = pack_dets.cl2comb
-        //             WHERE package.status = 'A'
-        //             -- AND package.wardcode = ?
-        //             ORDER BY item.cl2desc ASC;",
-        // );
         $packages = DB::select(
-            "SELECT
-                package.id,
-                package.description,
-                pack_dets.cl2comb,
-                item.cl2desc,
-                pack_dets.quantity,
-                package.status,
-                CASE
-                    WHEN gv.generic_cl2comb IS NOT NULL THEN 1
-                    ELSE 0
-                END AS is_generic
-            FROM
-                csrw_packages AS package
-            JOIN
-                csrw_package_details AS pack_dets ON pack_dets.package_id = package.id
-            JOIN
-                hclass2 AS item ON item.cl2comb = pack_dets.cl2comb
-            LEFT JOIN
-                csrw_generic_variants AS gv ON gv.generic_cl2comb = pack_dets.cl2comb
-            WHERE
-                package.status = 'A'
-            ORDER BY
-                item.cl2desc ASC;",
+            "SELECT package.id, package.description, pack_dets.cl2comb, item.cl2desc, pack_dets.quantity, package.status
+                    FROM csrw_packages AS package
+                    JOIN csrw_package_details as pack_dets ON pack_dets.package_id = package.id
+                    JOIN hclass2 as item ON item.cl2comb = pack_dets.cl2comb
+                    WHERE package.status = 'A'
+                    -- AND package.wardcode = ?
+                    ORDER BY item.cl2desc ASC;",
         );
 
         $genericVariants = DB::select("SELECT generic_cl2comb, variant_cl2comb FROM csrw_generic_variants");

@@ -1175,68 +1175,9 @@ export default {
       });
       //   console.log('item list', this.itemList);
     },
-    // medicalSuppliesQtyValidation() {
-    //   //   console.log('item 1', this.item);
-
-    //   if (!this.item) {
-    //     this.itemNotSelected = true;
-    //     this.itemNotSelectedMsg = 'Item not selected.';
-    //     return;
-    //   }
-
-    //   if (!this.qtyToCharge || this.qtyToCharge <= 0) {
-    //     this.itemNotSelected = true;
-    //     this.itemNotSelectedMsg = 'Please provide quantity.';
-    //     return;
-    //   }
-
-    //   if (this.item.is_package === false) {
-    //     // Handle DRUMN and MISC separately
-    //     if (this.item.typeOfCharge === 'DRUMN') {
-    //       this.chargeDrumnItem(this.item, this.qtyToCharge);
-    //     } else if (this.item.typeOfCharge === 'MISC') {
-    //       this.chargeMiscItem(this.item, this.qtyToCharge);
-    //     } else {
-    //       this.itemNotSelected = true;
-    //       this.itemNotSelectedMsg = 'Unsupported charge type.';
-    //     }
-    //   } else {
-    //     console.log('Package selected, processing package items...');
-
-    //     // Find all items inside the selected package
-    //     const packageItems = this.packageList.filter((pkg) => pkg.id === this.item.id);
-
-    //     if (packageItems.length === 0) {
-    //       this.itemNotSelected = true;
-    //       this.itemNotSelectedMsg = 'No items found in the package.';
-    //       return;
-    //     }
-
-    //     // Loop through each item in the package and charge it
-    //     for (const pkgItem of packageItems) {
-    //       console.log('Processing package item:', pkgItem);
-
-    //       // Find the actual item details from itemList using itemCode
-    //       const itemDetails = this.itemList.find((e) => e.itemCode === pkgItem.itemcode);
-
-    //       if (!itemDetails) {
-    //         console.warn('Item not found in stock:', pkgItem.itemDesc);
-    //         this.packageFail(pkgItem.itemDesc);
-    //         continue;
-    //       }
-
-    //       if (itemDetails.typeOfCharge === 'DRUMN') {
-    //         this.chargeDrumnItem(itemDetails, pkgItem.quantity * this.qtyToCharge);
-    //       } else if (itemDetails.typeOfCharge === 'MISC') {
-    //         this.chargeMiscItem(itemDetails, pkgItem.quantity * this.qtyToCharge);
-    //       } else {
-    //         console.warn('Unsupported charge type for package item:', itemDetails.itemCode);
-    //       }
-    //     }
-    //   }
-    // },
-
     medicalSuppliesQtyValidation() {
+      //   console.log('item 1', this.item);
+
       if (!this.item) {
         this.itemNotSelected = true;
         this.itemNotSelectedMsg = 'Item not selected.';
@@ -1249,12 +1190,20 @@ export default {
         return;
       }
 
-      const isPackage = this.item.is_package === true;
-      const isGenericVariant = !!this.item.generic_id; // or this.item.is_generic_variant if you use that flag
-
-      if (isPackage) {
+      if (this.item.is_package === false) {
+        // Handle DRUMN and MISC separately
+        if (this.item.typeOfCharge === 'DRUMN') {
+          this.chargeDrumnItem(this.item, this.qtyToCharge);
+        } else if (this.item.typeOfCharge === 'MISC') {
+          this.chargeMiscItem(this.item, this.qtyToCharge);
+        } else {
+          this.itemNotSelected = true;
+          this.itemNotSelectedMsg = 'Unsupported charge type.';
+        }
+      } else {
         console.log('Package selected, processing package items...');
 
+        // Find all items inside the selected package
         const packageItems = this.packageList.filter((pkg) => pkg.id === this.item.id);
 
         if (packageItems.length === 0) {
@@ -1263,7 +1212,11 @@ export default {
           return;
         }
 
+        // Loop through each item in the package and charge it
         for (const pkgItem of packageItems) {
+          console.log('Processing package item:', pkgItem);
+
+          // Find the actual item details from itemList using itemCode
           const itemDetails = this.itemList.find((e) => e.itemCode === pkgItem.itemcode);
 
           if (!itemDetails) {
@@ -1272,62 +1225,14 @@ export default {
             continue;
           }
 
-          const totalQty = pkgItem.quantity * this.qtyToCharge;
-
           if (itemDetails.typeOfCharge === 'DRUMN') {
-            this.chargeDrumnItem(itemDetails, totalQty);
+            this.chargeDrumnItem(itemDetails, pkgItem.quantity * this.qtyToCharge);
           } else if (itemDetails.typeOfCharge === 'MISC') {
-            this.chargeMiscItem(itemDetails, totalQty);
+            this.chargeMiscItem(itemDetails, pkgItem.quantity * this.qtyToCharge);
           } else {
             console.warn('Unsupported charge type for package item:', itemDetails.itemCode);
           }
         }
-
-        return;
-      }
-
-      if (isGenericVariant) {
-        console.log('Generic variant selected, processing mapped raw items...');
-
-        const variantItems = this.genericVariantItems.filter((i) => i.variant_id === this.item.id);
-
-        if (variantItems.length === 0) {
-          this.itemNotSelected = true;
-          this.itemNotSelectedMsg = 'No raw items linked to this variant.';
-          return;
-        }
-
-        for (const vItem of variantItems) {
-          const rawItem = this.itemList.find((e) => e.itemCode === vItem.itemcode);
-
-          if (!rawItem) {
-            console.warn('Raw item not found for variant:', vItem.itemDesc);
-            this.packageFail(vItem.itemDesc);
-            continue;
-          }
-
-          const totalQty = vItem.quantity * this.qtyToCharge;
-
-          if (rawItem.typeOfCharge === 'DRUMN') {
-            this.chargeDrumnItem(rawItem, totalQty);
-          } else if (rawItem.typeOfCharge === 'MISC') {
-            this.chargeMiscItem(rawItem, totalQty);
-          } else {
-            console.warn('Unsupported charge type for variant item:', rawItem.itemCode);
-          }
-        }
-
-        return;
-      }
-
-      // Default: Single raw item
-      if (this.item.typeOfCharge === 'DRUMN') {
-        this.chargeDrumnItem(this.item, this.qtyToCharge);
-      } else if (this.item.typeOfCharge === 'MISC') {
-        this.chargeMiscItem(this.item, this.qtyToCharge);
-      } else {
-        this.itemNotSelected = true;
-        this.itemNotSelectedMsg = 'Unsupported charge type.';
       }
     },
 
