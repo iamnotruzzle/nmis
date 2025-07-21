@@ -297,6 +297,16 @@
           <template #header>
             <div class="text-primary text-xl font-bold">REQUEST STOCK</div>
           </template>
+
+          <div
+            v-if="requestStockListDetails.length >= 15"
+            class="mb-4"
+          >
+            <p class="font-bold text-warning text-lg border border-yellow-500 bg-yellow-100 p-3 rounded">
+              ⚠️ Only 15 items are allowed per request. Please create a new request for additional items.
+            </p>
+          </div>
+
           <div
             v-if="noStockLevel == true"
             class="mb-4"
@@ -1133,33 +1143,60 @@ export default {
         this.formUpdateStatus.reset()
       );
     },
+    // fillRequestContainer() {
+    //   // check if no selected item
+    //   if (this.item == null || this.item == '') {
+    //     this.itemNotSelected = true;
+    //     this.itemNotSelectedMsg = 'Item not selected.';
+    //   } else {
+    //     // check if request qty is not provided
+    //     if (this.requested_qty == 0 || this.requested_qty == null || this.requested_qty == '') {
+    //       this.itemNotSelected = true;
+    //       this.itemNotSelectedMsg = 'Please provide quantity.';
+    //     } else {
+    //       // check if item selected is already on the list
+    //       if (this.requestStockListDetails.some((e) => e.cl2comb === this.item['cl2comb'])) {
+    //         this.itemNotSelected = true;
+    //         this.itemNotSelectedMsg = 'Item is already on the list.';
+    //       } else {
+    //         this.itemNotSelected = false;
+    //         this.itemNotSelectedMsg = null;
+    //         this.requestStockListDetails.push({
+    //           cl2comb: this.item['cl2comb'],
+    //           cl2desc: this.item['cl2desc'],
+    //           requested_qty: this.requested_qty,
+    //         });
+    //       }
+    //     }
+    //   }
+    // },
     fillRequestContainer() {
-      // check if no selected item
+      if (this.requestStockListDetails.length >= 15) {
+        this.itemNotSelected = true;
+        this.itemNotSelectedMsg = 'Limit of 15 items reached. Please create a new request.';
+        return;
+      }
+
       if (this.item == null || this.item == '') {
         this.itemNotSelected = true;
         this.itemNotSelectedMsg = 'Item not selected.';
+      } else if (this.requested_qty == 0 || this.requested_qty == null || this.requested_qty == '') {
+        this.itemNotSelected = true;
+        this.itemNotSelectedMsg = 'Please provide quantity.';
+      } else if (this.requestStockListDetails.some((e) => e.cl2comb === this.item['cl2comb'])) {
+        this.itemNotSelected = true;
+        this.itemNotSelectedMsg = 'Item is already on the list.';
       } else {
-        // check if request qty is not provided
-        if (this.requested_qty == 0 || this.requested_qty == null || this.requested_qty == '') {
-          this.itemNotSelected = true;
-          this.itemNotSelectedMsg = 'Please provide quantity.';
-        } else {
-          // check if item selected is already on the list
-          if (this.requestStockListDetails.some((e) => e.cl2comb === this.item['cl2comb'])) {
-            this.itemNotSelected = true;
-            this.itemNotSelectedMsg = 'Item is already on the list.';
-          } else {
-            this.itemNotSelected = false;
-            this.itemNotSelectedMsg = null;
-            this.requestStockListDetails.push({
-              cl2comb: this.item['cl2comb'],
-              cl2desc: this.item['cl2desc'],
-              requested_qty: this.requested_qty,
-            });
-          }
-        }
+        this.itemNotSelected = false;
+        this.itemNotSelectedMsg = null;
+        this.requestStockListDetails.push({
+          cl2comb: this.item['cl2comb'],
+          cl2desc: this.item['cl2desc'],
+          requested_qty: this.requested_qty,
+        });
       }
     },
+
     removeFromRequestContainer(item) {
       this.requestStockListDetails.splice(
         this.requestStockListDetails.findIndex((e) => e.cl2comb === item.cl2comb),
