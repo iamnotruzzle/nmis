@@ -396,11 +396,11 @@ export default {
           return obj.to !== 'users';
         });
       }
-      if (this.$page.props.user.designation == 'csr') {
-        this.menu[0].items = this.menu[0].items.filter(function (obj) {
-          return obj.to !== 'packages';
-        });
-      }
+      //   if (this.$page.props.user.designation == 'csr') {
+      //     this.menu[0].items = this.menu[0].items.filter(function (obj) {
+      //       return obj.to !== 'packages';
+      //     });
+      //   }
       if (this.$page.props.user.designation == 'csr') {
         this.menu[0].items = this.menu[0].items.filter(function (obj) {
           return obj.to !== 'wardreports';

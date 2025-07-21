@@ -263,9 +263,8 @@ class PatientChargeController extends Controller
                     JOIN csrw_package_details as pack_dets ON pack_dets.package_id = package.id
                     JOIN hclass2 as item ON item.cl2comb = pack_dets.cl2comb
                     WHERE package.status = 'A'
-                    AND package.wardcode = ?
+                    -- AND package.wardcode = ?
                     ORDER BY item.cl2desc ASC;",
-            [$authCode]
         );
 
         $bills = DB::select(
