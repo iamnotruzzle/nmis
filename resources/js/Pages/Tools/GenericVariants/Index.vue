@@ -7,7 +7,7 @@
     <div class="card w-full">
       <DataTable
         class="p-datatable-sm"
-        v-model:filters="filters"
+        v-model:filters="itemsWithGenericDescFilter"
         :value="variants"
         paginator
         :rows="20"
@@ -21,13 +21,27 @@
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span class="text-xl text-900 font-bold text-primary">GENERIC VARIANTS</span>
-            <Button
-              label="Create Variant"
-              icon="pi pi-plus"
-              iconPos="right"
-              @click="openCreateDialog"
-            />
+            <span class="text-xl text-900 font-bold text-primary">GENERIC VARIANT</span>
+            <div class="flex">
+              <div class="mr-2">
+                <div class="p-inputgroup">
+                  <span class="p-inputgroup-addon">
+                    <i class="pi pi-search"></i>
+                  </span>
+                  <InputText
+                    id="searchInput"
+                    v-model="itemsWithGenericDescFilter['global'].value"
+                    placeholder="Search item"
+                  />
+                </div>
+              </div>
+              <Button
+                label="ADD STOCK LEVEL"
+                icon="pi pi-plus"
+                iconPos="right"
+                @click="openCreateDialog"
+              />
+            </div>
           </div>
         </template>
 
@@ -236,6 +250,9 @@ export default {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
         generic_desc: { value: null, matchMode: FilterMatchMode.CONTAINS },
         variant_desc: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      },
+      itemsWithGenericDescFilter: {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       variantDialog: false,
       deleteDialog: false,
