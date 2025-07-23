@@ -453,16 +453,11 @@ export default {
           return obj.to !== 'generic-variants';
         });
       }
-      if (
-        this.$page.props.user.designation == 'ward' &&
-        (this.$page.props.auth.user.location.wardcode == 'CATHL' ||
-          this.$page.props.auth.user.location.wardcode == 'CENDU' ||
-          this.$page.props.auth.user.location.wardcode == 'HEMO')
-      ) {
-        this.menu[1].items = this.menu[1].items.filter(function (obj) {
-          return obj.to !== 'requeststocks';
-        });
-      }
+      //   if (this.$page.props.user.designation == 'ward') {
+      //     this.menu[1].items = this.menu[1].items.filter(function (obj) {
+      //       return obj.to !== 'requeststocks';
+      //     });
+      //   }
       if (this.$page.props.user.designation == 'ward') {
         this.menu[0].items = this.menu[0].items.filter(function (obj) {
           return obj.to !== 'returneditems';
