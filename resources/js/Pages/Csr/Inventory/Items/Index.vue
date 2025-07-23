@@ -143,13 +143,13 @@
                   <v-icon name="bi-arrow-left-right"></v-icon>
                 </template>
               </Button>
-              <Button
+              <!-- <Button
                 v-if="slotProps.data.uomcode != 'box'"
                 icon="pi pi-trash"
                 rounded
                 severity="danger"
                 @click="confirmDeleteItem(slotProps.data)"
-              />
+              /> -->
             </div>
           </template>
         </Column>
