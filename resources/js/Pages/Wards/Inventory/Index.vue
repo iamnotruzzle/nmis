@@ -46,7 +46,7 @@
                 </div>
                 <!-- :disabled="canTransact == false" -->
                 <Button
-                  v-if="authWardcode == 'BUCAS'"
+                  v-if="['CATHL', 'CENDU', 'HEMO', 'BUCAS'].includes(authWardcode)"
                   label="EXISTING STOCK"
                   icon="pi pi-plus"
                   iconPos="right"
