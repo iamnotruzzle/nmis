@@ -45,14 +45,14 @@
                   </div>
                 </div>
                 <!-- :disabled="canTransact == false" -->
-                <Button
+                <!-- <Button
                   v-if="!['CATHL', 'CENDU', 'HEMO'].includes(authWardcode)"
                   label="EXISTING STOCK"
                   icon="pi pi-plus"
                   iconPos="right"
                   severity="info"
                   @click="openExistingDialog"
-                />
+                /> -->
                 <div class="mr-2"></div>
                 <Button
                   v-if="['CATHL', 'CENDU', 'HEMO'].includes(authWardcode)"
