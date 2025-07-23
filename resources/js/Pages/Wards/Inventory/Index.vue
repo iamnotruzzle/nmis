@@ -257,10 +257,7 @@
         <template #header>
           <div class="text-blue-500 text-xl font-bold">DELIVERY</div>
         </template>
-        <div
-          v-if="canAddExpiryDate"
-          class="bg-orange-700 text-white p-4 rounded font-semibold my-2 text-3xl"
-        >
+        <div class="bg-orange-700 text-white p-4 rounded font-semibold my-2 text-3xl">
           Please double-check the expiration date. It cannot be updated once saved.
         </div>
         <div
@@ -369,13 +366,9 @@
             {{ formDelivery.errors.delivered_date }}
           </small>
         </div>
-        <div
-          v-if="canAddExpiryDate"
-          class="field flex flex-column"
-        >
+        <div class="field flex flex-column">
           <div>
             <label>Expiration date</label>
-            <span class="ml-2 text-error">* MAX BY DEFAULT.</span>
           </div>
           <input
             type="date"
