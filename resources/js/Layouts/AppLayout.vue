@@ -120,6 +120,13 @@ export default {
               comp: 'Wards/Patients/Index',
             },
             {
+              label: 'Patients Search',
+              icon: 'fa-user-injured',
+              to: 'wardspatientsearch',
+              prefix: 'wardspatientsearch',
+              comp: 'Wards/Patients/Search/Index',
+            },
+            {
               label: 'Transfer stocks',
               icon: 'oi-arrow-switch',
               to: 'transferstock',
@@ -261,6 +268,8 @@ export default {
     },
   },
   mounted() {
+    // console.log(this.$page.props);
+    // console.log(this.$page.props.auth.user.location.location_name.enctype);
     // // set count for pending and acknowledged RIS
     this.count = this.$page.props.pendingAndAckCount;
     const targetItem = this.menu[0].items.find((item) => item.prefix === 'issueitems');
@@ -378,6 +387,11 @@ export default {
       }
       if (this.$page.props.user.designation == 'csr') {
         this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'wardspatientsearch';
+        });
+      }
+      if (this.$page.props.user.designation == 'csr') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
           return obj.to !== 'csrinv';
         });
       }
@@ -453,11 +467,11 @@ export default {
           return obj.to !== 'generic-variants';
         });
       }
-      //   if (this.$page.props.user.designation == 'ward') {
-      //     this.menu[1].items = this.menu[1].items.filter(function (obj) {
-      //       return obj.to !== 'requeststocks';
-      //     });
-      //   }
+      if (this.$page.props.auth.user.location.location_name.enctype != 'OPD') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'wardspatientsearch';
+        });
+      }
       if (this.$page.props.user.designation == 'ward') {
         this.menu[0].items = this.menu[0].items.filter(function (obj) {
           return obj.to !== 'returneditems';

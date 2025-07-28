@@ -45,6 +45,7 @@ use App\Http\Controllers\Wards\Inventory\InventoryController;
 use App\Http\Controllers\Wards\ManualInventory\WardManualInventoryController;
 use App\Http\Controllers\Wards\Patients\PatientChargeController;
 use App\Http\Controllers\Wards\Patients\WardPatientsController;
+use App\Http\Controllers\Wards\Patients\WardPatientSearchController;
 use App\Http\Controllers\Wards\ReOrderLevel\ReOrderLevelController;
 use App\Http\Controllers\Wards\Reports\ReportController;
 use App\Http\Controllers\Wards\RequestStocks\RequestStocksController;
@@ -142,6 +143,7 @@ Route::middleware(['web', 'auth', 'verified', 'check.active.login'])->group(
         Route::resource('ecgreports', ECGController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
 
         Route::resource('wardspatients', WardPatientsController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('wardspatientsearch', WardPatientSearchController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('patientcharge', PatientChargeController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('wardsstockslogs', RequestStocksLogsController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
 
