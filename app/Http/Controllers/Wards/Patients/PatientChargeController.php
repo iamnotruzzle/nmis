@@ -47,6 +47,7 @@ class PatientChargeController extends Controller
         $is_for_discharge = $request->disch;
         $room_bed = $request->room_bed;
         $pat_tscode = $request->tscode;
+        // dd($pat_tscode);
 
         $authWardcode = DB::select(
             "SELECT TOP 1
@@ -312,7 +313,7 @@ class PatientChargeController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request);
+        // dd($request->tscode);
         $data = $request;
 
         $entryby = Auth::user()->employeeid;

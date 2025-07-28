@@ -373,9 +373,18 @@ class WardPatientsController extends Controller
                             hperson.patlast,
                             hperson.patsuffix,
                             henctr.encdate,
+                            CASE
+                                WHEN henctr.toecode = 'ADM' THEN adm.tscode
+                                WHEN henctr.toecode = 'OPD' THEN opd.tscode
+                                WHEN henctr.toecode = 'ER' THEN er.tscode
+                                ELSE NULL
+                            END AS tscode,
                             ROW_NUMBER() OVER (PARTITION BY henctr.toecode ORDER BY henctr.encdate DESC) AS RowNum
                         FROM hperson
                         JOIN henctr ON henctr.hpercode = hperson.hpercode
+                        LEFT JOIN hadmlog AS adm ON adm.enccode = henctr.enccode
+                        LEFT JOIN hopdlog AS opd ON opd.enccode = henctr.enccode
+                        LEFT JOIN herlog AS er ON er.enccode = henctr.enccode
                         WHERE hperson.hpercode LIKE ?
                         AND henctr.toecode IN ('ADM', 'OPD', 'ER')
                     )
@@ -387,7 +396,8 @@ class WardPatientsController extends Controller
                         patmiddle,
                         patlast,
                         patsuffix,
-                        encdate
+                        encdate,
+                        tscode
                     FROM RankedRecords
                     WHERE RowNum = 1
                     ORDER BY encdate DESC;",
@@ -407,9 +417,18 @@ class WardPatientsController extends Controller
                             hperson.patlast,
                             hperson.patsuffix,
                             henctr.encdate,
+                            CASE
+                                WHEN henctr.toecode = 'ADM' THEN adm.tscode
+                                WHEN henctr.toecode = 'OPD' THEN opd.tscode
+                                WHEN henctr.toecode = 'ER' THEN er.tscode
+                                ELSE NULL
+                            END AS tscode,
                             ROW_NUMBER() OVER (PARTITION BY henctr.toecode ORDER BY henctr.encdate DESC) AS RowNum
                         FROM hperson
                         JOIN henctr ON henctr.hpercode = hperson.hpercode
+                        LEFT JOIN hadmlog AS adm ON adm.enccode = henctr.enccode
+                        LEFT JOIN hopdlog AS opd ON opd.enccode = henctr.enccode
+                        LEFT JOIN herlog AS er ON er.enccode = henctr.enccode
                         WHERE (hperson.patfirst LIKE ? AND hperson.patlast LIKE ?)
                         AND henctr.toecode IN ('ADM', 'OPD', 'ER')
                     )
@@ -421,7 +440,8 @@ class WardPatientsController extends Controller
                         patmiddle,
                         patlast,
                         patsuffix,
-                        encdate
+                        encdate,
+                        tscode
                     FROM RankedRecords
                     WHERE RowNum = 1
                     ORDER BY encdate DESC;",
@@ -453,9 +473,18 @@ class WardPatientsController extends Controller
                             hperson.patlast,
                             hperson.patsuffix,
                             henctr.encdate,
+                            CASE
+                                WHEN henctr.toecode = 'ADM' THEN adm.tscode
+                                WHEN henctr.toecode = 'OPD' THEN opd.tscode
+                                WHEN henctr.toecode = 'ER' THEN er.tscode
+                                ELSE NULL
+                            END AS tscode,
                             ROW_NUMBER() OVER (PARTITION BY henctr.toecode ORDER BY henctr.encdate DESC) AS RowNum
                         FROM hperson
                         JOIN henctr ON henctr.hpercode = hperson.hpercode
+                        LEFT JOIN hadmlog AS adm ON adm.enccode = henctr.enccode
+                        LEFT JOIN hopdlog AS opd ON opd.enccode = henctr.enccode
+                        LEFT JOIN herlog AS er ON er.enccode = henctr.enccode
                         WHERE hperson.hpercode LIKE ?
                         AND henctr.toecode IN ('ADM', 'OPD', 'ER')
                     )
@@ -467,7 +496,8 @@ class WardPatientsController extends Controller
                         patmiddle,
                         patlast,
                         patsuffix,
-                        encdate
+                        encdate,
+                        tscode
                     FROM RankedRecords
                     WHERE RowNum = 1
                     ORDER BY encdate DESC;",
@@ -487,9 +517,18 @@ class WardPatientsController extends Controller
                             hperson.patlast,
                             hperson.patsuffix,
                             henctr.encdate,
+                            CASE
+                                WHEN henctr.toecode = 'ADM' THEN adm.tscode
+                                WHEN henctr.toecode = 'OPD' THEN opd.tscode
+                                WHEN henctr.toecode = 'ER' THEN er.tscode
+                                ELSE NULL
+                            END AS tscode,
                             ROW_NUMBER() OVER (PARTITION BY henctr.toecode ORDER BY henctr.encdate DESC) AS RowNum
                         FROM hperson
                         JOIN henctr ON henctr.hpercode = hperson.hpercode
+                        LEFT JOIN hadmlog AS adm ON adm.enccode = henctr.enccode
+                        LEFT JOIN hopdlog AS opd ON opd.enccode = henctr.enccode
+                        LEFT JOIN herlog AS er ON er.enccode = henctr.enccode
                         WHERE (hperson.patfirst LIKE ? AND hperson.patlast LIKE ?)
                         AND henctr.toecode IN ('ADM', 'OPD', 'ER')
                     )
@@ -501,7 +540,8 @@ class WardPatientsController extends Controller
                         patmiddle,
                         patlast,
                         patsuffix,
-                        encdate
+                        encdate,
+                        tscode
                     FROM RankedRecords
                     WHERE RowNum = 1
                     ORDER BY encdate DESC;",
@@ -575,33 +615,43 @@ class WardPatientsController extends Controller
             if ($hpercode != null && $hpercode != '') {
                 $encounters = DB::SELECT(
                     "WITH RankedRecords AS (
-                        SELECT
-                            henctr.enccode,
-                            henctr.toecode,
-                            hperson.hpercode,
-                            hperson.patfirst,
-                            hperson.patmiddle,
-                            hperson.patlast,
-                            hperson.patsuffix,
-                            henctr.encdate,
-                            ROW_NUMBER() OVER (PARTITION BY henctr.toecode ORDER BY henctr.encdate DESC) AS RowNum
-                        FROM hperson
-                        JOIN henctr ON henctr.hpercode = hperson.hpercode
-                        WHERE hperson.hpercode LIKE ?
-                        AND henctr.toecode IN ('ADM', 'OPD', 'ER')
-                    )
-                    SELECT TOP 1
-                        enccode,
-                        toecode,
-                        hpercode,
-                        patfirst,
-                        patmiddle,
-                        patlast,
-                        patsuffix,
-                        encdate
-                    FROM RankedRecords
-                    WHERE RowNum = 1
-                    ORDER BY encdate DESC;",
+                            SELECT
+                                henctr.enccode,
+                                henctr.toecode,
+                                hperson.hpercode,
+                                hperson.patfirst,
+                                hperson.patmiddle,
+                                hperson.patlast,
+                                hperson.patsuffix,
+                                henctr.encdate,
+                                CASE
+                                    WHEN henctr.toecode = 'ADM' THEN adm.tscode
+                                    WHEN henctr.toecode = 'OPD' THEN opd.tscode
+                                    WHEN henctr.toecode = 'ER' THEN er.tscode
+                                    ELSE NULL
+                                END AS tscode,
+                                ROW_NUMBER() OVER (PARTITION BY henctr.toecode ORDER BY henctr.encdate DESC) AS RowNum
+                            FROM hperson
+                            JOIN henctr ON henctr.hpercode = hperson.hpercode
+                            LEFT JOIN hadmlog AS adm ON adm.enccode = henctr.enccode
+                            LEFT JOIN hopdlog AS opd ON opd.enccode = henctr.enccode
+                            LEFT JOIN herlog AS er ON er.enccode = henctr.enccode
+                            WHERE hperson.hpercode LIKE ?
+                            AND henctr.toecode IN ('ADM', 'OPD', 'ER')
+                        )
+                        SELECT TOP 2
+                            enccode,
+                            toecode,
+                            hpercode,
+                            patfirst,
+                            patmiddle,
+                            patlast,
+                            patsuffix,
+                            encdate,
+                            tscode
+                        FROM RankedRecords
+                        WHERE RowNum = 1
+                        ORDER BY encdate DESC;",
                     [
                         $hpercode . '%'
                     ]
@@ -618,9 +668,18 @@ class WardPatientsController extends Controller
                             hperson.patlast,
                             hperson.patsuffix,
                             henctr.encdate,
+                            CASE
+                                WHEN henctr.toecode = 'ADM' THEN adm.tscode
+                                WHEN henctr.toecode = 'OPD' THEN opd.tscode
+                                WHEN henctr.toecode = 'ER' THEN er.tscode
+                                ELSE NULL
+                            END AS tscode,
                             ROW_NUMBER() OVER (PARTITION BY henctr.toecode ORDER BY henctr.encdate DESC) AS RowNum
                         FROM hperson
                         JOIN henctr ON henctr.hpercode = hperson.hpercode
+                        LEFT JOIN hadmlog AS adm ON adm.enccode = henctr.enccode
+                        LEFT JOIN hopdlog AS opd ON opd.enccode = henctr.enccode
+                        LEFT JOIN herlog AS er ON er.enccode = henctr.enccode
                         WHERE (hperson.patfirst LIKE ? AND hperson.patlast LIKE ?)
                         AND henctr.toecode IN ('ADM', 'OPD', 'ER')
                     )
@@ -632,7 +691,8 @@ class WardPatientsController extends Controller
                         patmiddle,
                         patlast,
                         patsuffix,
-                        encdate
+                        encdate,
+                        tscode
                     FROM RankedRecords
                     WHERE RowNum = 1
                     ORDER BY encdate DESC;",

@@ -208,6 +208,7 @@ export default {
             toecode: e.toecode,
             hpercode: e.hpercode,
             encdate: e.encdate,
+            tscode: e.tscode,
             patient: e.patlast + ',' + ' ' + e.patfirst + ' ' + (e.patsuffix == null ? '' : e.patsuffix),
           });
         });
@@ -221,6 +222,7 @@ export default {
             toecode: e.toecode,
             hpercode: e.hpercode,
             encdate: e.encdate,
+            tscode: e.tscode,
             patient: e.patlast + ',' + ' ' + e.patfirst + ' ' + (e.patsuffix == null ? '' : e.patsuffix),
           });
         });
@@ -248,6 +250,7 @@ export default {
       this.params.patient_name = e.patient;
       this.params.enccode = e.enccode;
       this.params.patient = e.patient;
+      this.params.tscode = e.tscode;
       this.$inertia.get('patientcharge', this.params, {
         preserveState: true,
         preserveScroll: true,

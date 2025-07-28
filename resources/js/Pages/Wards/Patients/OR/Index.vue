@@ -194,6 +194,7 @@ export default {
   mounted() {
     // console.log(this.encounters);
     this.storeEncounterList();
+    // console.log(this.encounterList);
   },
   methods: {
     tzone(date) {
@@ -202,26 +203,27 @@ export default {
     storeEncounterList() {
       if (this.hpercode) {
         this.encounters.forEach((e) => {
-          console.log(e);
           this.encounterList.push({
             enccode: e.enccode,
             toecode: e.toecode,
             hpercode: e.hpercode,
             encdate: e.encdate,
             patient: e.patlast + ',' + ' ' + e.patfirst + ' ' + (e.patsuffix == null ? '' : e.patsuffix),
+            tscode: e.tscode,
           });
         });
-
+        console.log('encounter', this.encounterList);
         this.patient = this.encounterList[0];
       } else if (this.patfirst && this.patlast) {
         this.encounters.forEach((e) => {
-          console.log(e);
+          //   console.log(e);
           this.encounterList.push({
             enccode: e.enccode,
             toecode: e.toecode,
             hpercode: e.hpercode,
             encdate: e.encdate,
             patient: e.patlast + ',' + ' ' + e.patfirst + ' ' + (e.patsuffix == null ? '' : e.patsuffix),
+            tscode: e.tscode,
           });
         });
 
@@ -248,6 +250,7 @@ export default {
       this.params.patient_name = e.patient;
       this.params.enccode = e.enccode;
       this.params.patient = e.patient;
+      this.params.tscode = e.tscode;
       this.$inertia.get('patientcharge', this.params, {
         preserveState: true,
         preserveScroll: true,
