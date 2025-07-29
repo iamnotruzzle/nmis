@@ -25,7 +25,9 @@ class PhpRedisConnector implements Connector
     {
         $connector = function () use ($config, $options) {
             return $this->createClient(array_merge(
-                $config, $options, Arr::pull($config, 'options', [])
+                $config,
+                $options,
+                Arr::pull($config, 'options', [])
             ));
         };
 
@@ -45,7 +47,8 @@ class PhpRedisConnector implements Connector
         $options = array_merge($options, $clusterOptions, Arr::pull($config, 'options', []));
 
         return new PhpRedisClusterConnection($this->createRedisClusterInstance(
-            array_map([$this, 'buildClusterConnectionString'], $config), $options
+            array_map([$this, 'buildClusterConnectionString'], $config),
+            $options
         ));
     }
 
@@ -57,8 +60,11 @@ class PhpRedisConnector implements Connector
      */
     protected function buildClusterConnectionString(array $server)
     {
-        return $this->formatHost($server).':'.$server['port'].'?'.Arr::query(Arr::only($server, [
-            'database', 'password', 'prefix', 'read_timeout',
+        return $this->formatHost($server) . ':' . $server['port'] . '?' . Arr::query(Arr::only($server, [
+            'database',
+            'password',
+            'prefix',
+            'read_timeout',
         ]));
     }
 
