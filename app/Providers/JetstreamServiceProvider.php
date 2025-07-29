@@ -48,66 +48,6 @@ class JetstreamServiceProvider extends ServiceProvider
         );
 
         // Fortify::authenticateUsing(function (Request $request) {
-        //     // dd($request->password);
-
-        //     // $user = User::where('employeeid', $request->login)->first();
-        //     $user = User::where('user_name', $request->login)->first();
-        //     // dd($user);
-
-        //     if ($request->wardcode != null || $request->wardcode != '') {
-        //         // 1st step: encrypt inputted password password
-        //         $enc = DB::select("select dbo.ufn_crypto('" . $request->password . "', 1) as decrypted_pass");
-        //         // dd($enc[0]->decrypted_pass);
-
-        //         // 2nd step: decrypt the newly encrypted password
-        //         $dec = DB::select("select dbo.ufn_crypto('" . $enc[0]->decrypted_pass . "', 0) as decrypted_pass");
-        //         // dd($dec[0]->decrypted_pass);
-
-        //         // 3rd step: decrypt the password again motherfucker, but directly from the table and where user_name is $request login
-        //         $decrypted_pass_from_db = DB::select("SELECT dbo.ufn_crypto(user_pass, 0) AS decrypted_pass_from_db FROM user_acc WHERE user_name = ?", [$request->login]);
-
-        //         if ($user && $dec[0]->decrypted_pass == $decrypted_pass_from_db[0]->decrypted_pass_from_db) {
-        //             // return $user;
-        //             if ($request->wardcode == 'CSR' && $user->designation == 'csr') {
-        //                 return $user;
-        //             } elseif ($request->wardcode != 'CSR' && $request->wardcode != 'ADMIN' && $user->designation == 'ward') {
-        //                 return $user;
-        //             } elseif ($request->wardcode == 'ADMIN' && $user->designation == 'admin') {
-        //                 return $user;
-        //             } else {
-        //                 throw ValidationException::withMessages(["You don't have permission to access this location."]);
-        //             }
-        //         }
-        //     } else {
-        //         throw ValidationException::withMessages(["The location field is required."]);
-        //     }
-        // });
-
-
-        // Fortify::authenticateUsing(function (Request $request) {
-        //     $user = User::where('user_name', $request->login)->first();
-
-        //     if ($request->wardcode != null || $request->wardcode != '') {
-        //         $enc = DB::select("select dbo.ufn_crypto('" . $request->password . "', 1) as decrypted_pass");
-        //         $dec = DB::select("select dbo.ufn_crypto('" . $enc[0]->decrypted_pass . "', 0) as decrypted_pass");
-        //         $decrypted_pass_from_db = DB::select("SELECT dbo.ufn_crypto(user_pass, 0) AS decrypted_pass_from_db FROM user_acc WHERE user_name = ?", [$request->login]);
-
-        //         if ($user && $dec[0]->decrypted_pass == $decrypted_pass_from_db[0]->decrypted_pass_from_db) {
-        //             //create login history
-        //             LoginHistory::create([
-        //                 'employeeid' => $user->employeeid,
-        //                 'wardcode' => $request->wardcode
-        //             ]);
-
-        //             return $user;
-        //         }
-        //     } else {
-        //         throw ValidationException::withMessages(["The location field is required."]);
-        //     }
-        // });
-
-
-        // Fortify::authenticateUsing(function (Request $request) {
         //     $user = User::where('user_name', $request->login)->first();
 
         //     if (!$request->wardcode || trim($request->wardcode) === '') {
@@ -120,14 +60,29 @@ class JetstreamServiceProvider extends ServiceProvider
         //         $decrypted_pass_from_db = DB::select("SELECT dbo.ufn_crypto(user_pass, 0) AS decrypted_pass_from_db FROM user_acc WHERE user_name = ?", [$request->login]);
 
         //         if ($dec[0]->decrypted_pass === $decrypted_pass_from_db[0]->decrypted_pass_from_db) {
-
-        //             // ✅ Save pending login token and wardcode for next request
-        //             session([
-        //                 'pending_login_token' => (string) Str::uuid(),
-        //                 'pending_wardcode' => $request->wardcode,
-        //             ]);
-
-        //             return $user;
+        //             // Check wardcode and designation permissions
+        //             if ($request->wardcode == 'CSR' && $user->designation == 'csr') {
+        //                 // ✅ Save pending login token and wardcode for next request
+        //                 session([
+        //                     'pending_login_token' => (string) Str::uuid(),
+        //                     'pending_wardcode' => $request->wardcode,
+        //                 ]);
+        //                 return $user;
+        //             } elseif ($request->wardcode != 'CSR' && $request->wardcode != 'ADMIN' && $user->designation == 'ward') {
+        //                 session([
+        //                     'pending_login_token' => (string) Str::uuid(),
+        //                     'pending_wardcode' => $request->wardcode,
+        //                 ]);
+        //                 return $user;
+        //             } elseif ($request->wardcode == 'ADMIN' && $user->designation == 'admin') {
+        //                 session([
+        //                     'pending_login_token' => (string) Str::uuid(),
+        //                     'pending_wardcode' => $request->wardcode,
+        //                 ]);
+        //                 return $user;
+        //             } else {
+        //                 throw ValidationException::withMessages(["You don't have permission to access this location."]);
+        //             }
         //         }
         //     }
 
@@ -137,47 +92,130 @@ class JetstreamServiceProvider extends ServiceProvider
         // });
 
         Fortify::authenticateUsing(function (Request $request) {
-            $user = User::where('user_name', $request->login)->first();
-
+            // 1. Validate required fields
             if (!$request->wardcode || trim($request->wardcode) === '') {
                 throw ValidationException::withMessages(["wardcode" => "The location field is required."]);
             }
 
-            if ($user) {
-                $enc = DB::select("select dbo.ufn_crypto(?, 1) as decrypted_pass", [$request->password]);
-                $dec = DB::select("select dbo.ufn_crypto(?, 0) as decrypted_pass", [$enc[0]->decrypted_pass]);
-                $decrypted_pass_from_db = DB::select("SELECT dbo.ufn_crypto(user_pass, 0) AS decrypted_pass_from_db FROM user_acc WHERE user_name = ?", [$request->login]);
+            // 2. Fetch user account
+            $user = User::where('user_name', $request->login)->first();
 
-                if ($dec[0]->decrypted_pass === $decrypted_pass_from_db[0]->decrypted_pass_from_db) {
-                    // Check wardcode and designation permissions
-                    if ($request->wardcode == 'CSR' && $user->designation == 'csr') {
-                        // ✅ Save pending login token and wardcode for next request
-                        session([
-                            'pending_login_token' => (string) Str::uuid(),
-                            'pending_wardcode' => $request->wardcode,
-                        ]);
-                        return $user;
-                    } elseif ($request->wardcode != 'CSR' && $request->wardcode != 'ADMIN' && $user->designation == 'ward') {
-                        session([
-                            'pending_login_token' => (string) Str::uuid(),
-                            'pending_wardcode' => $request->wardcode,
-                        ]);
-                        return $user;
-                    } elseif ($request->wardcode == 'ADMIN' && $user->designation == 'admin') {
-                        session([
-                            'pending_login_token' => (string) Str::uuid(),
-                            'pending_wardcode' => $request->wardcode,
-                        ]);
-                        return $user;
-                    } else {
-                        throw ValidationException::withMessages(["You don't have permission to access this location."]);
-                    }
-                }
+            if (!$user) {
+                throw ValidationException::withMessages([
+                    Fortify::username() => 'User not found',
+                ]);
             }
 
-            throw ValidationException::withMessages([
-                Fortify::username() => __('auth.failed'),
+            // 3. Encrypt the input password using your SQL Server function
+            $encryptedInput = DB::selectOne("SELECT dbo.ufn_crypto(?, 1) AS encrypted_pass", [$request->password]);
+            if (!$encryptedInput || !$encryptedInput->encrypted_pass) {
+                throw ValidationException::withMessages([
+                    Fortify::username() => 'Authentication failed',
+                ]);
+            }
+
+            // 4. Decrypt the encrypted input password (round-trip decryption)
+            $decryptedInput = DB::selectOne("SELECT dbo.ufn_crypto(?, 0) AS decrypted_pass", [$encryptedInput->encrypted_pass]);
+            if (!$decryptedInput || !$decryptedInput->decrypted_pass) {
+                throw ValidationException::withMessages([
+                    Fortify::username() => 'Authentication failed',
+                ]);
+            }
+
+            // 5. Decrypt the stored password from the DB
+            $storedDecrypted = DB::selectOne("SELECT dbo.ufn_crypto(user_pass, 0) AS decrypted_pass FROM user_acc WHERE user_name = ?", [$request->login]);
+            if (!$storedDecrypted || !$storedDecrypted->decrypted_pass) {
+                throw ValidationException::withMessages([
+                    Fortify::username() => 'User password not found',
+                ]);
+            }
+
+            // 6. Compare the decrypted passwords
+            if ($decryptedInput->decrypted_pass !== $storedDecrypted->decrypted_pass) {
+                throw ValidationException::withMessages([
+                    Fortify::username() => __('auth.failed'),
+                ]);
+            }
+
+            // 7. Check if user has a valid designation
+            if (is_null($user->designation) || empty($user->designation)) {
+                throw ValidationException::withMessages([
+                    "wardcode" => "Account not authorized for login",
+                ]);
+            }
+
+            // 8. Get the ward information to validate wardcode
+            $ward = collect(DB::select(
+                "SELECT wardcode, wardname, enctype FROM hward WHERE wardcode = ?",
+                [$request->wardcode]
+            ))->first();
+
+            if (!$ward) {
+                throw ValidationException::withMessages([
+                    "wardcode" => "Invalid ward selected",
+                ]);
+            }
+
+            // 9. Authorization logic based on designation and ward
+            $isAuthorized = false;
+            $errorMessage = 'Unauthorized access to this location';
+
+            switch ($user->designation) {
+                case 'admin':
+                    // Admin can only login to admin ward
+                    if ($request->wardcode === 'ADMIN') {
+                        $isAuthorized = true;
+                    } else {
+                        $errorMessage = 'Unauthorized access';
+                    }
+                    break;
+
+                case 'csr':
+                    // CSR can only login to CSR ward
+                    if ($request->wardcode === 'CSR') {
+                        $isAuthorized = true;
+                    } else {
+                        $errorMessage = 'Unauthorized access';
+                    }
+                    break;
+
+                case 'ward':
+                    // Ward users can login to any ward EXCEPT csr and admin
+                    if (!in_array($request->wardcode, ['CSR', 'ADMIN'])) {
+                        $isAuthorized = true;
+                    } else {
+                        $errorMessage = 'Unauthorized access';
+                    }
+                    break;
+
+                default:
+                    $errorMessage = 'Invalid user designation. Please contact system administrator.';
+                    break;
+            }
+
+            if (!$isAuthorized) {
+                throw ValidationException::withMessages([
+                    "wardcode" => $errorMessage,
+                ]);
+            }
+
+            // 10. Save pending login data for successful authentication
+            session([
+                'pending_login_token' => (string) Str::uuid(),
+                'pending_wardcode' => $request->wardcode,
+                'pending_wardname' => $ward->wardname,
+                'pending_enctype' => $ward->enctype ?? null,
             ]);
+
+            // 11. Log successful authentication
+            logger()->info('Successful Fortify login', [
+                'user' => $user->user_name,
+                'designation' => $user->designation,
+                'wardcode' => $request->wardcode,
+                'wardname' => $ward->wardname,
+            ]);
+
+            return $user;
         });
     }
 
