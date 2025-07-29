@@ -1087,7 +1087,7 @@ export default {
       //   console.log(this.billList);
     },
     storeMedicalSuppliesInContainer() {
-      console.log(this.medicalSupplies);
+      //   console.log(this.medicalSupplies);
       this.medicalSuppliesList = [];
 
       let combinedSupplies = [];
