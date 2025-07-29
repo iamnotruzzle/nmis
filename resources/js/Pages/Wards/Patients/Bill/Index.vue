@@ -694,8 +694,6 @@
         size="large"
       >
         <template #header>
-          <!-- <div class="text-2xl text-primary font-bold">CURRENT STOCKS</div> -->
-
           <div class="p-inputgroup my-3">
             <span class="p-inputgroup-addon">
               <i class="pi pi-search"></i>
@@ -710,33 +708,6 @@
             />
           </div>
         </template>
-        <!-- <Column
-          field="from"
-          header="FROM"
-          sortable
-        >
-          <template #body="{ data }">
-            <Tag
-              v-if="data.from == 'CSR'"
-              value="CSR"
-              severity="contrast"
-            ></Tag>
-            <Tag
-              v-else-if="data.from == 'CONSIGNMENT'"
-              value="CONSIGNMENT"
-              severity="warning"
-            ></Tag>
-            <Tag
-              v-else-if="data.from == 'EXISTING_STOCKS'"
-              value="EXISTING STOCKS"
-              severity="info"
-            ></Tag>
-            <Tag
-              v-else
-              value="MEDICAL GASES"
-            ></Tag>
-          </template>
-        </Column> -->
         <Column
           field="cl2desc"
           header="ITEM"
@@ -1116,6 +1087,7 @@ export default {
       //   console.log(this.billList);
     },
     storeMedicalSuppliesInContainer() {
+      console.log(this.medicalSupplies);
       this.medicalSuppliesList = [];
 
       let combinedSupplies = [];

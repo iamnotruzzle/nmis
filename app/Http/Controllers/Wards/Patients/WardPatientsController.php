@@ -100,10 +100,7 @@ class WardPatientsController extends Controller
                     [$authCode]
                 );
 
-                // Update cache with new patient data and latest admission date
-                // Cache::forever($cacheKeyLatestUpdate, $latestAdmDate);
-                // Cache::forever($cacheKeyPatients, $fetchedPatients);
-                // Store patient data and latest admission date in cache for 30 minutes
+                // Store patient data and latest admission date in cache for 60 minutes
                 Cache::put($cacheKeyLatestUpdate, $latestAdmDate, now()->addMinutes(60));
                 Cache::put($cacheKeyPatients, $fetchedPatients, now()->addMinutes(60));
                 $cachedPatients = $fetchedPatients;

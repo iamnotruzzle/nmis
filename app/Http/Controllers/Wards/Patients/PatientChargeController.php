@@ -65,142 +65,185 @@ class PatientChargeController extends Controller
         );
         $authCode = $authWardcode[0]->wardcode;
 
-        $fromExisting = DB::select(
-            "SELECT stock.[from], stock.id, stock.request_stocks_id, stock.is_consumable,
-                item.cl2comb, item.cl2desc, item.uomcode,
-                stock.quantity, stock.average, stock.total_usage,
-                price.price_per_unit as price,
-                stock.expiration_date, stock.created_at
-                FROM csrw_wards_stocks stock
-                JOIN hclass2 item ON stock.cl2comb = item.cl2comb
-                LEFT JOIN csrw_item_prices AS price
-                    ON stock.cl2comb = price.cl2comb
-                    AND price.ris_no = stock.ris_no -- use ris_no if item is from ward/existing
-                WHERE stock.location = '" . $authCode . "'
-                AND stock.quantity > 0
-                AND stock.[from] != 'CSR'
-                AND stock.[from] != 'WARD'
-                AND stock.[from] != 'MEDICAL GASES'"
-        );
-        $fromCSR = DB::select(
-            "SELECT stock.[from], stock.id, stock.request_stocks_id, stock.is_consumable,
-                item.cl2comb, item.cl2desc, item.uomcode,
-                stock.quantity, stock.average, stock.total_usage,
-                price.price_per_unit as price,
-                stock.expiration_date, stock.created_at
-                FROM csrw_wards_stocks stock
-                JOIN hclass2 item ON stock.cl2comb = item.cl2comb
-                LEFT JOIN csrw_request_stocks rs ON rs.id = stock.request_stocks_id
-                LEFT JOIN csrw_item_prices AS price
-                    ON stock.cl2comb = price.cl2comb
-                    AND price.item_conversion_id = stock.stock_id -- use stock_id if item is from CSR
-                WHERE stock.location = '" . $authCode . "'
-                AND stock.quantity > 0
-                AND (rs.id IS NULL OR rs.status = 'RECEIVED')
+        // $fromExisting = DB::select(
+        //     "SELECT stock.[from], stock.id, stock.request_stocks_id, stock.is_consumable,
+        //         item.cl2comb, item.cl2desc, item.uomcode,
+        //         stock.quantity, stock.average, stock.total_usage,
+        //         price.price_per_unit as price,
+        //         stock.expiration_date, stock.created_at
+        //         FROM csrw_wards_stocks stock
+        //         JOIN hclass2 item ON stock.cl2comb = item.cl2comb
+        //         LEFT JOIN csrw_item_prices AS price
+        //             ON stock.cl2comb = price.cl2comb
+        //             AND price.ris_no = stock.ris_no -- use ris_no if item is from ward/existing
+        //         WHERE stock.location = '" . $authCode . "'
+        //         AND stock.quantity > 0
+        //         AND stock.[from] != 'CSR'
+        //         AND stock.[from] != 'WARD'
+        //         AND stock.[from] != 'MEDICAL GASES'"
+        // );
+        // $fromCSR = DB::select(
+        //     "SELECT stock.[from], stock.id, stock.request_stocks_id, stock.is_consumable,
+        //         item.cl2comb, item.cl2desc, item.uomcode,
+        //         stock.quantity, stock.average, stock.total_usage,
+        //         price.price_per_unit as price,
+        //         stock.expiration_date, stock.created_at
+        //         FROM csrw_wards_stocks stock
+        //         JOIN hclass2 item ON stock.cl2comb = item.cl2comb
+        //         LEFT JOIN csrw_request_stocks rs ON rs.id = stock.request_stocks_id
+        //         LEFT JOIN csrw_item_prices AS price
+        //             ON stock.cl2comb = price.cl2comb
+        //             AND price.item_conversion_id = stock.stock_id -- use stock_id if item is from CSR
+        //         WHERE stock.location = '" . $authCode . "'
+        //         AND stock.quantity > 0
+        //         AND (rs.id IS NULL OR rs.status = 'RECEIVED')
+        //         AND stock.[from] = 'CSR'
+        //         AND stock.expiration_date > CAST(GETDATE() AS DATE);"
+        // );
+        // // dd($fromCSR);
+        // $fromWard = DB::select(
+        //     "SELECT stock.[from], stock.id, stock.request_stocks_id, stock.is_consumable,
+        //         item.cl2comb, item.cl2desc, item.uomcode,
+        //         stock.quantity, stock.average, stock.total_usage,
+        //         price.price_per_unit as price,
+        //         stock.expiration_date, stock.created_at
+        //         FROM csrw_wards_stocks stock
+        //         JOIN hclass2 item ON stock.cl2comb = item.cl2comb
+        //         LEFT JOIN csrw_request_stocks rs ON rs.id = stock.request_stocks_id
+        //         LEFT JOIN csrw_item_prices AS price
+        //                 ON stock.cl2comb = price.cl2comb
+        //                 AND price.ris_no = stock.ris_no -- use ris_no if item is from ward/existing
+        //         WHERE stock.location = '" . $authCode . "'
+        //         AND stock.quantity > 0
+        //         AND (rs.id IS NULL OR rs.status = 'RECEIVED')
+        //         AND stock.[from] = 'WARD'
+        //         AND stock.expiration_date > CAST(GETDATE() AS DATE);"
+        // );
+        // $fromMedical = DB::select(
+        //     "SELECT stock.[from], stock.id, stock.request_stocks_id, stock.is_consumable,
+        //         item.cl2comb, item.cl2desc, item.uomcode,
+        //         stock.quantity, stock.average, stock.total_usage,
+        //         price.price_per_unit as price,
+        //         stock.expiration_date, stock.created_at
+        //         FROM csrw_wards_stocks stock
+        //         JOIN hclass2 item ON stock.cl2comb = item.cl2comb
+        //         LEFT JOIN csrw_item_prices AS price
+        //             ON stock.cl2comb = price.cl2comb
+        //             AND price.ris_no = stock.ris_no
+        //         WHERE stock.location = '" . $authCode . "'
+        //         AND stock.quantity > 0
+        //         AND stock.[from] = 'MEDICAL GASES';"
+        // );
+        // // set medicalSupplies value
+        // $medicalSupplies = [];
+        // foreach ($fromCSR as $s) {
+        //     $medicalSupplies[] = (object) [
+        //         'from' => $s->from,
+        //         'id' => $s->id,
+        //         'is_consumable' => $s->is_consumable,
+        //         'cl2comb' => $s->cl2comb,
+        //         'cl2desc' => $s->cl2desc,
+        //         'uomcode' => $s->uomcode,
+        //         'quantity' => $s->quantity,
+        //         'average' => $s->average,
+        //         'total_usage' => $s->total_usage,
+        //         'price' => $s->price,
+        //         'expiration_date' => $s->expiration_date,
+        //         'created_at' => $s->created_at,
+        //     ];
+        // }
+        // foreach ($fromExisting as $s) {
+        //     $medicalSupplies[] = (object) [
+        //         'from' => $s->from,
+        //         'id' => $s->id,
+        //         'is_consumable' => $s->is_consumable,
+        //         'cl2comb' => $s->cl2comb,
+        //         'cl2desc' => $s->cl2desc,
+        //         'uomcode' => $s->uomcode,
+        //         'quantity' => $s->quantity,
+        //         'average' => $s->average,
+        //         'total_usage' => $s->total_usage,
+        //         'price' => $s->price,
+        //         'expiration_date' => $s->expiration_date,
+        //         'created_at' => $s->created_at,
+        //     ];
+        // }
+        // foreach ($fromMedical as $s) {
+        //     $medicalSupplies[] = (object) [
+        //         'from' => $s->from,
+        //         'id' => $s->id,
+        //         'is_consumable' => $s->is_consumable,
+        //         'cl2comb' => $s->cl2comb,
+        //         'cl2desc' => $s->cl2desc,
+        //         'uomcode' => $s->uomcode,
+        //         'quantity' => $s->quantity,
+        //         'average' => $s->average,
+        //         'total_usage' => $s->total_usage,
+        //         'price' => $s->price,
+        //         'expiration_date' => $s->expiration_date,
+        //         'created_at' => $s->created_at,
+        //     ];
+        // }
+        // foreach ($fromWard as $s) {
+        //     $medicalSupplies[] = (object) [
+        //         'from' => $s->from,
+        //         'id' => $s->id,
+        //         'is_consumable' => $s->is_consumable,
+        //         'cl2comb' => $s->cl2comb,
+        //         'cl2desc' => $s->cl2desc,
+        //         'uomcode' => $s->uomcode,
+        //         'quantity' => $s->quantity,
+        //         'average' => $s->average,
+        //         'total_usage' => $s->total_usage,
+        //         'price' => $s->price,
+        //         'expiration_date' => $s->expiration_date,
+        //         'created_at' => $s->created_at,
+        //     ];
+        // }
+
+        $medicalSupplies = DB::select(
+            "SELECT
+                stock.[from],
+                stock.id,
+                stock.request_stocks_id,
+                stock.is_consumable,
+                item.cl2comb,
+                item.cl2desc,
+                item.uomcode,
+                stock.quantity,
+                stock.average,
+                stock.total_usage,
+                CASE
+                    WHEN stock.[from] = 'CSR' THEN price_csr.price_per_unit
+                    ELSE price_other.price_per_unit
+                END as price,
+                stock.expiration_date,
+                stock.created_at
+            FROM csrw_wards_stocks stock
+            INNER JOIN hclass2 item ON stock.cl2comb = item.cl2comb
+            LEFT JOIN csrw_request_stocks rs ON rs.id = stock.request_stocks_id
+            LEFT JOIN csrw_item_prices price_csr
+                ON stock.cl2comb = price_csr.cl2comb
+                AND price_csr.item_conversion_id = stock.stock_id
                 AND stock.[from] = 'CSR'
-                AND stock.expiration_date > CAST(GETDATE() AS DATE);"
-        );
-        // dd($fromCSR);
-        $fromWard = DB::select(
-            "SELECT stock.[from], stock.id, stock.request_stocks_id, stock.is_consumable,
-                item.cl2comb, item.cl2desc, item.uomcode,
-                stock.quantity, stock.average, stock.total_usage,
-                price.price_per_unit as price,
-                stock.expiration_date, stock.created_at
-                FROM csrw_wards_stocks stock
-                JOIN hclass2 item ON stock.cl2comb = item.cl2comb
-                LEFT JOIN csrw_request_stocks rs ON rs.id = stock.request_stocks_id
-                LEFT JOIN csrw_item_prices AS price
-                        ON stock.cl2comb = price.cl2comb
-                        AND price.ris_no = stock.ris_no -- use ris_no if item is from ward/existing
-                WHERE stock.location = '" . $authCode . "'
+            LEFT JOIN csrw_item_prices price_other
+                ON stock.cl2comb = price_other.cl2comb
+                AND price_other.ris_no = stock.ris_no
+                AND stock.[from] <> 'CSR'
+            WHERE stock.location = ?
                 AND stock.quantity > 0
-                AND (rs.id IS NULL OR rs.status = 'RECEIVED')
-                AND stock.[from] = 'WARD'
-                AND stock.expiration_date > CAST(GETDATE() AS DATE);"
+                AND (
+                    stock.[from] = 'MEDICAL GASES'
+                    OR stock.[from] NOT IN ('CSR', 'WARD', 'MEDICAL GASES')
+                    OR (
+                        stock.[from] IN ('CSR', 'WARD')
+                        AND (rs.id IS NULL OR rs.status = 'RECEIVED')
+                        AND stock.expiration_date > CAST(GETDATE() AS DATE)
+                    )
+                )
+            ORDER BY stock.[from], item.cl2desc",
+            [$authCode]
         );
-        $fromMedical = DB::select(
-            "SELECT stock.[from], stock.id, stock.request_stocks_id, stock.is_consumable,
-                item.cl2comb, item.cl2desc, item.uomcode,
-                stock.quantity, stock.average, stock.total_usage,
-                price.price_per_unit as price,
-                stock.expiration_date, stock.created_at
-                FROM csrw_wards_stocks stock
-                JOIN hclass2 item ON stock.cl2comb = item.cl2comb
-                LEFT JOIN csrw_item_prices AS price
-                    ON stock.cl2comb = price.cl2comb
-                    AND price.ris_no = stock.ris_no
-                WHERE stock.location = '" . $authCode . "'
-                AND stock.quantity > 0
-                AND stock.[from] = 'MEDICAL GASES';"
-        );
-        // set medicalSupplies value
-        $medicalSupplies = [];
-        foreach ($fromCSR as $s) {
-            $medicalSupplies[] = (object) [
-                'from' => $s->from,
-                'id' => $s->id,
-                'is_consumable' => $s->is_consumable,
-                'cl2comb' => $s->cl2comb,
-                'cl2desc' => $s->cl2desc,
-                'uomcode' => $s->uomcode,
-                'quantity' => $s->quantity,
-                'average' => $s->average,
-                'total_usage' => $s->total_usage,
-                'price' => $s->price,
-                'expiration_date' => $s->expiration_date,
-                'created_at' => $s->created_at,
-            ];
-        }
-        foreach ($fromExisting as $s) {
-            $medicalSupplies[] = (object) [
-                'from' => $s->from,
-                'id' => $s->id,
-                'is_consumable' => $s->is_consumable,
-                'cl2comb' => $s->cl2comb,
-                'cl2desc' => $s->cl2desc,
-                'uomcode' => $s->uomcode,
-                'quantity' => $s->quantity,
-                'average' => $s->average,
-                'total_usage' => $s->total_usage,
-                'price' => $s->price,
-                'expiration_date' => $s->expiration_date,
-                'created_at' => $s->created_at,
-            ];
-        }
-        foreach ($fromMedical as $s) {
-            $medicalSupplies[] = (object) [
-                'from' => $s->from,
-                'id' => $s->id,
-                'is_consumable' => $s->is_consumable,
-                'cl2comb' => $s->cl2comb,
-                'cl2desc' => $s->cl2desc,
-                'uomcode' => $s->uomcode,
-                'quantity' => $s->quantity,
-                'average' => $s->average,
-                'total_usage' => $s->total_usage,
-                'price' => $s->price,
-                'expiration_date' => $s->expiration_date,
-                'created_at' => $s->created_at,
-            ];
-        }
-        foreach ($fromWard as $s) {
-            $medicalSupplies[] = (object) [
-                'from' => $s->from,
-                'id' => $s->id,
-                'is_consumable' => $s->is_consumable,
-                'cl2comb' => $s->cl2comb,
-                'cl2desc' => $s->cl2desc,
-                'uomcode' => $s->uomcode,
-                'quantity' => $s->quantity,
-                'average' => $s->average,
-                'total_usage' => $s->total_usage,
-                'price' => $s->price,
-                'expiration_date' => $s->expiration_date,
-                'created_at' => $s->created_at,
-            ];
-        }
-        // dd($medicalSupplies);
 
         // get miscellaneous / miscellaneous
         $misc = Miscellaneous::with('unit')
@@ -233,7 +276,6 @@ class PatientChargeController extends Controller
             JOIN
                 hclass2 AS variant_item ON variant_item.cl2comb = gv.variant_cl2comb;"
         );
-
 
         $bills = DB::select(
             "SELECT pat_charge.pcchrgcod as charge_slip_no,
