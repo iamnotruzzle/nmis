@@ -49,12 +49,6 @@ class HandleInertiaRequests extends Middleware
             "SELECT count(*) as count FROM csrw_request_stocks WHERE status = 'ACKNOWLEDGED' OR status = 'PENDING';"
         );
 
-        // if (!$cachedLocations) {
-        //     $cachedLocations = Location::where('wardstat', 'A')
-        //         ->orderBy('wardname', 'ASC')
-        //         ->get();
-        // }
-
         if (!$cachedFundSource) {
             $cachedFundSource = FundSource::orderBy('fsName')
                 ->get(['id', 'fsid', 'fsName', 'cluster_code']);
@@ -62,7 +56,6 @@ class HandleInertiaRequests extends Middleware
 
         session([
             'cached_inertia_auth' => $cachedAuthUser,
-            // 'cached_inertia_locations' => $cachedLocations,
             'cached_inertia_fundsource' => $cachedFundSource,
         ]);
         session()->save();
@@ -76,10 +69,8 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => fn() => $cachedAuthUser,
             ],
-            // 'locations' => fn() => $cachedLocations,
             'fundSource' => fn() => $cachedFundSource,
             'pendingAndAckCount' => fn() => $pendingAndAckCount[0]->count,
-            // 'pendingAndAckCount' => fn() => 0,
         ]);
     }
 }
