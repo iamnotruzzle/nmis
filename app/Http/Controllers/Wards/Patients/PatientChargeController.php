@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Wards\Patients;
 
-use App\Events\ChargeLogsProcessed;
+
 use App\Events\RequestStock;
 use App\Http\Controllers\Controller;
 use App\Jobs\ChargingWardConsumptionTrackerJobs;
@@ -242,7 +242,7 @@ class PatientChargeController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->tscode);
+        // dd($request);
         $data = $request;
 
         $entryby = Auth::user()->employeeid;
@@ -432,12 +432,17 @@ class PatientChargeController extends Controller
 
                     WardsStocks::where('id', $id)->update($updateData);
                 }
+
+                if (!empty($chargeLogs)) {
+                    PatientChargeLogs::insert($chargeLogs);
+                }
             });
 
+            // OLD method using jobs
             // Dispatch logs after successful transaction
-            if (!empty($chargeLogs)) {
-                CreatePatientChargeLogsJobs::dispatch($chargeLogs);
-            }
+            // if (!empty($chargeLogs)) {
+            //     CreatePatientChargeLogsJobs::dispatch($chargeLogs);
+            // }
         }
 
         // if returning a charge
@@ -878,12 +883,18 @@ class PatientChargeController extends Controller
         $upd_ward_stocks_id,
         $upd_QtyToReturn,
     ) {
-        WardConsumptionTracker::where('ward_stock_id', $upd_ward_stocks_id)
-            ->latest() // Orders by created_at DESC to get the most recent row
-            ->first()
-            ->update([
+        $latestRecord = WardConsumptionTracker::where('ward_stock_id', $upd_ward_stocks_id)
+            ->latest()
+            ->first();
+
+        // only update the ward consumption tracker if the $upd_ward_stocks_id received
+        // is NOT FROM = consignment, delivery, supplemental
+        // update only if its existing_stock or from csr
+        if ($latestRecord) {
+            $latestRecord->update([
                 'non_specific_charge' => DB::raw("non_specific_charge - {$upd_QtyToReturn}")
             ]);
+        }
     }
 
     public function update(Request $request, $id)

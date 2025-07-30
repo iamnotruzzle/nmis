@@ -931,22 +931,22 @@ export default {
   },
   async mounted() {
     this.authWardcode = this.$page.props.auth.user.location.location_name.wardcode;
-    window.Echo.channel('charges').listen('.ChargeLogsProcessed', (args) => {
-      console.log('windows echo is fired');
-      window.skipNProgress = true; // Prevent NProgress
+    // window.Echo.channel('charges').listen('.ChargeLogsProcessed', (args) => {
+    //   console.log('windows echo is fired');
+    //   window.skipNProgress = true; // Prevent NProgress
 
-      router.reload({
-        onSuccess: () => {
-          this.fetchWardSupplies();
-          this.storeBillsInContainer();
-          window.skipNProgress = false; // Reset flag after reload
-        },
-        onError: () => {
-          NProgress.done();
-          window.skipNProgress = false; // Reset flag on error
-        },
-      });
-    });
+    //   router.reload({
+    //     onSuccess: () => {
+    //       this.fetchWardSupplies();
+    //       this.storeBillsInContainer();
+    //       window.skipNProgress = false; // Reset flag after reload
+    //     },
+    //     onError: () => {
+    //       NProgress.done();
+    //       window.skipNProgress = false; // Reset flag on error
+    //     },
+    //   });
+    // });
 
     try {
       await this.loadAllData(); // wait for all async fetches
@@ -1376,7 +1376,7 @@ export default {
 
           if (existingItem) {
             existingItem.qtyToCharge += qtyToCharge;
-            existingItem.total = (existingItem.price * existingItem.qtyToCharge).toFixed(2);
+            existingItem.total = Number((existingItem.price * existingItem.qtyToCharge).toFixed(2));
           } else {
             newBillItems.push({
               id: priceInfo.id,
@@ -1387,7 +1387,7 @@ export default {
               currentStock: isDrumn ? totalQuantity : 'Infinite',
               qtyToCharge,
               price: priceInfo.price,
-              total: (priceInfo.price * qtyToCharge).toFixed(2),
+              total: Number((priceInfo.price * qtyToCharge).toFixed(2)),
               expiration_date: priceInfo.expiration_date,
             });
           }
