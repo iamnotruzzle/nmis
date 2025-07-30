@@ -74,7 +74,8 @@ Route::get('wardslocation', [AuthenticationController::class, 'wardslocation'])
     ->name('wardslocation');
 
 // Route::middleware(['auth:sanctum'])->group(
-Route::middleware(['web', 'auth', 'verified', 'check.active.login'])->group(
+// Route::middleware(['web', 'auth', 'verified', 'check.active.login'])->group(
+Route::middleware(['web', 'auth', 'verified'])->group(
     function () {
         // admin routes
         Route::resource('admindashboard', AdminDashboardController::class)->middleware(['verified', 'designation_admin'])->only(['index', 'store', 'update', 'destroy']);
@@ -152,6 +153,9 @@ Route::middleware(['web', 'auth', 'verified', 'check.active.login'])->group(
             ->middleware(['verified', 'designation_ward']);
         Route::get('getGenericVariant', [PatientChargeController::class, 'getGenericVariant'])
             ->name('getGenericVariant')
+            ->middleware(['verified', 'designation_ward']);
+        Route::get('getMisc', [PatientChargeController::class, 'getMisc'])
+            ->name('getMisc')
             ->middleware(['verified', 'designation_ward']);
         Route::resource('patientcharge', PatientChargeController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('wardsstockslogs', RequestStocksLogsController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);

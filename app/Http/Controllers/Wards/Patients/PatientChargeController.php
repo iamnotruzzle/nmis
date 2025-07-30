@@ -65,11 +65,6 @@ class PatientChargeController extends Controller
         );
         $authCode = $authWardcode[0]->wardcode;
 
-        // get miscellaneous / miscellaneous
-        $misc = Miscellaneous::with('unit')
-            ->where('hmstat', 'A')
-            ->get(['hmcode', 'hmdesc', 'hmamt', 'uomcode']);
-
         $bills = DB::select(
             "SELECT pat_charge.pcchrgcod as charge_slip_no,
                             type_of_charge.chrgcode as type_of_charge_code,
@@ -121,7 +116,6 @@ class PatientChargeController extends Controller
             'pat_enccode' => $pat_enccode,
             'room_bed' => $room_bed,
             'bills' => $bills,
-            'misc' => $misc,
             'is_for_discharge' => $is_for_discharge,
             'canTransact' => $canTransact,
         ]);
@@ -222,6 +216,14 @@ class PatientChargeController extends Controller
         );
 
         return response()->json($genericVariants);
+    }
+    public function getMisc()
+    {
+        $misc = Miscellaneous::with('unit')
+            ->where('hmstat', 'A')
+            ->get(['hmcode', 'hmdesc', 'hmamt', 'uomcode']);
+
+        return response()->json($misc);
     }
 
     protected function generateUniqueChargeCode()

@@ -816,9 +816,6 @@ export default {
     SpeedDial,
   },
   props: {
-    // pat_name: Array,
-    packages: Array,
-    // genericVariants: Array,
     hpercode: String,
     patient_name: String,
     pat_tscode: String,
@@ -826,8 +823,6 @@ export default {
     room_bed: String,
     is_for_discharge: String,
     bills: Object,
-    medicalSupplies: Object,
-    misc: Object,
     canTransact: Boolean,
   },
   data() {
@@ -872,6 +867,7 @@ export default {
       chargeSummaryDialog: false,
       countdown: 0,
       totalAmount: 0,
+      isItemListLoading: false,
       medicalSuppliesListFilter: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
         cl2desc: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -933,32 +929,34 @@ export default {
         .toFixed(2);
     },
   },
-  mounted() {
+  async mounted() {
     this.authWardcode = this.$page.props.auth.user.location.location_name.wardcode;
-    window.Echo.channel('charges').listen('.ChargeLogsProcessed', (args) => {
-      console.log('windows echo is fired');
-      window.skipNProgress = true; // Prevent NProgress
+    // window.Echo.channel('charges').listen('.ChargeLogsProcessed', (args) => {
+    //   console.log('windows echo is fired');
+    //   window.skipNProgress = true; // Prevent NProgress
 
-      router.reload({
-        onSuccess: () => {
-          this.fetchWardSupplies();
-          this.storeBillsInContainer();
-          window.skipNProgress = false; // Reset flag after reload
-        },
-        onError: () => {
-          NProgress.done();
-          window.skipNProgress = false; // Reset flag on error
-        },
-      });
-    });
+    //   router.reload({
+    //     onSuccess: () => {
+    //       this.fetchWardSupplies();
+    //       this.storeBillsInContainer();
+    //       window.skipNProgress = false; // Reset flag after reload
+    //     },
+    //     onError: () => {
+    //       NProgress.done();
+    //       window.skipNProgress = false; // Reset flag on error
+    //     },
+    //   });
+    // });
 
-    this.fetchWardSupplies();
-    this.fetchPackages();
-    this.fetchGenericVariant();
+    try {
+      await this.loadAllData(); // wait for all async fetches
+      this.storeItemsInContainer(); // this depends on data fetched
+    } catch (err) {
+      console.error('Error loading data:', err);
+    }
 
     this.storeBillsInContainer();
     this.getTotalAmount();
-    this.storeMiscInContainer();
 
     // set patient enccode
     this.enccode = this.pat_enccode;
@@ -968,41 +966,125 @@ export default {
     this.hospitalNumber = this.hpercode;
   },
   methods: {
+    async loadAllData() {
+      this.isItemListLoading = true;
+      this.error = null;
+
+      try {
+        await Promise.all([
+          this.fetchWardSupplies(),
+          this.fetchPackages(),
+          this.fetchGenericVariant(),
+          this.fetchMisc(), // async or sync – both fine here
+        ]);
+      } catch (err) {
+        this.error = err.response?.data ?? err.message;
+        throw err;
+      } finally {
+        this.isItemListLoading = false;
+      }
+    },
     async fetchWardSupplies() {
-      this.loading = true;
+      this.isItemListLoading = true;
       this.error = null;
       try {
         const response = await axios.get('getWardMedSupplies');
         console.log('fetchWardSupplies data: ', response.data);
-        this.storeMedicalSuppliesInContainer(response.data);
-        this.storeItemsInContainer(response.data);
+
+        let combinedSupplies = [];
+        response.data.forEach((med) => {
+          // Find if the item with the same cl2desc and price already exists in the combinedSupplies array
+          let existingItem = combinedSupplies.find(
+            (item) => item.cl2desc === med.cl2desc && Number(item.price) === Number(med.price)
+          );
+
+          if (existingItem) {
+            // If found, just update the quantity
+            existingItem.quantity += med.is_consumable != 'y' ? Number(med.quantity) : Number(med.total_usage);
+          } else {
+            // If not found, add a new entry
+            combinedSupplies.push({
+              // from: med.from,
+              id: med.id,
+              is_consumable: med.is_consumable,
+              cl2comb: med.cl2comb,
+              cl2desc: med.cl2desc,
+              uomcode: med.uomcode == null ? null : med.uomcode,
+              quantity: med.is_consumable != 'y' ? Number(med.quantity) : Number(med.total_usage),
+              average: Number(med.average),
+              total_usage: Number(med.total_usage),
+              price: Number(med.price),
+              expiration_date: med.expiration_date,
+            });
+          }
+        });
+
+        this.medicalSuppliesList = combinedSupplies;
       } catch (err) {
         this.error = err.response?.data ?? err.message;
         console.error('Failed to fetch ward supplies:', this.error);
+      } finally {
+        this.isItemListLoading = false;
       }
     },
     async fetchPackages() {
-      this.loading = true;
+      this.isItemListLoading = true;
       this.error = null;
       try {
         const response = await axios.get('getPackages');
         console.log('fetchPackages data: ', response.data);
-        this.storePackagesInController(response.data);
+
+        response.data.forEach((e) => {
+          this.packageList.push({
+            id: e.id,
+            description: e.description,
+            itemcode: e.cl2comb,
+            itemDesc: e.cl2desc,
+            quantity: e.quantity,
+          });
+        });
       } catch (err) {
         this.error = err.response?.data ?? err.message;
         console.error('Failed to fetch packages:', this.error);
+      } finally {
+        this.isItemListLoading = false;
       }
     },
     async fetchGenericVariant() {
-      this.loading = true;
+      this.isItemListLoading = true;
       this.error = null;
       try {
         const response = await axios.get('getGenericVariant');
         console.log('fetchGenericVariant data: ', response.data);
+
         this.mapvariant(response.data);
       } catch (err) {
         this.error = err.response?.data ?? err.message;
         console.error('Failed to fetch generic variant:', this.error);
+      } finally {
+        this.isItemListLoading = false;
+      }
+    },
+    async fetchMisc() {
+      this.isItemListLoading = true;
+      this.error = null;
+      try {
+        const response = await axios.get('getMisc');
+        console.log('fetchMisc data: ', response.data);
+
+        response.data.forEach((misc) => {
+          this.miscList.push({
+            hmcode: misc.hmcode,
+            hmdesc: misc.hmdesc,
+            hmamt: misc.hmamt,
+            uomcode: misc.uomcode == null ? null : misc.uomcode,
+          });
+        });
+      } catch (err) {
+        this.error = err.response?.data ?? err.message;
+        console.error('Failed to fetch generic variant:', this.error);
+      } finally {
+        this.isItemListLoading = false;
       }
     },
     mapvariant(variants) {
@@ -1016,6 +1098,7 @@ export default {
         });
       });
     },
+
     openChargeSummaryDialog() {
       console.log('charge list', this.itemsToBillList);
       this.chargeSummaryDialog = true;
@@ -1058,17 +1141,6 @@ export default {
       const truncated = Math.floor(number * factor) / factor;
       return truncated.toFixed(2);
     },
-    storePackagesInController(packages) {
-      packages.forEach((e) => {
-        this.packageList.push({
-          id: e.id,
-          description: e.description,
-          itemcode: e.cl2comb,
-          itemDesc: e.cl2desc,
-          quantity: e.quantity,
-        });
-      });
-    },
     storeBillsInContainer() {
       this.billList = [];
 
@@ -1100,60 +1172,13 @@ export default {
 
       //   console.log(this.billList);
     },
-    storeMedicalSuppliesInContainer(items) {
-      // console.log(items);
-      this.medicalSuppliesList = [];
-
-      let combinedSupplies = [];
-      items.forEach((med) => {
-        // Find if the item with the same cl2desc and price already exists in the combinedSupplies array
-        let existingItem = combinedSupplies.find(
-          (item) => item.cl2desc === med.cl2desc && Number(item.price) === Number(med.price)
-        );
-
-        if (existingItem) {
-          // If found, just update the quantity
-          existingItem.quantity += med.is_consumable != 'y' ? Number(med.quantity) : Number(med.total_usage);
-        } else {
-          // If not found, add a new entry
-          combinedSupplies.push({
-            // from: med.from,
-            id: med.id,
-            is_consumable: med.is_consumable,
-            cl2comb: med.cl2comb,
-            cl2desc: med.cl2desc,
-            uomcode: med.uomcode == null ? null : med.uomcode,
-            quantity: med.is_consumable != 'y' ? Number(med.quantity) : Number(med.total_usage),
-            average: Number(med.average),
-            total_usage: Number(med.total_usage),
-            price: Number(med.price),
-            expiration_date: med.expiration_date,
-          });
-        }
-      });
-
-      this.medicalSuppliesList = combinedSupplies;
-    },
-    storeMiscInContainer() {
-      this.miscList = [];
-
-      this.misc.forEach((misc) => {
-        this.miscList.push({
-          hmcode: misc.hmcode,
-          hmdesc: misc.hmdesc,
-          hmamt: misc.hmamt,
-          uomcode: misc.uomcode == null ? null : misc.uomcode,
-        });
-      });
-    },
-    storeItemsInContainer(items) {
+    storeItemsInContainer() {
       //   console.log(items);
       this.itemList = [];
-      this.miscList = [];
 
       // medical supplies
       const combinedItems = {};
-      items.forEach((med) => {
+      this.medicalSuppliesList.forEach((med) => {
         if (med.price != null) {
           let medQuantity = med.is_consumable != 'y' ? med.quantity : med.total_usage;
           if (combinedItems[med.cl2desc]) {
@@ -1182,7 +1207,7 @@ export default {
       this.itemList = Object.values(combinedItems);
 
       // // misc
-      this.misc.forEach((misc) => {
+      this.miscList.forEach((misc) => {
         this.itemList.push({
           id: null,
           typeOfCharge: 'MISC',
@@ -1572,7 +1597,7 @@ export default {
           this.storeBillsInContainer();
           this.getTotalAmount();
           this.fetchWardSupplies();
-          this.storeMiscInContainer();
+          //   this.storeMiscInContainer();
 
           this.isSubmitting = false; // Allow navigation again
         },
