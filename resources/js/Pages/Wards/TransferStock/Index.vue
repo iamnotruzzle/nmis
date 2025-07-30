@@ -545,7 +545,7 @@ export default {
       this.transferredStocksList = [];
       this.loading = true;
 
-      if (e.message == this.$page.props.authWardcode.wardcode) {
+      if (e.message == this.this.$page.props.auth.user.location.location_name.wardcode) {
         this.$inertia.get('transferstock', this.params, {
           preserveState: true,
           preserveScroll: true,

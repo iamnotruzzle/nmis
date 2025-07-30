@@ -933,8 +933,6 @@ export default {
     },
   },
   mounted() {
-    this.fetchWardSupplies();
-
     this.authWardcode = this.$page.props.auth.user.location.location_name.wardcode;
     window.Echo.channel('charges').listen('.ChargeLogsProcessed', (args) => {
       window.skipNProgress = true; // Prevent NProgress
@@ -954,7 +952,10 @@ export default {
       });
     });
 
-    this.storePackagesInController();
+    this.fetchWardSupplies();
+    this.fetchPackages();
+
+    // this.storePackagesInController();
     this.storeBillsInContainer();
     this.getTotalAmount();
     // this.storeMedicalSuppliesInContainer();
@@ -979,6 +980,19 @@ export default {
         console.log('fetchWardSupplies data: ', response.data);
         this.storeMedicalSuppliesInContainer(response.data);
         this.storeItemsInContainer(response.data);
+      } catch (err) {
+        this.error = err.response?.data ?? err.message;
+        console.error('Failed to fetch ward supplies:', this.error);
+      }
+    },
+    async fetchPackages() {
+      this.loading = true;
+      this.error = null;
+      //   console.log('function is fired.');
+      try {
+        const response = await axios.get('getPackages');
+        console.log('fetchPackages data: ', response.data);
+        this.storePackagesInController(response.data);
       } catch (err) {
         this.error = err.response?.data ?? err.message;
         console.error('Failed to fetch ward supplies:', this.error);
@@ -1038,8 +1052,8 @@ export default {
       const truncated = Math.floor(number * factor) / factor;
       return truncated.toFixed(2);
     },
-    storePackagesInController() {
-      this.packages.forEach((e) => {
+    storePackagesInController(packages) {
+      packages.forEach((e) => {
         this.packageList.push({
           id: e.id,
           description: e.description,
@@ -1179,7 +1193,7 @@ export default {
 
       // // packages
       // push but remove duplicate
-      this.$page.props.packages.forEach((e) => {
+      this.packageList.forEach((e) => {
         const exists = this.itemList.findIndex((item) => item.id === e.id);
 
         if (exists === -1) {

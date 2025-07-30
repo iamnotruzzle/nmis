@@ -65,142 +65,6 @@ class PatientChargeController extends Controller
         );
         $authCode = $authWardcode[0]->wardcode;
 
-        // $fromExisting = DB::select(
-        //     "SELECT stock.[from], stock.id, stock.request_stocks_id, stock.is_consumable,
-        //         item.cl2comb, item.cl2desc, item.uomcode,
-        //         stock.quantity, stock.average, stock.total_usage,
-        //         price.price_per_unit as price,
-        //         stock.expiration_date, stock.created_at
-        //         FROM csrw_wards_stocks stock
-        //         JOIN hclass2 item ON stock.cl2comb = item.cl2comb
-        //         LEFT JOIN csrw_item_prices AS price
-        //             ON stock.cl2comb = price.cl2comb
-        //             AND price.ris_no = stock.ris_no -- use ris_no if item is from ward/existing
-        //         WHERE stock.location = '" . $authCode . "'
-        //         AND stock.quantity > 0
-        //         AND stock.[from] != 'CSR'
-        //         AND stock.[from] != 'WARD'
-        //         AND stock.[from] != 'MEDICAL GASES'"
-        // );
-        // $fromCSR = DB::select(
-        //     "SELECT stock.[from], stock.id, stock.request_stocks_id, stock.is_consumable,
-        //         item.cl2comb, item.cl2desc, item.uomcode,
-        //         stock.quantity, stock.average, stock.total_usage,
-        //         price.price_per_unit as price,
-        //         stock.expiration_date, stock.created_at
-        //         FROM csrw_wards_stocks stock
-        //         JOIN hclass2 item ON stock.cl2comb = item.cl2comb
-        //         LEFT JOIN csrw_request_stocks rs ON rs.id = stock.request_stocks_id
-        //         LEFT JOIN csrw_item_prices AS price
-        //             ON stock.cl2comb = price.cl2comb
-        //             AND price.item_conversion_id = stock.stock_id -- use stock_id if item is from CSR
-        //         WHERE stock.location = '" . $authCode . "'
-        //         AND stock.quantity > 0
-        //         AND (rs.id IS NULL OR rs.status = 'RECEIVED')
-        //         AND stock.[from] = 'CSR'
-        //         AND stock.expiration_date > CAST(GETDATE() AS DATE);"
-        // );
-        // // dd($fromCSR);
-        // $fromWard = DB::select(
-        //     "SELECT stock.[from], stock.id, stock.request_stocks_id, stock.is_consumable,
-        //         item.cl2comb, item.cl2desc, item.uomcode,
-        //         stock.quantity, stock.average, stock.total_usage,
-        //         price.price_per_unit as price,
-        //         stock.expiration_date, stock.created_at
-        //         FROM csrw_wards_stocks stock
-        //         JOIN hclass2 item ON stock.cl2comb = item.cl2comb
-        //         LEFT JOIN csrw_request_stocks rs ON rs.id = stock.request_stocks_id
-        //         LEFT JOIN csrw_item_prices AS price
-        //                 ON stock.cl2comb = price.cl2comb
-        //                 AND price.ris_no = stock.ris_no -- use ris_no if item is from ward/existing
-        //         WHERE stock.location = '" . $authCode . "'
-        //         AND stock.quantity > 0
-        //         AND (rs.id IS NULL OR rs.status = 'RECEIVED')
-        //         AND stock.[from] = 'WARD'
-        //         AND stock.expiration_date > CAST(GETDATE() AS DATE);"
-        // );
-        // $fromMedical = DB::select(
-        //     "SELECT stock.[from], stock.id, stock.request_stocks_id, stock.is_consumable,
-        //         item.cl2comb, item.cl2desc, item.uomcode,
-        //         stock.quantity, stock.average, stock.total_usage,
-        //         price.price_per_unit as price,
-        //         stock.expiration_date, stock.created_at
-        //         FROM csrw_wards_stocks stock
-        //         JOIN hclass2 item ON stock.cl2comb = item.cl2comb
-        //         LEFT JOIN csrw_item_prices AS price
-        //             ON stock.cl2comb = price.cl2comb
-        //             AND price.ris_no = stock.ris_no
-        //         WHERE stock.location = '" . $authCode . "'
-        //         AND stock.quantity > 0
-        //         AND stock.[from] = 'MEDICAL GASES';"
-        // );
-        // // set medicalSupplies value
-        // $medicalSupplies = [];
-        // foreach ($fromCSR as $s) {
-        //     $medicalSupplies[] = (object) [
-        //         'from' => $s->from,
-        //         'id' => $s->id,
-        //         'is_consumable' => $s->is_consumable,
-        //         'cl2comb' => $s->cl2comb,
-        //         'cl2desc' => $s->cl2desc,
-        //         'uomcode' => $s->uomcode,
-        //         'quantity' => $s->quantity,
-        //         'average' => $s->average,
-        //         'total_usage' => $s->total_usage,
-        //         'price' => $s->price,
-        //         'expiration_date' => $s->expiration_date,
-        //         'created_at' => $s->created_at,
-        //     ];
-        // }
-        // foreach ($fromExisting as $s) {
-        //     $medicalSupplies[] = (object) [
-        //         'from' => $s->from,
-        //         'id' => $s->id,
-        //         'is_consumable' => $s->is_consumable,
-        //         'cl2comb' => $s->cl2comb,
-        //         'cl2desc' => $s->cl2desc,
-        //         'uomcode' => $s->uomcode,
-        //         'quantity' => $s->quantity,
-        //         'average' => $s->average,
-        //         'total_usage' => $s->total_usage,
-        //         'price' => $s->price,
-        //         'expiration_date' => $s->expiration_date,
-        //         'created_at' => $s->created_at,
-        //     ];
-        // }
-        // foreach ($fromMedical as $s) {
-        //     $medicalSupplies[] = (object) [
-        //         'from' => $s->from,
-        //         'id' => $s->id,
-        //         'is_consumable' => $s->is_consumable,
-        //         'cl2comb' => $s->cl2comb,
-        //         'cl2desc' => $s->cl2desc,
-        //         'uomcode' => $s->uomcode,
-        //         'quantity' => $s->quantity,
-        //         'average' => $s->average,
-        //         'total_usage' => $s->total_usage,
-        //         'price' => $s->price,
-        //         'expiration_date' => $s->expiration_date,
-        //         'created_at' => $s->created_at,
-        //     ];
-        // }
-        // foreach ($fromWard as $s) {
-        //     $medicalSupplies[] = (object) [
-        //         'from' => $s->from,
-        //         'id' => $s->id,
-        //         'is_consumable' => $s->is_consumable,
-        //         'cl2comb' => $s->cl2comb,
-        //         'cl2desc' => $s->cl2desc,
-        //         'uomcode' => $s->uomcode,
-        //         'quantity' => $s->quantity,
-        //         'average' => $s->average,
-        //         'total_usage' => $s->total_usage,
-        //         'price' => $s->price,
-        //         'expiration_date' => $s->expiration_date,
-        //         'created_at' => $s->created_at,
-        //     ];
-        // }
-
         // $medicalSupplies = DB::select(
         //     "SELECT
         //         stock.[from],
@@ -251,18 +115,17 @@ class PatientChargeController extends Controller
             ->get(['hmcode', 'hmdesc', 'hmamt', 'uomcode']);
 
 
-        // get packages / packages
-        $packages = DB::select(
-            "SELECT package.id, package.description, pack_dets.cl2comb, item.cl2desc, pack_dets.quantity, package.status
-                    FROM csrw_packages AS package
-                    JOIN csrw_package_details as pack_dets ON pack_dets.package_id = package.id
-                    JOIN hclass2 as item ON item.cl2comb = pack_dets.cl2comb
-                    WHERE package.status = 'A'
-                    -- AND package.wardcode = ?
-                    ORDER BY item.cl2desc ASC;",
-        );
+        // // get packages / packages
+        // $packages = DB::select(
+        //     "SELECT package.id, package.description, pack_dets.cl2comb, item.cl2desc, pack_dets.quantity, package.status
+        //             FROM csrw_packages AS package
+        //             JOIN csrw_package_details as pack_dets ON pack_dets.package_id = package.id
+        //             JOIN hclass2 as item ON item.cl2comb = pack_dets.cl2comb
+        //             WHERE package.status = 'A'
+        //             -- AND package.wardcode = ?
+        //             ORDER BY item.cl2desc ASC;",
+        // );
         // get variant
-        // $genericVariants = DB::select("SELECT generic_cl2comb, variant_cl2comb FROM csrw_generic_variants");
         $genericVariants = DB::select(
             "SELECT
                 gv.generic_cl2comb,
@@ -323,7 +186,7 @@ class PatientChargeController extends Controller
 
         return Inertia::render('Wards/Patients/Bill/Index', [
             // 'pat_name' => $pat_name,
-            'packages' => $packages,
+            // 'packages' => $packages,
             'genericVariants' => $genericVariants,
             'hpercode' => $hpercode,
             'patient_name' => $patient_name,
@@ -402,6 +265,20 @@ class PatientChargeController extends Controller
         );
 
         return response()->json($medicalSupplies);
+    }
+    public function getPackages()
+    {
+        $packages = DB::select(
+            "SELECT package.id, package.description, pack_dets.cl2comb, item.cl2desc, pack_dets.quantity, package.status
+                    FROM csrw_packages AS package
+                    JOIN csrw_package_details as pack_dets ON pack_dets.package_id = package.id
+                    JOIN hclass2 as item ON item.cl2comb = pack_dets.cl2comb
+                    WHERE package.status = 'A'
+                    -- AND package.wardcode = ?
+                    ORDER BY item.cl2desc ASC;",
+        );
+
+        return response()->json($packages);
     }
 
     protected function generateUniqueChargeCode()
