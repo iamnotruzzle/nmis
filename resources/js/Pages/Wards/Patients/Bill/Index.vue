@@ -791,6 +791,7 @@ import moment from 'moment';
 import { router } from '@inertiajs/vue3';
 import { usePage } from '@inertiajs/vue3';
 import { Link } from '@inertiajs/vue3';
+import axios from 'axios';
 
 export default {
   components: {
@@ -932,6 +933,8 @@ export default {
     },
   },
   mounted() {
+    this.fetchWardSupplies();
+
     this.authWardcode = this.$page.props.auth.user.location.location_name.wardcode;
     window.Echo.channel('charges').listen('.ChargeLogsProcessed', (args) => {
       window.skipNProgress = true; // Prevent NProgress
@@ -939,7 +942,8 @@ export default {
       router.reload({
         onSuccess: () => {
           //   console.log('Data reloaded successfully');
-          this.storeMedicalSuppliesInContainer();
+          //   this.storeMedicalSuppliesInContainer();
+          this.fetchWardSupplies();
           this.storeBillsInContainer();
           window.skipNProgress = false; // Reset flag after reload
         },
@@ -953,9 +957,9 @@ export default {
     this.storePackagesInController();
     this.storeBillsInContainer();
     this.getTotalAmount();
-    this.storeMedicalSuppliesInContainer();
+    // this.storeMedicalSuppliesInContainer();
     this.storeMiscInContainer();
-    this.storeItemsInContainer();
+    // this.storeItemsInContainer();
     this.mapvariant();
 
     // set patient enccode
@@ -966,29 +970,21 @@ export default {
     this.hospitalNumber = this.hpercode;
   },
   methods: {
-    // mapvariant() {
-    //   this.genericVariants.forEach(({ generic_cl2comb, variant_cl2comb }) => {
-    //     if (!this.variantMap[generic_cl2comb]) {
-    //       this.variantMap[generic_cl2comb] = [];
-    //     }
-    //     this.variantMap[generic_cl2comb].push(variant_cl2comb);
-    //   });
-    //   console.log(this.genericVariants);
-    //   //   [
-    //   //     {
-    //   //         "generic_cl2comb": "1000-11761-KMXXJ",
-    //   //         "variant_cl2comb": "1000-11761-jrctj"
-    //   //     },
-    //   //     {
-    //   //         "generic_cl2comb": "1000-11761-KMXXJ",
-    //   //         "variant_cl2comb": "1000-11761-ctfvV"
-    //   //     },
-    //   //     {
-    //   //         "generic_cl2comb": "1000-11761-KMXXJ",
-    //   //         "variant_cl2comb": "1000-11761-oJnyy"
-    //   //     }
-    //   //     ]
-    // },
+    async fetchWardSupplies() {
+      this.loading = true;
+      this.error = null;
+      //   console.log('function is fired.');
+      try {
+        const response = await axios.get('getWardMedSupplies');
+        console.log('fetchWardSupplies data: ', response.data);
+        this.storeMedicalSuppliesInContainer(response.data);
+        this.storeItemsInContainer(response.data);
+      } catch (err) {
+        this.error = err.response?.data ?? err.message;
+        console.error('Failed to fetch ward supplies:', this.error);
+      }
+    },
+
     mapvariant() {
       this.$page.props.genericVariants.forEach(({ generic_cl2comb, variant_cl2comb, variant_desc }) => {
         if (!this.variantMap[generic_cl2comb]) {
@@ -1086,12 +1082,12 @@ export default {
 
       //   console.log(this.billList);
     },
-    storeMedicalSuppliesInContainer() {
-      //   console.log(this.medicalSupplies);
+    storeMedicalSuppliesInContainer(items) {
+      // console.log(items);
       this.medicalSuppliesList = [];
 
       let combinedSupplies = [];
-      this.medicalSupplies.forEach((med) => {
+      items.forEach((med) => {
         // Find if the item with the same cl2desc and price already exists in the combinedSupplies array
         let existingItem = combinedSupplies.find(
           (item) => item.cl2desc === med.cl2desc && Number(item.price) === Number(med.price)
@@ -1132,13 +1128,14 @@ export default {
         });
       });
     },
-    storeItemsInContainer() {
+    storeItemsInContainer(items) {
+      //   console.log(items);
       this.itemList = [];
       this.miscList = [];
 
       // medical supplies
       const combinedItems = {};
-      this.medicalSupplies.forEach((med) => {
+      items.forEach((med) => {
         if (med.price != null) {
           let medQuantity = med.is_consumable != 'y' ? med.quantity : med.total_usage;
           if (combinedItems[med.cl2desc]) {
@@ -1559,9 +1556,10 @@ export default {
 
           this.storeBillsInContainer();
           this.getTotalAmount();
-          this.storeMedicalSuppliesInContainer();
+          //   this.storeMedicalSuppliesInContainer();
+          this.fetchWardSupplies();
           this.storeMiscInContainer();
-          this.storeItemsInContainer();
+          //   this.storeItemsInContainer();
 
           this.isSubmitting = false; // Allow navigation again
         },

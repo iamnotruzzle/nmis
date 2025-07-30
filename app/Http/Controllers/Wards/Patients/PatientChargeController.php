@@ -201,49 +201,49 @@ class PatientChargeController extends Controller
         //     ];
         // }
 
-        $medicalSupplies = DB::select(
-            "SELECT
-                stock.[from],
-                stock.id,
-                stock.request_stocks_id,
-                stock.is_consumable,
-                item.cl2comb,
-                item.cl2desc,
-                item.uomcode,
-                stock.quantity,
-                stock.average,
-                stock.total_usage,
-                CASE
-                    WHEN stock.[from] = 'CSR' THEN price_csr.price_per_unit
-                    ELSE price_other.price_per_unit
-                END as price,
-                stock.expiration_date,
-                stock.created_at
-            FROM csrw_wards_stocks stock
-            INNER JOIN hclass2 item ON stock.cl2comb = item.cl2comb
-            LEFT JOIN csrw_request_stocks rs ON rs.id = stock.request_stocks_id
-            LEFT JOIN csrw_item_prices price_csr
-                ON stock.cl2comb = price_csr.cl2comb
-                AND price_csr.item_conversion_id = stock.stock_id
-                AND stock.[from] = 'CSR'
-            LEFT JOIN csrw_item_prices price_other
-                ON stock.cl2comb = price_other.cl2comb
-                AND price_other.ris_no = stock.ris_no
-                AND stock.[from] <> 'CSR'
-            WHERE stock.location = ?
-                AND stock.quantity > 0
-                AND (
-                    stock.[from] = 'MEDICAL GASES'
-                    OR stock.[from] NOT IN ('CSR', 'WARD', 'MEDICAL GASES')
-                    OR (
-                        stock.[from] IN ('CSR', 'WARD')
-                        AND (rs.id IS NULL OR rs.status = 'RECEIVED')
-                        AND stock.expiration_date > CAST(GETDATE() AS DATE)
-                    )
-                )
-            ORDER BY stock.[from], item.cl2desc",
-            [$authCode]
-        );
+        // $medicalSupplies = DB::select(
+        //     "SELECT
+        //         stock.[from],
+        //         stock.id,
+        //         stock.request_stocks_id,
+        //         stock.is_consumable,
+        //         item.cl2comb,
+        //         item.cl2desc,
+        //         item.uomcode,
+        //         stock.quantity,
+        //         stock.average,
+        //         stock.total_usage,
+        //         CASE
+        //             WHEN stock.[from] = 'CSR' THEN price_csr.price_per_unit
+        //             ELSE price_other.price_per_unit
+        //         END as price,
+        //         stock.expiration_date,
+        //         stock.created_at
+        //     FROM csrw_wards_stocks stock
+        //     INNER JOIN hclass2 item ON stock.cl2comb = item.cl2comb
+        //     LEFT JOIN csrw_request_stocks rs ON rs.id = stock.request_stocks_id
+        //     LEFT JOIN csrw_item_prices price_csr
+        //         ON stock.cl2comb = price_csr.cl2comb
+        //         AND price_csr.item_conversion_id = stock.stock_id
+        //         AND stock.[from] = 'CSR'
+        //     LEFT JOIN csrw_item_prices price_other
+        //         ON stock.cl2comb = price_other.cl2comb
+        //         AND price_other.ris_no = stock.ris_no
+        //         AND stock.[from] <> 'CSR'
+        //     WHERE stock.location = ?
+        //         AND stock.quantity > 0
+        //         AND (
+        //             stock.[from] = 'MEDICAL GASES'
+        //             OR stock.[from] NOT IN ('CSR', 'WARD', 'MEDICAL GASES')
+        //             OR (
+        //                 stock.[from] IN ('CSR', 'WARD')
+        //                 AND (rs.id IS NULL OR rs.status = 'RECEIVED')
+        //                 AND stock.expiration_date > CAST(GETDATE() AS DATE)
+        //             )
+        //         )
+        //     ORDER BY stock.[from], item.cl2desc",
+        //     [$authCode]
+        // );
 
         // get miscellaneous / miscellaneous
         $misc = Miscellaneous::with('unit')
@@ -332,11 +332,76 @@ class PatientChargeController extends Controller
             'room_bed' => $room_bed,
             // 'patient' => $patient,
             'bills' => $bills,
-            'medicalSupplies' => $medicalSupplies,
+            // 'medicalSupplies' => $medicalSupplies,
             'misc' => $misc,
             'is_for_discharge' => $is_for_discharge,
             'canTransact' => $canTransact,
         ]);
+    }
+
+    public function getWardMedSupplies()
+    {
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+                FROM
+                    user_acc u
+                INNER JOIN
+                    csrw_login_history l ON u.employeeid = l.employeeid
+                WHERE
+                    l.employeeid = ?
+                ORDER BY
+                    l.created_at DESC;
+                ",
+            [Auth::user()->employeeid]
+        );
+        $authCode = $authWardcode[0]->wardcode;
+
+        $medicalSupplies = DB::select(
+            "SELECT
+                stock.[from],
+                stock.id,
+                stock.request_stocks_id,
+                stock.is_consumable,
+                item.cl2comb,
+                item.cl2desc,
+                item.uomcode,
+                stock.quantity,
+                stock.average,
+                stock.total_usage,
+                CASE
+                    WHEN stock.[from] = 'CSR' THEN price_csr.price_per_unit
+                    ELSE price_other.price_per_unit
+                END as price,
+                stock.expiration_date,
+                stock.created_at
+            FROM csrw_wards_stocks stock
+            INNER JOIN hclass2 item ON stock.cl2comb = item.cl2comb
+            LEFT JOIN csrw_request_stocks rs ON rs.id = stock.request_stocks_id
+            LEFT JOIN csrw_item_prices price_csr
+                ON stock.cl2comb = price_csr.cl2comb
+                AND price_csr.item_conversion_id = stock.stock_id
+                AND stock.[from] = 'CSR'
+            LEFT JOIN csrw_item_prices price_other
+                ON stock.cl2comb = price_other.cl2comb
+                AND price_other.ris_no = stock.ris_no
+                AND stock.[from] <> 'CSR'
+            WHERE stock.location = ?
+                AND stock.quantity > 0
+                AND (
+                    stock.[from] = 'MEDICAL GASES'
+                    OR stock.[from] NOT IN ('CSR', 'WARD', 'MEDICAL GASES')
+                    OR (
+                        stock.[from] IN ('CSR', 'WARD')
+                        AND (rs.id IS NULL OR rs.status = 'RECEIVED')
+                        AND stock.expiration_date > CAST(GETDATE() AS DATE)
+                    )
+                )
+            ORDER BY stock.[from], item.cl2desc",
+            [$authCode]
+        );
+
+        return response()->json($medicalSupplies);
     }
 
     protected function generateUniqueChargeCode()
