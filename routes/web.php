@@ -150,6 +150,9 @@ Route::middleware(['web', 'auth', 'verified', 'check.active.login'])->group(
         Route::get('getPackages', [PatientChargeController::class, 'getPackages'])
             ->name('getPackages')
             ->middleware(['verified', 'designation_ward']);
+        Route::get('getGenericVariant', [PatientChargeController::class, 'getGenericVariant'])
+            ->name('getGenericVariant')
+            ->middleware(['verified', 'designation_ward']);
         Route::resource('patientcharge', PatientChargeController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('wardsstockslogs', RequestStocksLogsController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
 

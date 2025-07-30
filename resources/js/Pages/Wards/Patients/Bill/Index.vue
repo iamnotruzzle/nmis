@@ -818,7 +818,7 @@ export default {
   props: {
     // pat_name: Array,
     packages: Array,
-    genericVariants: Array,
+    // genericVariants: Array,
     hpercode: String,
     patient_name: String,
     pat_tscode: String,
@@ -854,6 +854,7 @@ export default {
       medicalSuppliesList: [],
       miscList: [],
       itemList: [],
+      genericVariants: [],
       itemsToBillList: [],
       variantDialogVisible: false,
       variantItemName: '',
@@ -935,6 +936,7 @@ export default {
   mounted() {
     this.authWardcode = this.$page.props.auth.user.location.location_name.wardcode;
     window.Echo.channel('charges').listen('.ChargeLogsProcessed', (args) => {
+      console.log('windows echo is fired');
       window.skipNProgress = true; // Prevent NProgress
 
       router.reload({
@@ -954,6 +956,7 @@ export default {
 
     this.fetchWardSupplies();
     this.fetchPackages();
+    this.fetchGenericVariant();
 
     // this.storePackagesInController();
     this.storeBillsInContainer();
@@ -961,7 +964,7 @@ export default {
     // this.storeMedicalSuppliesInContainer();
     this.storeMiscInContainer();
     // this.storeItemsInContainer();
-    this.mapvariant();
+    // this.mapvariant();
 
     // set patient enccode
     this.enccode = this.pat_enccode;
@@ -995,12 +998,26 @@ export default {
         this.storePackagesInController(response.data);
       } catch (err) {
         this.error = err.response?.data ?? err.message;
-        console.error('Failed to fetch ward supplies:', this.error);
+        console.error('Failed to fetch packages:', this.error);
       }
     },
-
-    mapvariant() {
-      this.$page.props.genericVariants.forEach(({ generic_cl2comb, variant_cl2comb, variant_desc }) => {
+    async fetchGenericVariant() {
+      this.loading = true;
+      this.error = null;
+      //   console.log('function is fired.');
+      try {
+        const response = await axios.get('getGenericVariant');
+        console.log('fetchGenericVariant data: ', response.data);
+        // this.genericVariants = response.data;
+        this.mapvariant(response.data);
+      } catch (err) {
+        this.error = err.response?.data ?? err.message;
+        console.error('Failed to fetch generic variant:', this.error);
+      }
+    },
+    mapvariant(variants) {
+      //   this.genericVariants = variant;
+      variants.forEach(({ generic_cl2comb, variant_cl2comb, variant_desc }) => {
         if (!this.variantMap[generic_cl2comb]) {
           this.variantMap[generic_cl2comb] = [];
         }

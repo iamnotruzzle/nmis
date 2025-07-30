@@ -65,6 +65,7 @@ class PatientChargeController extends Controller
         );
         $authCode = $authWardcode[0]->wardcode;
 
+        // get medical supplies / medical supplies
         // $medicalSupplies = DB::select(
         //     "SELECT
         //         stock.[from],
@@ -108,37 +109,10 @@ class PatientChargeController extends Controller
         //     ORDER BY stock.[from], item.cl2desc",
         //     [$authCode]
         // );
-
         // get miscellaneous / miscellaneous
         $misc = Miscellaneous::with('unit')
             ->where('hmstat', 'A')
             ->get(['hmcode', 'hmdesc', 'hmamt', 'uomcode']);
-
-
-        // // get packages / packages
-        // $packages = DB::select(
-        //     "SELECT package.id, package.description, pack_dets.cl2comb, item.cl2desc, pack_dets.quantity, package.status
-        //             FROM csrw_packages AS package
-        //             JOIN csrw_package_details as pack_dets ON pack_dets.package_id = package.id
-        //             JOIN hclass2 as item ON item.cl2comb = pack_dets.cl2comb
-        //             WHERE package.status = 'A'
-        //             -- AND package.wardcode = ?
-        //             ORDER BY item.cl2desc ASC;",
-        // );
-        // get variant
-        $genericVariants = DB::select(
-            "SELECT
-                gv.generic_cl2comb,
-                gv.variant_cl2comb,
-                generic_item.cl2desc AS generic_desc,
-                variant_item.cl2desc AS variant_desc
-            FROM
-                csrw_generic_variants AS gv
-            JOIN
-                hclass2 AS generic_item ON generic_item.cl2comb = gv.generic_cl2comb
-            JOIN
-                hclass2 AS variant_item ON variant_item.cl2comb = gv.variant_cl2comb;"
-        );
 
         $bills = DB::select(
             "SELECT pat_charge.pcchrgcod as charge_slip_no,
@@ -187,7 +161,7 @@ class PatientChargeController extends Controller
         return Inertia::render('Wards/Patients/Bill/Index', [
             // 'pat_name' => $pat_name,
             // 'packages' => $packages,
-            'genericVariants' => $genericVariants,
+            // 'genericVariants' => $genericVariants,
             'hpercode' => $hpercode,
             'patient_name' => $patient_name,
             'pat_tscode' => $pat_tscode,
@@ -279,6 +253,24 @@ class PatientChargeController extends Controller
         );
 
         return response()->json($packages);
+    }
+    public function getGenericVariant()
+    {
+        $genericVariants = DB::select(
+            "SELECT
+                gv.generic_cl2comb,
+                gv.variant_cl2comb,
+                generic_item.cl2desc AS generic_desc,
+                variant_item.cl2desc AS variant_desc
+            FROM
+                csrw_generic_variants AS gv
+            JOIN
+                hclass2 AS generic_item ON generic_item.cl2comb = gv.generic_cl2comb
+            JOIN
+                hclass2 AS variant_item ON variant_item.cl2comb = gv.variant_cl2comb;"
+        );
+
+        return response()->json($genericVariants);
     }
 
     protected function generateUniqueChargeCode()
