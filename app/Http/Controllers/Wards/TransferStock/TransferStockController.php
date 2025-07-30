@@ -65,19 +65,6 @@ class TransferStockController extends Controller
             ->get();
 
 
-
-        // $transferredStock = WardTransferStock::with(
-        //     'ward_stock',
-        //     'ward_from:wardcode,wardname',
-        //     'ward_to:wardcode,wardname',
-        //     'requested_by:employeeid,firstname,lastname',
-        //     'approved_by:employeeid,firstname,lastname'
-        // )
-        //     ->where('from', '=', $authCode)
-        //     ->orWhere('to', '=', $authCode)
-        //     ->orderBy('created_at', 'DESC')
-        //     ->get();
-
         $employees = UserDetail::where('empstat', 'A')->orderBy('employeeid', 'ASC')->get(['employeeid', 'empstat', 'firstname', 'lastname']);
 
         $latestDateLog = LocationStockBalanceDateLogs::where('wardcode', $authCode)
@@ -99,8 +86,6 @@ class TransferStockController extends Controller
             'authWardcode' => $authWardcode[0],
             'wardStocks' => $wardStocks,
             'wardStocks2' => $wardStocks2,
-            // 'wardStocksMedicalGasess' => $wardStocksMedicalGasess,
-            // 'transferredStock' => $transferredStock,
             'employees' => $employees,
             'canTransact' => $canTransact,
             'locations' => $locations,
