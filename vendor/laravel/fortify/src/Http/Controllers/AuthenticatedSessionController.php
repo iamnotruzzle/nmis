@@ -95,13 +95,71 @@ class AuthenticatedSessionController extends Controller
         ]));
     }
 
+    // OLD
+    // public function destroy(Request $request): LogoutResponse
+    // {
+    //     // if (Auth::check()) {
+    //     $employeeId = Auth::user()->employeeid;
+
+    //     $authWardcode = DB::select(
+    //         "SELECT TOP 1
+    //             l.wardcode
+    //             FROM
+    //                 user_acc u
+    //             INNER JOIN
+    //                 csrw_login_history l ON u.employeeid = l.employeeid
+    //             WHERE
+    //                 l.employeeid = ?
+    //             ORDER BY
+    //                 l.created_at DESC;
+    //             ",
+    //         [$employeeId]
+    //     );
+    //     $authCode = $authWardcode[0]->wardcode;
+
+    //     // Retrieve cached auth ward code
+    //     // $authWardCode_employeeId = Cache::get($authCode . $employeeId);
+    //     // $authWardCode_employeeId = Cache::get($authCode);
+    //     // If auth ward code exists, delete the related keys
+    //     if ($authCode) {
+    //         Cache::deleteMultiple([
+    //             // 'c_authWardCode_' . $employeeId,
+    //             // 'c_locationType_' . $employeeId,
+    //             'c_patients_' . $authCode,
+    //             'c_csr_stocks_' . $authCode,
+    //             'latest_update_' . $authCode
+    //         ]);
+    //     }
+
+    //     LoginHistory::where('employeeid', $employeeId)->delete();
+
+    //     // Clear Inertia session cached data
+    //     session()->forget([
+    //         'cached_inertia_auth',
+    //         // 'cached_inertia_locations',
+    //         'cached_inertia_fundsource',
+    //     ]);
+
+    //     // Log out the user
+    //     $this->guard->logout();
+
+    //     // Invalidate and regenerate session
+    //     $request->session()->invalidate();
+    //     $request->session()->regenerateToken();
+    //     // }
+
+    //     return app(LogoutResponse::class);
+    // }
+
+    //NEW
     public function destroy(Request $request): LogoutResponse
     {
-        // if (Auth::check()) {
-        $employeeId = Auth::user()->employeeid;
+        // Check if user is authenticated before accessing properties
+        if (Auth::check() && Auth::user()) {
+            $employeeId = Auth::user()->employeeid;
 
-        $authWardcode = DB::select(
-            "SELECT TOP 1
+            $authWardcode = DB::select(
+                "SELECT TOP 1
                 l.wardcode
                 FROM
                     user_acc u
@@ -112,40 +170,38 @@ class AuthenticatedSessionController extends Controller
                 ORDER BY
                     l.created_at DESC;
                 ",
-            [$employeeId]
-        );
-        $authCode = $authWardcode[0]->wardcode;
+                [$employeeId]
+            );
 
-        // Retrieve cached auth ward code
-        // $authWardCode_employeeId = Cache::get($authCode . $employeeId);
-        // $authWardCode_employeeId = Cache::get($authCode);
-        // If auth ward code exists, delete the related keys
-        if ($authCode) {
-            Cache::deleteMultiple([
-                // 'c_authWardCode_' . $employeeId,
-                // 'c_locationType_' . $employeeId,
-                'c_patients_' . $authCode,
-                'c_csr_stocks_' . $authCode,
-                'latest_update_' . $authCode
-            ]);
+            if (!empty($authWardcode)) {
+                $authCode = $authWardcode[0]->wardcode;
+
+                // Clear cache only if we have a valid auth code
+                if ($authCode) {
+                    Cache::deleteMultiple([
+                        'c_patients_' . $authCode,
+                        'c_csr_stocks_' . $authCode,
+                        'latest_update_' . $authCode
+                    ]);
+                }
+            }
+
+            // Clean up login history
+            LoginHistory::where('employeeid', $employeeId)->delete();
         }
-
-        LoginHistory::where('employeeid', $employeeId)->delete();
 
         // Clear Inertia session cached data
         session()->forget([
             'cached_inertia_auth',
-            // 'cached_inertia_locations',
             'cached_inertia_fundsource',
         ]);
 
-        // Log out the user
+        // Log out the user (this is safe even if user is null)
         $this->guard->logout();
 
         // Invalidate and regenerate session
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        // }
 
         return app(LogoutResponse::class);
     }
