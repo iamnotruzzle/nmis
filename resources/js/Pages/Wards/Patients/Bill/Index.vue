@@ -1640,7 +1640,7 @@ export default {
           this.storeBillsInContainer();
           this.getTotalAmount();
           this.fetchWardSupplies();
-          this.storeMedicalSuppliesInContainer;
+          this.storeMedicalSuppliesInContainer();
 
           this.isSubmitting = false; // Allow navigation again
         },
