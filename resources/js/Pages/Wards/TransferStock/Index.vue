@@ -177,6 +177,7 @@
             class="w-full mb-3"
             :class="{ 'p-invalid': form.requested_by == '' }"
             showClear
+            :loading="isEmployeesLoading"
           />
           <small
             class="text-error"
@@ -490,13 +491,14 @@ export default {
     wardStocks2: Object,
     // wardStocksMedicalGasess: Object,
     // transferredStock: Object,
-    employees: Object,
+    // employees: Object,
     canTransact: Boolean,
     locations: Object,
   },
   data() {
     return {
       isTransferredStockLoading: false,
+      isEmployeesLoading: false,
       // paginator
       loading: false,
       rows: null,
@@ -565,11 +567,11 @@ export default {
 
     this.storeLocationsInContainer();
     this.storeWardStockInContainer();
-    this.storeEmployeesInContainer();
 
     this.loading = false;
 
     this.fetchTransferredStocks();
+    this.fetchEmployees();
   },
   methods: {
     async fetchTransferredStocks() {
@@ -623,6 +625,37 @@ export default {
         this.isTransferredStockLoading = false;
       }
     },
+    async fetchEmployees() {
+      this.isEmployeesLoading = true;
+      this.error = null;
+      try {
+        const response = await axios.get('getEmployees');
+        console.log('fetchEmployees data: ', response.data);
+
+        if (response.data.length != 0) {
+          response.data.forEach((e) => {
+            // console.log(e);
+            this.employeesList.push({
+              employeeid: e.employeeid,
+              name: '(' + e.employeeid + ') - ' + e.firstname + ' ' + e.lastname,
+            });
+          });
+        } else {
+          this.transferredStocksList.push({
+            id: null,
+            item: null,
+            quantity: null,
+            expiration_date: null,
+            from: null,
+          });
+        }
+      } catch (err) {
+        this.error = err.response?.data ?? err.message;
+        console.error('Failed to fetch packages:', this.error);
+      } finally {
+        this.isEmployeesLoading = false;
+      }
+    },
 
     tzone(date) {
       return moment.tz(date, 'Asia/Manila').format('L');
@@ -637,15 +670,6 @@ export default {
             wardname: e.wardname,
           });
         }
-      });
-    },
-    storeEmployeesInContainer() {
-      this.employees.forEach((e) => {
-        // console.log(e);
-        this.employeesList.push({
-          employeeid: e.employeeid,
-          name: '(' + e.employeeid + ') - ' + e.firstname + ' ' + e.lastname,
-        });
       });
     },
     storeWardStockInContainer() {

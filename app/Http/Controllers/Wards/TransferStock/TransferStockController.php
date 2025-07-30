@@ -65,7 +65,7 @@ class TransferStockController extends Controller
             ->get();
 
 
-        $employees = UserDetail::where('empstat', 'A')->orderBy('employeeid', 'ASC')->get(['employeeid', 'empstat', 'firstname', 'lastname']);
+        // $employees = UserDetail::where('empstat', 'A')->orderBy('employeeid', 'ASC')->get(['employeeid', 'empstat', 'firstname', 'lastname']);
 
         $latestDateLog = LocationStockBalanceDateLogs::where('wardcode', $authCode)
             ->latest('created_at')->first();
@@ -86,7 +86,7 @@ class TransferStockController extends Controller
             'authWardcode' => $authWardcode[0],
             'wardStocks' => $wardStocks,
             'wardStocks2' => $wardStocks2,
-            'employees' => $employees,
+            // 'employees' => $employees,
             'canTransact' => $canTransact,
             'locations' => $locations,
         ]);
@@ -124,6 +124,12 @@ class TransferStockController extends Controller
             ->get();
 
         return response()->json($transferredStock);
+    }
+    public function getEmployees()
+    {
+        $employees = UserDetail::where('empstat', 'A')->orderBy('employeeid', 'ASC')->get(['employeeid', 'empstat', 'firstname', 'lastname']);
+
+        return response()->json($employees);
     }
 
     public function store(Request $request)
