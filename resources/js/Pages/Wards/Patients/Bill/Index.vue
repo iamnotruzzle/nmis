@@ -826,6 +826,11 @@ export default {
     is_for_discharge: String,
     bills: Object,
     canTransact: Boolean,
+
+    medicalSupplies: Array,
+    packages: Array,
+    genericVariants: Array,
+    misc: Array,
   },
   data() {
     return {
@@ -851,7 +856,7 @@ export default {
       medicalSuppliesList: [],
       miscList: [],
       itemList: [],
-      genericVariants: [],
+      //   genericVariants: [],
       itemsToBillList: [],
       variantDialogVisible: false,
       variantItemName: '',
@@ -944,9 +949,70 @@ export default {
     // set hospital number
     this.hospitalNumber = this.hpercode;
 
-    this.initializeItems();
+    // this.initializeItems();
+
+    this.storeMedicalSuppliesInContainer();
+    this.storePackagesInContainer();
+    this.storeMiscInContainer();
+    this.mapvariant();
+
+    this.storeItemsInContainer();
   },
   methods: {
+    storeMedicalSuppliesInContainer() {
+      this.medicalSuppliesList = [];
+
+      let combinedSupplies = [];
+      this.medicalSupplies.forEach((med) => {
+        // Find if the item with the same cl2desc and price already exists in the combinedSupplies array
+        let existingItem = combinedSupplies.find(
+          (item) => item.cl2desc === med.cl2desc && Number(item.price) === Number(med.price)
+        );
+
+        if (existingItem) {
+          // If found, just update the quantity
+          existingItem.quantity += med.is_consumable != 'y' ? Number(med.quantity) : Number(med.total_usage);
+        } else {
+          // If not found, add a new entry
+          combinedSupplies.push({
+            // from: med.from,
+            id: med.id,
+            is_consumable: med.is_consumable,
+            cl2comb: med.cl2comb,
+            cl2desc: med.cl2desc,
+            uomcode: med.uomcode == null ? null : med.uomcode,
+            quantity: med.is_consumable != 'y' ? Number(med.quantity) : Number(med.total_usage),
+            average: Number(med.average),
+            total_usage: Number(med.total_usage),
+            price: Number(med.price),
+            expiration_date: med.expiration_date,
+          });
+        }
+      });
+
+      this.medicalSuppliesList = combinedSupplies;
+    },
+    storePackagesInContainer() {
+      this.packages.forEach((e) => {
+        this.packageList.push({
+          id: e.id,
+          description: e.description,
+          itemcode: e.cl2comb,
+          itemDesc: e.cl2desc,
+          quantity: e.quantity,
+        });
+      });
+    },
+    storeMiscInContainer() {
+      this.misc.forEach((misc) => {
+        this.miscList.push({
+          hmcode: misc.hmcode,
+          hmdesc: misc.hmdesc,
+          hmamt: misc.hmamt,
+          uomcode: misc.uomcode == null ? null : misc.uomcode,
+        });
+      });
+    },
     async initializeItems() {
       try {
         await this.loadAllData(); // wait for all fetches
@@ -956,7 +1022,7 @@ export default {
       }
     },
     async loadAllData() {
-      this.isItemListLoading = true;
+      this.isItemListLoading = false;
       this.error = null;
 
       try {
@@ -974,7 +1040,6 @@ export default {
       }
     },
     async fetchWardSupplies() {
-      this.isItemListLoading = true;
       this.error = null;
       try {
         const response = await axios.get('getWardMedSupplies');
@@ -1015,7 +1080,6 @@ export default {
       }
     },
     async fetchPackages() {
-      this.isItemListLoading = true;
       this.error = null;
       try {
         const response = await axios.get('getPackages');
@@ -1036,7 +1100,6 @@ export default {
       }
     },
     async fetchGenericVariant() {
-      this.isItemListLoading = true;
       this.error = null;
       try {
         const response = await axios.get('getGenericVariant');
@@ -1049,7 +1112,6 @@ export default {
       }
     },
     async fetchMisc() {
-      this.isItemListLoading = true;
       this.error = null;
       try {
         const response = await axios.get('getMisc');
@@ -1068,8 +1130,8 @@ export default {
         console.error('Failed to fetch generic variant:', this.error);
       }
     },
-    mapvariant(variants) {
-      variants.forEach(({ generic_cl2comb, variant_cl2comb, variant_desc }) => {
+    mapvariant() {
+      this.genericVariants.forEach(({ generic_cl2comb, variant_cl2comb, variant_desc }) => {
         if (!this.variantMap[generic_cl2comb]) {
           this.variantMap[generic_cl2comb] = [];
         }
@@ -1578,7 +1640,7 @@ export default {
           this.storeBillsInContainer();
           this.getTotalAmount();
           this.fetchWardSupplies();
-          //   this.storeMiscInContainer();
+          this.storeMedicalSuppliesInContainer;
 
           this.isSubmitting = false; // Allow navigation again
         },

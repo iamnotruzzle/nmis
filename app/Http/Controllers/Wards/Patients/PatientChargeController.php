@@ -65,6 +65,75 @@ class PatientChargeController extends Controller
         );
         $authCode = $authWardcode[0]->wardcode;
 
+        $medicalSupplies = DB::select(
+            "SELECT
+                stock.[from],
+                stock.id,
+                stock.request_stocks_id,
+                stock.is_consumable,
+                item.cl2comb,
+                item.cl2desc,
+                item.uomcode,
+                stock.quantity,
+                stock.average,
+                stock.total_usage,
+                CASE
+                    WHEN stock.[from] = 'CSR' THEN price_csr.price_per_unit
+                    ELSE price_other.price_per_unit
+                END as price,
+                stock.expiration_date,
+                stock.created_at
+            FROM csrw_wards_stocks stock
+            INNER JOIN hclass2 item ON stock.cl2comb = item.cl2comb
+            LEFT JOIN csrw_request_stocks rs ON rs.id = stock.request_stocks_id
+            LEFT JOIN csrw_item_prices price_csr
+                ON stock.cl2comb = price_csr.cl2comb
+                AND price_csr.item_conversion_id = stock.stock_id
+                AND stock.[from] = 'CSR'
+            LEFT JOIN csrw_item_prices price_other
+                ON stock.cl2comb = price_other.cl2comb
+                AND price_other.ris_no = stock.ris_no
+                AND stock.[from] <> 'CSR'
+            WHERE stock.location = ?
+                AND stock.quantity > 0
+                AND (
+                    stock.[from] = 'MEDICAL GASES'
+                    OR stock.[from] NOT IN ('CSR', 'WARD', 'MEDICAL GASES')
+                    OR (
+                        stock.[from] IN ('CSR', 'WARD')
+                        AND (rs.id IS NULL OR rs.status = 'RECEIVED')
+                        AND stock.expiration_date > CAST(GETDATE() AS DATE)
+                    )
+                )
+            ORDER BY stock.[from], item.cl2desc",
+            [$authCode]
+        );
+        $packages = DB::select(
+            "SELECT package.id, package.description, pack_dets.cl2comb, item.cl2desc, pack_dets.quantity, package.status
+                    FROM csrw_packages AS package
+                    JOIN csrw_package_details as pack_dets ON pack_dets.package_id = package.id
+                    JOIN hclass2 as item ON item.cl2comb = pack_dets.cl2comb
+                    WHERE package.status = 'A'
+                    -- AND package.wardcode = ?
+                    ORDER BY item.cl2desc ASC;",
+        );
+        $genericVariants = DB::select(
+            "SELECT
+                gv.generic_cl2comb,
+                gv.variant_cl2comb,
+                generic_item.cl2desc AS generic_desc,
+                variant_item.cl2desc AS variant_desc
+            FROM
+                csrw_generic_variants AS gv
+            JOIN
+                hclass2 AS generic_item ON generic_item.cl2comb = gv.generic_cl2comb
+            JOIN
+                hclass2 AS variant_item ON variant_item.cl2comb = gv.variant_cl2comb;"
+        );
+        $misc = Miscellaneous::with('unit')
+            ->where('hmstat', 'A')
+            ->get(['hmcode', 'hmdesc', 'hmamt', 'uomcode']);
+
         $bills = DB::select(
             "SELECT pat_charge.pcchrgcod as charge_slip_no,
                             type_of_charge.chrgcode as type_of_charge_code,
@@ -110,6 +179,12 @@ class PatientChargeController extends Controller
         }
 
         return Inertia::render('Wards/Patients/Bill/Index', [
+
+            'medicalSupplies' => $medicalSupplies,
+            'packages' => $packages,
+            'genericVariants' => $genericVariants,
+            'misc' => $misc,
+
             'hpercode' => $hpercode,
             'patient_name' => $patient_name,
             'pat_tscode' => $pat_tscode,
