@@ -385,7 +385,7 @@ class WardPatientsController extends Controller
                         WHERE hperson.hpercode LIKE ?
                         AND henctr.toecode IN ('ADM', 'OPD', 'ER')
                     )
-                    SELECT TOP 1
+                    SELECT TOP 2
                         enccode,
                         toecode,
                         hpercode,
