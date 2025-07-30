@@ -78,17 +78,11 @@ class TransferStockController extends Controller
             $canTransact = true;
         }
 
-        $locations = Location::where('wardstat', 'A')
-            ->orderBy('wardname', 'ASC')
-            ->get();
-
         return Inertia::render('Wards/TransferStock/Index', [
             'authWardcode' => $authWardcode[0],
             'wardStocks' => $wardStocks,
             'wardStocks2' => $wardStocks2,
-            // 'employees' => $employees,
             'canTransact' => $canTransact,
-            'locations' => $locations,
         ]);
     }
 
@@ -130,6 +124,14 @@ class TransferStockController extends Controller
         $employees = UserDetail::where('empstat', 'A')->orderBy('employeeid', 'ASC')->get(['employeeid', 'empstat', 'firstname', 'lastname']);
 
         return response()->json($employees);
+    }
+    public function getWards()
+    {
+        $locations = Location::where('wardstat', 'A')
+            ->orderBy('wardname', 'ASC')
+            ->get();
+
+        return response()->json($locations);
     }
 
     public function store(Request $request)

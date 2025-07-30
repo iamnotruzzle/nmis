@@ -168,6 +168,9 @@ Route::middleware(['web', 'auth', 'verified'])->group(
         Route::get('getEmployees', [TransferStockController::class, 'getEmployees'])
             ->name('getEmployees')
             ->middleware(['verified', 'designation_ward']);
+        Route::get('getWards', [TransferStockController::class, 'getWards'])
+            ->name('getWards')
+            ->middleware(['verified', 'designation_ward']);
         Route::resource('transferstock', TransferStockController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         Route::put('transferstock', [TransferStockController::class, 'updatetransferstatus', 'designation_ward'])->name('transferstock.updatetransferstatus');
 

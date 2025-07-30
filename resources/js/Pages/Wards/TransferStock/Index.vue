@@ -489,11 +489,7 @@ export default {
     authWardcode: Object,
     wardStocks: Object,
     wardStocks2: Object,
-    // wardStocksMedicalGasess: Object,
-    // transferredStock: Object,
-    // employees: Object,
     canTransact: Boolean,
-    locations: Object,
   },
   data() {
     return {
@@ -565,13 +561,13 @@ export default {
       }
     });
 
-    this.storeLocationsInContainer();
     this.storeWardStockInContainer();
 
     this.loading = false;
 
     this.fetchTransferredStocks();
     this.fetchEmployees();
+    this.fetchWards();
   },
   methods: {
     async fetchTransferredStocks() {
@@ -620,7 +616,7 @@ export default {
         }
       } catch (err) {
         this.error = err.response?.data ?? err.message;
-        console.error('Failed to fetch packages:', this.error);
+        console.error('Failed to fetch transferred stocks:', this.error);
       } finally {
         this.isTransferredStockLoading = false;
       }
@@ -632,26 +628,41 @@ export default {
         const response = await axios.get('getEmployees');
         console.log('fetchEmployees data: ', response.data);
 
-        if (response.data.length != 0) {
-          response.data.forEach((e) => {
-            // console.log(e);
-            this.employeesList.push({
-              employeeid: e.employeeid,
-              name: '(' + e.employeeid + ') - ' + e.firstname + ' ' + e.lastname,
-            });
+        response.data.forEach((e) => {
+          // console.log(e);
+          this.employeesList.push({
+            employeeid: e.employeeid,
+            name: '(' + e.employeeid + ') - ' + e.firstname + ' ' + e.lastname,
           });
-        } else {
-          this.transferredStocksList.push({
-            id: null,
-            item: null,
-            quantity: null,
-            expiration_date: null,
-            from: null,
-          });
-        }
+        });
       } catch (err) {
         this.error = err.response?.data ?? err.message;
-        console.error('Failed to fetch packages:', this.error);
+        console.error('Failed to fetch employees:', this.error);
+      } finally {
+        this.isEmployeesLoading = false;
+      }
+    },
+    async fetchWards() {
+      this.isEmployeesLoading = true;
+      this.error = null;
+      try {
+        const response = await axios.get('getWards');
+        console.log('fetchWards data: ', response.data);
+
+        response.data.forEach((e) => {
+          // console.log(e);
+          if (e.wardcode == 'CSR' || e.wardcode == 'ADMIN') {
+            return null;
+          } else {
+            this.locationsList.push({
+              wardcode: e.wardcode,
+              wardname: e.wardname,
+            });
+          }
+        });
+      } catch (err) {
+        this.error = err.response?.data ?? err.message;
+        console.error('Failed to fetch wards:', this.error);
       } finally {
         this.isEmployeesLoading = false;
       }
@@ -659,18 +670,6 @@ export default {
 
     tzone(date) {
       return moment.tz(date, 'Asia/Manila').format('L');
-    },
-    storeLocationsInContainer() {
-      this.locations.forEach((e) => {
-        if (e.wardcode == 'CSR' || e.wardcode == 'ADMIN') {
-          return null;
-        } else {
-          this.locationsList.push({
-            wardcode: e.wardcode,
-            wardname: e.wardname,
-          });
-        }
-      });
     },
     storeWardStockInContainer() {
       // FROM CSR
