@@ -63,21 +63,20 @@ class TransferStockController extends Controller
                     ->orWhere('from', 'EXISTING_STOCKS');
             })
             ->get();
-        // dd($wardStocks);
 
-        // dd($wardStocks3);
 
-        $transferredStock = WardTransferStock::with(
-            'ward_stock',
-            'ward_from:wardcode,wardname',
-            'ward_to:wardcode,wardname',
-            'requested_by:employeeid,firstname,lastname',
-            'approved_by:employeeid,firstname,lastname'
-        )
-            ->where('from', '=', $authCode)
-            ->orWhere('to', '=', $authCode)
-            ->orderBy('created_at', 'DESC')
-            ->get();
+
+        // $transferredStock = WardTransferStock::with(
+        //     'ward_stock',
+        //     'ward_from:wardcode,wardname',
+        //     'ward_to:wardcode,wardname',
+        //     'requested_by:employeeid,firstname,lastname',
+        //     'approved_by:employeeid,firstname,lastname'
+        // )
+        //     ->where('from', '=', $authCode)
+        //     ->orWhere('to', '=', $authCode)
+        //     ->orderBy('created_at', 'DESC')
+        //     ->get();
 
         $employees = UserDetail::where('empstat', 'A')->orderBy('employeeid', 'ASC')->get(['employeeid', 'empstat', 'firstname', 'lastname']);
 
@@ -101,13 +100,46 @@ class TransferStockController extends Controller
             'wardStocks' => $wardStocks,
             'wardStocks2' => $wardStocks2,
             // 'wardStocksMedicalGasess' => $wardStocksMedicalGasess,
-            'transferredStock' => $transferredStock,
+            // 'transferredStock' => $transferredStock,
             'employees' => $employees,
             'canTransact' => $canTransact,
             'locations' => $locations,
         ]);
     }
 
+    public function getTransferredStocks()
+    {
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+            FROM
+                user_acc u
+            INNER JOIN
+                csrw_login_history l ON u.employeeid = l.employeeid
+            WHERE
+                l.employeeid = ?
+            ORDER BY
+                l.created_at DESC;
+            ",
+            [Auth::user()->employeeid]
+        );
+        $authCode = $authWardcode[0]->wardcode;
+
+
+        $transferredStock = WardTransferStock::with(
+            'ward_stock',
+            'ward_from:wardcode,wardname',
+            'ward_to:wardcode,wardname',
+            'requested_by:employeeid,firstname,lastname',
+            'approved_by:employeeid,firstname,lastname'
+        )
+            ->where('from', '=', $authCode)
+            ->orWhere('to', '=', $authCode)
+            ->orderBy('created_at', 'DESC')
+            ->get();
+
+        return response()->json($transferredStock);
+    }
 
     public function store(Request $request)
     {

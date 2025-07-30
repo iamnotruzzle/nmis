@@ -278,7 +278,7 @@
             :sortOrder="1"
             filterDisplay="row"
             showGridlines
-            :loading="loading"
+            :loading="isTransferredStockLoading"
           >
             <template #header>
               <div class="flex flex-wrap align-items-center justify-content-end">
@@ -460,6 +460,7 @@ import TabPanel from 'primevue/tabpanel';
 import InputNumber from 'primevue/inputnumber';
 import Tag from 'primevue/tag';
 import moment from 'moment';
+import axios from 'axios';
 
 export default {
   components: {
@@ -488,13 +489,14 @@ export default {
     wardStocks: Object,
     wardStocks2: Object,
     // wardStocksMedicalGasess: Object,
-    transferredStock: Object,
+    // transferredStock: Object,
     employees: Object,
     canTransact: Boolean,
     locations: Object,
   },
   data() {
     return {
+      isTransferredStockLoading: false,
       // paginator
       loading: false,
       rows: null,
@@ -554,7 +556,7 @@ export default {
             this.transferredStocksList = [];
             this.toReceiveList = [];
             this.storeWardStockInContainer();
-            this.storeTransferredStockInContainer();
+            // this.storeTransferredStockInContainer();
             this.loading = false;
           },
         });
@@ -562,13 +564,66 @@ export default {
     });
 
     this.storeLocationsInContainer();
-    this.storeTransferredStockInContainer();
     this.storeWardStockInContainer();
     this.storeEmployeesInContainer();
 
     this.loading = false;
+
+    this.fetchTransferredStocks();
   },
   methods: {
+    async fetchTransferredStocks() {
+      this.isTransferredStockLoading = true;
+      this.error = null;
+      try {
+        const response = await axios.get('getTransferredStocks');
+        console.log('fetchTransferredStocks data: ', response.data);
+
+        if (response.data.length != 0) {
+          response.data.forEach((e) => {
+            let expiration_date = moment.tz(e.ward_stock.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
+
+            // list of items this auth ward transferred
+            if (e.from == this.authWardcode.wardcode) {
+              this.transferredStocksList.push({
+                id: e.id,
+                item: e.ward_stock.item_details.cl2desc,
+                quantity: e.quantity,
+                expiration_date: expiration_date,
+                to: e.ward_to.wardname,
+                status: e.status,
+              });
+            }
+
+            // list of items to receive
+            if (e.to == this.authWardcode.wardcode) {
+              this.toReceiveList.push({
+                id: e.id,
+                item: e.ward_stock.item_details.cl2desc,
+                quantity: e.quantity,
+                expiration_date: expiration_date,
+                from: e.ward_from.wardname,
+                status: e.status,
+              });
+            }
+          });
+        } else {
+          this.transferredStocksList.push({
+            id: null,
+            item: null,
+            quantity: null,
+            expiration_date: null,
+            from: null,
+          });
+        }
+      } catch (err) {
+        this.error = err.response?.data ?? err.message;
+        console.error('Failed to fetch packages:', this.error);
+      } finally {
+        this.isTransferredStockLoading = false;
+      }
+    },
+
     tzone(date) {
       return moment.tz(date, 'Asia/Manila').format('L');
     },
@@ -592,45 +647,6 @@ export default {
           name: '(' + e.employeeid + ') - ' + e.firstname + ' ' + e.lastname,
         });
       });
-    },
-    storeTransferredStockInContainer() {
-      if (this.transferredStock.length != 0) {
-        this.transferredStock.forEach((e) => {
-          let expiration_date = moment.tz(e.ward_stock.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
-
-          // list of items this auth ward transferred
-          if (e.from == this.authWardcode.wardcode) {
-            this.transferredStocksList.push({
-              id: e.id,
-              item: e.ward_stock.item_details.cl2desc,
-              quantity: e.quantity,
-              expiration_date: expiration_date,
-              to: e.ward_to.wardname,
-              status: e.status,
-            });
-          }
-
-          // list of items to receive
-          if (e.to == this.authWardcode.wardcode) {
-            this.toReceiveList.push({
-              id: e.id,
-              item: e.ward_stock.item_details.cl2desc,
-              quantity: e.quantity,
-              expiration_date: expiration_date,
-              from: e.ward_from.wardname,
-              status: e.status,
-            });
-          }
-        });
-      } else {
-        this.transferredStocksList.push({
-          id: null,
-          item: null,
-          quantity: null,
-          expiration_date: null,
-          from: null,
-        });
-      }
     },
     storeWardStockInContainer() {
       // FROM CSR
@@ -673,7 +689,7 @@ export default {
           this.transferredStocksList = [];
           this.toReceiveList = [];
           this.storeWardStockInContainer();
-          this.storeTransferredStockInContainer();
+          this.fetchTransferredStocks();
           this.loading = false;
         },
       });
@@ -735,7 +751,7 @@ export default {
           this.form.reset();
           this.updateData();
           this.deletedMsg();
-          this.storeTransferredStockInContainer();
+          this.fetchTransferredStocks();
         },
       });
     },
@@ -746,7 +762,7 @@ export default {
       this.form.reset();
       this.form.clearErrors();
       this.transferredStocksList = [];
-      this.storeTransferredStockInContainer();
+      this.fetchTransferredStocks();
     },
     createdMsg() {
       this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Transfer stock successfully.', life: 3000 });
