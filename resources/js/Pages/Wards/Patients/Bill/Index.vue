@@ -929,31 +929,8 @@ export default {
         .toFixed(2);
     },
   },
-  async mounted() {
+  mounted() {
     this.authWardcode = this.$page.props.auth.user.location.location_name.wardcode;
-    // window.Echo.channel('charges').listen('.ChargeLogsProcessed', (args) => {
-    //   console.log('windows echo is fired');
-    //   window.skipNProgress = true; // Prevent NProgress
-
-    //   router.reload({
-    //     onSuccess: () => {
-    //       this.fetchWardSupplies();
-    //       this.storeBillsInContainer();
-    //       window.skipNProgress = false; // Reset flag after reload
-    //     },
-    //     onError: () => {
-    //       NProgress.done();
-    //       window.skipNProgress = false; // Reset flag on error
-    //     },
-    //   });
-    // });
-
-    try {
-      await this.loadAllData(); // wait for all async fetches
-      this.storeItemsInContainer(); // this depends on data fetched
-    } catch (err) {
-      console.error('Error loading data:', err);
-    }
 
     this.storeBillsInContainer();
     this.getTotalAmount();
@@ -964,8 +941,18 @@ export default {
     this.patientName = this.patient_name;
     // set hospital number
     this.hospitalNumber = this.hpercode;
+
+    this.initializeItems();
   },
   methods: {
+    async initializeItems() {
+      try {
+        await this.loadAllData(); // wait for all fetches
+        this.storeItemsInContainer(); // process after all data is fetched
+      } catch (err) {
+        console.error('Error loading data:', err);
+      }
+    },
     async loadAllData() {
       this.isItemListLoading = true;
       this.error = null;
