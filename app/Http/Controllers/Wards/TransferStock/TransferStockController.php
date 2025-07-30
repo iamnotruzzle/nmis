@@ -52,7 +52,7 @@ class TransferStockController extends Controller
             ->where('from', 'CSR')
             ->get();
 
-        // FROM TRANSFERRED STOCKS
+        // FROM NON-CSR STOCK
         $wardStocks2 = WardsStocks::with(['item_details:cl2comb,cl2desc'])
             ->where('quantity', '>', 0)
             ->where('location', '=', $authCode)
