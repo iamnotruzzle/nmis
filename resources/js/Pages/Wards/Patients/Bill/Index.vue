@@ -1654,7 +1654,7 @@ export default {
   watch: {
     chargeSummaryDialog(newVal) {
       if (newVal) {
-        this.countdown = 4; // Reset countdown when dialog is opened
+        this.countdown = 0; // Reset countdown when dialog is opened
         this.timer = setInterval(() => {
           if (this.countdown > 0) {
             this.countdown--;

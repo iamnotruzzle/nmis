@@ -307,6 +307,8 @@ class PatientChargeController extends Controller
             ) {
                 $processedItems = [];
 
+                // dd($itemsToBillList);
+
                 foreach ($itemsToBillList as $item) {
                     // STEP 3.1: Handle charge code generation
                     if (!isset($processedItems[$item['itemCode']])) {
@@ -324,9 +326,9 @@ class PatientChargeController extends Controller
                         'pcchrgdte' => $now,
                         'chargcode' => $item['typeOfCharge'],
                         'uomcode' => $item['unit'],
-                        'pchrgqty' => $item['qtyToCharge'],
-                        'pchrgup' => $item['price'],
-                        'pcchrgamt' => $item['total'],
+                        'pchrgqty' => (float)$item['qtyToCharge'],
+                        'pchrgup' => (float)$item['price'],
+                        'pcchrgamt' => (float)$item['total'],
                         'pcstat' => 'A',
                         'pclock' => 'N',
                         'updsw' => 'N',
@@ -380,7 +382,7 @@ class PatientChargeController extends Controller
                             'manufactured_date' => $wardStock->manufactured_date,
                             'delivery_date' => $wardStock->delivery_date,
                             'expiration_date' => $wardStock->expiration_date,
-                            'quantity' => $quantity_to_insert_in_logs,
+                            'quantity' => (float)$quantity_to_insert_in_logs,
                             'price_per_piece' => (float)$item['price'] ?? null,
                             'price_total' => (float)$quantity_to_insert_in_logs * (float)$item['price'],
                             'pcchrgdte' => $now,
@@ -408,7 +410,7 @@ class PatientChargeController extends Controller
                             'manufactured_date' => null,
                             'delivery_date' => null,
                             'expiration_date' => null,
-                            'quantity' => $quantity_to_insert_in_logs,
+                            'quantity' => (float)$quantity_to_insert_in_logs,
                             'price_per_piece' => (float)$item['price'] ?? null,
                             'price_total' => (float)$quantity_to_insert_in_logs * (float)$item['price'],
                             'pcchrgdte' => $now,
@@ -424,6 +426,7 @@ class PatientChargeController extends Controller
                 if (!empty($patientCharges)) {
                     PatientCharge::insert($patientCharges);
                 }
+                // dd($chargeLogs);
 
                 // Bulk update ward stocks
                 foreach ($wardStockUpdates as $update) {
