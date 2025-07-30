@@ -941,8 +941,6 @@ export default {
 
       router.reload({
         onSuccess: () => {
-          //   console.log('Data reloaded successfully');
-          //   this.storeMedicalSuppliesInContainer();
           this.fetchWardSupplies();
           this.storeBillsInContainer();
           window.skipNProgress = false; // Reset flag after reload
@@ -958,13 +956,9 @@ export default {
     this.fetchPackages();
     this.fetchGenericVariant();
 
-    // this.storePackagesInController();
     this.storeBillsInContainer();
     this.getTotalAmount();
-    // this.storeMedicalSuppliesInContainer();
     this.storeMiscInContainer();
-    // this.storeItemsInContainer();
-    // this.mapvariant();
 
     // set patient enccode
     this.enccode = this.pat_enccode;
@@ -977,7 +971,6 @@ export default {
     async fetchWardSupplies() {
       this.loading = true;
       this.error = null;
-      //   console.log('function is fired.');
       try {
         const response = await axios.get('getWardMedSupplies');
         console.log('fetchWardSupplies data: ', response.data);
@@ -991,7 +984,6 @@ export default {
     async fetchPackages() {
       this.loading = true;
       this.error = null;
-      //   console.log('function is fired.');
       try {
         const response = await axios.get('getPackages');
         console.log('fetchPackages data: ', response.data);
@@ -1004,11 +996,9 @@ export default {
     async fetchGenericVariant() {
       this.loading = true;
       this.error = null;
-      //   console.log('function is fired.');
       try {
         const response = await axios.get('getGenericVariant');
         console.log('fetchGenericVariant data: ', response.data);
-        // this.genericVariants = response.data;
         this.mapvariant(response.data);
       } catch (err) {
         this.error = err.response?.data ?? err.message;
@@ -1016,7 +1006,6 @@ export default {
       }
     },
     mapvariant(variants) {
-      //   this.genericVariants = variant;
       variants.forEach(({ generic_cl2comb, variant_cl2comb, variant_desc }) => {
         if (!this.variantMap[generic_cl2comb]) {
           this.variantMap[generic_cl2comb] = [];
@@ -1079,8 +1068,6 @@ export default {
           quantity: e.quantity,
         });
       });
-
-      //   console.log(this.packageList);
     },
     storeBillsInContainer() {
       this.billList = [];
@@ -1237,7 +1224,6 @@ export default {
         }
         return 0;
       });
-      //   console.log('item list', this.itemList);
     },
     async selectVariantDialog(itemDesc, variants) {
       return new Promise((resolve) => {
@@ -1251,8 +1237,6 @@ export default {
       });
     },
     async medicalSuppliesQtyValidation() {
-      //   console.log('item 1', this.item);
-
       if (!this.item) {
         this.itemNotSelected = true;
         this.itemNotSelectedMsg = 'Item not selected.';
@@ -1587,10 +1571,8 @@ export default {
 
           this.storeBillsInContainer();
           this.getTotalAmount();
-          //   this.storeMedicalSuppliesInContainer();
           this.fetchWardSupplies();
           this.storeMiscInContainer();
-          //   this.storeItemsInContainer();
 
           this.isSubmitting = false; // Allow navigation again
         },
