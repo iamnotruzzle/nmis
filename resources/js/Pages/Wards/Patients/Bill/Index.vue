@@ -219,6 +219,7 @@
           filter
           placeholder="Select a Item"
           optionLabel="itemDesc"
+          :loading="isItemListLoading == true"
           class="w-full"
         />
       </div>
@@ -692,6 +693,7 @@
         paginator
         :rows="10"
         size="large"
+        :loading="isItemListLoading"
       >
         <template #header>
           <div class="p-inputgroup my-3">
@@ -1010,8 +1012,6 @@ export default {
       } catch (err) {
         this.error = err.response?.data ?? err.message;
         console.error('Failed to fetch ward supplies:', this.error);
-      } finally {
-        this.isItemListLoading = false;
       }
     },
     async fetchPackages() {
@@ -1033,8 +1033,6 @@ export default {
       } catch (err) {
         this.error = err.response?.data ?? err.message;
         console.error('Failed to fetch packages:', this.error);
-      } finally {
-        this.isItemListLoading = false;
       }
     },
     async fetchGenericVariant() {
@@ -1048,8 +1046,6 @@ export default {
       } catch (err) {
         this.error = err.response?.data ?? err.message;
         console.error('Failed to fetch generic variant:', this.error);
-      } finally {
-        this.isItemListLoading = false;
       }
     },
     async fetchMisc() {
@@ -1070,8 +1066,6 @@ export default {
       } catch (err) {
         this.error = err.response?.data ?? err.message;
         console.error('Failed to fetch generic variant:', this.error);
-      } finally {
-        this.isItemListLoading = false;
       }
     },
     mapvariant(variants) {
