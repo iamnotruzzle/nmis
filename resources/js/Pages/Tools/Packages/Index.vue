@@ -343,12 +343,12 @@ export default {
     return {
       CACHE_CONFIG: {
         ITEMS: {
-          key: 'itemsCache',
-          timestamp: 'itemsCacheTimestamp',
+          key: 'Packages_itemsCache',
+          timestamp: 'Packages_itemsCacheTimestamp',
         },
         PACKAGES: {
-          key: 'packagesCache',
-          timestamp: 'packagesCacheTimestamp',
+          key: 'Packages_packagesCache',
+          timestamp: 'Packages_packagesCacheTimestamp',
         },
       },
       CACHE_DURATION_MS: 1000 * 60 * 5, // 5 minutes
