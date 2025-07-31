@@ -52,19 +52,6 @@ class InventoryController extends Controller
         $authWardcode = $this->getAuthWardcode();
         $authCode = $authWardcode[0]->wardcode;
 
-        $currentWardStocks = DB::select(
-            "SELECT stock.[from], stock.id, stock.cl2comb, item.cl2desc, stock.quantity, stock.average, stock.is_consumable, stock.expiration_date
-                FROM csrw_wards_stocks stock
-                JOIN hclass2 item ON stock.cl2comb = item.cl2comb
-                -- LEFT JOIN huom uom ON stock.uomcode = uom.uomcode
-                LEFT JOIN csrw_request_stocks rs ON rs.id = stock.request_stocks_id
-                WHERE stock.location = ?
-                AND stock.quantity > 0
-                AND (rs.id IS NULL OR rs.status = 'RECEIVED');",
-            [$authCode] // Duplicate the parameter
-        );
-        // dd($currentWardStocks);
-
         $latestDateLog = LocationStockBalanceDateLogs::where('wardcode', $authCode)
             ->latest('created_at')->first();
         $canTransact = null;
@@ -83,7 +70,7 @@ class InventoryController extends Controller
 
         return Inertia::render('Wards/Inventory/Index', [
             // 'items' => $items,
-            'currentWardStocks' => $currentWardStocks,
+            // 'currentWardStocks' => $currentWardStocks,
             'canTransact' => $canTransact,
             'canAddExpiryDate' => $canAddExpiryDate,
         ]);
@@ -110,5 +97,24 @@ class InventoryController extends Controller
         );
 
         return response()->json($items);
+    }
+    public function getCurrentWardStocks()
+    {
+        $authWardcode = $this->getAuthWardcode();
+        $authCode = $authWardcode[0]->wardcode;
+
+        $currentWardStocks = DB::select(
+            "SELECT stock.[from], stock.id, stock.cl2comb, item.cl2desc, stock.quantity, stock.average, stock.is_consumable, stock.expiration_date
+                FROM csrw_wards_stocks stock
+                JOIN hclass2 item ON stock.cl2comb = item.cl2comb
+                -- LEFT JOIN huom uom ON stock.uomcode = uom.uomcode
+                LEFT JOIN csrw_request_stocks rs ON rs.id = stock.request_stocks_id
+                WHERE stock.location = ?
+                AND stock.quantity > 0
+                AND (rs.id IS NULL OR rs.status = 'RECEIVED');",
+            [$authCode] // Duplicate the parameter
+        );
+
+        return response()->json($currentWardStocks);
     }
 }

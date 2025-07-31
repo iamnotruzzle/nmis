@@ -133,6 +133,9 @@ Route::middleware(['web', 'auth', 'verified'])->group(
         Route::get('wardinv/getItems', [InventoryController::class, 'getItems'])
             ->name('wardinv/getItems')
             ->middleware(['verified', 'designation_ward']);
+        Route::get('wardinv/getCurrentWardStocks', [InventoryController::class, 'getCurrentWardStocks'])
+            ->name('wardinv/getCurrentWardStocks')
+            ->middleware(['verified', 'designation_ward']);
         Route::resource('wardinv', InventoryController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         // end non-medicine supplies
 

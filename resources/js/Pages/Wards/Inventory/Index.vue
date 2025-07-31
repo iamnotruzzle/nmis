@@ -27,7 +27,7 @@
           sortField="expiration_date"
           :sortOrder="1"
           showGridlines
-          :loading="loading"
+          :loading="isCurrentWardStocksLoading"
         >
           <template #header>
             <div class="flex flex-wrap align-items-center justify-content-end gap-2">
@@ -1163,7 +1163,6 @@ export default {
     InputNumber,
   },
   props: {
-    currentWardStocks: Object,
     canTransact: Boolean,
     canAddExpiryDate: Boolean,
   },
@@ -1171,13 +1170,18 @@ export default {
     return {
       CACHE_CONFIG: {
         ITEMS: {
-          key: 'WardsInv_wardStocksCache',
-          timestamp: 'WardsInv_wardStocksCacheTimestamp',
+          key: 'WardsInv_itemsCache',
+          timestamp: 'WardsInv_itemsCacheTimestamp',
+        },
+        CURRENT_WARD_STOCKS: {
+          key: 'WardsInv_currentWardStocksCache',
+          timestamp: 'WardsInv_currentWardStocksCacheTimestamp',
         },
       },
       CACHE_DURATION_MS: 1000 * 60 * 5, // 5 minutes
       // loading states
       isItemsLoading: false,
+      isCurrentWardStocksLoading: false,
 
       authWardcode: '',
       expandedRow: [],
@@ -1294,11 +1298,9 @@ export default {
     this.authWardcode = this.$page.props.auth.user.location.location_name.wardcode;
 
     this.storeFundSourceInContainer();
-    this.storeCurrentWardStocksInContainer();
-
-    this.loading = false;
 
     this.fetchItems();
+    this.fetchCurrentWardStocks();
   },
   computed: {
     user() {
@@ -1337,7 +1339,6 @@ export default {
         this.clearCacheData(cacheType);
       });
     },
-    // Ward Stocks with localStorage caching
     async fetchItems(forceRefresh = false) {
       this.isItemsLoading = true;
       this.error = null;
@@ -1370,6 +1371,48 @@ export default {
         console.error('❌ Failed to fetch items:', this.error);
       } finally {
         this.isItemsLoading = false;
+      }
+    },
+    async fetchCurrentWardStocks(forceRefresh = false) {
+      this.isCurrentWardStocksLoading = true;
+      this.error = null;
+
+      const cached = this.getCachedData('CURRENT_WARD_STOCKS');
+
+      if (cached && !forceRefresh) {
+        // console.log('🟢 Using cached ward stocks from localStorage');
+        this.itemsList = cached;
+        this.isCurrentWardStocksLoading = false;
+        return;
+      }
+
+      try {
+        const response = await axios.get('wardinv/getCurrentWardStocks');
+        moment.suppressDeprecationWarnings = true;
+
+        response.data.forEach((e) => {
+          let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
+
+          this.currentWardStocksList.push({
+            from: e.from,
+            ward_stock_id: e.id,
+            cl2comb: e.cl2comb,
+            item: e.cl2desc,
+            //   unit: e == null ? null : e.uomdesc,
+            quantity: e.quantity,
+            average: e.average,
+            is_consumable: e.is_consumable == null ? null : e.is_consumable,
+            expiration_date: expiration_date.toString(),
+          });
+        });
+
+        this.setCachedData('CURRENT_WARD_STOCKS', this.currentWardStocksList);
+        // console.log('🔵 Fetched fresh ward stocks and cached to localStorage');
+      } catch (err) {
+        this.error = err.response?.data ?? err.message;
+        console.error('❌ Failed to fetch current ward stocks:', this.error);
+      } finally {
+        this.isCurrentWardStocksLoading = false;
       }
     },
     async invalidateAndRefreshWardStocks() {
@@ -1466,47 +1509,6 @@ export default {
           chrgtable: null,
         });
       });
-    },
-    // store current stocks
-    storeCurrentWardStocksInContainer() {
-      //   console.log(this.currentWardStocks);
-      this.currentWardStocksList = []; // reset
-
-      moment.suppressDeprecationWarnings = true;
-
-      this.currentWardStocks.forEach((e) => {
-        let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
-
-        this.currentWardStocksList.push({
-          from: e.from,
-          ward_stock_id: e.id,
-          cl2comb: e.cl2comb,
-          item: e.cl2desc,
-          //   unit: e == null ? null : e.uomdesc,
-          quantity: e.quantity,
-          average: e.average,
-          is_consumable: e.is_consumable == null ? null : e.is_consumable,
-          expiration_date: expiration_date.toString(),
-        });
-      });
-
-      //   this.currentWardStocks2.forEach((e) => {
-      //     let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
-
-      //     this.currentWardStocksList.push({
-      //       from: e.from,
-      //       ward_stock_id: e.id,
-      //       cl2comb: e.item_details.cl2comb,
-      //       item: e.item_details.cl2desc,
-      //       unit: e == null ? null : e.uomdesc,
-      //       quantity: e.quantity,
-      //       average: e.average,
-      //       is_consumable: e.is_consumable == null ? null : e.is_consumable,
-      //       expiration_date: expiration_date.toString(),
-      //     });
-      //   });
-
-      //   console.log(this.currentWardStocksList);
     },
     tzone(date) {
       if (date == null || date == '') {
