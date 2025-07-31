@@ -40,33 +40,6 @@ class PackageController extends Controller
         $authWardcode = $this->getAuthWardcode();
         $authCode = $authWardcode[0]->wardcode;
 
-        // $items = DB::select(
-        //     "SELECT
-        //             item.cl2comb,
-        //             item.cl2desc,
-        //             item.uomcode,
-        //             uom.uomdesc
-        //         FROM
-        //             hclass2 AS item
-        //         JOIN huom AS uom
-        //             ON uom.uomcode = item.uomcode
-        //         WHERE
-        //             (item.catID = 1
-        //             -- AND item.uomcode != 'box'
-        //             AND (item.itemcode NOT LIKE 'MSMG-%' OR item.itemcode IS NULL))
-        //         ORDER BY
-        //             item.cl2desc ASC;"
-        // );
-
-        $packages = DB::select(
-            "SELECT package.id, package.description, pack_dets.cl2comb, item.cl2desc, pack_dets.quantity, package.status
-                FROM csrw_packages AS package
-                JOIN csrw_package_details as pack_dets ON pack_dets.package_id = package.id
-                JOIN hclass2 as item ON item.cl2comb = pack_dets.cl2comb
-                -- WHERE wardcode = ?
-                ORDER BY item.cl2desc ASC;",
-        );
-
         return Inertia::render('Tools/Packages/Index', [
             // 'items' => $items,
             // 'packages' => $packages,
