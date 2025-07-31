@@ -493,6 +493,25 @@ export default {
   },
   data() {
     return {
+      CACHE_CONFIG: {
+        WARD_STOCKS: {
+          key: 'wardStocksCache',
+          timestamp: 'wardStocksCacheTimestamp',
+        },
+        TRANSFERRED_STOCKS: {
+          key: 'transferredStocksCache',
+          timestamp: 'transferredStocksCacheTimestamp',
+        },
+        EMPLOYEES: {
+          key: 'employeesCache',
+          timestamp: 'employeesCacheTimestamp',
+        },
+        WARDS: {
+          key: 'wardsCache',
+          timestamp: 'wardsCacheTimestamp',
+        },
+      },
+      CACHE_DURATION_MS: 1000 * 60 * 5, // 5 minutes
       isTransferredStockLoading: false,
       isEmployeesLoading: false,
       isWardStockLoading: false,
@@ -542,24 +561,24 @@ export default {
   // created will be initialize before mounted
   created() {},
   mounted() {
-    window.Echo.channel('issued').listen('ItemIssued', (e) => {
-      this.transferredStocksList = [];
-      this.loading = true;
+    // window.Echo.channel('issued').listen('ItemIssued', (e) => {
+    //   this.transferredStocksList = [];
+    //   this.loading = true;
 
-      if (e.message == this.this.$page.props.auth.user.location.location_name.wardcode) {
-        this.$inertia.get('transferstock', this.params, {
-          preserveState: true,
-          preserveScroll: true,
-          onFinish: (visit) => {
-            this.wardStocksList = [];
-            this.transferredStocksList = [];
-            this.toReceiveList = [];
-            this.fetchWardStocks();
-            this.loading = false;
-          },
-        });
-      }
-    });
+    //   if (e.message == this.this.$page.props.auth.user.location.location_name.wardcode) {
+    //     this.$inertia.get('transferstock', this.params, {
+    //       preserveState: true,
+    //       preserveScroll: true,
+    //       onFinish: (visit) => {
+    //         this.wardStocksList = [];
+    //         this.transferredStocksList = [];
+    //         this.toReceiveList = [];
+    //         this.fetchWardStocks();
+    //         this.loading = false;
+    //       },
+    //     });
+    //   }
+    // });
 
     this.loading = false;
 
@@ -569,33 +588,95 @@ export default {
     this.fetchWards();
   },
   methods: {
-    async fetchWardStocks() {
+    // Generic localStorage cache methods
+    getCachedData(cacheType) {
+      const config = this.CACHE_CONFIG[cacheType];
+      const cached = localStorage.getItem(config.key);
+      const timestamp = localStorage.getItem(config.timestamp);
+
+      if (!cached || !timestamp) return null;
+
+      const age = Date.now() - parseInt(timestamp);
+      if (age > this.CACHE_DURATION_MS) {
+        console.log(`⚠️ Cache expired for ${cacheType}`);
+        this.clearCacheData(cacheType);
+        return null;
+      }
+
+      return JSON.parse(cached);
+    },
+
+    setCachedData(cacheType, data) {
+      const config = this.CACHE_CONFIG[cacheType];
+      localStorage.setItem(config.key, JSON.stringify(data));
+      localStorage.setItem(config.timestamp, Date.now().toString());
+    },
+
+    clearCacheData(cacheType) {
+      const config = this.CACHE_CONFIG[cacheType];
+      localStorage.removeItem(config.key);
+      localStorage.removeItem(config.timestamp);
+    },
+
+    clearAllCaches() {
+      Object.keys(this.CACHE_CONFIG).forEach((cacheType) => {
+        this.clearCacheData(cacheType);
+      });
+    },
+
+    // Ward Stocks with localStorage caching
+    async fetchWardStocks(forceRefresh = false) {
       this.isWardStockLoading = true;
       this.error = null;
+
+      const cached = this.getCachedData('WARD_STOCKS');
+
+      if (cached && !forceRefresh) {
+        // console.log('🟢 Using cached ward stocks from localStorage');
+        this.wardStocksList = cached;
+        this.isWardStockLoading = false;
+        return;
+      }
+
       try {
         const response = await axios.get('getWardStocks');
-        console.log('fetchWardStocks data: ', response.data);
-
         this.wardStocksList = response.data;
+        this.setCachedData('WARD_STOCKS', response.data);
+        // console.log('🔵 Fetched fresh ward stocks and cached to localStorage');
       } catch (err) {
         this.error = err.response?.data ?? err.message;
-        console.error('Failed to fetch ward stocks:', this.error);
+        console.error('❌ Failed to fetch ward stocks:', this.error);
       } finally {
         this.isWardStockLoading = false;
       }
     },
-    async fetchTransferredStocks() {
+
+    // Transferred Stocks with localStorage caching
+    async fetchTransferredStocks(forceRefresh = false) {
       this.isTransferredStockLoading = true;
       this.error = null;
+
+      const cached = this.getCachedData('TRANSFERRED_STOCKS');
+
+      if (cached && !forceRefresh) {
+        // console.log('🟢 Using cached transferred stocks from localStorage');
+        this.transferredStocksList = cached.transferred;
+        this.toReceiveList = cached.toReceive;
+        this.isTransferredStockLoading = false;
+        return;
+      }
+
+      this.transferredStocksList = [];
+      this.toReceiveList = [];
+
       try {
         const response = await axios.get('getTransferredStocks');
-        console.log('fetchTransferredStocks data: ', response.data);
+        // console.log('fetchTransferredStocks data: ', response.data);
 
-        if (response.data.length != 0) {
+        if (response.data.length !== 0) {
           response.data.forEach((e) => {
             let expiration_date = moment.tz(e.ward_stock.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
 
-            // list of items this auth ward transferred
             if (e.from == this.authWardcode.wardcode) {
               this.transferredStocksList.push({
                 id: e.id,
@@ -607,7 +688,6 @@ export default {
               });
             }
 
-            // list of items to receive
             if (e.to == this.authWardcode.wardcode) {
               this.toReceiveList.push({
                 id: e.id,
@@ -628,6 +708,14 @@ export default {
             from: null,
           });
         }
+
+        // Cache both lists together in localStorage
+        const cacheData = {
+          transferred: this.transferredStocksList,
+          toReceive: this.toReceiveList,
+        };
+        this.setCachedData('TRANSFERRED_STOCKS', cacheData);
+        // console.log('🔵 Fetched fresh transferred stocks and cached to localStorage');
       } catch (err) {
         this.error = err.response?.data ?? err.message;
         console.error('Failed to fetch transferred stocks:', this.error);
@@ -635,20 +723,36 @@ export default {
         this.isTransferredStockLoading = false;
       }
     },
-    async fetchEmployees() {
+
+    // Employees with localStorage caching
+    async fetchEmployees(forceRefresh = false) {
       this.isEmployeesLoading = true;
       this.error = null;
+
+      const cached = this.getCachedData('EMPLOYEES');
+
+      if (cached && !forceRefresh) {
+        // console.log('🟢 Using cached employees from localStorage');
+        this.employeesList = cached;
+        this.isEmployeesLoading = false;
+        return;
+      }
+
+      this.employeesList = [];
+
       try {
         const response = await axios.get('getEmployees');
-        console.log('fetchEmployees data: ', response.data);
+        // console.log('fetchEmployees data: ', response.data);
 
         response.data.forEach((e) => {
-          // console.log(e);
           this.employeesList.push({
             employeeid: e.employeeid,
             name: '(' + e.employeeid + ') - ' + e.firstname + ' ' + e.lastname,
           });
         });
+
+        this.setCachedData('EMPLOYEES', this.employeesList);
+        // console.log('🔵 Fetched fresh employees and cached to localStorage');
       } catch (err) {
         this.error = err.response?.data ?? err.message;
         console.error('Failed to fetch employees:', this.error);
@@ -656,71 +760,85 @@ export default {
         this.isEmployeesLoading = false;
       }
     },
-    async fetchWards() {
-      this.isEmployeesLoading = true;
+
+    // Wards with localStorage caching
+    async fetchWards(forceRefresh = false) {
+      this.isWardsLoading = true;
       this.error = null;
+
+      const cached = this.getCachedData('WARDS');
+
+      if (cached && !forceRefresh) {
+        // console.log('🟢 Using cached wards from localStorage');
+        this.locationsList = cached;
+        this.isWardsLoading = false;
+        return;
+      }
+
+      this.locationsList = [];
+
       try {
         const response = await axios.get('getWards');
-        console.log('fetchWards data: ', response.data);
+        // console.log('fetchWards data: ', response.data);
 
         response.data.forEach((e) => {
-          // console.log(e);
-          if (e.wardcode == 'CSR' || e.wardcode == 'ADMIN') {
-            return null;
-          } else {
+          if (e.wardcode !== 'CSR' && e.wardcode !== 'ADMIN') {
             this.locationsList.push({
               wardcode: e.wardcode,
               wardname: e.wardname,
             });
           }
         });
+
+        this.setCachedData('WARDS', this.locationsList);
+        // console.log('🔵 Fetched fresh wards and cached to localStorage');
       } catch (err) {
         this.error = err.response?.data ?? err.message;
         console.error('Failed to fetch wards:', this.error);
       } finally {
-        this.isEmployeesLoading = false;
+        this.isWardsLoading = false;
       }
     },
 
-    tzone(date) {
-      return moment.tz(date, 'Asia/Manila').format('L');
+    // Legacy method - kept for backward compatibility
+    clearWardStocksCache() {
+      this.clearCacheData('WARD_STOCKS');
+    },
+
+    async invalidateAndRefreshWardStocks() {
+      this.clearCacheData('WARD_STOCKS');
+      await this.fetchWardStocks(true);
+    },
+
+    // Method to refresh specific data after POST operations
+    async refreshDataAfterPost() {
+      console.log('🔄 Refreshing wardStocks, transferredStocks, and toReceiveList after POST');
+
+      // Clear localStorage cache for the three specific datasets
+      this.clearCacheData('WARD_STOCKS');
+      this.clearCacheData('TRANSFERRED_STOCKS');
+
+      // Fetch fresh data and cache in localStorage
+      await Promise.all([this.fetchWardStocks(true), this.fetchTransferredStocks(true)]);
     },
 
     updateData() {
-      this.transferredStocksList = [];
       this.loading = true;
 
       this.$inertia.get('transferstock', this.params, {
         preserveState: true,
         preserveScroll: true,
-        onFinish: (visit) => {
-          this.wardStocksList = [];
-          this.transferredStocksList = [];
-          this.toReceiveList = [];
-          this.fetchWardStocks();
-          this.fetchTransferredStocks();
-          this.loading = false;
+        onFinish: () => {
+          this.fetchWardStocks(true);
         },
       });
     },
-    // emit close dialog
-    clickOutsideDialog() {
-      this.$emit('hide', (this.cl1comb = null), (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
-    },
-    transferStock(item) {
-      //   console.log(item.quantity);
-      this.transferStockDialog = true;
-      this.form.ward_stock_id = item.ward_stock_id;
-      this.form.cl2desc = item.cl2desc;
-      this.form.prevQuantity = item.quantity;
-      this.form.expiration_date = item.expiration_date;
-    },
+
     submit() {
       if (this.form.processing) {
         return false;
       }
 
-      // the form is submitted only if the conditions is met
       if (
         Number(this.form.quantity) <= Number(this.form.prevQuantity) &&
         Number(this.form.quantity) != 0 &&
@@ -734,44 +852,78 @@ export default {
           onSuccess: () => {
             this.transferStockDialog = false;
             this.cancel();
-            this.updateData();
             this.createdMsg();
+
+            // Refresh only the data that changes after POST
+            this.refreshDataAfterPost();
           },
         });
       }
     },
-    confirmDeleteTransferredStock(item) {
-      this.cl1comb = item.cl1comb;
-      this.form.cl1desc = item.cl1desc;
-      this.deleteTransferredStockDialog = true;
-    },
-    deleteCategory() {
-      if (this.form.processing) {
+    updateReceivedStockStatus() {
+      if (this.formReceiveStock.processing) {
         return false;
       }
 
-      this.form.delete(route('transferstock.destroy', this.cl1comb), {
+      this.formReceiveStock.put(route('transferstock.updatetransferstatus', this.formReceiveStock), {
         preserveScroll: true,
         onSuccess: () => {
-          this.transferredStocksList = [];
-          this.deleteTransferredStockDialog = false;
-          this.cl1comb = null;
-          this.form.clearErrors();
-          this.form.reset();
-          this.updateData();
-          this.deletedMsg();
-          this.fetchTransferredStocks();
+          this.receivedItemDialog = false;
+          this.cancel();
+          this.stockReceivedMsg();
+
+          // Refresh only the data that changes after POST
+          this.refreshDataAfterPost();
         },
       });
     },
+
+    tzone(date) {
+      return moment.tz(date, 'Asia/Manila').format('L');
+    },
+
+    // emit close dialog
+    clickOutsideDialog() {
+      this.$emit('hide', (this.isUpdate = false), this.form.clearErrors(), this.form.reset());
+    },
+    transferStock(item) {
+      this.transferStockDialog = true;
+      this.form.ward_stock_id = item.ward_stock_id;
+      this.form.cl2desc = item.cl2desc;
+      this.form.prevQuantity = item.quantity;
+      this.form.expiration_date = item.expiration_date;
+    },
+    // submit() {
+    //   if (this.form.processing) {
+    //     return false;
+    //   }
+
+    //   // the form is submitted only if the conditions is met
+    //   if (
+    //     Number(this.form.quantity) <= Number(this.form.prevQuantity) &&
+    //     Number(this.form.quantity) != 0 &&
+    //     Number(this.form.quantity) != null &&
+    //     this.form.to != null &&
+    //     this.form.requested_by != null &&
+    //     this.form.remarks != null
+    //   ) {
+    //     this.form.post(route('transferstock.store'), {
+    //       preserveScroll: true,
+    //       onSuccess: () => {
+    //         this.transferStockDialog = false;
+    //         this.cancel();
+    //         this.updateData();
+    //         this.createdMsg();
+    //       },
+    //     });
+    //   }
+    // },
+
     cancel() {
-      this.cl1comb = null;
       this.isUpdate = false;
       this.transferStockDialog = false;
       this.form.reset();
       this.form.clearErrors();
-      this.transferredStocksList = [];
-      this.fetchTransferredStocks();
     },
     createdMsg() {
       this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Transfer stock successfully.', life: 3000 });
@@ -797,24 +949,8 @@ export default {
       );
     },
     receivedStock(item) {
-      //   console.log(item);
       this.receivedItemDialog = true;
       this.formReceiveStock.id = item.data.id;
-    },
-    updateReceivedStockStatus() {
-      if (this.formReceiveStock.processing) {
-        return false;
-      }
-
-      this.formReceiveStock.put(route('transferstock.updatetransferstatus', this.formReceiveStock), {
-        preserveScroll: true,
-        onSuccess: () => {
-          this.receivedItemDialog = false;
-          this.cancel();
-          this.updateData();
-          this.stockReceivedMsg();
-        },
-      });
     },
   },
   watch: {

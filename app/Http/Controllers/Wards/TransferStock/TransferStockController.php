@@ -23,10 +23,9 @@ use Inertia\Inertia;
 class TransferStockController extends Controller
 {
 
-    public function index(Request $request)
+    private function getAuthWardcode()
     {
-        // get auth wardcode
-        $authWardcode = DB::select(
+        return DB::select(
             "SELECT TOP 1
                 l.wardcode
             FROM
@@ -40,6 +39,13 @@ class TransferStockController extends Controller
             ",
             [Auth::user()->employeeid]
         );
+    }
+
+
+    public function index(Request $request)
+    {
+        // get auth wardcode
+        $authWardcode = $this->getAuthWardcode();
         $authCode = $authWardcode[0]->wardcode;
 
         $latestDateLog = LocationStockBalanceDateLogs::where('wardcode', $authCode)
@@ -62,21 +68,9 @@ class TransferStockController extends Controller
     public function getWardStocks()
     {
         // get auth wardcode
-        $authWardcode = DB::select(
-            "SELECT TOP 1
-                l.wardcode
-            FROM
-                user_acc u
-            INNER JOIN
-                csrw_login_history l ON u.employeeid = l.employeeid
-            WHERE
-                l.employeeid = ?
-            ORDER BY
-                l.created_at DESC;
-            ",
-            [Auth::user()->employeeid]
-        );
+        $authWardcode = $this->getAuthWardcode();
         $authCode = $authWardcode[0]->wardcode;
+
 
         // FROM CSR
         $wardStocks1 = WardsStocks::with(['item_details:cl2comb,cl2desc', 'request_stocks'])
@@ -93,8 +87,8 @@ class TransferStockController extends Controller
             ->where('location', '=', $authCode)
             ->where(function ($query) {
                 $query->where('from', 'WARD')
-                    ->orWhere('from', 'DELIVERY')
-                    ->orWhere('from', 'CONSIGNMENT')
+                    // ->orWhere('from', 'DELIVERY')
+                    // ->orWhere('from', 'CONSIGNMENT')
                     ->orWhere('from', 'EXISTING_STOCKS');
             })
             ->get();
@@ -107,7 +101,7 @@ class TransferStockController extends Controller
                 'cl2comb'         => $e->item_details->cl2comb ?? null,
                 'cl2desc'         => $e->item_details->cl2desc ?? null,
                 'quantity'        => $e->quantity,
-                'expiration_date' => optional($e->expiration_date)->format('m/d/Y'),
+                'expiration_date' => $e->expiration_date,
             ];
         });
 
@@ -116,22 +110,9 @@ class TransferStockController extends Controller
 
     public function getTransferredStocks()
     {
-        $authWardcode = DB::select(
-            "SELECT TOP 1
-                l.wardcode
-            FROM
-                user_acc u
-            INNER JOIN
-                csrw_login_history l ON u.employeeid = l.employeeid
-            WHERE
-                l.employeeid = ?
-            ORDER BY
-                l.created_at DESC;
-            ",
-            [Auth::user()->employeeid]
-        );
+        // get auth wardcode
+        $authWardcode = $this->getAuthWardcode();
         $authCode = $authWardcode[0]->wardcode;
-
 
         $transferredStock = WardTransferStock::with(
             'ward_stock',
