@@ -338,9 +338,7 @@ export default {
     // IconField,
     InputNumber,
   },
-  props: {
-    authCode: String,
-  },
+  props: {},
   data() {
     return {
       CACHE_CONFIG: {
