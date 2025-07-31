@@ -107,7 +107,7 @@ class HandleInertiaRequests extends Middleware
         if ($cachedAuthUser && isset($cachedAuthUser['location'])) {
             $locationName = $cachedAuthUser['location']->locationName ?? null;
 
-            if ($locationName && strtoupper($locationName->name) === 'CSR') {
+            if ($locationName && strtoupper($locationName->wardcode) === 'CSR') {
                 $result = DB::select(
                     "SELECT count(*) as count FROM csrw_request_stocks WHERE status = 'ACKNOWLEDGED' OR status = 'PENDING';"
                 );
