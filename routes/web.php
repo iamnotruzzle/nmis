@@ -162,6 +162,10 @@ Route::middleware(['web', 'auth', 'verified'])->group(
 
         Route::resource('wa-endorse', WaEndorsementController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
 
+
+        Route::get('getWardStocks', [TransferStockController::class, 'getWardStocks'])
+            ->name('getWardStocks')
+            ->middleware(['verified', 'designation_ward']);
         Route::get('getTransferredStocks', [TransferStockController::class, 'getTransferredStocks'])
             ->name('getTransferredStocks')
             ->middleware(['verified', 'designation_ward']);

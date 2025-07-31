@@ -42,31 +42,6 @@ class TransferStockController extends Controller
         );
         $authCode = $authWardcode[0]->wardcode;
 
-        // FROM CSR
-        $wardStocks = WardsStocks::with(['item_details:cl2comb,cl2desc', 'request_stocks'])
-            ->where('quantity', '>', 0)
-            ->where('location', '=', $authCode)
-            ->whereHas('request_stocks', function ($query) {
-                return $query->where('status', 'RECEIVED');
-            })
-            ->where('from', 'CSR')
-            ->get();
-
-        // FROM NON-CSR STOCK
-        $wardStocks2 = WardsStocks::with(['item_details:cl2comb,cl2desc'])
-            ->where('quantity', '>', 0)
-            ->where('location', '=', $authCode)
-            ->where(function ($query) {
-                $query->where('from', 'WARD')
-                    ->orWhere('from', 'DELIVERY')
-                    ->orWhere('from', 'CONSIGNMENT')
-                    ->orWhere('from', 'EXISTING_STOCKS');
-            })
-            ->get();
-
-
-        // $employees = UserDetail::where('empstat', 'A')->orderBy('employeeid', 'ASC')->get(['employeeid', 'empstat', 'firstname', 'lastname']);
-
         $latestDateLog = LocationStockBalanceDateLogs::where('wardcode', $authCode)
             ->latest('created_at')->first();
         $canTransact = null;
@@ -80,10 +55,63 @@ class TransferStockController extends Controller
 
         return Inertia::render('Wards/TransferStock/Index', [
             'authWardcode' => $authWardcode[0],
-            'wardStocks' => $wardStocks,
-            'wardStocks2' => $wardStocks2,
             'canTransact' => $canTransact,
         ]);
+    }
+
+    public function getWardStocks()
+    {
+        // get auth wardcode
+        $authWardcode = DB::select(
+            "SELECT TOP 1
+                l.wardcode
+            FROM
+                user_acc u
+            INNER JOIN
+                csrw_login_history l ON u.employeeid = l.employeeid
+            WHERE
+                l.employeeid = ?
+            ORDER BY
+                l.created_at DESC;
+            ",
+            [Auth::user()->employeeid]
+        );
+        $authCode = $authWardcode[0]->wardcode;
+
+        // FROM CSR
+        $wardStocks1 = WardsStocks::with(['item_details:cl2comb,cl2desc', 'request_stocks'])
+            ->where('quantity', '>', 0)
+            ->where('location', '=', $authCode)
+            ->whereHas('request_stocks', function ($query) {
+                return $query->where('status', 'RECEIVED');
+            })
+            ->where('from', 'CSR')
+            ->get();
+        // FROM NON-CSR STOCK
+        $wardStocks2 = WardsStocks::with(['item_details:cl2comb,cl2desc'])
+            ->where('quantity', '>', 0)
+            ->where('location', '=', $authCode)
+            ->where(function ($query) {
+                $query->where('from', 'WARD')
+                    ->orWhere('from', 'DELIVERY')
+                    ->orWhere('from', 'CONSIGNMENT')
+                    ->orWhere('from', 'EXISTING_STOCKS');
+            })
+            ->get();
+
+        // Merge and transform
+        $wardsStocks = $wardStocks1->merge($wardStocks2)->map(function ($e) {
+            return [
+                'ward_stock_id'   => $e->id,
+                'from'            => $e->from,
+                'cl2comb'         => $e->item_details->cl2comb ?? null,
+                'cl2desc'         => $e->item_details->cl2desc ?? null,
+                'quantity'        => $e->quantity,
+                'expiration_date' => optional($e->expiration_date)->format('m/d/Y'),
+            ];
+        });
+
+        return response()->json($wardsStocks);
     }
 
     public function getTransferredStocks()

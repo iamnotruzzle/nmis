@@ -21,7 +21,7 @@
         :sortOrder="1"
         filterDisplay="row"
         showGridlines
-        :loading="loading"
+        :loading="isWardStockLoading"
       >
         <template #header>
           <div class="flex flex-wrap align-items-center justify-content-end gap-2">
@@ -41,7 +41,7 @@
             </div>
           </div>
         </template>
-        <template #empty> No data found. </template>
+        <!-- <template #empty> No data found. </template> -->
         <template #loading> Loading data. Please wait. </template>
         <Column
           field="from"
@@ -299,7 +299,7 @@
                 </div>
               </div>
             </template>
-            <template #empty> No data found. </template>
+            <!-- <template #empty> No data found. </template> -->
             <template #loading> Loading data. Please wait. </template>
             <Column
               field="item"
@@ -495,6 +495,7 @@ export default {
     return {
       isTransferredStockLoading: false,
       isEmployeesLoading: false,
+      isWardStockLoading: false,
       // paginator
       loading: false,
       rows: null,
@@ -553,23 +554,36 @@ export default {
             this.wardStocksList = [];
             this.transferredStocksList = [];
             this.toReceiveList = [];
-            this.storeWardStockInContainer();
-            // this.storeTransferredStockInContainer();
+            this.fetchWardStocks();
             this.loading = false;
           },
         });
       }
     });
 
-    this.storeWardStockInContainer();
-
     this.loading = false;
 
+    this.fetchWardStocks();
     this.fetchTransferredStocks();
     this.fetchEmployees();
     this.fetchWards();
   },
   methods: {
+    async fetchWardStocks() {
+      this.isWardStockLoading = true;
+      this.error = null;
+      try {
+        const response = await axios.get('getWardStocks');
+        console.log('fetchWardStocks data: ', response.data);
+
+        this.wardStocksList = response.data;
+      } catch (err) {
+        this.error = err.response?.data ?? err.message;
+        console.error('Failed to fetch ward stocks:', this.error);
+      } finally {
+        this.isWardStockLoading = false;
+      }
+    },
     async fetchTransferredStocks() {
       this.isTransferredStockLoading = true;
       this.error = null;
@@ -671,35 +685,7 @@ export default {
     tzone(date) {
       return moment.tz(date, 'Asia/Manila').format('L');
     },
-    storeWardStockInContainer() {
-      // FROM CSR
-      this.wardStocks.forEach((e) => {
-        // let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
 
-        this.wardStocksList.push({
-          ward_stock_id: e.id,
-          from: e.from,
-          cl2comb: e.item_details.cl2comb,
-          cl2desc: e.item_details.cl2desc,
-          quantity: e.quantity,
-          expiration_date: e.expiration_date,
-        });
-      });
-
-      // FROM TRANSFERRED STOCKS (WARD)
-      this.wardStocks2.forEach((e) => {
-        // let expiration_date = moment.tz(e.expiration_date, 'Asia/Manila').format('MM/DD/YYYY');
-
-        this.wardStocksList.push({
-          ward_stock_id: e.id,
-          from: e.from,
-          cl2comb: e.item_details.cl2comb,
-          cl2desc: e.item_details.cl2desc,
-          quantity: e.quantity,
-          expiration_date: e.expiration_date,
-        });
-      });
-    },
     updateData() {
       this.transferredStocksList = [];
       this.loading = true;
@@ -711,7 +697,7 @@ export default {
           this.wardStocksList = [];
           this.transferredStocksList = [];
           this.toReceiveList = [];
-          this.storeWardStockInContainer();
+          this.fetchWardStocks();
           this.fetchTransferredStocks();
           this.loading = false;
         },
