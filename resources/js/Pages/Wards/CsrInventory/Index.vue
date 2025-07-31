@@ -201,12 +201,12 @@ export default {
     return {
       CACHE_CONFIG: {
         CSR_INVENTORY: {
-          key: 'csrInventoryCache',
-          timestamp: 'csrInventoryCacheTimestamp',
+          key: 'CsrInventory_csrInventoryCache',
+          timestamp: 'CsrInventory_csrInventoryCacheTimestamp',
         },
         CURRENT_STOCKS: {
-          key: 'currentStockCache',
-          timestamp: 'currentStockCacheTimestamp',
+          key: 'CsrInventory_currentStockCache',
+          timestamp: 'CsrInventory_currentStockCacheTimestamp',
         },
       },
       CACHE_DURATION_MS: 1000 * 60 * 5, // 5 minutes
