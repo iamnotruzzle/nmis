@@ -40,7 +40,7 @@
       v-if="topbarMenuActive"
       class="layout-topbar-menu lg:flex origin-top"
     >
-      <li>
+      <!-- <li>
         <Button
           class="p-button-link p-link layout-topbar-button"
           @click="openCreateItemDialog"
@@ -48,7 +48,7 @@
           <i class="pi pi-user"></i>
           <span>Profile</span>
         </Button>
-      </li>
+      </li> -->
       <li>
         <Button
           class="p-button-link p-link layout-topbar-button"
@@ -64,7 +64,7 @@
       v-else
       class="layout-topbar-menu hidden lg:flex origin-top"
     >
-      <li>
+      <!-- <li>
         <Button
           class="p-button-link p-link layout-topbar-button"
           @click="openCreateItemDialog"
@@ -72,7 +72,7 @@
           <i class="pi pi-user"></i>
           <span>Profile</span>
         </Button>
-      </li>
+      </li> -->
       <li>
         <Button
           class="p-button-link p-link layout-topbar-button"
@@ -202,6 +202,10 @@ export default {
       );
     },
     logout() {
+      // Clear all localStorage data
+      localStorage.clear();
+      //   console.log('🧹 All localStorage data cleared on logout');
+
       this.$inertia.post(this.route('logout'));
     },
     clickOutsideDialog() {
