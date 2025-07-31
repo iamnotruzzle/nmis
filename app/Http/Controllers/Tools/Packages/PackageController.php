@@ -69,7 +69,7 @@ class PackageController extends Controller
 
         return Inertia::render('Tools/Packages/Index', [
             // 'items' => $items,
-            'packages' => $packages,
+            // 'packages' => $packages,
             'authCode' => $authCode,
         ]);
     }
@@ -95,6 +95,19 @@ class PackageController extends Controller
         );
 
         return response()->json($items);
+    }
+    public function getPackages()
+    {
+        $packages = DB::select(
+            "SELECT package.id, package.description, pack_dets.cl2comb, item.cl2desc, pack_dets.quantity, package.status
+                FROM csrw_packages AS package
+                JOIN csrw_package_details as pack_dets ON pack_dets.package_id = package.id
+                JOIN hclass2 as item ON item.cl2comb = pack_dets.cl2comb
+                -- WHERE wardcode = ?
+                ORDER BY item.cl2desc ASC;",
+        );
+
+        return response()->json($packages);
     }
 
     public function store(Request $request)

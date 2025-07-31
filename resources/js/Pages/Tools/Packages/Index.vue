@@ -21,6 +21,7 @@
           :sortOrder="1"
           showGridlines
           removableSort
+          :loading="isPackagesLoading"
         >
           <template #header>
             <div class="flex flex-wrap align-items-center justify-content-between gap-2">
@@ -339,7 +340,6 @@ export default {
   },
   props: {
     authCode: String,
-    packages: Array,
   },
   data() {
     return {
@@ -348,10 +348,15 @@ export default {
           key: 'itemsCache',
           timestamp: 'itemsCacheTimestamp',
         },
+        PACKAGES: {
+          key: 'packagesCache',
+          timestamp: 'packagesCacheTimestamp',
+        },
       },
       CACHE_DURATION_MS: 1000 * 60 * 5, // 5 minutes
       // loading states
       isItemsLoading: false,
+      isPackagesLoading: false,
 
       itemsList: [],
       packagesList: [],
@@ -395,7 +400,7 @@ export default {
   },
   mounted() {
     this.fetchItems();
-    this.storePackagesInContainer();
+    this.fetchPackages();
   },
   methods: {
     // Generic localStorage cache methods
@@ -434,7 +439,6 @@ export default {
       });
     },
 
-    // Ward Stocks with localStorage caching
     async fetchItems(forceRefresh = false) {
       this.isItemsLoading = true;
       this.error = null;
@@ -469,6 +473,78 @@ export default {
       }
     },
 
+    async fetchPackages(forceRefresh = false) {
+      this.isPackagesLoading = true;
+      this.error = null;
+
+      const cached = this.getCachedData('PACKAGES');
+
+      if (cached && !forceRefresh) {
+        // console.log('🟢 Using cached ward stocks from localStorage');
+        this.packagesList = cached;
+        this.isPackagesLoading = false;
+        return;
+      }
+
+      try {
+        const response = await axios.get('getPackages');
+
+        this.packagesList = response.data.reduce((acc, curr) => {
+          const existingPackage = acc.find((p) => p.id === curr.id);
+
+          if (existingPackage) {
+            existingPackage.package_details.push({
+              cl2comb: curr.cl2comb,
+              cl2desc: curr.cl2desc,
+              quantity: curr.quantity,
+            });
+          } else {
+            acc.push({
+              id: curr.id,
+              description: curr.description,
+              status: curr.status,
+              package_details: [
+                {
+                  cl2comb: curr.cl2comb,
+                  cl2desc: curr.cl2desc,
+                  quantity: curr.quantity,
+                },
+              ],
+            });
+          }
+
+          return acc;
+        }, []);
+
+        // response.data.forEach((e) => {
+        //   this.packagesList.push({
+        //     cl2comb: e.cl2comb,
+        //     cl2desc: e.cl2desc,
+        //   });
+        // });
+
+        this.setCachedData('PACKAGES', this.packagesList);
+        // console.log('🔵 Fetched fresh items and cached to localStorage');
+      } catch (err) {
+        this.error = err.response?.data ?? err.message;
+        console.error('❌ Failed to fetch packages:', this.error);
+      } finally {
+        console.log('final');
+        this.isPackagesLoading = false;
+      }
+    },
+
+    async refreshDataAfterPost() {
+      console.log('🔄 Refreshing ITEMS, PACKAGES after non-get http request.');
+
+      // Clear localStorage cache for the three specific datasets
+      this.clearCacheData('ITEMS');
+      this.clearCacheData('PACKAGES');
+
+      // Fetch fresh data and cache in localStorage
+      await Promise.all([this.fetchItems(true), this.fetchPackages(true)]);
+    },
+
     statusSeverity(status) {
       //   console.log(status);
       switch (status.code) {
@@ -478,38 +554,6 @@ export default {
         case 'A':
           return 'success';
       }
-    },
-    storePackagesInContainer() {
-      this.packagesList = []; // reset
-
-      this.packagesList = this.packages.reduce((acc, curr) => {
-        const existingPackage = acc.find((p) => p.id === curr.id);
-
-        if (existingPackage) {
-          existingPackage.package_details.push({
-            cl2comb: curr.cl2comb,
-            cl2desc: curr.cl2desc,
-            quantity: curr.quantity,
-          });
-        } else {
-          acc.push({
-            id: curr.id,
-            description: curr.description,
-            status: curr.status,
-            package_details: [
-              {
-                cl2comb: curr.cl2comb,
-                cl2desc: curr.cl2desc,
-                quantity: curr.quantity,
-              },
-            ],
-          });
-        }
-
-        return acc;
-      }, []);
-
-      //   console.log(this.packagesList);
     },
     openCreatePackageDialog() {
       this.isUpdate = false;
@@ -593,6 +637,7 @@ export default {
             this.storeItemsInContainer();
             this.storePackagesInContainer();
             this.updatedMsg();
+            this.refreshDataAfterPost();
           },
         });
       } else {
@@ -604,6 +649,7 @@ export default {
             this.storeItemsInContainer();
             this.storePackagesInContainer();
             this.createdMsg();
+            this.refreshDataAfterPost();
           },
         });
       }
