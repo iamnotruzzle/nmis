@@ -137,11 +137,11 @@ Route::middleware(['web', 'auth', 'verified'])->group(
         // end non-medicine supplies
 
 
-        Route::get('getCsrInventory', [CsrInventoryController::class, 'getCsrInventory'])
-            ->name('getCsrInventory')
+        Route::get('csrinv/getCsrInventory', [CsrInventoryController::class, 'getCsrInventory'])
+            ->name('csrinv/getCsrInventory')
             ->middleware(['verified', 'designation_ward']);
-        Route::get('getCurrentStocks', [CsrInventoryController::class, 'getCurrentStocks'])
-            ->name('getCurrentStocks')
+        Route::get('csrinv/getCurrentStocks', [CsrInventoryController::class, 'getCurrentStocks'])
+            ->name('csrinv/getCurrentStocks')
             ->middleware(['verified', 'designation_ward']);
         Route::resource('csrinv', CsrInventoryController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
 

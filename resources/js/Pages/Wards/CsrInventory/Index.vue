@@ -285,7 +285,7 @@ export default {
       }
 
       try {
-        const response = await axios.get('getCsrInventory');
+        const response = await axios.get('csrinv/getCsrInventory');
 
         response.data.forEach((e) => {
           this.csrInventoryList.push({
@@ -316,7 +316,7 @@ export default {
       }
 
       try {
-        const response = await axios.get('getCurrentStocks');
+        const response = await axios.get('csrinv/getCurrentStocks');
 
         response.data.forEach((e) => {
           this.currentStockList.push({
