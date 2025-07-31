@@ -205,8 +205,8 @@ export default {
           timestamp: 'csrInventoryCacheTimestamp',
         },
         CURRENT_STOCKS: {
-          key: 'currentStocks',
-          timestamp: 'currentStocksTimestamp',
+          key: 'currentStockCache',
+          timestamp: 'currentStockCacheTimestamp',
         },
       },
       CACHE_DURATION_MS: 1000 * 60 * 5, // 5 minutes
