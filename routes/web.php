@@ -156,35 +156,24 @@ Route::middleware(['web', 'auth', 'verified'])->group(
 
         Route::resource('wardspatients', WardPatientsController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('wardspatientsearch', WardPatientSearchController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
-        Route::get('getWardMedSupplies', [PatientChargeController::class, 'getWardMedSupplies'])
-            ->name('getWardMedSupplies')
-            ->middleware(['verified', 'designation_ward']);
-        Route::get('getPackages', [PatientChargeController::class, 'getPackages'])
-            ->name('getPackages')
-            ->middleware(['verified', 'designation_ward']);
-        Route::get('getGenericVariant', [PatientChargeController::class, 'getGenericVariant'])
-            ->name('getGenericVariant')
-            ->middleware(['verified', 'designation_ward']);
-        Route::get('getMisc', [PatientChargeController::class, 'getMisc'])
-            ->name('getMisc')
-            ->middleware(['verified', 'designation_ward']);
+
         Route::resource('patientcharge', PatientChargeController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('wardsstockslogs', RequestStocksLogsController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
 
         Route::resource('wa-endorse', WaEndorsementController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
 
 
-        Route::get('getWardStocks', [TransferStockController::class, 'getWardStocks'])
-            ->name('getWardStocks')
+        Route::get('transferstock/getWardStocks', [TransferStockController::class, 'getWardStocks'])
+            ->name('transferstock/getWardStocks')
             ->middleware(['verified', 'designation_ward']);
-        Route::get('getTransferredStocks', [TransferStockController::class, 'getTransferredStocks'])
-            ->name('getTransferredStocks')
+        Route::get('transferstock/getTransferredStocks', [TransferStockController::class, 'getTransferredStocks'])
+            ->name('transferstock/getTransferredStocks')
             ->middleware(['verified', 'designation_ward']);
-        Route::get('getEmployees', [TransferStockController::class, 'getEmployees'])
-            ->name('getEmployees')
+        Route::get('transferstock/getEmployees', [TransferStockController::class, 'getEmployees'])
+            ->name('transferstock/getEmployees')
             ->middleware(['verified', 'designation_ward']);
-        Route::get('getWards', [TransferStockController::class, 'getWards'])
-            ->name('getWards')
+        Route::get('transferstock/getWards', [TransferStockController::class, 'getWards'])
+            ->name('transferstock/getWards')
             ->middleware(['verified', 'designation_ward']);
         Route::resource('transferstock', TransferStockController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         Route::put('transferstock', [TransferStockController::class, 'updatetransferstatus', 'designation_ward'])->name('transferstock.updatetransferstatus');

@@ -640,7 +640,7 @@ export default {
       }
 
       try {
-        const response = await axios.get('getWardStocks');
+        const response = await axios.get('transferstock/getWardStocks');
         this.wardStocksList = response.data;
         this.setCachedData('WARD_STOCKS', response.data);
         // console.log('🔵 Fetched fresh ward stocks and cached to localStorage');
@@ -671,7 +671,7 @@ export default {
       this.toReceiveList = [];
 
       try {
-        const response = await axios.get('getTransferredStocks');
+        const response = await axios.get('transferstock/getTransferredStocks');
         // console.log('fetchTransferredStocks data: ', response.data);
 
         if (response.data.length !== 0) {
@@ -742,7 +742,7 @@ export default {
       this.employeesList = [];
 
       try {
-        const response = await axios.get('getEmployees');
+        const response = await axios.get('transferstock/getEmployees');
         // console.log('fetchEmployees data: ', response.data);
 
         response.data.forEach((e) => {
@@ -779,7 +779,7 @@ export default {
       this.locationsList = [];
 
       try {
-        const response = await axios.get('getWards');
+        const response = await axios.get('transferstock/getWards');
         // console.log('fetchWards data: ', response.data);
 
         response.data.forEach((e) => {
