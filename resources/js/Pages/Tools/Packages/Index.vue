@@ -208,6 +208,7 @@
                   class="w-full mb-3"
                   :class="{ 'p-invalid': form.cl2comb == '' }"
                   style="width: 100%"
+                  :loading="isItemsLoading == true"
                 />
               </div>
 
@@ -317,6 +318,7 @@ import InputNumber from 'primevue/inputnumber';
 import Tag from 'primevue/tag';
 import moment, { updateLocale } from 'moment';
 import { Link } from '@inertiajs/vue3';
+import axios from 'axios';
 
 export default {
   components: {
@@ -336,12 +338,21 @@ export default {
     InputNumber,
   },
   props: {
-    // authCode: String,
-    items: Object,
+    authCode: String,
     packages: Array,
   },
   data() {
     return {
+      CACHE_CONFIG: {
+        ITEMS: {
+          key: 'itemsCache',
+          timestamp: 'itemsCacheTimestamp',
+        },
+      },
+      CACHE_DURATION_MS: 1000 * 60 * 5, // 5 minutes
+      // loading states
+      isItemsLoading: false,
+
       itemsList: [],
       packagesList: [],
       filters: {
@@ -383,11 +394,81 @@ export default {
     };
   },
   mounted() {
-    // console.log(this.$page.props.auth.user.location.wardcode);
-    this.storeItemsInContainer();
+    this.fetchItems();
     this.storePackagesInContainer();
   },
   methods: {
+    // Generic localStorage cache methods
+    getCachedData(cacheType) {
+      const config = this.CACHE_CONFIG[cacheType];
+      const cached = localStorage.getItem(config.key);
+      const timestamp = localStorage.getItem(config.timestamp);
+
+      if (!cached || !timestamp) return null;
+
+      const age = Date.now() - parseInt(timestamp);
+      if (age > this.CACHE_DURATION_MS) {
+        console.log(`⚠️ Cache expired for ${cacheType}`);
+        this.clearCacheData(cacheType);
+        return null;
+      }
+
+      return JSON.parse(cached);
+    },
+
+    setCachedData(cacheType, data) {
+      const config = this.CACHE_CONFIG[cacheType];
+      localStorage.setItem(config.key, JSON.stringify(data));
+      localStorage.setItem(config.timestamp, Date.now().toString());
+    },
+
+    clearCacheData(cacheType) {
+      const config = this.CACHE_CONFIG[cacheType];
+      localStorage.removeItem(config.key);
+      localStorage.removeItem(config.timestamp);
+    },
+
+    clearAllCaches() {
+      Object.keys(this.CACHE_CONFIG).forEach((cacheType) => {
+        this.clearCacheData(cacheType);
+      });
+    },
+
+    // Ward Stocks with localStorage caching
+    async fetchItems(forceRefresh = false) {
+      this.isItemsLoading = true;
+      this.error = null;
+
+      const cached = this.getCachedData('ITEMS');
+
+      if (cached && !forceRefresh) {
+        // console.log('🟢 Using cached ward stocks from localStorage');
+        this.itemsList = cached;
+        this.isItemsLoading = false;
+        return;
+      }
+
+      try {
+        const response = await axios.get('getItems');
+
+        response.data.forEach((e) => {
+          this.itemsList.push({
+            cl2comb: e.cl2comb,
+            cl2desc: e.cl2desc,
+          });
+        });
+
+        this.setCachedData('ITEMS', this.itemsList);
+        // console.log('🔵 Fetched fresh items and cached to localStorage');
+      } catch (err) {
+        this.error = err.response?.data ?? err.message;
+        console.error('❌ Failed to fetch items:', this.error);
+      } finally {
+        console.log('final');
+        this.isItemsLoading = false;
+      }
+    },
+
     statusSeverity(status) {
       //   console.log(status);
       switch (status.code) {
@@ -397,16 +478,6 @@ export default {
         case 'A':
           return 'success';
       }
-    },
-    storeItemsInContainer() {
-      this.itemsList = []; // reset
-
-      this.itemsList = this.items.map((e) => ({
-        cl2comb: e.cl2comb,
-        cl2desc: e.cl2desc,
-      }));
-
-      //   console.log('itemList', this.itemsList);
     },
     storePackagesInContainer() {
       this.packagesList = []; // reset

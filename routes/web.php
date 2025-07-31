@@ -192,6 +192,9 @@ Route::middleware(['web', 'auth', 'verified'])->group(
         // end ward routes
 
         // tools
+        Route::get('getItems', [PackageController::class, 'getItems'])
+            ->name('getItems')
+            ->middleware(['verified', 'designation_ward']);
         Route::resource('packages', PackageController::class)->middleware(['verified'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('generic-variants', GenericVariantController::class)->middleware(['verified', 'designation_csr'])->only(['index', 'store', 'update', 'destroy']);
     }
