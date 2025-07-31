@@ -1381,7 +1381,7 @@ export default {
 
       if (cached && !forceRefresh) {
         // console.log('🟢 Using cached ward stocks from localStorage');
-        this.itemsList = cached;
+        this.currentWardStocksList = cached;
         this.isCurrentWardStocksLoading = false;
         return;
       }
