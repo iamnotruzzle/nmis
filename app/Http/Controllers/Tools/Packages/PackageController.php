@@ -16,35 +16,9 @@ use Inertia\Inertia;
 
 class PackageController extends Controller
 {
-    private function getAuthWardcode()
-    {
-        return DB::select(
-            "SELECT TOP 1
-                l.wardcode
-            FROM
-                user_acc u
-            INNER JOIN
-                csrw_login_history l ON u.employeeid = l.employeeid
-            WHERE
-                l.employeeid = ?
-            ORDER BY
-                l.created_at DESC;
-            ",
-            [Auth::user()->employeeid]
-        );
-    }
-
     public function index()
     {
-        // get auth wardcode
-        $authWardcode = $this->getAuthWardcode();
-        $authCode = $authWardcode[0]->wardcode;
-
-        return Inertia::render('Tools/Packages/Index', [
-            // 'items' => $items,
-            // 'packages' => $packages,
-            'authCode' => $authCode,
-        ]);
+        return Inertia::render('Tools/Packages/Index', []);
     }
 
     public function getItems()
