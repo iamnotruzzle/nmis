@@ -954,6 +954,7 @@
             optionLabel="cl2desc"
             class="w-full mb-3"
             :disabled="isUpdateExisting == true"
+            :loading="isItemsLoading"
           />
         </div>
         <div class="field">
@@ -1138,6 +1139,7 @@ import moment from 'moment';
 import Echo from 'laravel-echo';
 import { Link } from '@inertiajs/vue3';
 import { usePage } from '@inertiajs/vue3';
+import axios from 'axios';
 
 export default {
   components: {
@@ -1161,13 +1163,22 @@ export default {
     InputNumber,
   },
   props: {
-    items: Object,
     currentWardStocks: Object,
     canTransact: Boolean,
     canAddExpiryDate: Boolean,
   },
   data() {
     return {
+      CACHE_CONFIG: {
+        ITEMS: {
+          key: 'WardsInv_wardStocksCache',
+          timestamp: 'WardsInv_wardStocksCacheTimestamp',
+        },
+      },
+      CACHE_DURATION_MS: 1000 * 60 * 5, // 5 minutes
+      // loading states
+      isItemsLoading: false,
+
       authWardcode: '',
       expandedRow: [],
       // paginator
@@ -1283,10 +1294,11 @@ export default {
     this.authWardcode = this.$page.props.auth.user.location.location_name.wardcode;
 
     this.storeFundSourceInContainer();
-    this.storeItemsInController();
     this.storeCurrentWardStocksInContainer();
 
     this.loading = false;
+
+    this.fetchItems();
   },
   computed: {
     user() {
@@ -1294,6 +1306,88 @@ export default {
     },
   },
   methods: {
+    getCachedData(cacheType) {
+      const config = this.CACHE_CONFIG[cacheType];
+      const cached = localStorage.getItem(config.key);
+      const timestamp = localStorage.getItem(config.timestamp);
+
+      if (!cached || !timestamp) return null;
+
+      const age = Date.now() - parseInt(timestamp);
+      if (age > this.CACHE_DURATION_MS) {
+        console.log(`⚠️ Cache expired for ${cacheType}`);
+        this.clearCacheData(cacheType);
+        return null;
+      }
+
+      return JSON.parse(cached);
+    },
+    setCachedData(cacheType, data) {
+      const config = this.CACHE_CONFIG[cacheType];
+      localStorage.setItem(config.key, JSON.stringify(data));
+      localStorage.setItem(config.timestamp, Date.now().toString());
+    },
+    clearCacheData(cacheType) {
+      const config = this.CACHE_CONFIG[cacheType];
+      localStorage.removeItem(config.key);
+      localStorage.removeItem(config.timestamp);
+    },
+    clearAllCaches() {
+      Object.keys(this.CACHE_CONFIG).forEach((cacheType) => {
+        this.clearCacheData(cacheType);
+      });
+    },
+    // Ward Stocks with localStorage caching
+    async fetchItems(forceRefresh = false) {
+      this.isItemsLoading = true;
+      this.error = null;
+
+      const cached = this.getCachedData('ITEMS');
+
+      if (cached && !forceRefresh) {
+        // console.log('🟢 Using cached ward stocks from localStorage');
+        this.itemsList = cached;
+        this.isItemsLoading = false;
+        return;
+      }
+
+      try {
+        const response = await axios.get('wardinv/getItems');
+
+        response.data.forEach((e) => {
+          this.itemsList.push({
+            cl2comb: e.cl2comb,
+            cl2desc: e.cl2desc,
+            uomcode: e.uomcode,
+            uomdesc: e.uomdesc,
+          });
+        });
+
+        this.setCachedData('ITEMS', this.itemsList);
+        // console.log('🔵 Fetched fresh ward stocks and cached to localStorage');
+      } catch (err) {
+        this.error = err.response?.data ?? err.message;
+        console.error('❌ Failed to fetch items:', this.error);
+      } finally {
+        this.isItemsLoading = false;
+      }
+    },
+    async invalidateAndRefreshWardStocks() {
+      this.clearCacheData('WARD_STOCKS');
+      await this.fetchWardStocks(true);
+    },
+    // Method to refresh specific data after POST operations
+    async refreshDataAfterPost() {
+      console.log('🔄 Refreshing wardStocks, transferredStocks, and toReceiveList after POST');
+
+      // Clear localStorage cache for the three specific datasets
+      this.clearCacheData('WARD_STOCKS');
+      this.clearCacheData('TRANSFERRED_STOCKS');
+
+      // Fetch fresh data and cache in localStorage
+      await Promise.all([this.fetchWardStocks(true), this.fetchTransferredStocks(true)]);
+    },
+
     openUpdateStock(data) {
       if (data.from == 'EXISTING_STOCKS') {
         this.formExisting.id = data.ward_stock_id;
@@ -1372,27 +1466,6 @@ export default {
           chrgtable: null,
         });
       });
-    },
-    storeItemsInController() {
-      this.itemsList = []; // reset
-      this.items.forEach((e) => {
-        this.itemsList.push({
-          cl2comb: e.cl2comb,
-          cl2desc: e.cl2desc,
-          uomcode: e.uomcode,
-          uomdesc: e.uomdesc,
-        });
-      });
-
-      //   this.medicalGasList = []; // reset
-      //   this.medicalGas.forEach((e) => {
-      //     this.medicalGasList.push({
-      //       cl2comb: e.cl2comb,
-      //       cl2desc: e.cl2desc,
-      //       uomcode: e.uomcode,
-      //       uomdesc: e.uomdesc,
-      //     });
-      //   });
     },
     // store current stocks
     storeCurrentWardStocksInContainer() {

@@ -23,48 +23,34 @@ use Illuminate\Support\Facades\Session;
 
 class InventoryController extends Controller
 {
+    private function getAuthWardcode()
+    {
+        return DB::select(
+            "SELECT TOP 1
+                l.wardcode
+            FROM
+                user_acc u
+            INNER JOIN
+                csrw_login_history l ON u.employeeid = l.employeeid
+            WHERE
+                l.employeeid = ?
+            ORDER BY
+                l.created_at DESC;
+            ",
+            [Auth::user()->employeeid]
+        );
+    }
+
     public function index(Request $request)
     {
-        // dd(5);
         $searchString = $request->search;
 
         $from = Carbon::parse($request->from)->startOfDay();
         $to = Carbon::parse($request->to)->endOfDay();
 
-        $authWardcode = DB::select(
-            "SELECT TOP 1
-                l.wardcode
-                FROM
-                    user_acc u
-                INNER JOIN
-                    csrw_login_history l ON u.employeeid = l.employeeid
-                WHERE
-                    l.employeeid = ?
-                ORDER BY
-                    l.created_at DESC;
-                ",
-            [Auth::user()->employeeid]
-        );
+        // get auth wardcode
+        $authWardcode = $this->getAuthWardcode();
         $authCode = $authWardcode[0]->wardcode;
-
-        $items = DB::select(
-            "SELECT
-                item.cl2comb,
-                item.cl2desc,
-                item.uomcode,
-                uom.uomdesc
-            FROM
-                hclass2 AS item
-           JOIN huom AS uom
-                ON uom.uomcode = item.uomcode
-            WHERE
-                (item.catID = 1
-                AND item.uomcode != 'box'
-                AND (item.itemcode NOT LIKE 'MSMG-%' OR item.itemcode IS NULL))
-            ORDER BY
-                item.cl2desc ASC;"
-        );
-
 
         $currentWardStocks = DB::select(
             "SELECT stock.[from], stock.id, stock.cl2comb, item.cl2desc, stock.quantity, stock.average, stock.is_consumable, stock.expiration_date
@@ -96,10 +82,33 @@ class InventoryController extends Controller
         // dd($canAddExpiryDate);
 
         return Inertia::render('Wards/Inventory/Index', [
-            'items' => $items,
+            // 'items' => $items,
             'currentWardStocks' => $currentWardStocks,
             'canTransact' => $canTransact,
             'canAddExpiryDate' => $canAddExpiryDate,
         ]);
+    }
+
+    public function getItems()
+    {
+        $items = DB::select(
+            "SELECT
+                item.cl2comb,
+                item.cl2desc,
+                item.uomcode,
+                uom.uomdesc
+            FROM
+                hclass2 AS item
+           JOIN huom AS uom
+                ON uom.uomcode = item.uomcode
+            WHERE
+                (item.catID = 1
+                AND item.uomcode != 'box'
+                AND (item.itemcode NOT LIKE 'MSMG-%' OR item.itemcode IS NULL))
+            ORDER BY
+                item.cl2desc ASC;"
+        );
+
+        return response()->json($items);
     }
 }
