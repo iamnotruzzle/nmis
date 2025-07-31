@@ -66,11 +66,8 @@ class InventoryController extends Controller
         if ($latestDateLog && $latestDateLog->created_at >= '2025-06-01') {
             $canAddExpiryDate = true;
         }
-        // dd($canAddExpiryDate);
 
         return Inertia::render('Wards/Inventory/Index', [
-            // 'items' => $items,
-            // 'currentWardStocks' => $currentWardStocks,
             'canTransact' => $canTransact,
             'canAddExpiryDate' => $canAddExpiryDate,
         ]);

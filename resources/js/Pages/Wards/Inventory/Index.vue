@@ -1388,6 +1388,7 @@ export default {
 
       try {
         const response = await axios.get('wardinv/getCurrentWardStocks');
+        this.currentWardStocksList = [];
         moment.suppressDeprecationWarnings = true;
 
         response.data.forEach((e) => {
@@ -1415,20 +1416,20 @@ export default {
         this.isCurrentWardStocksLoading = false;
       }
     },
-    async invalidateAndRefreshWardStocks() {
-      this.clearCacheData('WARD_STOCKS');
-      await this.fetchWardStocks(true);
+    async invalidateAndRefreshCurrentWardStocks() {
+      this.clearCacheData('CURRENT_WARD_STOCKS');
+      await this.fetchCurrentWardStocks(true);
     },
     // Method to refresh specific data after POST operations
     async refreshDataAfterPost() {
-      console.log('🔄 Refreshing wardStocks, transferredStocks, and toReceiveList after POST');
+      console.log('🔄 Refreshing current ward stocks after POST');
 
       // Clear localStorage cache for the three specific datasets
-      this.clearCacheData('WARD_STOCKS');
-      this.clearCacheData('TRANSFERRED_STOCKS');
+      this.clearCacheData('CURRENT_WARD_STOCKS');
+      //   this.clearCacheData('TRANSFERRED_STOCKS');
 
       // Fetch fresh data and cache in localStorage
-      await Promise.all([this.fetchWardStocks(true), this.fetchTransferredStocks(true)]);
+      await Promise.all([this.fetchCurrentWardStocks(true)]);
     },
 
     openUpdateStock(data) {
@@ -1628,9 +1629,10 @@ export default {
               } else {
                 this.formExisting.reset();
                 this.cancel();
-                this.updateData();
                 this.createdMsg();
-                this.loading = false;
+
+                // Refresh only the data that changes after POST
+                this.refreshDataAfterPost();
               }
             },
           });
@@ -1640,8 +1642,10 @@ export default {
             onSuccess: () => {
               this.formExisting.reset();
               this.cancel();
-              this.updateData();
               this.updateExistingMessage();
+
+              // Refresh only the data that changes after POST
+              this.refreshDataAfterPost();
             },
           });
         }
@@ -1680,9 +1684,10 @@ export default {
             onSuccess: () => {
               this.formConsignment.reset();
               this.cancel();
-              this.updateData();
               this.createdMsg();
-              this.loading = false;
+
+              // Refresh only the data that changes after POST
+              this.refreshDataAfterPost();
             },
           });
         }
@@ -1696,8 +1701,10 @@ export default {
           onSuccess: () => {
             +this.formConsignment.reset();
             this.cancel();
-            this.updateData();
             this.updateConsignmentMessage();
+
+            // Refresh only the data that changes after POST
+            this.refreshDataAfterPost();
           },
         });
       }
@@ -1735,9 +1742,10 @@ export default {
             onSuccess: () => {
               this.formDelivery.reset();
               this.cancel();
-              this.updateData();
               this.createdMsg();
-              this.loading = false;
+
+              // Refresh only the data that changes after POST
+              this.refreshDataAfterPost();
             },
           });
         }
@@ -1751,8 +1759,10 @@ export default {
           onSuccess: () => {
             +this.formDelivery.reset();
             this.cancel();
-            this.updateData();
             this.updateDeliveryMessage();
+
+            // Refresh only the data that changes after POST
+            this.refreshDataAfterPost();
           },
         });
       }
@@ -1790,9 +1800,10 @@ export default {
             onSuccess: () => {
               this.formSupplemental.reset();
               this.cancel();
-              this.updateData();
               this.createdMsg();
-              this.loading = false;
+
+              // Refresh only the data that changes after POST
+              this.refreshDataAfterPost();
             },
           });
         }
@@ -1806,8 +1817,10 @@ export default {
           onSuccess: () => {
             +this.formSupplemental.reset();
             this.cancel();
-            this.updateData();
             this.updateSupplementalMessage();
+
+            // Refresh only the data that changes after POST
+            this.refreshDataAfterPost();
           },
         });
       }
@@ -1908,9 +1921,10 @@ export default {
         onSuccess: () => {
           this.returnToCsrDialog = false;
           this.cancel();
-          this.updateData();
           this.updatedStockMsg();
-          this.loading = false;
+
+          // Refresh only the data that changes after POST
+          this.refreshDataAfterPost();
         },
       });
     },
