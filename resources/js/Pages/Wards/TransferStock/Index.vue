@@ -495,20 +495,20 @@ export default {
     return {
       CACHE_CONFIG: {
         WARD_STOCKS: {
-          key: 'wardStocksCache',
-          timestamp: 'wardStocksCacheTimestamp',
+          key: 'TransferStock_wardStocksCache',
+          timestamp: 'TransferStock_wardStocksCacheTimestamp',
         },
         TRANSFERRED_STOCKS: {
-          key: 'transferredStocksCache',
-          timestamp: 'transferredStocksCacheTimestamp',
+          key: 'TransferStock_transferredStocksCache',
+          timestamp: 'TransferStock_transferredStocksCacheTimestamp',
         },
         EMPLOYEES: {
-          key: 'employeesCache',
-          timestamp: 'employeesCacheTimestamp',
+          key: 'TransferStock_employeesCache',
+          timestamp: 'TransferStock_employeesCacheTimestamp',
         },
         WARDS: {
-          key: 'wardsCache',
-          timestamp: 'wardsCacheTimestamp',
+          key: 'TransferStock_wardsCache',
+          timestamp: 'TransferStock_wardsCacheTimestamp',
         },
       },
       CACHE_DURATION_MS: 1000 * 60 * 5, // 5 minutes
