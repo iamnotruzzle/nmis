@@ -88,32 +88,69 @@ class LocationStockBalanceController extends Controller
             }
         }
 
+        // // old query shows all stock regardless of item_from
+        // $locationStockBalance = DB::select(
+        //     "SELECT
+        //             tracker.cl2comb,
+        //             item.cl2desc,
+        //             price.price_per_unit,
+        //             SUM(tracker.beg_bal_qty) AS beginning_balance,
+        //             SUM(tracker.end_bal_qty) AS ending_balance,
+        //             MIN(tracker.beg_bal_date) AS beg_bal_created_at,
+        //             MAX(tracker.end_bal_date) AS end_bal_created_at
+        //         FROM csrw_ward_consumption_tracker AS tracker
+        //         JOIN hclass2 AS item ON item.cl2comb = tracker.cl2comb
+        //         JOIN csrw_item_prices AS price ON price.id = tracker.price_id
+        //         WHERE tracker.location = ?
+        //             AND (
+        //                 (tracker.beg_bal_date BETWEEN ? AND ?)
+        //                 OR tracker.beg_bal_date IS NULL
+        //             )
+        //             AND (
+        //                 (tracker.end_bal_date BETWEEN ? AND ?)
+        //                 OR tracker.end_bal_date IS NULL
+        //             )
+        //         GROUP BY
+        //             tracker.cl2comb,
+        //             item.cl2desc,
+        //             price.price_per_unit
+        //     ",
+        //     [
+        //         $authCode,
+        //         $from,
+        //         $to,
+        //         $from,
+        //         $to
+        //     ]
+        // );
+
+        // // show only stocks that are from CSR, Existing Stocks, or Ward
         $locationStockBalance = DB::select(
             "SELECT
-                    tracker.cl2comb,
-                    item.cl2desc,
-                    price.price_per_unit,
-                    SUM(tracker.beg_bal_qty) AS beginning_balance,
-                    SUM(tracker.end_bal_qty) AS ending_balance,
-                    MIN(tracker.beg_bal_date) AS beg_bal_created_at,
-                    MAX(tracker.end_bal_date) AS end_bal_created_at
-                FROM csrw_ward_consumption_tracker AS tracker
-                JOIN hclass2 AS item ON item.cl2comb = tracker.cl2comb
-                JOIN csrw_item_prices AS price ON price.id = tracker.price_id
-                WHERE tracker.location = ?
-                    AND (
-                        (tracker.beg_bal_date BETWEEN ? AND ?)
-                        OR tracker.beg_bal_date IS NULL
-                    )
-                    AND (
-                        (tracker.end_bal_date BETWEEN ? AND ?)
-                        OR tracker.end_bal_date IS NULL
-                    )
-                GROUP BY
-                    tracker.cl2comb,
-                    item.cl2desc,
-                    price.price_per_unit
-            ",
+                tracker.cl2comb,
+                item.cl2desc,
+                price.price_per_unit,
+                SUM(tracker.beg_bal_qty) AS beginning_balance,
+                SUM(tracker.end_bal_qty) AS ending_balance,
+                MIN(tracker.beg_bal_date) AS beg_bal_created_at,
+                MAX(tracker.end_bal_date) AS end_bal_created_at
+            FROM csrw_ward_consumption_tracker AS tracker
+            JOIN hclass2 AS item ON item.cl2comb = tracker.cl2comb
+            JOIN csrw_item_prices AS price ON price.id = tracker.price_id
+            WHERE tracker.location = ?
+                AND tracker.item_from IN ('CSR', 'EXISTING_STOCKS', 'WARD')  -- ADD THIS LINE
+                AND (
+                    (tracker.beg_bal_date BETWEEN ? AND ?)
+                    OR tracker.beg_bal_date IS NULL
+                )
+                AND (
+                    (tracker.end_bal_date BETWEEN ? AND ?)
+                    OR tracker.end_bal_date IS NULL
+                )
+            GROUP BY
+                tracker.cl2comb,
+                item.cl2desc,
+                price.price_per_unit",
             [
                 $authCode,
                 $from,
@@ -147,18 +184,6 @@ class LocationStockBalanceController extends Controller
         // $endDateTime = $date->copy()->endOfDay()->format('Y-m-d H:i:s');   // Sets time to 23:59:59
         $begDateTime = $date->copy(); // Sets time to 00:00:00
         $endDateTime = $date->copy();   // Sets time to 23:59:59
-
-        // old
-        // $currentStocks = DB::select(
-        //     "SELECT ward_stock.id, ward_stock.stock_id, ward_stock.request_stocks_id, ward_stock.request_stocks_detail_id, ward_stock.stock_id, ward_stock.location, ward_stock.cl2comb,
-        //             ward_stock.uomcode, ward_stock.chrgcode, ward_stock.quantity, ward_stock.[from], ward_stock.manufactured_date, ward_stock.delivered_date, ward_stock.expiration_date, ward_stock.created_at,
-        //             ward_stock.ris_no, price.id as price_id
-        //             FROM csrw_wards_stocks as ward_stock
-        //             JOIN csrw_item_prices as price ON price.cl2comb = ward_stock.cl2comb AND price.ris_no = ward_stock.ris_no
-        //             WHERE ward_stock.location = ?
-        //             AND ward_stock.quantity > 0",
-        //     [$request->location]
-        // );
 
         // new ONLY read stocks that have request stock status as received or NULL(meaning its added using existing stock function)
         $currentStocks = DB::select(
