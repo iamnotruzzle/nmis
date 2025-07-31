@@ -132,6 +132,11 @@ Route::middleware(['web', 'auth', 'verified'])->group(
         Route::get('requeststocks/view-reorder', [RequestStocksController::class, 'viewItemReOrderQuantity'])->name('requeststocks.view-reorder');
         Route::resource('wardinv', InventoryController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         // end non-medicine supplies
+
+
+        Route::get('getCsrInventory', [CsrInventoryController::class, 'getCsrInventory'])
+            ->name('getCsrInventory')
+            ->middleware(['verified', 'designation_ward']);
         Route::resource('csrinv', CsrInventoryController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
 
         Route::resource('medicalGases', WardMedicalGasesController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);

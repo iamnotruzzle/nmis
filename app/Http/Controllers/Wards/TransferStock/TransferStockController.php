@@ -41,7 +41,6 @@ class TransferStockController extends Controller
         );
     }
 
-
     public function index(Request $request)
     {
         // get auth wardcode

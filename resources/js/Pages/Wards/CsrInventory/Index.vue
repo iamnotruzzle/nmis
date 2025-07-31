@@ -25,6 +25,7 @@
           removableSort
           :globalFilterFields="['item_desc']"
           showGridlines
+          :loading="isCsrInventoryLoading"
         >
           <template #header>
             <div class="flex flex-wrap align-items-center justify-content-between gap-2">
@@ -170,6 +171,7 @@ import AutoComplete from 'primevue/autocomplete';
 import Tag from 'primevue/tag';
 import moment from 'moment';
 import { Link } from '@inertiajs/vue3';
+import axios from 'axios';
 
 export default {
   components: {
@@ -192,17 +194,27 @@ export default {
     // IconField,
   },
   props: {
-    csrInventory: Object,
+    // csrInventory: Object,
     currentStock: Object,
   },
   data() {
     return {
-      //   categoryFilter: [
-      //     { name: 'Accountable forms', catID: 22 },
-      //   ],
+      CACHE_CONFIG: {
+        CSR_INVENTORY: {
+          key: 'csrInventoryCache',
+          timestamp: 'csrInventoryCacheTimestamp',
+        },
+      },
+      CACHE_DURATION_MS: 1000 * 60 * 5, // 5 minutes
+      // loading states
+      isCsrInventoryLoading: false,
+
       csrInventoryList: [],
       currentStockList: [],
-      locationFilter: [],
+
+      error: null,
+
+      // filters
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
         item_desc: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -215,19 +227,77 @@ export default {
   },
   mounted() {
     // console.log(this.currentStock);
-    this.storeCsrInventoryInContainer();
+    // this.storeCsrInventoryInContainer();
+    this.fetchCsrInventory();
     this.storeCurrentStockInContainer();
   },
   methods: {
-    storeCsrInventoryInContainer() {
-      this.csrInventoryList = []; // reset
+    // Generic localStorage cache methods
+    getCachedData(cacheType) {
+      const config = this.CACHE_CONFIG[cacheType];
+      const cached = localStorage.getItem(config.key);
+      const timestamp = localStorage.getItem(config.timestamp);
 
-      this.csrInventory.forEach((e) => {
-        this.csrInventoryList.push({
-          item_desc: e.item_desc,
-          quantity: e.quantity,
-        });
+      if (!cached || !timestamp) return null;
+
+      const age = Date.now() - parseInt(timestamp);
+      if (age > this.CACHE_DURATION_MS) {
+        console.log(`⚠️ Cache expired for ${cacheType}`);
+        this.clearCacheData(cacheType);
+        return null;
+      }
+
+      return JSON.parse(cached);
+    },
+
+    setCachedData(cacheType, data) {
+      const config = this.CACHE_CONFIG[cacheType];
+      localStorage.setItem(config.key, JSON.stringify(data));
+      localStorage.setItem(config.timestamp, Date.now().toString());
+    },
+
+    clearCacheData(cacheType) {
+      const config = this.CACHE_CONFIG[cacheType];
+      localStorage.removeItem(config.key);
+      localStorage.removeItem(config.timestamp);
+    },
+
+    clearAllCaches() {
+      Object.keys(this.CACHE_CONFIG).forEach((cacheType) => {
+        this.clearCacheData(cacheType);
       });
+    },
+
+    async fetchCsrInventory(forceRefresh = false) {
+      this.isCsrInventoryLoading = true;
+      this.error = null;
+
+      const cached = this.getCachedData('CSR_INVENTORY');
+
+      if (cached && !forceRefresh) {
+        // console.log('🟢 Using cached csr inventory from localStorage');
+        this.csrInventoryList = cached;
+        this.isCsrInventoryLoading = false;
+        return;
+      }
+
+      try {
+        const response = await axios.get('getCsrInventory');
+
+        response.data.forEach((e) => {
+          this.csrInventoryList.push({
+            item_desc: e.item_desc,
+            quantity: e.quantity,
+          });
+        });
+        this.setCachedData('CSR_INVENTORY', this.csrInventoryList);
+        // console.log('🔵 Fetched fresh ward stocks and cached to localStorage');
+      } catch (err) {
+        this.error = err.response?.data ?? err.message;
+        console.error('❌ Failed to fetch csr inventory:', this.error);
+      } finally {
+        this.isCsrInventoryLoading = false;
+      }
     },
     storeCurrentStockInContainer() {
       this.currentStockList = []; // reset
@@ -238,8 +308,6 @@ export default {
           quantity: e.quantity,
         });
       });
-
-      //   console.log(this.currentStockList);
     },
     tzone(date) {
       return moment.tz(date, 'Asia/Manila').format('L');

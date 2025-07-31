@@ -512,6 +512,7 @@ export default {
         },
       },
       CACHE_DURATION_MS: 1000 * 60 * 5, // 5 minutes
+      // loading states
       isTransferredStockLoading: false,
       isEmployeesLoading: false,
       isWardStockLoading: false,
@@ -798,11 +799,6 @@ export default {
       } finally {
         this.isWardsLoading = false;
       }
-    },
-
-    // Legacy method - kept for backward compatibility
-    clearWardStocksCache() {
-      this.clearCacheData('WARD_STOCKS');
     },
 
     async invalidateAndRefreshWardStocks() {

@@ -11,32 +11,38 @@ use Inertia\Inertia;
 
 class CsrInventoryController extends Controller
 {
-    public function index()
+    private function getAuthWardcode()
     {
-        $authWardcode = DB::select(
+        return DB::select(
             "SELECT TOP 1
                 l.wardcode
-                FROM
-                    user_acc u
-                INNER JOIN
-                    csrw_login_history l ON u.employeeid = l.employeeid
-                WHERE
-                    l.employeeid = ?
-                ORDER BY
-                    l.created_at DESC;
-                ",
+            FROM
+                user_acc u
+            INNER JOIN
+                csrw_login_history l ON u.employeeid = l.employeeid
+            WHERE
+                l.employeeid = ?
+            ORDER BY
+                l.created_at DESC;
+            ",
             [Auth::user()->employeeid]
         );
+    }
+
+    public function index()
+    {
+        // get auth wardcode
+        $authWardcode = $this->getAuthWardcode();
         $authCode = $authWardcode[0]->wardcode;
 
-        $csrInventory = DB::select(
-            "SELECT item_conver.cl2comb_after, item.cl2desc as item_desc, SUM(quantity_after) as quantity
-                FROM csrw_csr_item_conversion as item_conver
-                JOIN hclass2 as item ON item.cl2comb = item_conver.cl2comb_after
-                WHERE quantity_after > 0
-                GROUP BY item_conver.cl2comb_after, item.cl2desc
-                ORDER BY item.cl2desc ASC;"
-        );
+        // $csrInventory = DB::select(
+        //     "SELECT item_conver.cl2comb_after, item.cl2desc as item_desc, SUM(quantity_after) as quantity
+        //         FROM csrw_csr_item_conversion as item_conver
+        //         JOIN hclass2 as item ON item.cl2comb = item_conver.cl2comb_after
+        //         WHERE quantity_after > 0
+        //         GROUP BY item_conver.cl2comb_after, item.cl2desc
+        //         ORDER BY item.cl2desc ASC;"
+        // );
 
         $currentStock = DB::select(
             "SELECT item.cl2desc as item_desc, SUM(ward_stock.quantity) as quantity
@@ -53,24 +59,22 @@ class CsrInventoryController extends Controller
         // dd($currentStock);
 
         return Inertia::render('Wards/CsrInventory/Index', [
-            'csrInventory' => $csrInventory,
+            // 'csrInventory' => $csrInventory,
             'currentStock' => $currentStock,
         ]);
     }
 
+    public function getCsrInventory()
+    {
+        $csrInventory = DB::select(
+            "SELECT item_conver.cl2comb_after, item.cl2desc as item_desc, SUM(quantity_after) as quantity
+                FROM csrw_csr_item_conversion as item_conver
+                JOIN hclass2 as item ON item.cl2comb = item_conver.cl2comb_after
+                WHERE quantity_after > 0
+                GROUP BY item_conver.cl2comb_after, item.cl2desc
+                ORDER BY item.cl2desc ASC;"
+        );
 
-    // public function store(Request $request)
-    // {
-    //     //
-    // }
-
-    // public function update(Request $request, $id)
-    // {
-    //     //
-    // }
-
-    // public function destroy($id)
-    // {
-    //     //
-    // }
+        return response()->json($csrInventory);
+    }
 }
