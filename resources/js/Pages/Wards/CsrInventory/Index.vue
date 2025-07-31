@@ -96,6 +96,7 @@
           removableSort
           :globalFilterFields="['item_desc']"
           showGridlines
+          :loading="isCurrentStocksLoading"
         >
           <template #header>
             <div class="flex flex-wrap align-items-center justify-content-between gap-2">
@@ -195,7 +196,6 @@ export default {
   },
   props: {
     // csrInventory: Object,
-    currentStock: Object,
   },
   data() {
     return {
@@ -204,10 +204,15 @@ export default {
           key: 'csrInventoryCache',
           timestamp: 'csrInventoryCacheTimestamp',
         },
+        CURRENT_STOCKS: {
+          key: 'currentStocks',
+          timestamp: 'currentStocksTimestamp',
+        },
       },
       CACHE_DURATION_MS: 1000 * 60 * 5, // 5 minutes
       // loading states
       isCsrInventoryLoading: false,
+      isCurrentStocksLoading: false,
 
       csrInventoryList: [],
       currentStockList: [],
@@ -226,10 +231,8 @@ export default {
     };
   },
   mounted() {
-    // console.log(this.currentStock);
-    // this.storeCsrInventoryInContainer();
     this.fetchCsrInventory();
-    this.storeCurrentStockInContainer();
+    this.fetchCurrentStocks();
   },
   methods: {
     // Generic localStorage cache methods
@@ -299,16 +302,38 @@ export default {
         this.isCsrInventoryLoading = false;
       }
     },
-    storeCurrentStockInContainer() {
-      this.currentStockList = []; // reset
+    async fetchCurrentStocks(forceRefresh = false) {
+      this.isCurrentStocksLoading = true;
+      this.error = null;
 
-      this.currentStock.forEach((e) => {
-        this.currentStockList.push({
-          item_desc: e.item_desc,
-          quantity: e.quantity,
+      const cached = this.getCachedData('CURRENT_STOCKS');
+
+      if (cached && !forceRefresh) {
+        // console.log('🟢 Using cached csr inventory from localStorage');
+        this.currentStockList = cached;
+        this.isCurrentStocksLoading = false;
+        return;
+      }
+
+      try {
+        const response = await axios.get('getCurrentStocks');
+
+        response.data.forEach((e) => {
+          this.currentStockList.push({
+            item_desc: e.item_desc,
+            quantity: e.quantity,
+          });
         });
-      });
+        this.setCachedData('CURRENT_STOCKS', this.currentStockList);
+        // console.log('🔵 Fetched fresh ward stocks and cached to localStorage');
+      } catch (err) {
+        this.error = err.response?.data ?? err.message;
+        console.error('❌ Failed to fetch current stocks:', this.error);
+      } finally {
+        this.isCurrentStocksLoading = false;
+      }
     },
+
     tzone(date) {
       return moment.tz(date, 'Asia/Manila').format('L');
     },

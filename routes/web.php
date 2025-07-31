@@ -137,6 +137,9 @@ Route::middleware(['web', 'auth', 'verified'])->group(
         Route::get('getCsrInventory', [CsrInventoryController::class, 'getCsrInventory'])
             ->name('getCsrInventory')
             ->middleware(['verified', 'designation_ward']);
+        Route::get('getCurrentStocks', [CsrInventoryController::class, 'getCurrentStocks'])
+            ->name('getCurrentStocks')
+            ->middleware(['verified', 'designation_ward']);
         Route::resource('csrinv', CsrInventoryController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
 
         Route::resource('medicalGases', WardMedicalGasesController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);

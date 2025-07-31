@@ -31,37 +31,8 @@ class CsrInventoryController extends Controller
 
     public function index()
     {
-        // get auth wardcode
-        $authWardcode = $this->getAuthWardcode();
-        $authCode = $authWardcode[0]->wardcode;
 
-        // $csrInventory = DB::select(
-        //     "SELECT item_conver.cl2comb_after, item.cl2desc as item_desc, SUM(quantity_after) as quantity
-        //         FROM csrw_csr_item_conversion as item_conver
-        //         JOIN hclass2 as item ON item.cl2comb = item_conver.cl2comb_after
-        //         WHERE quantity_after > 0
-        //         GROUP BY item_conver.cl2comb_after, item.cl2desc
-        //         ORDER BY item.cl2desc ASC;"
-        // );
-
-        $currentStock = DB::select(
-            "SELECT item.cl2desc as item_desc, SUM(ward_stock.quantity) as quantity
-                FROM csrw_wards_stocks as ward_stock
-                JOIN hclass2 as item ON item.cl2comb = ward_stock.cl2comb
-                LEFT JOIN csrw_request_stocks rs ON rs.id = ward_stock.request_stocks_id
-                WHERE ward_stock.quantity > 0
-                AND ward_stock.location = '$authCode'
-                AND (rs.id IS NULL OR rs.status = 'RECEIVED')
-                GROUP BY item.cl2desc
-                ORDER BY item.cl2desc ASC;"
-        );
-
-        // dd($currentStock);
-
-        return Inertia::render('Wards/CsrInventory/Index', [
-            // 'csrInventory' => $csrInventory,
-            'currentStock' => $currentStock,
-        ]);
+        return Inertia::render('Wards/CsrInventory/Index', []);
     }
 
     public function getCsrInventory()
@@ -76,5 +47,26 @@ class CsrInventoryController extends Controller
         );
 
         return response()->json($csrInventory);
+    }
+
+    public function getCurrentStocks()
+    {
+        // get auth wardcode
+        $authWardcode = $this->getAuthWardcode();
+        $authCode = $authWardcode[0]->wardcode;
+
+        $currentStock = DB::select(
+            "SELECT item.cl2desc as item_desc, SUM(ward_stock.quantity) as quantity
+                FROM csrw_wards_stocks as ward_stock
+                JOIN hclass2 as item ON item.cl2comb = ward_stock.cl2comb
+                LEFT JOIN csrw_request_stocks rs ON rs.id = ward_stock.request_stocks_id
+                WHERE ward_stock.quantity > 0
+                AND ward_stock.location = '$authCode'
+                AND (rs.id IS NULL OR rs.status = 'RECEIVED')
+                GROUP BY item.cl2desc
+                ORDER BY item.cl2desc ASC;"
+        );
+
+        return response()->json($currentStock);
     }
 }
