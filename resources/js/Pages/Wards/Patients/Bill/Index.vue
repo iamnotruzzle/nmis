@@ -1523,6 +1523,7 @@ export default {
           this.storeBillsInContainer();
           this.getTotalAmount();
           this.storeMedicalSuppliesInContainer();
+          this.storeItemsInContainer();
 
           this.isSubmitting = false; // Allow navigation again
         },
