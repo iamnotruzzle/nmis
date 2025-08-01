@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Wards\Patients;
 
 use App\Events\RequestStock;
 use App\Http\Controllers\Controller;
+use App\Jobs\ChargingWardConsumptionBatchJob;
 use App\Jobs\ChargingWardConsumptionTrackerJobs;
 use App\Jobs\CreatePatientChargeLogsJobs;
 use App\Models\AdmissionLog;
@@ -355,6 +356,9 @@ class PatientChargeController extends Controller
         // init tscode
         $tscode = $request->tscode;
 
+        // Initialize batch data collection
+        $consumptionJobData = [];
+
         // STEP 1: check if the request is a new charge or modifying a charge
         if ($request->isUpdate == false) {
             // STEP 2: check patient account
@@ -470,7 +474,13 @@ class PatientChargeController extends Controller
                         #region comment for now
                         $ward_stock_id = $wardStock->id;
                         $non_specific_charge = $quantity_to_insert_in_logs;
-                        ChargingWardConsumptionTrackerJobs::dispatch($ward_stock_id, $non_specific_charge, $tscode);
+
+                        $consumptionJobData[] = [
+                            'ward_stock_id' => $ward_stock_id,
+                            'non_specific_charge' => $non_specific_charge,
+                            'tscode' => $tscode
+                        ];
+
                         #endregion comment for now
                     }
 
@@ -495,6 +505,11 @@ class PatientChargeController extends Controller
                             'tscode' => $tscode
                         ];
                     }
+                }
+
+                // After the foreach loop, dispatch one batch job instead of many individual jobs:
+                if (!empty($consumptionJobData)) {
+                    ChargingWardConsumptionBatchJob::dispatch($consumptionJobData);
                 }
 
                 // Bulk insert patient charges

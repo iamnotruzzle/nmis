@@ -69,14 +69,8 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
-            // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', false),
-            // 'multiple_active_result_sets' => env('DB_MULTIPLE_ACTIVE_RESULT_SETS', true),
-            // 'options' => [
-            //     PDO::ATTR_PERSISTENT => false, // Critical for jobs!
-            //     PDO::SQLSRV_ATTR_CONNECTION_POOLING => true,
-            //     PDO::ATTR_TIMEOUT => 30, // Add connection timeout
-            //     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            // ],
+            'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', false),
+            'multiple_active_result_sets' => env('DB_MULTIPLE_ACTIVE_RESULT_SETS', false),
         ],
 
         // 'mysql' => [
