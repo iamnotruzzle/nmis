@@ -44,32 +44,40 @@ return [
         ],
 
         // // test server
-        'sqlsrv' => [
-            'driver' => 'sqlsrv',
-            'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '192.168.0.3'),
-            'port' => env('DB_PORT', '1433'),
-            'database' => env('DB_DATABASE', 'hospital'),
-            'username' => env('DB_USERNAME', 'sa'),
-            'password' => env('DB_PASSWORD', 'pacs'),
-            'charset' => 'utf8',
-            'prefix' => '',
-            'prefix_indexes' => true,
-        ],
-
-        // production
         // 'sqlsrv' => [
         //     'driver' => 'sqlsrv',
         //     'url' => env('DATABASE_URL'),
-        //     'host' => env('DB_HOST', 'localhost'),
+        //     'host' => env('DB_HOST', '192.168.0.3'),
         //     'port' => env('DB_PORT', '1433'),
-        //     'database' => env('DB_DATABASE', 'forge'),
-        //     'username' => env('DB_USERNAME', 'forge'),
-        //     'password' => env('DB_PASSWORD', ''),
+        //     'database' => env('DB_DATABASE', 'hospital'),
+        //     'username' => env('DB_USERNAME', 'sa'),
+        //     'password' => env('DB_PASSWORD', 'pacs'),
         //     'charset' => 'utf8',
         //     'prefix' => '',
         //     'prefix_indexes' => true,
         // ],
+
+        // production
+        'sqlsrv' => [
+            'driver' => 'sqlsrv',
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB_HOST', 'localhost'),
+            'port' => env('DB_PORT', '1433'),
+            'database' => env('DB_DATABASE', 'forge'),
+            'username' => env('DB_USERNAME', 'forge'),
+            'password' => env('DB_PASSWORD', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', false),
+            // 'multiple_active_result_sets' => env('DB_MULTIPLE_ACTIVE_RESULT_SETS', true),
+            // 'options' => [
+            //     PDO::ATTR_PERSISTENT => false, // Critical for jobs!
+            //     PDO::SQLSRV_ATTR_CONNECTION_POOLING => true,
+            //     PDO::ATTR_TIMEOUT => 30, // Add connection timeout
+            //     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            // ],
+        ],
 
         // 'mysql' => [
         //     'driver' => 'mysql',
