@@ -142,37 +142,103 @@ class PatientChargeController extends Controller
             ->where('hmstat', 'A')
             ->get(['hmcode', 'hmdesc', 'hmamt', 'uomcode']);
 
+        // // old
+        // $bills = DB::select(
+        //     "SELECT pat_charge.pcchrgcod as charge_slip_no,
+        //         type_of_charge.chrgcode as type_of_charge_code,
+        //         type_of_charge.chrgdesc as type_of_charge_description,
+        //         category.cl1desc as category,
+        //         item.cl2desc as item,
+        //         misc.hmdesc as misc,
+        //         pat_charge.itemcode as itemcode,
+        //         pat_charge.pchrgqty as quantity,
+        //         pat_charge.pchrgup as price,
+        //         pat_charge.uomcode as uomcode,
+        //         pat_charge.pcchrgdte as charge_date,
+        //         charge_log.id as charge_log_id,
+        //         charge_log.[from] as charge_log_from,
+        //         charge_log.ward_stocks_id as charge_log_ward_stocks_id,
+        //         charge_log.quantity as charge_log_quantity,
+        //         charge_log.expiration_date as charge_log_expiration_date,
+        //         charge_by.firstname + ' ' + charge_by.lastname as entry_by,
+        //         charge_log.entry_at as entry_at
+        //         FROM hospital.dbo.hpatchrg pat_charge
+        //         LEFT JOIN hospital.dbo.hclass2 as item ON pat_charge.itemcode = item.cl2comb
+        //         LEFT JOIN hospital.dbo.hclass1 as category ON item.cl1comb = category.cl1comb
+        //         LEFT JOIN hospital.dbo.hmisc as misc ON pat_charge.itemcode = misc.hmcode
+        //         LEFT JOIN hospital.dbo.hpersonal as charge_by ON pat_charge.entryby = charge_by.employeeid
+        //         LEFT JOIN hospital.dbo.hcharge as type_of_charge ON pat_charge.chargcode = type_of_charge.chrgcode
+        //         LEFT JOIN hospital.dbo.csrw_patient_charge_logs as charge_log ON pat_charge.enccode = charge_log.enccode
+        //                                                                     AND pat_charge.pcchrgdte = charge_log.pcchrgdte
+        //                                                                     AND pat_charge.itemcode = charge_log.itemcode
+        //         WHERE pat_charge.enccode = ?
+        //         AND  (type_of_charge.chrgcode = 'DRUMD' OR type_of_charge.chrgcode = 'DRUMN' OR type_of_charge.chrgcode = 'MISC')
+        //         ORDER BY pat_charge.pcchrgdte DESC",
+        //     [$pat_enccode]
+        // );
+
+        // // new
         $bills = DB::select(
             "SELECT pat_charge.pcchrgcod as charge_slip_no,
-                            type_of_charge.chrgcode as type_of_charge_code,
-                            type_of_charge.chrgdesc as type_of_charge_description,
-                            category.cl1desc as category,
-                            item.cl2desc as item,
-                            misc.hmdesc as misc,
-                            pat_charge.itemcode as itemcode,
-                            pat_charge.pchrgqty as quantity,
-                            pat_charge.pchrgup as price,
-                            pat_charge.uomcode as uomcode,
-                            pat_charge.pcchrgdte as charge_date,
-                            charge_log.id as charge_log_id,
-                            charge_log.[from] as charge_log_from,
-                            charge_log.ward_stocks_id as charge_log_ward_stocks_id,
-                            charge_log.quantity as charge_log_quantity,
-                            charge_log.expiration_date as charge_log_expiration_date,
-                            charge_by.firstname + ' ' + charge_by.lastname as entry_by,
-                            charge_log.entry_at as entry_at
-                            FROM hospital.dbo.hpatchrg pat_charge
-                            LEFT JOIN hospital.dbo.hclass2 as item ON pat_charge.itemcode = item.cl2comb
-                            LEFT JOIN hospital.dbo.hclass1 as category ON item.cl1comb = category.cl1comb
-                            LEFT JOIN hospital.dbo.hmisc as misc ON pat_charge.itemcode = misc.hmcode
-                            LEFT JOIN hospital.dbo.hpersonal as charge_by ON pat_charge.entryby = charge_by.employeeid
-                            LEFT JOIN hospital.dbo.hcharge as type_of_charge ON pat_charge.chargcode = type_of_charge.chrgcode
-                            LEFT JOIN hospital.dbo.csrw_patient_charge_logs as charge_log ON pat_charge.enccode = charge_log.enccode
-                                                                                        AND pat_charge.pcchrgdte = charge_log.pcchrgdte
-                                                                                        AND pat_charge.itemcode = charge_log.itemcode
-                            WHERE pat_charge.enccode = '" . $pat_enccode . "'
-                            AND  (type_of_charge.chrgcode = 'DRUMD' OR type_of_charge.chrgcode = 'DRUMN' OR type_of_charge.chrgcode = 'MISC')
-                            ORDER BY pat_charge.pcchrgdte DESC"
+                type_of_charge.chrgcode as type_of_charge_code,
+                type_of_charge.chrgdesc as type_of_charge_description,
+                category.cl1desc as category,
+                item.cl2desc as item,
+                misc.hmdesc as misc,
+                pat_charge.itemcode as itemcode,
+                pat_charge.pchrgqty as quantity,
+                pat_charge.pchrgup as price,
+                pat_charge.uomcode as uomcode,
+                pat_charge.pcchrgdte as charge_date,
+                charge_log.id as charge_log_id,
+                charge_log.[from] as charge_log_from,
+                charge_log.ward_stocks_id as charge_log_ward_stocks_id,
+                charge_log.quantity as charge_log_quantity,
+                charge_log.expiration_date as charge_log_expiration_date,
+                charge_by.firstname + ' ' + charge_by.lastname as entry_by,
+                charge_log.entry_at as entry_at
+                FROM hospital.dbo.hpatchrg pat_charge
+                -- LEFT JOIN hospital.dbo.hclass2 as item ON pat_charge.itemcode = item.cl2comb
+                OUTER APPLY (
+                    SELECT TOP 1 cl2desc, cl1comb
+                    FROM hospital.dbo.hclass2
+                    WHERE hclass2.cl2comb = pat_charge.itemcode
+                ) AS item
+                OUTER APPLY (
+                    SELECT TOP 1 cl1desc
+                    FROM hospital.dbo.hclass1
+                    WHERE hclass1.cl1comb = item.cl1comb
+                ) AS category
+                OUTER APPLY (
+                    SELECT TOP 1 hmdesc
+                    FROM hospital.dbo.hmisc
+                    WHERE hmisc.hmcode = pat_charge.itemcode
+                ) AS misc
+                OUTER APPLY (
+                    SELECT TOP 1 firstname, lastname
+                    FROM hospital.dbo.hpersonal
+                    WHERE employeeid = pat_charge.entryby
+                ) AS charge_by
+                OUTER APPLY (
+                    SELECT TOP 1 chrgcode, chrgdesc
+                    FROM hospital.dbo.hcharge
+                    WHERE chrgcode = pat_charge.chargcode
+                ) AS type_of_charge
+                LEFT JOIN hospital.dbo.csrw_patient_charge_logs as charge_log ON pat_charge.enccode = charge_log.enccode
+                                                                            AND pat_charge.pcchrgdte = charge_log.pcchrgdte
+                                                                            AND pat_charge.itemcode = charge_log.itemcode
+                -- OUTER APPLY (
+                --     SELECT TOP 1 id, [from], ward_stocks_id, quantity, expiration_date, entry_at
+                --     FROM hospital.dbo.csrw_patient_charge_logs
+                --     WHERE enccode = pat_charge.enccode
+                --     AND pcchrgdte = pat_charge.pcchrgdte
+                --     AND itemcode = pat_charge.itemcode
+                --     ORDER BY id DESC
+                -- ) AS charge_log
+                WHERE pat_charge.enccode = ?
+                AND  (type_of_charge.chrgcode = 'DRUMD' OR type_of_charge.chrgcode = 'DRUMN' OR type_of_charge.chrgcode = 'MISC')
+                ORDER BY pat_charge.pcchrgdte DESC",
+            [$pat_enccode]
         );
 
         $canTransact = TransactionService::canTransact($authCode);
