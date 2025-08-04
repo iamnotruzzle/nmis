@@ -18,8 +18,8 @@ return [
     |
     */
 
-    // 'driver' => env('SESSION_DRIVER', 'database'),
-    'driver' => 'file',
+    'driver' => env('SESSION_DRIVER', 'redis'),
+    // 'driver' => 'file',
     // 'driver' => 'database',
 
     /*
@@ -37,8 +37,8 @@ return [
     // 'lifetime' => env('SESSION_LIFETIME', 800),
     // 'lifetime' => 1440, // One day (in minutes)
     // 'lifetime' => 120, // 2 hours
-    'lifetime' => env('SESSION_LIFETIME', 120), // 2 hours (minutes)
-    'cookie_lifetime' => env('SESSION_LIFETIME', 120), // 👈 Match cookie to session
+    'lifetime' => env('SESSION_LIFETIME', 600), // 2 hours (minutes)
+    'cookie_lifetime' => env('SESSION_LIFETIME', 600), // 👈 Match cookie to session
     'expire_on_close' => false,
 
     /*
