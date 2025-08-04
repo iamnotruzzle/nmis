@@ -181,7 +181,8 @@ class AuthenticatedSessionController extends Controller
                     Cache::deleteMultiple([
                         'c_patients_' . $authCode,
                         'c_csr_stocks_' . $authCode,
-                        'latest_update_' . $authCode
+                        'latest_update_' . $authCode,
+                        'transaction_data_ward_' . $authCode
                     ]);
                 }
             }

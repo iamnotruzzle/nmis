@@ -32,6 +32,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Sessions;
 use App\Models\WardConsumptionTracker;
+use App\Services\TransactionService;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
@@ -168,16 +169,7 @@ class PatientChargeController extends Controller
                             ORDER BY pat_charge.pcchrgdte DESC"
         );
 
-        $latestDateLog = LocationStockBalanceDateLogs::where('wardcode', $authCode)
-            ->latest('created_at')->first();
-        $canTransact = null;
-        if ($latestDateLog == null) {
-            $canTransact = false;
-        } else if ($latestDateLog != null && $latestDateLog->end_bal_created_at != null) {
-            $canTransact = false;
-        } else {
-            $canTransact = true;
-        }
+        $canTransact = TransactionService::canTransact($authCode);
 
         return Inertia::render('Wards/Patients/Bill/Index', [
 

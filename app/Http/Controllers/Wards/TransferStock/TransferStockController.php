@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\Sessions;
 use App\Models\WardConsumptionTracker;
+use App\Services\TransactionService;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 
@@ -47,16 +48,7 @@ class TransferStockController extends Controller
         $authWardcode = $this->getAuthWardcode();
         $authCode = $authWardcode[0]->wardcode;
 
-        $latestDateLog = LocationStockBalanceDateLogs::where('wardcode', $authCode)
-            ->latest('created_at')->first();
-        $canTransact = null;
-        if ($latestDateLog == null) {
-            $canTransact = false;
-        } else if ($latestDateLog != null && $latestDateLog->end_bal_created_at != null) {
-            $canTransact = false;
-        } else {
-            $canTransact = true;
-        }
+        $canTransact = TransactionService::canTransact($authCode);
 
         return Inertia::render('Wards/TransferStock/Index', [
             'authWardcode' => $authWardcode[0],

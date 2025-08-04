@@ -20,6 +20,7 @@ use Inertia\Inertia;
 use App\Models\Sessions;
 use App\Models\WardConsumptionTracker;
 use App\Models\WardsStocksLogs;
+use App\Services\TransactionService;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
@@ -158,16 +159,7 @@ class RequestStocksController extends Controller
 
         // dd($requestedStocks);
 
-        $latestDateLog = LocationStockBalanceDateLogs::where('wardcode', $authCode)
-            ->latest('created_at')->first();
-        $canTransact = null;
-        if ($latestDateLog == null) {
-            $canTransact = false;
-        } else if ($latestDateLog != null && $latestDateLog->end_bal_created_at != null) {
-            $canTransact = false;
-        } else {
-            $canTransact = true;
-        }
+        $canTransact = TransactionService::canTransact($authCode);
 
         return Inertia::render('Wards/RequestStocks/Index', [
             'items' => $items,

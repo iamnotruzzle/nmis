@@ -271,6 +271,10 @@ class LocationStockBalanceController extends Controller
             }
         }
 
+        Cache::deleteMultiple([
+            'transaction_data_ward_' . $request->location
+        ]);
+
         return redirect()->back()->with('success', 'Balance set successfully.');
     }
 
