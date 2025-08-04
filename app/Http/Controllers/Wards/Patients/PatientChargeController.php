@@ -41,6 +41,24 @@ use stdClass;
 
 class PatientChargeController extends Controller
 {
+    private function getAuthWardcode()
+    {
+        return DB::select(
+            "SELECT TOP 1
+                l.wardcode
+            FROM
+                user_acc u
+            INNER JOIN
+                csrw_login_history l ON u.employeeid = l.employeeid
+            WHERE
+                l.employeeid = ?
+            ORDER BY
+                l.created_at DESC;
+            ",
+            [Auth::user()->employeeid]
+        );
+    }
+
     public function index(Request $request)
     {
         $pat_enccode = $request->enccode;
@@ -51,20 +69,8 @@ class PatientChargeController extends Controller
         $pat_tscode = $request->tscode;
         // dd($pat_tscode);
 
-        $authWardcode = DB::select(
-            "SELECT TOP 1
-                l.wardcode
-                FROM
-                    user_acc u
-                INNER JOIN
-                    csrw_login_history l ON u.employeeid = l.employeeid
-                WHERE
-                    l.employeeid = ?
-                ORDER BY
-                    l.created_at DESC;
-                ",
-            [Auth::user()->employeeid]
-        );
+        // get auth wardcode
+        $authWardcode = $this->getAuthWardcode();
         $authCode = $authWardcode[0]->wardcode;
 
         $medicalSupplies = DB::select(
