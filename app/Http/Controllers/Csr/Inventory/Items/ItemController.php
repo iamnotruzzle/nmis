@@ -97,12 +97,6 @@ class ItemController extends Controller
             ->join('hclass1 as category', 'item.cl1comb', '=', 'category.cl1comb')
             ->join('csrw_pims_categories as main_category', 'item.catID', '=', 'main_category.catID')
             ->where('item.catID', 1)
-            ->when($search, function ($query, $search) {
-                return $query->where('item.cl2desc', 'LIKE', "%{$search}%");
-            })
-            ->when($status, function ($query, $status) {
-                return $query->where('item.cl2stat', 'LIKE', "%{$status}%");
-            })
             ->orderBy('item.cl2desc', 'ASC')
             ->paginate(10); // 10 items per page
         // dd($items);
