@@ -239,6 +239,12 @@
                   severity="info"
                   @click="openUpdateSupplemental(slotProps.data)"
                 />
+                <Button
+                  v-if="slotProps.data.from == 'DELIVERY'"
+                  label="UPDATE"
+                  severity="info"
+                  @click="openUpdateDelivery(slotProps.data)"
+                />
               </div>
             </template>
           </Column>
@@ -1433,10 +1439,12 @@ export default {
     },
 
     openUpdateStock(data) {
+      console.log(data);
       if (data.from == 'EXISTING_STOCKS') {
         this.formExisting.id = data.ward_stock_id;
         this.formExisting.cl2comb = data.cl2comb;
         this.formExisting.quantity = data.quantity;
+        this.formExisting.expiration_date = data.expiration_date;
 
         this.isUpdateExisting = true;
         this.existingDialog = true;
@@ -1447,6 +1455,7 @@ export default {
         this.formConsignment.id = data.ward_stock_id;
         this.formConsignment.cl2comb = data.cl2comb;
         this.formConsignment.quantity = data.quantity;
+        this.formConsignment.expiration_date = data.expiration_date;
 
         this.isUpdateConsignment = true;
         this.consignmentDialog = true;
@@ -1457,9 +1466,10 @@ export default {
         this.formDelivery.id = data.ward_stock_id;
         this.formDelivery.cl2comb = data.cl2comb;
         this.formDelivery.quantity = data.quantity;
+        this.formDelivery.expiration_date = data.expiration_date;
 
         this.isUpdateDelivery = true;
-        this.DeliveryDialog = true;
+        this.deliveryDialog = true;
       }
     },
     openUpdateSupplemental(data) {
@@ -1467,6 +1477,7 @@ export default {
         this.formSupplemental.id = data.ward_stock_id;
         this.formSupplemental.cl2comb = data.cl2comb;
         this.formSupplemental.quantity = data.quantity;
+        this.formSupplemental.expiration_date = data.expiration_date;
 
         this.isUpdateSupplemental = true;
         this.supplementalDialog = true;
