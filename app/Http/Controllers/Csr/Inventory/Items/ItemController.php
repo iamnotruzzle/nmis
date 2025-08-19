@@ -19,11 +19,68 @@ use Inertia\Inertia;
 
 class ItemController extends Controller
 {
+    // public function index(Request $request)
+    // {
+    //     $search = $request->search;
+    //     $status = $request->status;
+    //     // dd($search);
+
+    //     $cl1combs = Category::where('cl1stat', 'A')
+    //         ->where('ptcode', '1000')
+    //         ->orderBy('cl1comb', 'ASC')
+    //         ->get(['cl1comb', 'cl1desc']);
+
+    //     $units = UnitOfMeasurement::where('uomstat', 'A')
+    //         ->orderBy('uomdesc', 'ASC')
+    //         ->get(['uomcode', 'uomdesc']);
+
+    //     $pimsCategory = PimsCategory::orderBy('categoryname', 'ASC')->get(['id', 'catID', 'categoryname']);
+
+    //     $items = DB::table('hclass2 as item')
+    //         ->select([
+    //             'item.cl2comb',
+    //             'item.cl2code',
+    //             'main_category.categoryname as main_category',
+    //             'category.cl1comb as cl1comb',
+    //             'category.cl1desc as sub_category',
+    //             'item.itemcode',
+    //             'item.catID',
+    //             'item.cl2desc as item',
+    //             'unit.uomcode',
+    //             'unit.uomdesc as unit',
+    //             'item.cl2stat'
+    //         ])
+    //         ->join('huom as unit', 'item.uomcode', '=', 'unit.uomcode')
+    //         ->join('hclass1 as category', 'item.cl1comb', '=', 'category.cl1comb')
+    //         ->join('csrw_pims_categories as main_category', 'item.catID', '=', 'main_category.catID')
+    //         ->where('item.catID', 1)
+    //         ->orderBy('item.cl2desc', 'ASC')
+    //         ->paginate(5); // 10 items per page
+    //     // dd($items);
+
+    //     // $prices = [];
+    //     $prices = DB::select(
+    //         "SELECT price.id, price.cl2comb, price.price_per_unit, price.ris_no,
+    //             price.acquisition_price, price.hospital_price,
+    //             emp.firstname, emp.lastname, price.created_at
+    //             FROM csrw_item_prices as price
+    //             JOIN hpersonal as emp ON emp.employeeid = price.entry_by;"
+    //     );
+    //     // dd($prices);
+
+    //     return Inertia::render('Csr/Inventory/Items/Index', [
+    //         'cl1combs' => $cl1combs,
+    //         'pimsCategory' => $pimsCategory,
+    //         'items' => $items,
+    //         'units' => $units,
+    //         'prices' => $prices,
+    //     ]);
+    // }
+
     public function index(Request $request)
     {
         $search = $request->search;
         $status = $request->status;
-        // dd($search);
 
         $cl1combs = Category::where('cl1stat', 'A')
             ->where('ptcode', '1000')
@@ -36,49 +93,6 @@ class ItemController extends Controller
 
         $pimsCategory = PimsCategory::orderBy('categoryname', 'ASC')->get(['id', 'catID', 'categoryname']);
 
-        // $items = DB::table('hclass2 as item')
-        //     ->select(
-        //         'item.cl2comb',
-        //         'item.cl2code',
-        //         'main_category.categoryname as main_category',
-        //         'category.cl1comb as cl1comb',
-        //         'category.cl1desc as sub_category',
-        //         'item.catID',
-        //         'item.cl2desc as item',
-        //         'unit.uomcode',
-        //         'unit.uomdesc as unit',
-        //         'item.cl2stat'
-        //     )
-        //     ->join('huom as unit', 'item.uomcode', '=', 'unit.uomcode')
-        //     ->join('hclass1 as category', 'item.cl1comb', '=', 'category.cl1comb')
-        //     ->join('csrw_pims_categories as main_category', 'item.catID', '=', 'main_category.catID')
-        //     ->where('item.cl2comb', 'like', '%1000-%')
-        //     ->paginate(10);
-
-        // $items = DB::select(
-        //     "SELECT
-        //         item.cl2comb,
-        //         item.cl2code,
-        //         main_category.categoryname AS main_category,
-        //         category.cl1comb AS cl1comb,
-        //         category.cl1desc AS sub_category,
-        //         item.itemcode,
-        //         item.catID,
-        //         item.cl2desc AS item,
-        //         unit.uomcode,
-        //         unit.uomdesc AS unit,
-        //         item.cl2stat
-        //     FROM
-        //         hclass2 AS item
-        //     JOIN
-        //         huom AS unit ON item.uomcode = unit.uomcode
-        //     JOIN
-        //         hclass1 AS category ON item.cl1comb = category.cl1comb
-        //     JOIN
-        //         csrw_pims_categories AS main_category ON item.catID = main_category.catID
-        //     WHERE
-        //         item.catID = 1"
-        // );
         $items = DB::table('hclass2 as item')
             ->select([
                 'item.cl2comb',
@@ -97,19 +111,29 @@ class ItemController extends Controller
             ->join('hclass1 as category', 'item.cl1comb', '=', 'category.cl1comb')
             ->join('csrw_pims_categories as main_category', 'item.catID', '=', 'main_category.catID')
             ->where('item.catID', 1)
+            // Add search functionality
+            ->when($search, function ($query, $search) {
+                return $query->where(function ($q) use ($search) {
+                    $q->where('item.cl2desc', 'LIKE', "%{$search}%")
+                        ->orWhere('item.itemcode', 'LIKE', "%{$search}%")
+                        ->orWhere('category.cl1desc', 'LIKE', "%{$search}%")
+                        ->orWhere('main_category.categoryname', 'LIKE', "%{$search}%");
+                });
+            })
+            // Add status filter
+            ->when($status, function ($query, $status) {
+                return $query->where('item.cl2stat', $status);
+            })
             ->orderBy('item.cl2desc', 'ASC')
-            ->paginate(5); // 10 items per page
-        // dd($items);
+            ->paginate(5);
 
-        // $prices = [];
         $prices = DB::select(
             "SELECT price.id, price.cl2comb, price.price_per_unit, price.ris_no,
-                price.acquisition_price, price.hospital_price,
-                emp.firstname, emp.lastname, price.created_at
-                FROM csrw_item_prices as price
-                JOIN hpersonal as emp ON emp.employeeid = price.entry_by;"
+            price.acquisition_price, price.hospital_price,
+            emp.firstname, emp.lastname, price.created_at
+            FROM csrw_item_prices as price
+            JOIN hpersonal as emp ON emp.employeeid = price.entry_by;"
         );
-        // dd($prices);
 
         return Inertia::render('Csr/Inventory/Items/Index', [
             'cl1combs' => $cl1combs,
@@ -117,6 +141,11 @@ class ItemController extends Controller
             'items' => $items,
             'units' => $units,
             'prices' => $prices,
+            // Pass current filters back to frontend
+            'filters' => [
+                'search' => $search,
+                'status' => $status,
+            ]
         ]);
     }
 
