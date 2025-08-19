@@ -626,8 +626,6 @@ export default {
           onSuccess: () => {
             this.packageDialog = false;
             this.cancel();
-            this.storeItemsInContainer();
-            this.storePackagesInContainer();
             this.updatedMsg();
             this.refreshDataAfterPost();
           },
@@ -638,8 +636,6 @@ export default {
           onSuccess: () => {
             this.packageDialog = false;
             this.cancel();
-            this.storeItemsInContainer();
-            this.storePackagesInContainer();
             this.createdMsg();
             this.refreshDataAfterPost();
           },

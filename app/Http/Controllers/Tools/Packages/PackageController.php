@@ -22,36 +22,6 @@ class PackageController extends Controller
         return Inertia::render('Tools/Packages/Index', []);
     }
 
-    public function getItems()
-    {
-        $items = DB::select(
-            "SELECT
-                    item.cl2comb,
-                    item.cl2desc,
-                    item.uomcode,
-                    uom.uomdesc
-                FROM
-                    hclass2 AS item
-                JOIN huom AS uom
-                    ON uom.uomcode = item.uomcode
-                WHERE
-                    (item.catID = 1
-                    -- AND item.uomcode != 'box'
-                    AND (item.itemcode NOT LIKE 'MSMG-%' OR item.itemcode IS NULL))
-                ORDER BY
-                    item.cl2desc ASC;"
-        );
-
-        return response()->json($items);
-    }
-    public function getMisc()
-    {
-        $misc = Miscellaneous::with('unit')
-            ->where('hmstat', 'A')
-            ->get(['hmcode', 'hmdesc', 'hmamt', 'uomcode']);
-
-        return response()->json($misc);
-    }
     public function getCombinedItems()
     {
         // Get items
@@ -194,24 +164,24 @@ class PackageController extends Controller
 
         // Process new items
         foreach ($newItems as $newItem) {
-            if (isset($existingItemsMap[$newItem['cl2comb']])) {
+            if (isset($existingItemsMap[$newItem['id']])) {
                 // Update quantity if changed
-                if ($existingItemsMap[$newItem['cl2comb']]->quantity != $newItem['quantity']) {
+                if ($existingItemsMap[$newItem['id']]->quantity != $newItem['quantity']) {
                     DB::table('csrw_package_details')
                         ->where('package_id', $packageId)
-                        ->where('cl2comb', $newItem['cl2comb'])
+                        ->where('cl2comb', $newItem['id'])
                         ->update([
                             'quantity' => $newItem['quantity'],
                             'updated_at' => Carbon::now(),
                         ]);
                 }
                 // Remove from existing items map to track remaining items
-                unset($existingItemsMap[$newItem['cl2comb']]);
+                unset($existingItemsMap[$newItem['id']]);
             } else {
                 // Insert new item
                 DB::table('csrw_package_details')->insert([
                     'package_id' => $packageId,
-                    'cl2comb' => $newItem['cl2comb'],
+                    'cl2comb' => $newItem['id'],
                     'quantity' => $newItem['quantity'],
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),

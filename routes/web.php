@@ -187,12 +187,6 @@ Route::middleware(['web', 'auth', 'verified'])->group(
         // end ward routes
 
         // tools
-        Route::get('getItems', [PackageController::class, 'getItems'])
-            ->name('getItems')
-            ->middleware(['verified']);
-        Route::get('getMisc', [PackageController::class, 'getMisc'])
-            ->name('getMisc')
-            ->middleware(['verified']);
         Route::get('getCombinedItems', [PackageController::class, 'getCombinedItems'])
             ->name('getCombinedItems')
             ->middleware(['verified']);
