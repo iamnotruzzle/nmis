@@ -52,22 +52,83 @@ class PackageController extends Controller
 
         return response()->json($misc);
     }
+    public function getCombinedItems()
+    {
+        // Get items
+        $items = collect(DB::select(
+            "SELECT item.cl2comb, item.cl2desc
+                FROM hclass2 AS item
+                JOIN huom AS uom ON uom.uomcode = item.uomcode
+                WHERE (item.catID = 1
+                AND (item.itemcode NOT LIKE 'MSMG-%' OR item.itemcode IS NULL))"
+        ))->map(function ($item) {
+            return [
+                'id' => $item->cl2comb,
+                'item_description' => $item->cl2desc
+            ];
+        });
+
+        // Get miscellaneous
+        $misc = Miscellaneous::where('hmstat', 'A')
+            ->get(['hmcode', 'hmdesc'])
+            ->map(function ($miscItem) {
+                return [
+                    'id' => $miscItem->hmcode,
+                    'item_description' => $miscItem->hmdesc
+                ];
+            });
+
+        // Combine and sort by description in ascending order
+        $combined = $items->concat($misc)
+            ->sortBy('item_description', SORT_REGULAR, false) // false = ascending
+            ->values(); // Reset array keys
+
+        return response()->json($combined);
+    }
     public function getPackages()
     {
-        $packages = DB::select(
-            "SELECT package.id, package.description, pack_dets.cl2comb, item.cl2desc, pack_dets.quantity, package.status
-                FROM csrw_packages AS package
-                JOIN csrw_package_details as pack_dets ON pack_dets.package_id = package.id
-                JOIN hclass2 as item ON item.cl2comb = pack_dets.cl2comb
-                -- WHERE wardcode = ?
-                ORDER BY item.cl2desc ASC;",
-        );
+        // $packages = DB::select(
+        //     "SELECT package.id, package.description, pack_dets.cl2comb, item.cl2desc, pack_dets.quantity, package.status
+        //         FROM csrw_packages AS package
+        //         JOIN csrw_package_details as pack_dets ON pack_dets.package_id = package.id
+        //         JOIN hclass2 as item ON item.cl2comb = pack_dets.cl2comb
+        //         -- WHERE wardcode = ?
+        //         ORDER BY item.cl2desc ASC;",
+        // );
+
+        $packages = collect(DB::select(
+            "SELECT
+                package.id,
+                package.description,
+                pack_dets.cl2comb as item_id,
+                CASE
+                    WHEN item.cl2desc IS NOT NULL THEN item.cl2desc
+                    WHEN misc.hmdesc IS NOT NULL THEN misc.hmdesc
+                    ELSE 'Unknown Item'
+                END as item_description,
+                pack_dets.quantity,
+                package.status,
+                CASE
+                    WHEN item.cl2desc IS NOT NULL THEN 'item'
+                    WHEN misc.hmdesc IS NOT NULL THEN 'misc'
+                    ELSE 'unknown'
+                END as item_type
+            FROM csrw_packages AS package
+            JOIN csrw_package_details as pack_dets ON pack_dets.package_id = package.id
+            LEFT JOIN hclass2 as item ON item.cl2comb = pack_dets.cl2comb
+            LEFT JOIN hmisc as misc ON misc.hmcode = pack_dets.cl2comb AND misc.hmstat = 'A'
+            WHERE (item.cl2comb IS NOT NULL OR misc.hmcode IS NOT NULL)
+            ORDER BY package.description, item_description ASC"
+        ));
+
+        // dd($packages);
 
         return response()->json($packages);
     }
 
     public function store(Request $request)
     {
+        // dd($request);
         $request->validate([
             'description' => 'required|max:150',
             'status' => 'required',
@@ -89,7 +150,7 @@ class PackageController extends Controller
         foreach ($request->packageItems as $item) {
             // dd($item);
             PackageDetails::create([
-                'cl2comb' => $item['cl2comb'],
+                'cl2comb' => $item['id'],
                 'quantity' => $item['quantity'],
                 'package_id' => $package_id,
             ]);

@@ -119,7 +119,7 @@
                     sortable
                   >
                     <template #body="{ data }">
-                      <span class="text-green-500"> {{ data.cl2desc }}</span>
+                      <span class="text-green-500"> {{ data.item_description }}</span>
                     </template>
                   </Column>
                   <Column
@@ -205,9 +205,9 @@
                   :options="itemsList"
                   :virtualScrollerOptions="{ itemSize: 38 }"
                   filter
-                  optionLabel="cl2desc"
+                  optionLabel="item_description"
                   class="w-full mb-3"
-                  :class="{ 'p-invalid': form.cl2comb == '' }"
+                  :class="{ 'p-invalid': form.id == '' }"
                   style="width: 100%"
                   :loading="isItemsLoading == true"
                 />
@@ -242,7 +242,7 @@
                   showGridlines
                 >
                   <Column
-                    field="cl2desc"
+                    field="item_description"
                     header="Item Description"
                   />
                   <Column
@@ -360,7 +360,7 @@ export default {
       packagesList: [],
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        description: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        item_description: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
       expandedRow: [],
       isUpdate: false,
@@ -399,6 +399,7 @@ export default {
   mounted() {
     this.fetchItems();
     this.fetchPackages();
+    console.log(this.packagesList);
   },
   methods: {
     // Generic localStorage cache methods
@@ -451,12 +452,12 @@ export default {
       }
 
       try {
-        const response = await axios.get('getItems');
+        const response = await axios.get('getCombinedItems');
 
         response.data.forEach((e) => {
           this.itemsList.push({
-            cl2comb: e.cl2comb,
-            cl2desc: e.cl2desc,
+            id: e.id,
+            item_description: e.item_description,
           });
         });
 
@@ -478,7 +479,6 @@ export default {
       const cached = this.getCachedData('PACKAGES');
 
       if (cached && !forceRefresh) {
-        // console.log('🟢 Using cached ward stocks from localStorage');
         this.packagesList = cached;
         this.isPackagesLoading = false;
         return;
@@ -492,20 +492,22 @@ export default {
 
           if (existingPackage) {
             existingPackage.package_details.push({
-              cl2comb: curr.cl2comb,
-              cl2desc: curr.cl2desc,
+              id: curr.item_id, // ✅ Changed from curr.id to curr.item_id
+              item_description: curr.item_description,
               quantity: curr.quantity,
+              item_type: curr.item_type, // ✅ Added item type
             });
           } else {
             acc.push({
-              id: curr.id,
+              id: curr.id, // ✅ This stays as curr.id (package ID)
               description: curr.description,
               status: curr.status,
               package_details: [
                 {
-                  cl2comb: curr.cl2comb,
-                  cl2desc: curr.cl2desc,
+                  id: curr.item_id, // ✅ Changed from curr.id to curr.item_id
+                  item_description: curr.item_description,
                   quantity: curr.quantity,
+                  item_type: curr.item_type, // ✅ Added item type
                 },
               ],
             });
@@ -514,15 +516,7 @@ export default {
           return acc;
         }, []);
 
-        // response.data.forEach((e) => {
-        //   this.packagesList.push({
-        //     cl2comb: e.cl2comb,
-        //     cl2desc: e.cl2desc,
-        //   });
-        // });
-
         this.setCachedData('PACKAGES', this.packagesList);
-        // console.log('🔵 Fetched fresh items and cached to localStorage');
       } catch (err) {
         this.error = err.response?.data ?? err.message;
         console.error('❌ Failed to fetch packages:', this.error);
@@ -589,7 +583,7 @@ export default {
     addItem() {
       if (this.selectedItem && this.quantity > 0) {
         // Check for duplicates
-        const isDuplicate = this.packageItems.some((item) => item.cl2comb === this.selectedItem.cl2comb);
+        const isDuplicate = this.packageItems.some((item) => item.id === this.selectedItem.id);
 
         if (isDuplicate) {
           alert('This item is already in the package, remove it first to update the quantity.');
@@ -598,8 +592,8 @@ export default {
 
         // Add item if no duplicates
         this.packageItems.push({
-          cl2comb: this.selectedItem.cl2comb,
-          cl2desc: this.selectedItem.cl2desc,
+          id: this.selectedItem.id,
+          item_description: this.selectedItem.item_description,
           quantity: this.quantity,
         });
 
@@ -611,7 +605,7 @@ export default {
       }
     },
     removeItem(item) {
-      this.packageItems = this.packageItems.filter((i) => i.cl2comb !== item.cl2comb);
+      this.packageItems = this.packageItems.filter((i) => i.id !== item.id);
     },
     submit() {
       // initialize value
