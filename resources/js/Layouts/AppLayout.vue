@@ -352,6 +352,11 @@ export default {
       }
       if (this.$page.props.user.designation == 'csr') {
         this.menu[0].items = this.menu[0].items.filter(function (obj) {
+          return obj.to !== 'wa-endorse';
+        });
+      }
+      if (this.$page.props.user.designation == 'csr') {
+        this.menu[0].items = this.menu[0].items.filter(function (obj) {
           return obj.to !== 'warddashboard';
         });
       }

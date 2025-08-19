@@ -98,7 +98,7 @@ class ItemController extends Controller
             ->join('csrw_pims_categories as main_category', 'item.catID', '=', 'main_category.catID')
             ->where('item.catID', 1)
             ->orderBy('item.cl2desc', 'ASC')
-            ->paginate(10); // 10 items per page
+            ->paginate(5); // 10 items per page
         // dd($items);
 
         // $prices = [];
