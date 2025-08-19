@@ -190,6 +190,9 @@ Route::middleware(['web', 'auth', 'verified'])->group(
         Route::get('getItems', [PackageController::class, 'getItems'])
             ->name('getItems')
             ->middleware(['verified']);
+        Route::get('getMisc', [PackageController::class, 'getMisc'])
+            ->name('getMisc')
+            ->middleware(['verified']);
         Route::get('getPackages', [PackageController::class, 'getPackages'])
             ->name('getPackages')
             ->middleware(['verified']);

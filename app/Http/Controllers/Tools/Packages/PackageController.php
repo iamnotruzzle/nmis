@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Tools\Packages;
 
 use App\Http\Controllers\Controller;
 use App\Models\Item;
+use App\Models\Miscellaneous;
 use App\Models\Package;
 use App\Models\PackageDetails;
 use Carbon\Carbon;
@@ -42,6 +43,14 @@ class PackageController extends Controller
         );
 
         return response()->json($items);
+    }
+    public function getMisc()
+    {
+        $misc = Miscellaneous::with('unit')
+            ->where('hmstat', 'A')
+            ->get(['hmcode', 'hmdesc', 'hmamt', 'uomcode']);
+
+        return response()->json($misc);
     }
     public function getPackages()
     {
