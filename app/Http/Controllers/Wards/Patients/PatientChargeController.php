@@ -117,13 +117,35 @@ class PatientChargeController extends Controller
             [$authCode]
         );
         $packages = DB::select(
-            "SELECT package.id, package.description, pack_dets.cl2comb, item.cl2desc, pack_dets.quantity, package.status
-                    FROM csrw_packages AS package
-                    JOIN csrw_package_details as pack_dets ON pack_dets.package_id = package.id
-                    JOIN hclass2 as item ON item.cl2comb = pack_dets.cl2comb
-                    WHERE package.status = 'A'
-                    -- AND package.wardcode = ?
-                    ORDER BY item.cl2desc ASC;",
+            // "SELECT package.id, package.description, pack_dets.cl2comb, item.cl2desc, pack_dets.quantity, package.status
+            //         FROM csrw_packages AS package
+            //         JOIN csrw_package_details as pack_dets ON pack_dets.package_id = package.id
+            //         JOIN hclass2 as item ON item.cl2comb = pack_dets.cl2comb
+            //         WHERE package.status = 'A'
+            //         -- AND package.wardcode = ?
+            //         ORDER BY item.cl2desc ASC;",
+            "SELECT
+                package.id,
+                package.description,
+                pack_dets.cl2comb as cl2comb,
+                CASE
+                    WHEN item.cl2desc IS NOT NULL THEN item.cl2desc
+                    WHEN misc.hmdesc IS NOT NULL THEN misc.hmdesc
+                    ELSE 'Unknown Item'
+                END as cl2desc,
+                pack_dets.quantity,
+                package.status,
+                CASE
+                    WHEN item.cl2desc IS NOT NULL THEN 'item'
+                    WHEN misc.hmdesc IS NOT NULL THEN 'misc'
+                    ELSE 'unknown'
+                END as item_type
+            FROM csrw_packages AS package
+            JOIN csrw_package_details as pack_dets ON pack_dets.package_id = package.id
+            LEFT JOIN hclass2 as item ON item.cl2comb = pack_dets.cl2comb
+            LEFT JOIN hmisc as misc ON misc.hmcode = pack_dets.cl2comb AND misc.hmstat = 'A'
+            WHERE (item.cl2comb IS NOT NULL OR misc.hmcode IS NOT NULL)
+            ORDER BY package.description, cl2desc ASC"
         );
         $genericVariants = DB::select(
             "SELECT
