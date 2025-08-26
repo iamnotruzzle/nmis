@@ -830,6 +830,7 @@ export default {
     medicalSupplies: Array,
     packages: Array,
     genericVariants: Array,
+    gas: Array,
     misc: Array,
   },
   data() {
@@ -856,6 +857,7 @@ export default {
       medicalSuppliesList: [],
       miscList: [],
       itemList: [],
+      gasList: [],
       //   genericVariants: [],
       itemsToBillList: [],
       variantDialogVisible: false,
@@ -954,6 +956,7 @@ export default {
     this.storeMedicalSuppliesInContainer();
     this.storePackagesInContainer();
     this.storeMiscInContainer();
+    this.storeGasInContainer();
     this.mapvariant();
 
     this.storeItemsInContainer();
@@ -1010,6 +1013,16 @@ export default {
           hmdesc: misc.hmdesc,
           hmamt: misc.hmamt,
           uomcode: misc.uomcode == null ? null : misc.uomcode,
+        });
+      });
+    },
+    storeGasInContainer() {
+      this.gas.forEach((gas) => {
+        this.gasList.push({
+          cl2comb: gas.cl2comb,
+          cl2desc: gas.cl2desc,
+          price_per_unit: gas.price_per_unit,
+          uomcode: gas.uomcode,
         });
       });
     },
@@ -1145,6 +1158,19 @@ export default {
           is_package: false,
         });
       });
+      // // gas
+      this.gasList.forEach((gas) => {
+        this.itemList.push({
+          id: null,
+          typeOfCharge: 'DRUMD',
+          itemCode: gas.cl2comb,
+          itemDesc: '(GAS)' + ' - ' + gas.cl2desc,
+          unit: gas.uomcode,
+          quantity: 99999,
+          price: gas.price_per_unit,
+          is_package: false,
+        });
+      });
 
       // // packages
       // push but remove duplicate
@@ -1206,6 +1232,8 @@ export default {
           this.chargeDrumnItem(this.item, this.qtyToCharge);
         } else if (this.item.typeOfCharge === 'MISC') {
           this.chargeMiscItem(this.item, this.qtyToCharge);
+        } else if (this.item.typeOfCharge === 'DRUMD') {
+          this.chargeDrumdItem(this.item, this.qtyToCharge);
         } else {
           this.itemNotSelected = true;
           this.itemNotSelectedMsg = 'Unsupported charge type.';
@@ -1338,6 +1366,43 @@ export default {
       const isMisc = typeOfCharge === 'MISC';
 
       if (isMisc) {
+        const totalBilledQty = this.itemsToBillList
+          .filter((e) => e.itemCode === itemCode)
+          .reduce((sum, e) => sum + e.qtyToCharge, 0);
+
+        if (this.itemsToBillList.some((e) => e.itemCode === itemCode)) {
+          this.itemNotSelected = true;
+          this.itemNotSelectedMsg = 'Remove all related items first to update the quantity.';
+          return;
+        }
+
+        const totalCost = (price * quantityToCharge).toFixed(2);
+
+        const newBillItem = {
+          id: null, // No need for an ID for MISC
+          typeOfCharge,
+          itemCode,
+          itemDesc,
+          unit,
+          currentStock: 'Infinite', // MISC items don't track stock
+          qtyToCharge: quantityToCharge,
+          price,
+          total: totalCost,
+          expiration_date: null, // MISC items don't have expiry dates
+        };
+
+        this.itemsToBillList.push(newBillItem);
+      }
+    },
+
+    /**
+     * Function to handle Gas charging logic.
+     */
+    chargeDrumdItem(item, quantityToCharge) {
+      const { typeOfCharge, itemCode, itemDesc, unit, price } = item;
+      const isGas = typeOfCharge === 'DRUMD';
+
+      if (isGas) {
         const totalBilledQty = this.itemsToBillList
           .filter((e) => e.itemCode === itemCode)
           .reduce((sum, e) => sum + e.qtyToCharge, 0);

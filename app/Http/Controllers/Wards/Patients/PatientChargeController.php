@@ -163,6 +163,12 @@ class PatientChargeController extends Controller
         $misc = Miscellaneous::with('unit')
             ->where('hmstat', 'A')
             ->get(['hmcode', 'hmdesc', 'hmamt', 'uomcode']);
+        $gas = DB::select(
+            "SELECT price.id as price_id, price.cl2comb, item.cl2desc, price.price_per_unit, item.uomcode, price.ris_no
+                FROM csrw_item_prices as price
+                JOIN hclass2 as item ON item.cl2comb = price.cl2comb
+                WHERE price.ris_no = 'gas';"
+        );
 
         // // old
         // $bills = DB::select(
@@ -280,6 +286,8 @@ class PatientChargeController extends Controller
             'bills' => $bills,
             'is_for_discharge' => $is_for_discharge,
             'canTransact' => $canTransact,
+
+            'gas' => $gas,
         ]);
     }
 
@@ -591,6 +599,28 @@ class PatientChargeController extends Controller
                             'tscode' => $tscode
                         ];
                     }
+
+                    // DRUMD items / GAS
+                    if ($item['typeOfCharge'] == 'DRUMD') {
+                        $chargeLogs[] = [
+                            'enccode' => $enccode,
+                            'acctno' => $acctno,
+                            'ward_stocks_id' => null,
+                            'itemcode' => $item['itemCode'],
+                            'from' => null,
+                            'manufactured_date' => null,
+                            'delivery_date' => null,
+                            'expiration_date' => null,
+                            'quantity' => (float)$quantity_to_insert_in_logs,
+                            'price_per_piece' => (float)$item['price'] ?? null,
+                            'price_total' => (float)$quantity_to_insert_in_logs * (float)$item['price'],
+                            'pcchrgdte' => $now,
+                            'entry_at' => $authCode,
+                            'entry_by' => $entryby,
+                            'pcchrgcod' => $processedItems[$item['itemCode']],
+                            'tscode' => $tscode
+                        ];
+                    }
                 }
 
                 // After the foreach loop, dispatch one batch job instead of many individual jobs:
@@ -628,6 +658,97 @@ class PatientChargeController extends Controller
         if ($request->isUpdate == true) {
             // void/return MISC item
             if ($request->upd_type_of_charge_code == 'MISC') {
+                $previousCharge = null;
+                $previousPatientChargeLogs = null;
+                $previousWardStocks = null;
+                $upd_QtyToReturn = ltrim($request->upd_QtyToReturn, '0'); // removed leading zeroes if theres any
+                $authID = Auth::user()->employeeid;
+                $authWard = $authCode;
+
+                $patientCharge = PatientCharge::where('enccode', $request->upd_enccode)
+                    ->where('itemcode', $request->upd_itemcode)
+                    ->where('pcchrgdte', $request->upd_pcchrgdte)
+                    ->first();
+                $previousCharge = $patientCharge;
+                // dd($request);
+
+                $patientChargeLogs = PatientChargeLogs::where('id', $request->upd_id)->first();
+                $previousPatientChargeLogs = $patientChargeLogs;
+
+                // delete the patient charge log
+                $patientChargeLogs->delete();
+
+                // check if it only updates the quantity of charged items
+                if ((int)$previousPatientChargeLogs->quantity != (int)$upd_QtyToReturn) {
+                    PatientChargeLogs::create([
+                        'enccode' => $previousPatientChargeLogs->enccode,
+                        'acctno' => $previousPatientChargeLogs->acctno,
+                        'ward_stocks_id' => $previousPatientChargeLogs->ward_stocks_id,
+                        'itemcode' => $previousPatientChargeLogs->itemcode,
+                        'from' => $previousPatientChargeLogs->from,
+                        'manufactured_date' => Carbon::parse($previousPatientChargeLogs->manufactured_date)->format('Y-m-d H:i:s.v'),
+                        'delivery_date' => Carbon::parse($previousPatientChargeLogs->delivered_date)->format('Y-m-d H:i:s.v'),
+                        'expiration_date' => Carbon::parse($previousPatientChargeLogs->expiration_date)->format('Y-m-d H:i:s.v'),
+                        'quantity' => (int)$previousPatientChargeLogs->quantity - (int)$upd_QtyToReturn,
+                        'price_per_piece' => $previousPatientChargeLogs->price_per_piece,
+                        'price_total' => ((float)$previousPatientChargeLogs->quantity - (float)$upd_QtyToReturn) * (float)$previousPatientChargeLogs->price_per_piece,
+                        'pcchrgdte' => $previousPatientChargeLogs->pcchrgdte,
+                        'tscode' => $request->tscode,
+                        'entry_at' => $authWard,
+                        'entry_by' => $authID,
+                        'created_at' => $previousPatientChargeLogs->created_at,
+                        'updated_at' => $previousPatientChargeLogs->updated_at,
+                        'pcchrgcod' => $previousPatientChargeLogs->pcchrgcod, // charge slip no.
+                    ]);
+                }
+
+                // if previous charge minus the quantity to return = 0 then void the charge (delete charge)
+                if (((int)$previousCharge->pchrgqty - (int)$upd_QtyToReturn) == 0) {
+                    PatientCharge::where('enccode', $request->upd_enccode)
+                        ->where('itemcode', $request->upd_itemcode)
+                        ->where('pcchrgdte', $request->upd_pcchrgdte)
+                        ->delete();
+                } else {
+                    PatientCharge::where('enccode', $request->upd_enccode)
+                        ->where('itemcode', $request->upd_itemcode)
+                        ->where('pcchrgdte', $request->upd_pcchrgdte)
+                        ->update([
+                            'enccode' => $previousCharge->enccode,
+                            'hpercode' => $previousCharge->hpercode,
+                            'upicode' => null,
+                            'pcchrgcod' => $previousCharge->pcchrgcod, // charge slip no.
+                            'pcchrgdte' => $previousCharge->pcchrgdte,
+                            'chargcode' => $previousCharge->chargcode, // type of charge (chrgcode from hcharge)
+                            'uomcode' => $previousCharge->uomcode, // unit
+                            'pchrgqty' =>  (int)$previousCharge->pchrgqty - (int)$upd_QtyToReturn,
+                            'pchrgup' => $previousCharge->pchrgup,
+                            'pcchrgamt' => ((float)$previousCharge->pchrgqty - (float)$upd_QtyToReturn) * (float)$previousCharge->pchrgup,
+                            'pcstat' => 'A', // always A
+                            'pclock' => 'N', // always N
+                            'updsw' => 'N', // always N
+                            'confdl' => 'N', // always N
+                            'srcchrg' => $previousCharge->srcchrg,
+                            'pcdisch' => 'Y',
+                            'acctno' => $previousCharge->acctno, // SELECT * FROM hpatacct --pacctno
+                            'itemcode' => $previousCharge->itemcode, // cl2comb or hmisc hmcode
+                            'entryby' => $authID,
+                            'orinclst' => null, // null
+                            'compense' => null, // always null
+                            'proccode' => null, // always null
+                            'discount' => null, // always null
+                            'disamt' => null, // always null
+                            'discbal' => null, // always null
+                            'phicamt' => null, // always null
+                            'rvscode' => null, // always null
+                            'licno' => null, // always null
+                            'hpatkey' => null, // always null
+                            'time_frequency' => null, // always null
+                            'unit_frequency' => null, // always null
+                            'qtyintake' => null, // always null
+                            'uomintake' => null, // always null
+                        ]);
+                }
+            } else if ($request->upd_type_of_charge_code == 'DRUMD') {
                 $previousCharge = null;
                 $previousPatientChargeLogs = null;
                 $previousWardStocks = null;
