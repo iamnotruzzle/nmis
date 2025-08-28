@@ -142,6 +142,7 @@ class RequestStocksController extends Controller
                 'rsd.cl2comb',
                 'rsd.requested_qty',
                 'rsd.approved_qty',
+                'rsd.remarks',
                 'item.cl2desc',
                 'item.uomcode',
                 'unit.uomdesc'

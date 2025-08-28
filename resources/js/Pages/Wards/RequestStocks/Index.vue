@@ -279,7 +279,11 @@
                   header="REMARKS"
                   style="width: 20%; text-align: center"
                   :pt="{ headerContent: 'justify-content-center' }"
-                ></Column>
+                >
+                  <template #body="{ data }">
+                    <span>{{ data.remarks }} </span>
+                  </template>
+                </Column>
               </DataTable>
             </div>
           </template>
@@ -1216,6 +1220,7 @@ export default {
           cl2comb: e.cl2comb,
           cl2desc: e.cl2desc,
           requested_qty: e.requested_qty,
+          remarks: e.remarks,
         });
       });
     },
