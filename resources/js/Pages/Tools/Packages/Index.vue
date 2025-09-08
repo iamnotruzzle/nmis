@@ -81,6 +81,7 @@
             <template #body="slotProps">
               <div class="flex flex-row justify-content-center align-content-around">
                 <Button
+                  v-if="$page.props.auth.user.location.location_name.wardcode == 'CSR'"
                   v-tooltip.top="'Update'"
                   icon="pi pi-pencil"
                   class="mr-2"
