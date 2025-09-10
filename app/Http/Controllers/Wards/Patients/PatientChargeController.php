@@ -145,6 +145,7 @@ class PatientChargeController extends Controller
             LEFT JOIN hclass2 as item ON item.cl2comb = pack_dets.cl2comb
             LEFT JOIN hmisc as misc ON misc.hmcode = pack_dets.cl2comb AND misc.hmstat = 'A'
             WHERE (item.cl2comb IS NOT NULL OR misc.hmcode IS NOT NULL)
+            AND package.status = 'A'
             ORDER BY package.description, cl2desc ASC"
         );
         $genericVariants = DB::select(
