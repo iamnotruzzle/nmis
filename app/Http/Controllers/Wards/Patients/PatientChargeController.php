@@ -261,6 +261,7 @@ class PatientChargeController extends Controller
                 fc.pchrgqty AS quantity,
                 fc.pchrgup AS price,
                 fc.uomcode,
+                fc.chargcode as type_of_charge_code,
                 fc.pcchrgdte AS charge_date,
                 clog.id AS charge_log_id,
                 clog.[from] AS charge_log_from,

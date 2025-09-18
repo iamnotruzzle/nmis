@@ -1109,7 +1109,7 @@ export default {
       // Sort the list after async operations
       this.billList.sort((a, b) => moment(b.charge_date, 'MM-DD-YYYY') - moment(a.charge_date, 'MM-DD-YYYY'));
 
-      //   console.log(this.billList);
+      //   console.log('bill list', this.billList);
     },
     storeItemsInContainer() {
       //   console.log(items);
@@ -1239,7 +1239,7 @@ export default {
           this.itemNotSelectedMsg = 'Unsupported charge type.';
         }
       } else {
-        console.log('Package selected, processing package items...');
+        // console.log('Package selected, processing package items...');
 
         // Find all items inside the selected package
         const packageItems = this.packageList.filter((pkg) => pkg.id === this.item.id);
@@ -1272,7 +1272,7 @@ export default {
           const itemDetails = this.itemList.find((e) => e.itemCode === itemCodeToCharge);
 
           if (!itemDetails) {
-            console.warn('Item not found in stock:', pkgItem.itemDesc);
+            // console.warn('Item not found in stock:', pkgItem.itemDesc);
             this.packageFail(pkgItem.itemDesc);
             continue;
           }
@@ -1595,6 +1595,7 @@ export default {
       });
     },
     editItem(e) {
+      //   console.log(e);
       this.form.isUpdate = true;
       this.form.upd_id = e.charge_log_id;
       this.form.upd_ward_stocks_id = e.charge_log_ward_stocks_id;
