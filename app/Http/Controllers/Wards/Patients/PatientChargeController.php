@@ -171,41 +171,6 @@ class PatientChargeController extends Controller
                 WHERE price.ris_no = 'gas';"
         );
 
-        // // old
-        // $bills = DB::select(
-        //     "SELECT pat_charge.pcchrgcod as charge_slip_no,
-        //         type_of_charge.chrgcode as type_of_charge_code,
-        //         type_of_charge.chrgdesc as type_of_charge_description,
-        //         category.cl1desc as category,
-        //         item.cl2desc as item,
-        //         misc.hmdesc as misc,
-        //         pat_charge.itemcode as itemcode,
-        //         pat_charge.pchrgqty as quantity,
-        //         pat_charge.pchrgup as price,
-        //         pat_charge.uomcode as uomcode,
-        //         pat_charge.pcchrgdte as charge_date,
-        //         charge_log.id as charge_log_id,
-        //         charge_log.[from] as charge_log_from,
-        //         charge_log.ward_stocks_id as charge_log_ward_stocks_id,
-        //         charge_log.quantity as charge_log_quantity,
-        //         charge_log.expiration_date as charge_log_expiration_date,
-        //         charge_by.firstname + ' ' + charge_by.lastname as entry_by,
-        //         charge_log.entry_at as entry_at
-        //         FROM hospital.dbo.hpatchrg pat_charge
-        //         LEFT JOIN hospital.dbo.hclass2 as item ON pat_charge.itemcode = item.cl2comb
-        //         LEFT JOIN hospital.dbo.hclass1 as category ON item.cl1comb = category.cl1comb
-        //         LEFT JOIN hospital.dbo.hmisc as misc ON pat_charge.itemcode = misc.hmcode
-        //         LEFT JOIN hospital.dbo.hpersonal as charge_by ON pat_charge.entryby = charge_by.employeeid
-        //         LEFT JOIN hospital.dbo.hcharge as type_of_charge ON pat_charge.chargcode = type_of_charge.chrgcode
-        //         LEFT JOIN hospital.dbo.csrw_patient_charge_logs as charge_log ON pat_charge.enccode = charge_log.enccode
-        //                                                                     AND pat_charge.pcchrgdte = charge_log.pcchrgdte
-        //                                                                     AND pat_charge.itemcode = charge_log.itemcode
-        //         WHERE pat_charge.enccode = ?
-        //         AND  (type_of_charge.chrgcode = 'DRUMD' OR type_of_charge.chrgcode = 'DRUMN' OR type_of_charge.chrgcode = 'MISC')
-        //         ORDER BY pat_charge.pcchrgdte DESC",
-        //     [$pat_enccode]
-        // );
-
         // // new
         // -- OUTER APPLY (
         // --     SELECT TOP 1 id, [from], ward_stocks_id, quantity, expiration_date, entry_at
