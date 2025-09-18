@@ -2437,7 +2437,7 @@ export default {
       });
     },
     openSummaryAddDeliveryDialog() {
-      console.log(this.formAddDelivery.price_per_unit);
+      //   console.log(this.formAddDelivery.price_per_unit);
       //   console.log('summary item', this.formAddDelivery.cl2comb);
       this.convertedItemList.forEach((e) => {
         // console.log(e);
@@ -2448,7 +2448,7 @@ export default {
       this.summaryAddDeliveryDialog = true;
     },
     openSummaryConvertDialog() {
-      console.log(this.formConvertItem.price_per_unit);
+      //   console.log(this.formConvertItem.price_per_unit);
       //   console.log('summary item', this.formConvertItem.cl2comb);
       this.convertedItemList.forEach((e) => {
         // console.log(e);
@@ -2616,7 +2616,7 @@ export default {
       });
     },
     editConvertedItem(item) {
-      console.log(item);
+      //   console.log(item);
       this.formConvertItem.update_price_per_unit = item.price_per_unit;
       this.formConvertItem.id = item.id;
       this.formConvertItem.quantity_after = item.quantity_after;
@@ -2971,7 +2971,7 @@ export default {
     },
     formAddDelivery: {
       handler(e) {
-        console.log('formadddeliver', e);
+        // console.log('formadddeliver', e);
         // // acquisition price
         let acquisitionPrice = Number(e.acquisitionPrice);
         let hospital_price = (acquisitionPrice * this.formAddDelivery.quantity) / 0.7;
