@@ -810,7 +810,8 @@
               formAddDelivery.quantity == null ||
               formAddDelivery.quantity == 0 ||
               formAddDelivery.acquisitionPrice == null ||
-              formAddDelivery.acquisitionPrice == 0
+              formAddDelivery.acquisitionPrice == '' ||
+              (!isDonationItem && formAddDelivery.acquisitionPrice == 0)
             "
             @click="openSummaryAddDeliveryDialog"
           />
@@ -2095,6 +2096,15 @@ export default {
     // Remove event listener before component is destroyed
     // document.removeEventListener('keydown', this.handleKeyPress);
   },
+  computed: {
+    isDonationItem() {
+      // Find the selected item from convertedItemList
+      const selectedItem = this.convertedItemList.find((item) => item.cl2comb === this.formAddDelivery.cl2comb_after);
+
+      // Check if the optionLabel (cl2desc) contains "(DONATION)"
+      return selectedItem && selectedItem.cl2desc && selectedItem.cl2desc.includes('(DONATION)');
+    },
+  },
   methods: {
     recalculatePrices() {
       let acquisition_price = Number(this.formConvertItem.acquisition_price);
@@ -2774,7 +2784,8 @@ export default {
         this.formAddDelivery.quantity == null ||
         this.formAddDelivery.quantity == 0 ||
         this.formAddDelivery.acquisitionPrice == null ||
-        this.formAddDelivery.acquisitionPrice == 0
+        this.formAddDelivery.acquisitionPrice == '' ||
+        (!this.isDonationItem && this.formAddDelivery.acquisitionPrice == 0)
       ) {
         return false;
       }
@@ -2960,7 +2971,7 @@ export default {
     },
     formAddDelivery: {
       handler(e) {
-        // console.log(this.formAddDelivery.price_per_unit);
+        console.log('formadddeliver', e);
         // // acquisition price
         let acquisitionPrice = Number(e.acquisitionPrice);
         let hospital_price = (acquisitionPrice * this.formAddDelivery.quantity) / 0.7;
