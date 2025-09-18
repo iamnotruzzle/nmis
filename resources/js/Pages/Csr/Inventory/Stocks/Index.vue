@@ -661,14 +661,6 @@
             <span class="ml-2 text-error">*</span>
           </div>
           <div class="flex flex-row">
-            <!-- <Calendar
-              v-model="formAddDelivery.delivered_date"
-              dateFormat="mm-dd-yy"
-              showIcon
-              showButtonBar
-              :manualInput="false"
-              :hideOnDateTimeSelect="true"
-            /> -->
             <input
               type="date"
               v-model="formAddDelivery.delivered_date"
@@ -683,15 +675,6 @@
             <span class="ml-2 text-error">* MAX BY DEFAULT.</span>
           </div>
           <div class="flex flex-row">
-            <!-- <Calendar
-              required="true"
-              v-model="formAddDelivery.expiration_date"
-              dateFormat="mm-dd-yy"
-              showIcon
-              showButtonBar
-              :manualInput="false"
-              :hideOnDateTimeSelect="true"
-            /> -->
             <input
               type="date"
               v-model="formAddDelivery.expiration_date"
@@ -2009,10 +1992,10 @@ export default {
         // manufactured_date: null,
         delivered_date: null,
         expiration_date: '9999-12-30',
-        quantity: 0,
-        acquisitionPrice: 0,
-        cl2comb_after: 0,
-        quantity_after: 0,
+        quantity: null,
+        acquisitionPrice: null,
+        cl2comb_after: null,
+        quantity_after: null,
         hospital_price: 0,
         price_per_unit: 0,
       }),
@@ -2102,7 +2085,7 @@ export default {
       const selectedItem = this.convertedItemList.find((item) => item.cl2comb === this.formAddDelivery.cl2comb_after);
 
       // Check if the optionLabel (cl2desc) contains "(DONATION)"
-      return selectedItem && selectedItem.cl2desc && selectedItem.cl2desc.includes('(DONATION)');
+      return selectedItem && selectedItem.cl2desc && selectedItem.cl2desc.toLowerCase().includes('donation');
     },
   },
   methods: {
@@ -2365,7 +2348,7 @@ export default {
       });
 
       this.items.forEach((e) => {
-        this.convertedItemSelection.push({
+        this.convertedItemList.push({
           cl1comb: e.cl1comb,
           cl2comb: e.cl2comb,
           cl2desc: e.cl2desc,
@@ -2932,12 +2915,12 @@ export default {
         this.generatedRisNo = false;
       }
     },
-    'formAddDelivery.cl2comb': function (cl2comb) {
-      // Find similar IDs in array2
-      if (cl2comb != null) {
-        const similarObjects = this.findSimilarIds(cl2comb, this.convertedItemSelection);
-      }
-    },
+    // 'formAddDelivery.cl2comb': function (cl2comb) {
+    //   // Find similar IDs in array2
+    //   if (cl2comb != null) {
+    //     const similarObjects = this.findSimilarIds(cl2comb, this.convertedItemSelection);
+    //   }
+    // },
 
     'formConvertItem.acquisition_price': 'recalculatePrices',
     'formConvertItem.quantity_before': 'recalculatePrices',
@@ -2978,10 +2961,10 @@ export default {
         this.formAddDelivery.hospital_price = Number(hospital_price.toFixed(2));
 
         let price_per_unit = this.formAddDelivery.hospital_price / this.formAddDelivery.quantity_after;
-        // isNaN(Number(this.formAddDelivery.price_per_unit)) || this.formAddDelivery.price_per_unit == 0
-        //   ? '0.00'
-        //   : Number(this.formAddDelivery.price_per_unit).toFixed(2);
-        this.formAddDelivery.price_per_unit = Number(price_per_unit).toFixed(2);
+
+        // this.formAddDelivery.price_per_unit = Number(price_per_unit).toFixed(2);
+
+        this.formAddDelivery.price_per_unit = isNaN(price_per_unit) ? '0.00' : price_per_unit.toFixed(2);
       },
       deep: true,
     },
