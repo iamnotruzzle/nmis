@@ -74,7 +74,7 @@
             sortable
           >
           </Column>
-          <Column
+          <!-- <Column
             field="type_of_charge_description"
             header="TYPE OF CHARGE"
             sortable
@@ -82,7 +82,7 @@
             <template #body="{ data }">
               {{ data.type_of_charge_description }}
             </template>
-          </Column>
+          </Column> -->
           <Column
             field="item"
             header="ITEM"
