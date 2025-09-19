@@ -31,13 +31,11 @@ class RequestStocksLogsController extends Controller
         // ]);
 
         $returned_by = Auth::user()->employeeid;
-        // dd($auth->id);
 
         $entry_by = Auth::user()->employeeid;
         $ward_stock_id = $request->ward_stock_id;
 
         $previousQty = WardsStocks::where('id', $ward_stock_id)->first();
-        // dd($previousQty->quantity);
 
         $updatedWardStock = WardsStocks::where('id', $ward_stock_id)
             ->update([
@@ -45,8 +43,6 @@ class RequestStocksLogsController extends Controller
             ]);
 
         $wardStock = WardsStocks::where('id', $request->ward_stock_id)->first();
-        // dd($wardStock);
-        // TODO: Create a disposal table
 
         ReturnedItems::create([
             'item_conversion_id' => $wardStock->stock_id,
