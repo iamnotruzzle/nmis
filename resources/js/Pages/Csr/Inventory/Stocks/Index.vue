@@ -2592,10 +2592,28 @@ export default {
     submitUpdateConvertItem() {
       this.formConvertItem.put(route('csrconvertdelivery.update', this.formConvertItem.id), {
         preserveScroll: true,
-        onSuccess: () => {
+        onSuccess: (page) => {
           this.editConvertedItemDialog = true;
           this.cancel();
-          this.updateData();
+
+          // Reset and update local data with fresh props from the redirect
+          this.stocksList = [];
+          this.totalDeliveriesList = [];
+          this.fundSourceList = [];
+          this.itemsList = [];
+          this.suppliersList = [];
+          this.convertedItemsList = [];
+          this.convertedItemSelection = [];
+          this.totalConvertedItemsList = [];
+
+          // Repopulate with fresh data
+          this.storeFundSourceInContainer();
+          this.storeItemsInContainer();
+          this.storeStocksInContainer();
+          this.storeTotalDeliveriesInContainer();
+          this.storeSuppliersInContainer();
+          this.storeTotalConvertedItemsInContainer();
+
           this.updateQuantity();
         },
       });
@@ -2614,10 +2632,28 @@ export default {
 
       this.formConvertItem.delete(route('csrconvertdelivery.destroy', this.formConvertItem.id), {
         preserveScroll: true,
-        onSuccess: () => {
+        onSuccess: (page) => {
           this.deleteConvertedItemDialog = false;
           this.cancel();
-          this.updateData();
+
+          // Reset and update local data with fresh props from the redirect
+          this.stocksList = [];
+          this.totalDeliveriesList = [];
+          this.fundSourceList = [];
+          this.itemsList = [];
+          this.suppliersList = [];
+          this.convertedItemsList = [];
+          this.convertedItemSelection = [];
+          this.totalConvertedItemsList = [];
+
+          // Repopulate with fresh data
+          this.storeFundSourceInContainer();
+          this.storeItemsInContainer();
+          this.storeStocksInContainer();
+          this.storeTotalDeliveriesInContainer();
+          this.storeSuppliersInContainer();
+          this.storeTotalConvertedItemsInContainer();
+
           this.deleteConvertedItemMsg();
         },
       });
