@@ -298,13 +298,40 @@
             required="true"
             v-model="formDelivery.cl2comb"
             :options="itemsList"
-            :virtualScrollerOptions="{ itemSize: 38 }"
+            :virtualScrollerOptions="{ itemSize: 60 }"
             filter
+            dataKey="cl2comb"
             optionValue="cl2comb"
             optionLabel="cl2desc"
-            class="w-full mb-3"
+            class="w-full custom-dropdown-height"
             :disabled="isUpdateDelivery == true"
-          />
+          >
+            <template #option="{ option }">
+              <div class="flex flex-column">
+                <span
+                  class="font-semibold text-base"
+                  style="white-space: normal; word-wrap: break-word"
+                >
+                  {{ option.cl2desc }}
+                </span>
+              </div>
+            </template>
+
+            <template #value="{ value, placeholder }">
+              <span
+                v-if="value"
+                style="white-space: normal; word-wrap: break-word"
+              >
+                {{ itemsList.find((item) => item.cl2comb === value)?.cl2desc || value }}
+              </span>
+              <span
+                v-else
+                class="text-gray-400"
+              >
+                {{ placeholder }}
+              </span>
+            </template>
+          </Dropdown>
         </div>
         <div class="field">
           <label for="unit">Unit</label>
@@ -525,13 +552,40 @@
             required="true"
             v-model="formConsignment.cl2comb"
             :options="itemsList"
-            :virtualScrollerOptions="{ itemSize: 38 }"
+            :virtualScrollerOptions="{ itemSize: 60 }"
             filter
+            dataKey="cl2comb"
             optionValue="cl2comb"
             optionLabel="cl2desc"
-            class="w-full mb-3"
+            class="w-full custom-dropdown-height"
             :disabled="isUpdateConsignment == true"
-          />
+          >
+            <template #option="{ option }">
+              <div class="flex flex-column">
+                <span
+                  class="font-semibold text-base"
+                  style="white-space: normal; word-wrap: break-word"
+                >
+                  {{ option.cl2desc }}
+                </span>
+              </div>
+            </template>
+
+            <template #value="{ value, placeholder }">
+              <span
+                v-if="value"
+                style="white-space: normal; word-wrap: break-word"
+              >
+                {{ itemsList.find((item) => item.cl2comb === value)?.cl2desc || value }}
+              </span>
+              <span
+                v-else
+                class="text-gray-400"
+              >
+                {{ placeholder }}
+              </span>
+            </template>
+          </Dropdown>
         </div>
         <div class="field">
           <label for="unit">Unit</label>
@@ -756,13 +810,40 @@
             required="true"
             v-model="formSupplemental.cl2comb"
             :options="itemsList"
-            :virtualScrollerOptions="{ itemSize: 38 }"
+            :virtualScrollerOptions="{ itemSize: 60 }"
             filter
+            dataKey="cl2comb"
             optionValue="cl2comb"
             optionLabel="cl2desc"
-            class="w-full mb-3"
+            class="w-full custom-dropdown-height"
             :disabled="isUpdateSupplemental == true"
-          />
+          >
+            <template #option="{ option }">
+              <div class="flex flex-column">
+                <span
+                  class="font-semibold text-base"
+                  style="white-space: normal; word-wrap: break-word"
+                >
+                  {{ option.cl2desc }}
+                </span>
+              </div>
+            </template>
+
+            <template #value="{ value, placeholder }">
+              <span
+                v-if="value"
+                style="white-space: normal; word-wrap: break-word"
+              >
+                {{ itemsList.find((item) => item.cl2comb === value)?.cl2desc || value }}
+              </span>
+              <span
+                v-else
+                class="text-gray-400"
+              >
+                {{ placeholder }}
+              </span>
+            </template>
+          </Dropdown>
         </div>
         <div class="field">
           <label for="unit">Unit</label>
@@ -2102,6 +2183,14 @@ export default {
 </script>
 
 <style scoped>
+.custom-dropdown-height :deep(.p-dropdown-label) {
+  min-height: 2.5rem !important;
+  display: flex !important;
+  align-items: center !important;
+  white-space: normal !important;
+  word-wrap: break-word !important;
+}
+
 .rounded-card {
   border-radius: 50%;
   /* min-height: 100px;
