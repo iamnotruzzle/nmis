@@ -1569,6 +1569,30 @@ export default {
       this.form.approved_by = this.user.userDetail.employeeid;
       this.form.requestStockListDetails = this.requestStockListDetails;
 
+      // Common success handler
+      const commonOptions = {
+        preserveScroll: true,
+        onSuccess: (page) => {
+          this.requestStockId = null;
+          this.createRequestStocksDialog = false;
+          this.cancel();
+
+          // Update local data with fresh props from the redirect
+          this.totalRecords = page.props.requestedStocks.total;
+          this.requestStockList = [];
+          this.expandedRow = [];
+          this.wardsMedicalGasStockList = [];
+          this.medicalGasList = [];
+          this.storeRequestedStocksInContainer();
+          this.storeWardsMedicalGasStock();
+          this.storeItemsInController();
+          this.loading = false;
+
+          // Show appropriate message
+          this.isUpdate ? this.updatedMsg() : this.createdMsg();
+        },
+      };
+
       // prevents submitting the form using enter key when this.disabled is true or the
       // approved qty <= total stock
       if (this.disabled != true) {
@@ -1583,16 +1607,7 @@ export default {
           });
 
           if (isQtyEnough) {
-            this.form.put(route('issueitems.update', this.requestStockId), {
-              preserveScroll: true,
-              onSuccess: () => {
-                this.requestStockId = null;
-                this.createRequestStocksDialog = false;
-                this.cancel();
-                this.updateData();
-                this.updatedMsg();
-              },
-            });
+            this.form.put(route('issueitems.update', this.requestStockId), commonOptions);
           } else {
             this.qtyIsNotEnough();
           }
@@ -1607,16 +1622,7 @@ export default {
           });
 
           if (isQtyEnough) {
-            this.form.post(route('issueitems.store'), {
-              preserveScroll: true,
-              onSuccess: () => {
-                this.requestStockId = null;
-                this.createRequestStocksDialog = false;
-                this.cancel();
-                this.updateData();
-                this.createdMsg();
-              },
-            });
+            this.form.post(route('issueitems.store'), commonOptions);
           } else {
             this.qtyIsNotEnough();
           }
