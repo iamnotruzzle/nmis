@@ -746,14 +746,39 @@
             required="true"
             v-model="formAddDelivery.cl2comb_after"
             :options="convertedItemList"
-            :virtualScrollerOptions="{ itemSize: 38 }"
+            :virtualScrollerOptions="{ itemSize: 60 }"
             filter
-            showClear
             dataKey="cl2comb"
             optionValue="cl2comb"
             optionLabel="cl2desc"
-            class="w-full"
-          />
+            class="w-full custom-dropdown-height"
+          >
+            <template #option="{ option }">
+              <div class="flex flex-column">
+                <span
+                  class="font-semibold text-base"
+                  style="white-space: normal; word-wrap: break-word"
+                >
+                  {{ option.cl2desc }}
+                </span>
+              </div>
+            </template>
+
+            <template #value="{ value, placeholder }">
+              <span
+                v-if="value"
+                style="white-space: normal; word-wrap: break-word"
+              >
+                {{ convertedItemList.find((item) => item.cl2comb === value)?.cl2desc || value }}
+              </span>
+              <span
+                v-else
+                class="text-gray-400"
+              >
+                {{ placeholder }}
+              </span>
+            </template>
+          </Dropdown>
         </div>
         <div>
           <div class="flex align-content-center">
