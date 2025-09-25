@@ -1106,32 +1106,30 @@ export default {
         return false;
       }
 
-      //   this.form.location = this.authLocation.location.wardcode;
+      const commonOptions = {
+        preserveScroll: true,
+        onSuccess: (page) => {
+          this.itemId = null;
+          this.createItemDialog = false;
+          this.cancel();
+
+          // Update local data with fresh props from the redirect
+          this.totalRecords = page.props.items.total;
+          this.itemsList = [];
+          this.expandedRow = [];
+          this.storeItemInContainer();
+          this.loading = false;
+
+          // Show appropriate message
+          this.isUpdate ? this.updatedMsg() : this.createdMsg();
+        },
+      };
 
       if (this.isUpdate) {
-        this.form.put(route('items.update', this.itemId), {
-          preserveScroll: true,
-          onSuccess: () => {
-            this.itemId = null;
-            this.createItemDialog = false;
-            this.cancel();
-            this.updateData();
-            this.updatedMsg();
-          },
-        });
+        this.form.put(route('items.update', this.itemId), commonOptions);
       } else {
-        this.form.post(route('items.store'), {
-          preserveScroll: true,
-          onSuccess: () => {
-            this.itemId = null;
-            this.createItemDialog = false;
-            this.cancel();
-            this.updateData();
-            this.createdMsg();
-          },
-        });
+        this.form.post(route('items.store'), commonOptions);
       }
-      //   console.log(this.$page.props.errors);
     },
     submitConvert() {
       this.formConvert.post(route('csrconvertitem.store'), {
