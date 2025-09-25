@@ -1579,8 +1579,8 @@
             :rows="10"
             :rowsPerPageOptions="[10, 20, 30]"
             removableSort
-            sortField="name"
-            :sortOrder="1"
+            sortField="quantity"
+            :sortOrder="-1"
             showGridlines
           >
             <template #header>
@@ -1703,8 +1703,8 @@
             :rows="10"
             :rowsPerPageOptions="[10, 20, 30]"
             removableSort
-            sortField="name"
-            :sortOrder="1"
+            sortField="quantity_after"
+            :sortOrder="-1"
             showGridlines
           >
             <template #header>
