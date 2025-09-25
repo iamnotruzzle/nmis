@@ -1328,14 +1328,21 @@ export default {
     cancelItem() {
       this.form.delete(route('requeststocks.destroy', this.requestStockId), {
         preserveScroll: true,
-        onSuccess: () => {
+        onSuccess: (page) => {
           this.loading = false;
-          this.requestStockList = [];
           this.cancelItemDialog = false;
           this.requestStockId = null;
           this.form.clearErrors();
           this.form.reset();
-          this.updateData();
+
+          // Update local data with fresh props from the redirect
+          this.totalRecords = page.props.requestedStocks.total;
+          this.params.page = page.props.requestedStocks.current_page;
+          this.rows = page.props.requestedStocks.per_page;
+          this.requestStockList = [];
+          this.expandedRow = [];
+          this.storeRequestedStocksInContainer();
+
           this.cancelledMsg();
         },
       });
