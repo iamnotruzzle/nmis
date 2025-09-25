@@ -109,7 +109,7 @@ class HandleInertiaRequests extends Middleware
 
             if ($locationName && strtoupper($locationName->wardcode) === 'CSR') {
                 $result = DB::select(
-                    "SELECT count(*) as count FROM csrw_request_stocks WHERE status = 'ACKNOWLEDGED' OR status = 'PENDING';"
+                    "SELECT count(*) as count FROM csrw_request_stocks WHERE status = 'PENDING';"
                 );
                 $pendingAndAckCount = $result[0]->count ?? 0;
             }
