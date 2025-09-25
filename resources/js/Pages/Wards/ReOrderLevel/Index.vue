@@ -571,28 +571,29 @@ export default {
         this.formStockLevel.reorder_quantity != null ||
         this.formStockLevel.reorder_quantity != ''
       ) {
+        const commonOptions = {
+          preserveScroll: true,
+          onSuccess: (page) => {
+            this.formStockLevel.reset();
+            this.cancel();
+
+            // Update local data with fresh props from the redirect
+            // Replace with the actual prop names that your reorder controller returns
+            this.storeItemsInController();
+            this.storeItemsWithReOrderLevelInContainer();
+
+            this.loading = false;
+
+            // Show appropriate message
+            this.isUpdatingStockLevel ? this.updateExistingMessage() : this.createdMsg();
+          },
+        };
+
         // check if in update mode
         if (this.isUpdatingStockLevel == false) {
-          this.formStockLevel.post(route('reorder.store'), {
-            preserveScroll: true,
-            onSuccess: (e) => {
-              this.formStockLevel.reset();
-              this.cancel();
-              this.updateData();
-              this.createdMsg();
-              this.loading = false;
-            },
-          });
+          this.formStockLevel.post(route('reorder.store'), commonOptions);
         } else {
-          this.formStockLevel.put(route('reorder.update', this.formStockLevel.id), {
-            preserveScroll: true,
-            onSuccess: () => {
-              this.formStockLevel.reset();
-              this.cancel();
-              this.updateData();
-              this.updateExistingMessage();
-            },
-          });
+          this.formStockLevel.put(route('reorder.update', this.formStockLevel.id), commonOptions);
         }
       }
     },
