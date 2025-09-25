@@ -215,13 +215,40 @@
           required="true"
           v-model="item"
           :options="itemList"
-          :virtualScrollerOptions="{ itemSize: 38 }"
+          :virtualScrollerOptions="{ itemSize: 60 }"
           filter
           placeholder="Select a Item"
           optionLabel="itemDesc"
           :loading="isItemListLoading == true"
-          class="w-full"
-        />
+          class="w-full custom-dropdown-height"
+        >
+          <template #option="{ option }">
+            <div class="flex flex-column">
+              <span
+                class="font-semibold text-base"
+                style="white-space: normal; word-wrap: break-word"
+              >
+                {{ option.itemDesc }}
+              </span>
+            </div>
+          </template>
+
+          <template #value="{ value, placeholder }">
+            <span
+              v-if="value"
+              style="white-space: normal; word-wrap: break-word"
+            >
+              <!-- {{ itemList.find((item) => item.cl2comb === value)?.cl2desc || value }} -->
+              {{ value.itemDesc }}
+            </span>
+            <span
+              v-else
+              class="text-gray-400"
+            >
+              {{ placeholder }}
+            </span>
+          </template>
+        </Dropdown>
       </div>
       <div class="field">
         <label for="Item">Quantity</label>
@@ -1664,6 +1691,14 @@ export default {
 };
 </script>
 <style scoped>
+.custom-dropdown-height :deep(.p-dropdown-label) {
+  min-height: 2.5rem !important;
+  display: flex !important;
+  align-items: center !important;
+  white-space: normal !important;
+  word-wrap: break-word !important;
+}
+
 /* Remove arrow for input type number */
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
