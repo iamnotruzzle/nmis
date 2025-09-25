@@ -1716,11 +1716,21 @@ export default {
     updateStatus() {
       this.formUpdateStatus.put(route('issueitems.acknowledgedrequest', this.formUpdateStatus), {
         preserveScroll: true,
-        onSuccess: () => {
+        onSuccess: (page) => {
           this.requestStockId = null;
           this.editStatusDialog = false;
           this.cancel();
-          this.updateData();
+
+          // Update local data with fresh props from the redirect
+          this.totalRecords = page.props.requestedStocks.total;
+          this.requestStockList = [];
+          this.expandedRow = [];
+          this.wardsMedicalGasStockList = [];
+          this.medicalGasList = [];
+          this.storeRequestedStocksInContainer();
+          this.storeWardsMedicalGasStock();
+          this.storeItemsInController();
+          this.loading = false;
         },
       });
     },
