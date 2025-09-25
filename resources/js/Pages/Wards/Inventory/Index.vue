@@ -257,6 +257,7 @@
         v-model:visible="deliveryDialog"
         :modal="true"
         :closeOnEscape="false"
+        :closable="false"
         class="p-fluid w-4"
         @hide="whenDialogIsHidden"
       >
@@ -429,6 +430,7 @@
         v-model:visible="confirmDeliveryDialog"
         :modal="true"
         :closeOnEscape="false"
+        :closable="false"
         class="p-fluid w-4"
         persist
       >
@@ -479,6 +481,7 @@
         v-model:visible="consignmentDialog"
         :modal="true"
         :closeOnEscape="false"
+        :closable="false"
         class="p-fluid w-4"
         @hide="whenDialogIsHidden"
       >
@@ -658,6 +661,7 @@
         v-model:visible="confirmConsignmentDialog"
         :modal="true"
         :closeOnEscape="false"
+        :closable="false"
         class="p-fluid w-4"
         persist
       >
@@ -708,6 +712,7 @@
         v-model:visible="supplementalDialog"
         :modal="true"
         :closeOnEscape="false"
+        :closable="false"
         class="p-fluid w-4"
         @hide="whenDialogIsHidden"
       >
@@ -887,6 +892,7 @@
         v-model:visible="confirmSupplementalDialog"
         :modal="true"
         :closeOnEscape="false"
+        :closable="false"
         class="p-fluid w-4"
         persist
       >
@@ -936,6 +942,7 @@
       <Dialog
         v-model:visible="existingDialog"
         :modal="true"
+        :closable="false"
         class="p-fluid w-4"
         @hide="whenDialogIsHidden"
       >
@@ -1038,6 +1045,7 @@
       <Dialog
         v-model:visible="returnToCsrDialog"
         :modal="true"
+        :closable="false"
         class="p-fluid w-3"
         @hide="whenDialogIsHidden"
       >
