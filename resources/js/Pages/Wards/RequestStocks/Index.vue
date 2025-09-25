@@ -295,6 +295,7 @@
           v-model:visible="createRequestStocksDialog"
           :modal="true"
           class="p-fluid w-5"
+          :closable="false"
           :closeOnEscape="false"
           @hide="whenDialogIsHidden"
         >
@@ -303,11 +304,11 @@
           </template>
 
           <div
-            v-if="requestStockListDetails.length >= 15"
+            v-if="requestStockListDetails.length >= 10"
             class="mb-4"
           >
             <p class="font-bold text-warning text-lg border border-yellow-500 bg-yellow-100 p-3 rounded">
-              ⚠️ Only 15 items are allowed per request. Please create a new request for additional items.
+              ⚠️ Only 10 items are allowed per request. Please create a new request for additional items.
             </p>
           </div>
 
@@ -409,25 +410,26 @@
             <Button
               :label="!form.processing ? 'CANCEL' : 'CANCEL'"
               icon="pi pi-times"
-              :disabled="form.processing"
+              :disabled="saving || form.processing"
               severity="danger"
               @click="cancel"
             />
 
             <Button
               v-if="isUpdate == true"
-              :disabled="form.processing || requestStockListDetails == '' || requestStockListDetails == null"
+              :disabled="saving || form.processing || !requestStockListDetails || requestStockListDetails.length === 0"
               :label="!form.processing ? 'UPDATE' : 'UPDATE'"
               :icon="form.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
               severity="warning"
               type="submit"
               @click="submit"
             />
+
             <Button
               v-else
               :label="!form.processing ? 'REQUEST' : 'REQUEST'"
               :icon="form.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
-              :disabled="form.processing || requestStockListDetails == '' || requestStockListDetails == null"
+              :disabled="saving || form.processing || !requestStockListDetails || requestStockListDetails.length === 0"
               type="submit"
               @click="submit"
             />
@@ -848,6 +850,7 @@ export default {
       cancelItemDialog: false,
       search: '',
       status: null,
+      saving: false,
       statusList: [
         { status: 'NO FILTER', code: '' },
         { status: 'PENDING', code: 'PENDING' },
@@ -1175,9 +1178,9 @@ export default {
     //   }
     // },
     fillRequestContainer() {
-      if (this.requestStockListDetails.length >= 15) {
+      if (this.requestStockListDetails.length >= 10) {
         this.itemNotSelected = true;
-        this.itemNotSelectedMsg = 'Limit of 15 items reached. Please create a new request.';
+        this.itemNotSelectedMsg = 'Limit of 10 items reached. Please create a new request.';
         return;
       }
 
@@ -1243,39 +1246,36 @@ export default {
       });
     },
     submit() {
-      if (this.form.processing) {
+      if (this.saving || this.form.processing) {
         return false;
       }
 
-      // setup location, requested by and requestStockListDetails before submitting
+      // setup location, requested by, and requestStockListDetails before submitting
       this.form.location = this.authWardcode;
       this.form.requested_by = this.user.userDetail.employeeid;
       this.form.requestStockListDetails = this.requestStockListDetails;
 
+      this.saving = true; // ✅ lock submit until finish
+
+      const options = {
+        preserveScroll: true,
+        onSuccess: () => {
+          this.requestStockId = null;
+          this.createRequestStocksDialog = false; // ✅ close dialog
+          this.cancel();
+          this.updateData();
+          this.isUpdate ? this.updatedMsg() : this.createdMsg();
+          this.loading = false;
+        },
+        onFinish: () => {
+          this.saving = false; // ✅ release lock
+        },
+      };
+
       if (this.isUpdate) {
-        this.form.put(route('requeststocks.update', this.requestStockId), {
-          preserveScroll: true,
-          onSuccess: () => {
-            this.requestStockId = null;
-            this.createRequestStocksDialog = false;
-            this.cancel();
-            this.updateData();
-            this.updatedMsg();
-            this.loading = false;
-          },
-        });
+        this.form.put(route('requeststocks.update', this.requestStockId), options);
       } else {
-        this.form.post(route('requeststocks.store'), {
-          preserveScroll: true,
-          onSuccess: () => {
-            this.requestStockId = null;
-            this.createRequestStocksDialog = false;
-            this.cancel();
-            this.updateData();
-            this.createdMsg();
-            this.loading = false;
-          },
-        });
+        this.form.post(route('requeststocks.store'), options);
       }
     },
     reorder() {
