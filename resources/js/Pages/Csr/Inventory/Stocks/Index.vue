@@ -784,6 +784,7 @@
             icon="pi pi-check"
             text
             :disabled="
+              saving ||
               formAddDelivery.processing ||
               formAddDelivery.ris_no == null ||
               formAddDelivery.fund_source == null ||
@@ -793,30 +794,11 @@
               formAddDelivery.quantity == null ||
               formAddDelivery.quantity == 0 ||
               formAddDelivery.acquisitionPrice == null ||
-              formAddDelivery.acquisitionPrice == '' ||
+              formAddDelivery.acquisitionPrice === '' ||
               (!isDonationItem && formAddDelivery.acquisitionPrice == 0)
             "
             @click="openSummaryAddDeliveryDialog"
           />
-          <!-- <Button
-            label="Save"
-            icon="pi pi-check"
-            text
-            type="submit"
-            :disabled="
-              formAddDelivery.processing ||
-              formAddDelivery.ris_no == null ||
-              formAddDelivery.fund_source == null ||
-              formAddDelivery.cl2comb == null ||
-              formAddDelivery.delivered_date == null ||
-              formAddDelivery.expiration_date == null ||
-              formAddDelivery.quantity == null ||
-              formAddDelivery.quantity == 0 ||
-              formAddDelivery.acquisitionPrice == null ||
-              formAddDelivery.acquisitionPrice == 0
-            "
-            @click="submitAddDelivery"
-          /> -->
         </template>
       </Dialog>
 
@@ -1877,6 +1859,7 @@ export default {
       to_ed: null,
       fundSourceList: [],
       totalConvertedItemsList: [],
+      saving: false,
       // -----------------
       disableSearchRisInput: false,
       itemNotSelected: false,
@@ -2758,6 +2741,7 @@ export default {
     },
     submitAddDelivery() {
       if (
+        this.saving ||
         this.formAddDelivery.processing ||
         this.formAddDelivery.ris_no == null ||
         this.formAddDelivery.fund_source == null ||
@@ -2767,18 +2751,19 @@ export default {
         this.formAddDelivery.quantity == null ||
         this.formAddDelivery.quantity == 0 ||
         this.formAddDelivery.acquisitionPrice == null ||
-        this.formAddDelivery.acquisitionPrice == '' ||
+        this.formAddDelivery.acquisitionPrice === '' ||
         (!this.isDonationItem && this.formAddDelivery.acquisitionPrice == 0)
       ) {
         return false;
       }
 
+      this.saving = true; // ✅ block multiple clicks
+
       this.formAddDelivery.post(route('csrmanualadd.store'), {
         preserveScroll: true,
-        onSuccess: () => {
-          this.addDeliveryDialog = true;
-          //   this.cancel();
 
+        onSuccess: () => {
+          // ✅ reset form fields
           this.formAddDelivery.cl2comb = null;
           this.formAddDelivery.quantity = 0;
           this.formAddDelivery.acquisitionPrice = 0;
@@ -2786,14 +2771,20 @@ export default {
           this.formAddDelivery.quantity_after = 0;
           this.formAddDelivery.hospital_price = 0;
           this.formAddDelivery.price_per_unit = 0;
-          //   this.formAddDelivery.ris_no = this.newRisNo;
 
           this.stocksList = [];
           this.storeStocksInContainer();
 
           this.updateData();
           this.createdMsg();
+
+          // ✅ close dialogs after success
           this.summaryAddDeliveryDialog = false;
+          this.addDeliveryDialog = false;
+        },
+
+        onFinish: () => {
+          this.saving = false; // ✅ always release lock
         },
       });
     },
