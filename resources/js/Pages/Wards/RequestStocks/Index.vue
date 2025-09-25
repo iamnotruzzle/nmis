@@ -1297,7 +1297,7 @@ export default {
       if (this.saving || this.form.processing) {
         return false;
       }
-
+      //s
       this.form.location = this.authWardcode;
       this.form.requested_by = this.user.userDetail.employeeid;
       this.form.requestStockListDetails = this.requestStockListDetails;
