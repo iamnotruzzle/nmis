@@ -190,7 +190,7 @@ class RequestStocksController extends Controller
 
         // the parameters result will be send into the frontend
         event(new RequestStock(RequestStocks::where('status', 'PENDING')->count()));
-
+    
         return Redirect::route('requeststocks.index');
     }
 

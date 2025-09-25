@@ -303,6 +303,16 @@
             <div class="text-primary text-xl font-bold">REQUEST STOCK</div>
           </template>
 
+          <!-- Warning while processing -->
+          <div
+            v-if="form.processing"
+            class="mb-4"
+          >
+            <p class="font-bold text-red-600 text-lg border border-red-500 bg-red-100 p-3 rounded">
+              ⚠️ Requesting stock is processing. Please don’t refresh or close this page.
+            </p>
+          </div>
+
           <div
             v-if="requestStockListDetails.length >= 10"
             class="mb-4"
@@ -1250,25 +1260,32 @@ export default {
         return false;
       }
 
-      // setup location, requested by, and requestStockListDetails before submitting
       this.form.location = this.authWardcode;
       this.form.requested_by = this.user.userDetail.employeeid;
       this.form.requestStockListDetails = this.requestStockListDetails;
 
-      this.saving = true; // ✅ lock submit until finish
+      this.saving = true;
 
       const options = {
         preserveScroll: true,
-        onSuccess: () => {
+        onSuccess: (page) => {
           this.requestStockId = null;
-          this.createRequestStocksDialog = false; // ✅ close dialog
+          this.createRequestStocksDialog = false;
           this.cancel();
-          this.updateData();
+
+          // Update local data with fresh props from the redirect
+          this.totalRecords = page.props.requestedStocks.total;
+          this.params.page = page.props.requestedStocks.current_page;
+          this.rows = page.props.requestedStocks.per_page;
+          this.requestStockList = [];
+          this.expandedRow = [];
+          this.storeRequestedStocksInContainer();
+
           this.isUpdate ? this.updatedMsg() : this.createdMsg();
           this.loading = false;
         },
         onFinish: () => {
-          this.saving = false; // ✅ release lock
+          this.saving = false;
         },
       };
 
