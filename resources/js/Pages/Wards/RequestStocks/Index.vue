@@ -330,7 +330,7 @@
           </div>
           <div class="field">
             <label>Available items</label>
-            <Dropdown
+            <!-- <Dropdown
               required="true"
               v-model="item"
               :options="itemsList"
@@ -338,7 +338,43 @@
               filter
               optionLabel="cl2desc"
               class="w-full mb-3"
-            />
+            /> -->
+
+            <Dropdown
+              required="true"
+              v-model="item"
+              :options="itemsList"
+              :virtualScrollerOptions="{ itemSize: 60 }"
+              filter
+              optionLabel="cl2desc"
+              class="w-full custom-dropdown-height"
+            >
+              <template #option="{ option }">
+                <div class="flex flex-column">
+                  <span
+                    class="font-semibold text-base"
+                    style="white-space: normal; word-wrap: break-word"
+                  >
+                    {{ option.cl2desc }}
+                  </span>
+                </div>
+              </template>
+
+              <template #value="{ value, placeholder }">
+                <span
+                  v-if="value"
+                  style="white-space: normal; word-wrap: break-word"
+                >
+                  {{ value.cl2desc }}
+                </span>
+                <span
+                  v-else
+                  class="text-gray-400"
+                >
+                  {{ placeholder }}
+                </span>
+              </template>
+            </Dropdown>
           </div>
           <div class="field">
             <label for="Item">Quantity</label>
@@ -1429,6 +1465,14 @@ export default {
 </script>
 
 <style scoped>
+.custom-dropdown-height :deep(.p-dropdown-label) {
+  min-height: 2.5rem !important;
+  display: flex !important;
+  align-items: center !important;
+  white-space: normal !important;
+  word-wrap: break-word !important;
+}
+
 .rounded-card {
   border-radius: 50%;
   /* min-height: 100px;
