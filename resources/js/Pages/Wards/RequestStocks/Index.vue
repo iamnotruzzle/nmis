@@ -452,6 +452,7 @@
           :style="{ width: '450px' }"
           header=" "
           :modal="true"
+          :closable="false"
           dismissableMask
         >
           <div class="flex align-items-center justify-content-center">
@@ -495,6 +496,7 @@
           :style="{ width: '450px' }"
           header="Confirm"
           :modal="true"
+          :closable="false"
           dismissableMask
         >
           <div class="flex align-items-center justify-content-center">

@@ -567,6 +567,7 @@
       <Dialog
         v-model:visible="addDeliveryDialog"
         :modal="true"
+        :closable="false"
         class="p-fluid overflow-hidden"
         :style="{ width: '1050px' }"
         :draggable="true"
@@ -807,6 +808,7 @@
         v-model:visible="updateStockDialog"
         :style="{ width: '650px' }"
         :modal="true"
+        :closable="false"
         class="p-fluid"
         @hide="clickOutsideDialog"
       >
@@ -995,6 +997,7 @@
         v-model:visible="convertDialog"
         :style="{ width: '550px' }"
         :modal="true"
+        :closable="false"
         class="p-fluid"
         @hide="clickOutsideDialog"
       >
@@ -1253,6 +1256,7 @@
         v-model:visible="editConvertedItemDialog"
         :style="{ width: '550px' }"
         :modal="true"
+        :closable="false"
         class="p-fluid"
         @hide="clickOutsideDialog"
       >
@@ -1335,6 +1339,7 @@
         :style="{ width: '450px' }"
         header="Confirm"
         :modal="true"
+        :closable="false"
         dismissableMask
       >
         <div class="flex align-items-center justify-content-center">
@@ -1423,6 +1428,7 @@
         v-model:visible="summaryConvertDialog"
         :style="{ width: '500px' }"
         header="Confirm"
+        :closable="false"
         :closeOnEscape="false"
       >
         <template #header>
@@ -1478,6 +1484,7 @@
         :style="{ width: '450px' }"
         header="Confirm"
         :modal="true"
+        :closable="false"
         dismissableMask
       >
         <div class="flex align-items-center justify-content-center">

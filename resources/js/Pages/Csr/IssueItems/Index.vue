@@ -353,6 +353,7 @@
         v-model:visible="createRequestStocksDialog"
         :modal="true"
         class="p-fluid"
+        :closable="false"
         @hide="whenDialogIsHidden"
       >
         <template #header>
@@ -555,6 +556,7 @@
         :style="{ width: '450px' }"
         header="Confirm"
         :modal="true"
+        :closable="false"
         dismissableMask
       >
         <div class="flex align-items-center justify-content-center">
@@ -589,6 +591,7 @@
         v-model:visible="medicalGasDialog"
         :modal="true"
         class="p-fluid w-4"
+        :closable="false"
         @hide="whenDialogIsHidden"
       >
         <template #header>
@@ -755,6 +758,7 @@
         v-model:visible="updateMedicalGasDialog"
         :modal="true"
         class="p-fluid w-4"
+        :closable="false"
         @hide="whenDialogIsHidden"
       >
         <template #header>
