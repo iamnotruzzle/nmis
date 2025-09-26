@@ -50,6 +50,7 @@ class WardStockAdjustmentController extends Controller
                 'new_quantity' => $newQuantity,
                 'remarks' => trim($request->remarks),
                 'tag' => $request->tag,
+                'wardcode' => $request->wardcode,
                 'employeeid' => $request->employeeid,
             ]);
 

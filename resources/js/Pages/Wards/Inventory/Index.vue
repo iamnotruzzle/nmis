@@ -1623,6 +1623,7 @@ export default {
         remarks: null,
         tag: 'Infection Control', // default tag
         employeeid: null,
+        wardcode: null,
       }),
       previousQty: 0,
       targetItemDesc: null,
@@ -1838,6 +1839,7 @@ export default {
       this.formStockAdjustment.item_description = data.item;
       this.formStockAdjustment.current_quantity = data.quantity;
       this.formStockAdjustment.quantity = null; // User enters quantity used
+      this.formStockAdjustment.wardcode = this.authWardcode; // User location wardcode
       this.formStockAdjustment.employeeid = this.$page.props.auth.user.userDetail.employeeid;
 
       this.stockAdjustmentDialog = true;
