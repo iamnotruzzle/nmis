@@ -1655,187 +1655,6 @@
           />
         </template>
       </Dialog>
-
-      <!-- Print Layout (Hidden) -->
-      <div
-        id="stock-history-print"
-        style="background-color: white; display: none"
-      >
-        <div
-          style="
-            font-family: Arial, sans-serif;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-          "
-        >
-          <div style="padding: 0 2rem; color: #1f2937; margin: 0; max-width: 1000px">
-            <div
-              style="
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                text-align: center;
-                margin-bottom: 1rem;
-              "
-            >
-              <p style="font-weight: bold; font-size: 1.25rem; margin: 0; padding: 0; text-transform: uppercase">
-                WARD STOCK ADJUSTMENT HISTORY
-              </p>
-              <p style="font-size: 0.75rem; margin: 0; padding: 0">
-                MARIANO MARCOS MEMORIAL HOSPITAL and MEDICAL CENTER
-              </p>
-              <p style="font-size: 1rem; color: #3b82f6; font-weight: bold">Ward Stock Management System</p>
-            </div>
-
-            <!-- Ward Information -->
-            <div
-              v-if="stockHistoryData"
-              style="margin-bottom: 1rem"
-            >
-              <div
-                style="
-                  display: flex;
-                  justify-content: space-between;
-                  width: 100%;
-                  margin-bottom: 0.25rem;
-                  font-size: 0.875rem;
-                "
-              >
-                <div>
-                  <label style="font-weight: bold">Ward Code:</label>
-                  <span>{{ stockHistoryData.ward_code }}</span>
-                </div>
-                <div>
-                  <label style="font-weight: bold">Date Printed:</label>
-                  <span>{{ new Date().toLocaleDateString() }}</span>
-                </div>
-              </div>
-
-              <div
-                style="
-                  display: flex;
-                  justify-content: space-between;
-                  width: 100%;
-                  margin-bottom: 0.25rem;
-                  font-size: 0.875rem;
-                "
-              >
-                <div>
-                  <label style="font-weight: bold">Current Items:</label>
-                  <span>{{ stockHistoryData.total_current_items }}</span>
-                </div>
-                <div>
-                  <label style="font-weight: bold">Current Stock Qty:</label>
-                  <span>{{ stockHistoryData.total_current_quantity }}</span>
-                </div>
-              </div>
-
-              <div
-                v-if="stockHistoryFilters.dateFrom || stockHistoryFilters.dateTo"
-                style="
-                  display: flex;
-                  justify-content: flex-start;
-                  width: 100%;
-                  margin-bottom: 0.5rem;
-                  font-size: 0.875rem;
-                "
-              >
-                <div>
-                  <label style="font-weight: bold">Filter Period:</label>
-                  <span>
-                    {{
-                      stockHistoryFilters.dateFrom ? new Date(stockHistoryFilters.dateFrom).toLocaleDateString() : 'All'
-                    }}
-                    to
-                    {{ stockHistoryFilters.dateTo ? new Date(stockHistoryFilters.dateTo).toLocaleDateString() : 'All' }}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Adjustments Table -->
-            <div style="display: flex; justify-content: center; width: 100%; margin-bottom: 0.25rem">
-              <table style="width: 100%; font-size: 0.7rem; border-collapse: collapse">
-                <thead>
-                  <tr>
-                    <th style="padding: 0.5rem; text-align: left; border: 1px solid #ccc">DATE & TIME</th>
-                    <th style="padding: 0.5rem; text-align: left; border: 1px solid #ccc">ITEM</th>
-                    <th style="padding: 0.5rem; text-align: center; border: 1px solid #ccc">USED</th>
-                    <th style="padding: 0.5rem; text-align: center; border: 1px solid #ccc">PREVIOUS</th>
-                    <th style="padding: 0.5rem; text-align: center; border: 1px solid #ccc">NEW</th>
-                    <th style="padding: 0.5rem; text-align: left; border: 1px solid #ccc">TAG</th>
-                    <th style="padding: 0.5rem; text-align: left; border: 1px solid #ccc">REMARKS</th>
-                    <th style="padding: 0.5rem; text-align: center; border: 1px solid #ccc">BY</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr
-                    v-for="adjustment in stockHistoryData?.adjustments || []"
-                    :key="adjustment.id"
-                  >
-                    <td style="padding: 0.5rem; text-align: left; border: 1px solid #ccc; font-size: 0.65rem">
-                      {{ adjustment.date }}
-                    </td>
-                    <td style="padding: 0.5rem; text-align: left; border: 1px solid #ccc; font-size: 0.65rem">
-                      {{ adjustment.item_description }}
-                    </td>
-                    <td style="padding: 0.5rem; text-align: center; border: 1px solid #ccc; font-weight: bold">
-                      -{{ adjustment.quantity_used }}
-                    </td>
-                    <td style="padding: 0.5rem; text-align: center; border: 1px solid #ccc">
-                      {{ adjustment.previous_quantity }}
-                    </td>
-                    <td style="padding: 0.5rem; text-align: center; border: 1px solid #ccc; font-weight: bold">
-                      {{ adjustment.new_quantity }}
-                    </td>
-                    <td style="padding: 0.5rem; text-align: left; border: 1px solid #ccc; font-size: 0.65rem">
-                      {{ adjustment.tag }}
-                    </td>
-                    <td style="padding: 0.5rem; text-align: left; border: 1px solid #ccc; font-size: 0.65rem">
-                      {{ adjustment.remarks || '-' }}
-                    </td>
-                    <td style="padding: 0.5rem; text-align: center; border: 1px solid #ccc; font-size: 0.65rem">
-                      {{ adjustment.employee_id }}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <!-- Summary Footer -->
-            <div
-              v-if="stockHistoryData"
-              style="margin-top: 1rem; font-size: 0.875rem"
-            >
-              <div
-                style="
-                  display: flex;
-                  justify-content: space-between;
-                  font-weight: bold;
-                  border-top: 1px solid #ccc;
-                  padding-top: 0.5rem;
-                "
-              >
-                <span>Total Records: {{ stockHistoryData.total_adjustment_records }}</span>
-                <span>Total Quantity Adjusted: {{ stockHistoryData.total_adjusted }}</span>
-              </div>
-            </div>
-
-            <!-- Print Footer -->
-            <div
-              style="display: flex; justify-content: flex-start; width: 100%; margin-top: 1.5rem; font-size: 0.75rem"
-            >
-              <div>
-                <label style="margin-right: 0.5rem">Generated by:</label>
-                <span style="font-weight: bold">{{ $page.props.auth.user.userDetail.employeeid }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </app-layout>
 </template>
@@ -2128,17 +1947,150 @@ export default {
     },
 
     printStockHistory() {
-      const printContent = document.getElementById('stock-history-print');
-      if (printContent) {
-        const originalDisplay = printContent.style.display;
-        printContent.style.display = 'block';
-
-        // Use a timeout to ensure the content is rendered before printing
-        setTimeout(() => {
-          window.print();
-          printContent.style.display = originalDisplay;
-        }, 100);
+      if (!this.stockHistoryData || this.stockHistoryData.adjustments.length === 0) {
+        return;
       }
+
+      this.$nextTick(() => {
+        // Create a hidden iframe for printing (like your reference)
+        const iframe = document.createElement('iframe');
+        iframe.style.position = 'absolute';
+        iframe.style.top = '-9999px';
+        iframe.style.left = '-9999px';
+        iframe.style.width = '0';
+        iframe.style.height = '0';
+        document.body.appendChild(iframe);
+
+        // Write print content into the iframe
+        const iframeDoc = iframe.contentWindow.document;
+        iframeDoc.open();
+        iframeDoc.write(this.generatePrintHTML());
+        iframeDoc.close();
+
+        // Trigger the print dialog
+        iframe.contentWindow.focus();
+        iframe.contentWindow.print();
+
+        // Remove the iframe after a delay to ensure proper cleanup
+        setTimeout(() => {
+          document.body.removeChild(iframe);
+        }, 100);
+      });
+    },
+
+    generatePrintHTML() {
+      const data = this.stockHistoryData;
+      const filters = this.stockHistoryFilters;
+      const user = this.$page.props.auth.user;
+
+      const tableRows = data.adjustments
+        .map(
+          (adjustment) => `
+        <tr>
+            <td>${adjustment.date}</td>
+            <td>${adjustment.item_description}</td>
+            <td style="font-weight: bold;">-${adjustment.quantity_used}</td>
+            <td>${adjustment.previous_quantity}</td>
+            <td style="font-weight: bold;">${adjustment.new_quantity}</td>
+            <td>${adjustment.tag}</td>
+            <td>${adjustment.remarks || '-'}</td>
+            <td>${adjustment.employee_id}</td>
+        </tr>
+        `
+        )
+        .join('');
+
+      return `
+        <html>
+        <head>
+        <title>Ward Stock Adjustment History</title>
+        <style>
+            body { font-family: Arial, sans-serif; }
+            table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: Arial, sans-serif;
+            }
+            table, th, td {
+            border: 1px solid black;
+            }
+            td, th {
+            padding: 8px;
+            text-align: center;
+            font-size: 0.75rem;
+            }
+            p { margin: 0; padding: 0; }
+        </style>
+        </head>
+        <body style="background-color: white; color: black;">
+
+        <!-- Header -->
+        <div>
+            <h3 style="font-weight: bold; text-align: center;">WARD STOCK ADJUSTMENT HISTORY</h3>
+            <h4 style="margin-top: 1rem;">MARIANO MARCOS MEMORIAL HOSPITAL AND MEDICAL CENTER</h4>
+        </div>
+
+        <!-- Ward Information Table -->
+        <table>
+            <tbody>
+            <tr>
+                <td colspan="4"><strong>Ward Code: ${data.ward_code}</strong></td>
+                <td colspan="4"><strong>Date Printed: ${new Date().toLocaleDateString()}</strong></td>
+            </tr>
+            <tr>
+                <td colspan="2"><strong>Current Items: ${data.total_current_items}</strong></td>
+                <td colspan="2"><strong>Total Stock Qty: ${data.total_current_quantity}</strong></td>
+                <td colspan="2"><strong>Total Adjusted: ${data.total_adjusted}</strong></td>
+                <td colspan="2"><strong>Total Records: ${data.total_adjustment_records}</strong></td>
+            </tr>
+            ${
+              filters.dateFrom || filters.dateTo
+                ? `
+            <tr>
+                <td colspan="8">
+                Filter Period: <strong><u>${
+                  filters.dateFrom ? new Date(filters.dateFrom).toLocaleDateString() : 'All'
+                } to ${filters.dateTo ? new Date(filters.dateTo).toLocaleDateString() : 'All'}</u></strong>
+                </td>
+            </tr>
+            `
+                : ''
+            }
+            </tbody>
+        </table>
+
+        <!-- Main Adjustments Table -->
+        <table>
+            <thead>
+            <tr>
+                <th>DATE & TIME</th>
+                <th>ITEM</th>
+                <th>USED</th>
+                <th>PREVIOUS</th>
+                <th>NEW</th>
+                <th>TAG</th>
+                <th>REMARKS</th>
+                <th>BY</th>
+            </tr>
+            </thead>
+            <tbody>
+            ${tableRows}
+            </tbody>
+        </table>
+
+        <!-- Footer Table -->
+        <table>
+            <tr>
+            <td><strong>Generated by:</strong></td>
+            <td colspan="3" style="padding: 20px 0;"><strong>${user.userDetail.employeeid}</strong></td>
+            <td><strong>Date:</strong></td>
+            <td colspan="3" style="padding: 20px 0;">${new Date().toLocaleDateString()}</td>
+            </tr>
+        </table>
+
+        </body>
+        </html>
+    `;
     },
 
     formatDateForApi(date) {
