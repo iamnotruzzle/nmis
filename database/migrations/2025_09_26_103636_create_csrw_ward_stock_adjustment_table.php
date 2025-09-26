@@ -22,6 +22,7 @@ class CreateCsrwWardStockAdjustmentTable extends Migration
             $table->integer('new_quantity');
             $table->string('employeeid');
             $table->string('tag');
+            $table->string('wardcode');
             $table->text('remarks')->nullable();
             $table->timestamps();
         });

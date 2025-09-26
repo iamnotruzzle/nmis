@@ -19,6 +19,7 @@ class WardStockAdjustment extends Model
         'new_quantity',
         'employeeid',
         'tag',
+        'wardcode',
         'remarks',
     ];
 }
