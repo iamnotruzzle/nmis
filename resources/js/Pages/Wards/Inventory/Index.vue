@@ -222,12 +222,6 @@
                 />
                 <!-- :disabled="canTransact == false" -->
                 <Button
-                  v-if="slotProps.data.from == 'EXISTING_STOCKS'"
-                  label="UPDATE"
-                  severity="info"
-                  @click="openUpdateStock(slotProps.data)"
-                />
-                <Button
                   v-if="slotProps.data.from == 'CONSIGNMENT'"
                   label="UPDATE"
                   severity="info"
@@ -244,6 +238,18 @@
                   label="UPDATE"
                   severity="info"
                   @click="openUpdateDelivery(slotProps.data)"
+                />
+                <Button
+                  v-if="slotProps.data.from == 'EXISTING_STOCKS'"
+                  label="UPDATE"
+                  severity="info"
+                  @click="openUpdateStock(slotProps.data)"
+                />
+                <Button
+                  label="ADJUST"
+                  severity="warning"
+                  class="ml-2"
+                  @click="openStockAdjustment(slotProps.data)"
                 />
               </div>
             </template>
@@ -1206,6 +1212,222 @@
           />
         </template>
       </Dialog>
+
+      <!-- Stock Adjustment Dialog -->
+      <Dialog
+        v-model:visible="stockAdjustmentDialog"
+        :modal="true"
+        :closeOnEscape="false"
+        :closable="false"
+        class="p-fluid w-4"
+        @hide="whenDialogIsHidden"
+      >
+        <template #header>
+          <div class="text-orange-500 text-xl font-bold">STOCK USAGE ADJUSTMENT</div>
+        </template>
+
+        <div class="bg-red-600 text-white p-4 rounded font-semibold my-2 text-lg">
+          ⚠️ WARNING: Stock usage adjustments cannot be undone. Please review the quantity used thoroughly before
+          proceeding.
+        </div>
+
+        <div class="field">
+          <label for="adjustItem">Item</label>
+          <TextArea
+            id="adjustItem"
+            v-model.trim="formStockAdjustment.item_description"
+            readonly
+            rows="5"
+            class="text-blue-600 font-bold text-xl"
+          />
+        </div>
+
+        <div class="field">
+          <label for="currentQty">Current Quantity</label>
+          <InputText
+            id="currentQty"
+            v-model.trim="formStockAdjustment.current_quantity"
+            readonly
+            class="text-green-500 font-bold text-xl"
+          />
+        </div>
+
+        <div class="field">
+          <label for="quantityUsed">Quantity Used <span class="text-red-500">*</span></label>
+          <InputText
+            id="quantityUsed"
+            v-model.trim="formStockAdjustment.quantity"
+            required
+            autofocus
+            :class="{ 'p-invalid': formStockAdjustment.quantity == '' || formStockAdjustment.quantity == null }"
+            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+          />
+          <small class="text-gray-500">Enter the quantity that was used/consumed</small>
+          <small
+            class="text-red-500 block"
+            v-if="formStockAdjustment.errors.quantity"
+          >
+            {{ formStockAdjustment.errors.quantity }}
+          </small>
+        </div>
+
+        <div
+          class="field"
+          v-if="formStockAdjustment.quantity"
+        >
+          <label for="resultingQty">Resulting Quantity</label>
+          <InputText
+            id="resultingQty"
+            :value="calculateResultingQuantity"
+            readonly
+            class="bg-yellow-600 bg-opacity-40 font-bold text-xl"
+            :class="{ 'text-red-600': calculateResultingQuantity < 0 }"
+          />
+          <small class="text-gray-500">This will be the remaining stock after usage</small>
+          <small
+            class="text-red-500 block"
+            v-if="calculateResultingQuantity < 0"
+          >
+            Warning: This would result in negative stock!
+          </small>
+        </div>
+
+        <div class="field">
+          <label for="adjustRemarks">Reason for Usage <span class="text-red-500">*</span></label>
+          <TextArea
+            id="adjustRemarks"
+            v-model.trim="formStockAdjustment.remarks"
+            rows="4"
+            required
+            placeholder="Please provide a detailed reason for this stock usage."
+            :class="{ 'p-invalid': formStockAdjustment.remarks == '' || formStockAdjustment.remarks == null }"
+          />
+          <small class="text-gray-500">Explain why this quantity was used/consumed</small>
+          <small
+            class="text-red-500 block"
+            v-if="formStockAdjustment.errors.remarks"
+          >
+            {{ formStockAdjustment.errors.remarks }}
+          </small>
+        </div>
+
+        <template #footer>
+          <Button
+            label="CANCEL"
+            icon="pi pi-times"
+            :disabled="formStockAdjustment.processing"
+            severity="secondary"
+            @click="cancel"
+          />
+
+          <Button
+            :disabled="
+              formStockAdjustment.processing ||
+              formStockAdjustment.quantity == null ||
+              formStockAdjustment.quantity == '' ||
+              formStockAdjustment.remarks == null ||
+              formStockAdjustment.remarks.trim() == '' ||
+              calculateResultingQuantity < 0
+            "
+            label="PROCEED TO REVIEW"
+            icon="pi pi-arrow-right"
+            severity="warning"
+            @click="openConfirmStockAdjustment"
+          />
+        </template>
+      </Dialog>
+
+      <!-- Confirmation Dialog -->
+      <Dialog
+        v-model:visible="confirmStockAdjustmentDialog"
+        :modal="true"
+        :closeOnEscape="false"
+        :closable="false"
+        class="p-fluid w-5"
+        persist
+      >
+        <template #header>
+          <div class="text-red-500 uppercase text-xl font-bold">⚠️ FINAL CONFIRMATION - STOCK USAGE</div>
+        </template>
+
+        <div class="text-lg">
+          <div class="bg-yellow-100 border-l-4 border-yellow-500 p-4 mb-4">
+            <div class="flex">
+              <div class="flex-shrink-0">
+                <i class="pi pi-exclamation-triangle text-yellow-500 text-2xl"></i>
+              </div>
+              <div class="ml-3">
+                <p class="text-lg text-yellow-700 font-bold">This action cannot be reversed!</p>
+                <p class="text-base text-yellow-600">
+                  Once confirmed, the used quantity will be permanently deducted from stock.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 gap-4 mb-4">
+            <div class="p-4 border rounded">
+              <h4 class="font-semibold mb-2">Usage Details:</h4>
+              <p class="mb-2">{{ formStockAdjustment.item_description }}</p>
+
+              <div class="flex justify-between items-center mb-2">
+                <span class="font-medium mr-2">Current Stock:</span>
+                <span class="text-lg font-bold text-blue-600">{{ formStockAdjustment.current_quantity }}</span>
+              </div>
+
+              <div class="flex justify-between items-center mb-2">
+                <span class="font-medium mr-2">Quantity Used:</span>
+                <span class="text-lg font-bold text-error">-{{ formStockAdjustment.quantity }}</span>
+              </div>
+
+              <div class="flex justify-between items-center mb-2 border-t pt-2">
+                <span class="font-medium mr-2">Remaining Stock:</span>
+                <span
+                  class="text-lg font-bold"
+                  :class="calculateResultingQuantity >= 0 ? 'text-green-600' : 'text-error'"
+                >
+                  {{ calculateResultingQuantity }}
+                </span>
+              </div>
+
+              <div class="mt-4">
+                <span class="font-medium">Reason for Usage:</span>
+                <p class="italic mt-1">{{ formStockAdjustment.remarks }}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-sm space-y-2">
+            <p>
+              • Your user account ({{ $page.props.auth.user.userDetail.employeeid }}) will be recorded in the usage logs
+            </p>
+            <p>• This usage will be tagged as "{{ formStockAdjustment.tag }}"</p>
+            <p>• The used quantity will be deducted from the current stock</p>
+            <p>• If you are unsure about any details, please <strong>CANCEL</strong> and verify the information</p>
+          </div>
+        </div>
+
+        <template #footer>
+          <Button
+            label="CANCEL"
+            icon="pi pi-times"
+            :disabled="formStockAdjustment.processing"
+            severity="secondary"
+            @click="cancel"
+          />
+
+          <Button
+            :disabled="formStockAdjustment.processing || adjustmentCountdown > 0"
+            :icon="formStockAdjustment.processing ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
+            severity="danger"
+            @click="submitStockAdjustment"
+          >
+            {{
+              adjustmentCountdown > 0 ? `CONFIRM ADJUSTMENT (${adjustmentCountdown})` : 'YES, PROCEED WITH ADJUSTMENT'
+            }}
+          </Button>
+        </template>
+      </Dialog>
     </div>
   </app-layout>
 </template>
@@ -1277,6 +1499,12 @@ export default {
       // loading states
       isItemsLoading: false,
       isCurrentWardStocksLoading: false,
+
+      // Stock adjustment dialog states
+      stockAdjustmentDialog: false,
+      confirmStockAdjustmentDialog: false,
+      adjustmentCountdown: 0,
+      adjustmentTimer: null,
 
       authWardcode: '',
       expandedRow: [],
@@ -1385,9 +1613,23 @@ export default {
         expiration_date: null,
         remarks: null,
       }),
+      // Stock adjustment form
+      formStockAdjustment: this.$inertia.form({
+        id: null,
+        cl2comb: null,
+        item_description: null,
+        current_quantity: null,
+        quantity: null,
+        remarks: null,
+        tag: 'Infection Control', // default tag
+        employeeid: null,
+      }),
       previousQty: 0,
       targetItemDesc: null,
     };
+  },
+  beforeUnmount() {
+    this.clearAdjustmentTimer();
   },
   mounted() {
     this.authWardcode = this.$page.props.auth.user.location.location_name.wardcode;
@@ -1400,6 +1642,11 @@ export default {
   computed: {
     user() {
       return this.$page.props.auth.user;
+    },
+    calculateResultingQuantity() {
+      const current = parseInt(this.formStockAdjustment.current_quantity) || 0;
+      const used = parseInt(this.formStockAdjustment.quantity) || 0;
+      return current - used;
     },
   },
   methods: {
@@ -1581,6 +1828,53 @@ export default {
     openConfirmSupplementalDialog() {
       this.confirmSupplementalDialog = true;
     },
+    openStockAdjustment(data) {
+      this.formStockAdjustment.clearErrors();
+      this.formStockAdjustment.reset();
+
+      // Set form data
+      this.formStockAdjustment.id = data.ward_stock_id;
+      this.formStockAdjustment.cl2comb = data.cl2comb;
+      this.formStockAdjustment.item_description = data.item;
+      this.formStockAdjustment.current_quantity = data.quantity;
+      this.formStockAdjustment.quantity = null; // User enters quantity used
+      this.formStockAdjustment.employeeid = this.$page.props.auth.user.userDetail.employeeid;
+
+      this.stockAdjustmentDialog = true;
+    },
+    openConfirmStockAdjustment() {
+      if (this.validateStockAdjustment()) {
+        this.confirmStockAdjustmentDialog = true;
+      }
+    },
+    validateStockAdjustment() {
+      let isValid = true;
+
+      // Clear previous errors
+      this.formStockAdjustment.clearErrors();
+
+      // Validate quantity used
+      const quantityUsed = parseInt(this.formStockAdjustment.quantity) || 0;
+      const currentQty = parseInt(this.formStockAdjustment.current_quantity) || 0;
+
+      if (!this.formStockAdjustment.quantity || quantityUsed <= 0) {
+        this.formStockAdjustment.setError('quantity', 'Quantity used must be greater than 0');
+        isValid = false;
+      }
+
+      if (quantityUsed > currentQty) {
+        this.formStockAdjustment.setError('quantity', 'Quantity used cannot exceed current stock');
+        isValid = false;
+      }
+
+      // Validate remarks
+      if (!this.formStockAdjustment.remarks || this.formStockAdjustment.remarks.trim() === '') {
+        this.formStockAdjustment.setError('remarks', 'Reason for usage is required');
+        isValid = false;
+      }
+
+      return isValid;
+    },
     restrictNonNumericAndPeriod(event) {
       if (
         [46, 8, 9, 27, 13].includes(event.keyCode) ||
@@ -1640,6 +1934,13 @@ export default {
       this.params.page = event.page + 1;
       this.updateData();
     },
+    clearAdjustmentTimer() {
+      if (this.adjustmentTimer) {
+        clearInterval(this.adjustmentTimer);
+        this.adjustmentTimer = null;
+      }
+      this.adjustmentCountdown = 0;
+    },
     updateData() {
       this.$inertia.get('wardinv', this.params, {
         preserveState: true,
@@ -1691,6 +1992,11 @@ export default {
         (this.targetItemDesc = null),
         (this.selectedItemsUomDesc = ''),
         (this.oldQuantity = 0),
+        (this.stockAdjustmentDialog = false),
+        (this.confirmStockAdjustmentDialog = false),
+        this.clearAdjustmentTimer(),
+        this.formStockAdjustment.clearErrors(),
+        this.formStockAdjustment.reset(),
         this.formMedicalGases.clearErrors(),
         this.formMedicalGases.reset(),
         this.formConsignment.reset(),
@@ -1925,6 +2231,33 @@ export default {
         });
       }
     },
+    submitStockAdjustment() {
+      if (this.formStockAdjustment.processing) {
+        return false;
+      }
+
+      if (!this.validateStockAdjustment()) {
+        this.confirmStockAdjustmentDialog = false;
+        return false;
+      }
+
+      this.formStockAdjustment.post(route('wardstockadjustment.store'), {
+        preserveScroll: true,
+        onSuccess: () => {
+          this.formStockAdjustment.reset();
+          this.cancel();
+          this.stockAdjustmentSuccessMsg();
+
+          // Refresh the current ward stocks data
+          this.refreshDataAfterPost();
+        },
+        onError: (errors) => {
+          console.error('Stock adjustment error:', errors);
+          this.stockAdjustmentErrorMsg();
+          this.confirmStockAdjustmentDialog = false;
+        },
+      });
+    },
     cancel() {
       this.confirmConsignmentDialog = false;
       this.confirmDeliveryDialog = false;
@@ -1944,6 +2277,11 @@ export default {
       this.targetItemDesc = null;
       this.oldQuantity = 0;
       this.selectedItemsUomDesc = '';
+      this.stockAdjustmentDialog = false;
+      this.confirmStockAdjustmentDialog = false;
+      this.clearAdjustmentTimer();
+      this.formStockAdjustment.reset();
+      this.formStockAdjustment.clearErrors();
       this.formMedicalGases.reset();
       this.formMedicalGases.clearErrors();
       this.formConsignment.reset();
@@ -1980,6 +2318,22 @@ export default {
     },
     updateSupplementalMessage() {
       this.$toast.add({ severity: 'warn', summary: 'Success', detail: 'Stock updated', life: 5000 });
+    },
+    stockAdjustmentSuccessMsg() {
+      this.$toast.add({
+        severity: 'success',
+        summary: 'Stock Usage Recorded',
+        detail: 'Stock usage has been successfully recorded and deducted from inventory',
+        life: 5000,
+      });
+    },
+    stockAdjustmentErrorMsg() {
+      this.$toast.add({
+        severity: 'error',
+        summary: 'Usage Recording Failed',
+        detail: 'Failed to record stock usage. Please try again.',
+        life: 5000,
+      });
     },
     getLocalDateString(utcStr) {
       const date = new Date(utcStr);
@@ -2034,6 +2388,20 @@ export default {
     // end ward stocks logs
   },
   watch: {
+    confirmStockAdjustmentDialog(newVal) {
+      if (newVal) {
+        this.adjustmentCountdown = 5; // 5 second countdown
+        this.adjustmentTimer = setInterval(() => {
+          if (this.adjustmentCountdown > 0) {
+            this.adjustmentCountdown--;
+          } else {
+            this.clearAdjustmentTimer();
+          }
+        }, 1000);
+      } else {
+        this.clearAdjustmentTimer();
+      }
+    },
     confirmConsignmentDialog(newVal) {
       if (newVal) {
         this.countdown = 5; // Reset countdown when dialog is opened
