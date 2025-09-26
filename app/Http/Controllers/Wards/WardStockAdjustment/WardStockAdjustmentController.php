@@ -13,20 +13,6 @@ class WardStockAdjustmentController extends Controller
 {
     public function store(Request $request)
     {
-        // // dd($request);
-
-        // WardStocks::where('id', $request->id)->update([
-        //     'quantity' => $request->quantity,
-        // ]);
-
-        // WardStockAdjustment::create([
-        //     'cl2comb' => $request->cl2comb,
-        //     'remarks' => trim($request->remarks),
-        //     'tag' => $request->tag,
-        //     'employeeid' => $request->employeeid,
-        // ]);
-
-
         try {
             DB::beginTransaction();
 
@@ -75,7 +61,5 @@ class WardStockAdjustmentController extends Controller
         }
 
         return Redirect::route('wardinv.index')->with('success', 'Stock usage recorded successfully');
-
-        // return Redirect::route('wardinv.index');
     }
 }
