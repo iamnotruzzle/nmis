@@ -154,7 +154,11 @@ Route::middleware(['web', 'auth', 'verified'])->group(
         Route::resource('supplemental', SupplementalControler::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('delivery', DeliveryController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
         Route::resource('existingstock', ExistingStockController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);
-        Route::resource('wardstockadjustment', WardStockAdjustmentController::class)->middleware(['verified', 'designation_ward'])->only(['store',]);
+
+        Route::get('wardstockadjustment/ward-history', [WardStockAdjustmentController::class, 'getWardStockHistory'])
+        ->middleware(['verified', 'designation_ward']);
+        Route::resource('wardstockadjustment', WardStockAdjustmentController::class)->middleware(['verified', 'designation_ward']);
+
         Route::resource('wardreports', ReportController::class)->middleware(['verified', 'designation_ward'])->only(['index']);
         Route::get('wardstocks/export/', [WardStocksReportController::class, 'export']);
         Route::resource('ecgreports', ECGController::class)->middleware(['verified', 'designation_ward'])->only(['index', 'store', 'update', 'destroy']);

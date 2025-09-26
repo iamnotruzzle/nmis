@@ -13,7 +13,16 @@
       <div class="card">
         <Toast />
         <!-- current ward stocks -->
-        <span class="text-xl text-900 font-bold text-primary">CURRENT STOCKS</span>
+        <div class="flex align-items-center mb-4">
+          <span class="text-xl text-900 font-bold text-primary">CURRENT STOCKS</span>
+          <Button
+            label="ADJUSTMENT HISTORY"
+            icon="pi pi-calendar"
+            severity="info"
+            @click="openWardStockHistory"
+            class="ml-2"
+          />
+        </div>
 
         <DataTable
           class="p-datatable-sm"
@@ -1428,6 +1437,405 @@
           </Button>
         </template>
       </Dialog>
+
+      <!-- Stock History Dialog for Ward -->
+      <Dialog
+        v-model:visible="stockHistoryDialog"
+        :modal="true"
+        :closable="true"
+        class="p-fluid w-11 md:w-10 lg:w-8"
+        @hide="whenDialogIsHidden"
+      >
+        <template #header>
+          <div class="text-primary text-xl font-bold">WARD STOCK ADJUSTMENT HISTORY</div>
+        </template>
+
+        <div v-if="stockHistoryData">
+          <!-- Summary Section - Dark theme compatible -->
+          <div class="surface-100 border-l-4 border-primary p-4 mb-4 border-round">
+            <h3 class="text-color font-semibold text-lg mb-2">{{ authWardcode }} - Ward Summary</h3>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div class="text-center">
+                <div class="text-2xl font-bold text-green-400">{{ stockHistoryData.total_current_items }}</div>
+                <div class="text-sm text-color-secondary">Current Items</div>
+              </div>
+              <div class="text-center">
+                <div class="text-2xl font-bold text-blue-400">{{ stockHistoryData.total_current_quantity }}</div>
+                <div class="text-sm text-color-secondary">Total Stock Qty</div>
+              </div>
+              <div class="text-center">
+                <div class="text-2xl font-bold text-red-400">{{ stockHistoryData.total_adjusted }}</div>
+                <div class="text-sm text-color-secondary">Total Adjusted</div>
+              </div>
+              <div class="text-center">
+                <div class="text-2xl font-bold text-purple-400">{{ stockHistoryData.total_adjustment_records }}</div>
+                <div class="text-sm text-color-secondary">Total Records</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filter Section - Dark theme compatible -->
+          <div class="surface-50 p-4 mb-4 border-round">
+            <h4 class="text-color font-semibold mb-3">Filter by Adjustment Date</h4>
+            <div class="flex flex-wrap gap-4 align-items-end">
+              <div
+                class="flex-1 min-w-0"
+                style="min-width: 200px"
+              >
+                <label
+                  for="dateFrom"
+                  class="text-color block mb-2 text-sm"
+                  >From Date</label
+                >
+                <Calendar
+                  id="dateFrom"
+                  v-model="stockHistoryFilters.dateFrom"
+                  dateFormat="mm/dd/yy"
+                  showIcon
+                  showButtonBar
+                  class="w-full"
+                />
+              </div>
+              <div
+                class="flex-1 min-w-0"
+                style="min-width: 200px"
+              >
+                <label
+                  for="dateTo"
+                  class="text-color block mb-2 text-sm"
+                  >To Date</label
+                >
+                <Calendar
+                  id="dateTo"
+                  v-model="stockHistoryFilters.dateTo"
+                  dateFormat="mm/dd/yy"
+                  showIcon
+                  showButtonBar
+                  class="w-full"
+                />
+              </div>
+              <div class="flex gap-3 align-items-end">
+                <Button
+                  label="Apply"
+                  icon="pi pi-filter"
+                  @click="applyStockHistoryFilter"
+                  size="small"
+                  class="px-3 py-2"
+                  style="height: 2.5rem; min-width: 80px"
+                />
+                <Button
+                  label="Clear"
+                  icon="pi pi-times"
+                  severity="secondary"
+                  @click="clearStockHistoryFilter"
+                  size="small"
+                  class="px-3 py-2"
+                  style="height: 2.5rem; min-width: 80px"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Adjustments Table -->
+          <div class="mb-4">
+            <DataTable
+              :value="stockHistoryData.adjustments"
+              class="p-datatable-sm"
+              :loading="isStockHistoryLoading"
+              paginator
+              :rows="15"
+              showGridlines
+              emptyMessage="No adjustments found"
+              sortField="date"
+              :sortOrder="-1"
+            >
+              <Column
+                field="date"
+                header="Date & Time"
+                sortable
+                class="w-2"
+              ></Column>
+              <Column
+                field="item_description"
+                header="Item"
+                sortable
+                class="w-3"
+              >
+                <template #body="{ data }">
+                  <span class="text-sm text-color">{{ data.item_description }}</span>
+                </template>
+              </Column>
+              <Column
+                field="quantity_used"
+                header="Used"
+                sortable
+                class="w-1 text-center"
+              >
+                <template #body="{ data }">
+                  <span class="text-red-400 font-semibold">-{{ data.quantity_used }}</span>
+                </template>
+              </Column>
+              <Column
+                field="previous_quantity"
+                header="Previous"
+                sortable
+                class="w-1 text-center"
+              >
+                <template #body="{ data }">
+                  <span class="text-color-secondary">{{ data.previous_quantity }}</span>
+                </template>
+              </Column>
+              <Column
+                field="new_quantity"
+                header="New"
+                sortable
+                class="w-1 text-center"
+              >
+                <template #body="{ data }">
+                  <span class="text-blue-400 font-semibold">{{ data.new_quantity }}</span>
+                </template>
+              </Column>
+              <Column
+                field="tag"
+                header="Tag"
+                sortable
+                class="w-2"
+              >
+                <template #body="{ data }">
+                  <Tag
+                    :value="data.tag"
+                    severity="info"
+                  />
+                </template>
+              </Column>
+              <Column
+                field="remarks"
+                header="Remarks"
+                class="w-2"
+              >
+                <template #body="{ data }">
+                  <span class="text-sm text-color">{{ data.remarks || '-' }}</span>
+                </template>
+              </Column>
+              <Column
+                field="employee_id"
+                header="By"
+                sortable
+                class="w-1 text-center"
+              >
+                <template #body="{ data }">
+                  <span class="text-xs text-color-secondary">{{ data.employee_id }}</span>
+                </template>
+              </Column>
+            </DataTable>
+          </div>
+        </div>
+
+        <div
+          v-else-if="isStockHistoryLoading"
+          class="text-center p-4"
+        >
+          <i class="pi pi-spinner pi-spin text-2xl text-color"></i>
+          <p class="mt-2 text-color">Loading ward stock history...</p>
+        </div>
+
+        <template #footer>
+          <Button
+            label="Print"
+            icon="pi pi-print"
+            severity="info"
+            @click="printStockHistory"
+            :disabled="!stockHistoryData || stockHistoryData.adjustments.length === 0"
+          />
+          <Button
+            label="Close"
+            icon="pi pi-times"
+            severity="secondary"
+            @click="stockHistoryDialog = false"
+          />
+        </template>
+      </Dialog>
+
+      <!-- Print Layout (Hidden) -->
+      <div
+        id="stock-history-print"
+        style="background-color: white; display: none"
+      >
+        <div
+          style="
+            font-family: Arial, sans-serif;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          "
+        >
+          <div style="padding: 0 2rem; color: #1f2937; margin: 0; max-width: 1000px">
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                margin-bottom: 1rem;
+              "
+            >
+              <p style="font-weight: bold; font-size: 1.25rem; margin: 0; padding: 0; text-transform: uppercase">
+                WARD STOCK ADJUSTMENT HISTORY
+              </p>
+              <p style="font-size: 0.75rem; margin: 0; padding: 0">
+                MARIANO MARCOS MEMORIAL HOSPITAL and MEDICAL CENTER
+              </p>
+              <p style="font-size: 1rem; color: #3b82f6; font-weight: bold">Ward Stock Management System</p>
+            </div>
+
+            <!-- Ward Information -->
+            <div
+              v-if="stockHistoryData"
+              style="margin-bottom: 1rem"
+            >
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  width: 100%;
+                  margin-bottom: 0.25rem;
+                  font-size: 0.875rem;
+                "
+              >
+                <div>
+                  <label style="font-weight: bold">Ward Code:</label>
+                  <span>{{ stockHistoryData.ward_code }}</span>
+                </div>
+                <div>
+                  <label style="font-weight: bold">Date Printed:</label>
+                  <span>{{ new Date().toLocaleDateString() }}</span>
+                </div>
+              </div>
+
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  width: 100%;
+                  margin-bottom: 0.25rem;
+                  font-size: 0.875rem;
+                "
+              >
+                <div>
+                  <label style="font-weight: bold">Current Items:</label>
+                  <span>{{ stockHistoryData.total_current_items }}</span>
+                </div>
+                <div>
+                  <label style="font-weight: bold">Current Stock Qty:</label>
+                  <span>{{ stockHistoryData.total_current_quantity }}</span>
+                </div>
+              </div>
+
+              <div
+                v-if="stockHistoryFilters.dateFrom || stockHistoryFilters.dateTo"
+                style="
+                  display: flex;
+                  justify-content: flex-start;
+                  width: 100%;
+                  margin-bottom: 0.5rem;
+                  font-size: 0.875rem;
+                "
+              >
+                <div>
+                  <label style="font-weight: bold">Filter Period:</label>
+                  <span>
+                    {{
+                      stockHistoryFilters.dateFrom ? new Date(stockHistoryFilters.dateFrom).toLocaleDateString() : 'All'
+                    }}
+                    to
+                    {{ stockHistoryFilters.dateTo ? new Date(stockHistoryFilters.dateTo).toLocaleDateString() : 'All' }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Adjustments Table -->
+            <div style="display: flex; justify-content: center; width: 100%; margin-bottom: 0.25rem">
+              <table style="width: 100%; font-size: 0.7rem; border-collapse: collapse">
+                <thead>
+                  <tr>
+                    <th style="padding: 0.5rem; text-align: left; border: 1px solid #ccc">DATE & TIME</th>
+                    <th style="padding: 0.5rem; text-align: left; border: 1px solid #ccc">ITEM</th>
+                    <th style="padding: 0.5rem; text-align: center; border: 1px solid #ccc">USED</th>
+                    <th style="padding: 0.5rem; text-align: center; border: 1px solid #ccc">PREVIOUS</th>
+                    <th style="padding: 0.5rem; text-align: center; border: 1px solid #ccc">NEW</th>
+                    <th style="padding: 0.5rem; text-align: left; border: 1px solid #ccc">TAG</th>
+                    <th style="padding: 0.5rem; text-align: left; border: 1px solid #ccc">REMARKS</th>
+                    <th style="padding: 0.5rem; text-align: center; border: 1px solid #ccc">BY</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="adjustment in stockHistoryData?.adjustments || []"
+                    :key="adjustment.id"
+                  >
+                    <td style="padding: 0.5rem; text-align: left; border: 1px solid #ccc; font-size: 0.65rem">
+                      {{ adjustment.date }}
+                    </td>
+                    <td style="padding: 0.5rem; text-align: left; border: 1px solid #ccc; font-size: 0.65rem">
+                      {{ adjustment.item_description }}
+                    </td>
+                    <td style="padding: 0.5rem; text-align: center; border: 1px solid #ccc; font-weight: bold">
+                      -{{ adjustment.quantity_used }}
+                    </td>
+                    <td style="padding: 0.5rem; text-align: center; border: 1px solid #ccc">
+                      {{ adjustment.previous_quantity }}
+                    </td>
+                    <td style="padding: 0.5rem; text-align: center; border: 1px solid #ccc; font-weight: bold">
+                      {{ adjustment.new_quantity }}
+                    </td>
+                    <td style="padding: 0.5rem; text-align: left; border: 1px solid #ccc; font-size: 0.65rem">
+                      {{ adjustment.tag }}
+                    </td>
+                    <td style="padding: 0.5rem; text-align: left; border: 1px solid #ccc; font-size: 0.65rem">
+                      {{ adjustment.remarks || '-' }}
+                    </td>
+                    <td style="padding: 0.5rem; text-align: center; border: 1px solid #ccc; font-size: 0.65rem">
+                      {{ adjustment.employee_id }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Summary Footer -->
+            <div
+              v-if="stockHistoryData"
+              style="margin-top: 1rem; font-size: 0.875rem"
+            >
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  font-weight: bold;
+                  border-top: 1px solid #ccc;
+                  padding-top: 0.5rem;
+                "
+              >
+                <span>Total Records: {{ stockHistoryData.total_adjustment_records }}</span>
+                <span>Total Quantity Adjusted: {{ stockHistoryData.total_adjusted }}</span>
+              </div>
+            </div>
+
+            <!-- Print Footer -->
+            <div
+              style="display: flex; justify-content: flex-start; width: 100%; margin-top: 1.5rem; font-size: 0.75rem"
+            >
+              <div>
+                <label style="margin-right: 0.5rem">Generated by:</label>
+                <span style="font-weight: bold">{{ $page.props.auth.user.userDetail.employeeid }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </app-layout>
 </template>
@@ -1532,7 +1940,15 @@ export default {
       cancelItemDialog: false,
       search: '',
       selectedItemsUomDesc: null,
-      oldQuantity: 0,
+
+      stockHistoryDialog: false,
+      stockHistoryData: null,
+      isStockHistoryLoading: false,
+      stockHistoryFilters: {
+        dateFrom: null,
+        dateTo: null,
+      },
+
       options: {},
       params: {},
       from: null,
@@ -1651,6 +2067,124 @@ export default {
     },
   },
   methods: {
+    openWardStockHistory() {
+      this.stockHistoryDialog = true;
+      this.stockHistoryData = null;
+      this.stockHistoryFilters.dateFrom = null;
+      this.stockHistoryFilters.dateTo = null;
+
+      this.fetchWardStockHistory();
+    },
+
+    async fetchWardStockHistory(dateFrom = null, dateTo = null) {
+      this.isStockHistoryLoading = true;
+
+      try {
+        const params = {
+          wardcode: this.authWardcode,
+        };
+
+        if (dateFrom) {
+          params.date_from = this.formatDateForApi(dateFrom);
+          console.log('Sending date_from:', params.date_from); // Debug log
+        }
+        if (dateTo) {
+          params.date_to = this.formatDateForApi(dateTo);
+          console.log('Sending date_to:', params.date_to); // Debug log
+        }
+
+        console.log('Fetching with params:', params); // Debug log
+
+        const response = await axios.get('wardstockadjustment/ward-history', { params });
+        this.stockHistoryData = response.data;
+
+        console.log('Received data:', response.data); // Debug log
+      } catch (error) {
+        console.error('Failed to fetch ward stock history:', error);
+        this.$toast.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to fetch ward stock history',
+          life: 3000,
+        });
+      } finally {
+        this.isStockHistoryLoading = false;
+      }
+    },
+
+    async applyStockHistoryFilter() {
+      console.log('Applying filter with dates:', {
+        from: this.stockHistoryFilters.dateFrom,
+        to: this.stockHistoryFilters.dateTo,
+      }); // Debug log
+
+      await this.fetchWardStockHistory(this.stockHistoryFilters.dateFrom, this.stockHistoryFilters.dateTo);
+    },
+
+    clearStockHistoryFilter() {
+      this.stockHistoryFilters.dateFrom = null;
+      this.stockHistoryFilters.dateTo = null;
+      this.fetchWardStockHistory();
+    },
+
+    printStockHistory() {
+      const printContent = document.getElementById('stock-history-print');
+      if (printContent) {
+        const originalDisplay = printContent.style.display;
+        printContent.style.display = 'block';
+
+        // Use a timeout to ensure the content is rendered before printing
+        setTimeout(() => {
+          window.print();
+          printContent.style.display = originalDisplay;
+        }, 100);
+      }
+    },
+
+    formatDateForApi(date) {
+      if (!date) return null;
+
+      // Handle different date input types
+      let dateObj;
+
+      if (typeof date === 'string') {
+        if (date.match(/^\d{4}-\d{2}-\d{2}$/)) {
+          return date; // Already in correct format
+        }
+        dateObj = new Date(date);
+      } else if (date instanceof Date) {
+        dateObj = date;
+      } else if (moment.isMoment(date)) {
+        dateObj = date.toDate();
+      } else {
+        console.warn('Unknown date format:', date);
+        return null;
+      }
+
+      // Ensure we have a valid date
+      if (isNaN(dateObj.getTime())) {
+        console.error('Invalid date:', date);
+        return null;
+      }
+
+      // Format as YYYY-MM-DD (local date, not UTC)
+      const year = dateObj.getFullYear();
+      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const day = String(dateObj.getDate()).padStart(2, '0');
+
+      const formatted = `${year}-${month}-${day}`;
+      console.log('Formatted date:', date, '->', formatted); // Debug log
+
+      return formatted;
+    },
+
+    formatCurrency(value) {
+      return new Intl.NumberFormat('en-PH', {
+        style: 'currency',
+        currency: 'PHP',
+      }).format(value || 0);
+    },
+
     getCachedData(cacheType) {
       const config = this.CACHE_CONFIG[cacheType];
       const cached = localStorage.getItem(config.key);
@@ -1979,6 +2513,8 @@ export default {
       this.$emit(
         'hide',
         (this.isUpdate = false),
+        (this.stockHistoryDialog = false),
+        (this.stockHistoryData = null),
         (this.isUpdateExisting = false),
         (this.isUpdateSupplemental = false),
         (this.isUpdateConsignment = false),
@@ -2553,6 +3089,28 @@ export default {
 </script>
 
 <style scoped>
+@media print {
+  #stock-history-print {
+    display: block !important;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  #stock-history-print,
+  #stock-history-print * {
+    visibility: visible;
+  }
+
+  #stock-history-print {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+}
+
 .custom-dropdown-height :deep(.p-dropdown-label) {
   min-height: 2.5rem !important;
   display: flex !important;
